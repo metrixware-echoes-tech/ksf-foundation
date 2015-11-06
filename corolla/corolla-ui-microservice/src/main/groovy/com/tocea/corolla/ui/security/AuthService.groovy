@@ -21,7 +21,7 @@ import com.tocea.corolla.utils.serviceapi.IReadonlyService
  */
 @Service("authService")
 @Slf4j
-class AuthService implements UserDetailsService, IReadonlyService {
+public class AuthService implements UserDetailsService, IReadonlyService {
 
 	@Autowired
 	def IUserDAO			userService
