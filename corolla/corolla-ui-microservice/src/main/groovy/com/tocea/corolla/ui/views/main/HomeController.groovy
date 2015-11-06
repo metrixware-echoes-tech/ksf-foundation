@@ -20,17 +20,23 @@ import com.tocea.corolla.users.domain.Permission
 @Controller
 public class HomeController {
 
-	@ModelAttribute("sideMenu")
-	public String addAccount() {
-		return "mainMenu"
-	}
+    @ModelAttribute("sideMenu")
+    public String addAccount() {
+        return "mainMenu"
+    }
 
-	@RequestMapping(value=[
+    @RequestMapping(value=[
 		"/ui/home",
-		"/ui/",
-		"/"
+		"/ui/"		
 	])
-	public ModelAndView getHomePage() {
-		return new ModelAndView("home")
-	}
+    public ModelAndView getHomePage() {
+        return new ModelAndView("home")
+    }
+        
+    @RequestMapping(value=[
+		"/"		
+	])
+    public String redirectSlash() {
+        return "redirect:/ui/home"
+    }
 }
