@@ -84,14 +84,14 @@ public class GuiSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Override
 	protected void configure(final HttpSecurity http) throws Exception {
-		LOGGER.info("Web-- Defining Web Security")
-		http.authorizeRequests().antMatchers("/resources/**", "/js/**", "/public/**", "/images/**", "/css/**", "/pictures/**", "/fonts/**", "/login", "/logout","/", "/favicon.ico").permitAll().
-				antMatchers("/ui/**").authenticated().
-				antMatchers("/api/**").hasRole("REST")
-		
-		//anyRequest().permitAll()
-		http.formLogin().loginPage("/login").defaultSuccessUrl("/home").and().logout().logoutUrl("/logout")
-		http.csrf().disable()
+//		LOGGER.info("Web-- Defining Web Security")
+//		http.authorizeRequests().antMatchers("/resources/**", "/js/**", "/public/**", "/images/**", "/css/**", "/pictures/**", "/fonts/**", "/login", "/logout","/", "/favicon.ico").permitAll().
+//				antMatchers("/ui/**").authenticated().
+//				antMatchers("/api/**").hasRole("REST")
+//		
+//		//anyRequest().permitAll()
+//		http.formLogin().loginPage("/login").defaultSuccessUrl("/home").and().logout().logoutUrl("/logout")
+//		http.csrf().disable()
 		
 		
 	}
