@@ -1,0 +1,593 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout">
+<body>
+	<!-- Main -->
+	<div layout:fragment="content">
+		<!-- Content Header (Page header) -->
+		<section class="content-header">
+			<ol class="breadcrumb">
+				<li>
+					<a th:href="@{/ui/portfolio/manager/}+${project.key}">
+						<i class="glyphicon glyphicon-book" />
+						<span th:text="${project.name}">Project</span>
+					</a>
+				</li>
+				<li>
+					<a href="#" th:text="${branch.name}">Branch</a>
+				</li>
+				<li class="active">Requirements</li>
+			</ol>
+		</section>
+		<!-- Main -->
+		<div class="content">
+			<div class="row">
+				<div class="col-sm-6 col-md-4">
+					<div class="panel panel-primary">
+						<!-- 						<div class="panel-heading"> -->
+						<!-- 							<h4>Favorite products</h4> -->
+						<!-- 						</div> -->
+						<div class="tab-header">
+							<img src="http://lorempixel.com/56/56/" alt="" />
+							<h3>Add a KPI</h3>
+							<div class="properties">
+								<a href="#" class="entity-key"> <i class="fa fa-key" /> ADD_KPI
+								</a>
+							</div>
+							<br style="clear: both;" />
+						</div>
+						<div>
+							<div>
+								<ul class="wysihtml5-toolbar" style="margin: 8px;">
+									<li class="dropdown">
+										<a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown"> Add <b
+											class="caret" />
+										</a>
+										<ul class="dropdown-menu">
+											<li><a href="#">Requirement</a></li>
+											<li th:each="folderNodeType : ${folderNodeTypes}">
+												<a  href="#" th:attr="onclick='jsTreeManager.addFolder(\''+${folderNodeType.id}+'\', null)'">
+													<img th:src="${folderNodeType.icon}" />
+													<span th:text="${folderNodeType.name}"></span>
+												</a>
+											</li>
+										</ul></li>
+									<li>
+										<a href="#" class="btn btn-default"> 
+											<span class="glyphicon glyphicon-filter" />
+										</a>
+									</li>
+									<li>
+										<a href="#" class="btn btn-default" onclick="jsTreeManager.expand()">
+											<span class="fa fa-expand"></span>
+										</a>
+									</li>
+									<li>
+										<a href="#" class="btn btn-default" onclick="jsTreeManager.collapse()">
+											<span class="fa fa-compress"></span>
+										</a>
+									</li>
+									<li style="width: 25%;">
+										<select id="selectBranch" class="form-control select2" style="width: 100%">
+											<option 
+												th:each="otherBranch : ${branches}" 
+												th:text="${otherBranch.name}" 
+												th:attr="selected=${otherBranch.id == branch.id ? 'selected' : null}">											
+											</option>						
+										</select>
+									</li>
+									<li style="width: 30%;">
+										<div class="input-group">
+											<span class="input-group-addon"> <i class="glyphicon glyphicon-search" />
+											</span> <input class="form-control" type="text" placeholder="Search" style="width: 100%;" />
+										</div>
+									</li>
+								</ul>
+							</div>
+							<div class="project-items-tree-view" />
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-6 col-md-8" th:if="${requirement != null}">
+					<div class="nav-tabs-custom">
+						<ul class="nav nav-tabs">
+							<li class="active"><a href="#details" data-toggle="tab">Details</a></li>
+							<li><a href="#requirements" data-toggle="tab" class="toggle-sunburst">Requirements</a></li>
+							<li><a href="#test-cases-panel" data-toggle="tab">Test Cases</a></li>
+							<li><a href="#comments" data-toggle="tab">Comments</a></li>
+							<li><a href="#activity" data-toggle="tab">Activity</a></li>
+							<li class="dropdown pull-right"><a class="dropdown-toggle btn btn-app" data-toggle="dropdown" href="#">
+									<i class="fa fa-paw" /> Actions
+							</a>
+								<ul class="dropdown-menu">
+									<li role="presentation"><a role="menuitem" tabindex="-1" href="#"> <i
+											class="glyphicon glyphicon-remove" /> Delete
+									</a></li>
+								</ul></li>
+							<li class="pull-right"><a class="btn btn-app" data-toggle="tab" href="#edit"> <i
+									class="glyphicon glyphicon-edit" /> Edit
+							</a></li>
+							<li class="pull-right dropdown"><a class="dropdown-toggle btn btn-app" data-toggle="dropdown" href="#">
+									<i class="fa fa-location-arrow" /> Export
+							</a>
+								<ul class="dropdown-menu">
+									<li role="presentation"><a role="menuitem" tabindex="-1" th:href="@{/ui/requirements/komea-dashboard}"> <i
+											class="fa fa-file-pdf-o" /> PDF
+									</a></li>
+								</ul></li>
+							<li class="dropdown pull-right"><a class="dropdown-toggle btn btn-app" data-toggle="dropdown" href="#">
+									<i class="glyphicon glyphicon-plus" /> Add
+							</a>
+								<ul class="dropdown-menu">
+									<li role="presentation"><a role="menuitem" tabindex="-1" href="#"> <i
+											class="glyphicon glyphicon-list-alt" /> Requirement
+									</a></li>
+									<li role="presentation"><a role="menuitem" tabindex="-1" href="#"> <i
+											class="glyphicon glyphicon-list-alt" /> User Story
+									</a></li>
+									<li role="presentation" class="divider" />
+									<li role="presentation"><a role="menuitem" tabindex="-1" href="#"> <i
+											class="glyphicon glyphicon-transfer" /> Relationship
+									</a></li>
+									<li role="presentation" class="divider" />
+									<li role="presentation"><a role="menuitem" tabindex="-1" href="#"> <i class="fa fa-flask" /> Test
+											Case
+									</a></li>
+									<li role="presentation" class="divider" />
+									<li role="presentation"><a role="menuitem" tabindex="-1" href="#"> <i class="fa fa-paperclip" />
+											Attachment
+									</a></li>
+									<li role="presentation" class="divider" />
+									<li role="presentation"><a role="menuitem" tabindex="-1" href="#"> <i class="fa fa-download" />
+											Import
+									</a></li>
+								</ul></li>
+						</ul>
+						<div class="tab-content">
+							<div class="tab-pane" id="requirements">
+								<div class="table-responsive">
+									<table id="relationships-table" class="table table-hover table-striped" cellspacing="0" width="100%">
+										<thead>
+											<tr>
+												<th>Key</th>
+												<th>Name</th>
+												<th>Actions</th>
+											</tr>
+										</thead>
+										<tr>
+											<td><a href="#" class="label label-default">ADD_KPI</a></td>
+											<td>Add a KPI</td>
+											<td><a href="#" class="label label-info">Open</a> <a href="#" class="label label-danger">Delete</a></td>
+										</tr>
+										<tr>
+											<td><a href="#" class="label label-default">EDIT_KPI</a></td>
+											<td>Edit a KPI</td>
+											<td><a href="#" class="label label-info">Open</a> <a href="#" class="label label-danger">Delete</a></td>
+										</tr>
+										<tr>
+											<td><a href="#" class="label label-default">DELETE_KPI</a></td>
+											<td>Delete a KPI</td>
+											<td><a href="#" class="label label-info">Open</a> <a href="#" class="label label-danger">Delete</a></td>
+										</tr>
+									</table>
+								</div>
+							</div>
+							<!-- /.tab-pane -->
+							<div class="details-view tab-pane active" id="details">
+								<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+									<div class="panel panel-default">
+										<div class="panel-heading" role="tab" id="headingOne">
+											<h4 class="panel-title">
+												<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true"
+													aria-controls="collapseOne"> <i class="fa fa-database" /> Informations
+												</a>
+											</h4>
+										</div>
+										<div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+											<div class="panel-body">
+												<div class="row">
+													<div class="col-sm-3 col-md-2 field-name">Key</div>
+													<div class="col-sm-9 col-md-10 entity-key">ADD_KPI</div>
+												</div>
+												<div class="row">
+													<div class="col-sm-3 col-md-2 field-name">Name</div>
+													<div class="col-sm-9 col-md-10">Add a KPI</div>
+												</div>
+												<div class="row">
+													<div class="col-sm-3 col-md-2 field-name">Description</div>
+													<div class="col-sm-9 col-md-10">u autem, Fanni, quod mihi tantum tribui dicis quantum ego nec
+														adgnosco nec postulo, facis amice; sed, ut mihi videris, non recte iudicas de Catone; aut enim nemo, quod
+														quidem magis credo, aut si quisquam, ille sapiens fuit. Quo modo, ut alia omittam, mortem filii tulit!
+														memineram Paulum, videram Galum, sed hi in pueris, Cato in perfecto et spectato viro. Equitis Romani autem
+														esse filium criminis loco poni ab accusatoribus neque his iudicantibus oportuit neque defendentibus nobis.
+														Nam quod de pietate dixistis, est quidem ista nostra existimatio, sed iudicium certe parentis; quid nos
+														opinemur, audietis ex iuratis; quid parentes sentiant, lacrimae matris incredibilisque maeror, squalor
+														patris et haec praesens maestitia, quam cernitis, luctusque declarat. Accedat huc suavitas quaedam oportet
+														sermonum atque morum, haudquaquam mediocre condimentum amicitiae. Tristitia autem et in omni re severitas
+														habet illa quidem gravitatem, sed amicitia remissior esse debet et liberior et dulcior et ad omnem
+														comitatem facilitatemque proclivior. Procedente igitur mox tempore cum adventicium nihil inveniretur,
+														relicta ora maritima in Lycaoniam adnexam Isauriae se contulerunt ibique densis intersaepientes itinera
+														praetenturis provincialium et viatorum opibus pascebantur. Dum haec in oriente aguntur, Arelate hiemem
+														agens Constantius post theatralis ludos atque circenses ambitioso editos apparatu diem sextum idus
+														Octobres, qui imperii eius annum tricensimum terminabat, insolentiae pondera gravius librans, siquid
+														dubium deferebatur aut falsum, pro liquido accipiens et conperto, inter alia excarnificatum Gerontium
+														Magnentianae comitem partis exulari maerore multavit. In his tractibus navigerum nusquam visitur flumen
+														sed in locis plurimis aquae suapte natura calentes emergunt ad usus aptae multiplicium medelarum. verum
+														has quoque regiones pari sorte Pompeius Iudaeis domitis et Hierosolymis captis in provinciae speciem
+														delata iuris dictione formavit. Non ergo erunt homines deliciis diffluentes audiendi, si quando de
+														amicitia, quam nec usu nec ratione habent cognitam, disputabunt. Nam quis est, pro deorum fidem atque
+														hominum! qui velit, ut neque diligat quemquam nec ipse ab ullo diligatur, circumfluere omnibus copiis
+														atque in omnium rerum abundantia vivere? Haec enim est tyrannorum vita nimirum, in qua nulla fides, nulla
+														caritas, nulla stabilis benevolentiae potest esse fiducia, omnia semper suspecta atque sollicita, nullus
+														locus amicitiae. Eodem tempore Serenianus ex duce, cuius ignavia populatam in Phoenice Celsen ante
+														rettulimus, pulsatae maiestatis imperii reus iure postulatus ac lege, incertum qua potuit suffragatione
+														absolvi, aperte convictus familiarem suum cum pileo, quo caput operiebat, incantato vetitis artibus ad
+														templum misisse fatidicum, quaeritatum expresse an ei firmum portenderetur imperium, ut cupiebat, et
+														cunctum. At nunc si ad aliquem bene nummatum tumentemque ideo honestus advena salutatum introieris,
+														primitus tamquam exoptatus suscipieris et interrogatus multa coactusque mentiri, miraberis numquam antea
+														visus summatem virum tenuem te sic enixius observantem, ut paeniteat ob haec bona tamquam praecipua non
+														vidisse ante decennium Romam. Montius nos tumore inusitato quodam et novo ut rebellis et maiestati
+														recalcitrantes Augustae per haec quae strepit incusat iratus nimirum quod contumacem praefectum, quid
+														rerum ordo postulat ignorare dissimulantem formidine tenus iusserim custodiri.</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="panel panel-default">
+										<div class="panel-heading" role="tab" id="headingOne">
+											<h4 class="panel-title">
+												<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTags" aria-expanded="true"
+													aria-controls="collapseTags"> <i class="glyphicon glyphicon-tags" /> Tags
+												</a>
+											</h4>
+										</div>
+										<div id="collapseTags" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">
+											<div class="panel-body">
+												<input type="text" name="tags" placeholder="Tags" class="tm-input tm-input-info" />
+											</div>
+										</div>
+									</div>
+									<div class="panel panel-default">
+										<div class="panel-heading" role="tab" id="headingOne">
+											<h4 class="panel-title">
+												<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseAttachments"
+													aria-expanded="true" aria-controls="collapseAttachments"> <i class="fa fa-paperclip" /> Attachments
+												</a>
+											</h4>
+										</div>
+										<div id="collapseAttachments" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">
+											<div class="panel-body">
+												<div class="table-responsive">
+													<table id="attachments-table" class="table table-hover table-striped" cellspacing="0" width="100%">
+														<thead>
+															<tr>
+																<th>File</th>
+																<th>Date</th>
+																<th>Size</th>
+																<th>Actions</th>
+															</tr>
+														</thead>
+														<tr>
+															<td><a href="#">note.pdf</a></td>
+															<td>25/06/2015 11:30</td>
+															<td>49.98 Mo</td>
+															<td><a href="#" class="label label-danger">Delete</a></td>
+														</tr>
+														<tr>
+															<td><a href="#">image.png</a></td>
+															<td>25/06/2015 11:28</td>
+															<td>4.78 Mo</td>
+															<td><a href="#" class="label label-danger">Delete</a></td>
+														</tr>
+													</table>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="panel panel-default">
+										<div class="panel-heading" role="tab" id="headingOne">
+											<h4 class="panel-title">
+												<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseRelations"
+													aria-expanded="true" aria-controls="collapseRelations"> <i class="glyphicon glyphicon-transfer" />
+													Relationships
+												</a>
+											</h4>
+										</div>
+										<div id="collapseRelations" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">
+											<div class="panel-body">
+												<div class="table-responsive">
+													<table id="relationships-table" class="table table-hover table-striped" cellspacing="0" width="100%">
+														<thead>
+															<tr>
+																<th>Requirement</th>
+																<th>Relation Name</th>
+																<th>Relation Type</th>
+																<th>Actions</th>
+															</tr>
+														</thead>
+														<tr>
+															<td><a href="#" class="label label-default">DELETE_KPI</a></td>
+															<td>Manage KPI</td>
+															<td>Related to</td>
+															<td><a href="#" class="label label-info">Edit</a> <a href="#" class="label label-danger">Delete</a></td>
+														</tr>
+														<tr>
+															<td><a href="#" class="label label-default">EDIT_KPI</a></td>
+															<td>Manage KPI</td>
+															<td>Related to</td>
+															<td><a href="#" class="label label-info">Edit</a> <a href="#" class="label label-danger">Delete</a></td>
+														</tr>
+													</table>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="panel panel-default">
+										<div class="panel-heading" role="tab" id="headingOne">
+											<h4 class="panel-title">
+												<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseRevisions"
+													aria-expanded="true" aria-controls="collapseRevisions"> <i class="fa fa-history" /> Revisions
+												</a>
+											</h4>
+										</div>
+										<div id="collapseRevisions" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">
+											<div class="panel-body">
+												<div class="table-responsive">
+													<table id="revisions" class="table table-hover table-striped" cellspacing="0" width="100%">
+														<thead>
+															<tr>
+																<th>Version</th>
+																<th>Created on</th>
+																<th>Change details</th>
+																<th>Author</th>
+																<th>Actions</th>
+															</tr>
+														</thead>
+														<tr th:each="commit : ${commits}">
+															<td class="toggle">
+																<span class="badge" th:text="${commit.id}">id</span>
+															</td>
+															<td class="toggle" th:text="${#dates.format(commit.getDate(), 'dd/MM/yyyy HH:mm')}">date</td>
+															<td class="toggle" th:text="${commit.type}"></td>
+															<td class="toggle">
+																<img src="http://www.gravatar.com/avatar/?s=16" alt="" />
+																<span th:text="${commit.author}"></span>
+															</td>
+															<td>
+																<a th:if="${commits[0].id} != ${commit.id}" href="#" class="label label-warning" style="margin-right: 5px;">
+																	Restore
+																</a>
+																<a th:href="@{/ui/requirements/}+${project.key}+@{/}+${branch.name}+@{/}+${requirement.key}+@{/revisions/}+${commit.id}" class="label label-primary">
+																	Changelog
+																</a>
+															</td>
+														</tr>																										
+													</table>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- /.tab-pane -->
+							<div class="tab-pane" id="test-cases-panel">
+								<div class="table-responsive">
+									<table id="test-cases-table" class="table table-hover table-striped" cellspacing="0" width="100%">
+										<thead>
+											<tr>
+												<th>Key</th>
+												<th>Name</th>
+												<th>Actions</th>
+											</tr>
+										</thead>
+										<tr>
+											<td><a href="#" class="label label-default">TEST_ADD_KPI</a></td>
+											<td>Create a kpi</td>
+											<td><a href="#" class="label label-info">Open</a> <a href="#" class="label label-danger">Remove
+													relation</a></td>
+										</tr>
+										<tr>
+											<td><a href="#" class="label label-default">TEST_ADD_KPI_WITH_EMPTY_NAME</a></td>
+											<td>Create a KPI with empty name</td>
+											<td><a href="#" class="label label-info">Open</a> <a href="#" class="label label-danger">Remove
+													relation</a></td>
+										</tr>
+									</table>
+								</div>
+							</div>
+							<div class="tab-pane" id="edit">
+								<form class="project-form" action="">
+									<div class="input-group">
+										<span class="input-group-addon">Key</span> <input name="key" type="text" class="form-control"
+											placeholder="Key" />
+									</div>
+									<div class="input-group">
+										<span class="input-group-addon">Name</span> <input name="name" type="text" class="form-control"
+											placeholder="Name" />
+									</div>
+									<textarea class="textarea" placeholder="Description" style="height: 500px;" cols="" rows="" />
+									<div class="box-footer">
+										<button type="submit" class="btn btn-primary">Save</button>
+									</div>
+								</form>
+							</div>
+							<!-- /.tab-pane -->
+							<div class="tab-pane" id="comments">
+								<!-- Conversations are loaded here -->
+								<div class="direct-chat-messages">
+									<!-- Message. Default to the left -->
+									<div class="direct-chat-msg">
+										<div class='direct-chat-info clearfix'>
+											<span class='direct-chat-name pull-left'>Olly</span> <span class='direct-chat-timestamp pull-right'>23
+												Jan 2:00 pm</span>
+										</div>
+										<!-- /.direct-chat-info -->
+										<img class="direct-chat-img" src="http://www.gravatar.com/avatar/?s=128" alt="message user image" />
+										<!-- /.direct-chat-img -->
+										<div class="direct-chat-text">For the watch!</div>
+										<!-- /.direct-chat-text -->
+									</div>
+									<!-- /.direct-chat-msg -->
+									<!-- Message to the right -->
+									<div class="direct-chat-msg right">
+										<div class='direct-chat-info clearfix'>
+											<span class='direct-chat-name pull-right'>Jon Snow</span> <span class='direct-chat-timestamp pull-left'>23
+												Jan 2:05 pm</span>
+										</div>
+										<!-- /.direct-chat-info -->
+										<img class="direct-chat-img" src="http://www.gravatar.com/avatar/?s=128" alt="message user image" />
+										<!-- /.direct-chat-img -->
+										<div class="direct-chat-text">The Apple Watch?</div>
+										<!-- /.direct-chat-text -->
+									</div>
+									<!-- /.direct-chat-msg -->
+									<!-- Message. Default to the left -->
+									<div class="direct-chat-msg">
+										<div class='direct-chat-info clearfix'>
+											<span class='direct-chat-name pull-left'>Olly</span> <span class='direct-chat-timestamp pull-right'>23
+												Jan 2:00 pm</span>
+										</div>
+										<!-- /.direct-chat-info -->
+										<img class="direct-chat-img" src="http://www.gravatar.com/avatar/?s=128" alt="message user image" />
+										<!-- /.direct-chat-img -->
+										<div class="direct-chat-text">For the watch!</div>
+										<!-- /.direct-chat-text -->
+									</div>
+									<!-- /.direct-chat-msg -->
+									<!-- Message to the right -->
+									<div class="direct-chat-msg right">
+										<div class='direct-chat-info clearfix'>
+											<span class='direct-chat-name pull-right'>Jon Snow</span> <span class='direct-chat-timestamp pull-left'>23
+												Jan 2:05 pm</span>
+										</div>
+										<!-- /.direct-chat-info -->
+										<img class="direct-chat-img" src="http://www.gravatar.com/avatar/?s=128" alt="message user image" />
+										<!-- /.direct-chat-img -->
+										<div class="direct-chat-text">The Apple Watch?</div>
+										<!-- /.direct-chat-text -->
+									</div>
+									<!-- /.direct-chat-msg -->
+									<!-- Message. Default to the left -->
+									<div class="direct-chat-msg">
+										<div class='direct-chat-info clearfix'>
+											<span class='direct-chat-name pull-left'>Olly</span> <span class='direct-chat-timestamp pull-right'>23
+												Jan 2:00 pm</span>
+										</div>
+										<!-- /.direct-chat-info -->
+										<img class="direct-chat-img" src="http://www.gravatar.com/avatar/?s=128" alt="message user image" />
+										<!-- /.direct-chat-img -->
+										<div class="direct-chat-text">For the watch!</div>
+										<!-- /.direct-chat-text -->
+									</div>
+									<!-- /.direct-chat-msg -->
+									<!-- Message to the right -->
+									<div class="direct-chat-msg right">
+										<div class='direct-chat-info clearfix'>
+											<span class='direct-chat-name pull-right'>Jon Snow</span> <span class='direct-chat-timestamp pull-left'>23
+												Jan 2:05 pm</span>
+										</div>
+										<!-- /.direct-chat-info -->
+										<img class="direct-chat-img" src="http://www.gravatar.com/avatar/?s=128" alt="message user image" />
+										<!-- /.direct-chat-img -->
+										<div class="direct-chat-text">The Apple Watch?</div>
+										<!-- /.direct-chat-text -->
+									</div>
+									<!-- /.direct-chat-msg -->
+								</div>
+								<!--/.direct-chat-messages-->
+								<div class="box-footer">
+									<form action="#" method="post">
+										<div class="input-group">
+											<input type="text" name="message" placeholder="Type Message ..." class="form-control" /> <span
+												class="input-group-btn">
+												<button type="button" class="btn btn-success btn-flat">Send</button>
+											</span>
+										</div>
+									</form>
+								</div>
+								<!-- /.box-footer-->
+							</div>
+							<!-- /.tab-pane -->
+							<div class="tab-pane" id="activity">
+								<ul class="timeline">
+									<!-- timeline time label -->
+									<li class="time-label"><span class="bg-gray"> 24/06/2015 </span></li>
+									<li>
+										<!-- timeline icon --> <i class="fa fa-comments bg-aqua" />
+										<div class="timeline-item">
+											<span class="time"><i class="fa fa-clock-o" /> 09:25</span>
+											<h3 class="timeline-header">
+												<a href="#">Hodor</a> commented on this requirement
+											</h3>
+											<div class='timeline-footer'>
+												<a class="btn btn-primary btn-xs">View comment</a>
+											</div>
+										</div>
+									</li>
+									<!-- timeline time label -->
+									<li class="time-label"><span class="bg-gray"> 23/06/2015 </span></li>
+									<li>
+										<!-- timeline icon --> <i class="fa fa-flask bg-yellow" />
+										<div class="timeline-item">
+											<span class="time"><i class="fa fa-clock-o" /> 10:25</span>
+											<h3 class="timeline-header">
+												<a href="#">Jon Snow</a> added a test case to this requirement
+											</h3>
+											<div class='timeline-footer'>
+												<a class="btn btn-warning btn-xs">Open</a> <a class="btn btn-primary btn-xs">Show all test cases related
+													to this requirement</a>
+											</div>
+										</div>
+									</li>
+									<li>
+										<!-- timeline icon --> <i class="fa fa-edit bg-blue" />
+										<div class="timeline-item">
+											<span class="time"><i class="fa fa-clock-o" /> 10:05</span>
+											<h3 class="timeline-header">
+												<a href="#">Jon Snow</a> edited this requirement
+											</h3>
+											<div class='timeline-footer'>
+												<a class="btn btn-warning btn-xs">Show changelog</a> <a class="btn btn-primary btn-xs">Show all versions</a>
+											</div>
+										</div>
+									</li>
+									<!-- timeline time label -->
+									<li class="time-label"><span class="bg-gray"> 10/06/2015 </span></li>
+									<!-- /.timeline-label -->
+									<li><i class="fa fa-clock-o bg-gray" />
+										<div class="timeline-item">
+											<span class="time"><i class="fa fa-clock-o" /> 12:05</span>
+											<h3 class="timeline-header">
+												<a href="#">Jon Snow</a> created this requirement
+											</h3>
+										</div></li>
+								</ul>
+							</div>
+						</div>
+						<!-- /.tab-content -->
+					</div>
+					<!-- nav-tabs-custom -->
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--/row-->
+	<div />
+	<!--/row-->
+	<div layout:fragment="footer">
+		<script type="text/javascript" src="../../static/js/modules/jstree-utils.js" th:src="@{/js/modules/jstree-utils.js}" />
+		<script type="text/javascript" src="../../static/js/modules/requirements.js" th:src="@{/js/modules/requirements.js}" />
+		<script type="text/javascript" th:inline="text">
+// 			var pageData = {
+// 					'projectKey': '[[${project.key}]]',
+// 					'branchName': '[[${branch.name}]]'
+// 			}
+			$(document).ready(function() {
+				initRequirementView();
+				tabRooting();
+			});
+		</script>
+	</div>
+</body>
+</html>

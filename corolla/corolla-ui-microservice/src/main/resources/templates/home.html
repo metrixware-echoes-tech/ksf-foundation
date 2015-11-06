@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout"
+>
+<body>
+	
+	<div layout:fragment="content">
+	
+		<!-- Content Header (Page header) -->
+	    <section class="content-header">
+	      <h1>
+	        Dashboard
+	        <small>Control panel</small>
+	      </h1>
+	      <ol class="breadcrumb">
+	        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+	        <li class="active">Dashboard</li>
+	      </ol>
+	    </section>
+
+
+		<!-- Main -->
+		<div class="content" >
+			<div class="row">
+				<div class="col-sm-6 col-md-4">
+					<div class="panel panel-primary">
+						<div class="panel-heading">
+							<h4>Favorite products</h4>
+						</div>
+						<div class="list-group">
+							<a href="#" class="list-group-item"><img src="http://lorempixel.com/16/16/" alt="Komea" /> Komea </a> <a href="#"
+								class="list-group-item"
+							><img src="http://lorempixel.com/16/16/" alt="Komea" /> Cobos</a> <a href="#" class="list-group-item"><img
+								src="http://lorempixel.com/16/16/" alt="Komea"
+							/> Echoes Software Factory</a> <a href="#" class="list-group-item"><img src="http://lorempixel.com/16/16/"
+								alt="Komea"
+							/> Mainframe Integrator</a> <a href="#" class="list-group-item"><img src="http://lorempixel.com/16/16/"
+								alt="Komea"
+							/> Product XYZ</a>
+						</div>
+						<div class="panel-footer">
+							<button type="button" class="btn btn-default">View projects</button>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-6 col-md-4">
+					<div class="panel panel-info">
+						<div class="panel-heading">
+							<h4>Active Test Campaigns</h4>
+						</div>
+						<div class="list-group">
+							<a href="#" class="list-group-item"><b>Campaign Komea : Q1</b> </a> <a href="#" class="list-group-item"><b>Campaign
+									Cobos : Q2</b> </a> <a href="#" class="list-group-item"><b>Campaign ESF : Q1</b> </a>
+						</div>
+						<div class="panel-footer">
+							<button type="button" class="btn btn-default">View Campaigns</button>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-6 col-md-4">
+					<div class="panel panel-info">
+						<div class="panel-heading">
+							<h4>Latest Activity</h4>
+						</div>
+						<div class="list-group">
+							<a href="#" class="list-group-item"><b>Testcase</b> : Ajouter des icones </a> <a href="#" class="list-group-item"><b>Application
+									Komea</b> : Modification architecture </a> <a href="#" class="list-group-item"><b>Testcase</b> : Ajouter des icones
+							</a>
+						</div>
+						<div class="panel-footer">
+							<button type="button" class="btn btn-default">View activity</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--/row-->
+		
+	</div>
+</body>
+</html>

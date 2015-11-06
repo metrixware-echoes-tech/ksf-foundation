@@ -1,0 +1,284 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout">
+<body>
+	<!-- Main -->
+	<div layout:fragment="content">
+		<!-- Content Header (Page header) -->
+		<section class="content-header">
+		<h1>
+			<i class="glyphicon glyphicon-tags"></i>
+			<span>Releases</span>
+		</h1>
+		<ol class="breadcrumb">
+			<li><a th:href="@{/ui/portfolio/}"><i class="glyphicon glyphicon-book" /> Komea</a></li>
+			<li><a th:href="@{/ui/portfolio/}+${project}">Komea Dashboard</a></li>
+			<li class="active">Releases</li>
+		</ol>
+		</section>
+		<!-- Main -->
+		<div class="content">
+			<div class="row">
+				<div class="col-sm-6 col-md-4">
+					<div class="panel panel-primary">
+						<div>
+							<div>
+								<ul class="wysihtml5-toolbar" style="margin: 8px;" />
+							</div>
+							<div class="table-responsive">
+								<table id="releases-table" class="table table-hover table-striped text-center" cellspacing="0" width="100%">
+									<thead>
+										<tr>
+											<th>Name</th>
+											<th>Date</th>
+										</tr>
+									</thead>
+									<tr class="success">
+										<td><a href="#" class="label label-default">2.0</a></td>
+										<td>29/06/2015</td>
+									</tr>
+									<tr>
+										<td><a href="#" class="label label-default">1.6</a></td>
+										<td>21/05/2015</td>
+									</tr>
+									<tr>
+										<td><a href="#" class="label label-default">1.5</a></td>
+										<td>10/05/2015</td>
+									</tr>
+									<tr>
+										<td><a href="#" class="label label-default">1.4</a></td>
+										<td>01/05/2015</td>
+									</tr>
+									<tr>
+										<td><a href="#" class="label label-default">1.3</a></td>
+										<td>12/04/2015</td>
+									</tr>
+									<tr>
+										<td><a href="#" class="label label-default">1.2</a></td>
+										<td>09/03/2015</td>
+									</tr>
+									<tr>
+										<td><a href="#" class="label label-default">1.1</a></td>
+										<td>02/02/2015</td>
+									</tr>
+									<tr>
+										<td><a href="#" class="label label-default">1.0</a></td>
+										<td>01/01/2015</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-6 col-md-8">
+					<div class="nav-tabs-custom">
+						<ul class="nav nav-tabs">
+							<li class="active"><a href="#details" data-toggle="tab">Details</a></li>
+							<li><a href="#requirements" data-toggle="tab">Requirements</a></li>
+							<li><a href="#test-cases" data-toggle="tab">Test Cases</a></li>
+							<li><a href="#campaigns" data-toggle="tab">Test Campaigns</a></li>
+							<li class="dropdown pull-right"><a class="dropdown-toggle btn btn-app" data-toggle="dropdown" href="#">
+									<i class="fa fa-paw" /> Actions
+							</a>
+								<ul class="dropdown-menu">
+									<li role="presentation"><a role="menuitem" tabindex="-1" href="#"> <i
+											class="glyphicon glyphicon-remove" /> Delete
+									</a></li>
+								</ul></li>
+							<li class="pull-right"><a class="btn btn-app" data-toggle="tab" href="#edit"> <i
+									class="glyphicon glyphicon-edit" /> Edit
+							</a></li>
+							<li class="pull-right dropdown"><a class="dropdown-toggle btn btn-app" data-toggle="dropdown" href="#">
+									<i class="fa fa-location-arrow" /> Export
+							</a>
+								<ul class="dropdown-menu">
+									<li role="presentation"><a role="menuitem" tabindex="-1" th:href="@{/ui/projects/komea-dashboard}"> <i
+											class="fa fa-file-pdf-o" /> PDF
+									</a></li>
+								</ul></li>
+							<li class="dropdown pull-right"><a class="dropdown-toggle btn btn-app" href="#"> <i
+									class="glyphicon glyphicon-plus" /> Add
+							</a></li>
+						</ul>
+						<div class="tab-content">
+							<div class="details-view tab-pane active" id="details">
+								<div class="row">
+									<div class="col-sm-3 col-md-2 field-name">Name</div>
+									<div class="col-sm-9 col-md-10 entity-key">2.0</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-3 col-md-2 field-name">Date</div>
+									<div class="col-sm-9 col-md-10">29/06/2015</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-3 col-md-2 field-name">Project Version</div>
+									<div class="col-sm-9 col-md-10">
+										<a href="#">6411a54d8a1e50aada05c</a>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-3 col-md-2 field-name">Description</div>
+									<div class="col-sm-9 col-md-10">u autem, Fanni, quod mihi tantum tribui dicis quantum ego nec adgnosco
+										nec postulo, facis amice; sed, ut mihi videris, non recte iudicas de Catone; aut enim nemo, quod quidem magis
+										credo, aut si quisquam, ille sapiens fuit. Quo modo, ut alia omittam, mortem filii tulit! memineram Paulum,
+										videram Galum, sed hi in pueris, Cato in perfecto et spectato viro. Equitis Romani autem esse filium criminis
+										loco poni ab accusatoribus neque his iudicantibus oportuit neque defendentibus nobis. Nam quod de pietate
+										dixistis, est quidem ista nostra existimatio, sed iudicium certe parentis; quid nos opinemur, audietis ex
+										iuratis; quid parentes sentiant, lacrimae matris incredibilisque maeror, squalor patris et haec praesens
+										maestitia, quam cernitis, luctusque declarat. Accedat huc suavitas quaedam oportet sermonum atque morum,
+										haudquaquam mediocre condimentum amicitiae. Tristitia autem et in omni re severitas habet illa quidem
+										gravitatem, sed amicitia remissior esse debet et liberior et dulcior et ad omnem comitatem facilitatemque
+										proclivior. Procedente igitur mox tempore cum adventicium nihil inveniretur, relicta ora maritima in Lycaoniam
+										adnexam Isauriae se contulerunt ibique densis intersaepientes itinera praetenturis provincialium et viatorum
+										opibus pascebantur.</div>
+								</div>
+							</div>
+							<div class="tab-pane" id="edit">
+								<form class="project-form" action="">
+									<div class="row form-row">
+										<div class="col-sm-3 col-md-2">
+											<span class="">Name</span>
+										</div>
+										<div class="col-sm-9 col-md-10">
+											<input name="name" type="text" class="form-control" />
+										</div>
+									</div>
+									<div class="row form-row">
+										<div class="col-sm-3 col-md-2">
+											<span class="">Date</span>
+										</div>
+										<div class="col-sm-9 col-md-10">
+											<input name="date" type="text" class="form-control datepicker" />
+										</div>
+									</div>
+									<div class="row form-row">
+										<div class="col-sm-3 col-md-2">
+											<span class="">Project Version</span>
+										</div>
+										<div class="col-sm-9 col-md-10">
+											<select name="status" class="select2">
+												<option>3 - 24/06/2015 12:35</option>
+												<option>2 - 23/06/2015 12:35</option>
+												<option>1 - 23/06/2015 11:25</option>
+											</select>
+										</div>
+									</div>
+									<textarea class="textarea" placeholder="Description" style="height: 500px;" cols="" rows="" />
+									<div class="box-footer">
+										<button type="submit" class="btn btn-primary">Save</button>
+									</div>
+								</form>
+							</div>
+							<div class="tab-pane" id="requirements">
+								<div class="table-responsive">
+									<table id="relationships-table" class="table table-hover table-striped" cellspacing="0" width="100%">
+										<thead>
+											<tr>
+												<th>Key</th>
+												<th>Name</th>
+												<th>Actions</th>
+											</tr>
+										</thead>
+										<tr>
+											<td><a href="#" class="label label-default">ADD_KPI</a></td>
+											<td>Add a KPI</td>
+											<td><a href="#" class="label label-info">Open</a></td>
+										</tr>
+										<tr>
+											<td><a href="#" class="label label-default">EDIT_KPI</a></td>
+											<td>Edit a KPI</td>
+											<td><a href="#" class="label label-info">Open</a></td>
+										</tr>
+										<tr>
+											<td><a href="#" class="label label-default">DELETE_KPI</a></td>
+											<td>Delete a KPI</td>
+											<td><a href="#" class="label label-info">Open</a></td>
+										</tr>
+									</table>
+								</div>
+							</div>
+							<div class="tab-pane" id="test-cases">
+								<div class="table-responsive">
+									<table id="test-cases-table" class="table table-hover table-striped" cellspacing="0" width="100%">
+										<thead>
+											<tr>
+												<th>Key</th>
+												<th>Name</th>
+												<th>Actions</th>
+											</tr>
+										</thead>
+										<tr>
+											<td><a href="#" class="label label-default">TEST_ADD_KPI</a></td>
+											<td>Create a kpi</td>
+											<td><a href="#" class="label label-info">Open</a></td>
+										</tr>
+										<tr>
+											<td><a href="#" class="label label-default">TEST_ADD_KPI_WITH_EMPTY_NAME</a></td>
+											<td>Create a KPI with empty name</td>
+											<td><a href="#" class="label label-info">Open</a></td>
+										</tr>
+									</table>
+								</div>
+							</div>
+							<div class="tab-pane" id="campaigns">
+								<div class="table-responsive">
+									<table id="test-cases-table" class="table table-hover table-striped" cellspacing="0" width="100%">
+										<thead>
+											<tr>
+												<th />
+												<th>Key</th>
+												<th>Name</th>
+												<th>Date</th>
+												<th>Status</th>
+												<th>Results</th>
+												<th>Actions</th>
+											</tr>
+										</thead>
+										<tr class="">
+											<td><b class="fa fa-spinner" /></td>
+											<td><a href="#" class="label label-default">Campaign #003</a></td>
+											<td>Campaign #003</td>
+											<td>30/06/2015</td>
+											<td><a href="#" class="label label-default">In Progress</a></td>
+											<td><a href="#" class="badge">5/35</a></td>
+											<td><a href="#" class="label label-info">Open</a></td>
+										</tr>
+										<tr class="success">
+											<td><b class="fa fa-check" /></td>
+											<td><a href="#" class="label label-default">Campaign #002</a></td>
+											<td>Campaign #002</td>
+											<td>29/06/2015</td>
+											<td><a href="#" class="label label-default">Completed</a></td>
+											<td><a href="#" class="badge">35/35</a></td>
+											<td><a href="#" class="label label-info">Open</a></td>
+										</tr>
+										<tr class="danger">
+											<td><b class="fa fa-remove" /></td>
+											<td><a href="#" class="label label-default">Campaign #001</a></td>
+											<td>Campaign #001</td>
+											<td>28/06/2015</td>
+											<td><a href="#" class="label label-default">Completed</a></td>
+											<td><a href="#" class="badge">25/35</a></td>
+											<td><a href="#" class="label label-info">Open</a></td>
+										</tr>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div layout:fragment="footer">
+		<script type="text/javascript" src="../../static/js/modules/project.js" th:src="@{/js/modules/releases.js}" />
+		<script type="text/javascript">
+			$(document).ready(function() {
+				initReleasesView();
+				tabRooting();
+			});
+		</script>
+	</div>
+</body>
+</html>

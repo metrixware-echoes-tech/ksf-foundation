@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout">
+<body>
+	<!-- Main -->
+ 	<div layout:fragment="content">
+ 
+  		<!-- Content Header (Page header) -->
+	    <section class="content-header">
+		    <ol class="breadcrumb">
+		       <li><a th:href="@{/ui/admin}"><i class="fa fa-gear"></i> Administration</a></li>
+		       <li class="active">Folder Types</li>
+		    </ol> 
+	    </section>
+
+
+		<!-- Main -->
+		<div class="content">
+			<div class="row">
+	            <div class="col-xs-12">
+	              	<div class="box">
+	              	
+		                <div class="box-header">
+		                  <h3 class="box-title"></h3>
+		                  <div style="max-width: 80%;" class="pull-left">
+		                  	<div th:replace="modal :: helpbox('In this panel you can manage the types of the folders that are displayed in Corolla\'s treeviews. Click on the \'Edit\' button of a type to edit its information. Click on the \'Add\' button to define a new type.')"></div>
+		                  </div>
+		                  <div class="box-tools nav-tabs-custom">
+		                  	<ul class="nav nav-tabs">
+		                  		<li>
+			                  		<a th:href="@{/ui/admin/folder-node-types/add}" class="btn btn-app">
+										<i class="glyphicon glyphicon-plus"></i>
+										Add
+									</a>
+		                  		</li>
+		                  	</ul>			
+		                  </div>
+		                </div><!-- /.box-header -->
+		                
+		                <div class="box-body table-responsive">
+					      <table id="items-table" class="table table-hover table-striped" cellspacing="0" width="100%">
+					       <thead>
+					        <tr>
+					         <th>Icon</th>
+					         <th>Name</th>
+					         <th></th>
+					         <th></th>
+					        </tr>
+					       </thead>
+					       <tr th:each="type : ${types}" th:attr="data-id=${type.id}">
+					       		<td><img th:src="${type.icon}"/></td>
+					       		<td><span th:text="${type.name}"></span></td>
+					       		<td>
+					       			<a th:href="@{/ui/admin/folder-node-types/edit/}+${type.id}" class="btn btn-primary btn-xs">
+					       				<span class="glyphicon glyphicon-pencil" />
+					       				Edit
+					       			</a>
+					       		</td>
+					       		<td>
+					       			<button class="btn btn-danger btn-xs itemDelete">
+					       				<span class="glyphicon glyphicon-trash"></span>
+					       				Delete
+					       			</button>
+					       		</td>
+					       </tr>
+					      </table>
+	     				</div>
+    				</div>
+   				</div>
+   			</div>
+   		</div>
+   	</div>
+
+	 <div layout:fragment="footer">
+	  	<script type="text/javascript" src="../../static/js/modules/items.js" th:src="@{/js/modules/folders.js}" />
+	  	<script type="text/javascript">
+	  		$(document).ready(initFolderView);
+	  	</script>
+	 </div>
+	 
+</body>
+</html>

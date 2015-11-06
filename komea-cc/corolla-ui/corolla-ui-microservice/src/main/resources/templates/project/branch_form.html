@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout">
+<body>
+	<!-- Main -->
+	<div class="content" layout:fragment="content">
+		<!-- content -->
+		<div class="row">
+			<!-- main col left -->
+			<div class="col-sm-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4>Define Branch</h4>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<form class="form-horizontal" th:object="${branch}"
+								th:attr="action=@{${#strings.isEmpty(branch.id)} ? '/ui/projects/'+${project.key}+'/branches/add/' + ${originBranchName} : '/ui/projects/'+${project.key}+'/branches/edit/' + ${branch.name}}"
+								method="post" id="form" action="">
+								<fieldset>
+									<input type="hidden" name="id" id="id" th:value="${branch.id}" />
+									<input type="hidden" name="projectId" th:value="${branch.projectId}" />
+									<!-- Name input-->
+									<div class="form-group">
+										<label class="col-md-2 control-label" for="name">Name</label>
+										<div class="col-md-4">
+											<input id="name" name="name" placeholder="Branch Name" class="form-control input-md" required="required"
+												data-parsley-trigger="focusin focusout change" data-parsley-range="[3, 30]" type="text" th:field="*{name}" />
+											<span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+										</div>
+									</div>																								
+									<!-- Button (Double) -->
+									<div class="form-group">
+										<label class="col-md-2 control-label" for="saveButton" />										
+										<div class="col-md-2">
+											<button id="saveButton" name="saveButton" class="btn btn-primary">Save</button>
+										</div>
+										<div class="col-md-2">
+											<a th:href="@{/ui/projects/}+${project.key}+@{#branches}" id="cancelButton" name="cancelButton" class="btn btn-default">Cancel</a>
+										</div>
+									</div>
+								</fieldset>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--/row-->
+	<div layout:fragment="footer">
+	</div>
+</body>
+</html>

@@ -1,0 +1,7 @@
+dependencies {
+	compile project(":ksf-commons:ksf-backend-microservice")
+	
+	
+	compile "commons-io:commons-io:$APACHE_COMMONIO"
+	
+}

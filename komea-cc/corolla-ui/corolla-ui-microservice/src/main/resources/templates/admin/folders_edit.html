@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout">
+<body>
+	<!-- Main -->
+	<div class="content" layout:fragment="content">
+		<!-- content -->
+		<div class="row">
+			<!-- main col left -->
+			<div class="col-sm-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4>Define Role</h4>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<form class="form-horizontal" th:object="${type}"
+								th:attr="action=@{${type.id} == null ? '/ui/admin/folder-node-types/add' : '/ui/admin/folder-node-types/edit/' + ${type.id}}"
+								method="post" id="form" action="">
+								<fieldset>
+									<input type="hidden" name="id" id="id" th:value="${type.id}" />
+									<!-- Name input-->
+									<div class="form-group">
+										<label class="col-md-2 control-label" for="name">Name</label>
+										<div class="col-md-4">
+											<input id="name" name="name" placeholder="Guest" class="form-control input-md" required="required"
+												data-parsley-trigger="focusin focusout change" data-parsley-range="[3, 30]" type="text" th:field="*{name}" />
+										</div>
+									</div>
+									<!-- Icon input-->
+									<div class="form-group">
+										<label class="col-md-2 control-label" for="note">Icon</label>
+										<div class="col-md-4">
+											<input id="icon" name="icon" placeholder="Guest" class="form-control input-md" required="required" type="text" th:field="*{icon}" />
+										</div>
+									</div>
+									<!-- Button (Double) -->
+									<div class="form-group">
+										<label class="col-md-2 control-label" for="saveButton" />										
+										<div class="col-md-2">
+											<button id="saveButton" name="saveButton" class="btn btn-primary">Save</button>
+										</div>
+										<div class="col-md-2">
+											<a href="/ui/admin/folder-node-types" id="cancelButton" name="cancelButton" class="btn btn-default">Cancel</a>
+										</div>
+									</div>
+								</fieldset>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--/row-->
+	<div layout:fragment="footer">
+		<script type="text/javascript" src="../../static/js/modules/roles.js" th:src="@{/js/modules/roles.js}" />
+		<script type="text/javascript">
+			$(document).ready(initFormUserEdit);
+		</script>
+	</div>
+</body>
+</html>

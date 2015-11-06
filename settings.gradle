@@ -1,0 +1,19 @@
+rootProject.name = 'ksf-parent'
+
+// KSF-Commons
+
+include "ksf-commons:ksf-backend-cqrs"
+include "ksf-commons:ksf-backend-domain-commons"
+include "ksf-commons:ksf-backend-users"
+include "ksf-commons:ksf-backend-portfolio"
+
+include "ksf-commons:ksf-backend-projects"
+include "ksf-commons:ksf-backend-utils"
+include "ksf-commons:ksf-backend-microservice"
+
+// Corolla
+
+include "corolla:corolla-backend-requirements"
+include "corolla:corolla-ui-widgets"
+include "corolla:corolla-ui-microservice"
+

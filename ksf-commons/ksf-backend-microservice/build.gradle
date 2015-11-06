@@ -1,0 +1,28 @@
+//buildscript {
+//	repositories {
+//		mavenLocal()
+//		mavenCentral()
+//	}
+//	dependencies { classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}") }
+//}
+//
+//apply plugin: 'war'
+//apply plugin: 'spring-boot'
+//
+//configurations { providedRuntime }
+
+dependencies {
+	
+	compile project(":ksf-commons:ksf-backend-cqrs")
+	compile project(":ksf-commons:ksf-backend-domain-commons")
+	compile project(":ksf-commons:ksf-backend-projects")
+	compile project(":ksf-commons:ksf-backend-users")
+	compile project(":ksf-commons:ksf-backend-utils")
+	compile project(":ksf-commons:ksf-backend-portfolio")
+	
+}
+//
+//war {
+//	baseName = 'corolla-backend'
+//}
+//

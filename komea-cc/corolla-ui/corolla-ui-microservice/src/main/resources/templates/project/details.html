@@ -1,0 +1,341 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout">
+<body>
+	<div layout:fragment="content">
+		<!-- Content Header (Page header) -->
+		<section class="content-header">
+		<ol class="breadcrumb">
+			<li><a href="/ui/portfolio/manager">
+				<i class="glyphicon glyphicon-book" /> 
+				<span th:text="${project.name}"></span></a>
+			</li>
+			<li class="active">Details</li>
+		</ol>
+		</section>
+		<!-- Main -->
+		<div class="content">
+				
+			<div class="row">
+				<div class="col-sm-1 col-md-1"></div>
+				<div class="col-sm-10 col-md-10">
+				
+					<div th:replace="modal :: helpbox('
+						From this panel, you can navigate through your projects, create new projects, edit a project\'s information.')" />
+				
+					<div class="nav-tabs-custom">
+						<ul class="nav nav-tabs">
+							<li th:classappend="${#strings.isEmpty(selectedTab)} ? 'active'"><a href="#details" data-toggle="tab">Details</a></li>
+							<li><a href="#projects" data-toggle="tab">Projects</a></li>
+							<li><a href="#branches" data-toggle="tab">Branches</a></li>
+							<li><a href="#revisions" data-toggle="tab">Revisions</a></li>
+							<li><a href="#activity" data-toggle="tab">Activity</a></li>
+							<li class="pull-right dropdown"><a class="dropdown-toggle btn btn-app" data-toggle="dropdown" href="#">
+									<i class="fa fa-paw" /> Actions
+							</a>
+								<ul class="dropdown-menu">
+									<li role="presentation"><a role="menuitem" tabindex="-1" th:href="@{/ui/requirements/}+${project.key}">
+											<i class="glyphicon glyphicon-list-alt" /> Manage requirements
+									</a></li>
+									<li role="presentation" class="divider" />
+									<li role="presentation"><a role="menuitem" tabindex="-1" href="#"> <i class="fa fa-flask" /> Manage
+											test cases
+									</a></li>
+									<li role="presentation" class="divider" />
+									<li role="presentation"><a role="menuitem" tabindex="-1" href="#"> <i class="glyphicon glyphicon-ok" />
+											Manage test campaigns
+									</a></li>
+									<li role="presentation" class="divider" />
+									<li role="presentation"><a role="menuitem" tabindex="-1" th:href="@{/ui/releases/komea-dashboard}"> <i
+											class="glyphicon glyphicon-tags" /> Manage releases
+									</a></li>
+									<li role="presentation" class="divider" />
+									<li role="presentation"><a role="menuitem" tabindex="-1" th:href="@{/ui/variables/komea-dashboard}"> <i
+											class="glyphicon glyphicon-text-color" /> Manage variables
+									</a></li>
+									<li role="presentation" class="divider" />
+									<li role="presentation"><a role="menuitem" tabindex="-1" href="#"> <i
+											class="glyphicon glyphicon-inbox" /> Archive project
+									</a></li>
+									<li role="presentation" class="divider" />
+									<li role="presentation">
+										<a class="projectDelete" role="menuitem" tabindex="-1" href="#"> 
+											<i class="glyphicon glyphicon-remove" /> Delete project
+										</a>
+									</li>
+								</ul></li>
+							<li class="pull-right dropdown"><a class="dropdown-toggle btn btn-app" data-toggle="dropdown" href="#">
+									<i class="fa fa-location-arrow" /> Export
+							</a>
+								<ul class="dropdown-menu">
+									<li role="presentation"><a role="menuitem" tabindex="-1" th:href="@{/ui/requirements/komea-dashboard}">
+											<i class="fa fa-file-pdf-o" /> PDF
+									</a></li>
+								</ul></li>
+							<li class="pull-right" th:classappend="${selectedTab == 'edit'} ? 'active'"><a href="#edit"
+								data-toggle="tab" class="btn btn-app"> <i class="glyphicon glyphicon-edit" /> Edit
+							</a></li>
+						</ul>
+						<div class="tab-content">
+							<div class="tab-pane" id="projects">
+								<div>
+								<ul class="wysihtml5-toolbar" style="margin: 5px;">
+									<li class="dropdown"><a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown"> Add <b
+											class="caret" />
+									</a>
+										<ul class="dropdown-menu">
+											<li><a href="#"> <i class="fa fa-briefcase" /> Project
+											</a></li>
+											<li th:each="folderNodeType : ${folderNodeTypes}"><a href="#"
+												th:attr="onclick='jsTreeManager.addFolder(\''+${folderNodeType.id}+'\', null)'"> <img
+													th:src="${folderNodeType.icon}" src="" alt="" /> <span th:text="${folderNodeType.name}" />
+											</a></li>
+										</ul></li>
+									<li><a href="#" class="btn btn-default"> <span class="glyphicon glyphicon-filter" />
+									</a></li>
+									<li><a href="#" class="btn btn-default" onclick="jsTreeManager.expand()"> <span class="fa fa-expand" />
+									</a></li>
+									<li><a href="#" class="btn btn-default" onclick="jsTreeManager.collapse()"> <span
+											class="fa fa-compress" />
+									</a></li>
+									<li><a href="/ui/portfolio" class="btn btn-default"> <span class="glyphicon glyphicon-th" />
+									</a></li>
+									<li style="width: 45%;">
+										<div class="input-group">
+											<span class="input-group-addon"> <i class="glyphicon glyphicon-search" />
+											</span> <input class="form-control" type="text" placeholder="Search" style="width: 100%;" />
+										</div>
+									</li>
+								</ul>
+								</div>
+								<div class="projects-tree-view" />
+							</div>
+							<!-- /.tab-pane -->
+							<div class="tab-pane" id="details" th:classappend="${#strings.isEmpty(selectedTab)} ? 'active'">
+								<div class="details-view">
+									<div class="row">
+										<div class="col-sm-3 col-md-2 field-name">Key</div>
+										<div class="col-sm-9 col-md-10 entity-key">
+											<img th:if="${project.image != null}" th:src="${project.image}" style="height: 24px;" src="" alt="" /> <span
+												th:text="${project.key}" />
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-sm-3 col-md-2 field-name">Name</div>
+										<div class="col-sm-9 col-md-10" th:text="${project.name}" />
+									</div>
+									<div class="row">
+										<div class="col-sm-3 col-md-2 field-name">Status</div>
+										<div class="col-sm-9 col-md-10">
+											<span class="label" th:classappend="${status.closed}? 'label-warning' : 'label-success'"
+												th:text="${status.name}">Active</span>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-sm-3 col-md-2 field-name">Category</div>
+										<div class="col-sm-9 col-md-10">
+											<span th:text="${category}? ${category.name} : '-'" />
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-sm-3 col-md-2 field-name">Product Manager</div>
+										<div class="col-sm-9 col-md-10">
+											<div th:if="${owner != null}">
+												<img
+													th:src="${#strings.isEmpty(owner.gravatar)} ? ${owner.gravatar} : 'http://www.gravatar.com/avatar/?s=16'"
+													src="" alt="" /> <a th:href="@{/ui/users/}+${owner.login}" th:text="${owner.firstName+' '+owner.lastName}">Hodor</a>
+											</div>
+											<span th:if="${owner == null}">-</span>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-sm-3 col-md-2 field-name">Description</div>
+										<div class="col-sm-9 col-md-10" th:utext="${project.description}" />
+									</div>
+									<div class="row tags-row">
+										<div class="col-sm-3 col-md-2 field-name">Tags</div>
+										<div class="col-sm-9 col-md-10">
+											<input type="text" name="tags" placeholder="Tags" class="tm-input tm-input-info" />
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="tab-pane" id="edit" th:classappend="${selectedTab == 'edit'} ? 'active'">
+								<!-- Edit Project Form -->
+								<div th:replace="project_form :: projectForm" />
+							</div>
+							<!-- /.tab-pane -->
+							<div class="tab-pane" id="branches">
+<!-- 								<a th:href="@{/ui/projects/}+${project.key}+@{/branches/add}" class="btn btn-primary pull-right">  -->
+<!-- 									<span class="fa fa-plus" /> New Branch -->
+<!-- 								</a>  -->
+								<br style="clear: both;" />
+								<div class="table-responsive">
+									<table class="table table-hover table-striped" cellspacing="0" width="100%">
+										<tr th:each="branch : ${branches}" th:attr="data-branchName=${branch.name}">
+											<td class="col-md-6">
+												<span th:text="${branch.name}" style="font-weight: bold;"/>
+											</td>
+											<td>
+												<a th:href="@{/ui/requirements/}+${project.key}+@{/}+${branch.name}" class="btn btn-default">
+													<span class="glyphicon glyphicon-duplicate" /> Requirements
+												</a>
+											</td>
+											<td>
+												<a href="#" class="btn btn-default"> 
+													<span class="fa fa-flask" /> Test Cases
+												</a>
+											</td>
+											<td>
+												<a th:href="@{/ui/projects/}+${project.key}+@{/branches/add/}+${branch.name}" class="btn btn-default"> 
+													<span class="fa fa-plus" /> New Branch
+												</a> 
+											</td>
+											<td>
+												<a href="#" class="btn btn-default"> 
+													<span class="fa fa-flash" /> Merge
+												</a>
+											</td>
+											<td>
+												<a th:href="@{/ui/projects/}+${project.key}+@{/branches/edit/}+${branch.name}" class="btn btn-info"> 
+													<span class="glyphicon glyphicon-pencil" /> Edit
+												</a>
+											</td>
+											
+											<td>
+												<a href="#" class="branchDelete btn btn-danger" th:if="${branch.defaultBranch == false}"> 
+													<span class="glyphicon glyphicon-trash" /> Delete
+												</a>
+											</td>
+										</tr>
+									</table>
+								</div>
+							</div>
+							<div class="tab-pane" id="revisions">
+								<div class="table-responsive">
+									<table class="table table-hover table-striped" cellspacing="0" width="100%">
+										<thead>
+											<tr>
+												<th>Version</th>
+												<th>Created on</th>
+												<th>Change details</th>
+												<th>Author</th>
+												<th>Actions</th>
+											</tr>
+										</thead>
+										<tr th:each="commit : ${commits}">
+											<td class="toggle"><span class="badge" th:text="${commit.id}">id</span></td>
+											<td class="toggle" th:text="${#dates.format(commit.getDate(), 'dd/MM/yyyy HH:mm')}">date</td>
+											<td class="toggle" th:text="${commit.type}" />
+											<td class="toggle"><img src="http://www.gravatar.com/avatar/?s=16" alt="" /> <span
+												th:text="${commit.author}" /></td>
+											<td>
+												<a th:if="${commits[0].id} != ${commit.id}" 
+												th:href="@{/ui/projects/}+${project.key}+@{/revisions/}+${commit.id}+@{/restore}" 
+												class="label label-warning" style="margin-right: 5px;"> 
+												Restore </a> 
+												<a th:href="@{/ui/projects/}+${project.key}+@{/revisions/}+${commit.id}" class="label label-primary">
+													Changelog 
+												</a>
+											</td>
+										</tr>
+									</table>
+								</div>
+							</div>
+							<div class="tab-pane" id="activity">
+								<ul class="timeline">
+									<!-- timeline time label -->
+									<li class="time-label"><span class="bg-gray"> 24/06/2015 </span></li>
+									<li>
+										<!-- timeline icon --> <i class="glyphicon glyphicon-ok bg-aqua" />
+										<div class="timeline-item">
+											<span class="time"><i class="fa fa-clock-o" /> 09:45</span>
+											<h3 class="timeline-header">
+												<a href="#">Hodor</a> started a new campaign
+											</h3>
+											<div class='timeline-footer'>
+												<a class="btn btn-warning btn-xs">Open</a>
+											</div>
+										</div>
+									</li>
+									<li>
+										<!-- timeline icon --> <i class="fa fa-tags bg-black" />
+										<div class="timeline-item">
+											<span class="time"><i class="fa fa-clock-o" /> 09:25</span>
+											<h3 class="timeline-header">
+												<a href="#">Hodor</a> created the release <a href="#">Version 1.0</a>
+											</h3>
+										</div>
+									</li>
+									<!-- timeline time label -->
+									<li class="time-label"><span class="bg-gray"> 23/06/2015 </span></li>
+									<li>
+										<!-- timeline icon --> <i class="fa fa-flask bg-yellow" />
+										<div class="timeline-item">
+											<span class="time"><i class="fa fa-clock-o" /> 10:25</span>
+											<h3 class="timeline-header">
+												<a href="#">Jon Snow</a> added the test case <a href="#">"Add a KPI"</a> to this project
+											</h3>
+											<div class='timeline-footer'>
+												<a class="btn btn-warning btn-xs">Open</a> <a class="btn btn-primary btn-xs">View all test cases</a>
+											</div>
+										</div>
+									</li>
+									<li>
+										<!-- timeline icon --> <i class="glyphicon glyphicon-list-alt bg-green" />
+										<div class="timeline-item">
+											<span class="time"><i class="fa fa-clock-o" /> 10:25</span>
+											<h3 class="timeline-header">
+												<a href="#">Jon Snow</a> added the requirement <a href="#">"Add a KPI"</a> to this project
+											</h3>
+											<div class='timeline-footer'>
+												<a class="btn btn-warning btn-xs">Open</a> <a class="btn btn-primary btn-xs">View all requirements</a>
+											</div>
+										</div>
+									</li>
+									<li>
+										<!-- timeline icon --> <i class="fa fa-edit bg-blue" />
+										<div class="timeline-item">
+											<span class="time"><i class="fa fa-clock-o" /> 10:05</span>
+											<h3 class="timeline-header">
+												<a href="#">Jon Snow</a> edited this project
+											</h3>
+											<div class='timeline-footer'>
+												<a class="btn btn-warning btn-xs">Show changelog</a> <a class="btn btn-primary btn-xs">Show all versions</a>
+											</div>
+										</div>
+									</li>
+									<!-- timeline time label -->
+									<li class="time-label"><span class="bg-gray"> 10/06/2015 </span></li>
+									<!-- /.timeline-label -->
+									<li><i class="fa fa-clock-o bg-gray" />
+										<div class="timeline-item">
+											<span class="time"><i class="fa fa-clock-o" /> 12:05</span>
+											<h3 class="timeline-header">
+												<a href="#">Jon Snow</a> created this project
+											</h3>
+										</div></li>
+								</ul>
+							</div>
+						</div>
+						<!-- /.tab-content -->
+					</div>
+					<!-- nav-tabs-custom -->
+				</div>
+				<div class="col-sm-1 col-md-1"></div>
+			</div>
+		</div>
+	</div>
+	<div layout:fragment="footer">
+		<script type="text/javascript" th:src="@{/js/modules/jstree-utils.js}" src="../static/js/modules/jstree-utils.js" />
+		<script type="text/javascript" src="../../static/js/modules/portfolio.js" th:src="@{/js/modules/portfolio-manager.js}" />
+		<script type="text/javascript">
+			$(document).ready(function() {
+				tabRooting();
+				initDetailsView();
+			});
+		</script>
+	</div>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout">
+<body>
+	<!-- Main -->
+	<div class="content" layout:fragment="content">
+		<!-- content -->
+		<div class="row">
+			<!-- main col left -->
+			<div class="col-sm-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4>Define Role</h4>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<form class="form-horizontal" th:object="${role}"
+								th:attr="action=@{${role.id} == null ? '/ui/admin/roles/add' : '/ui/admin/roles/edit/' + ${role.id}}"
+								method="post" id="form" action="">
+								<fieldset>
+									<input type="hidden" name="id" id="id" th:value="${role.id}" />
+									<!-- Name input-->
+									<div class="form-group">
+										<label class="col-md-2 control-label" for="name">Name</label>
+										<div class="col-md-4">
+											<input id="name" name="name" placeholder="Guest" class="form-control input-md" required="required"
+												data-parsley-trigger="focusin focusout change" data-parsley-range="[3, 30]" type="text" th:field="*{name}" />
+										</div>
+									</div>
+									<!-- Note input-->
+									<div class="form-group">
+										<label class="col-md-2 control-label" for="note">Note</label>
+										<div class="col-md-4">
+											<input id="note" name="note" placeholder="Guest" class="form-control input-md" required="required"
+												data-parsley-trigger="focusin focusout change" data-parsley-range="[3, 30]" type="text" th:field="*{note}" />
+										</div>
+									</div>
+									<!-- Permission input-->
+									<div class="form-group">
+										<label class="col-md-2 control-label" for="permissions">Permissions</label>
+										<div class="col-md-4">
+											<div class="control-group">
+												<div class="permission-cb " th:each="permission : ${permissions}">
+													<input type="checkbox" name="permissions" th:value="${permission}" th:checked="${#lists.contains(role.permissions, permission)}" /> 
+													<span th:text="${permission}" />
+												</div>
+											</div>
+										</div>
+									</div>
+									<!-- Button (Double) -->
+									<div class="form-group">
+										<label class="col-md-2 control-label" for="saveButton" />										
+										<div class="col-md-2">
+											<button id="saveButton" name="saveButton" class="btn btn-primary">Save</button>
+										</div>
+										<div class="col-md-2">
+											<a href="/ui/admin/roles" id="cancelButton" name="cancelButton" class="btn btn-default">Cancel</a>
+										</div>
+									</div>
+								</fieldset>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--/row-->
+	<div layout:fragment="footer">
+		<script type="text/javascript" src="../../static/js/modules/roles.js" th:src="@{/js/modules/roles.js}" />
+		<script type="text/javascript">
+			$(document).ready(initFormUserEdit);
+		</script>
+	</div>
+</body>
+</html>

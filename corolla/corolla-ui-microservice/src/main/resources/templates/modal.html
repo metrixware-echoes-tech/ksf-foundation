@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<body>
+	<!-- start: Delete Item Modal -->
+	<div th:fragment="deleteModal" class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+		aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h3 class="modal-title" id="myModalLabel">Warning!</h3>
+				</div>
+				<div class="modal-body">
+					<h4>Are you sure you want to DELETE?</h4>
+				</div>
+				<!--/modal-body-collapse -->
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" id="btnModalYes" href="#">Yes</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+				</div>
+				<!--/modal-footer-collapse -->
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- start: Operation Forbidden Modal -->
+	<div th:fragment="forbiddenModal" class="modal fade" id="forbiddenModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+		aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h3 class="modal-title" id="myModalLabel">Operation forbidden</h3>
+				</div>
+				<div class="modal-body">
+					<h4>It seems that you have not the required permission to execute this action.</h4>
+				</div>
+				<!--/modal-body-collapse -->
+				<div class="modal-footer">			
+				</div>
+				<!--/modal-footer-collapse -->
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+	<!-- Change Project Modal -->
+	<div th:fragment="changeProjectModal" id="modal-change-project" class="modal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title">Change project</h4>
+				</div>
+				<div class="modal-body">
+					<div class="change-project-treeview"></div>
+				</div>
+				<div class="modal-footer">
+					<a type="button" class="btn btn-primary" th:href="@{/ui/portfolio}">Portfolio</a>
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+				<!--/modal-footer-collapse -->
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+	<!-- Select User Modal -->
+	<div th:fragment="selectUserModal" id="modal-select-user" class="modal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title">Select User</h4>
+				</div>
+				<div class="modal-body">
+					<div class="table-responsive" style="padding: 10px;">
+						<table class="table table-hover table-striped" cellspacing="0" width="100%">
+							<thead>
+								<tr>
+									<th></th>
+									<th>Login</th>
+									<th>First name</th>
+									<th>Last name</th>
+									<th>Email</th>
+									<th>Role</th>
+									<th></th>
+								</tr>
+							</thead>
+<!-- 							<tr th:each="user : ${users}" th:attr="data-id=${user.login}" th:class="${user.active ? '' : 'warning'}"> -->
+<!-- 								<td><img th:src="'http://www.gravatar.com/avatar/'+ ${user.gravatar} + '?s=48'" class="img-responsive" -->
+<!-- 									src="" alt="" /></td> -->
+<!-- 								<td><a data-toggle="tooltip" title="Edit this user" th:href="@{'/ui/admin/users/edit/' + ${user.login}}" -->
+<!-- 									th:text="${user.login}">login</a></td> -->
+<!-- 								<td th:text="${user.firstName}">First name</td> -->
+<!-- 								<td th:text="${user.lastName}">Last name</td> -->
+<!-- 								<td th:text="${user.email}">Email</td> -->
+<!-- 								<td th:text="${user.role}">Role</td> -->
+<!-- 								<td> -->
+<!-- 									<button class="btn-pick btn btn-primary btn-xs" data-title="Select"> -->
+<!-- 										<span class="fa fa-crosshairs"></span> -->
+<!-- 									</button> -->
+<!-- 								</td> -->
+<!-- 							</tr> -->
+							<tfoot>
+								<tr>
+									<th></th>
+									<th>Login</th>
+									<th>First name</th>
+									<th>Last name</th>
+									<th>Email</th>
+									<th>Role</th>
+									<th></th>
+								</tr>
+							</tfoot>
+						</table>
+					</div>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal-dialog -->
+		</div>
+		<!-- /.modal -->
+	</div>
+	
+	<!-- HelpBox -->
+	<div th:fragment="helpbox(helpMsg)" class="alert alert-dismissible bg-gray" role="alert">
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<i class="icon fa fa-question-circle"></i> <span th:text="${helpMsg}"></span>
+	</div>
+	<!-- /.HelpBox -->
+	
+</body>
+</html>
