@@ -10,9 +10,8 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @SpringBootApplication
 @EnableAutoConfiguration
 @EnableConfigurationProperties
-//@EnableJpaAuditing
-//@EnableJpaRepositories
-//@EnableTransactionManagement
+@EnableMongoRepositories
+@EnableMongoAuditing
 //@EnableWebMvc
 class CorollaGuiApplication {
 	
