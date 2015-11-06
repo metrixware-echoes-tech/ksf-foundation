@@ -19,24 +19,6 @@
  */
 package com.tocea.corolla.products.rest;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.util.Collection;
-import java.util.List;
-
-import org.apache.commons.collections.CollectionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
@@ -53,142 +35,166 @@ import com.tocea.corolla.products.exceptions.ProjectBranchNotFoundException;
 import com.tocea.corolla.products.exceptions.ProjectNotFoundException;
 import com.tocea.corolla.products.utils.ProjectUtils;
 import com.tocea.corolla.users.domain.Permission;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.Collection;
+import java.util.List;
+import org.apache.commons.collections.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/rest/projects")
 public class ProjectRestController {
-	
-	@Autowired
-	private IProjectDAO projectDAO;
 
-	@Autowired
-	private IProjectBranchDAO branchDAO;
+    @Autowired
+    private IProjectDAO projectDAO;
 
-	@Autowired
-	private Gate gate;
+    @Autowired
+    private IProjectBranchDAO branchDAO;
 
-	@RequestMapping(value = "/{projectKey}/branches/{branchName}/delete")
-	@Secured({ Permission.PROJECT_MANAGEMENT })
-	public void deleteBranch(@PathVariable final String projectKey, @PathVariable final String branchName) throws Throwable {
+    @Autowired
+    private Gate gate;
 
-		final Project project = projectDAO.findByKey(projectKey);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProjectRestController.class.getName());
 
-		if (project == null) {
-			throw new ProjectNotFoundException();
-		}
+    @RequestMapping(value = "/{projectKey}/branches/{branchName}/delete")
+    @Secured({Permission.PROJECT_MANAGEMENT})
+    public void deleteBranch(@PathVariable final String projectKey, @PathVariable final String branchName) throws Throwable {
 
-		final ProjectBranch branch = branchDAO.findByNameAndProjectId(branchName, project.getId());
+        final Project project = projectDAO.findByKey(projectKey);
 
-		if (branch == null) {
-			throw new ProjectBranchNotFoundException();
-		}
+        if (project == null) {
+            throw new ProjectNotFoundException();
+        }
 
-		gate.dispatch(new DeleteProjectBranchCommand(branch));
-		
-	}
+        final ProjectBranch branch = branchDAO.findByNameAndProjectId(branchName, project.getId());
 
-	@RequestMapping(value = "/filter", method = RequestMethod.POST)
-	@PreAuthorize("isAuthenticated()")
-	public Collection<Project> filterProjects(@RequestBody final ProjectFilterDTO filter) {
+        if (branch == null) {
+            throw new ProjectBranchNotFoundException();
+        }
 
-		final Collection<Project> projects = Lists.newArrayList();
+        gate.dispatch(new DeleteProjectBranchCommand(branch));
 
-		if (filter.isEmpty()) {
-			projects.addAll(projectDAO.findAll());
-		}
+    }
 
-		if (CollectionUtils.isNotEmpty(filter.getTags())) {
-			projects.addAll(projectDAO.filterByTags(filter.getTags()));
-		}
+    @RequestMapping(value = "/filter", method = RequestMethod.POST)
+    @PreAuthorize("isAuthenticated()")
+    public Collection<Project> filterProjects(@RequestBody final ProjectFilterDTO filter) {
 
-		if (CollectionUtils.isNotEmpty(filter.getCategoryIds())) {
-			projects.addAll(projectDAO.filterByCategories(filter.getCategoryIds()));
-		}
+        final Collection<Project> projects = Lists.newArrayList();
 
-		if (CollectionUtils.isNotEmpty(filter.getStatusIds())) {
-			projects.addAll(projectDAO.filterByStatuses(filter.getStatusIds()));
-		}
+        if (filter.isEmpty()) {
+            projects.addAll(projectDAO.findAll());
+        }
 
-		if (CollectionUtils.isNotEmpty(filter.getOwnerIds())) {
-			projects.addAll(projectDAO.filterByOwner(filter.getOwnerIds()));
-		}
+        if (CollectionUtils.isNotEmpty(filter.getTags())) {
+            projects.addAll(projectDAO.filterByTags(filter.getTags()));
+        }
 
-		return Collections2.filter(projects, new ProjectUtils.DuplicateRemover());
-	}
+        if (CollectionUtils.isNotEmpty(filter.getCategoryIds())) {
+            projects.addAll(projectDAO.filterByCategories(filter.getCategoryIds()));
+        }
 
-	@RequestMapping(value = "/filter/keys", method = RequestMethod.POST)
-	@PreAuthorize("isAuthenticated()")
-	public Collection<String> filterProjectsAndRetrieveOnlyIDs(@RequestBody final ProjectFilterDTO filter) {
+        if (CollectionUtils.isNotEmpty(filter.getStatusIds())) {
+            projects.addAll(projectDAO.filterByStatuses(filter.getStatusIds()));
+        }
 
-		return Collections2.transform(filterProjects(filter), new Function<Project, String>() {
-			@Override
-			public String apply(final Project input) {
-				return input != null ? input.getKey() : "";
-			}
-		});
-	}
+        if (CollectionUtils.isNotEmpty(filter.getOwnerIds())) {
+            projects.addAll(projectDAO.filterByOwner(filter.getOwnerIds()));
+        }
+        for (Project project : projects) {
+            LOGGER.info("Project id {}->{}", project.getId() , project);
+        }
+        final Collection<Project> filteredProjects = Collections2.filter(projects, new ProjectUtils.DuplicateRemover());
+        
+        return filteredProjects;
+    }
 
-	@RequestMapping(value = "/all")
-	@PreAuthorize("isAuthenticated()")
-	public Collection<Project> findAll() {
+    @RequestMapping(value = "/filter/keys", method = RequestMethod.POST)
+    @PreAuthorize("isAuthenticated()")
+    public Collection<String> filterProjectsAndRetrieveOnlyIDs(@RequestBody final ProjectFilterDTO filter) {
 
-		return projectDAO.findAll();
-	}
+        return Collections2.transform(filterProjects(filter), new Function<Project, String>() {
+            @Override
+            public String apply(final Project input) {
+                return input != null ? input.getKey() : "";
+            }
+        });
+    }
 
-	@RequestMapping(value = "/all", method = RequestMethod.POST)
-	@PreAuthorize("isAuthenticated()")
-	public Collection<Project> findAll(@RequestBody final List<String> ids) {
+    @RequestMapping(value = "/all")
+    @PreAuthorize("isAuthenticated()")
+    public Collection<Project> findAll() {
 
-		return (Collection<Project>) projectDAO.findAll(ids);
-	}
+        return projectDAO.findAll();
+    }
 
-	@RequestMapping(value="/tags")
-	@PreAuthorize("isAuthenticated()")
-	public Collection<String> findAllTags() {
+    @RequestMapping(value = "/all", method = RequestMethod.POST)
+    @PreAuthorize("isAuthenticated()")
+    public Collection<Project> findAll(@RequestBody final List<String> ids) {
 
-		final Collection<Project> projects = projectDAO.findAll();
-		return Lists.newArrayList(ProjectUtils.extractTags(projects));
-	}
+        return (Collection<Project>) projectDAO.findAll(ids);
+    }
 
-	@RequestMapping(value="/{projectKey}/tags")
-	@PreAuthorize("isAuthenticated()")
-	public Collection<String> findTags(@PathVariable final String projectKey) {
+    @RequestMapping(value = "/tags")
+    @PreAuthorize("isAuthenticated()")
+    public Collection<String> findAllTags() {
 
-		final Project project = projectDAO.findByKey(projectKey);
+        final Collection<Project> projects = projectDAO.findAll();
+        return Lists.newArrayList(ProjectUtils.extractTags(projects));
+    }
 
-		if (project != null && project.getTags() != null) {
-			return project.getTags();
-		}
+    @RequestMapping(value = "/{projectKey}/tags")
+    @PreAuthorize("isAuthenticated()")
+    public Collection<String> findTags(@PathVariable final String projectKey) {
 
-		return Lists.newArrayList();
-	}
+        final Project project = projectDAO.findByKey(projectKey);
 
-	@ResponseStatus(value=HttpStatus.NOT_ACCEPTABLE)
-	@ExceptionHandler({ CommandExecutionException.class })
-	public void handlePageNotFoundException() {
-		// FIXME : :Behaviour to define
-	}
+        if (project != null && project.getTags() != null) {
+            return project.getTags();
+        }
 
-	@RequestMapping(value="/{projectKey}/tags/push", method = RequestMethod.POST)
-	@Secured({ Permission.PROJECT_MANAGEMENT })
-	public Collection<String> pushTags(@PathVariable final String projectKey, @RequestBody String data) throws UnsupportedEncodingException {
+        return Lists.newArrayList();
+    }
 
-		final Project project = projectDAO.findByKey(projectKey);
+    @ResponseStatus(value = HttpStatus.NOT_ACCEPTABLE)
+    @ExceptionHandler({CommandExecutionException.class})
+    public void handlePageNotFoundException() {
+        // FIXME : :Behaviour to define
+    }
 
-		if (project != null) {
+    @RequestMapping(value = "/{projectKey}/tags/push", method = RequestMethod.POST)
+    @Secured({Permission.PROJECT_MANAGEMENT})
+    public Collection<String> pushTags(@PathVariable final String projectKey, @RequestBody String data) throws UnsupportedEncodingException {
 
-			data = data.replace("tags=", "");
-			data = URLDecoder.decode(data, "UTF-8");
-			final List<String> tags = Lists.newArrayList(data.split(","));
+        final Project project = projectDAO.findByKey(projectKey);
 
-			project.setTags(tags);
+        if (project != null) {
 
-			gate.dispatch(new EditProjectCommand(project));
+            data = data.replace("tags=", "");
+            data = URLDecoder.decode(data, "UTF-8");
+            final List<String> tags = Lists.newArrayList(data.split(","));
 
-			return project.getTags();
-		}
-		
-		return Lists.newArrayList();
-	}
+            project.setTags(tags);
+
+            gate.dispatch(new EditProjectCommand(project));
+
+            return project.getTags();
+        }
+
+        return Lists.newArrayList();
+    }
 
 }

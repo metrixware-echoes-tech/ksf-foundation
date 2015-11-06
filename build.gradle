@@ -15,11 +15,10 @@ ext.JUNIT= "junit:junit:${TEST_JUNIT}"
 ext.LOGGING = "ch.qos.logback:logback-classic:$LOG_LOGBACK"
 ext.tests_frameworks = [
 	JUNIT,
-	"org.mockito:mockito-all:${TEST_MOCKITO}",
+	"org.mockito:mockito-core:${TEST_MOCKITO}",
 	"cglib:cglib-nodep:${TEST_CGLIB}",
 	"org.hamcrest:hamcrest-core:${TEST_HAMCREST}",
 	"org.objenesis:objenesis:${TEST_OBJENESIS}",
-	"org.hamcrest:hamcrest-all:${TEST_HAMCREST}",
 	"com.tocea.frameworks:bench4j-core:${TEST_BENCH4J}",
 	"com.tocea.frameworks:bench4j-htmlreport:${TEST_BENCH4J}"
 ]
@@ -297,6 +296,8 @@ allprojects {
 			}
 		}
 	}
+	
+
 	
 }
 

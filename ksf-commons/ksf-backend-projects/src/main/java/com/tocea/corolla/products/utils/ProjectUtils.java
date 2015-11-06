@@ -14,9 +14,6 @@
  */
 package com.tocea.corolla.products.utils;
 
-import java.util.Collection;
-import java.util.Set;
-
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableSet;
@@ -24,6 +21,8 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.tocea.corolla.products.domain.Project;
+import java.util.Collection;
+import java.util.Set;
 
 /**
  * Define a list of utility methods
@@ -86,8 +85,8 @@ public class ProjectUtils {
 		public boolean apply(Project project) {
 			
 			if (project != null) {
-				
 				if (!ids.contains(project.getId())) {
+                                    
 					ids.add(project.getId());
 					return true;
 				}
