@@ -21,6 +21,7 @@ package com.tocea.corolla.products.rest;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
+import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 import com.tocea.corolla.cqrs.gate.CommandExecutionException;
 import com.tocea.corolla.cqrs.gate.Gate;
@@ -114,11 +115,8 @@ public class ProjectRestController {
         if (CollectionUtils.isNotEmpty(filter.getOwnerIds())) {
             projects.addAll(projectDAO.filterByOwner(filter.getOwnerIds()));
         }
-        for (Project project : projects) {
-            LOGGER.info("Project id {}->{}", project.getId() , project);
-        }
-        final Collection<Project> filteredProjects = Collections2.filter(projects, new ProjectUtils.DuplicateRemover());
         
+        final Collection<Project> filteredProjects = Lists.newArrayList(Iterators.filter(projects.iterator(), new ProjectUtils.DuplicateRemover()));
         return filteredProjects;
     }
 

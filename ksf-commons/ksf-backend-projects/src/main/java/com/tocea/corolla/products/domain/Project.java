@@ -19,119 +19,121 @@
  */
 package com.tocea.corolla.products.domain;
 
+import com.google.common.collect.Lists;
+import com.tocea.corolla.utils.domain.ObjectValidation;
 import java.io.Serializable;
 import java.net.URL;
 import java.util.List;
-
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import com.google.common.collect.Lists;
-import com.tocea.corolla.utils.domain.ObjectValidation;
-
 @Document
 public class Project implements Serializable {
 
-	@Id
-	@Field("_id")
-	private String id;
-	
-	@NotEmpty
-	@Size(min=3, max=50)
-	@Pattern(regexp=ObjectValidation.URL_SAFE_PATTERN)
-	private String key;
-	
-	@NotEmpty
-	@Size(min=3, max=100)
-	private String name;
-	
-	private String statusId;
-	
-	private String categoryId;
-	
-	private String ownerId;
-	
-	private String description;
-	
-	private URL image;
-	
-	private List<String> tags = Lists.newArrayList();
+    @Id
+    @Field("_id")
+    private String id;
 
-	public String getCategoryId() {
-		return categoryId;
-	}
+    @NotEmpty
+    @Size(min = 3, max = 50)
+    @Pattern(regexp = ObjectValidation.URL_SAFE_PATTERN)
+    private String key;
 
-	public String getDescription() {
-		return description;
-	}
+    @NotEmpty
+    @Size(min = 3, max = 100)
+    private String name;
 
-	public String getId() {
-		return id;
-	}
+    private String statusId;
 
-	public URL getImage() {
-		return image;
-	}
+    private String categoryId;
 
-	public String getKey() {
-		return key;
-	}
+    private String ownerId;
 
-	public String getName() {
-		return name;
-	}
+    private String description;
 
-	public String getOwnerId() {
-		return ownerId;
-	}
+    private URL image;
 
-	public String getStatusId() {
-		return statusId;
-	}
+    private List<String> tags = Lists.newArrayList();
 
-	public List<String> getTags() {
-		return tags;
-	}
+    public String getCategoryId() {
+        return categoryId;
+    }
 
-	public void setCategoryId(final String categoryId) {
-		this.categoryId = categoryId;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public void setDescription(final String description) {
-		this.description = description;
-	}
+    public String getId() {
+        return id;
+    }
 
-	public void setId(final String id) {
-		this.id = id;
-	}
+    public URL getImage() {
+        return image;
+    }
 
-	public void setImage(final URL image) {
-		this.image = image;
-	}
+    public String getKey() {
+        return key;
+    }
 
-	public void setKey(final String key) {
-		this.key = key;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setName(final String name) {
-		this.name = name;
-	}
+    public String getOwnerId() {
+        return ownerId;
+    }
 
-	public void setOwnerId(final String ownerId) {
-		this.ownerId = ownerId;
-	}
+    public String getStatusId() {
+        return statusId;
+    }
 
-	public void setStatusId(final String statusId) {
-		this.statusId = statusId;
-	}
+    public List<String> getTags() {
+        return tags;
+    }
 
-	public void setTags(final List<String> tags) {
-		this.tags = tags;
-	}
-	
+    @Override
+    public String toString() {
+        return "Project{" + "id=" + id + ", key=" + key + ", name=" + name + ", statusId=" + statusId + ", categoryId=" + categoryId + ", ownerId=" + ownerId + ", description=" + description + ", image=" + image + ", tags=" + tags + '}';
+    }
+
+    public void setCategoryId(final String categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public void setDescription(final String description) {
+        this.description = description;
+    }
+
+    public void setId(final String id) {
+        this.id = id;
+    }
+
+    public void setImage(final URL image) {
+        this.image = image;
+    }
+
+    public void setKey(final String key) {
+        this.key = key;
+    }
+
+    public void setName(final String name) {
+        this.name = name;
+    }
+
+    public void setOwnerId(final String ownerId) {
+        this.ownerId = ownerId;
+    }
+
+    public void setStatusId(final String statusId) {
+        this.statusId = statusId;
+    }
+
+    public void setTags(final List<String> tags) {
+        this.tags = tags;
+    }
+
 }

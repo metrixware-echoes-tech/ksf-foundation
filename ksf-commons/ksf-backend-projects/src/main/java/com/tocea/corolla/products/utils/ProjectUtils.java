@@ -23,6 +23,8 @@ import com.google.common.collect.Sets;
 import com.tocea.corolla.products.domain.Project;
 import java.util.Collection;
 import java.util.Set;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Define a list of utility methods
@@ -78,12 +80,15 @@ public class ProjectUtils {
 	 *
 	 */
 	public static class DuplicateRemover implements Predicate<Project> {
+            private static final Logger LOG = LoggerFactory.getLogger(DuplicateRemover.class.getName());
 
+            
+            
 		private final Set<String> ids = Sets.newHashSet();
 		
 		@Override
 		public boolean apply(Project project) {
-			
+			LOG.info("Traitement {}", project.getId(), project);
 			if (project != null) {
 				if (!ids.contains(project.getId())) {
                                     
