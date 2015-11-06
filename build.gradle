@@ -102,6 +102,11 @@ allprojects {
 	repositories {
 		
 		mavenLocal()
+		if (project.hasProperty('remote')) {
+			mavenCentral()
+			jcenter()
+		}
+		
 		maven {
 			credentials {
 				username mavenUser
