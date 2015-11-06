@@ -14,7 +14,12 @@ apply plugin: 'spring-boot'
 configurations { providedRuntime }
 
 dependencies {
+	compile project(":ksf-commons:ksf-backend-microservice")
 	compile project(":corolla:corolla-ui-widgets")
+	compile project(":corolla:corolla-backend-requirements")
+
+
+	
 
 	providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
 	testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
@@ -22,6 +27,6 @@ dependencies {
 }
 
 war {
-	baseName = 'corolla-ui'
+	baseName = 'corolla'
 }
 
