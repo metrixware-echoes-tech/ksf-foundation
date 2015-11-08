@@ -11,6 +11,7 @@ public class ViewRouter extends WebMvcConfigurerAdapter {
 	public void addViewControllers(final ViewControllerRegistry registry) {
 		
 		registry.addViewController("/login").setViewName("login")
+                registry.addViewController("/logout").setViewName("logout")
 		registry.addRedirectViewController "/home", "/ui/home"
 	}
 }

@@ -60,7 +60,7 @@ public class GuiSecurityConfig extends WebSecurityConfigurerAdapter {
             antMatchers("/api/**").hasRole("REST");
 
         //anyRequest().permitAll()
-        http.formLogin().loginPage("/login").defaultSuccessUrl("/home").and().logout().logoutUrl("/logout");
+        http.formLogin().loginPage("/login").defaultSuccessUrl("/ui/home").and().logout().logoutUrl("/logout");
         http.csrf().disable();
 
     }
