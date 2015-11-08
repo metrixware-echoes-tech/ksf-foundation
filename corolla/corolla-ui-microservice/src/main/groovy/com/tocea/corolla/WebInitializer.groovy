@@ -16,8 +16,6 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpStatus
 import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer
 
-import com.tocea.corolla.ui.configuration.WicketConfiguration
-
 /**
  * This class is the replacement of the web.xml. It registers the wicket filter
  * in the spring aware configuration style.
@@ -32,8 +30,6 @@ class WebInitializer {
 
 	def static final Logger	LOGGER			= LoggerFactory.getLogger(WebInitializer.class)
 
-	@Autowired
-	def WicketConfiguration configuration
 
 	@Bean
 	public EmbeddedServletContainerCustomizer containerCustomizer() {
