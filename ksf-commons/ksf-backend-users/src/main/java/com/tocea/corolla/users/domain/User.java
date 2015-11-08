@@ -19,20 +19,17 @@
  */
 package com.tocea.corolla.users.domain;
 
+import com.google.common.base.Strings;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Locale;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
-
-import com.google.common.base.Strings;
 
 /**
  * This class declares a member that contributes to a repository. It is
@@ -42,265 +39,259 @@ import com.google.common.base.Strings;
  *
  */
 /*@Entity()
-@Table(name = "users", indexes = { @Index(unique = true, name = "login_index", columnList = "login") })*/
-@Document(collection="users")
+ @Table(name = "users", indexes = { @Index(unique = true, name = "login_index", columnList = "login") })*/
+@Document(collection = "users")
 public class User implements Serializable {
 
-	@Id
-	@Field("_id")
-	private String id;
+    @Id
+    @Field("_id")
+    private String id;
 
-	@NotBlank
-	@Size(min = 3, max = 30)
-	//@Column(nullable = false, length = 30)
-	private String	login			= "";
+    @NotBlank
+    @Size(min = 3, max = 30)
+    //@Column(nullable = false, length = 30)
+    private String login = "";
 
-	@NotBlank
-	@Size(max = 40)
-	//@Column(nullable = false, length = 40)
-	private String	firstName		= "";
+    @NotBlank
+    @Size(max = 40)
+    //@Column(nullable = false, length = 40)
+    private String firstName = "";
 
-	@NotBlank
-	@Size(max = 40)
-	//@Column(nullable = false, length = 40)
-	private String	lastName		= "";
+    @NotBlank
+    @Size(max = 40)
+    //@Column(nullable = false, length = 40)
+    private String lastName = "";
 
-	@NotBlank
-	@Size(max = 128)
-	//@Column(nullable = false, length = 128)
-	@Email
-	private String	email			= "";
+    @NotBlank
+    @Size(max = 128)
+    //@Column(nullable = false, length = 128)
+    @Email
+    private String email = "";
 
-	@NotBlank
-	@Size(max = 256)
-	//@Column(nullable = false, length = 256)
-	private String	password		= "";
+    @NotBlank
+    @Size(max = 256)
+    //@Column(nullable = false, length = 256)
+    private String password = "";
 
-	@NotNull
-	//@Column(nullable = false)
-	private String	roleId;
+    @NotNull
+    //@Column(nullable = false)
+    private String roleId;
 
-	@NotBlank
-	@Size(max = 10)
-	//@Column(nullable = false, length = 10)
-	private String	locale			= "en_GB";	//$NON-NLS-1$
+    @NotBlank
+    @Size(max = 10)
+    //@Column(nullable = false, length = 10)
+    private String locale = "en_GB";	//$NON-NLS-1$
 
-	@Size(max = 50)
-	//@Column(nullable = true, length = 50)
-	private String	activationToken	= "";		//$NON-NLS-1$
+    @Size(max = 50)
+    //@Column(nullable = true, length = 50)
+    private String activationToken = "";		//$NON-NLS-1$
 
-	@NotNull
-	//@Column(nullable = false)
-	private Date	createdTime;
+    @NotNull
+    //@Column(nullable = false)
+    private Date createdTime;
 
-	@NotNull
-	//@Column(nullable = false)
-	private boolean	active			= true;
+    @Size(max = 256)
+    //@Column(nullable = false, length = 128)	
+    private String salt = "";
 
-	/**
-	 * Copy values if missing fields
-	 */
-	public void copyMissingFields() {
-		if (this.activationToken == null) {
-			this.activationToken = "";
-		}
-		if (Strings.isNullOrEmpty(this.firstName)
-				&& Strings.isNullOrEmpty(this.lastName)) {
-			this.firstName = this.login;
-		}
-		if (this.createdTime == null) {
-			this.createdTime = new Date();
-		}
+    public String getSalt() {
+        return salt;
+    }
 
-		this.setLocaleIfNecessary();
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
 
-	}
+    @NotNull
+    //@Column(nullable = false)
+    private boolean active = true;
 
-	/**
-	 * @return the activationToken
-	 */
-	public String getActivationToken() {
-		return this.activationToken;
-	}
+    /**
+     * Copy values if missing fields
+     */
+    public void copyMissingFields() {
+        if (this.activationToken == null) {
+            this.activationToken = "";
+        }
+        if (Strings.isNullOrEmpty(this.firstName)
+                && Strings.isNullOrEmpty(this.lastName)) {
+            this.firstName = this.login;
+        }
+        if (this.createdTime == null) {
+            this.createdTime = new Date();
+        }
 
-	/**
-	 * @return the createdTime
-	 */
-	public Date getCreatedTime() {
-		return this.createdTime;
-	}
+        this.setLocaleIfNecessary();
 
-	/**
-	 * @return the email
-	 */
-	public String getEmail() {
-		return this.email;
-	}
+    }
 
-	/**
-	 * @return the firstName
-	 */
-	public String getFirstName() {
-		return this.firstName;
-	}
+    /**
+     * @return the activationToken
+     */
+    public String getActivationToken() {
+        return this.activationToken;
+    }
 
-	/**
-	 * @return the lastName
-	 */
-	public String getLastName() {
-		return this.lastName;
-	}
+    /**
+     * @return the createdTime
+     */
+    public Date getCreatedTime() {
+        return this.createdTime;
+    }
 
-	/**
-	 * @return the locale
-	 */
-	public String getLocale() {
-		return this.locale;
-	}
+    /**
+     * @return the email
+     */
+    public String getEmail() {
+        return this.email;
+    }
 
-	/**
-	 * @return the login
-	 */
-	public String getLogin() {
-		return this.login;
-	}
+    /**
+     * @return the firstName
+     */
+    public String getFirstName() {
+        return this.firstName;
+    }
 
-	/**
-	 * @return the password
-	 */
-	public String getPassword() {
-		return this.password;
-	}
+    /**
+     * @return the lastName
+     */
+    public String getLastName() {
+        return this.lastName;
+    }
 
-	/**
-	 * @return the role_id
-	 */
-	public String getRoleId() {
-		return this.roleId;
-	}
+    /**
+     * @return the locale
+     */
+    public String getLocale() {
+        return this.locale;
+    }
 
-	/**
-	 * @return the active
-	 */
-	public boolean isActive() {
-		return this.active;
-	}
+    /**
+     * @return the login
+     */
+    public String getLogin() {
+        return this.login;
+    }
 
-	/**
-	 * @param _activationToken
-	 *            the activationToken to set
-	 */
-	public void setActivationToken(final String _activationToken) {
-		this.activationToken = _activationToken;
-	}
+    /**
+     * @return the password
+     */
+    public String getPassword() {
+        return this.password;
+    }
 
-	/**
-	 * @param _active
-	 *            the active to set
-	 */
-	public void setActive(final boolean _active) {
-		this.active = _active;
-	}
+    /**
+     * @return the role_id
+     */
+    public String getRoleId() {
+        return this.roleId;
+    }
 
-	/**
-	 * @param _createdTime
-	 *            the createdTime to set
-	 */
-	public void setCreatedTime(final Date _createdTime) {
-		this.createdTime = _createdTime;
-	}
+    /**
+     * @return the active
+     */
+    public boolean isActive() {
+        return this.active;
+    }
 
-	/**
-	 * @param _email
-	 *            the email to set
-	 */
-	public void setEmail(final String _email) {
-		this.email = _email;
-	}
+    /**
+     * @param _activationToken the activationToken to set
+     */
+    public void setActivationToken(final String _activationToken) {
+        this.activationToken = _activationToken;
+    }
 
-	/**
-	 * @param _firstName
-	 *            the firstName to set
-	 */
-	public void setFirstName(final String _firstName) {
-		this.firstName = _firstName;
-	}
+    /**
+     * @param _active the active to set
+     */
+    public void setActive(final boolean _active) {
+        this.active = _active;
+    }
 
-	/**
-	 * @param _lastName
-	 *            the lastName to set
-	 */
-	public void setLastName(final String _lastName) {
-		this.lastName = _lastName;
-	}
+    /**
+     * @param _createdTime the createdTime to set
+     */
+    public void setCreatedTime(final Date _createdTime) {
+        this.createdTime = _createdTime;
+    }
 
-	/**
-	 * @param _locale
-	 *            the locale to set
-	 */
-	public void setLocale(final String _locale) {
-		this.locale = _locale;
-	}
+    /**
+     * @param _email the email to set
+     */
+    public void setEmail(final String _email) {
+        this.email = _email;
+    }
 
-	/**
-	 * Set locale if necessary
-	 *
-	 * @param _user
-	 */
-	public void setLocaleIfNecessary() {
-		if (Strings.isNullOrEmpty(this.getLocale())) {
-			this.setLocale(Locale.getDefault().toString());
-		}
+    /**
+     * @param _firstName the firstName to set
+     */
+    public void setFirstName(final String _firstName) {
+        this.firstName = _firstName;
+    }
 
-	}
+    /**
+     * @param _lastName the lastName to set
+     */
+    public void setLastName(final String _lastName) {
+        this.lastName = _lastName;
+    }
 
-	/**
-	 * @param _login
-	 *            the login to set
-	 */
-	public void setLogin(final String _login) {
-		this.login = _login;
-	}
+    /**
+     * @param _locale the locale to set
+     */
+    public void setLocale(final String _locale) {
+        this.locale = _locale;
+    }
 
-	/**
-	 * @param _password
-	 *            the password to set
-	 */
-	public void setPassword(final String _password) {
-		this.password = _password;
-	}
+    /**
+     * Set locale if necessary
+     *
+     * @param _user
+     */
+    public void setLocaleIfNecessary() {
+        if (Strings.isNullOrEmpty(this.getLocale())) {
+            this.setLocale(Locale.getDefault().toString());
+        }
 
-	public void setRole(final Role _role) {
-		this.roleId = _role.getId();
-	}
+    }
 
-	/**
-	 * @param _role_id
-	 *            the role_id to set
-	 */
-	public void setRoleId(final String _role_id) {
-		this.roleId = _role_id;
-	}
+    /**
+     * @param _login the login to set
+     */
+    public void setLogin(final String _login) {
+        this.login = _login;
+    }
 
-	public String getId() {
-		return id;
-	}
+    /**
+     * @param _password the password to set
+     */
+    public void setPassword(final String _password) {
+        this.password = _password;
+    }
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    public void setRole(final Role _role) {
+        this.roleId = _role.getId();
+    }
 
+    /**
+     * @param _role_id the role_id to set
+     */
+    public void setRoleId(final String _role_id) {
+        this.roleId = _role_id;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return "User [_id="+this.id+", firstName=" + this.firstName
-				+ ", lastName=" + this.lastName + ", email=" + this.email
-				+ ", login=" + this.login + "]";
-	}
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" + "id=" + id + ", login=" + login + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", roleId=" + roleId + ", locale=" + locale + ", activationToken=" + activationToken + ", createdTime=" + createdTime + ", active=" + active + '}';
+    }
 
 }

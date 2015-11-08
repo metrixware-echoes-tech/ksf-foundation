@@ -17,7 +17,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.tocea.corolla.cqrs.gate.Gate;
-import com.tocea.corolla.ui.security.AuthService;
+import com.echoeslab.ksf.users.security.auth.AuthService;
 import com.tocea.corolla.users.commands.CreateRoleCommand;
 import com.tocea.corolla.users.commands.CreateUserCommand;
 import com.tocea.corolla.users.commands.DeleteRoleCommand;
