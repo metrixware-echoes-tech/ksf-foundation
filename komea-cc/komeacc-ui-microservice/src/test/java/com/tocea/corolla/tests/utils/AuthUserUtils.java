@@ -1,6 +1,6 @@
 package com.tocea.corolla.tests.utils;
 
-import com.tocea.corolla.ui.security.AuthUser;
+import com.echoeslab.ksf.cc.ui.security.AuthUser;
 import com.tocea.corolla.users.domain.Permission;
 import com.tocea.corolla.users.domain.Role;
 import com.tocea.corolla.users.domain.User;

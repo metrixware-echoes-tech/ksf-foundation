@@ -1,4 +1,4 @@
-package com.tocea.corolla
+package com.echoeslab.ksf.cc
 
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
@@ -14,12 +14,12 @@ import org.springframework.transaction.annotation.EnableTransactionManagement
 @EnableAutoConfiguration
 @EnableConfigurationProperties
 //@EnableTransactionManagement
-@EnableMongoRepositories
+@EnableMongoRepositories(value=["com.tocea", "com.echoeslab.ksf"])
 @EnableMongoAuditing
 //@EnableWebMvc
-class CorollaGuiApplication {
+public class KomeaCCGuiApplication {
 	
 	public static void main(final String[] args) {
-		SpringApplication.run(CorollaGuiApplication.class, args)
+		SpringApplication.run(KomeaCCGuiApplication.class, args)
 	}
 }

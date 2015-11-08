@@ -1,9 +1,9 @@
 buildscript {
-	repositories {
-		mavenLocal()
-		mavenCentral()
-	}
-	dependencies { classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}") }
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+    dependencies { classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}") }
 }
 
 apply plugin: 'war'
@@ -11,22 +11,26 @@ apply plugin: 'java'
 apply plugin: 'groovy'
 apply plugin: 'spring-boot'
 
+
+jar {
+    baseName = 'komeacc-gui'
+    version = ''
+}
+
+
+project.description = "Komea Software Factory : Command & Control"
+
 configurations { providedRuntime }
 
+springBoot {
+    mainClass = "com.echoeslab.ksf.cc.KomeaCCGuiApplication"
+}
+
 dependencies {
-	compile project(":ksf-commons:ksf-backend-microservice")
-	compile project(":corolla:corolla-ui-widgets")
-	compile project(":corolla:corolla-backend-requirements")
-
-
-	
-
-	providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
-	testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
-
+    compile project(":ksf-commons:ksf-backend-microservice")	
+    providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
+    testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
 }
 
-war {
-	baseName = 'corolla'
-}
+war { baseName = 'komea-cc' }
 
