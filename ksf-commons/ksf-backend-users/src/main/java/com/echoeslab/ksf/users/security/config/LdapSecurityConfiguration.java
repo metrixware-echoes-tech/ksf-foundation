@@ -4,6 +4,8 @@
 package com.echoeslab.ksf.users.security.config;
 
 import groovy.transform.Canonical;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.security.ldap.DefaultSpringSecurityContextSource;
 import org.springframework.stereotype.Component;
@@ -19,20 +21,17 @@ import org.springframework.stereotype.Component;
 @Canonical
 public class LdapSecurityConfiguration {
 
+    private static final Logger LOG = LoggerFactory.getLogger(LdapSecurityConfiguration.class.getName());
+
     private String url;
 
     private String managerDn = "";
-
-    @Override
-    public String toString() {
-        return "LdapSecurityConfiguration{" + "url=" + url + ", managerDn=" + managerDn + ", managerPassword=" + managerPassword + ", root=" + root + ", port=" + port + ", userDnPattern=" + userDnPattern + ", userSearchFilter=" + userSearchFilter + ", userSearchBase=" + userSearchBase + ", groupSearchBase=" + groupSearchBase + ", groupRoleAttribute=" + groupRoleAttribute + ", groupSearchFilter=" + groupSearchFilter + '}';
-    }
 
     private String managerPassword = "";
 
     private String root = "dc=springframework,dc=org";
 
-    private Integer port = 33389;
+    private Integer port = 389;
 
     private String userDnPattern = "";
 
@@ -45,6 +44,13 @@ public class LdapSecurityConfiguration {
     private String groupRoleAttribute = "";
 
     private String groupSearchFilter = "";
+
+    private boolean pooled = false;
+
+    @Override
+    public String toString() {
+        return "LdapSecurityConfiguration{" + "url=" + url + ", managerDn=" + managerDn + ", root=" + root + ", port=" + port + ", userDnPattern=" + userDnPattern + ", userSearchFilter=" + userSearchFilter + ", userSearchBase=" + userSearchBase + ", groupSearchBase=" + groupSearchBase + ", groupRoleAttribute=" + groupRoleAttribute + ", groupSearchFilter=" + groupSearchFilter + '}';
+    }
 
     public boolean hasUserDN() {
         return !userDnPattern.isEmpty();
@@ -87,15 +93,26 @@ public class LdapSecurityConfiguration {
 
     }
 
+    /**
+     * LDAP Context contains the LDAP Url and the LDAP Authentication
+     *
+     * @return the spring ldap configuration.
+     */
     public DefaultSpringSecurityContextSource buildLdapContext() {
         DefaultSpringSecurityContextSource contextSource = new DefaultSpringSecurityContextSource(getProviderUrl());
-        if (managerDn != null) {
+        LOG.info("LDAP Connection informations : {}", this);
+        if (!managerDn.isEmpty()) {
+            LOG.info("LDAP Connection requires authentication");
             contextSource.setUserDn(managerDn);
             if (managerPassword == null) {
                 throw new IllegalStateException("managerPassword is required if managerDn is supplied");
             }
             contextSource.setPassword(managerPassword);
+        } else {
+            LOG.info("LDAP Authentication use anonymous read-only mode");
+            contextSource.setAnonymousReadOnly(true);
         }
+        contextSource.afterPropertiesSet(); // TODO::Required to initialize the conf, could be converted into a bean later.. with @Component or @Bean
         return contextSource;
     }
 
@@ -185,5 +202,13 @@ public class LdapSecurityConfiguration {
 
     public void setGroupSearchFilter(String groupSearchFilter) {
         this.groupSearchFilter = groupSearchFilter;
+    }
+
+    public boolean isPooled() {
+        return pooled;
+    }
+
+    public void setPooled(boolean pooled) {
+        this.pooled = pooled;
     }
 }
