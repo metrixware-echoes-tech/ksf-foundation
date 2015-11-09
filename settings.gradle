@@ -11,6 +11,7 @@ include "ksf-commons:ksf-backend-projects"
 include "ksf-commons:ksf-backend-utils"
 include "ksf-commons:ksf-backend-microservice"
 include "ksf-commons:ksf-backend-plugin"
+include "ksf-commons:ksf-backend-support"
 
 // Corolla
 
