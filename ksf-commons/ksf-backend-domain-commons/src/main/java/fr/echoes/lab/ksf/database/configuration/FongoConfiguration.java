@@ -15,7 +15,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
  */
 @Profile("test")
 @Configuration
-@EnableMongoRepositories(basePackages = {"com.echoeslab", "com.tocea"})
+@EnableMongoRepositories(basePackages = {"fr.echoes.lab", "com.tocea"})
 public class FongoConfiguration extends AbstractMongoConfiguration {
 
     @Override

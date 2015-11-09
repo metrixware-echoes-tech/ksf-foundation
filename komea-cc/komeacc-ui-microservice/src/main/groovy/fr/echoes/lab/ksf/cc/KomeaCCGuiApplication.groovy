@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement
 @EnableAutoConfiguration
 @EnableConfigurationProperties
 //@EnableTransactionManagement
-@EnableMongoRepositories(value=["com.tocea", "fr.echoes.lab.ksf"])
+@EnableMongoRepositories(value=["com.tocea", "fr.echoes.lab"])
 @EnableMongoAuditing
 //@EnableWebMvc
 public class KomeaCCGuiApplication {
