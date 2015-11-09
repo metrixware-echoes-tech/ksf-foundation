@@ -2,9 +2,9 @@ package com.tocea.corolla.ui.security;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.echoeslab.ksf.users.security.config.SecurityConfiguration
-import com.echoeslab.ksf.users.security.config.LdapSecurityConfiguration
-import com.echoeslab.ksf.users.security.auth.UserAuthenticationManager
+import fr.echoes.lab.ksf.users.security.config.SecurityConfiguration
+import fr.echoes.lab.ksf.users.security.config.LdapSecurityConfiguration
+import fr.echoes.lab.ksf.users.security.auth.UserAuthenticationManager
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
