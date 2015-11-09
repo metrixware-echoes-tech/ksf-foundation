@@ -1,5 +1,5 @@
 version="0.3-SNAPSHOT"
-group = "com.echoeslab.ksf.corolla"
+group = "fr.echoes.lab.ksf.corolla"
 
 subprojects {
         dependencies {

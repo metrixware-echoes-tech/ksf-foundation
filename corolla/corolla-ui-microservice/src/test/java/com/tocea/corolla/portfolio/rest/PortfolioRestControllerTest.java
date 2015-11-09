@@ -1,6 +1,6 @@
 package com.tocea.corolla.portfolio.rest;
 
-import com.echoeslab.ksf.users.security.auth.AuthUser;
+import fr.echoes.lab.ksf.users.security.auth.AuthUser;
 import com.tocea.corolla.cqrs.gate.Gate;
 import com.tocea.corolla.portfolio.commands.CreatePortfolioFolderNodeCommand;
 import com.tocea.corolla.portfolio.dao.IPortfolioDAO;

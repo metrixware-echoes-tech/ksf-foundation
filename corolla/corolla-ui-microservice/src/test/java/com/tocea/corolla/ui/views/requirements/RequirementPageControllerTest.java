@@ -1,6 +1,6 @@
 package com.tocea.corolla.ui.views.requirements;
 
-import com.echoeslab.ksf.users.security.auth.AuthUser;
+import fr.echoes.lab.ksf.users.security.auth.AuthUser;
 import com.tocea.corolla.cqrs.gate.Gate;
 import com.tocea.corolla.products.commands.CreateProjectBranchCommand;
 import com.tocea.corolla.products.commands.CreateProjectCommand;

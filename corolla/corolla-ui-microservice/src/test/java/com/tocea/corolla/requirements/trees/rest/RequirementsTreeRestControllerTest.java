@@ -1,6 +1,6 @@
 package com.tocea.corolla.requirements.trees.rest;
 
-import com.echoeslab.ksf.users.security.auth.AuthUser;
+import fr.echoes.lab.ksf.users.security.auth.AuthUser;
 import com.tocea.corolla.cqrs.gate.Gate;
 import com.tocea.corolla.products.commands.CreateProjectCommand;
 import com.tocea.corolla.products.dao.IProjectBranchDAO;
