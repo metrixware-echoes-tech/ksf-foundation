@@ -1,0 +1,31 @@
+.project-form {
+	width: 1100px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.project-form h1 {
+	margin-top: 30px;
+	margin-bottom: 30px;
+}
+
+.app-list {
+	list-style-type: none;
+}
+
+.app-list li {
+	float: left;
+	margin: 10px;
+	padding: 5px 10px;
+	cursor: pointer;
+}
+
+.app-list li label {
+	display: block;
+}
+
+.app-list li.active {
+	box-shadow:0px 1px 4px 0px #FACC2E;
+	background-color: #fff7e5;
+	border-radius: 5px;
+}

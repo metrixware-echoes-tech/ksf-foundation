@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout"
+        >
+    <head>
+        <title>New Project</title>
+    </head>
+<body>
+	
+	<div layout:fragment="content">	
+		<form class="form-horizontal project-form" th:object="${project}"
+			th:attr="action=@{${#strings.isEmpty(project.id)} ? '/ui/projects/new' : '/ui/projects/edit/'}"
+			method="post" id="form" action="">
+			<div class="text-center">
+	            <h1 style="font-size:25px">New project</h1>
+	        </div>	
+	        <ul class="bg-danger" th:if="${#fields.hasErrors('global')}">
+          		<li th:each="err : ${#fields.errors('global')}" class="text-danger" th:text="${err}">Input is incorrect</li>
+         	</ul>
+			<fieldset>
+				<input type="hidden" name="id" id="id" th:value="${project.id}" />
+				<div class="form-group">
+					<label class="col-md-3 control-label" for="key">Key</label>
+					<div class="col-md-7">
+						<input id="name" name="name" placeholder="Project Key" class="form-control input-md" required="required"
+							data-parsley-trigger="focusin focusout change" data-parsley-range="[3, 30]" type="text" th:field="*{key}" />
+						<span th:if="${#fields.hasErrors('key')}" th:errors="*{key}"></span>
+					</div>
+				</div>
+				<!-- Name input-->
+				<div class="form-group">
+					<label class="col-md-3 control-label" for="name">Name</label>
+					<div class="col-md-7">
+						<input id="name" name="name" placeholder="Project Name" class="form-control input-md" required="required"
+							data-parsley-trigger="focusin focusout change" data-parsley-range="[3, 30]" type="text" th:field="*{name}" />
+						<span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+					</div>
+				</div>
+				<div class="form-group">
+	              <div class="col-sm-offset-3 col-sm-7">
+	              	<ul class="app-list">
+	              		<li>
+	              			<img th:src="@{/pictures/redmine.png}"/>
+	              			<label>Redmine</label>
+	              		</li>
+	              		<li class="active">
+	              			<img th:src="@{/pictures/foreman.png}"/>
+	              			<label>Foreman</label>
+	              		</li>
+	              	</ul>
+	              	<div class="">
+	              		<input name="extension_ids[]" id="extension_ids_" value="Jenkins" type="checkbox"/> Jenkins
+	                	<input name="extension_ids[]" id="extension_ids_" value="Redmine" type="checkbox"/> Redmine
+	                	<input name="extension_ids[]" id="extension_ids_" value="Foreman" type="checkbox"/> Foreman
+	              	</div>
+	              </div>
+	            </div>																									
+				<!-- Button (Double) -->
+				<div class="form-group">
+					<label class="col-md-3 control-label" for="saveButton" />										
+					<div class="col-md-7">
+						<div class="pull-right">
+							<button id="saveButton" name="saveButton" class="btn btn-primary">Save</button>
+							<a th:href="@{/ui/projects/}" id="cancelButton" name="cancelButton" class="btn btn-default">Cancel</a>
+						</div>
+					</div>
+				</div>
+			</fieldset>
+		</form>
+		<script type="text/javascript">
+			$(document).ready(function() {
+				$('.app-list li').click(function() {
+					$(this).addClass('active');
+				});
+			});
+		</script>
+	</div>
+</body>
+</html>

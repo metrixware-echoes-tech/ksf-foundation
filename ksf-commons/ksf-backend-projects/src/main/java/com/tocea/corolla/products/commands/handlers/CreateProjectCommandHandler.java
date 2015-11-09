@@ -22,6 +22,7 @@ package com.tocea.corolla.products.commands.handlers;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -69,6 +70,8 @@ public class CreateProjectCommandHandler implements ICommandHandler<CreateProjec
 			throw new InvalidProjectInformationException("No ID expected");
 		}
 		
+		project.setId(null);
+		
 		final Project existingProject = projectDAO.findByKey(project.getKey());
 		
 		if (existingProject != null) {
@@ -85,6 +88,9 @@ public class CreateProjectCommandHandler implements ICommandHandler<CreateProjec
 		
 		// Store the project in the DB
 		projectDAO.save(project);
+		
+		Validate.notEmpty(project.getKey());
+		Validate.notEmpty(project.getId());
 		
 		// Add revision control on the new instance
 		revisionService.commit(project);

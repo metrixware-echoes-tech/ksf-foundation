@@ -18,8 +18,11 @@ include "corolla:corolla-backend-requirements"
 include "corolla:corolla-ui-widgets"
 include "corolla:corolla-ui-microservice"
 
+// KomeaCC
+
 include "komea-cc:komeacc-ui-microservice"
 include "komea-cc:komeacc-plugins:komeacc-foreman-plugin"
 include "komea-cc:komeacc-plugins:komeacc-puppet-plugin"
 include "komea-cc:komeacc-plugins:komeacc-redmine-plugin"
 include "komea-cc:komeacc-plugins:komeacc-jenkins-plugin"
+include "komea-cc:komeacc-softwarefactory"

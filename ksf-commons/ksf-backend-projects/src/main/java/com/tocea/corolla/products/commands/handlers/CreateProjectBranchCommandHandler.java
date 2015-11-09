@@ -25,6 +25,8 @@ import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.tocea.corolla.cqrs.annotations.CommandHandler;
@@ -47,6 +49,8 @@ public class CreateProjectBranchCommandHandler implements ICommandHandler<Create
 	
 	@Autowired
 	private Gate gate;
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(CreateProjectBranchCommandHandler.class);
 	
 	@Override
 	public ProjectBranch handle(@Valid final CreateProjectBranchCommand command) {
@@ -74,6 +78,7 @@ public class CreateProjectBranchCommandHandler implements ICommandHandler<Create
 		}
 		
 		branchDAO.save(branch);
+		LOGGER.info("branch {} created for project {}", branch.getName(), branch.getProjectId());
 		
 		gate.dispatchEvent(new EventNewBranchCreated(branch, command.getOriginBranch()));
 		
