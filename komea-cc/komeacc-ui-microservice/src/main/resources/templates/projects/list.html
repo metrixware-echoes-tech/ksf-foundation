@@ -1,15 +1,42 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout"
-        >
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout"
+      >
     <head>
         <title>Home</title>
     </head>
-<body>
-	
-	<div layout:fragment="content">	
-		<h2>Ici vous mettez le contenu de la page Home</h2>		
-	</div>
-</body>
+    <body>
+
+        <div layout:fragment="content">	
+            <main class="container-fluid" role="main">
+
+                <div class="content">
+                    <h1 font-size:25px="">
+                        Projects
+                        <!--<span class="badge">1</span>  alert evenement-->
+                    </h1>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Owners</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="prod : ${projects}">
+
+                                <td >
+                                    <a th:text="${prod.name}" th:href="@{/ui/projects/new/project(${prod.key})}"></a>
+                                </td>
+                                <td th:text="${prod.ownerId}"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </main>
+        </div>
+    </body>
 </html>

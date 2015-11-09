@@ -99,6 +99,24 @@ public class DemoDataBean {
 		this.newUser(	"Saroumane", "LeBlanch", "saroumane.leblanc@lotr.com",
 				"saroumane",
 				"fuckSauron..", roleAdmin)
+        
+        def projet1 = new Project()
+        projet1.setName("test")
+        projet1.setOwnerId("user")
+        projet1.setKey("keyTest")
+        this.saveProject(projet1)
+        
+            def projet2 = new Project()
+        projet2.setName("test1")
+        projet2.setOwnerId("user1")
+        projet2.setKey("keyTest1")
+        this.saveProject(projet2)
+        
+            def projet = new Project()
+        projet.setName("test2")
+        projet.setOwnerId("user2")
+        projet.setKey("keyTest2")
+        this.saveProject(projet)
 		
 		/*
 		 * User Groups
