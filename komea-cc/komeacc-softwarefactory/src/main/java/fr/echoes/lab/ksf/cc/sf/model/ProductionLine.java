@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import com.github.fakemongo.impl.aggregation.Project;
+import com.tocea.corolla.products.domain.Project;
 
 @Document
 public class ProductionLine {

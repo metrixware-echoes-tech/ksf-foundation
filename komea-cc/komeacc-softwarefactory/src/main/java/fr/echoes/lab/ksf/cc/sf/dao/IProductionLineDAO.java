@@ -2,7 +2,7 @@ package fr.echoes.lab.ksf.cc.sf.dao;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-import com.github.fakemongo.impl.aggregation.Project;
+import com.tocea.corolla.products.domain.Project;
 
 import fr.echoes.lab.ksf.cc.sf.model.ProductionLine;
 
