@@ -40,19 +40,19 @@
 				<div class="form-group">
 	              <div class="col-sm-offset-3 col-sm-7">
 	              	<ul class="app-list">
-	              		<li>
+	              		<li data-item="redmine">
 	              			<img th:src="@{/pictures/redmine.png}"/>
 	              			<label>Redmine</label>
 	              		</li>
-	              		<li class="active">
+	              		<li data-item="foreman">
 	              			<img th:src="@{/pictures/foreman.png}"/>
 	              			<label>Foreman</label>
 	              		</li>
 	              	</ul>
-	              	<div class="">
-	              		<input name="extension_ids[]" id="extension_ids_" value="Jenkins" type="checkbox"/> Jenkins
-	                	<input name="extension_ids[]" id="extension_ids_" value="Redmine" type="checkbox"/> Redmine
-	                	<input name="extension_ids[]" id="extension_ids_" value="Foreman" type="checkbox"/> Foreman
+	              	<div class="hidden">
+	              		<input name="extension_ids[]" id="extension_ids_" value="jenkins" type="checkbox"/> Jenkins
+	                	<input name="extension_ids[]" id="extension_ids_" value="redmine" type="checkbox"/> Redmine
+	                	<input name="extension_ids[]" id="extension_ids_" value="foreman" type="checkbox"/> Foreman
 	              	</div>
 	              </div>
 	            </div>																									
@@ -68,10 +68,23 @@
 				</div>
 			</fieldset>
 		</form>
+	</div>
+	<div layout:fragment="footer">	
 		<script type="text/javascript">
 			$(document).ready(function() {
 				$('.app-list li').click(function() {
-					$(this).addClass('active');
+					if ($(this).hasClass('active')) {
+						$(this).removeClass('active');
+					}else{
+						$(this).addClass('active');	
+					}
+					var item = $(this).data('item');
+					$('[name="extension_ids[]"]').each(function(i, input) {
+						if ($(input).val() == item) {
+							var checked = ($(input).prop('checked'));
+							$(input).prop('checked', !checked);
+						}
+					});
 				});
 			});
 		</script>
