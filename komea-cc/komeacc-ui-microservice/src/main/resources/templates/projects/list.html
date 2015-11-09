@@ -29,7 +29,7 @@
                             <tr th:each="prod : ${projects}">
 
                                 <td >
-                                    <a th:text="${prod.name}" th:href="@{/ui/projects/new/project(${prod.key})}"></a>
+                                    <a th:text="${prod.name}" th:href="@{/ui/projects/+${prod.key}}"></a>
                                 </td>
                                 <td th:text="${prod.ownerId}"></td>
                             </tr>
