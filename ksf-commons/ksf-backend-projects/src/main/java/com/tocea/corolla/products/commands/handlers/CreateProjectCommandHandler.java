@@ -89,9 +89,6 @@ public class CreateProjectCommandHandler implements ICommandHandler<CreateProjec
 		// Store the project in the DB
 		projectDAO.save(project);
 		
-		Validate.notEmpty(project.getKey());
-		Validate.notEmpty(project.getId());
-		
 		// Add revision control on the new instance
 		revisionService.commit(project);
 		
