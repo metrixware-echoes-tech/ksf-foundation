@@ -1,19 +1,19 @@
 /*
- * Corolla - A Tool to manage software requirements and test cases 
+ * Corolla - A Tool to manage software requirements and test cases
  * Copyright (C) 2015 Tocea
- * 
+ *
  * This file is part of Corolla.
- * 
+ *
  * Corolla is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 2 of the License, 
+ * the Free Software Foundation, either version 2 of the License,
  * or any later version.
- * 
+ *
  * Corolla is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Corolla.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -36,8 +36,6 @@ import com.tocea.corolla.cqrs.gate.Gate;
 import com.tocea.corolla.users.commands.DeleteUserCommand;
 import com.tocea.corolla.users.commands.DisableUserCommand;
 import com.tocea.corolla.users.commands.EnableUserCommand;
-import com.tocea.corolla.users.dao.IRoleDAO;
-import com.tocea.corolla.users.dao.IUserDAO;
 import com.tocea.corolla.users.domain.Permission;
 import com.tocea.corolla.users.dto.UserDto;
 import com.tocea.corolla.users.dto.UserWithRoleDto;
@@ -55,82 +53,77 @@ import com.tocea.corolla.utils.datatable.DataTableList;
 @RequestMapping("/rest/users")
 @Secured(Permission.REST)
 public class UserRestController {
-
-	@Autowired
-	private IUserDAO		userDao;
-	@Autowired
-	private IRoleDAO		roleDao;
 	@Autowired
 	private Gate			gate;
-
+	
 	@Autowired
 	private UserDtoService	dtoService;
-
+	
 	@Autowired
 	private UserValidation	userValidation;
-
+	
 	@Secured({ Permission.ADMIN, Permission.ADMIN_USERS })
 	@RequestMapping(value = "/delete/{login}", method = RequestMethod.GET)
 	public void deleteUser(@PathVariable final String login,
 			final Principal _principal) {
-		if (!this.userValidation.isValidLogin(login)) {
+		if (!userValidation.isValidLogin(login)) {
 			throw new InvalidLoginException();
 		}
 		if (login.equals(_principal.getName())) {
 			throw new OperationForbidenWithThisLoginException();
 		}
-
-		this.gate.dispatch(new DeleteUserCommand(login));
-
+		
+		gate.dispatch(new DeleteUserCommand(login));
+		
 	}
-
+	
 	@Secured({ Permission.ADMIN, Permission.ADMIN_USERS })
 	@RequestMapping(value = "/disable/{login}", method = RequestMethod.GET)
 	public void disableUser(@PathVariable final String login,
 			final Principal _principal) {
-		if (!this.userValidation.isValidLogin(login)) {
+		if (!userValidation.isValidLogin(login)) {
 			throw new InvalidLoginException();
 		}
 		if (login.equals(_principal.getName())) {
 			throw new OperationForbidenWithThisLoginException();
 		}
-
-		this.gate.dispatch(new DisableUserCommand(login));
+		
+		gate.dispatch(new DisableUserCommand(login));
 	}
-
+	
 	@Secured({ Permission.ADMIN, Permission.ADMIN_USERS })
 	@RequestMapping(value = "/enable/{login}", method = RequestMethod.GET)
 	public void enableUser(@PathVariable final String login,
 			final Principal _principal) {
-		if (!this.userValidation.isValidLogin(login)) {
+		if (!userValidation.isValidLogin(login)) {
 			throw new InvalidLoginException();
 		}
 		if (login.equals(_principal.getName())) {
 			throw new OperationForbidenWithThisLoginException();
 		}
-
-		this.gate.dispatch(new EnableUserCommand(login));
+		
+		gate.dispatch(new EnableUserCommand(login));
 	}
-
+	
 	@RequestMapping("/all")
 	public DataTableList<UserDto> getAllUsers() {
 		final DataTableList<UserDto> userTable = new DataTableList();
-		userTable.addAll(this.dtoService.getUsersDtoList());
+		userTable.addAll(dtoService.getUsersDtoList());
 		return userTable;
 	}
-
+	
 	@RequestMapping("/allwithrole")
 	public DataTableList<UserWithRoleDto> getAllUsersWithRole() {
 		final DataTableList<UserWithRoleDto> userTable = new DataTableList();
-		userTable.addAll(this.dtoService.getUsersWithRoleList());
+		userTable.addAll(dtoService.getUsersWithRoleList());
 		return userTable;
 	}
-
+	
 	@ExceptionHandler(Exception.class)
 	@ResponseBody
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
 	public JsonError handleException(final Exception e) {
 		return new JsonError(e.getMessage());
 	}
-
+	
 }
