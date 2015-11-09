@@ -86,7 +86,7 @@ public class AuthenticationTest extends AbstractSpringTest {
 				.param("username", "jsnow")
 				.param("password", "password"))
 		.andExpect(status().isFound())
-		.andExpect(redirectedUrl("/home"))
+		.andExpect(redirectedUrl("/ui/home"))
 		.andExpect(authenticated().withUsername("jsnow"));
 
 	}

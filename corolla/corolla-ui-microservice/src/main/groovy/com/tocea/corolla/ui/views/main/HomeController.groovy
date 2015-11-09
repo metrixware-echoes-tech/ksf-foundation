@@ -26,15 +26,15 @@ public class HomeController {
     }
 
     @RequestMapping(value=[
-		"/ui/home",
-		"/ui/"		
+		"/ui/home"	
 	])
     public ModelAndView getHomePage() {
         return new ModelAndView("home")
     }
         
     @RequestMapping(value=[
-		"/"		
+		"/",
+                "/ui/"	
 	])
     public String redirectSlash() {
         return "redirect:/ui/home"
