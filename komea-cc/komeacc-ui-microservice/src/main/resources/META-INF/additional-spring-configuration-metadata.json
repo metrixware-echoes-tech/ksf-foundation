@@ -1,0 +1,5 @@
+{"properties": [{
+  "name": "ksf.security.passwordStrength",
+  "type": "java.lang.String",
+  "description": "Provides the strength to create passwords"
+}]}

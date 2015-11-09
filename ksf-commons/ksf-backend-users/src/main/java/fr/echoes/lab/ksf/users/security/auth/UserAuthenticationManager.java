@@ -5,17 +5,22 @@
  */
 package fr.echoes.lab.ksf.users.security.auth;
 
-import fr.echoes.lab.ksf.users.security.config.LdapSecurityConfiguration;
-import fr.echoes.lab.ksf.users.security.config.SecurityConfiguration;
+import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ldap.core.ContextSource;
+import org.springframework.ldap.core.support.BaseLdapPathContextSource;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configurers.ldap.LdapAuthenticationProviderConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import fr.echoes.lab.ksf.users.security.config.LdapSecurityConfiguration;
+import fr.echoes.lab.ksf.users.security.config.SecurityConfiguration;
+import fr.echoes.lab.ksf.users.security.utils.SecurityLoggers;
 
 /**
  * This class default initializes the KSF Security Authentication mechanism
@@ -26,56 +31,68 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserAuthenticationManager {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserAuthenticationManager.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(UserAuthenticationManager.class);
 
-    @Autowired
-    private UserDetailsService userDetailsService;
+	@Autowired
+	private UserDetailsService userDetailsService;
 
-    @Autowired
-    private LdapSecurityConfiguration ldapSecurity;
+	@Autowired
+	private LdapSecurityConfiguration ldapSecurity;
 
-    @Autowired
-    private SecurityConfiguration security;
+	@Autowired
+	private SecurityConfiguration security;
+	
+	@Autowired()
+	private ContextSource ldapContextSource;
 
-    public void initializeKsfAuth(final AuthenticationManagerBuilder auth) throws Exception {
-        // also see LdapAuthenticationProviderConfigurer and @code ContextSourceBuilder
-                
-        //		auth.inMemoryAuthentication().withUser("user").password("password1")
-        //				.roles("GUI")
-        if (ldapSecurity.hasConfigurationProvided()) {
-            LdapAuthenticationProviderConfigurer<AuthenticationManagerBuilder> ldapAuth = auth.ldapAuthentication();
+	public void initializeKsfAuth(final AuthenticationManagerBuilder auth) throws Exception {
+		// also see LdapAuthenticationProviderConfigurer and @code ContextSourceBuilder
+		
+		//		auth.inMemoryAuthentication().withUser("user").password("password1")
+		//				.roles("GUI")
+		if (ldapSecurity.hasConfigurationProvided()) {
+			LOGGER.info("Initialization of LDAP Authentication provider");
+			initializeLdapAuthenticationManager(auth);
+		}
+		LOGGER.info("Initialization of DAO Authentication provider");
+		final DaoAuthenticationProvider userEmbeddedAuthenticationProvider = new DaoAuthenticationProvider();
+		userEmbeddedAuthenticationProvider.setPasswordEncoder(new BCryptPasswordEncoder(security.getPasswordStrength()));
+		userEmbeddedAuthenticationProvider.setUserDetailsService(userDetailsService);
+		auth.authenticationProvider(userEmbeddedAuthenticationProvider);
 
-            LOGGER.info("Enabling LDAP Authentication on server {}", ldapSecurity.getUrl());
-            ldapSecurity.clearManagerDN();
+	}
+	
+	private void initializeLdapAuthenticationManager(final AuthenticationManagerBuilder auth) throws Exception {
+		LdapAuthenticationProviderConfigurer<AuthenticationManagerBuilder> ldapAuth = auth.ldapAuthentication();
 
-            ldapAuth = ldapAuth.contextSource(ldapSecurity.buildLdapContext());
+		SecurityLoggers.LDAP_LOGGER.info("Enabling LDAP Authentication on server {}", ldapSecurity.getUrl());
+		ldapSecurity.clearManagerDN();
+		Validate.notNull(ldapContextSource);
+		ldapAuth = ldapAuth.contextSource((BaseLdapPathContextSource) ldapContextSource);
 
-            if (this.ldapSecurity.hasUserDN()) {
-                LOGGER.info("Ldap Security base on UserDN pattern");
-                ldapAuth = ldapAuth
-                        .userDnPatterns(this.ldapSecurity.getUserDnPattern());
+		if (ldapSecurity.hasUserDN()) {
+			SecurityLoggers.LDAP_LOGGER.info("Ldap Security base on UserDN pattern");
+			ldapAuth = ldapAuth
+					.userDnPatterns(ldapSecurity.getUserDnPattern());
 
-            } else if (this.ldapSecurity.hasUserSearch()) {
-                LOGGER.info("Ldap Security base on UserDN pattern");
-                ldapAuth = ldapAuth
-                        .userSearchBase(this.ldapSecurity.getUserSearchBase())
-                        .userSearchFilter(this.ldapSecurity.getUserSearchFilter());
-            }
-            if (!this.ldapSecurity.getGroupSearchBase().isEmpty()) {
-                ldapAuth = ldapAuth.groupSearchBase(this.ldapSecurity.getGroupSearchBase());
-            }
-            if (!this.ldapSecurity.getGroupRoleAttribute().isEmpty()) {
-                ldapAuth = ldapAuth.groupRoleAttribute(this.ldapSecurity.getGroupRoleAttribute());
-            }
-            if (!this.ldapSecurity.getGroupSearchFilter().isEmpty()) {
-                ldapAuth = ldapAuth.groupSearchFilter(this.ldapSecurity.getGroupSearchFilter());
+		} else if (ldapSecurity.hasUserSearch()) {
+			SecurityLoggers.LDAP_LOGGER.info("Ldap Security base on UserDN pattern");
+			ldapAuth = ldapAuth
+					.userSearchBase(ldapSecurity.getUserSearchBase())
+					.userSearchFilter(ldapSecurity.getUserSearchFilter());
+		}
+		if (!ldapSecurity.getGroupSearchBase().isEmpty()) {
+			SecurityLoggers.LDAP_LOGGER.info("Setting groupSearchBase={}", ldapSecurity.getGroupSearchBase());
+			ldapAuth = ldapAuth.groupSearchBase(ldapSecurity.getGroupSearchBase());
+		}
+		if (!ldapSecurity.getGroupRoleAttribute().isEmpty()) {
+			SecurityLoggers.LDAP_LOGGER.info("Setting groupRoleAttribute={}", ldapSecurity.getGroupRoleAttribute());
+			ldapAuth = ldapAuth.groupRoleAttribute(ldapSecurity.getGroupRoleAttribute());
+		}
+		if (!ldapSecurity.getGroupSearchFilter().isEmpty()) {
+			SecurityLoggers.LDAP_LOGGER.info("Setting groupSearchFilter={}", ldapSecurity.getGroupSearchFilter());
+			ldapAuth = ldapAuth.groupSearchFilter(ldapSecurity.getGroupSearchFilter());
 
-            }
-        }
-        final DaoAuthenticationProvider userEmbeddedAuthenticationProvider = new DaoAuthenticationProvider();
-        userEmbeddedAuthenticationProvider.setPasswordEncoder(new BCryptPasswordEncoder(this.security.getPasswordStrength()));
-        userEmbeddedAuthenticationProvider.setUserDetailsService(this.userDetailsService);
-        auth.authenticationProvider(userEmbeddedAuthenticationProvider);
-
-    }
+		}
+	}
 }

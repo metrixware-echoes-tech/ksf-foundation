@@ -1,3 +1,4 @@
 dependencies {
 	compile project(":ksf-commons:ksf-backend-cqrs")
+	testCompile ("org.apache.directory.server:apacheds-server-jndi:1.5.5") // For Test : Embedded ldap server
 }

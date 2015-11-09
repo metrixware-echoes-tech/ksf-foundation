@@ -1,19 +1,19 @@
 /*
- * Corolla - A Tool to manage software requirements and test cases 
+ * Corolla - A Tool to manage software requirements and test cases
  * Copyright (C) 2015 Tocea
- * 
+ *
  * This file is part of Corolla.
- * 
+ *
  * Corolla is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 2 of the License, 
+ * the Free Software Foundation, either version 2 of the License,
  * or any later version.
- * 
+ *
  * Corolla is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Corolla.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -47,19 +47,19 @@ import com.tocea.corolla.users.service.EmailValidationService;
 @Transactional
 public class CreateUserCommandHandler implements
 ICommandHandler<CreateUserCommand, User> {
-
-	@Autowired
-	private IUserDAO				userDAO;
-
-	@Autowired
-	private IRoleDAO				roleDAO;
 	
 	@Autowired
-	private PasswordEncoder			passwordEncoder;
+	private IUserDAO				userDAO;
+	
+	@Autowired
+	private IRoleDAO				roleDAO;
 
 	@Autowired
+	private PasswordEncoder			passwordEncoder;
+	
+	@Autowired
 	private EmailValidationService	emailValidationService;
-
+	
 	/*
 	 * (non-Javadoc)
 	 *
@@ -75,44 +75,44 @@ ICommandHandler<CreateUserCommand, User> {
 		if (user.getId() != null && !user.getId().equals("")) {
 			throw new InvalidUserInformationException("No ID expected");
 		}
-		this.checkUserLogin(user);
+		checkUserLogin(user);
 		user.copyMissingFields();
-		user.setActive(false);
-		this.setDefaultRoleIfNecessary(user);
-		if (!this.emailValidationService.validateEmail(user.getEmail())) {
+		user.setActive(true);
+		setDefaultRoleIfNecessary(user);
+		if (!emailValidationService.validateEmail(user.getEmail())) {
 			throw new InvalidEmailAddressException(user.getEmail());
 		}
-		
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-		this.userDAO.save(user);
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		
+		userDAO.save(user);
+
 		return user;
 	}
-
+	
 	/**
 	 * @param _user
 	 */
 	private void checkUserLogin(final User _user) {
-		if (this.userDAO.findUserByLogin(_user.getLogin()) != null) {
+		if (userDAO.findUserByLogin(_user.getLogin()) != null) {
 			throw new AlreadyExistingUserWithLoginException(_user.getLogin());
 		}
-
+		
 	}
-
+	
 	/**
 	 * @param user
 	 */
 	private void setDefaultRoleIfNecessary(final User user) {
 		if (user.getRoleId() == null) {
-			final Role defaultRole = this.roleDAO.getDefaultRole();
+			final Role defaultRole = roleDAO.getDefaultRole();
 			if (defaultRole == null) {
 				throw new RoleManagementBrokenException("Could not find the default role");
 			}
 			user.setRoleId(defaultRole.getId());
-
+			
 		}
 	}
-
-
+	
+	
 }
