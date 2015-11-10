@@ -36,7 +36,7 @@ public class CreateProjectAndProductionLineCommandHandler implements ICommandHan
 	private ISFApplicationDAO applicationDAO;
 	
 	@Autowired
-	private ISFApplicationTypeDAO applicationTypeDAO;
+	private ISFApplicationTypeDAO applicationTypeDAO;	
 		
 	private static final Logger LOGGER = LoggerFactory.getLogger(CreateProjectAndProductionLineCommandHandler.class);
 	

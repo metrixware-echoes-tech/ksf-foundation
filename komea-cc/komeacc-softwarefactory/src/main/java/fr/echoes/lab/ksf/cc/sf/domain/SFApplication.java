@@ -16,6 +16,9 @@ public class SFApplication {
 	@NotNull
 	private SFApplicationType type;
 	
+	@NotNull
+	private SoftwareFactory softwareFactory;
+	
 	private String name;
 	
 	private String url;
@@ -32,7 +35,6 @@ public class SFApplication {
 		return type;
 	}
 	
-
 	public void setType(SFApplicationType type) {
 		this.type = type;
 	}
@@ -40,7 +42,6 @@ public class SFApplication {
 	public String getName() {
 		return name;
 	}
-	
 
 	public void setName(String name) {
 		this.name = name;
@@ -51,9 +52,16 @@ public class SFApplication {
 		return url;
 	}
 	
-
 	public void setUrl(String url) {
 		this.url = url;
+	}
+
+	public SoftwareFactory getSoftwareFactory() {
+		return softwareFactory;
+	}
+	
+	public void setSoftwareFactory(SoftwareFactory softwareFactory) {
+		this.softwareFactory = softwareFactory;
 	}
 	
 }

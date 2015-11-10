@@ -9,6 +9,8 @@ import fr.echoes.lab.ksf.cc.sf.domain.SFApplicationType;
 
 public interface ISFApplicationDAO extends MongoRepository<SFApplication, String> {
 
+//	List<SFApplication> findByTypeAndSoftwareFactory(SFApplicationType type, SoftwareFactory softwareFactory);
+	
 	List<SFApplication> findByType(SFApplicationType type);
 	
 }
