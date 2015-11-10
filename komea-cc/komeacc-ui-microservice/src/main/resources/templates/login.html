@@ -4,21 +4,45 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorator="layout">
+    <head>
+        <link th:href="@{/css/local/logincustom.css}" href="../static/css/local/logincustom.css" rel="stylesheet" />
+    </head>
+
     <body>
 
-
-        <div layout:fragment="content">
-
-            <div th:if="${param.error}">Invalid username and password.</div>
-            <div th:if="${param.logout}">You have been logged out.</div>						
-            <!-- wicket:message="value:login.submit.label" -->
-            <form class="form-horizontal" th:action="@{/login}" method="post">                
-                <input id="username" type="text" name="username"></input>
-                <input type="password" name="password" id="password" placeholder="Password" />
-                <input type="checkbox" name="remember-me" id="remember-me"/>                
-                <button type="submit" value="Sign in">Sign in</button>
-            </form>
+       
+        <!--        <div layout:fragment="content">
+        
+                    <div th:if="${param.error}">Invalid username and password.</div>
+                    <div th:if="${param.logout}">You have been logged out.</div>						
+                     wicket:message="value:login.submit.label" 
+                    <form class="form-horizontal" th:action="@{/login}" method="post">                
+                        <input id="username" type="text" name="username"></input>
+                        <input type="password" name="password" id="password" placeholder="Password" />
+                        <input type="checkbox" name="remember-me" id="remember-me"/>                
+                        <button type="submit" value="Sign in">Sign in</button>
+                    </form>-->
+        <!--</div>-->
+        <div layout:fragment="content">	
+            <div class="container">
+                <div class="login-container">
+                    <div id="output"></div>
+                    <div class="avatar">
+                        <img th:src="@{/pictures/echoes.png}" width="120" /> 
+                    </div>
+                    <div class="form-box">
+                        <form   th:action="@{/login}" method="post">
+                            <input onClick="this.select();" name="username" type="text" placeholder="username"></input>
+                            <input onClick="this.select();" type="password" name="password" id="password" placeholder="password"/>
+                            <!--<input type="checkbox" name="remember-me" id="remember-me">Remember me</input>-->  
+                            <button class="btn btn-info btn-block login" type="submit">Login</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
-
+        <div layout:fragment="footer">
+            <!--<script th:src="@{/js/local/guilocal.js}" src="../static/js/local/guilocal.js" type="text/javascript" />-->
+        </div>
     </body>
 </html>
