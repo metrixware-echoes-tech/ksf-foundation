@@ -4,7 +4,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import com.tocea.corolla.products.domain.Project;
 
-import fr.echoes.lab.ksf.cc.sf.model.ProductionLine;
+import fr.echoes.lab.ksf.cc.sf.domain.ProductionLine;
 
 public interface IProductionLineDAO extends MongoRepository<ProductionLine, String> {
 

@@ -4,7 +4,7 @@ import javax.validation.constraints.NotNull;
 
 import com.tocea.corolla.cqrs.annotations.CommandOptions;
 
-import fr.echoes.lab.ksf.cc.sf.model.ProductionLine;
+import fr.echoes.lab.ksf.cc.sf.domain.ProductionLine;
 
 @CommandOptions
 public class CreateProductionLineCommand {

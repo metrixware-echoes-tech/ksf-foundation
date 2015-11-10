@@ -10,11 +10,11 @@ import com.tocea.corolla.cqrs.handler.ICommandHandler;
 
 import fr.echoes.lab.ksf.cc.sf.commands.CreateProductionLineCommand;
 import fr.echoes.lab.ksf.cc.sf.dao.IProductionLineDAO;
+import fr.echoes.lab.ksf.cc.sf.domain.ProductionLine;
 import fr.echoes.lab.ksf.cc.sf.events.EventProductionLineCreated;
 import fr.echoes.lab.ksf.cc.sf.exceptions.InvalidProductionLineInformationException;
 import fr.echoes.lab.ksf.cc.sf.exceptions.MissingProductionLineInformationException;
 import fr.echoes.lab.ksf.cc.sf.exceptions.ProductionLineAlreadyExistsException;
-import fr.echoes.lab.ksf.cc.sf.model.ProductionLine;
 
 public class CreateProductionLineCommandHandler implements ICommandHandler<CreateProductionLineCommand, ProductionLine> {
 

@@ -1,4 +1,4 @@
-package fr.echoes.lab.ksf.cc.sf.model;
+package fr.echoes.lab.ksf.cc.sf.domain;
 
 import java.util.List;
 
