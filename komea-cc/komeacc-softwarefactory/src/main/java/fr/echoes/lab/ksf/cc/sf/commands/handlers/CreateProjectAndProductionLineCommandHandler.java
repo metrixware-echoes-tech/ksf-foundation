@@ -15,6 +15,7 @@ import com.tocea.corolla.cqrs.gate.Gate;
 import com.tocea.corolla.cqrs.handler.ICommandHandler;
 import com.tocea.corolla.products.commands.CreateProjectCommand;
 import com.tocea.corolla.products.domain.Project;
+import com.tocea.corolla.users.dto.UserDto;
 import com.tocea.corolla.utils.domain.CorollaDomainException;
 
 import fr.echoes.lab.ksf.cc.sf.commands.CreateProductionLineCommand;
@@ -25,6 +26,7 @@ import fr.echoes.lab.ksf.cc.sf.domain.ProductionLine;
 import fr.echoes.lab.ksf.cc.sf.domain.SFApplication;
 import fr.echoes.lab.ksf.cc.sf.domain.SFApplicationType;
 import fr.echoes.lab.ksf.cc.sf.dto.SFProjectDTO;
+import fr.echoes.lab.ksf.users.security.auth.UserDetailsRetrievingService;
 
 @CommandHandler
 public class CreateProjectAndProductionLineCommandHandler implements ICommandHandler<CreateProjectAndProductionLineCommand, Project> {
@@ -37,6 +39,9 @@ public class CreateProjectAndProductionLineCommandHandler implements ICommandHan
 	
 	@Autowired
 	private ISFApplicationTypeDAO applicationTypeDAO;	
+	
+	@Autowired
+	private UserDetailsRetrievingService userDetailsRetrievingService;
 		
 	private static final Logger LOGGER = LoggerFactory.getLogger(CreateProjectAndProductionLineCommandHandler.class);
 	
@@ -49,6 +54,13 @@ public class CreateProjectAndProductionLineCommandHandler implements ICommandHan
 		project.setKey(projectDTO.getKey());
 		project.setName(projectDTO.getName());
 		
+		UserDto userDTO = userDetailsRetrievingService.getCurrentUser();
+		if (userDTO != null) {
+			project.setOwnerId(userDTO.getId());
+		}else{
+			LOGGER.error("[CreateProjectAndProductionLineCommand] No user found!");
+		}
+			
 		try {
 			gate.dispatch(new CreateProjectCommand(project));
 		}catch(CommandExecutionException ex){
