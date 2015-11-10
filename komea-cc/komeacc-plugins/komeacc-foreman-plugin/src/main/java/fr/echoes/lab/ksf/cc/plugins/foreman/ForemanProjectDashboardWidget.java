@@ -8,28 +8,28 @@ import fr.echoes.lab.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWid
 import fr.echoes.lab.ksf.plugins.utils.HtmlTemplateClasspathLoaderService;
 
 public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
-	
+
 	@Override
 	public List<MenuAction> getDropdownActions() {
 		final ArrayList<MenuAction> arrayList = new ArrayList<>();
-		
+
 		return arrayList;
 	}
-	
+
 	@Override
 	public String getHtmlPanelBody() {
 		return new HtmlTemplateClasspathLoaderService().getHtmlContent(Thread.currentThread().getContextClassLoader(),
-				"/templates/foremanPanel.html");
+				"templates/foremanPanel.html");
 	}
-	
+
 	@Override
 	public String getIconUrl() {
 		return "/pictures/foreman.png";
 	}
-	
+
 	@Override
 	public String getTitle() {
 		return "Foreman";
 	}
-	
+
 }

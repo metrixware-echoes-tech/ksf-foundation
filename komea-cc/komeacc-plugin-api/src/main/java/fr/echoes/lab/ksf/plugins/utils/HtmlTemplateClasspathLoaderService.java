@@ -9,9 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class HtmlTemplateClasspathLoaderService {
-
+	
 	private static Logger LOGGER = LoggerFactory.getLogger(HtmlTemplateClasspathLoaderService.class);
-
+	
 	/**
 	 * Returns the html content from a classpath.
 	 *
@@ -21,6 +21,7 @@ public class HtmlTemplateClasspathLoaderService {
 	 * @return the html content.
 	 */
 	public String getHtmlContent(final ClassLoader _classLoader, final String _htmlResource) {
+		LOGGER.debug("Trying to retrieve the template {}", _htmlResource);
 		try (InputStream resourceAsStream = _classLoader.getResourceAsStream(_htmlResource);) {
 			return IOUtils.toString(resourceAsStream);
 		} catch (final Exception e) {
