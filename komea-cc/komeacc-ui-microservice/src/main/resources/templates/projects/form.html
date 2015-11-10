@@ -40,7 +40,7 @@
 				<div class="form-group">
 	              <div class="col-sm-offset-3 col-sm-7">
 	              	<ul class="app-list">
-	              		<li data-item="redmine">
+	              		<li class="disabled" data-item="redmine">
 	              			<img th:src="@{/pictures/redmine.png}"/>
 	              			<label>Redmine</label>
 	              		</li>
@@ -48,11 +48,21 @@
 	              			<img th:src="@{/pictures/foreman.png}"/>
 	              			<label>Foreman</label>
 	              		</li>
+	              		<li class="disabled" data-item="git">
+	              			<img th:src="@{/pictures/git.png}"/>
+	              			<label>Git</label>
+	              		</li>
+	              		<li class="disabled" data-item="jenkins">
+	              			<img th:src="@{/pictures/jenkins.png}"/>
+	              			<label>Jenkins</label>
+	              		</li>
 	              	</ul>
 	              	<div class="hidden">
 	              		<input name="extension_ids[]" id="extension_ids_" value="jenkins" type="checkbox"/> Jenkins
 	                	<input name="extension_ids[]" id="extension_ids_" value="redmine" type="checkbox"/> Redmine
 	                	<input name="extension_ids[]" id="extension_ids_" value="foreman" type="checkbox"/> Foreman
+	                	<input name="extension_ids[]" id="extension_ids_" value="git" type="checkbox"/> Git
+	                	<input name="extension_ids[]" id="extension_ids_" value="jenkins" type="checkbox"/> Jenkins
 	              	</div>
 	              </div>
 	            </div>																									
@@ -73,6 +83,9 @@
 		<script type="text/javascript">
 			$(document).ready(function() {
 				$('.app-list li').click(function() {
+					if ($(this).hasClass('disabled')) {
+						return false;
+					}
 					if ($(this).hasClass('active')) {
 						$(this).removeClass('active');
 					}else{
@@ -85,6 +98,7 @@
 							$(input).prop('checked', !checked);
 						}
 					});
+					return true;
 				});
 			});
 		</script>
