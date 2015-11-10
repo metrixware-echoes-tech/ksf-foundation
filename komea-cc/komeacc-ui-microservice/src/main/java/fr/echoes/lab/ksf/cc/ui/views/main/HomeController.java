@@ -17,8 +17,8 @@ import org.springframework.web.servlet.ModelAndView;
 public class HomeController {
     
     @RequestMapping(value="/ui/home")
-    public ModelAndView getHomePage() {
-        return new ModelAndView("home");
+    public String getHomePage() {
+        return "redirect:/ui/projects";
     }
         
     
@@ -28,6 +28,6 @@ public class HomeController {
      */
     @RequestMapping(value={"/ui/","/"})
     public String redirectSlashAndBasicUrl() {
-        return "redirect:/ui/home";
+        return "redirect:/ui/projects";
     }
 }
