@@ -16,6 +16,7 @@ import com.tocea.corolla.revisions.domain.Commit
 import com.tocea.corolla.revisions.services.IRevisionService
 import com.tocea.corolla.test.utils.FunctionalDocRule
 import com.tocea.corolla.utils.functests.FunctionalTestDoc
+import fr.echoes.lab.ksf.users.security.api.ICurrentUserService
 
 class JaversRevisionServiceTest extends Specification {
 
@@ -23,6 +24,7 @@ class JaversRevisionServiceTest extends Specification {
 	def FunctionalDocRule rule	= new FunctionalDocRule()
 	def Javers javers = Mock(Javers)
 	def IRevisionService revisionService
+	def ICurrentUserService currentUserService = Mock(ICurrentUserService)
 	
 	class DomainObject {
 		def String id;
@@ -30,7 +32,8 @@ class JaversRevisionServiceTest extends Specification {
 	
 	def setup() {
 		revisionService = new JaversRevisionService(
-				javers: javers
+				javers: javers,
+				currentUserService: currentUserService
 		)
 	}
 	
@@ -41,6 +44,9 @@ class JaversRevisionServiceTest extends Specification {
 		
 		when:
 			revisionService.commit(object)
+			
+		then:
+			currentUserService.getCurrentUserLogin() >> "somebody"
 	
 		then:
 			notThrown(Exception.class)
