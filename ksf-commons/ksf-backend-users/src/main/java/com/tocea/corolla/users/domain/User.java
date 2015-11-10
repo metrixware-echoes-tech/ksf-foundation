@@ -26,6 +26,7 @@ import java.util.Locale;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.data.annotation.Id;
@@ -141,8 +142,10 @@ public class User implements Serializable {
 	 */
 	public void fixInformationsIfRequired() {
 		if (!new ObjectValidation().isValid(this)) {
-			firstName = Strings.isNullOrEmpty(firstName)? login : firstName.substring(0, 40); // Attention : vérifier les valeurs plus haut
-			lastName = Strings.isNullOrEmpty(firstName)? "" : lastName.substring(0, 40); // Attention : vérifier les valeurs plus haut
+			// Attention : vérifier les valeurs de bornes définies dans les conditions de validation
+			firstName = Strings.isNullOrEmpty(firstName)? login : StringUtils.left(firstName, 40);
+			//
+			lastName = Strings.isNullOrEmpty(firstName)? "" : StringUtils.left(lastName, 40);
 			if (!new EmailValidationService().validateEmail(email)) {
 				email = login  + "@company.com";
 			}
