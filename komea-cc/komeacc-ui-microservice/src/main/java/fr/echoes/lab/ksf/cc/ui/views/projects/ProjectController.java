@@ -11,18 +11,23 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.tocea.corolla.cqrs.gate.CommandExecutionException;
 import com.tocea.corolla.cqrs.gate.Gate;
 import com.tocea.corolla.products.dao.IProjectDAO;
 import com.tocea.corolla.products.domain.Project;
+import com.tocea.corolla.products.exceptions.ProjectNotFoundException;
 import com.tocea.corolla.users.dao.IUserDAO;
 import com.tocea.corolla.users.domain.User;
 
@@ -36,8 +41,12 @@ import fr.echoes.lab.ksf.cc.sf.dto.SFProjectDTO;
 @Controller
 public class ProjectController {
 
+	private static String FORM_PROJECT 	= "projects/form";
+	private static String LIST_PAGE		= "projects/list";
+	private static String VIEW_PAGE		= "projects/overview";
+	
     @Autowired
-    IProjectDAO projetDao;
+    IProjectDAO projectDao;
 
     @Autowired
     IUserDAO userDao;
@@ -45,12 +54,10 @@ public class ProjectController {
     @Autowired
     Gate gate;
 
-    private static String FORM_PROJECT = "projects/form";
-
     @RequestMapping(value = "/ui/projects")
-    public ModelAndView getHomePage() {
-        ModelAndView model = new ModelAndView("projects/list");
-        List<Project> findAll = projetDao.findAll();
+    public ModelAndView getListPage() {
+        ModelAndView model = new ModelAndView(LIST_PAGE);
+        List<Project> findAll = projectDao.findAll();
         List<ProjectPagelistDTO> projectsList = new ArrayList<>();
 
         for (Project pr : findAll) {
@@ -65,6 +72,21 @@ public class ProjectController {
 
         model.addObject("projects", projectsList);
         return model;
+    }
+    
+    @RequestMapping(value = "/ui/projects/{projectKey}")
+    public ModelAndView getProjectPage(@RequestParam("projectKey") String projectKey) {
+    	
+    	Project project = projectDao.findByKey(projectKey);
+    	
+    	if (project == null) {
+    		throw new ProjectNotFoundException();
+    	}
+    	
+    	ModelAndView model = new ModelAndView(VIEW_PAGE);
+    	model.addObject("project", project);
+    	
+    	return model;
     }
 
     @RequestMapping(value = "/ui/projects/new")
@@ -106,5 +128,12 @@ public class ProjectController {
             return model;
         }
     }
+    
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+	@ExceptionHandler({
+		ProjectNotFoundException.class
+	})
+	public void handlePageNotFoundException() {
+	}
 
 }

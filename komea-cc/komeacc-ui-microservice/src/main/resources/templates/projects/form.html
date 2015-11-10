@@ -48,6 +48,10 @@
 	              			<img th:src="@{/pictures/foreman.png}"/>
 	              			<label>Foreman</label>
 	              		</li>
+	              		<li data-item="puppet">
+	              			<img th:src="@{/pictures/puppet.png}"/>
+	              			<label>Puppet</label>
+	              		</li>
 	              		<li class="disabled" data-item="git">
 	              			<img th:src="@{/pictures/git.png}"/>
 	              			<label>Git</label>
@@ -63,6 +67,7 @@
 	                	<input name="extension_ids[]" id="extension_ids_" value="foreman" type="checkbox"/> Foreman
 	                	<input name="extension_ids[]" id="extension_ids_" value="git" type="checkbox"/> Git
 	                	<input name="extension_ids[]" id="extension_ids_" value="jenkins" type="checkbox"/> Jenkins
+	                	<input name="extension_ids[]" id="extension_ids_" value="puppet" type="checkbox"/> Puppet
 	              	</div>
 	              </div>
 	            </div>																									
@@ -86,21 +91,31 @@
 					if ($(this).hasClass('disabled')) {
 						return false;
 					}
-					if ($(this).hasClass('active')) {
-						$(this).removeClass('active');
-					}else{
-						$(this).addClass('active');	
-					}
+					selectItem(this);
 					var item = $(this).data('item');
-					$('[name="extension_ids[]"]').each(function(i, input) {
-						if ($(input).val() == item) {
-							var checked = ($(input).prop('checked'));
-							$(input).prop('checked', !checked);
-						}
-					});
+					if (item == "foreman") {
+						selectItem($('.app-list li[data-item=puppet]'));
+					}
+					if (item == "puppet") {
+						selectItem($('.app-list li[data-item=foreman]'));
+					}
 					return true;
 				});
 			});
+			function selectItem(obj) {
+				if ($(obj).hasClass('active')) {
+					$(obj).removeClass('active');
+				}else{
+					$(obj).addClass('active');	
+				}
+				var item = $(obj).data('item');
+				$('[name="extension_ids[]"]').each(function(i, input) {
+					if ($(input).val() == item) {
+						var checked = ($(input).prop('checked'));
+						$(input).prop('checked', !checked);
+					}
+				});
+			}
 		</script>
 	</div>
 </body>
