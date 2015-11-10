@@ -83,7 +83,7 @@ public class DemoDataBean {
 		/*
 		 * Users
 		 */
-		def jsnow = this.newUser(	"John", "Snow", "john.snow@email.com", "jsnow",
+		User jsnow = this.newUser(	"John", "Snow", "john.snow@email.com", "jsnow",
 				"password", roleAdmin)
 		def scarreau = this.newUser(	"Sébastien", "Carreau", "sebastien.carreau@tocea.com", "scarreau",
 				"scarreau", roleAdmin)
@@ -102,25 +102,28 @@ public class DemoDataBean {
         
         def projet1 = new Project()
         projet1.setName("test")
-        projet1.setOwnerId("user")
+        projet1.setOwnerId(jsnow.getId())
         projet1.setKey("keyTest")
         this.saveProject(projet1)
         
             def projet2 = new Project()
         projet2.setName("test1")
-        projet2.setOwnerId("user1")
+        projet2.setOwnerId(jsnow.getId())
         projet2.setKey("keyTest1")
         this.saveProject(projet2)
         
             def projet = new Project()
         projet.setName("test2")
-        projet.setOwnerId("user2")
+        projet.setOwnerId(jsnow.getId())
         projet.setKey("keyTest2")
         this.saveProject(projet)
 		
 		/*
 		 * User Groups
 		 */
+                
+
+        
 		def developers = this.newGroup("developers", [jsnow, scarreau])
 		
 	}
