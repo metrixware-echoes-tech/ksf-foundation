@@ -20,10 +20,10 @@
 	      <nav class='navbar navbar-inverse navbar-static-top'>
 	        <div class='container-fluid'>
 	          <div class='navbar-header'>
-	            <a class="navbar-brand" href="/projects">Projects</a>
+	            <a class="navbar-brand" th:href="@{/ui/projects}">Projects</a>
 	          </div>
 	          <div class='navbar-form navbar-left' role='form'>
-	            <a class="btn-primary btn-sm glyphicon glyphicon-plus" data-toggle="tooltip" title="Create a new project" href="/projects/new"></a>
+	            <a class="btn-primary btn-sm glyphicon glyphicon-plus" data-toggle="tooltip" title="Create a new project" th:href="@{/ui/projects/new}"></a>
 	          </div>
 	          <!-- User links -->
 	          <div class='navbar-collapse collapse' id='navbar'>
@@ -32,7 +32,7 @@
 	                <a class='dropdown-toggle' data-toggle='dropdown' href='#' th:if="${#httpServletRequest.remoteUser != null}">
 	                  	<span id='username'>
 				           	<!-- <img th:src="'http://www.gravatar.com/avatar/'+ ${currentUser.gravatar} + '?s=24'" class="user-image" alt="User Image" src="" /> --> 
-				           	<span class="hidden-xs" th:text="${currentUser.login}">Name of the user</span>
+				           	<span class="hidden-xs" th:text="${currentUser.firstName}">Name of the user</span>
 						</span>
 	                  	<span class='glyphicon glyphicon-user'></span>
 	                </a>
