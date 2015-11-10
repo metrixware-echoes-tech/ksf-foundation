@@ -1,6 +1,7 @@
 package fr.echoes.lab.ksf.users.security.auth.ldap;
 
 import javax.naming.NamingException;
+import javax.naming.directory.Attribute;
 import javax.naming.directory.Attributes;
 
 import org.apache.commons.lang3.Validate;
@@ -17,21 +18,21 @@ import fr.echoes.lab.ksf.users.security.config.LdapSecurityConfiguration;
 
 @Component
 public class LdapAttributesUserDetailsMapper implements AttributesMapper<User> {
-	
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(LdapAttributesUserDetailsMapper.class);
-	
+
 	private final LdapSecurityConfiguration configuration;
-	
+
 	private final PasswordGenerator passwordGenerator;
-	
+
 	@Autowired
 	public LdapAttributesUserDetailsMapper(final LdapSecurityConfiguration _configuration,
 			final PasswordGenerator _factory) {
 		configuration = _configuration;
 		passwordGenerator = _factory;
-		
+
 	}
-	
+
 	@Override
 	public User mapFromAttributes(final Attributes _attributes) throws NamingException {
 		final User user = new User();
@@ -45,18 +46,21 @@ public class LdapAttributesUserDetailsMapper implements AttributesMapper<User> {
 		user.setPassword(passwordGenerator.generatePassword());
 		return user;
 	}
-	
-	private String getStringFromField(final Attributes _attributes, final String _fieldName) {
 
-		Object attribute = null;
+	private String getStringFromField(final Attributes _attributes, final String _fieldName) {
+		
+		Object attributeString = null;
 		try {
 			Validate.notNull(_attributes,"Ldap Attributes should not be empty");
 			Validate.notEmpty("Field should not be empty", _fieldName);
-			attribute = _attributes.get(_fieldName).get();
+			final Attribute attribute = _attributes.get(_fieldName);
+			if (attribute != null) {
+				attributeString = attribute.get();
+			}
 		} catch (final NamingException e) {
 			LOGGER.debug("LDAP:UserDetails: Could not access to field {}", _fieldName, e);
 		}
-		return attribute == null ? "" : attribute.toString();
+		return attributeString == null ? "" : attributeString.toString();
 	}
-	
+
 }
