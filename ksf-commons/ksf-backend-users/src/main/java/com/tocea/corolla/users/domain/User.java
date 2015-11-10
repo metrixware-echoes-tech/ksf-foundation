@@ -34,6 +34,8 @@ import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.security.ldap.userdetails.LdapUserDetails;
 
 import com.google.common.base.Strings;
+import com.tocea.corolla.users.service.EmailValidationService;
+import com.tocea.corolla.utils.domain.ObjectValidation;
 
 /**
  * This class declares a member that contributes to a repository. It is
@@ -132,6 +134,20 @@ public class User implements Serializable {
 		
 		setLocaleIfNecessary();
 		
+	}
+	
+	/**
+	 * Checks some fields. If the Pojo is not valid, curate it.
+	 */
+	public void fixInformationsIfRequired() {
+		if (!new ObjectValidation().isValid(this)) {
+			firstName = Strings.isNullOrEmpty(firstName)? login : firstName.substring(0, 40); // Attention : vérifier les valeurs plus haut
+			lastName = Strings.isNullOrEmpty(firstName)? "" : lastName.substring(0, 40); // Attention : vérifier les valeurs plus haut
+			if (!new EmailValidationService().validateEmail(email)) {
+				email = login  + "@company.com";
+			}
+
+		}
 	}
 	
 	/**
@@ -305,7 +321,7 @@ public class User implements Serializable {
 	public void setSalt(final String salt) {
 		this.salt = salt;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "User{" + "id=" + id + ", login=" + login + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", roleId=" + roleId + ", locale=" + locale + ", activationToken=" + activationToken + ", createdTime=" + createdTime + ", active=" + active + '}';

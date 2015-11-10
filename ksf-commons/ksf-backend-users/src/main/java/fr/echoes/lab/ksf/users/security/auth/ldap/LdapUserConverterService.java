@@ -28,16 +28,16 @@ import fr.echoes.lab.ksf.users.security.utils.SecurityLoggers;
 @Service
 public class LdapUserConverterService {
 	private final LdapTemplate ldapTemplate;
-
+	
 	private final LdapAttributesUserDetailsMapper userDetailsAttributeMapper;
-
+	
 	private final LdapSecurityConfiguration ldapSecurityConfiguration;
-
+	
 	private final Gate gate;
-
+	
 	@Autowired
 	private IUserDAO userDAO;
-
+	
 	@Autowired
 	public LdapUserConverterService(final LdapTemplate _ldapTemplate,
 			final LdapAttributesUserDetailsMapper _userDetailsAttributeMapper,
@@ -52,11 +52,11 @@ public class LdapUserConverterService {
 		Validate.notNull(_ldapSecurityConfiguration);
 		Validate.notNull(gate);
 	}
-
+	
 	public String buildQuery(final String _username) {
 		return MessageFormat.format(ldapSecurityConfiguration.getUserDetailsLookup(), _username);
 	}
-
+	
 	public UserDto convertLdapUserDetailsIntoDatabaseUser(final LdapUserDetails _principal) {
 		try {
 			final User findUserByLogin = userDAO.findUserByLogin(_principal.getUsername());
@@ -78,7 +78,7 @@ public class LdapUserConverterService {
 		userDto.setLocale(Locale.getDefault().toString());
 		return userDto;
 	}
-
+	
 	/**
 	 * Try to retrieve informations about an user from the ldap.
 	 *
@@ -94,6 +94,7 @@ public class LdapUserConverterService {
 			userLdapInformation = ldapTemplate.lookup(queryToObtainUser, userDetailsAttributeMapper);
 			if (userLdapInformation != null) {
 				SecurityLoggers.LDAP_LOGGER.info("Found User details from LDAP {}", userLdapInformation);
+				userLdapInformation.fixInformationsIfRequired();
 				gate.dispatch(new CreateUserCommand(userLdapInformation));
 			} else {
 				SecurityLoggers.LDAP_LOGGER.debug("LDAP did not provide any user information for {}", _username);
@@ -102,6 +103,6 @@ public class LdapUserConverterService {
 			SecurityLoggers.LDAP_LOGGER.error("LDAP Lookup for {} met an exception", _username, e);
 		}
 		return userLdapInformation;
-
+		
 	}
 }
