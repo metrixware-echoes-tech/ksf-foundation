@@ -22,13 +22,17 @@ package com.tocea.corolla.users.dto;
 import java.util.Date;
 
 /**
+ * This class defines the anonymmous user Dto.
+ *
  * @author sleroy
  *
  */
 public class AnonymousUserDto extends UserDto {
+	public static final String UNKNOWN = "unknown";
+
 	public AnonymousUserDto() {
 		setEmail("");
-		setFirstName("Anonymous");
+		setFirstName(UNKNOWN);
 		setLastName("");
 		setCreatedTime(new Date());
 	}

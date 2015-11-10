@@ -21,6 +21,7 @@ import com.tocea.corolla.users.dto.AnonymousUserDto;
 import com.tocea.corolla.users.dto.UserDto;
 import com.tocea.corolla.utils.serviceapi.IReadonlyService;
 
+import fr.echoes.lab.ksf.users.security.api.IAuthenticatedUserService;
 import fr.echoes.lab.ksf.users.security.auth.ldap.LdapUserConverterService;
 
 /**
@@ -30,7 +31,7 @@ import fr.echoes.lab.ksf.users.security.auth.ldap.LdapUserConverterService;
  */
 @Service("authService")
 @Transactional
-public class UserDetailsRetrievingService implements UserDetailsService, IReadonlyService {
+public class UserDetailsRetrievingService implements UserDetailsService, IReadonlyService,  IAuthenticatedUserService {
 	
 	private static UserDto anonymousUser = new AnonymousUserDto();
 	
@@ -83,6 +84,13 @@ public class UserDetailsRetrievingService implements UserDetailsService, IReadon
 		return anonymousUser;
 		
 	}
+	
+	@Override
+	public String getCurrentUserLogin() {
+		return getCurrentUser().getLogin();
+	}
+	
+	
 	
 	@Override
 	public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
