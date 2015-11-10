@@ -3,6 +3,7 @@ package fr.echoes.lab.ksf.users.security.auth.ldap;
 import java.text.MessageFormat;
 import java.util.Locale;
 
+import org.apache.commons.lang.Validate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.security.ldap.userdetails.LdapUserDetails;
@@ -27,16 +28,16 @@ import fr.echoes.lab.ksf.users.security.utils.SecurityLoggers;
 @Service
 public class LdapUserConverterService {
 	private final LdapTemplate ldapTemplate;
-	
+
 	private final LdapAttributesUserDetailsMapper userDetailsAttributeMapper;
-	
+
 	private final LdapSecurityConfiguration ldapSecurityConfiguration;
-	
+
 	private final Gate gate;
-	
+
 	@Autowired
 	private IUserDAO userDAO;
-	
+
 	@Autowired
 	public LdapUserConverterService(final LdapTemplate _ldapTemplate,
 			final LdapAttributesUserDetailsMapper _userDetailsAttributeMapper,
@@ -46,12 +47,16 @@ public class LdapUserConverterService {
 		userDetailsAttributeMapper = _userDetailsAttributeMapper;
 		ldapSecurityConfiguration = _ldapSecurityConfiguration;
 		gate = _gate;
+		Validate.notNull(_ldapTemplate);
+		Validate.notNull(_userDetailsAttributeMapper);
+		Validate.notNull(_ldapSecurityConfiguration);
+		Validate.notNull(gate);
 	}
-	
+
 	public String buildQuery(final String _username) {
 		return MessageFormat.format(ldapSecurityConfiguration.getUserDetailsLookup(), _username);
 	}
-	
+
 	public UserDto convertLdapUserDetailsIntoDatabaseUser(final LdapUserDetails _principal) {
 		try {
 			final User findUserByLogin = userDAO.findUserByLogin(_principal.getUsername());
@@ -73,7 +78,7 @@ public class LdapUserConverterService {
 		userDto.setLocale(Locale.getDefault().toString());
 		return userDto;
 	}
-	
+
 	/**
 	 * Try to retrieve informations about an user from the ldap.
 	 *
@@ -97,6 +102,6 @@ public class LdapUserConverterService {
 			SecurityLoggers.LDAP_LOGGER.error("LDAP Lookup for {} met an exception", _username, e);
 		}
 		return userLdapInformation;
-		
+
 	}
 }

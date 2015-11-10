@@ -1,7 +1,10 @@
 package fr.echoes.lab.ksf.users.security.auth.ldap;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -18,36 +21,56 @@ import fr.echoes.lab.ksf.users.security.config.SecurityConfiguration;
 
 @RunWith(MockitoJUnitRunner.class)
 public class LdapUserConverterServiceTest {
-	private final SecurityConfiguration		securityConfiguration	= new SecurityConfiguration();
-	private final LdapSecurityConfiguration	ldapConfiguration		= new LdapSecurityConfiguration();
-	private final PasswordGeneratorService		passwordGeneratorService	= new PasswordGeneratorService(securityConfiguration);
+
+	private final SecurityConfiguration		securityConfiguration		= new SecurityConfiguration();
+	private final LdapSecurityConfiguration	ldapConfiguration			= new LdapSecurityConfiguration();
+	private final PasswordGeneratorService	passwordGeneratorService	= new PasswordGeneratorService(
+			securityConfiguration);
 	@Mock
-	private Gate gate;
+	private Gate							gate;
 
-	@Test
-	public final void testRetrieveFromLdap() throws Exception {
+	@Rule
+	public final JUnitLdapRule	ldapRule	= new JUnitLdapRule();
+	private LdapTemplate		ldapTemplate;
+	private LdapAttributesUserDetailsMapper attributeManager;
 
-		ldapConfiguration.setUrl("ldap://ares");
-		ldapConfiguration.setRoot("dc=tocea,dc=com");
-		ldapConfiguration.setManagerDn("");
-		ldapConfiguration.setManagerPassword("");
+	@Before
+	public void before() throws Exception {
+		ldapConfiguration.setUrl(ldapRule.getUrl());
+		ldapConfiguration.setRoot(JUnitLdapRule.ROOT);
+		ldapConfiguration.setManagerDn(JUnitLdapRule.MANAGER_DN);
+		ldapConfiguration.setManagerPassword(JUnitLdapRule.MANAGER_PWD);
+		ldapConfiguration.setPort(JUnitLdapRule.LOCAL_PORT);
+		;
 		ldapConfiguration.setPooled(false);
-		ldapConfiguration.setUserDnPattern("uid={0},ou=people");
+		ldapConfiguration.setUserDetailsLookup("uid={0},ou=people");
 		ldapConfiguration.setGroupSearchBase("ou=groups");
 
-		//
-		final LdapAttributesUserDetailsMapper attributeManager = new LdapAttributesUserDetailsMapper(ldapConfiguration,
+		attributeManager = new LdapAttributesUserDetailsMapper(ldapConfiguration,
 				passwordGeneratorService);
 
 		final DefaultSpringSecurityContextSource context = ldapConfiguration.buildLdapContext();
 		assertNotNull(context);
-
-		final LdapTemplate ldapTemplate = new LdapTemplate(context);
+		ldapTemplate = new LdapTemplate(context);
 		ldapTemplate.afterPropertiesSet();
+	}
 
-		final LdapUserConverterService userDetailsRetrievingService = new LdapUserConverterService(ldapTemplate, attributeManager, ldapConfiguration, gate);
-		final User ldapUser = userDetailsRetrievingService.retrieveFromLdap("sleroy");
-		System.out.println(ldapUser);
+	@Test
+	public final void testRetrieveFromLdap() throws Exception {
+
+		final LdapUserConverterService userDetailsRetrievingService = new LdapUserConverterService(ldapTemplate,
+				attributeManager, ldapConfiguration, gate);
+		final User ldapUser = userDetailsRetrievingService.retrieveFromLdap("bob");
+		assertNotNull(ldapUser);
+
+	}
+
+	@Test
+	public final void testRetrieveFromLdapWithoutUser() throws Exception {
+		final LdapUserConverterService userDetailsRetrievingService = new LdapUserConverterService(ldapTemplate,
+				attributeManager, ldapConfiguration, gate);
+		final User ldapUser2 = userDetailsRetrievingService.retrieveFromLdap("gnignagnu");
+		assertNull(ldapUser2);
 
 	}
 
