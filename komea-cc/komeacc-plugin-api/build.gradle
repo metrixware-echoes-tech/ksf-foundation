@@ -1,0 +1,4 @@
+dependencies {
+	compile project(":ksf-commons:ksf-backend-plugin-api")
+	compile "commons-io:commons-io:$APACHE_COMMONIO"
+}

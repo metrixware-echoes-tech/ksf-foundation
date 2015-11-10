@@ -12,6 +12,7 @@ include "ksf-commons:ksf-backend-utils"
 include "ksf-commons:ksf-backend-microservice"
 include "ksf-commons:ksf-backend-plugin"
 include "ksf-commons:ksf-backend-support"
+include "ksf-commons:ksf-backend-plugin-api"
 
 // Corolla
 
@@ -26,4 +27,5 @@ include "komea-cc:komeacc-plugins:komeacc-foreman-plugin"
 include "komea-cc:komeacc-plugins:komeacc-puppet-plugin"
 include "komea-cc:komeacc-plugins:komeacc-redmine-plugin"
 include "komea-cc:komeacc-plugins:komeacc-jenkins-plugin"
+include "komea-cc:komeacc-plugin-api"
 include "komea-cc:komeacc-softwarefactory"

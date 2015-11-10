@@ -1,1 +1,3 @@
- 
+dependencies {
+	compile project(":komea-cc:komeacc-plugin-api")
+}

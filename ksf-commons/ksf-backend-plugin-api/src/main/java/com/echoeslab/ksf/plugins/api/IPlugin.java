@@ -24,7 +24,7 @@ public interface IPlugin extends Closeable {
 	 * Returns the properties offered by the plugin.
 	 * @return
 	 */
-	IPluginProperties getPluginProperties();
+	IPluginPropertiesDefinition getPluginProperties();
 	
 	/**
 	 * Returns the summary into the HTML format.

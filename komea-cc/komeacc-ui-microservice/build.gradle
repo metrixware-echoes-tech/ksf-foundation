@@ -29,6 +29,14 @@ springBoot {
 dependencies {
     compile project(":ksf-commons:ksf-backend-microservice")	
 	compile project(":komea-cc:komeacc-softwarefactory")
+	compile project(":komea-cc:komeacc-plugin-api")
+	
+	// Plugins preloaded
+	compile project(":komea-cc:komeacc-plugins:komeacc-foreman-plugin")
+	compile project(":komea-cc:komeacc-plugins:komeacc-puppet-plugin")
+	compile project(":komea-cc:komeacc-plugins:komeacc-jenkins-plugin")
+	compile project(":komea-cc:komeacc-plugins:komeacc-redmine-plugin")
+	
     providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
     testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
 }

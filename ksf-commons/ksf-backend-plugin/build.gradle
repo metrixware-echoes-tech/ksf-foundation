@@ -1,0 +1,3 @@
+dependencies {
+	compile project(":ksf-commons:ksf-backend-plugin-api")
+}

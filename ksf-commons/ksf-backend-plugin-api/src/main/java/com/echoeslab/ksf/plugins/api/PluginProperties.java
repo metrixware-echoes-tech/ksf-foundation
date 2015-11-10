@@ -6,18 +6,20 @@ import java.util.Map;
 
 import org.apache.commons.lang3.Validate;
 
+public class PluginProperties implements IPluginPropertiesDefinition {
 
-
-public class PluginProperties implements IPluginProperties {
-	
 	private final Map<String, PluginProperty> properties = new HashMap<>();
-	
+
 	public PluginProperties() {
 		super();
 	}
-	
+
 	/**
 	 * Declares a new property and provides the pojo to modify it.
+	 *
+	 * @param _key
+	 *            the property key
+	 * @return the plugin
 	 */
 	public PluginProperty declareProperty(final String _key) {
 		Validate.notEmpty(_key, "Key should not be empty");
@@ -29,11 +31,12 @@ public class PluginProperties implements IPluginProperties {
 		properties.put(_key, property);
 		return property;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see com.echoeslab.ksf.plugins.api.IPluginProperties#getProperties()
+	 * @see
+	 * com.echoeslab.ksf.plugins.api.IPluginPropertiesDefinition#getProperties()
 	 */
 	@Override
 	public Collection<PluginProperty> getProperties() {
