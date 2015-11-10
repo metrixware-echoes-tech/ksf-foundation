@@ -8,7 +8,7 @@ import fr.echoes.lab.ksf.extensions.api.IExtension;
  * @author sleroy
  *
  */
-public interface IEventListenerExtension extends IExtension{
-
-	void notifyEvent(Object _event);
+public interface IJsonEventListenerExtension extends IExtension {
+	
+	void notifyEvent(JsonEvent _event);
 }

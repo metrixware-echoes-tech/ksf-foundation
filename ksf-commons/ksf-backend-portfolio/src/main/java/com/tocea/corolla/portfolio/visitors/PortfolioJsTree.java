@@ -45,13 +45,13 @@ public class PortfolioJsTree extends JsTreeNodeVisitor {
 		if (PortfolioUtils.isProjectNode(node)) {
 			
 			String ID = ((ProjectNode) node).getProjectId();
-			result.getA_attr().put("data-projectID", ID);
+			result.getA_attr().put("jsonData-projectID", ID);
 
 			if (this.projects != null) {
 				Project project = ProjectUtils.findByID(ID, projects);
 				if (project != null) {
 					result.setText(project.getName());
-					result.getA_attr().put("data-key", project.getKey());
+					result.getA_attr().put("jsonData-key", project.getKey());
 					result.setIcon(project.getImage() != null ? project.getImage().toString() : "");
 				}
 			}

@@ -1,1 +1,29 @@
-dependencies { compile JUNIT }
+dependencies {
+	compile JUNIT
+	compile("org.springframework.boot:spring-boot-starter-security:${springBootVersion}")
+	compile("org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}")
+	compile("org.springframework.boot:spring-boot-starter-logging:${springBootVersion}")
+	compile("org.springframework.boot:spring-boot-starter-data-mongodb:${springBootVersion}")
+	compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
+	compile("org.springframework.security:spring-security-ldap:${SPRING_LDAP}")
+	
+	
+	compile "org.slf4j:slf4j-api:$LOG_SLF4J"
+	compile "org.slf4j:jcl-over-slf4j:$LOG_SLF4J"
+	compile "org.slf4j:log4j-over-slf4j:$LOG_SLF4J"
+	
+	compile "org.apache.commons:commons-lang3:$APACHE_COMMONLANG3"
+	compile "commons-validator:commons-validator:$APACHE_COMMONVALID"
+	
+	compile "org.ocpsoft.prettytime:prettytime:$PRETTY_TIME"
+	
+	compile "javax.mail:javax.mail-api:$JAVAMAIL"
+	
+	
+	compile "joda-time:joda-time:$JODA_TIME"
+	compile "org.codehaus.groovy:groovy-all:$GROOVY_VERSION"
+	
+	// LDAP
+	testCompile   ("org.apache.directory.server:apacheds-server-jndi:${LDAP_SERVER}")
+	
+}

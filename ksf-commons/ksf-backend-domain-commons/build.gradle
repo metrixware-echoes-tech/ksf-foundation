@@ -1,4 +1,5 @@
 dependencies {
 	compile project(":ksf-commons:ksf-backend-utils")
 	compile project(":ksf-commons:ksf-backend-cqrs")
+	compile project(":ksf-commons:ksf-backend-plugin-api")
 }
