@@ -4,16 +4,18 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
+
+
 
 public class PluginProperties implements IPluginProperties {
-
+	
 	private final Map<String, PluginProperty> properties = new HashMap<>();
-
+	
 	public PluginProperties() {
 		super();
 	}
-
+	
 	/**
 	 * Declares a new property and provides the pojo to modify it.
 	 */
@@ -27,7 +29,7 @@ public class PluginProperties implements IPluginProperties {
 		properties.put(_key, property);
 		return property;
 	}
-
+	
 	/*
 	 * (non-Javadoc)
 	 *
