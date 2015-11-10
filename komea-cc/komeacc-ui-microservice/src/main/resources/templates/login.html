@@ -30,9 +30,9 @@
                     <div class="avatar"></div>
                     <div class="form-box">
                         <form   th:action="@{/login}" method="post">
-                            <input name="username" type="text" placeholder="username"></input>
-                            <input type="password" name="password" id="password" placeholder="password"/>
-                            <!--<input type="checkbox" name="remember-me" id="remember-me">remember me</input>-->  
+                            <input onClick="this.select();" name="username" type="text" placeholder="username"></input>
+                            <input onClick="this.select();" type="password" name="password" id="password" placeholder="password"/>
+                            <!--<input type="checkbox" name="remember-me" id="remember-me">Remember me</input>-->  
                             <button class="btn btn-info btn-block login" type="submit">Login</button>
                         </form>
                     </div>
