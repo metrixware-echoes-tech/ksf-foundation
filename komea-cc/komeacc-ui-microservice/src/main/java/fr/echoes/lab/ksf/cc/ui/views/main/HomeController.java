@@ -7,7 +7,6 @@ package fr.echoes.lab.ksf.cc.ui.views.main;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 /**
  *
@@ -15,19 +14,15 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @Controller
 public class HomeController {
-    
-    @RequestMapping(value="/ui/home")
-    public String getHomePage() {
-        return "redirect:/ui/projects";
-    }
-        
-    
-    /**
-     * Une direction est produite pour être capturée par Spring Security et afficher la page de login
-     * @return 
-     */
-    @RequestMapping(value={"/ui/","/"})
-    public String redirectSlashAndBasicUrl() {
-        return "redirect:/ui/projects";
-    }
+
+
+
+	/**
+	 * Une direction est produite pour être capturée par Spring Security et afficher la page de login
+	 * @return
+	 */
+	@RequestMapping(value={"/ui/","/", "/ui"})
+	public String redirectSlashAndBasicUrl() {
+		return "redirect:/ui/projects";
+	}
 }
