@@ -37,3 +37,10 @@
   	filter: grayscale(1); /* Firefox 35+ */
   	-webkit-filter: grayscale(1); /* Google Chrome, Safari 6+ & Opera 15+ */
 }
+
+.panel-title {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 16px;
+  color: inherit;
+}
