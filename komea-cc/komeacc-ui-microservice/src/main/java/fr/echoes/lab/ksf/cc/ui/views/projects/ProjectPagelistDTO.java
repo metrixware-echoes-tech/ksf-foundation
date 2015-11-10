@@ -5,6 +5,7 @@
  */
 package fr.echoes.lab.ksf.cc.ui.views.projects;
 
+import fr.echoes.lab.ksf.cc.ui.views.projects.*;
 import com.tocea.corolla.products.domain.Project;
 import com.tocea.corolla.users.domain.User;
 import java.io.Serializable;
