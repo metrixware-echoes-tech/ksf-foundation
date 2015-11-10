@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.tocea.corolla.cqrs.annotations.CommandHandler;
 import com.tocea.corolla.cqrs.gate.Gate;
 import com.tocea.corolla.cqrs.handler.ICommandHandler;
 
@@ -16,6 +17,7 @@ import fr.echoes.lab.ksf.cc.sf.exceptions.InvalidProductionLineInformationExcept
 import fr.echoes.lab.ksf.cc.sf.exceptions.MissingProductionLineInformationException;
 import fr.echoes.lab.ksf.cc.sf.exceptions.ProductionLineAlreadyExistsException;
 
+@CommandHandler
 public class CreateProductionLineCommandHandler implements ICommandHandler<CreateProductionLineCommand, ProductionLine> {
 
 	@Autowired
