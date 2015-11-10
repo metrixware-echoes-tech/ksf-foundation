@@ -1,5 +1,6 @@
 package fr.echoes.lab.ksf.cc.sf.domain;
 
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -10,6 +11,9 @@ public class SoftwareFactory {
 	@Id
 	@Field("_id")
 	private String id;
+	
+	@NotEmpty
+	private String name;
 
 	public String getId() {
 		return id;
@@ -17,6 +21,14 @@ public class SoftwareFactory {
 	
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 }

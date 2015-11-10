@@ -3,7 +3,7 @@ package fr.echoes.lab.ksf.users.security.auth.ldap;
 import java.text.MessageFormat;
 import java.util.Locale;
 
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.security.ldap.userdetails.LdapUserDetails;

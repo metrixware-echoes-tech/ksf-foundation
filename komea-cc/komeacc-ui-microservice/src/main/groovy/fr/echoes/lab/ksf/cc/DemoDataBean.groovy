@@ -3,6 +3,11 @@
  */
 package fr.echoes.lab.ksf.cc
 
+import fr.echoes.lab.ksf.cc.sf.dao.ISFApplicationTypeDAO
+import fr.echoes.lab.ksf.cc.sf.dao.ISoftwareFactoryDAO
+import fr.echoes.lab.ksf.cc.sf.domain.SFApplication
+import fr.echoes.lab.ksf.cc.sf.domain.SFApplicationType
+import fr.echoes.lab.ksf.cc.sf.domain.SoftwareFactory
 import groovy.util.logging.Slf4j
 
 import javax.annotation.PostConstruct
@@ -53,6 +58,12 @@ public class DemoDataBean {
 	
 	@Autowired
 	def IProjectDAO					projectDAO
+	
+	@Autowired
+	def ISFApplicationTypeDAO		applicationTypeDAO
+	
+	@Autowired
+	def ISoftwareFactoryDAO			softwareFactoryDAO
 	
 	@Autowired
 	def PasswordEncoder				passwordEncoder
@@ -121,10 +132,24 @@ public class DemoDataBean {
 		/*
 		 * User Groups
 		 */
-                
-
-        
 		def developers = this.newGroup("developers", [jsnow, scarreau])
+		
+		
+		/*
+		 * Software Factory
+		 */
+		def softwareFactory = new SoftwareFactory(name: "Demo SF");
+		softwareFactoryDAO.save(softwareFactory);
+		
+		def foreman = new SFApplicationType(name: "foreman");
+		applicationTypeDAO.save(foreman)
+		
+		def foremanApp = new SFApplication(
+			name: "Foreman-1", 
+			type: foreman,
+			softwareFactory: softwareFactory,
+			url: "http://"
+		);
 		
 	}
 	
