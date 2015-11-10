@@ -24,6 +24,8 @@ import org.springframework.web.context.WebApplicationContext;
 
 public class AuthenticationTest extends AbstractSpringTest {
 	
+	private static final String HOME_PAGE = "/ui/projects";
+	
 	@Autowired
 	private WebApplicationContext context;
 
@@ -86,7 +88,7 @@ public class AuthenticationTest extends AbstractSpringTest {
 				.param("username", "jsnow")
 				.param("password", "password"))
 		.andExpect(status().isFound())
-		.andExpect(redirectedUrl("/ui/home"))
+		.andExpect(redirectedUrl(HOME_PAGE))
 		.andExpect(authenticated().withUsername("jsnow"));
 
 	}
@@ -94,7 +96,7 @@ public class AuthenticationTest extends AbstractSpringTest {
 	@Test
 	public void testRequireAuthentication() throws Exception {
 
-		mvc.perform(get("/ui/home")).andExpect(status().isFound());
+		mvc.perform(get(HOME_PAGE)).andExpect(status().isFound());
 
 	}
 	
