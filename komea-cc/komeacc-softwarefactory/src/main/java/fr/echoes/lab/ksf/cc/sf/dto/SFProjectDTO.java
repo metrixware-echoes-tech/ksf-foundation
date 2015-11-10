@@ -4,11 +4,9 @@ import java.util.List;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
-import com.tocea.corolla.products.domain.Project;
-
-import fr.echoes.lab.ksf.cc.sf.domain.ProductionLine;
-
 public class SFProjectDTO {
+	
+	private String id;
 	
 	@NotEmpty
 	private String key;
@@ -17,6 +15,14 @@ public class SFProjectDTO {
 	private String name;
 	
 	private List<String> applications;
+
+	public String getId() {
+		return id;
+	}
+	
+	public void setId(String id) {
+		this.id = id;
+	}
 
 	public String getKey() {
 		return key;
