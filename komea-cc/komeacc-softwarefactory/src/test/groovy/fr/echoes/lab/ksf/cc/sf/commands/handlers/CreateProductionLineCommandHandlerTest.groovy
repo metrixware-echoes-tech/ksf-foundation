@@ -13,7 +13,7 @@ import com.tocea.corolla.utils.functests.FunctionalTestDoc
 import fr.echoes.lab.ksf.cc.sf.commands.CreateProductionLineCommand
 import fr.echoes.lab.ksf.cc.sf.dao.IProductionLineDAO
 import fr.echoes.lab.ksf.cc.sf.exceptions.*;
-import fr.echoes.lab.ksf.cc.sf.model.ProductionLine
+import fr.echoes.lab.ksf.cc.sf.domain.ProductionLine
 
 @FunctionalTestDoc(requirementName = "ADD_PRODUCTION_LINE")
 class CreateProductionLineCommandHandlerTest extends Specification {
