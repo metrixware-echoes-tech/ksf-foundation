@@ -10,7 +10,7 @@
 
     <body>
 
-
+       
         <!--        <div layout:fragment="content">
         
                     <div th:if="${param.error}">Invalid username and password.</div>
@@ -27,7 +27,9 @@
             <div class="container">
                 <div class="login-container">
                     <div id="output"></div>
-                    <div class="avatar"></div>
+                    <div class="avatar">
+                        <img th:src="@{/pictures/echoes.png}" width="120" /> 
+                    </div>
                     <div class="form-box">
                         <form   th:action="@{/login}" method="post">
                             <input onClick="this.select();" name="username" type="text" placeholder="username"></input>
