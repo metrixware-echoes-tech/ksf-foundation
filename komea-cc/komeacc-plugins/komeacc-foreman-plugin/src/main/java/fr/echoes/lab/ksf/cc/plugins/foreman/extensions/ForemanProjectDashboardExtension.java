@@ -6,14 +6,14 @@ import fr.echoes.lab.ksf.extensions.annotations.Extension;
 
 @Extension
 public class ForemanProjectDashboardExtension implements IProjectDashboardExtension {
-	
+
 	@Override
 	public void reclaimProjectDashboardWidget(final IProjectDashboardWidgets _widgets) {
 		_widgets.addWidget(new ForemanProjectDashboardWidget());
 	}
-	
+
 	@Override
 	public String toString() {
-		return "Foreman Dashboad Widget";
+		return "Foreman Dashboard Widget";
 	}
 }
