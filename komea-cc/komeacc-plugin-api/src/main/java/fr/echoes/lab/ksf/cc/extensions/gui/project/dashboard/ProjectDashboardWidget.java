@@ -15,5 +15,7 @@ public interface ProjectDashboardWidget {
 	String getIconUrl();
 
 	String getTitle();
+	
+	List<IProjectTabPanel> getTabPanels();
 
 }

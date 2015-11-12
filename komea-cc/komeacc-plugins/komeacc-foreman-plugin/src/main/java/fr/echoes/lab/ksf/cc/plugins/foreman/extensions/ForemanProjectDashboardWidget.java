@@ -7,6 +7,7 @@ import org.thymeleaf.context.Context;
 
 import com.google.common.collect.Lists;
 
+import fr.echoes.lab.ksf.cc.extensions.gui.project.dashboard.IProjectTabPanel;
 import fr.echoes.lab.ksf.cc.extensions.gui.project.dashboard.MenuAction;
 import fr.echoes.lab.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
 import fr.echoes.lab.ksf.cc.plugins.foreman.utils.ThymeleafTemplateEngineUtils;
@@ -47,6 +48,25 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
 	@Override
 	public String getTitle() {
 		return "Foreman";
+	}
+
+	@Override
+	public List<IProjectTabPanel> getTabPanels() {
+	
+		IProjectTabPanel iframePanel = new IProjectTabPanel() {
+			
+			@Override
+			public String getTitle() {
+				return "Systems Management (Foreman)";
+			}
+			
+			@Override
+			public String getContent() {
+				return templateEngine.process("managementPanel", new Context());
+			}
+		};
+		
+		return Lists.newArrayList(iframePanel);
 	}
 
 }

@@ -18,12 +18,15 @@
 					<ul class="nav nav-tabs tabSelect" id="toolsTab" role="tablist">
 						<li class="active" role="presentation">
 							<a aria-controls="overview" data-toggle="tab" href="#overview" role="tab"> 
-								<b> test </b> &nbsp;Overview
+								Project Overview
 							</a>
 						</li>
-						<li role="presentation">
-							<a aria-controls="#systemsManagement" data-toggle="tab" href="#systemsManagement" role="tab">
-								Systems Management (Foreman)
+						<li role="presentation" th:each="panel,it : ${panels}" >
+							<a th:attr="aria-controls=${'#pluginTab'+it.index}" 
+								th:href="${'#pluginTab'+it.index}"
+								data-toggle="tab" 
+								role="tab"
+								th:text="${panel.title}">								
 							</a>
 						</li>
 					</ul>
@@ -209,9 +212,11 @@
 								</div>
 							</div>
 						</div>
-						<div class="tab-pane"
-							data-src="https://pc-ksf.metrixware.local/hosts"
-							id="systemsManagement" role="tabpanel">
+						<div th:each="panel,it : ${panels}" 
+							class="tab-pane" 
+							th:utext="${panel.content}"
+							th:attr="id=${'pluginTab'+it.index}" 
+							role="tabpanel">
 							<iframe src="" frameborder="0" height="100%" width="100%">
 							&lt;p&gt;Your browser does not support iframes.&lt;/p&gt; </iframe>
 						</div>
