@@ -1,6 +1,7 @@
 dependencies {
 	compile project(":komea-cc:komeacc-plugin-api")
 	compile project(":ksf-commons:ksf-backend-domain-commons") // TO REMOVE IN 1.1
+	compile project(":ksf-commons:ksf-backend-projects") // TO REMOVE IN 1.1
 	compile("org.springframework.boot:spring-boot-starter-thymeleaf:${springBootVersion}") //TO REMOVE IN 1.1
 
 		// FOR LATER (1.1)
