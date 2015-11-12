@@ -64,9 +64,9 @@ public class ProjectLifecycleExtensionManager {
 		try {
 			final ProjectDto projectDto = new ProjectDto();
 			final BeanMap projectMap = new BeanMap(_createdProject);
-			new BeanMap(projectDto);
-			projectMap.putAllWriteable(projectMap);
-			return (ProjectDto) projectMap.getBean();
+			final BeanMap dtoMap = new BeanMap(projectDto);
+			dtoMap.putAllWriteable(projectMap);
+			return (ProjectDto) dtoMap.getBean();
 
 		} catch (final Exception e) {
 			LOGGER.error("Could not convert project to Project DTO", e);
