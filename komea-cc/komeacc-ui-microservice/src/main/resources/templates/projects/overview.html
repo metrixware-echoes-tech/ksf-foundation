@@ -11,7 +11,7 @@
 
 	<div layout:fragment="content">
 		<main class="container-fluid" role="main">
-		<div class="content">
+		<div class="content project-overview">
 			<div class="row">
 				<div class="span12" role="tabpanel">
 					<ul class="nav nav-tabs tabSelect" id="toolsTab" role="tablist">
@@ -33,23 +33,21 @@
 											<div class="panel-heading">
 												<h3 class="panel-title">Project information</h3>
 											</div>
-											<div class="panel-body">
-												<ul style="list-style-type: none">
+											<div class="panel-body">												
+												<ul class="project-properties" style="list-style-type: none">
 													<li>
-														<h5>
-															<strong>Name:</strong> test
-														</h5>
+														<strong>Name:</strong> 
+														<label th:text="${projectData.project.name}">test</label>
 													</li>
 													<li>
-														<h5>
-															<strong>Owner:</strong> User
-														</h5>
+														<strong>Owner:</strong>
+														<label th:text="${projectData.user.firstName+' '+projectData.user.lastName}">User</label>
 													</li>
-													<li>
-														<h5>
-															<strong>Creation date:</strong> 2015-11-09 09:06:06 UTC
-														</h5>
-													</li>
+<!-- 													<li> -->
+<!-- 														<h5> -->
+<!-- 															<strong>Creation date:</strong> 2015-11-09 09:06:06 UTC -->
+<!-- 														</h5> -->
+<!-- 													</li> -->
 													<li>
 														<h5>
 															<strong>Repository:</strong> test.git
@@ -183,82 +181,15 @@
 
 									<div class="col-sm-6"
 										th:each="widget : ${@projectDashboardWidgets.getDashboardWidgets()}">
-										<div class="panel panel-warning">
+										<div class="panel panel-warning project-widget-panel">
 											<div class="panel-heading">
-												<h3 class="panel-title" th:text="${widget.title}"></h3>
-												<img th:src="@{${widget.getIconUrl()}}" style="width: 40px;" />
-
-
+												<img th:src="@{${widget.getIconUrl()}}"/>
+												<h3 class="panel-title" th:text="${widget.title}"></h3>												
 											</div>
-											<div class="panel-body"
-												th:utext="${widget.getHtmlPanelBody()}"></div>
+											<div class="panel-body" th:utext="${widget.getHtmlPanelBody()}"></div>
 										</div>
 									</div>
-
-									<div class="col-sm-6">
-										<div class="panel panel-warning">
-											<div class="panel-heading">
-												<img th:src="@{/pictures/foreman.png}" style="width: 40px;" />
-												<h3 class="panel-title">foreman</h3>
-											</div>
-											<div class="panel-body">
-												<table class="table table-striped">
-													<thead>
-														<tr>
-															<th>Name</th>
-															<th>Operating System</th>
-															<th>
-																<div class="text-right"></div>
-															</th>
-														</tr>
-													</thead>
-													<tbody>
-														<tr>
-															<td>Target 1</td>
-															<td><img alt=""
-																src="project_overview_files/Debian-85d813ee291f23961be994e379ce25032711107ecca09dc5ebc4d.png" />
-																Debian 8.2</td>
-															<td class="text-right">
-																<div class="btn-group">
-																	<span class="btn btn-sm btn-default"> <a
-																		class="glyphicon glyphicon-pencil"
-																		data-id="aid_hosts_obx.metrixware.local_edit"
-																		href="http://localhost:3000/hosts/obx.metrixware.local/edit">&nbsp;Edit</a>
-																	</span> <a class="btn btn-default btn-sm dropdown-toggle"
-																		data-id="aid_not_defined" data-toggle="dropdown"
-																		href="#"> <i class="caret"></i>
-																	</a>
-																	<ul class="dropdown-menu pull-right">
-																		<li><a class="glyphicon glyphicon-duplicate"
-																			data-id="aid_hosts_obx.metrixware.local_clone"
-																			href="http://localhost:3000/hosts/obx.metrixware.local/clone">&nbsp;Clone</a>
-																		</li>
-																		<li><a action="destroy"
-																			class="delete glyphicon glyphicon-trash"
-																			data-confirm="Are you sure you want to delete Environment1?"
-																			data-id="aid_hosts_obx.metrixware.local"
-																			data-method="delete"
-																			href="http://localhost:3000/hosts/obx.metrixware.local"
-																			rel="nofollow">&nbsp;Delete</a></li>
-																	</ul>
-																</div>
-																<button class="btn btn-default glyphicon glyphicon-play"
-																	data-target="#GSCCModal" data-toggle="modal"
-																	type="button">&nbsp;Instantiate</button>
-															</td>
-														</tr>
-													</tbody>
-												</table>
-												<div class="text-right">
-													<ul class="pagination">
-														<li class="previous disabled"><a href="#">Previous</a>
-														</li>
-														<li class="next"><a href="#">Next</a></li>
-													</ul>
-												</div>
-											</div>
-										</div>
-									</div>
+									
 								</div>
 							</div>
 						</div>

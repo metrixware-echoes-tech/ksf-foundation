@@ -61,17 +61,23 @@ public class ProjectController {
         List<ProjectPagelistDTO> projectsList = new ArrayList<>();
 
         for (Project pr : findAll) {
-            User findOne = userDao.findOne(pr.getOwnerId());
-            if (findOne == null) {
-                findOne = new User();
-                findOne.setFirstName("");
-                findOne.setLastName("");
-            }
-            projectsList.add(new ProjectPagelistDTO(pr, findOne));
+            projectsList.add(createProjectPageListDTO(pr));
         }
 
         model.addObject("projects", projectsList);
         return model;
+    }
+    
+    private ProjectPagelistDTO createProjectPageListDTO(Project project) {
+    	
+    	User findOne = userDao.findOne(project.getOwnerId());
+        if (findOne == null) {
+            findOne = new User();
+            findOne.setFirstName("");
+            findOne.setLastName("");
+        }
+        
+    	return new ProjectPagelistDTO(project, findOne);
     }
     
     @RequestMapping(value = "/ui/projects/{projectKey}")
@@ -84,7 +90,7 @@ public class ProjectController {
     	}
     	
     	ModelAndView model = new ModelAndView(VIEW_PAGE);
-    	model.addObject("project", project);
+    	model.addObject("projectData", createProjectPageListDTO(project));
     	
     	return model;
     }
