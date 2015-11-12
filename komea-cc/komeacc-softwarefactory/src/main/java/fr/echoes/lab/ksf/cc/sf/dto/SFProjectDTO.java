@@ -8,7 +8,6 @@ public class SFProjectDTO {
 	
 	private String id;
 	
-	@NotEmpty
 	private String key;
 	
 	@NotEmpty

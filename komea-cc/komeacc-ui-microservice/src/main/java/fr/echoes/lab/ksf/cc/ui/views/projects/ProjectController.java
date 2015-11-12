@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.common.collect.Lists;
 import com.tocea.corolla.cqrs.gate.CommandExecutionException;
 import com.tocea.corolla.cqrs.gate.Gate;
 import com.tocea.corolla.products.dao.IProjectDAO;
@@ -31,6 +32,9 @@ import com.tocea.corolla.products.exceptions.ProjectNotFoundException;
 import com.tocea.corolla.users.dao.IUserDAO;
 import com.tocea.corolla.users.domain.User;
 
+import fr.echoes.lab.ksf.cc.extensions.gui.project.dashboard.IProjectTabPanel;
+import fr.echoes.lab.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
+import fr.echoes.lab.ksf.cc.projects.extmanager.ui.ProjectDashboardExtensionManager;
 import fr.echoes.lab.ksf.cc.sf.commands.CreateProjectAndProductionLineCommand;
 import fr.echoes.lab.ksf.cc.sf.dto.SFProjectDTO;
 
@@ -44,6 +48,9 @@ public class ProjectController {
 	private static String FORM_PROJECT 	= "projects/form";
 	private static String LIST_PAGE		= "projects/list";
 	private static String VIEW_PAGE		= "projects/overview";
+	
+	@Autowired
+	private ProjectDashboardExtensionManager projectDashboardExtensionManager;
 	
     @Autowired
     IProjectDAO projectDao;
@@ -61,17 +68,23 @@ public class ProjectController {
         List<ProjectPagelistDTO> projectsList = new ArrayList<>();
 
         for (Project pr : findAll) {
-            User findOne = userDao.findOne(pr.getOwnerId());
-            if (findOne == null) {
-                findOne = new User();
-                findOne.setFirstName("");
-                findOne.setLastName("");
-            }
-            projectsList.add(new ProjectPagelistDTO(pr, findOne));
+            projectsList.add(createProjectPageListDTO(pr));
         }
 
         model.addObject("projects", projectsList);
         return model;
+    }
+    
+    private ProjectPagelistDTO createProjectPageListDTO(Project project) {
+    	
+    	User findOne = userDao.findOne(project.getOwnerId());
+        if (findOne == null) {
+            findOne = new User();
+            findOne.setFirstName("");
+            findOne.setLastName("");
+        }
+        
+    	return new ProjectPagelistDTO(project, findOne);
     }
     
     @RequestMapping(value = "/ui/projects/{projectKey}")
@@ -84,7 +97,17 @@ public class ProjectController {
     	}
     	
     	ModelAndView model = new ModelAndView(VIEW_PAGE);
-    	model.addObject("project", project);
+    	model.addObject("projectData", createProjectPageListDTO(project));
+    	
+    	List<IProjectTabPanel> panels = Lists.newArrayList();
+    	List<ProjectDashboardWidget> widgets = projectDashboardExtensionManager.getDashboardWidgets();
+    	
+    	for(ProjectDashboardWidget widget : widgets) {
+    		panels.addAll(widget.getTabPanels());
+    	}
+    	
+    	model.addObject("widgets", widgets);
+    	model.addObject("panels", panels);
     	
     	return model;
     }

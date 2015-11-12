@@ -28,10 +28,10 @@
                         <tbody>
                             <tr th:each="prod : ${projects}">
 
-                                <td >
-                                    <a th:text="${prod.projet.name}" th:href="@{/ui/projects/}+${prod.projet.key}"></a>
+                                <td>
+                                    <a th:text="${prod.project.name}" th:href="@{/ui/projects/}+${prod.project.key}"></a>
                                 </td>
-                                <td th:text="${prod.utilisateur.firstName}+' '+${prod.utilisateur.lastName}"></td>
+                                <td th:text="${prod.user.firstName}+' '+${prod.user.lastName}"></td>
                             </tr>
                         </tbody>
                     </table>
