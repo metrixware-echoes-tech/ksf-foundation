@@ -16,7 +16,7 @@ public class ForemanProjectLifeCycleExtension implements IProjectLifecycleExtens
 	public void notifyCreatedProject(ProjectDto _project) {
 		
 		LOGGER.info("[foreman] project creation detected : "+_project.getKey());
-		
+		//LOGGER.info("your password : "+SecurityContextHolder.getContext().getAuthentication().getCredentials());
 	}
 
 	@Override
