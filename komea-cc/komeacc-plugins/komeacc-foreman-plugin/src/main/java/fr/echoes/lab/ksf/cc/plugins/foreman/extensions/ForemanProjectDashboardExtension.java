@@ -9,15 +9,15 @@ import fr.echoes.lab.ksf.extensions.annotations.Extension;
 
 @Extension
 public class ForemanProjectDashboardExtension implements IProjectDashboardExtension {
-	
+
 	@Autowired
 	private ForemanConfigurationService configurationService;
-	
+
 	@Override
 	public void reclaimProjectDashboardWidget(final IProjectDashboardWidgets _widgets) {
-		_widgets.addWidget(new ForemanProjectDashboardWidget(configurationService.getForemanUrl()));
+		_widgets.addWidget(new ForemanProjectDashboardWidget(this.configurationService));
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Foreman Dashboad Widget";

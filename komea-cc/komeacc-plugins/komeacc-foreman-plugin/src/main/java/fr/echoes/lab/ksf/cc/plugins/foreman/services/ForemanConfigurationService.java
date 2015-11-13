@@ -8,9 +8,23 @@ public class ForemanConfigurationService {
 
 	@Value("${ksf.foreman.url}")
 	private String url;
-	
+
+	@Value("${ksf.foreman.username}")
+	private String username;
+
+	@Value("${ksf.foreman.password}")
+	private String password;
+
 	public String getForemanUrl() {
-		return url;
+		return this.url;
 	}
-	
+
+	public String getForemanUsername() {
+		return this.username;
+	}
+
+	public String getForemanPassword() {
+		return this.password;
+	}
+
 }
