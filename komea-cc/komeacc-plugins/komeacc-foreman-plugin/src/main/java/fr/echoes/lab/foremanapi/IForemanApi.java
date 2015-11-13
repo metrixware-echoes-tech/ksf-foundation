@@ -10,6 +10,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import fr.echoes.lab.foremanapi.model.ComputeProfiles;
 import fr.echoes.lab.foremanapi.model.ComputeResources;
 import fr.echoes.lab.foremanapi.model.Filter;
 import fr.echoes.lab.foremanapi.model.FilterWrapper;
@@ -126,6 +127,11 @@ public interface IForemanApi {
 			@QueryParam("order") String order,
 			@QueryParam("page") String page,
 			@QueryParam("per_page") String perPage);
+
+	@GET
+	@Path("/api/compute_profiles")
+	@Produces(MediaType.APPLICATION_JSON)
+	ComputeProfiles getComputeProfiles();
 
 
 //	@GET

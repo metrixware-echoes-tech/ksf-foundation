@@ -58,7 +58,9 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
 
 			ctx.setVariable("operatingSystems", Lists.newArrayList(foremanApi.getOperatingSystems().results));
 
-		} catch (Exception e) {
+			ctx.setVariable("computeProfiles", Lists.newArrayList(foremanApi.getComputeProfiles().results));
+
+		} catch (final Exception e) {
 			LOGGER.error("[foreman] Foreman API call failed : {}", e);
 		}
 

@@ -23,7 +23,7 @@
 				src="project_overview_files/Debian-85d813ee291f23961be994e379ce25032711107ecca09dc5ebc4d.png" />
 				Debian 8.2</td>
 			<td class="text-right">
-				<div class="btn-group">
+				<!-- div class="btn-group">
 					<span class="btn btn-sm btn-default"> <a
 						class="glyphicon glyphicon-pencil"
 						data-id="aid_hosts_obx.metrixware.local_edit"
@@ -45,7 +45,7 @@
 							href="http://localhost:3000/hosts/obx.metrixware.local"
 							rel="nofollow">&nbsp;Delete</a></li>
 					</ul>
-				</div>
+				</div -->
 				<button class="btn btn-default glyphicon glyphicon-play"
 					data-target="#GSCCModal" data-toggle="modal"
 					type="button">&nbsp;Instantiate</button>
@@ -57,7 +57,7 @@
    <div class="modal-dialog">
      <div class="modal-content">
        <div class="modal-header">
-         <button aria-hidden="true" class="close" data-dismiss="modal" type="button">×</button>
+         <button aria-hidden="true" class="close" data-dismiss="modal" type="button">&times;</button>
          <h4 class="modal-title" id="myModalLabel">Create Target</h4>
        </div>
        <div class="modal-body">
@@ -82,7 +82,7 @@
              <div class="col-sm-10">
                <select class="form-control" id="operatingsystem">
                  <option th:each="operatingSystem : ${operatingSystems}"
-                        th:value="${operatingSystem.id}" th:text="${operatingSystem.title}">AA</option>
+                        th:value="${operatingSystem.id}" th:text="${operatingSystem.title}"></option>
 
                </select>
              </div>
@@ -91,9 +91,8 @@
              <label class="control-label col-sm-2" for="computeprofiles">Compute Profiles</label>
              <div class="col-sm-10">
                <select class="form-control" id="computeprofiles">
-                 <option selected="selected">Small</option>
-                 <option>Medium</option>
-                 <option>Large</option>
+                 <option th:each="computeProfile : ${computeProfiles}"
+                        th:value="${computeProfile.id}" th:text="${computeProfile.name}"></option>
                </select>
              </div>
            </div>
@@ -110,7 +109,7 @@
    <div class="modal-dialog">
      <div class="modal-content">
        <div class="modal-header">
-         <button aria-hidden="true" class="close" data-dismiss="modal" type="button">×</button>
+         <button aria-hidden="true" class="close" data-dismiss="modal" type="button">&times;</button>
          <h4 class="modal-title" id="myModalLabel">Create Environment</h4>
        </div>
        <div class="modal-body">
