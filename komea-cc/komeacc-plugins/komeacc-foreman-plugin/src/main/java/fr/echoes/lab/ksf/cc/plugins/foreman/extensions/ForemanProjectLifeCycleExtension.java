@@ -47,7 +47,6 @@ public class ForemanProjectLifeCycleExtension implements IProjectLifecycleExtens
 		}
 	}
 
-
 	@Override
 	public void notifyDeletedProject(ProjectDto _project) {
 		// TODO Auto-generated method stub
