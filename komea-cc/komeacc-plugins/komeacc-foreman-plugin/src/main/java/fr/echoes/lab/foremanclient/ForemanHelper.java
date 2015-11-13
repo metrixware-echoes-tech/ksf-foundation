@@ -135,7 +135,9 @@ public class ForemanHelper {
 	private static void createHostGroup(IForemanApi api, String projectName) {
 		final HostGroupWrapper hostGroupWrapper = new HostGroupWrapper();
 		final HostGroup hostGroup = new HostGroup();
-
+		hostGroup.name = projectName;
+		hostGroupWrapper.setHostGroup(hostGroup);
+		api.createHostGroups(hostGroupWrapper);
 	}
 
 	private static Role duplicateRole(final IForemanApi api, String projectName, String roleName) {
@@ -174,6 +176,7 @@ public class ForemanHelper {
 		final NewUser newUser = new NewUser();
 
 		final UserWrapper userWrapper = new UserWrapper();
+		newUser.role_ids = roleIds;
 		userWrapper.setUser(newUser);
 
 		api.updateUser(user.id, userWrapper);
