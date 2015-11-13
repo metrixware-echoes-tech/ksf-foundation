@@ -20,6 +20,9 @@ public class ForemanEnvironnment implements Serializable {
 	private String name;
 
 	private String configuration;
+	
+	@NotEmpty
+	private String projectId;
 
 	public String getConfiguration() {
 		return configuration;
@@ -44,7 +47,15 @@ public class ForemanEnvironnment implements Serializable {
 	public void setName(final String _name) {
 		name = _name;
 	}
-
+	
+	public String getProjectId() {
+		return projectId;
+	}
+	
+	public void setProjectId(String projectId) {
+		this.projectId = projectId;
+	}
+	
 	@Override
 	public String toString() {
 		return "ForemanEnvironnment [id=" + id + ", name=" + name + ", configuration=" + configuration + "]";

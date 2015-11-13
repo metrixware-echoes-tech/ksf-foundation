@@ -10,7 +10,7 @@ public interface ProjectDashboardWidget {
 	 */
 	List<MenuAction> getDropdownActions();
 
-	String getHtmlPanelBody();
+	String getHtmlPanelBody(String projectId);
 
 	String getIconUrl();
 

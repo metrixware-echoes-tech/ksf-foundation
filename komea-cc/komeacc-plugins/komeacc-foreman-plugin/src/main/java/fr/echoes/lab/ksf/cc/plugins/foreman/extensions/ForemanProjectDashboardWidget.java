@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
@@ -14,22 +16,23 @@ import fr.echoes.lab.foremanclient.ForemanClient;
 import fr.echoes.lab.ksf.cc.extensions.gui.project.dashboard.IProjectTabPanel;
 import fr.echoes.lab.ksf.cc.extensions.gui.project.dashboard.MenuAction;
 import fr.echoes.lab.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
+import fr.echoes.lab.ksf.cc.plugins.foreman.dao.IForemanEnvironmentDAO;
+import fr.echoes.lab.ksf.cc.plugins.foreman.model.ForemanEnvironnment;
 import fr.echoes.lab.ksf.cc.plugins.foreman.services.ForemanConfigurationService;
 import fr.echoes.lab.ksf.cc.plugins.foreman.utils.ThymeleafTemplateEngineUtils;
 
+@Component
 public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
 
 	private static TemplateEngine templateEngine = ThymeleafTemplateEngineUtils.createTemplateEngine();
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ForemanProjectDashboardWidget.class);
 
-	private final ForemanConfigurationService configurationService;
-
-
-	public ForemanProjectDashboardWidget(
-			ForemanConfigurationService configurationService) {
-		this.configurationService = configurationService;
-	}
+	@Autowired
+	private ForemanConfigurationService configurationService;
+	
+	@Autowired
+	private IForemanEnvironmentDAO environmentDAO;
 
 	@Override
 	public List<MenuAction> getDropdownActions() {
@@ -47,10 +50,13 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
 	}
 
 	@Override
-	public String getHtmlPanelBody() {
+	public String getHtmlPanelBody(String projectId) {
 
 		final Context ctx = new Context();
-		ctx.setVariable("test", "test");
+		ctx.setVariable("projectId", projectId);
+		
+		List<ForemanEnvironnment> environments = environmentDAO.findAll();
+		ctx.setVariable("environments", environments);
 
 		try {
 
