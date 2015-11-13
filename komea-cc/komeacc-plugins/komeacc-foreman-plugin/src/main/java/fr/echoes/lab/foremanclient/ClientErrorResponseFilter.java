@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 
 
 @Provider
-class ClientErrorResponseFilter implements ClientResponseFilter {
+public class ClientErrorResponseFilter implements ClientResponseFilter {
 	final static Logger LOGGER = LoggerFactory.getLogger(ClientErrorResponseFilter.class);
 
 	@Override

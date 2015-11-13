@@ -63,7 +63,7 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
 
 			final IForemanApi foremanApi = ForemanClient.createApi(this.configurationService.getForemanUrl(), this.configurationService.getForemanUsername(), this.configurationService.getForemanPassword());
 
-			ctx.setVariable("operatingSystems", foremanApi.getOperatingSystems());
+			ctx.setVariable("operatingSystems", foremanApi.getOperatingSystems().results);
 
 		} catch (KeyManagementException | NoSuchAlgorithmException
 				| KeyStoreException e) {

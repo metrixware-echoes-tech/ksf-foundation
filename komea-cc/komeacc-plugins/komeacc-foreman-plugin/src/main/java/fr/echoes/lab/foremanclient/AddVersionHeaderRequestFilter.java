@@ -11,7 +11,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-class AddVersionHeaderRequestFilter implements ClientRequestFilter{
+public class AddVersionHeaderRequestFilter implements ClientRequestFilter{
     final static Logger LOGGER = LoggerFactory.getLogger(AddVersionHeaderRequestFilter.class);
     @Override
     public void filter(ClientRequestContext requestContext) throws IOException {

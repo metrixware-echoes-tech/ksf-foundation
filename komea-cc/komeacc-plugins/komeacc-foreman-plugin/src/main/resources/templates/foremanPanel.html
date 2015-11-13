@@ -81,9 +81,8 @@
              <label class="control-label col-sm-2" for="operatingsystem">Operating System</label>
              <div class="col-sm-10">
                <select class="form-control" id="operatingsystem">
-                 <option selected="selected">Debian 8.2</option>
                  <option th:each="operatingSystem : ${operatingSystems}"
-                        th:value="${operatingSystem.id}" th:text="${operatingSystem.value}">AA</option>
+                        th:value="${operatingSystem.id}" th:text="${operatingSystem.title}">AA</option>
 
                </select>
              </div>
