@@ -21,11 +21,11 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
 		
 		MenuAction actionCreateTarget = new MenuAction();
 		actionCreateTarget.setActionName("Create Target");
-		actionCreateTarget.setUrl("/foreman/targets/new");
+		actionCreateTarget.setUrl("javascript:displayCreateTargetModal()");
 		
 		MenuAction actionCreateEnv = new MenuAction();
 		actionCreateEnv.setActionName("Create Environment");
-		actionCreateEnv.setUrl("/foreman/environment/new");
+		actionCreateEnv.setUrl("javascript:displayCreateEnvModal()");
 		
 		return Lists.newArrayList(actionCreateTarget, actionCreateEnv);
 		
