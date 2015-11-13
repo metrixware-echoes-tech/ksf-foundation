@@ -96,7 +96,9 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
 
 			@Override
 			public String getContent() {
-				return templateEngine.process("managementPanel", new Context());
+				Context ctx = new Context();
+				ctx.setVariable("foremanURL", configurationService.getForemanUrl());
+				return templateEngine.process("managementPanel", ctx);
 			}
 		};
 
