@@ -1,8 +1,5 @@
 package fr.echoes.lab.ksf.cc.plugins.foreman.extensions;
 
-import java.security.KeyManagementException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -59,11 +56,10 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
 
 			final IForemanApi foremanApi = ForemanClient.createApi(this.configurationService.getForemanUrl(), this.configurationService.getForemanUsername(), this.configurationService.getForemanPassword());
 
-			ctx.setVariable("operatingSystems", foremanApi.getOperatingSystems().results);
+			ctx.setVariable("operatingSystems", Lists.newArrayList(foremanApi.getOperatingSystems().results));
 
-		} catch (KeyManagementException | NoSuchAlgorithmException
-				| KeyStoreException e) {
-			LOGGER.error("[foreman] Foreman API call failed", e);
+		} catch (Exception e) {
+			LOGGER.error("[foreman] Foreman API call failed : {}", e);
 		}
 
 		return templateEngine.process("foremanPanel", ctx);
