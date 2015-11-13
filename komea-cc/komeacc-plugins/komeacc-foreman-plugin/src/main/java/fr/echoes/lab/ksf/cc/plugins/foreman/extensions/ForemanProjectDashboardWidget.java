@@ -55,10 +55,6 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
 		final Context ctx = new Context();
 		ctx.setVariable("test", "test");
 
-
-		LOGGER.info("ForemanProjectDashboardWidget url : " +  this.configurationService.getForemanUrl());
-		LOGGER.info("ForemanProjectDashboardWidget username : " +  this.configurationService.getForemanUsername());
-		LOGGER.info("ForemanProjectDashboardWidget password : " +  this.configurationService.getForemanPassword());
 		try {
 
 			final IForemanApi foremanApi = ForemanClient.createApi(this.configurationService.getForemanUrl(), this.configurationService.getForemanUsername(), this.configurationService.getForemanPassword());
@@ -67,7 +63,7 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
 
 		} catch (KeyManagementException | NoSuchAlgorithmException
 				| KeyStoreException e) {
-			LOGGER.error("Foreman API call failed", e);
+			LOGGER.error("[foreman] Foreman API call failed", e);
 		}
 
 		return templateEngine.process("foremanPanel", ctx);

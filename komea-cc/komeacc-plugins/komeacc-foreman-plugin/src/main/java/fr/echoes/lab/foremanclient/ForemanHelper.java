@@ -11,6 +11,8 @@ import org.apache.commons.lang.StringUtils;
 import fr.echoes.lab.foremanapi.IForemanApi;
 import fr.echoes.lab.foremanapi.model.Filter;
 import fr.echoes.lab.foremanapi.model.FilterWrapper;
+import fr.echoes.lab.foremanapi.model.HostGroup;
+import fr.echoes.lab.foremanapi.model.HostGroupWrapper;
 import fr.echoes.lab.foremanapi.model.NewFilter;
 import fr.echoes.lab.foremanapi.model.NewRole;
 import fr.echoes.lab.foremanapi.model.NewUser;
@@ -123,28 +125,36 @@ public class ForemanHelper {
 
 		final IForemanApi api = ForemanClient.createApi(url, adminUserName, password);
 
-		Role role = duplicateRole(api, projectName, "Default user");
+		createHostGroup(api, projectName);
+
+		final Role role = duplicateRole(api, projectName, "Default user");
 
 		addRoleToUser(api, userId, role.id );
+	}
+
+	private static void createHostGroup(IForemanApi api, String projectName) {
+		final HostGroupWrapper hostGroupWrapper = new HostGroupWrapper();
+		final HostGroup hostGroup = new HostGroup();
+
 	}
 
 	private static Role duplicateRole(final IForemanApi api, String projectName, String roleName) {
 		final List<Filter> defaultUserFilters = ForemanHelper.findFilters(api, roleName);
 
-		NewRole newRole = new NewRole();
+		final NewRole newRole = new NewRole();
 		newRole.name = projectName;
 
-		RoleWrapper roleWrapper = new RoleWrapper();
+		final RoleWrapper roleWrapper = new RoleWrapper();
 		roleWrapper.setRole(newRole);
 
 
-		Role role = api.createRole(roleWrapper);
+		final Role role = api.createRole(roleWrapper);
 
-		List<String> filterIds = new ArrayList<>();
-		for (Filter filter : defaultUserFilters) {
-			Filter f = api.getFilter(filter.id);
+		final List<String> filterIds = new ArrayList<>();
+		for (final Filter filter : defaultUserFilters) {
+			final Filter f = api.getFilter(filter.id);
 
-			Filter clonedFilter = ForemanHelper.copyFilter(api, f, role.id, projectName);
+			final Filter clonedFilter = ForemanHelper.copyFilter(api, f, role.id, projectName);
 			filterIds.add(clonedFilter.id);
 		}
 		return role;
