@@ -18,7 +18,7 @@
 	</thead>
 	<tbody>
 		<tr>
-			<td th:text="${test}">Target 1</td>
+			<td>Target 1</td>
 			<td><img alt=""
 				src="project_overview_files/Debian-85d813ee291f23961be994e379ce25032711107ecca09dc5ebc4d.png" />
 				Debian 8.2</td>
@@ -117,14 +117,15 @@
            <div class="form-group">
              <label class="control-label col-sm-2" for="source">Source</label>
              <div class="col-sm-10">
-               <select class="form-control" id="source">
+               <select class="form-control" id="env_source" onchange="selectSource()">
+               	<option value=""></option>
                	<option th:each="env : ${environments}" th:value="${env.id}" th:text="${env.name}"></option>
                </select>
              </div>
            </div>
            <div class="form-group">
              <div class="col-sm-12">
-               <textarea class="form-control" id="configuration" name="configuration" rows="15"></textarea>
+               <textarea class="form-control" id="env_configuration" name="configuration" rows="15"></textarea>
              </div>
            </div>
            <div class="form-group">
@@ -150,6 +151,19 @@
 	
 	function displayCreateEnvModal() {
 		$('#createEnvModal').modal('show');
+	}
+	
+	function selectSource() {
+		var sourceId = $('#env_source').val();
+		if (sourceId != "") {
+			$.get("/rest/foreman/environments/"+sourceId, function(data) {
+				if (data) {
+					$('#env_configuration').text(data.configuration);
+				}
+			});
+		}else{
+			$('#env_configuration').text("");
+		}
 	}
 	
 </script>
