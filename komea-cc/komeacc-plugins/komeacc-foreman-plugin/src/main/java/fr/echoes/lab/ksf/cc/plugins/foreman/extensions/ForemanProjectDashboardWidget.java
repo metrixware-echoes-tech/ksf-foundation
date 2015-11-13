@@ -2,6 +2,8 @@ package fr.echoes.lab.ksf.cc.plugins.foreman.extensions;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
@@ -15,6 +17,14 @@ import fr.echoes.lab.ksf.cc.plugins.foreman.utils.ThymeleafTemplateEngineUtils;
 public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
 
 	private static TemplateEngine templateEngine = ThymeleafTemplateEngineUtils.createTemplateEngine();
+		
+	private static final Logger LOGGER = LoggerFactory.getLogger(ForemanProjectDashboardWidget.class);
+	
+	private String foremanURL;
+	
+	public ForemanProjectDashboardWidget(String foremanURL) {
+		this.foremanURL = foremanURL;
+	}
 	
 	@Override
 	public List<MenuAction> getDropdownActions() {
@@ -33,7 +43,9 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
 
 	@Override
 	public String getHtmlPanelBody() {
-				
+		
+		LOGGER.info("[foreman-plugin] foreman url: {}", foremanURL);
+		
 		Context ctx = new Context();
 		ctx.setVariable("test", "test");
 	
