@@ -1,5 +1,6 @@
 package fr.echoes.lab.ksf.cc.plugins.foreman.extensions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -10,6 +11,8 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 import com.google.common.collect.Lists;
+import com.tocea.corolla.products.dao.IProjectDAO;
+import com.tocea.corolla.products.domain.Project;
 
 import fr.echoes.lab.foremanapi.IForemanApi;
 import fr.echoes.lab.foremanclient.ForemanClient;
@@ -17,7 +20,9 @@ import fr.echoes.lab.ksf.cc.extensions.gui.project.dashboard.IProjectTabPanel;
 import fr.echoes.lab.ksf.cc.extensions.gui.project.dashboard.MenuAction;
 import fr.echoes.lab.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
 import fr.echoes.lab.ksf.cc.plugins.foreman.dao.IForemanEnvironmentDAO;
+import fr.echoes.lab.ksf.cc.plugins.foreman.dao.IForemanTargetDAO;
 import fr.echoes.lab.ksf.cc.plugins.foreman.model.ForemanEnvironnment;
+import fr.echoes.lab.ksf.cc.plugins.foreman.model.ForemanTarget;
 import fr.echoes.lab.ksf.cc.plugins.foreman.services.ForemanConfigurationService;
 import fr.echoes.lab.ksf.cc.plugins.foreman.utils.ThymeleafTemplateEngineUtils;
 
@@ -30,9 +35,15 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
 
 	@Autowired
 	private ForemanConfigurationService configurationService;
-	
+
 	@Autowired
 	private IForemanEnvironmentDAO environmentDAO;
+
+	@Autowired
+	private IForemanTargetDAO targetDAO;
+
+	@Autowired
+	private IProjectDAO projectDAO;
 
 	@Override
 	public List<MenuAction> getDropdownActions() {
@@ -52,11 +63,22 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
 	@Override
 	public String getHtmlPanelBody(String projectId) {
 
+		final Project project = this.projectDAO.findOne(projectId);
+
 		final Context ctx = new Context();
 		ctx.setVariable("projectId", projectId);
-		
-		List<ForemanEnvironnment> environments = environmentDAO.findAll();
+
+		final List<ForemanEnvironnment> environments = this.environmentDAO.findAll();
 		ctx.setVariable("environments", environments);
+
+		final Iterable<ForemanTarget> targets = this.targetDAO.findAll();
+		final List<ForemanTarget> projectTargets = new ArrayList<ForemanTarget>();
+		for (final ForemanTarget target : targets) {
+			if (target.getProject().getId().equals(project.getId())) {
+				projectTargets.add(target);
+			}
+		}
+		ctx.setVariable("targets", projectTargets);
 
 		try {
 
@@ -96,8 +118,8 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
 
 			@Override
 			public String getContent() {
-				Context ctx = new Context();
-				ctx.setVariable("foremanURL", configurationService.getForemanUrl());
+				final Context ctx = new Context();
+				ctx.setVariable("foremanURL", ForemanProjectDashboardWidget.this.configurationService.getForemanUrl());
 				return templateEngine.process("managementPanel", ctx);
 			}
 		};
