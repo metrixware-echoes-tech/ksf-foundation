@@ -14,5 +14,5 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Transactional(isolation=Isolation.DEFAULT, readOnly=true, propagation=Propagation.REQUIRED)
 public interface IReadonlyService {
-
+	//
 }

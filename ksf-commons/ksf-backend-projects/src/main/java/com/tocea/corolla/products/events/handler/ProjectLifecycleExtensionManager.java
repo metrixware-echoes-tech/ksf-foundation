@@ -15,6 +15,10 @@ import com.tocea.corolla.products.events.EventProjectUpdated;
 import fr.echoes.lab.ksf.extensions.projects.IProjectLifecycleExtension;
 import fr.echoes.lab.ksf.extensions.projects.ProjectDto;
 
+/**
+ * The Class ProjectLifecycleExtensionManager defines an handler that manages
+ * events associated to the creation/deletion/update of the projects.
+ */
 @EventHandler
 public class ProjectLifecycleExtensionManager {
 

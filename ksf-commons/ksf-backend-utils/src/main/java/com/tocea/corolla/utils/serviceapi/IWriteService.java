@@ -9,10 +9,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * This marker interface defines a service with write operations on database
+ *
  * @author sleroy
  *
  */
-@Transactional(isolation=Isolation.SERIALIZABLE, readOnly=false, propagation=Propagation.REQUIRED)
+@Transactional(isolation = Isolation.SERIALIZABLE, readOnly = false, propagation = Propagation.REQUIRED)
 public interface IWriteService {
-
+	// Marker interface
 }
