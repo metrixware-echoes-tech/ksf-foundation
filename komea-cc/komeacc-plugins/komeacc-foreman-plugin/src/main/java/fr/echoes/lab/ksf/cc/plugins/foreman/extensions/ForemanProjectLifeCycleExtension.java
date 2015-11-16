@@ -1,9 +1,5 @@
 package fr.echoes.lab.ksf.cc.plugins.foreman.extensions;
 
-import java.security.KeyManagementException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +8,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import fr.echoes.lab.foremanclient.ForemanHelper;
 import fr.echoes.lab.ksf.cc.plugins.foreman.services.ForemanConfigurationService;
+import fr.echoes.lab.ksf.cc.plugins.foreman.services.ForemanErrorHandlingService;
 import fr.echoes.lab.ksf.extensions.annotations.Extension;
 import fr.echoes.lab.ksf.extensions.projects.IProjectLifecycleExtension;
 import fr.echoes.lab.ksf.extensions.projects.ProjectDto;
@@ -32,6 +29,9 @@ public class ForemanProjectLifeCycleExtension implements IProjectLifecycleExtens
 
 	@Autowired
 	private ForemanConfigurationService configurationService;
+	
+	@Autowired
+	private ForemanErrorHandlingService errorHandler;
 
 	@Override
 	public void notifyCreatedProject(ProjectDto _project) {
@@ -41,9 +41,9 @@ public class ForemanProjectLifeCycleExtension implements IProjectLifecycleExtens
 		final String logginName = SecurityContextHolder.getContext().getAuthentication().getName();
 		try {
 			ForemanHelper.createProject(this.url, this.username, this.password, _project.getName(), logginName);
-		} catch (KeyManagementException | NoSuchAlgorithmException
-				| KeyStoreException e) {
+		} catch (Exception e) {
 			LOGGER.error("[foreman] project creation failed", e);
+			errorHandler.registerError("Unable to create Foreman project. Please verify your Foreman configuration.");
 		}
 	}
 

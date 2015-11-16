@@ -1,6 +1,5 @@
 package fr.echoes.lab.ksf.cc.plugins.foreman.extensions;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -24,6 +23,7 @@ import fr.echoes.lab.ksf.cc.plugins.foreman.dao.IForemanTargetDAO;
 import fr.echoes.lab.ksf.cc.plugins.foreman.model.ForemanEnvironnment;
 import fr.echoes.lab.ksf.cc.plugins.foreman.model.ForemanTarget;
 import fr.echoes.lab.ksf.cc.plugins.foreman.services.ForemanConfigurationService;
+import fr.echoes.lab.ksf.cc.plugins.foreman.services.ForemanErrorHandlingService;
 import fr.echoes.lab.ksf.cc.plugins.foreman.utils.ThymeleafTemplateEngineUtils;
 
 @Component
@@ -45,6 +45,9 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
 	@Autowired
 	private IProjectDAO projectDAO;
 
+	@Autowired
+	private ForemanErrorHandlingService errorHandler;
+	
 	@Override
 	public List<MenuAction> getDropdownActions() {
 
@@ -73,7 +76,7 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
 
 		final Iterable<ForemanTarget> projectTargets = targetDAO.findByProject(project);
 		ctx.setVariable("targets", projectTargets);
-
+		
 		try {
 
 			final IForemanApi foremanApi = ForemanClient.createApi(this.configurationService.getForemanUrl(), this.configurationService.getForemanUsername(), this.configurationService.getForemanPassword());
@@ -84,7 +87,10 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
 
 		} catch (final Exception e) {
 			LOGGER.error("[foreman] Foreman API call failed : {}", e);
+			errorHandler.registerError("Unable to invoke Foreman. Please verify your Foreman configuration");
 		}
+		
+		ctx.setVariable("foremanError", errorHandler.retrieveError());
 
 		return templateEngine.process("foremanPanel", ctx);
 	}

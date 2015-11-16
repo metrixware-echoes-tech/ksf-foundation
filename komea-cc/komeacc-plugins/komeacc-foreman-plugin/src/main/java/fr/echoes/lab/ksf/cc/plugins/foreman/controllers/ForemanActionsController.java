@@ -25,6 +25,7 @@ import fr.echoes.lab.ksf.cc.plugins.foreman.dao.IForemanEnvironmentDAO;
 import fr.echoes.lab.ksf.cc.plugins.foreman.dao.IForemanTargetDAO;
 import fr.echoes.lab.ksf.cc.plugins.foreman.model.ForemanEnvironnment;
 import fr.echoes.lab.ksf.cc.plugins.foreman.model.ForemanTarget;
+import fr.echoes.lab.ksf.cc.plugins.foreman.services.ForemanErrorHandlingService;
 import fr.echoes.lab.puppet.PuppetClient;
 import fr.echoes.lab.puppet.PuppetException;
 
@@ -56,6 +57,9 @@ public class ForemanActionsController {
 
 	@Autowired
 	private IForemanTargetDAO targetDAO;
+	
+	@Autowired
+	private ForemanErrorHandlingService errorHandler;
 
 	@RequestMapping(value = "/ui/foreman/environment/new", method = RequestMethod.POST)
 	public String createEnvironment(@RequestParam("projectId") String projectId, @RequestParam("name") String name, @RequestParam("configuration") String configuration) {
@@ -88,16 +92,19 @@ public class ForemanActionsController {
 						puppetClient.installModule(moduleName, moduleVersion, envName);
 					} catch (final PuppetException e) {
 						LOGGER.error("Failed to create environment " + envName, e);
+						errorHandler.registerError("Failed to create Puppet environment.");
 					}
 			    }
 			}
 		} catch (final IOException e) {
 			LOGGER.error("Failed to create environment " + envName, e);
+			errorHandler.registerError("Failed to create Puppet environment. Error parsing configuration file.");
 		}
 		try {
 			ForemanHelper.importPuppetClasses(this.url, this.username, this.password, this.smartProxyId);
 		} catch (final Exception e) {
 			LOGGER.error("[foreman] Failed to import puppet classes.");
+			errorHandler.registerError("Failed to import Puppet classes.");
 		}
 	}
 
@@ -145,6 +152,7 @@ public class ForemanActionsController {
 			api.hostPower(host.id, "start");
 		} catch (final Exception e) {
 			LOGGER.error("[foreman] Host creation failed " + puppetConfiguration);
+			errorHandler.registerError("Failed to instantiate target. Please verify your Foreman configuration.");
 		}
 
 		return "redirect:/ui/projects/"+project.getKey();
