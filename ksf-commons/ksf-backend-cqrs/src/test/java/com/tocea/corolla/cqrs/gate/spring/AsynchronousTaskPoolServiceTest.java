@@ -1,6 +1,5 @@
 package com.tocea.corolla.cqrs.gate.spring;
 
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -11,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.tocea.corolla.cqrs.gate.conf.CqrsConfiguration;
+import com.tocea.corolla.cqrs.gate.spring.api.ICommandExecutor;
 
 public class AsynchronousTaskPoolServiceTest {
 
@@ -37,18 +37,22 @@ public class AsynchronousTaskPoolServiceTest {
 		for (int i = 0; i < 100; ++i) {
 			try {
 				final int number = i;
-				final Future<Integer> submit = service.submit(new Callable<Integer>() {
+				final Future<Integer> submit = service.submit(new ICommandExecutor<Integer>() {
 
 					@Override
-					public Integer call() throws Exception {
+					public Integer call() {
 						LOGGER.info("Task {}", number);
-						service.submit(new Callable<Integer>() {
-							
-							@Override
-							public Integer call() throws Exception {
-								return 145;
-							}
-						}).get();
+						try {
+							service.submit(new ICommandExecutor<Integer>() {
+
+								@Override
+								public Integer call() {
+									return 145;
+								}
+							}).get();
+						} catch (InterruptedException | ExecutionException e) {
+							e.printStackTrace();
+						}
 						return number;
 					}
 				});

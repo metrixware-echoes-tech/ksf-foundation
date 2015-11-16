@@ -1,8 +1,9 @@
+
 package com.tocea.corolla.cqrs.gate.spring.api;
 
-import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 
@@ -12,7 +13,14 @@ import org.springframework.util.concurrent.ListenableFutureCallback;
  * the heap of tasks. Tasks are executed asynchronously.
  */
 public interface IAsynchronousTaskPoolService {
-	
+
+	/**
+	 * Returns the executor service.
+	 *
+	 * @return the executor service.
+	 */
+	ThreadPoolTaskExecutor getExecutorService();
+
 	/**
 	 * Submits a new task to the pool.
 	 *
@@ -20,16 +28,19 @@ public interface IAsynchronousTaskPoolService {
 	 *            the callable task
 	 * @return a future object designated the future result
 	 */
-	<V> Future<V> submit(Callable<V> _executableTask);
-	
+	<V> Future<V> submit(ICommandExecutor<V> _executableTask);
+
 	/**
 	 * Submits a new task to the pool.
 	 *
-	 * @param <V> the value type
-	 * @param _executableTask            the callable task
-	 * @param _callback the _callback
+	 * @param <V>
+	 *            the value type
+	 * @param _executableTask
+	 *            the callable task
+	 * @param _callback
+	 *            the _callback
 	 * @return a future object designated the future result
 	 */
-	<V> ListenableFuture<V> submit(Callable<V> _executableTask, ListenableFutureCallback<V> _callback);
-	
+	<V> ListenableFuture<V> submit(ICommandExecutor<V> _executableTask, ListenableFutureCallback<V> _callback);
+
 }

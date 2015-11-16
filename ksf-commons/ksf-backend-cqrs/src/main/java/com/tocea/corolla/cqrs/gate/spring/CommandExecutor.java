@@ -1,11 +1,11 @@
 package com.tocea.corolla.cqrs.gate.spring;
 
 import java.util.Arrays;
-import java.util.concurrent.Callable;
 
 import com.tocea.corolla.cqrs.gate.CommandExecutionException;
 import com.tocea.corolla.cqrs.gate.spring.api.ICommandCallback;
 import com.tocea.corolla.cqrs.gate.spring.api.ICommandExecutionListener;
+import com.tocea.corolla.cqrs.gate.spring.api.ICommandExecutor;
 
 /**
  * This task may be executed asynchronously. She contains all the logic to
@@ -15,13 +15,23 @@ import com.tocea.corolla.cqrs.gate.spring.api.ICommandExecutionListener;
  *
  * @param <R>
  */
-public class CommandExecutor<R> implements Callable<R> {
+public class CommandExecutor<R> implements ICommandExecutor<R> {
 
 	private final ICommandCallback<R> callback;
 
 	private final ICommandExecutionListener[]	listeners;
 	private final Object						command;
 
+	/**
+	 * Instantiates a new command executor.
+	 *
+	 * @param _command
+	 *            the _command
+	 * @param _callback
+	 *            the _callback
+	 * @param _listeners
+	 *            the _listeners
+	 */
 	public CommandExecutor(final Object _command, final ICommandCallback<R> _callback,
 			final ICommandExecutionListener[] _listeners) {
 		command = _command;
@@ -29,8 +39,13 @@ public class CommandExecutor<R> implements Callable<R> {
 		listeners = _listeners;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see java.util.concurrent.Callable#call()
+	 */
 	@Override
-	public R call() throws Exception {
+	public R call() {
 		R result = null;
 		try {
 
@@ -53,12 +68,24 @@ public class CommandExecutor<R> implements Callable<R> {
 				+ command + "]";
 	}
 
-	private void notifyListenersFailure(final Throwable e) {
+	/**
+	 * Notify listeners failure.
+	 *
+	 * @param _exception
+	 *            the exception
+	 */
+	private void notifyListenersFailure(final Throwable _exception) {
 		for (final ICommandExecutionListener commandExecutionListener : listeners) {
-			commandExecutionListener.onFailure(command, e);
+			commandExecutionListener.onFailure(command, _exception);
 		}
 	}
 
+	/**
+	 * Notify listeners success.
+	 *
+	 * @param result
+	 *            the result
+	 */
 	private void notifyListenersSuccess(final Object result) {
 		for (final ICommandExecutionListener commandExecutionListener : listeners) {
 			commandExecutionListener.onSuccess(command, result);

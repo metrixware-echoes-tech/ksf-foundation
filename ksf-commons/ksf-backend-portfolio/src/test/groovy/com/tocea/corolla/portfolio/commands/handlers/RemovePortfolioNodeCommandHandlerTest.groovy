@@ -123,8 +123,8 @@ public class RemovePortfolioNodeCommandHandlerTest extends Specification {
 			treeManagementService.findNode(portfolio, { it instanceof FindNodeByIDPredicate }) >> portfolio.nodes[0]
 		
 		then:
-			1 * gate.dispatch { it instanceof DeleteProjectCommand && it.projectID == portfolio.nodes[0].projectId }	
-			1 * gate.dispatch { it instanceof DeleteProjectCommand && it.projectID == portfolio.nodes[0].nodes[0].projectId }	
+			1 * gate.dispatchAsync { it instanceof DeleteProjectCommand && it.projectID == portfolio.nodes[0].projectId }	
+			1 * gate.dispatchAsync { it instanceof DeleteProjectCommand && it.projectID == portfolio.nodes[0].nodes[0].projectId }	
 		
 	}
 	

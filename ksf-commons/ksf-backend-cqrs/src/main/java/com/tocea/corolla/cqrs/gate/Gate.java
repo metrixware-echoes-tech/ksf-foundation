@@ -15,7 +15,6 @@
  */
 package com.tocea.corolla.cqrs.gate;
 
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 import org.springframework.util.concurrent.ListenableFuture;
@@ -34,26 +33,28 @@ import org.springframework.util.concurrent.ListenableFutureCallback;
  *
  */
 public interface Gate {
-
+	
 	/**
 	 * Dispatch a command and executes it asynchronously. The code awaits the
-	 * response to return to the result in a sequentialy way.
+	 * response to return to the result in a sequential way.
 	 *
-	 * @param <R> the generic type
-	 * @param command            the command.
+	 * @param <R>
+	 *            the generic type
+	 * @param command
+	 *            the command.
 	 * @return the result of the command.
-	 * @throws InterruptedException the interrupted exception
-	 * @throws ExecutionException the execution exception
 	 */
-	<R> R dispatch(Object command) ;
+	<R> R dispatch(Object command);
 	
 	/**
 	 * Dispatch a command and executes it asynchronously since we don't expect
 	 * results from it. Warning : Command are not supposed to store results
 	 * value.
 	 *
-	 * @param <R> the generic type
-	 * @param command            the command.
+	 * @param <R>
+	 *            the generic type
+	 * @param command
+	 *            the command.
 	 * @return the result of the command.
 	 */
 	<R> Future<R> dispatchAsync(Object command);
@@ -63,9 +64,12 @@ public interface Gate {
 	 * results from it. The returned value is not returned but handled with a
 	 * callback that will be triggered at the task completion.
 	 *
-	 * @param <R> the generic type
-	 * @param command            the command.
-	 * @param _callback the _callback
+	 * @param <R>
+	 *            the generic type
+	 * @param command
+	 *            the command.
+	 * @param _callback
+	 *            the _callback
 	 * @return the result of the command.
 	 */
 	<R> ListenableFuture<R> dispatchAsync(Object command, ListenableFutureCallback<R> _callback);

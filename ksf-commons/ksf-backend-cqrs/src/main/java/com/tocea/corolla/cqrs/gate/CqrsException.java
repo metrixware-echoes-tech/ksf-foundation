@@ -13,10 +13,8 @@ import com.tocea.corolla.utils.domain.KsfDomainException;
  */
 public class CqrsException extends KsfDomainException {
 
-	/**
-	 *
-	 */
-	private static final String DOMAIN_EXCEPTION = "CQRS Exception : ";
+	private static final long	serialVersionUID	= -208491937717509793L;
+	private static final String	DOMAIN_EXCEPTION	= "CQRS Exception : ";
 
 	/**
 	 * Domain exception.
@@ -28,7 +26,8 @@ public class CqrsException extends KsfDomainException {
 	/**
 	 * Instantiates a new cqrs exception.
 	 *
-	 * @param _message the _message
+	 * @param _message
+	 *            the _message
 	 */
 	public CqrsException(final String _message) {
 		this(_message, null);
@@ -37,13 +36,21 @@ public class CqrsException extends KsfDomainException {
 	/**
 	 * Instantiates a new cqrs exception.
 	 *
-	 * @param _message the _message
-	 * @param _cause the _cause
+	 * @param _message
+	 *            the _message
+	 * @param _cause
+	 *            the _cause
 	 */
 	public CqrsException(final String _message, final Throwable _cause) {
 		super(DOMAIN_EXCEPTION + _message, _cause);
 	}
 
+	/**
+	 * Instantiates a new cqrs exception.
+	 *
+	 * @param cause
+	 *            the cause
+	 */
 	public CqrsException(final Throwable cause) {
 		this(cause.getMessage(), cause);
 	}

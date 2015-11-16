@@ -18,10 +18,9 @@
  */
 package com.tocea.corolla.cqrs.gate.spring;
 
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
+import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +28,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 
-import com.tocea.corolla.cqrs.gate.CqrsException;
 import com.tocea.corolla.cqrs.gate.Gate;
 import com.tocea.corolla.cqrs.gate.IEventBus;
 import com.tocea.corolla.cqrs.gate.spring.api.IAsynchronousTaskPoolService;
+import com.tocea.corolla.cqrs.gate.spring.api.ICommandExecutor;
 
 /**
  * This class defines the gate where the commands are dispatched for execution.
@@ -57,42 +56,46 @@ public class SpringGate implements Gate {
 	/**
 	 * Executes sequentially.
 	 *
-	 * @param <R> the generic type
-	 * @param _command the _command
+	 * @param <R>
+	 *            the generic type
+	 * @param _command
+	 *            the _command
 	 * @return the result of the command
 	 */
 	@Override
-	public <R> R dispatch(final Object _command)  {
-		final Future<R> future = dispatchAsync(_command);
-		try {
-			return future.get();
-		} catch (InterruptedException | ExecutionException e) {
-			throw new CqrsException("Error when trying to access to the result of a command", e);
-		}
-
+	public <R> R dispatch(final Object _command) {
+		final ICommandExecutor<R> run = commandExecutorFactoryService.run(_command);
+		Validate.notNull(run);
+		return run.call();
 	}
-	
-	
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 *
 	 * @see com.tocea.corolla.cqrs.gate.Gate#dispatchAsync(java.lang.Object)
 	 */
 	@Override
 	public <R> Future<R> dispatchAsync(final Object _command) {
-		final Callable<R> callable = commandExecutorFactoryService.run(_command);
+		
+		final ICommandExecutor<R> callable = commandExecutorFactoryService.run(_command);
 		return asynchronousTaskPoolService.submit(callable);
 	}
 
-	/* (non-Javadoc)
-	 * @see com.tocea.corolla.cqrs.gate.Gate#dispatchAsync(java.lang.Object, org.springframework.util.concurrent.ListenableFutureCallback)
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see com.tocea.corolla.cqrs.gate.Gate#dispatchAsync(java.lang.Object,
+	 * org.springframework.util.concurrent.ListenableFutureCallback)
 	 */
 	@Override
 	public <R> ListenableFuture<R> dispatchAsync(final Object _command, final ListenableFutureCallback<R> _callback) {
-		final Callable<R> callable = commandExecutorFactoryService.run(_command);
+		final ICommandExecutor<R> callable = commandExecutorFactoryService.run(_command);
 		return asynchronousTaskPoolService.submit(callable, _callback);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 *
 	 * @see com.tocea.corolla.cqrs.gate.Gate#dispatchEvent(java.lang.Object)
 	 */
 	@Override

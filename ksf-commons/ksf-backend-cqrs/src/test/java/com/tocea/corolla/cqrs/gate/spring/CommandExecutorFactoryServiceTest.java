@@ -60,7 +60,7 @@ public class CommandExecutorFactoryServiceTest {
 				return _command + " LA TERRE";
 			}
 		});
-		assertEquals("SALUT LA TERRE", service.run(COMMAND));
+		assertEquals("SALUT LA TERRE", service.run(COMMAND).call());
 	}
 
 	@Test(expected = InvalidCommandException.class)
@@ -81,12 +81,12 @@ public class CommandExecutorFactoryServiceTest {
 			}
 		};
 		Mockito.when(handlersProvider.getHandler(COMMAND)).thenReturn(handler);
-		assertNull(service.run(COMMAND));
+		assertNull(service.run(COMMAND).call());
 	}
 
 	@Test(expected = CommandHandlerNotFoundException.class)
 	public final void testRun_without_handler() {
 		configuration.setProfilingEnabled(false);
-		service.run(COMMAND);
+		service.run(COMMAND).call();
 	}
 }

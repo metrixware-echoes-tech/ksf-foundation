@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.servlet.ModelAndView
 
-import com.tocea.corolla.users.domain.Permission;
 import com.tocea.corolla.cqrs.gate.CommandExecutionException
 import com.tocea.corolla.cqrs.gate.Gate
 import com.tocea.corolla.portfolio.commands.RemovePortfolioNodeCommand
@@ -196,7 +195,7 @@ public class ProjectDetailsPageController {
 		try {
 
 			gate.dispatch new CreateProjectBranchCommand(branch.name, origin)
-		}catch(CommandExecutionException ex) {
+		}catch(Exception ex) {
 
 			if (ex.cause instanceof ProjectBranchAlreadyExistException) {
 				_result.rejectValue("name", "error.name", "This name is already used by another project branch")
@@ -254,7 +253,7 @@ public class ProjectDetailsPageController {
 		Project project = findProjectOrFail(projectKey)
 		def node = treeManagementService.findNode(portfolioDAO.find(), new FindNodeByProjectIDPredicate(project.id))
 
-		gate.dispatchAsync new RemovePortfolioNodeCommand(node.id)
+		gate.dispatch new RemovePortfolioNodeCommand(node.id)
 
 		return new ModelAndView("redirect:/ui/portfolio/manager")
 	}

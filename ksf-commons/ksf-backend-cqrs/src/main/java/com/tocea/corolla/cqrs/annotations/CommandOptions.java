@@ -21,9 +21,18 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * The Interface CommandOptions.
+ */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface CommandOptions {
+	
+	/**
+	 * Allows the developer to add a time out on the command.
+	 *
+	 * @return the delay in sec
+	 */
 	long timeOut() default 0;
 }

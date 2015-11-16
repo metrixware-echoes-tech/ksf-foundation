@@ -43,48 +43,48 @@ import com.tocea.corolla.products.exceptions.ProjectBranchAlreadyExistException;
 @CommandHandler
 @Transactional
 public class CreateProjectBranchCommandHandler implements ICommandHandler<CreateProjectBranchCommand, ProjectBranch> {
-	
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(CreateProjectBranchCommandHandler.class);
+
 	@Autowired
 	private IProjectBranchDAO branchDAO;
-	
+
 	@Autowired
 	private Gate gate;
-	
-	private static final Logger LOGGER = LoggerFactory.getLogger(CreateProjectBranchCommandHandler.class);
-	
+
 	@Override
 	public ProjectBranch handle(@Valid final CreateProjectBranchCommand command) {
-		
+
 		final ProjectBranch branch = command.getBranch();
-		
+
 		if (branch == null) {
 			throw new MissingProjectBranchInformationException("No data provided to create a project branch");
 		}
-		
+
 		if (StringUtils.isNotEmpty(branch.getId())) {
 			throw new InvalidProjectBranchInformationException("No ID expected");
 		}
-		
+
 		final ProjectBranch withSameName = branchDAO.findByNameAndProjectId(branch.getName(), branch.getProjectId());
-		
+
 		if (withSameName != null) {
-			throw new ProjectBranchAlreadyExistException();
+			throw new ProjectBranchAlreadyExistException(withSameName.getName());
 		}
-		
+
 		final Collection<ProjectBranch> otherBranches = branchDAO.findByProjectId(branch.getProjectId());
-		
+
 		if (otherBranches.isEmpty()) {
 			branch.setDefaultBranch(true);
 		}
-		
+
 		branchDAO.save(branch);
 		LOGGER.info("branch {} created for project {}", branch.getName(), branch.getProjectId());
-		
+
 		gate.dispatchEvent(new EventNewBranchCreated(branch, command.getOriginBranch()));
-		
-		
+
+
 		return branch;
-		
+
 	}
-		
+
 }

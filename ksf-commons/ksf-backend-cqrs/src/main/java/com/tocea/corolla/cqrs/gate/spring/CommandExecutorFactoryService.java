@@ -18,8 +18,6 @@
  */
 package com.tocea.corolla.cqrs.gate.spring;
 
-import java.util.concurrent.Callable;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +27,7 @@ import com.tocea.corolla.cqrs.gate.conf.CqrsConfiguration;
 import com.tocea.corolla.cqrs.gate.spring.api.HandlersProvider;
 import com.tocea.corolla.cqrs.gate.spring.api.ICommandCallback;
 import com.tocea.corolla.cqrs.gate.spring.api.ICommandExecutionListener;
+import com.tocea.corolla.cqrs.gate.spring.api.ICommandExecutor;
 import com.tocea.corolla.cqrs.gate.spring.api.ICommandProfilingService;
 import com.tocea.corolla.cqrs.handler.ICommandHandler;
 import com.tocea.corolla.utils.domain.ObjectValidation;
@@ -55,10 +54,19 @@ public class CommandExecutorFactoryService {
 	@Autowired
 	private ICommandProfilingService profilingService;
 
+	/**
+	 * Instantiates a new command executor factory service.
+	 */
 	public CommandExecutorFactoryService() {
 		super();
 	}
 
+	/**
+	 * Instantiates a new command executor factory service.
+	 *
+	 * @param _configuration
+	 *            the _configuration
+	 */
 	public CommandExecutorFactoryService(final CqrsConfiguration _configuration) {
 		configuration = _configuration;
 	}
@@ -68,9 +76,9 @@ public class CommandExecutorFactoryService {
 	 *
 	 * @param command
 	 *            the command
-	 * @return
+	 * @return the command executor.
 	 */
-	public <R> Callable<R> run(final Object command) {
+	public <R> ICommandExecutor<R> run(final Object command) {
 		final ObjectValidation objectValidation = new ObjectValidation();
 		if (!objectValidation.isValid(command)) {
 			throw new InvalidCommandException(command);
@@ -90,7 +98,7 @@ public class CommandExecutorFactoryService {
 		if (configuration.isProfilingEnabled()) {
 			callback = profilingService.decorate(command, callback);
 		}
-		
+
 		return new CommandExecutor(command, callback, listeners);
 	}
 
@@ -101,6 +109,5 @@ public class CommandExecutorFactoryService {
 	public void setListeners(final ICommandExecutionListener[] _listeners) {
 		listeners = _listeners;
 	}
-
 
 }

@@ -27,25 +27,25 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.stereotype.Component;
 
-import com.sun.corba.se.impl.activation.CommandHandler;
+import com.tocea.corolla.cqrs.annotations.CommandHandler;
 import com.tocea.corolla.cqrs.gate.spring.api.HandlersProvider;
 import com.tocea.corolla.cqrs.handler.ICommandHandler;
 
 /**
  * This class retrieves the appropriate {@link CommandHandler} based on the type
  * of the command.
- * 
+ *
  * @author sleroy
- *        
+ *
  */
 @Component
 public class SpringHandlersProvider implements HandlersProvider {
-	
+
 	@Autowired
 	private ConfigurableListableBeanFactory beanFactory;
-	
+
 	private final Map<Class<?>, String> handlers = new HashMap<Class<?>, String>();
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public ICommandHandler<Object, Object> getHandler(final Object command) {
@@ -56,7 +56,7 @@ public class SpringHandlersProvider implements HandlersProvider {
 		final ICommandHandler<Object, Object> handler = beanFactory.getBean(beanName, ICommandHandler.class);
 		return handler;
 	}
-	
+
 	@PostConstruct
 	public void onApplicationEvent() {
 		handlers.clear();
@@ -71,7 +71,7 @@ public class SpringHandlersProvider implements HandlersProvider {
 			}
 		}
 	}
-	
+
 	private ParameterizedType findByRawType(final Type[] genericInterfaces, final Class<?> expectedRawType) {
 		for (final Type type : genericInterfaces) {
 			if (type instanceof ParameterizedType) {
@@ -83,7 +83,7 @@ public class SpringHandlersProvider implements HandlersProvider {
 		}
 		throw new RuntimeException();
 	}
-	
+
 	private Class<?> getHandledCommandType(final Class<?> clazz) {
 		final Type[] genericInterfaces = clazz.getGenericInterfaces();
 		final ParameterizedType type = findByRawType(genericInterfaces, ICommandHandler.class);

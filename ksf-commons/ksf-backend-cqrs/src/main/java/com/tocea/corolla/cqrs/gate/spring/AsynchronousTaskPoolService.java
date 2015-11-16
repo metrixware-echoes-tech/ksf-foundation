@@ -16,6 +16,7 @@ import org.springframework.util.concurrent.ListenableFutureCallback;
 
 import com.tocea.corolla.cqrs.gate.conf.CqrsConfiguration;
 import com.tocea.corolla.cqrs.gate.spring.api.IAsynchronousTaskPoolService;
+import com.tocea.corolla.cqrs.gate.spring.api.ICommandExecutor;
 
 /**
  * The Class AsynchronousTaskPoolService implements a pool of task. The tasks
@@ -23,21 +24,46 @@ import com.tocea.corolla.cqrs.gate.spring.api.IAsynchronousTaskPoolService;
  */
 @Service
 public class AsynchronousTaskPoolService implements IAsynchronousTaskPoolService {
-	
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(AsynchronousTaskPoolService.class);
-	
+
+	/**
+	 * Creates the callable.
+	 *
+	 * @param <V>
+	 *            the value type
+	 * @param _executableTask
+	 *            the _executable task
+	 * @return the callable
+	 */
+	public static <V> Callable<V> createCallable(final ICommandExecutor<V> _executableTask) {
+		return new Callable<V>() {
+
+			@Override
+			public V call() throws Exception {
+				return _executableTask.call();
+			}
+		};
+	}
+
 	private ThreadPoolTaskExecutor executorService = null;
-	
+
 	/** The cqrs configuration. */
-	
+
 	private final CqrsConfiguration cqrsConfiguration;
-	
+
+	/**
+	 * Instantiates a new asynchronous task pool service.
+	 *
+	 * @param _cqrsConfiguration
+	 *            the _cqrs configuration
+	 */
 	@Autowired
 	public AsynchronousTaskPoolService(final CqrsConfiguration _cqrsConfiguration) {
 		super();
 		cqrsConfiguration = _cqrsConfiguration;
 	}
-	
+
 	/**
 	 * Destroy the service
 	 */
@@ -46,7 +72,17 @@ public class AsynchronousTaskPoolService implements IAsynchronousTaskPoolService
 		LOGGER.info("Destroying the Asynchronous Task Pool");
 		executorService.destroy();
 	}
-	
+
+	/**
+	 * Returns the executor service
+	 *
+	 * @return the executor service.
+	 */
+	@Override
+	public ThreadPoolTaskExecutor getExecutorService() {
+		return executorService;
+	}
+
 	/**
 	 * Inits the service
 	 */
@@ -61,7 +97,7 @@ public class AsynchronousTaskPoolService implements IAsynchronousTaskPoolService
 		if (cqrsConfiguration.getMaxPoolSize() > 0) {
 			LOGGER.info("AsynchronousEngine maxPoolSize : {}", cqrsConfiguration.getMaxPoolSize());
 			executorService.setMaxPoolSize(cqrsConfiguration.getMaxPoolSize());
-			
+
 		} else {
 			LOGGER.info("AsynchronousEngine pool size : UNLIMITED");
 			executorService.setMaxPoolSize(Integer.MAX_VALUE);
@@ -69,7 +105,7 @@ public class AsynchronousTaskPoolService implements IAsynchronousTaskPoolService
 		if (cqrsConfiguration.getQueueCapacity() > 0) {
 			LOGGER.info("AsynchronousEngine maxPoolSize : {}", cqrsConfiguration.getQueueCapacity());
 			executorService.setQueueCapacity(cqrsConfiguration.getQueueCapacity());
-			
+
 		} else {
 			LOGGER.info("AsynchronousEngine queue capacity : UNLIMITED");
 			executorService.setQueueCapacity(Integer.MAX_VALUE);
@@ -79,7 +115,11 @@ public class AsynchronousTaskPoolService implements IAsynchronousTaskPoolService
 		executorService.setThreadPriority(cqrsConfiguration.getThreadPriority());
 		executorService.initialize();
 	}
-	
+
+	public void setExecutorService(final ThreadPoolTaskExecutor _executorService) {
+		executorService = _executorService;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 *
@@ -88,12 +128,12 @@ public class AsynchronousTaskPoolService implements IAsynchronousTaskPoolService
 	 * java.util.concurrent.Callable)
 	 */
 	@Override
-	public <V> Future<V> submit(final Callable<V> _executableTask) {
+	public <V> Future<V> submit(final ICommandExecutor<V> _executableTask) {
 		LOGGER.info("Submit task {}", _executableTask);
-		return executorService.submit(_executableTask);
-		
+		return executorService.submit(createCallable(_executableTask));
+
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 *
@@ -103,12 +143,12 @@ public class AsynchronousTaskPoolService implements IAsynchronousTaskPoolService
 	 * org.springframework.util.concurrent.ListenableFutureCallback)
 	 */
 	@Override
-	public <V> ListenableFuture<V> submit(final Callable<V> _executableTask,
+	public <V> ListenableFuture<V> submit(final ICommandExecutor<V> _executableTask,
 			final ListenableFutureCallback<V> _callback) {
 		LOGGER.info("Submit task {}", _executableTask);
-		final ListenableFuture<V> listenableFuture = executorService.submitListenable(_executableTask);
+		final ListenableFuture<V> listenableFuture = executorService.submitListenable(createCallable(_executableTask));
 		listenableFuture.addCallback(_callback);
 		return listenableFuture;
-		
+
 	}
 }
