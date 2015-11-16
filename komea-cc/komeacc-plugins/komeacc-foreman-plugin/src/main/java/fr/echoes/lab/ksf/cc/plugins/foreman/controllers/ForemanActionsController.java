@@ -1,9 +1,14 @@
 package fr.echoes.lab.ksf.cc.plugins.foreman.controllers;
 
+import java.io.IOException;
+
 import org.apache.commons.lang3.StringUtils;
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -12,16 +17,33 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.tocea.corolla.products.dao.IProjectDAO;
 import com.tocea.corolla.products.domain.Project;
 
+import fr.echoes.lab.foremanclient.ForemanHelper;
 import fr.echoes.lab.ksf.cc.plugins.foreman.dao.IForemanEnvironmentDAO;
 import fr.echoes.lab.ksf.cc.plugins.foreman.dao.IForemanTargetDAO;
 import fr.echoes.lab.ksf.cc.plugins.foreman.model.ForemanEnvironnment;
 import fr.echoes.lab.ksf.cc.plugins.foreman.model.ForemanTarget;
+import fr.echoes.lab.puppet.PuppetClient;
+import fr.echoes.lab.puppet.PuppetException;
 
 @Controller
 public class ForemanActionsController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ForemanActionsController.class);
 
+	@Value("${ksf.foreman.url}")
+	private String url;
+
+	@Value("${ksf.foreman.username}")
+	private String username;
+
+	@Value("${ksf.foreman.password}")
+	private String password;
+
+	@Value("${ksf.foreman.host.smartProxyId}")
+	private String smartProxyId;
+
+	@Value("${ksf.foreman.host.computeResourceId}")
+	private String computeResourceId;
 
 	@Autowired
 	private IProjectDAO projectDAO;
@@ -44,7 +66,36 @@ public class ForemanActionsController {
 
 		this.environmentDAO.save(env);
 
+		createEnvironment(name, configuration);
+
 		return "redirect:/ui/projects/"+project.getKey();
+	}
+
+	private void createEnvironment(String envName, String configuration) {
+		final ObjectMapper mapper = new ObjectMapper();
+		try {
+			final JsonNode rootNode = mapper.readTree(configuration);
+			final JsonNode modulesNode = rootNode.get("modules");
+			if (modulesNode.isArray()) {
+				final PuppetClient puppetClient = new PuppetClient();
+			    for (final JsonNode moduleNode : modulesNode) {
+			        final String moduleName = moduleNode.path("name").asText();
+			        final String moduleVersion = moduleNode.path("version").asText();
+			        try {
+						puppetClient.installModule(moduleName, moduleVersion, envName);
+					} catch (final PuppetException e) {
+						LOGGER.error("Failed to create environment " + envName, e);
+					}
+			    }
+			}
+		} catch (final IOException e) {
+			LOGGER.error("Failed to create environment " + envName, e);
+		}
+		try {
+			ForemanHelper.importPuppetClasses(this.url, this.username, this.password, this.smartProxyId);
+		} catch (final Exception e) {
+			LOGGER.error("[foreman] Failed to import puppet classes.");
+		}
 	}
 
 	@RequestMapping(value = "/ui/foreman/targets/new", method = RequestMethod.POST)
@@ -76,7 +127,18 @@ public class ForemanActionsController {
 		final Project project = this.projectDAO.findOne(projectId);
 
 		final ForemanTarget target = this.targetDAO.findOne(targetId);
-		target.setProject(project);
+
+
+		final String name = target.getName();
+		final String operationSystemId = target.getOperationSystemId();
+		final ForemanEnvironnment environment = target.getEnvironment();
+
+
+		try {
+			ForemanHelper.createHost(this.url, this.username, this.password, this.computeResourceId);
+		} catch (final Exception e) {
+			LOGGER.error("[foreman] Failed to create host.");
+		}
 
 		return "redirect:/ui/projects/"+project.getKey();
 	}

@@ -13,7 +13,9 @@ import fr.echoes.lab.foremanapi.model.Filter;
 import fr.echoes.lab.foremanapi.model.FilterWrapper;
 import fr.echoes.lab.foremanapi.model.HostGroup;
 import fr.echoes.lab.foremanapi.model.HostGroupWrapper;
+import fr.echoes.lab.foremanapi.model.HostWrapper;
 import fr.echoes.lab.foremanapi.model.NewFilter;
+import fr.echoes.lab.foremanapi.model.NewHost;
 import fr.echoes.lab.foremanapi.model.NewRole;
 import fr.echoes.lab.foremanapi.model.NewUser;
 import fr.echoes.lab.foremanapi.model.Permissions;
@@ -180,6 +182,23 @@ public class ForemanHelper {
 		userWrapper.setUser(newUser);
 
 		api.updateUser(user.id, userWrapper);
+	}
+
+	public static void createHost(String url, String adminUserName, String password, String computeResourceId) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
+		final NewHost host = new NewHost();
+		host.name = "host 1";
+		host.compute_resource_id = computeResourceId;
+		host.compute_profile_id = "1";
+
+		final HostWrapper hostWrapper = new HostWrapper();
+		final IForemanApi api = ForemanClient.createApi(url, adminUserName, password);
+		api.createHost(hostWrapper);
+	}
+
+	public static void importPuppetClasses(String url, String adminUserName,
+			String password, String smartProxyId) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
+		final IForemanApi api = ForemanClient.createApi(url, adminUserName, password);
+		api.importPuppetClasses(smartProxyId);
 	}
 
 }

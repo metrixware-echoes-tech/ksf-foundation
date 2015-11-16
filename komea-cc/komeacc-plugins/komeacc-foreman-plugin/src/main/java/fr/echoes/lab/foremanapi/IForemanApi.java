@@ -15,11 +15,14 @@ import fr.echoes.lab.foremanapi.model.ComputeResources;
 import fr.echoes.lab.foremanapi.model.Filter;
 import fr.echoes.lab.foremanapi.model.FilterWrapper;
 import fr.echoes.lab.foremanapi.model.Filters;
+import fr.echoes.lab.foremanapi.model.Host;
 import fr.echoes.lab.foremanapi.model.HostGroup;
 import fr.echoes.lab.foremanapi.model.HostGroupWrapper;
+import fr.echoes.lab.foremanapi.model.HostWrapper;
 import fr.echoes.lab.foremanapi.model.Hostgroups;
 import fr.echoes.lab.foremanapi.model.OperatingSystems;
 import fr.echoes.lab.foremanapi.model.Permissions;
+import fr.echoes.lab.foremanapi.model.PuppetClasses;
 import fr.echoes.lab.foremanapi.model.Role;
 import fr.echoes.lab.foremanapi.model.RoleWrapper;
 import fr.echoes.lab.foremanapi.model.Roles;
@@ -134,16 +137,25 @@ public interface IForemanApi {
 	ComputeProfiles getComputeProfiles();
 
 
+	@POST
+	@Path("/api/smart_proxies/{id}/import_puppetclasses")
+	@Produces(MediaType.APPLICATION_JSON)
+	PuppetClasses importPuppetClasses(
+			@PathParam("id") String id);
+
+
+	@POST
+	@Path("/api/hosts")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	Host createHost(HostWrapper hostWrapper);
+
 //	@GET
 //    @Path("/api/hosts/{id}")
 //    @Produces(MediaType.APPLICATION_JSON)
 //    Host getHost(@PathParam("id") String id);
 //
-//	@POST
-//	@Path("/api/hosts")
-//	@Produces(MediaType.APPLICATION_JSON)
-//	@Consumes(MediaType.APPLICATION_JSON)
-//	Host createHost(HostWrapper newHost);
+
 //
 //	@PUT
 //	@Path("/api/hosts/{id}/power")
