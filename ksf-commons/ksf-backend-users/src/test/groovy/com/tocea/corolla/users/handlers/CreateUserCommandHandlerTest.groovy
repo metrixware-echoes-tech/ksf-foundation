@@ -64,7 +64,7 @@ class CreateUserCommandHandlerTest extends Specification{
 				locale:"fr",
 				login:"login",
 				password:"superPassword",
-				roleId:1)
+				roleId:"1")
 
 		validUserWithoutRole = 		new User(
 				activationToken:"",
@@ -101,17 +101,17 @@ class CreateUserCommandHandlerTest extends Specification{
 	 */
 	def "testvalid user creation"() {
 
+		given:
+			final CreateUserCommand command = new CreateUserCommand()
+			command.setUser validUser
+		
 		when:
-		final CreateUserCommand command = new CreateUserCommand()
-
-
-		command.setUser validUser
-
-		this.handler.handle(command)
-		Mockito.verify(roleDao, times(0)).getDefaultRole()
-		Mockito.verify(userDao, times(1)).save validUser
+			this.handler.handle(command)
+			Mockito.verify(roleDao, times(0)).getDefaultRole()
+			Mockito.verify(userDao, times(1)).save validUser
+		
 		then:
-		notThrown(Exception.class)
+			notThrown(Exception.class)
 	}
 
 	/**
@@ -178,16 +178,19 @@ class CreateUserCommandHandlerTest extends Specification{
 	 * .
 	 */
 	def "test valid user with missing role and no role available"() {
+		
 		given:
-		when(roleDao.getDefaultRole()).thenReturn null
+			when(roleDao.getDefaultRole()).thenReturn null
+			when(roleDao.save(Role.DEFAULT_ROLE)).thenReturn(Role.DEFAULT_ROLE)
+		
 		when:
-		final CreateUserCommand command = new CreateUserCommand()
-
-		command.setUser validUserWithoutRole
-		this.handler.handle(command)
+			final CreateUserCommand command = new CreateUserCommand()
+			command.setUser validUserWithoutRole
+			this.handler.handle(command)
 
 		then:
-		thrown(RoleManagementBrokenException)
+			notThrown(Exception)
+
 	}
 
 

@@ -100,8 +100,7 @@ ICommandHandler<CreateUserCommand, User> {
 	private void checkUserLogin(final User _user) {
 		if (userDAO.findUserByLogin(_user.getLogin()) != null) {
 			throw new AlreadyExistingUserWithLoginException(_user.getLogin());
-		}
-		
+		}		
 	}
 	
 	/**

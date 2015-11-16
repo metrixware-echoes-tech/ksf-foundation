@@ -41,10 +41,10 @@ import com.google.common.collect.Lists;
 @Document(collection = "roles")
 public class Role implements GrantedAuthority {
 	
-	public static final Role	DEFAULT_ROLE	= new Role("MISSING_ROLE",
-			"Missing role",
+	public static final Role	DEFAULT_ROLE	= new Role("KSF-DEFAULT-ROLE",
+			"KSF Default Role",
 			"",
-			false);
+			true);
 	
 	@Id
 	@Field("_id")
