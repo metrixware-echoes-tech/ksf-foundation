@@ -44,11 +44,11 @@
 	              			<img th:src="@{/pictures/redmine.png}"/>
 	              			<label>Redmine</label>
 	              		</li>
-	              		<li data-item="foreman">
+	              		<li class="active" data-item="foreman">
 	              			<img th:src="@{/pictures/foreman.png}"/>
 	              			<label>Foreman</label>
 	              		</li>
-	              		<li data-item="puppet">
+	              		<li class="active" data-item="puppet">
 	              			<img th:src="@{/pictures/puppet.png}"/>
 	              			<label>Puppet</label>
 	              		</li>
@@ -64,10 +64,10 @@
 	              	<div class="hidden">
 	              		<input name="applications[]" id="applications_" value="jenkins" type="checkbox"/> Jenkins
 	                	<input name="applications[]" id="applications_" value="redmine" type="checkbox"/> Redmine
-	                	<input name="applications[]" id="applications_" value="foreman" type="checkbox"/> Foreman
+	                	<input name="applications[]" id="applications_" value="foreman" type="checkbox" checked="checked"/> Foreman
 	                	<input name="applications[]" id="applications_" value="git" type="checkbox"/> Git
 	                	<input name="applications[]" id="applications_" value="jenkins" type="checkbox"/> Jenkins
-	                	<input name="applications[]" id="applications_" value="puppet" type="checkbox"/> Puppet
+	                	<input name="applications[]" id="applications_" value="puppet" type="checkbox" checked="checked"/> Puppet
 	              	</div>
 	              </div>
 	            </div>																									
@@ -86,7 +86,7 @@
 	</div>
 	<div layout:fragment="footer">	
 		<script type="text/javascript">
-			$(document).ready(function() {
+			/*$(document).ready(function() {
 				$('.app-list li').click(function() {
 					if ($(this).hasClass('disabled')) {
 						return false;
@@ -115,7 +115,7 @@
 						$(input).prop('checked', !checked);
 					}
 				});
-			}
+			}*/
 		</script>
 	</div>
 </body>
