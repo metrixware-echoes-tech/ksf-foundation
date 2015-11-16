@@ -71,13 +71,7 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
 		final List<ForemanEnvironnment> environments = this.environmentDAO.findAll();
 		ctx.setVariable("environments", environments);
 
-		final Iterable<ForemanTarget> targets = this.targetDAO.findAll();
-		final List<ForemanTarget> projectTargets = new ArrayList<ForemanTarget>();
-		for (final ForemanTarget target : targets) {
-			if (target.getProject().getId().equals(project.getId())) {
-				projectTargets.add(target);
-			}
-		}
+		final Iterable<ForemanTarget> projectTargets = targetDAO.findByProject(project);
 		ctx.setVariable("targets", projectTargets);
 
 		try {
