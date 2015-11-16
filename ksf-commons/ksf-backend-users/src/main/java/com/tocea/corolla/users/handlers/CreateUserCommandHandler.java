@@ -26,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.tocea.corolla.cqrs.annotations.CommandHandler;
+import com.tocea.corolla.cqrs.gate.Gate;
 import com.tocea.corolla.cqrs.handler.ICommandHandler;
 import com.tocea.corolla.users.commands.CreateUserCommand;
 import com.tocea.corolla.users.dao.IRoleDAO;
@@ -59,6 +60,9 @@ ICommandHandler<CreateUserCommand, User> {
 	
 	@Autowired
 	private EmailValidationService	emailValidationService;
+	
+	@Autowired
+	private Gate gate;
 	
 	/*
 	 * (non-Javadoc)
@@ -96,8 +100,7 @@ ICommandHandler<CreateUserCommand, User> {
 	private void checkUserLogin(final User _user) {
 		if (userDAO.findUserByLogin(_user.getLogin()) != null) {
 			throw new AlreadyExistingUserWithLoginException(_user.getLogin());
-		}
-		
+		}		
 	}
 	
 	/**
@@ -105,12 +108,15 @@ ICommandHandler<CreateUserCommand, User> {
 	 */
 	private void setDefaultRoleIfNecessary(final User user) {
 		if (user.getRoleId() == null) {
-			final Role defaultRole = roleDAO.getDefaultRole();
+			Role defaultRole = roleDAO.getDefaultRole();
 			if (defaultRole == null) {
-				throw new RoleManagementBrokenException("Could not find the default role");
+				if (Role.DEFAULT_ROLE != null) {
+					defaultRole = roleDAO.save(Role.DEFAULT_ROLE);
+				}else{
+					throw new RoleManagementBrokenException("Could not find the default role");
+				}
 			}
-			user.setRoleId(defaultRole.getId());
-			
+			user.setRoleId(defaultRole.getId());			
 		}
 	}
 	

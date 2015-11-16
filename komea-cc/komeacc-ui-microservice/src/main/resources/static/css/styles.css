@@ -66,3 +66,7 @@
 .project-overview .tab-content {
 	padding-top: 20px;
 }
+
+html, body, iframe {
+	height: 100%;
+}
