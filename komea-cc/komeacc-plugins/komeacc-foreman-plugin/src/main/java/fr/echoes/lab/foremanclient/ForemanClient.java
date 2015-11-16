@@ -8,6 +8,7 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.SSLContext;
 
@@ -121,7 +122,10 @@ public class ForemanClient {
 		final HttpClient httpClient = httpClientBuilder.build();
 
 		final ApacheHttpClient4Engine engine = new ApacheHttpClient4Engine( httpClient, localContext);
-		final ResteasyClient client = new ResteasyClientBuilder().httpEngine(engine).build();
+		final ResteasyClient client = new ResteasyClientBuilder()
+										.httpEngine(engine)
+										.establishConnectionTimeout(60, TimeUnit.SECONDS)
+										.build();
 
 		client.register(ClientErrorResponseFilter.class);
 		client.register(JacksonJaxbJsonProvider.class);
