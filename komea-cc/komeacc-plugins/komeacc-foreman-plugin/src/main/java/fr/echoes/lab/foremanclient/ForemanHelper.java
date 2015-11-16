@@ -1,19 +1,31 @@
 package fr.echoes.lab.foremanclient;
 
+import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import fr.echoes.lab.foremanapi.IForemanApi;
+import fr.echoes.lab.foremanapi.model.Environment;
+import fr.echoes.lab.foremanapi.model.Environments;
 import fr.echoes.lab.foremanapi.model.Filter;
 import fr.echoes.lab.foremanapi.model.FilterWrapper;
+import fr.echoes.lab.foremanapi.model.Host;
 import fr.echoes.lab.foremanapi.model.HostGroup;
 import fr.echoes.lab.foremanapi.model.HostGroupWrapper;
 import fr.echoes.lab.foremanapi.model.HostWrapper;
+import fr.echoes.lab.foremanapi.model.Hostgroups;
 import fr.echoes.lab.foremanapi.model.NewFilter;
 import fr.echoes.lab.foremanapi.model.NewHost;
 import fr.echoes.lab.foremanapi.model.NewRole;
@@ -32,9 +44,8 @@ import fr.echoes.lab.foremanapi.model.UserWrapper;
 
 public class ForemanHelper {
 
-	public static final String URL = "https://pc-ksf.metrixware.local";
-	public static final String USERNAME = "admin";
-	public static final String PASSWORD = "foreman234";
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(ForemanHelper.class);
 
 	/**
 	 * Private constructor to prevent instantiation.
@@ -184,15 +195,83 @@ public class ForemanHelper {
 		api.updateUser(user.id, userWrapper);
 	}
 
-	public static void createHost(String url, String adminUserName, String password, String computeResourceId) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
-		final NewHost host = new NewHost();
-		host.name = "host 1";
-		host.compute_resource_id = computeResourceId;
-		host.compute_profile_id = "1";
+	public static Host createHost(String url, String adminUserName, String password, String hostName, String computeResourceId, String computeProfileId, String hostGroupName, String environmentName, Integer operatingSystemId, Integer architectureId, String puppetConfiguration) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
+
+		Host host = null;
+
+		final IForemanApi api = ForemanClient.createApi(url, adminUserName, password);
+		final NewHost newHost = new NewHost();
+		newHost.name = hostName;
+		newHost.compute_resource_id = computeResourceId;
+		newHost.compute_profile_id = computeProfileId;
+		newHost.hostgroup_id = findHostGroupId(api, hostGroupName);
+		newHost.environment_id = findEnvironmentId(api, environmentName);
+		newHost.operatingsystem_id = operatingSystemId;
+		newHost.architecture_id = architectureId;
+
 
 		final HostWrapper hostWrapper = new HostWrapper();
-		final IForemanApi api = ForemanClient.createApi(url, adminUserName, password);
-		api.createHost(hostWrapper);
+		hostWrapper.setHost(newHost);
+		host = api.createHost(hostWrapper);
+
+		configurePuppet(api, puppetConfiguration);
+
+		return host;
+	}
+
+	private static void configurePuppet(IForemanApi api, String puppetConfiguration) {
+
+		if (StringUtils.isEmpty(puppetConfiguration)) {
+			return;
+		}
+
+		final ObjectMapper mapper = new ObjectMapper();
+		try {
+			final JsonNode rootNode = mapper.readTree(puppetConfiguration);
+			final JsonNode modulesNode = rootNode.get("variables");
+			if (modulesNode.isArray()) {
+
+				for (final JsonNode moduleNode : modulesNode) {
+					final Map<String, String> overrideValuesMap = new HashMap<String, String>();
+			        final String variableId = moduleNode.path("variable_id").asText();
+			        final JsonNode overrideValues = moduleNode.path("override_value");
+			        if (overrideValues.isArray()) {
+			        	final Iterator<String> fieldNames = overrideValues.getFieldNames();
+			        	while (fieldNames.hasNext()) {
+			        		final String key = fieldNames.next();
+			        		overrideValuesMap.put(key, overrideValues.get(key).asText());
+			        	}
+			        }
+			        if (overrideValuesMap.size() > 0) {
+			        	api.overrideSmartVariable(variableId, overrideValuesMap);
+			        }
+			    }
+
+
+			}
+		} catch (final IOException e) {
+			LOGGER.error("Failed to override puppet module.", e);
+		}
+	}
+
+	private static Integer findEnvironmentId(IForemanApi api, String environmentName) {
+		final Environments environments = api.getEnvironments();
+		for (final Environment hostGroup : environments.results) {
+			if (hostGroup.name.equals(environmentName)) {
+				return hostGroup.id;
+			}
+		}
+		return null;
+	}
+
+	private static Integer findHostGroupId(IForemanApi api, String hostGroupName) {
+		final Hostgroups hostGroups = api.getHostGroups(null, null, null, null);
+		for (final HostGroup hostGroup : hostGroups.results) {
+			if (hostGroup.name.equals(hostGroupName)) {
+				return hostGroup.id;
+			}
+		}
+		return null;
 	}
 
 	public static void importPuppetClasses(String url, String adminUserName,
@@ -200,5 +279,6 @@ public class ForemanHelper {
 		final IForemanApi api = ForemanClient.createApi(url, adminUserName, password);
 		api.importPuppetClasses(smartProxyId);
 	}
+
 
 }
