@@ -48,75 +48,75 @@ public class ProjectController {
 	private static String FORM_PROJECT 	= "projects/form";
 	private static String LIST_PAGE		= "projects/list";
 	private static String VIEW_PAGE		= "projects/overview";
-	
+
 	@Autowired
 	private ProjectDashboardExtensionManager projectDashboardExtensionManager;
-	
+
     @Autowired
     IProjectDAO projectDao;
 
     @Autowired
     IUserDAO userDao;
-    
+
     @Autowired
     Gate gate;
 
     @RequestMapping(value = "/ui/projects")
     public ModelAndView getListPage() {
-        ModelAndView model = new ModelAndView(LIST_PAGE);
-        List<Project> findAll = projectDao.findAll();
-        List<ProjectPagelistDTO> projectsList = new ArrayList<>();
+        final ModelAndView model = new ModelAndView(LIST_PAGE);
+        final List<Project> findAll = this.projectDao.findAll();
+        final List<ProjectPagelistDTO> projectsList = new ArrayList<>();
 
-        for (Project pr : findAll) {
+        for (final Project pr : findAll) {
             projectsList.add(createProjectPageListDTO(pr));
         }
 
         model.addObject("projects", projectsList);
         return model;
     }
-    
+
     private ProjectPagelistDTO createProjectPageListDTO(Project project) {
-    	
-    	User findOne = userDao.findOne(project.getOwnerId());
+
+    	User findOne = this.userDao.findOne(project.getOwnerId());
         if (findOne == null) {
             findOne = new User();
             findOne.setFirstName("");
             findOne.setLastName("");
         }
-        
+
     	return new ProjectPagelistDTO(project, findOne);
     }
-    
+
     @RequestMapping(value = "/ui/projects/{projectKey}")
     public ModelAndView getProjectPage(@PathVariable String projectKey) {
-    	
-    	Project project = projectDao.findByKey(projectKey);
-    	
+
+    	final Project project = this.projectDao.findByKey(projectKey);
+
     	if (project == null) {
     		throw new ProjectNotFoundException();
     	}
-    	
-    	ModelAndView model = new ModelAndView(VIEW_PAGE);
+
+    	final ModelAndView model = new ModelAndView(VIEW_PAGE);
     	model.addObject("projectData", createProjectPageListDTO(project));
-    	
-    	List<IProjectTabPanel> panels = Lists.newArrayList();
-    	List<ProjectDashboardWidget> widgets = projectDashboardExtensionManager.getDashboardWidgets();
-    	
-    	for(ProjectDashboardWidget widget : widgets) {
+
+    	final List<IProjectTabPanel> panels = Lists.newArrayList();
+    	final List<ProjectDashboardWidget> widgets = this.projectDashboardExtensionManager.getDashboardWidgets();
+
+    	for(final ProjectDashboardWidget widget : widgets) {
     		panels.addAll(widget.getTabPanels());
     	}
-    	
+
     	model.addObject("widgets", widgets);
     	model.addObject("panels", panels);
-    	
+
     	return model;
     }
 
     @RequestMapping(value = "/ui/projects/new")
     public ModelAndView getCreatePage() {
 
-    	SFProjectDTO project = new SFProjectDTO();
-        ModelAndView model = new ModelAndView(FORM_PROJECT);
+    	final SFProjectDTO project = new SFProjectDTO();
+        final ModelAndView model = new ModelAndView(FORM_PROJECT);
         model.addObject("project", project);
         return model;
 
@@ -126,32 +126,32 @@ public class ProjectController {
     public ModelAndView createProject(@Valid @ModelAttribute("project") SFProjectDTO newProject, BindingResult _result) {
 
         newProject = (SFProjectDTO) _result.getModel().get("project");
-        
+
         if (newProject == null) {
             return new ModelAndView("redirect:/ui/projects/new");
         }
 
         if (_result.hasErrors()) {
-            ModelAndView model = new ModelAndView(FORM_PROJECT);
+            final ModelAndView model = new ModelAndView(FORM_PROJECT);
             model.addObject(newProject);
             return model;
         }
 
         try {
 
-        	Project project = gate.dispatch(new CreateProjectAndProductionLineCommand(newProject));
+        	final Project project = this.gate.dispatch(new CreateProjectAndProductionLineCommand(newProject));
 
             return new ModelAndView("redirect:/ui/projects/" + project.getKey());
 
-        } catch (CommandExecutionException ex) {
+        } catch (final CommandExecutionException ex) {
 
             _result.addError(new ObjectError("project", ex.getCause().getMessage()));
-            ModelAndView model = new ModelAndView(FORM_PROJECT);
+            final ModelAndView model = new ModelAndView(FORM_PROJECT);
             model.addObject(newProject);
             return model;
         }
     }
-    
+
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
 	@ExceptionHandler({
 		ProjectNotFoundException.class

@@ -22,7 +22,7 @@ public class ForemanTarget {
 	@Size(min = 3, max = 100)
 	private String name;
 
-	@DBRef
+//	@DBRef
 	private ForemanEnvironnment	environment;
 
 	@DBRef
@@ -35,6 +35,8 @@ public class ForemanTarget {
 	private String	computeProfile;
 
 	private String operatingSystemId;
+
+	private String puppetConfiguration;
 
 	public String getComputeProfile() {
 		return this.computeProfile;
@@ -76,11 +78,6 @@ public class ForemanTarget {
 		return this.operatingSystemId;
 	}
 
-	@Override
-	public String toString() {
-		return "ForemanTarget [id=" + this.id + ", environment=" + this.environment + ", operatingSystem=" + this.operatingSystemName
-				+ ", computeProfile=" + this.computeProfile + "]";
-	}
 
 	public void setName(String name) {
 		this.name = name;
@@ -91,10 +88,24 @@ public class ForemanTarget {
 	}
 
 	public Project getProject() {
-		return project;
+		return this.project;
 	}
 
 	public void setProject(Project project) {
 		this.project = project;
+	}
+
+	public void setPuppetConfiguration(String puppetConfiguration) {
+		this.puppetConfiguration = puppetConfiguration;
+	}
+
+	public String getPuppetConfiguration() {
+		return this.puppetConfiguration;
+	}
+
+	@Override
+	public String toString() {
+		return "ForemanTarget [id=" + this.id + ", environment=" + this.environment + ", operatingSystem=" + this.operatingSystemName
+				+ ", computeProfile=" + this.computeProfile + "]";
 	}
 }

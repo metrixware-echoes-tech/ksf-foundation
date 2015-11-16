@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.tocea.corolla.products.dao.IProjectDAO;
 import com.tocea.corolla.products.domain.Project;
 
+import fr.echoes.lab.foremanapi.IForemanApi;
+import fr.echoes.lab.foremanapi.model.Host;
+import fr.echoes.lab.foremanclient.ForemanClient;
 import fr.echoes.lab.foremanclient.ForemanHelper;
 import fr.echoes.lab.ksf.cc.plugins.foreman.dao.IForemanEnvironmentDAO;
 import fr.echoes.lab.ksf.cc.plugins.foreman.dao.IForemanTargetDAO;
@@ -106,6 +109,7 @@ public class ForemanActionsController {
 		foremanTarget.setProject(project);
 		foremanTarget.setName(name);
 		foremanTarget.setComputeProfile(computeprofiles);
+		foremanTarget.setPuppetConfiguration(puppetConfiguration);
 
 		if (!StringUtils.isEmpty(operatingsystem)) {
 			final String[] os = StringUtils.split(operatingsystem, '-');
@@ -128,16 +132,19 @@ public class ForemanActionsController {
 
 		final ForemanTarget target = this.targetDAO.findOne(targetId);
 
-
 		final String name = target.getName();
-		final String operationSystemId = target.getOperationSystemId();
 		final ForemanEnvironnment environment = target.getEnvironment();
 
 
+		final String puppetConfiguration = target.getPuppetConfiguration();
+		LOGGER.info("[puppet] conf: " + puppetConfiguration);
+
 		try {
-			ForemanHelper.createHost(this.url, this.username, this.password, this.computeResourceId);
+			final Host host = ForemanHelper.createHost(this.url, this.username, this.password, name, "1", "1", project.getName(), environment.getName(), Integer.parseInt(target.getOperationSystemId()), 1, target.getPuppetConfiguration());
+			final IForemanApi api = ForemanClient.createApi(this.url, this.username, this.password);
+			api.hostPower(host.id, "start");
 		} catch (final Exception e) {
-			LOGGER.error("[foreman] Failed to create host.");
+			LOGGER.error("[foreman] Host creation failed " + puppetConfiguration);
 		}
 
 		return "redirect:/ui/projects/"+project.getKey();

@@ -11,7 +11,7 @@ public class HostWrapper {
 		return this.host;
 	}
 
-	public void setFilter(NewHost host) {
+	public void setHost(NewHost host) {
 		this.host = host;
 	}
 
