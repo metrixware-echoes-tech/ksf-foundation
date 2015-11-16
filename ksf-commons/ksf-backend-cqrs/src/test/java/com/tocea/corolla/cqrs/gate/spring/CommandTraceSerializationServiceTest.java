@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.tocea.corolla.cqrs.gate.conf.CorollaCqrsConfiguration;
+import com.tocea.corolla.cqrs.gate.conf.CqrsConfiguration;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CommandTraceSerializationServiceTest {
@@ -30,7 +30,7 @@ public class CommandTraceSerializationServiceTest {
 	
 	@Test
 	public void testInit() throws Exception {
-		final CorollaCqrsConfiguration cqrsConfiguration = new CorollaCqrsConfiguration();
+		final CqrsConfiguration cqrsConfiguration = new CqrsConfiguration();
 		cqrsConfiguration.setTraceFile(File.createTempFile("trace", "json"));
 		final CommandTraceSerializationService commandTraceSerializationService = new CommandTraceSerializationService(
 				cqrsConfiguration);
@@ -39,7 +39,7 @@ public class CommandTraceSerializationServiceTest {
 	
 	@Test
 	public void testOnFailure() throws Exception {
-		final CorollaCqrsConfiguration cqrsConfiguration = new CorollaCqrsConfiguration();
+		final CqrsConfiguration cqrsConfiguration = new CqrsConfiguration();
 		cqrsConfiguration.setTraceFile(File.createTempFile("trace", "json"));
 		final CommandTraceSerializationService commandTraceSerializationService = new CommandTraceSerializationService(
 				cqrsConfiguration);
@@ -49,7 +49,7 @@ public class CommandTraceSerializationServiceTest {
 	
 	@Test
 	public void testOnSuccess() throws Exception {
-		final CorollaCqrsConfiguration cqrsConfiguration = new CorollaCqrsConfiguration();
+		final CqrsConfiguration cqrsConfiguration = new CqrsConfiguration();
 		cqrsConfiguration.setTraceFile(File.createTempFile("trace", "json"));
 		final CommandTraceSerializationService commandTraceSerializationService = new CommandTraceSerializationService(
 				cqrsConfiguration);

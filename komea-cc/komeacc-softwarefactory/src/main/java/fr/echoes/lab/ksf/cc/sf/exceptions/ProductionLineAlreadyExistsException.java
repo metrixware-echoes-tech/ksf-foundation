@@ -1,8 +1,8 @@
 package fr.echoes.lab.ksf.cc.sf.exceptions;
 
-import com.tocea.corolla.utils.domain.CorollaDomainException;
+import com.tocea.corolla.utils.domain.KsfDomainException;
 
-public class ProductionLineAlreadyExistsException extends CorollaDomainException {
+public class ProductionLineAlreadyExistsException extends KsfDomainException {
 
 	private final static String MESSAGE = "This production line already exists";
 	

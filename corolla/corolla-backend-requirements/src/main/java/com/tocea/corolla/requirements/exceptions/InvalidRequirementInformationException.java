@@ -19,9 +19,9 @@
  */
 package com.tocea.corolla.requirements.exceptions;
 
-import com.tocea.corolla.utils.domain.CorollaDomainException;
+import com.tocea.corolla.utils.domain.KsfDomainException;
 
-public class InvalidRequirementInformationException extends CorollaDomainException {
+public class InvalidRequirementInformationException extends KsfDomainException {
 
 	public InvalidRequirementInformationException(String message) {
 		super(message);

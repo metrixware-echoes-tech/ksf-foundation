@@ -5,13 +5,13 @@
  */
 package com.tocea.corolla.timetracker.exceptions;
 
-import com.tocea.corolla.utils.domain.CorollaDomainException;
+import com.tocea.corolla.utils.domain.KsfDomainException;
 
 /**
  *
  * @author sleroy
  */
-public class ActivityAlreadyExistingException extends CorollaDomainException {
+public class ActivityAlreadyExistingException extends KsfDomainException {
 
     public ActivityAlreadyExistingException(String activityName) {
         super("Activity "+ activityName + " is already existing");

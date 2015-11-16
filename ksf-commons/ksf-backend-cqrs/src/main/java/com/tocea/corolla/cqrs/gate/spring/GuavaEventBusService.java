@@ -15,12 +15,12 @@ import org.springframework.stereotype.Service;
 import com.google.common.eventbus.AsyncEventBus;
 import com.google.common.eventbus.EventBus;
 import com.tocea.corolla.cqrs.annotations.EventHandler;
-import com.tocea.corolla.cqrs.gate.IEventBusService;
-import com.tocea.corolla.cqrs.gate.conf.CorollaCqrsConfiguration;
+import com.tocea.corolla.cqrs.gate.IEventBus;
+import com.tocea.corolla.cqrs.gate.conf.CqrsConfiguration;
 import javax.annotation.PreDestroy;
 
 @Service
-public class GuavaEventBusService implements ApplicationContextAware, IEventBusService {
+public class GuavaEventBusService implements ApplicationContextAware, IEventBus {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GuavaEventBusService.class);
     private EventBus eventBus;
@@ -28,7 +28,7 @@ public class GuavaEventBusService implements ApplicationContextAware, IEventBusS
     private ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
     @Autowired
-    private CorollaCqrsConfiguration corollaCqrsConfiguation;
+    private CqrsConfiguration corollaCqrsConfiguation;
 
     @PreDestroy
     public void destroy() {

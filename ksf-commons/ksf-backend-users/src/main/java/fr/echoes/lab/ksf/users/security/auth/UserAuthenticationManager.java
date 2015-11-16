@@ -60,6 +60,8 @@ public class UserAuthenticationManager {
 		userEmbeddedAuthenticationProvider.setUserDetailsService(userDetailsService);
 		auth.authenticationProvider(userEmbeddedAuthenticationProvider);
 
+		// keep the credentials in the session for using them against a REST API
+		auth.eraseCredentials(false);
 	}
 	
 	private void initializeLdapAuthenticationManager(final AuthenticationManagerBuilder auth) throws Exception {
@@ -94,5 +96,6 @@ public class UserAuthenticationManager {
 			ldapAuth = ldapAuth.groupSearchFilter(ldapSecurity.getGroupSearchFilter());
 
 		}
+		
 	}
 }

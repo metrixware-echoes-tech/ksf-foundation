@@ -19,9 +19,9 @@
  */
 package com.tocea.corolla.revisions.exceptions;
 
-import com.tocea.corolla.utils.domain.CorollaDomainException;
+import com.tocea.corolla.utils.domain.KsfDomainException;
 
-public class SnapshotBuildFailureException extends CorollaDomainException {
+public class SnapshotBuildFailureException extends KsfDomainException {
 
 	private static String MESSAGE = "Failed to build a snapshot of a Corolla domain object";
 	

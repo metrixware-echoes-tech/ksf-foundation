@@ -19,9 +19,9 @@
  */
 package com.tocea.corolla.trees.exceptions;
 
-import com.tocea.corolla.utils.domain.CorollaDomainException;
+import com.tocea.corolla.utils.domain.KsfDomainException;
 
-public class MissingFolderNodeTypeInformationException extends CorollaDomainException {
+public class MissingFolderNodeTypeInformationException extends KsfDomainException {
 
 	public MissingFolderNodeTypeInformationException(String msg) {
 		super(msg);

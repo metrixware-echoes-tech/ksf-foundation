@@ -28,7 +28,7 @@ import com.tocea.corolla.users.domain.Permission
 import com.tocea.corolla.users.domain.Role
 import com.tocea.corolla.users.dto.UserPasswordDto
 import com.tocea.corolla.users.exceptions.InvalidLoginException
-import com.tocea.corolla.users.service.UserDtoService;
+import com.tocea.corolla.users.service.UserDtoService
 import com.tocea.corolla.users.validation.UserValidation
 
 /**
@@ -73,14 +73,14 @@ public class UserEditController {
 
 	@RequestMapping("/add")
 	public ModelAndView getAddPage(@ModelAttribute UserPasswordDto user) {
-		
+
 		if (user.roleId == null) {
 			user.roleId = roleDAO.getDefaultRole().getId()
 		}
-		
+
 		def ModelAndView model = new ModelAndView(ADMIN_USERS_EDIT)
 		model.addObject "user", user
-		
+
 		return model
 	}
 
@@ -94,7 +94,7 @@ public class UserEditController {
 		}
 		_passwordDto.setCreatedTime(new Date())
 		CreateUserCommand command = new CreateUserCommand(_passwordDto)
-		gate.dispatch(command)
+		gate.dispatchAsync(command)
 
 		return new ModelAndView("redirect:/ui/admin/users")
 	}
@@ -129,9 +129,9 @@ public class UserEditController {
 		}
 		_passwordDto.setCreatedTime(new Date())
 		EditUserCommand command = new EditUserCommand(_passwordDto)
-		gate.dispatch(command)
+		gate.dispatchAsync(command)
 
 		return new ModelAndView("redirect:/ui/admin/users")
 	}
-	
+
 }

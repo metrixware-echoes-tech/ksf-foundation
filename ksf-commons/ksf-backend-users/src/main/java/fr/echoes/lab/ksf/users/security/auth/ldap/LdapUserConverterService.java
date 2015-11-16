@@ -32,16 +32,16 @@ import fr.echoes.lab.ksf.users.security.utils.SecurityLoggers;
 @Service
 public class LdapUserConverterService {
 	private final LdapTemplate ldapTemplate;
-	
+
 	private final LdapAttributesUserDetailsMapper userDetailsAttributeMapper;
-	
+
 	private final LdapSecurityConfiguration ldapSecurityConfiguration;
-	
+
 	private final Gate gate;
-	
+
 	@Autowired
 	private IUserDAO userDAO;
-	
+
 	@Autowired
 	public LdapUserConverterService(final LdapTemplate _ldapTemplate,
 			final LdapAttributesUserDetailsMapper _userDetailsAttributeMapper,
@@ -56,11 +56,11 @@ public class LdapUserConverterService {
 		Validate.notNull(_ldapSecurityConfiguration);
 		Validate.notNull(gate);
 	}
-	
+
 	public String buildQuery(final String _username) {
 		return MessageFormat.format(ldapSecurityConfiguration.getUserDetailsLookup(), _username);
 	}
-	
+
 	public UserDto convertLdapUserDetailsIntoDatabaseUser(final LdapUserDetails _principal) {
 		try {
 			final User findUserByLogin = userDAO.findUserByLogin(_principal.getUsername());
@@ -82,7 +82,7 @@ public class LdapUserConverterService {
 		userDto.setLocale(Locale.getDefault().toString());
 		return userDto;
 	}
-	
+
 	/**
 	 * Checks some fields. If the Pojo is not valid, curate it.
 	 * @param _userLdapInformation
@@ -96,10 +96,10 @@ public class LdapUserConverterService {
 			if (!new EmailValidationService().validateEmail(_userLdapInformation.getEmail())) {
 				_userLdapInformation.setEmail(_userLdapInformation.getLogin()  + "@company.com");
 			}
-
+			
 		}
 	}
-	
+
 	/**
 	 * Try to retrieve informations about an user from the ldap.
 	 *
@@ -124,7 +124,7 @@ public class LdapUserConverterService {
 			SecurityLoggers.LDAP_LOGGER.error("LDAP Lookup for {} met an exception", _username, e);
 		}
 		return userLdapInformation;
-
+		
 	}
-	
+
 }

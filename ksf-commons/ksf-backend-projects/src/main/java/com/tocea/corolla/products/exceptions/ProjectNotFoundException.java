@@ -19,9 +19,9 @@
  */
 package com.tocea.corolla.products.exceptions;
 
-import com.tocea.corolla.utils.domain.CorollaDomainException;
+import com.tocea.corolla.utils.domain.KsfDomainException;
 
-public class ProjectNotFoundException extends CorollaDomainException {
+public class ProjectNotFoundException extends KsfDomainException {
 	
 	final static String MESSAGE = "Project Not Found";
 	

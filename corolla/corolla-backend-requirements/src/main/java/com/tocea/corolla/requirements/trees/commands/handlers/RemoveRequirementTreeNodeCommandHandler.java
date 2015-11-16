@@ -1,19 +1,19 @@
 /*
- * Corolla - A Tool to manage software requirements and test cases 
+ * Corolla - A Tool to manage software requirements and test cases
  * Copyright (C) 2015 Tocea
- * 
+ *
  * This file is part of Corolla.
- * 
+ *
  * Corolla is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 2 of the License, 
+ * the Free Software Foundation, either version 2 of the License,
  * or any later version.
- * 
+ *
  * Corolla is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Corolla.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -47,65 +47,65 @@ import com.tocea.corolla.trees.services.ITreeManagementService;
 @CommandHandler
 @Transactional
 public class RemoveRequirementTreeNodeCommandHandler implements ICommandHandler<RemoveRequirementTreeNodeCommand, RequirementsTree> {
-
+	
 	@Autowired
 	private IRequirementsTreeDAO requirementsTreeDAO;
-	
+
 	@Autowired
 	private Gate gate;
-	
+
 	@Autowired
 	private ITreeManagementService treeManagementService;
-	
+
 	@Override
-	public RequirementsTree handle(@Valid RemoveRequirementTreeNodeCommand command) {
-		
-		ProjectBranch branch = command.getBranch();
-		
+	public RequirementsTree handle(@Valid final RemoveRequirementTreeNodeCommand command) {
+
+		final ProjectBranch branch = command.getBranch();
+
 		if (branch == null) {
 			throw new MissingProjectBranchInformationException("No project branch found");
 		}
-		
-		Integer nodeID = command.getNodeID();
-		
+
+		final Integer nodeID = command.getNodeID();
+
 		if (nodeID == null) {
 			throw new MissingTreeNodeInformationException("No node ID found");
 		}
-		
-		RequirementsTree tree = requirementsTreeDAO.findByBranchId(branch.getId());
-		
+
+		final RequirementsTree tree = requirementsTreeDAO.findByBranchId(branch.getId());
+
 		if (tree == null) {
 			throw new RequirementsTreeNotFoundException();
 		}
-		
-		TreeNode node = treeManagementService.findNode(tree, new FindNodeByIDPredicate(nodeID));
-		
+
+		final TreeNode node = treeManagementService.findNode(tree, new FindNodeByIDPredicate(nodeID));
+
 		if (node == null) {
 			throw new RequirementTreeNodeNotFoundException();
 		}
-			
+
 		cleanRequirements(node);
-		
+
 		treeManagementService.removeNode(tree, node.getId());
-		
+
 		requirementsTreeDAO.save(tree);
-		
+
 		return tree;
 	}
-	
-	private void cleanRequirements(TreeNode node) {
-		
+
+	private void cleanRequirements(final TreeNode node)  {
+
 		if (RequirementsTreeUtils.isRequirementNode(node)) {
-			String requirementID = ((RequirementNode) node).getRequirementId();
-			gate.dispatch(new DeleteRequirementCommand(requirementID));
+			final String requirementID = ((RequirementNode) node).getRequirementId();
+			gate.dispatchAsync(new DeleteRequirementCommand(requirementID));
 		}
-		
-		Collection<String> ids = RequirementsTreeUtils.getRequirementsIDs(node.getNodes());
-		
-		for(String ID : ids) {
-			gate.dispatch(new DeleteRequirementCommand(ID));
+
+		final Collection<String> ids = RequirementsTreeUtils.getRequirementsIDs(node.getNodes());
+
+		for(final String ID : ids) {
+			gate.dispatchAsync(new DeleteRequirementCommand(ID));
 		}
-		
+
 	}
-	
+
 }

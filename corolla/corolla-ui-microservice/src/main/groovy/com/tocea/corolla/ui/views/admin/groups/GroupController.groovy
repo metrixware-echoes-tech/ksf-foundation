@@ -1,33 +1,32 @@
 package com.tocea.corolla.ui.views.admin.groups
 
-import javax.validation.Valid;
+import groovy.util.logging.Slf4j
 
-import groovy.util.logging.Slf4j;
+import javax.validation.Valid
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.security.access.annotation.Secured
+import org.springframework.stereotype.Controller
+import org.springframework.validation.BindingResult
+import org.springframework.web.bind.annotation.ModelAttribute
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestMethod
+import org.springframework.web.servlet.ModelAndView
 
-import com.google.common.collect.Lists;
 import com.tocea.corolla.cqrs.gate.Gate
 import com.tocea.corolla.users.commands.CreateUserGroupCommand
 import com.tocea.corolla.users.commands.EditUserGroupCommand
-import com.tocea.corolla.users.dao.IUserDAO;
-import com.tocea.corolla.users.dao.IUserGroupDAO;
-import com.tocea.corolla.users.domain.Permission;
+import com.tocea.corolla.users.dao.IUserDAO
+import com.tocea.corolla.users.dao.IUserGroupDAO
+import com.tocea.corolla.users.domain.Permission
 import com.tocea.corolla.users.domain.UserGroup
-import com.tocea.corolla.users.service.UserDtoService;
+import com.tocea.corolla.users.service.UserDtoService
 
 @Controller
 @Slf4j
 class GroupController {
-
+	
 	def static final INDEX_PAGE = "admin/groups"
 	def static final EDIT_PAGE = "admin/groups_edit"
 	
@@ -41,7 +40,7 @@ class GroupController {
 	private IUserDAO userDAO
 	
 	@Autowired
-	private Gate gate;
+	private Gate gate
 	
 	@ModelAttribute("menu")
 	public String setMenu() {
@@ -52,7 +51,7 @@ class GroupController {
 	@RequestMapping("/ui/admin/groups")
 	public ModelAndView getGroups() {
 		
-		def model = new ModelAndView(INDEX_PAGE)		
+		def model = new ModelAndView(INDEX_PAGE)
 		model.addObject "groups", groupDAO.findAll()
 		
 		return model
@@ -72,12 +71,12 @@ class GroupController {
 	public ModelAndView addGroup(@Valid @ModelAttribute("group") UserGroup group, BindingResult _result) {
 		
 		group = _result.model.get("group")
-				
-		if (_result.hasErrors()) {			
-			return getFormModelAndView(group)			
+		
+		if (_result.hasErrors()) {
+			return getFormModelAndView(group)
 		}
 		
-		this.gate.dispatch new CreateUserGroupCommand(group)
+		this.gate.dispatchAsync new CreateUserGroupCommand(group)
 		
 		return new ModelAndView("redirect:/ui/admin/groups")
 		
@@ -88,7 +87,7 @@ class GroupController {
 	public ModelAndView getEditPage(@PathVariable id) {
 		
 		UserGroup group = groupDAO.findOne(id)
-				
+		
 		return getFormModelAndView(group)
 		
 	}
@@ -99,12 +98,12 @@ class GroupController {
 		
 		group = _result.model.get("group")
 		log.info("{}", group.userIds)
-					
-		if (_result.hasErrors()) {		
-			return getFormModelAndView(group)		
+		
+		if (_result.hasErrors()) {
+			return getFormModelAndView(group)
 		}
 		
-		this.gate.dispatch new EditUserGroupCommand(group)
+		this.gate.dispatchAsync new EditUserGroupCommand(group)
 		
 		return new ModelAndView("redirect:/ui/admin/groups")
 		
@@ -113,7 +112,7 @@ class GroupController {
 	private ModelAndView getFormModelAndView(UserGroup group) {
 		
 		def users = userDTODAO.getUsersWithRoleList()
-				
+		
 		def model = new ModelAndView(EDIT_PAGE)
 		model.addObject "group", group != null ? group : new UserGroup()
 		model.addObject "users", users

@@ -25,7 +25,7 @@ import com.tocea.corolla.users.dao.IUserDAO
 import com.tocea.corolla.users.domain.User
 import com.tocea.corolla.users.dto.UserProfileDto
 import com.tocea.corolla.users.exceptions.InvalidLoginException
-import com.tocea.corolla.users.service.UserDtoService;
+import com.tocea.corolla.users.service.UserDtoService
 import com.tocea.corolla.users.validation.UserValidation
 
 /**
@@ -35,24 +35,24 @@ import com.tocea.corolla.users.validation.UserValidation
 @Controller
 @Slf4j
 public class UserViewProfileController {
-
+	
 	def static final String PROFILE_PAGE = "profiles/user_profile"
-
+	
 	@Autowired
 	private UserDtoService userDTODAO
-
+	
 	@Autowired
 	private IRoleDAO roleDAO
-
+	
 	@Autowired
 	private IUserDAO userDAO
-
+	
 	@Autowired
 	private UserValidation validation
-
+	
 	@Autowired
 	private Gate gate
-
+	
 	@RequestMapping("/ui/edit_profile")
 	public ModelAndView getAddPage(Principal _principal) {
 		def login = _principal.name
@@ -67,9 +67,9 @@ public class UserViewProfileController {
 		model.addObject "user", user == null ? new UserProfileDto() : new UserProfileDto(user)
 		return model
 	}
-
-
-
+	
+	
+	
 	@RequestMapping(value="/ui/edit_profile", method = RequestMethod.POST)
 	public ModelAndView modifyUser(@Valid @ModelAttribute("user") UserProfileDto _userProfile, BindingResult _result, Principal _principal) {
 		def login = _principal.name
@@ -80,14 +80,14 @@ public class UserViewProfileController {
 		if (user == null) {
 			_result.addError( new ObjectError("login", "User not found"))
 		}
-
+		
 		if (_result.hasErrors()) {
 			def ModelAndView model2 = new ModelAndView(PROFILE_PAGE)
 			return model2
 		}
 		EditUserCommand command = new EditUserCommand(user, _userProfile)
-		gate.dispatch(command)
-
+		gate.dispatchAsync(command)
+		
 		return new ModelAndView("redirect:/")
 	}
 }

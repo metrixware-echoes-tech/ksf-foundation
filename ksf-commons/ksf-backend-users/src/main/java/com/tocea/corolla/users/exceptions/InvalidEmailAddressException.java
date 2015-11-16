@@ -19,7 +19,7 @@
  */
 package com.tocea.corolla.users.exceptions;
 
-import com.tocea.corolla.utils.domain.CorollaDomainException;
+import com.tocea.corolla.utils.domain.KsfDomainException;
 
 /**
  * Exception when an email adress is invalid.
@@ -27,7 +27,7 @@ import com.tocea.corolla.utils.domain.CorollaDomainException;
  * @author sleroy
  *
  */
-public class InvalidEmailAddressException extends CorollaDomainException {
+public class InvalidEmailAddressException extends KsfDomainException {
 
 	/**
 	 * @param _email

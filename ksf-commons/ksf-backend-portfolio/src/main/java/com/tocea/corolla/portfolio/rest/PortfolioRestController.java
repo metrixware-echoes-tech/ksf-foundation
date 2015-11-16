@@ -1,19 +1,19 @@
 /*
- * Corolla - A Tool to manage software requirements and test cases 
+ * Corolla - A Tool to manage software requirements and test cases
  * Copyright (C) 2015 Tocea
- * 
+ *
  * This file is part of Corolla.
- * 
+ *
  * Corolla is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 2 of the License, 
+ * the Free Software Foundation, either version 2 of the License,
  * or any later version.
- * 
+ *
  * Corolla is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Corolla.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -56,123 +56,123 @@ import com.tocea.corolla.users.domain.Permission;
 @RestController
 @RequestMapping("/rest/portfolio")
 public class PortfolioRestController {
-
+	
 	@Autowired
 	private IPortfolioDAO portfolioDAO;
-	
+
 	@Autowired
 	private IProjectDAO projectDAO;
-	
+
 	@Autowired
 	private IFolderNodeTypeDAO folderNodeTypeDAO;
-	
+
 	@Autowired
 	private Gate gate;
-	
+
 	@Autowired
 	private ITreeManagementService treeManagementService;
-	
-	@RequestMapping(value = "/")
-	@PreAuthorize("isAuthenticated()")
-	public Collection<TreeNode> getTree() {
-		
-		Portfolio portfolio = portfolioDAO.find();
-		
-		return portfolio != null ? portfolio.getNodes() : new ArrayList<TreeNode>();
+
+	@RequestMapping(value = "/folders/add/{parentID}/{folderNodeTypeID}", method = RequestMethod.POST, consumes = "text/plain")
+	@Secured({ Permission.PORTFOLIO_MANAGEMENT })
+	public FolderNode addTextNode(@PathVariable final Integer parentID, @PathVariable final String folderNodeTypeID, @RequestBody final String text)  {
+
+		final FolderNodeType folderNodeType = folderNodeTypeDAO.findOne(folderNodeTypeID);
+
+		return gate.dispatch(new CreatePortfolioFolderNodeCommand(text, folderNodeType, parentID));
 	}
-	
+
+	@RequestMapping(value = "/folders/add/{folderNodeTypeID}", method = RequestMethod.POST, consumes = "text/plain")
+	@Secured({ Permission.PORTFOLIO_MANAGEMENT })
+	public FolderNode addTextNode(@PathVariable final String folderNodeTypeID, @RequestBody final String text)  {
+
+		return addTextNode(null, folderNodeTypeID, text);
+	}
+
+	@RequestMapping(value = "/folders/edit/type/{nodeID}/{typeID}")
+	@Secured({ Permission.PORTFOLIO_MANAGEMENT })
+	public FolderNode changeFolderNodeType(@PathVariable final Integer nodeID, @PathVariable final String typeID)  {
+
+		return gate.dispatch(new ChangePortfolioFolderNodeTypeCommand(nodeID, typeID));
+	}
+
+	@RequestMapping(value = "/folders/edit/{nodeID}", method = RequestMethod.POST, consumes = "text/plain")
+	@Secured({ Permission.PORTFOLIO_MANAGEMENT })
+	public Portfolio editTextNode(@PathVariable final Integer nodeID, @RequestBody final String text)  {
+
+		return gate.dispatch(new EditPortfolioFolderNodeCommand(nodeID, text));
+	}
+
 	@RequestMapping(value = "/jstree")
 	@PreAuthorize("isAuthenticated()")
 	public Collection<JsTreeNodeDTO> getJsTree() {
-		
-		Portfolio portfolio = portfolioDAO.find();
-		
+
+		final Portfolio portfolio = portfolioDAO.find();
+
 		return buildJsTree(portfolio.getNodes());
 	}
-	
+
 	@RequestMapping(value = "/jstree/{projectKey}")
 	@PreAuthorize("isAuthenticated()")
-	public Collection<JsTreeNodeDTO> getJsTreeSubtree(@PathVariable String projectKey) {
-		
-		Project project = projectDAO.findByKey(projectKey);
-		
+	public Collection<JsTreeNodeDTO> getJsTreeSubtree(@PathVariable final String projectKey) {
+
+		final Project project = projectDAO.findByKey(projectKey);
+
 		if (project != null) {
-		
-			Portfolio portfolio = portfolioDAO.find();
-		
-			TreeNode node = treeManagementService.findNode(portfolio.getNodes(), new FindNodeByProjectIDPredicate(project.getId()));
-		
+
+			final Portfolio portfolio = portfolioDAO.find();
+
+			final TreeNode node = treeManagementService.findNode(portfolio.getNodes(), new FindNodeByProjectIDPredicate(project.getId()));
+
 			if (node != null) {
 				return buildJsTree(Lists.newArrayList(node.getNodes()));
 			}
-			
-		}
-		
-		return Lists.newArrayList();	
-	}
-	
-	private Collection<JsTreeNodeDTO> buildJsTree(Collection<TreeNode> treeNodes) {
-		
-		Collection<String> ids = PortfolioUtils.getProjectIDs(treeNodes);
-		
-		Collection<Project> projects = Lists.newArrayList(projectDAO.findAll(ids));
-		
-		Collection<JsTreeNodeDTO> nodes = Lists.newArrayList();
-		
-		for(TreeNode node : treeNodes) {
-			
-			PortfolioJsTree visitor = new PortfolioJsTree(projects);
-			node.accept(visitor);
-			nodes.add(visitor.getResult());
-			
+
 		}
 
-		return nodes;
-		
+		return Lists.newArrayList();
 	}
-	
+
+	@RequestMapping(value = "/")
+	@PreAuthorize("isAuthenticated()")
+	public Collection<TreeNode> getTree() {
+
+		final Portfolio portfolio = portfolioDAO.find();
+
+		return portfolio != null ? portfolio.getNodes() : new ArrayList<TreeNode>();
+	}
+
 	@RequestMapping(value = "/move/{fromID}/{toID}")
 	@Secured({ Permission.PORTFOLIO_MANAGEMENT })
-	public Portfolio moveNode(@PathVariable Integer fromID, @PathVariable Integer toID) {
-		
+	public Portfolio moveNode(@PathVariable final Integer fromID, @PathVariable final Integer toID)  {
+
 		return gate.dispatch(new MovePortfolioNodeCommand(fromID, toID != 0 ? toID : null));
 	}
-	
+
 	@RequestMapping(value = "/remove/{nodeID}")
 	@Secured({ Permission.PORTFOLIO_MANAGEMENT })
-	public Portfolio removeNode(@PathVariable Integer nodeID) {
-		
+	public Portfolio removeNode(@PathVariable final Integer nodeID)  {
+
 		return gate.dispatch(new RemovePortfolioNodeCommand(nodeID));
 	}
-	
-	@RequestMapping(value = "/folders/edit/{nodeID}", method = RequestMethod.POST, consumes = "text/plain")
-	@Secured({ Permission.PORTFOLIO_MANAGEMENT })
-	public Portfolio editTextNode(@PathVariable Integer nodeID, @RequestBody String text) {
+
+	private Collection<JsTreeNodeDTO> buildJsTree(final Collection<TreeNode> treeNodes) {
+
+		final Collection<String> ids = PortfolioUtils.getProjectIDs(treeNodes);
+
+		final Collection<Project> projects = Lists.newArrayList(projectDAO.findAll(ids));
+
+		final Collection<JsTreeNodeDTO> nodes = Lists.newArrayList();
+
+		for(final TreeNode node : treeNodes) {
+
+			final PortfolioJsTree visitor = new PortfolioJsTree(projects);
+			node.accept(visitor);
+			nodes.add(visitor.getResult());
+
+		}
 		
-		return gate.dispatch(new EditPortfolioFolderNodeCommand(nodeID, text));
+		return nodes;
+
 	}
-	
-	@RequestMapping(value = "/folders/add/{parentID}/{folderNodeTypeID}", method = RequestMethod.POST, consumes = "text/plain")
-	@Secured({ Permission.PORTFOLIO_MANAGEMENT })
-	public FolderNode addTextNode(@PathVariable Integer parentID, @PathVariable String folderNodeTypeID, @RequestBody String text) {
-		
-		FolderNodeType folderNodeType = folderNodeTypeDAO.findOne(folderNodeTypeID);
-		
-		return gate.dispatch(new CreatePortfolioFolderNodeCommand(text, folderNodeType, parentID));
-	}
-	
-	@RequestMapping(value = "/folders/add/{folderNodeTypeID}", method = RequestMethod.POST, consumes = "text/plain")
-	@Secured({ Permission.PORTFOLIO_MANAGEMENT })
-	public FolderNode addTextNode(@PathVariable String folderNodeTypeID, @RequestBody String text) {
-		
-		return addTextNode(null, folderNodeTypeID, text);
-	}
-	
-	@RequestMapping(value = "/folders/edit/type/{nodeID}/{typeID}")
-	@Secured({ Permission.PORTFOLIO_MANAGEMENT })
-	public FolderNode changeFolderNodeType(@PathVariable Integer nodeID, @PathVariable String typeID) {
-		
-		return gate.dispatch(new ChangePortfolioFolderNodeTypeCommand(nodeID, typeID));
-	}
-	
+
 }

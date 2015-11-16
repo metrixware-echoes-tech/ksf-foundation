@@ -1,12 +1,17 @@
 package fr.echoes.lab.ksf.database.configuration;
 
-import com.github.fakemongo.Fongo;
-import com.mongodb.Mongo;
+import java.util.Random;
+
+import javax.annotation.PostConstruct;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+
+import com.github.fakemongo.Fongo;
+import com.mongodb.Mongo;
 
 /**
  * Configuration of the embedded test database.
@@ -18,14 +23,23 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @EnableMongoRepositories(basePackages = {"fr.echoes.lab", "com.tocea"})
 public class FongoConfiguration extends AbstractMongoConfiguration {
 
-    @Override
-    protected String getDatabaseName() {
-        return "corolla-test";
-    }
+	private static Random fongoRandomizer = new Random();
+	private String databaseName;
+	
+	@PostConstruct
+	public void init() {
+		databaseName=	"corolla-test" + fongoRandomizer.nextLong();
+	}
+	
+	@Override
+	@Bean
+	public Mongo mongo() throws Exception {
+		return new Fongo(getDatabaseName()).getMongo();
+	}
 
-    @Bean
-    public Mongo mongo() throws Exception {
-        return new Fongo("corolla-test").getMongo();
-    }
+	@Override
+	protected String getDatabaseName() {
+		return databaseName;
+	}
 
 }

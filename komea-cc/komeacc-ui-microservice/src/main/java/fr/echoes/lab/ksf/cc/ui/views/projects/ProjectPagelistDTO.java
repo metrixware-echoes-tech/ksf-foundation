@@ -5,10 +5,10 @@
  */
 package fr.echoes.lab.ksf.cc.ui.views.projects;
 
-import fr.echoes.lab.ksf.cc.ui.views.projects.*;
+import java.io.Serializable;
+
 import com.tocea.corolla.products.domain.Project;
 import com.tocea.corolla.users.domain.User;
-import java.io.Serializable;
 
 /**
  *
@@ -16,31 +16,31 @@ import java.io.Serializable;
  */
 public class ProjectPagelistDTO implements Serializable {
 
-    private Project projet;
-    private User utilisateur;
+    private Project project;
+    private User user;
 
-    public ProjectPagelistDTO(Project projet, User utilisateur) {
-        this.projet = projet;
-        this.utilisateur = utilisateur;
+    public ProjectPagelistDTO(Project projet, User user) {
+        this.project = projet;
+        this.user = user;
     }
 
     public ProjectPagelistDTO() {
     }
 
-    public Project getProjet() {
-        return projet;
+    public Project getProject() {
+        return project;
     }
 
-    public void setProjet(Project projet) {
-        this.projet = projet;
+    public void setProject(Project project) {
+        this.project = project;
     }
 
-    public User getUtilisateur() {
-        return utilisateur;
+    public User getUser() {
+        return user;
     }
 
-    public void setUtilisateur(User utilisateur) {
-        this.utilisateur = utilisateur;
+    public void setUser(User user) {
+        this.user = user;
     }
 
 }

@@ -19,13 +19,13 @@
  */
 package com.tocea.corolla.users.exceptions;
 
-import com.tocea.corolla.utils.domain.CorollaDomainException;
+import com.tocea.corolla.utils.domain.KsfDomainException;
 
 /**
  * @author sleroy
  *
  */
-public class InvalidUserInformationException extends CorollaDomainException {
+public class InvalidUserInformationException extends KsfDomainException {
 
 	/**
 	 * @param _message

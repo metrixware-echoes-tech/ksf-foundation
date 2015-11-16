@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.tocea.corolla.cqrs.gate.conf.CorollaCqrsConfiguration;
+import com.tocea.corolla.cqrs.gate.conf.CqrsConfiguration;
 import com.tocea.corolla.cqrs.gate.spring.api.ICommandExecutionListener;
 
 @Service
@@ -14,7 +14,7 @@ public class CommandLoggingService implements ICommandExecutionListener {
 	private static final Logger LOGGER = LoggerFactory.getLogger(CommandLoggingService.class);
 
 	@Autowired
-	private CorollaCqrsConfiguration configuration;
+	private CqrsConfiguration configuration;
 
 	@Override
 	public void onFailure(final Object _command, final Throwable _cause) {

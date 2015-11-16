@@ -19,9 +19,9 @@
  */
 package com.tocea.corolla.requirements.exceptions;
 
-import com.tocea.corolla.utils.domain.CorollaDomainException;
+import com.tocea.corolla.utils.domain.KsfDomainException;
 
-public class RequirementNotFoundException extends CorollaDomainException {
+public class RequirementNotFoundException extends KsfDomainException {
 
 	private static String MESSAGE = "Requirement not found";
 	

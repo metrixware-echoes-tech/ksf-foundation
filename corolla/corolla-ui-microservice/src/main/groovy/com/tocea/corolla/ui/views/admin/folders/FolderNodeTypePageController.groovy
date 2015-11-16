@@ -71,7 +71,7 @@ class FolderNodeTypePageController {
 		
 		type = _result.model.get('type')
 				
-		gate.dispatch(new CreateFolderNodeTypeCommand(type))
+		gate.dispatchAsync(new CreateFolderNodeTypeCommand(type))
 		
 		return new ModelAndView("redirect:/ui/admin/folder-node-types")	
 	}
@@ -104,7 +104,7 @@ class FolderNodeTypePageController {
 		
 		type = _result.model.get('type')
 
-		gate.dispatch(new EditFolderNodeTypeCommand(type))
+		gate.dispatchAsync(new EditFolderNodeTypeCommand(type))
 		
 		return new ModelAndView("redirect:/ui/admin/folder-node-types")	
 	}

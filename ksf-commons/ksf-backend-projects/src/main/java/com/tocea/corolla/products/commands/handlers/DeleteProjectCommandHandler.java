@@ -19,12 +19,15 @@
  */
 package com.tocea.corolla.products.commands.handlers;
 
+import static org.apache.commons.lang3.StringUtils.isEmpty;
+
 import java.util.Collection;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
-import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.tocea.corolla.cqrs.annotations.CommandHandler;
@@ -39,9 +42,6 @@ import com.tocea.corolla.products.domain.ProjectBranch;
 import com.tocea.corolla.products.events.EventProjectDeleted;
 import com.tocea.corolla.products.exceptions.MissingProjectInformationException;
 import com.tocea.corolla.products.exceptions.ProjectNotFoundException;
-import static org.apache.commons.lang3.StringUtils.isEmpty;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * This class handles the command when a project has to be deleted.
@@ -50,51 +50,51 @@ import org.slf4j.LoggerFactory;
 @CommandHandler
 @Transactional
 public class DeleteProjectCommandHandler implements ICommandHandler<DeleteProjectCommand, Project> {
-
-    private static final Logger LOG = LoggerFactory.getLogger(DeleteProjectCommandHandler.class);
-
-    @Autowired
-    private IProjectDAO projectDAO;
-
-    @Autowired
-    private IProjectBranchDAO branchDAO;
-
-    @Autowired
-    private Gate gate;
-
-    /**
-     * Treats the command "When a project is deleted"
-     *
-     * @param command
-     * @return
-     */
-    @Override
-    public Project handle(@Valid final DeleteProjectCommand command) {
-
-        final String id = command.getProjectID();
-
-        if (isEmpty(id)) {
-            throw new MissingProjectInformationException("No ID found");
-        }
-
-        final Project project = projectDAO.findOne(id);
-
-        if (project == null) {
-            throw new ProjectNotFoundException();
-        }
-
-        // Delete the project from the database
-        projectDAO.delete(project);
-
-        // Invoke the commands to delete the project branches associated to this project
-        final Collection<ProjectBranch> branches = branchDAO.findByProjectId(project.getId());
-        for (final ProjectBranch branch : branches) {
-            gate.dispatch(new DeleteProjectBranchCommand(branch));
-        }
-        gate.dispatchEvent(new EventProjectDeleted(project));
-
-        return project;
-
-    }
-
+	
+	private static final Logger LOG = LoggerFactory.getLogger(DeleteProjectCommandHandler.class);
+	
+	@Autowired
+	private IProjectDAO projectDAO;
+	
+	@Autowired
+	private IProjectBranchDAO branchDAO;
+	
+	@Autowired
+	private Gate gate;
+	
+	/**
+	 * Treats the command "When a project is deleted"
+	 *
+	 * @param command
+	 * @return
+	 */
+	@Override
+	public Project handle(@Valid final DeleteProjectCommand command) {
+		
+		final String id = command.getProjectID();
+		
+		if (isEmpty(id)) {
+			throw new MissingProjectInformationException("No ID found");
+		}
+		
+		final Project project = projectDAO.findOne(id);
+		
+		if (project == null) {
+			throw new ProjectNotFoundException();
+		}
+		
+		// Delete the project from the database
+		projectDAO.delete(project);
+		
+		// Invoke the commands to delete the project branches associated to this project
+		final Collection<ProjectBranch> branches = branchDAO.findByProjectId(project.getId());
+		for (final ProjectBranch branch : branches) {
+			gate.dispatchAsync(new DeleteProjectBranchCommand(branch));
+		}
+		gate.dispatchEvent(new EventProjectDeleted(project));
+		
+		return project;
+		
+	}
+	
 }

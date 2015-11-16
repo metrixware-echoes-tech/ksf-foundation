@@ -19,9 +19,9 @@
  */
 package com.tocea.corolla.products.exceptions;
 
-import com.tocea.corolla.utils.domain.CorollaDomainException;
+import com.tocea.corolla.utils.domain.KsfDomainException;
 
-public class ProjectCategoryAlreadyExistException extends CorollaDomainException {
+public class ProjectCategoryAlreadyExistException extends KsfDomainException {
 
 	private static final String MESSAGE = "This project category already exists.";
 	

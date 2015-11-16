@@ -19,9 +19,9 @@
  */
 package com.tocea.corolla.revisions.exceptions;
 
-import com.tocea.corolla.utils.domain.CorollaDomainException;
+import com.tocea.corolla.utils.domain.KsfDomainException;
 
-public class InvalidCommitInformationException extends CorollaDomainException {
+public class InvalidCommitInformationException extends KsfDomainException {
 
 	public InvalidCommitInformationException(String message) {
 		super(message);

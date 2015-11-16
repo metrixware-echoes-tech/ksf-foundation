@@ -1,19 +1,19 @@
 /*
- * Corolla - A Tool to manage software requirements and test cases 
+ * Corolla - A Tool to manage software requirements and test cases
  * Copyright (C) 2015 Tocea
- * 
+ *
  * This file is part of Corolla.
- * 
+ *
  * Corolla is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 2 of the License, 
+ * the Free Software Foundation, either version 2 of the License,
  * or any later version.
- * 
+ *
  * Corolla is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Corolla.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -41,50 +41,50 @@ import com.tocea.corolla.trees.services.ITreeManagementService;
 @CommandHandler
 @Transactional
 public class RemovePortfolioNodeCommandHandler implements ICommandHandler<RemovePortfolioNodeCommand, Portfolio> {
-
+	
 	@Autowired
 	private IPortfolioDAO portfolioDAO;
-	
+
 	@Autowired
 	private Gate gate;
-	
+
 	@Autowired
 	private ITreeManagementService treeManagementService;
-	
+
 	@Override
-	public Portfolio handle(@Valid RemovePortfolioNodeCommand command) {
-		
-		Portfolio portfolio = portfolioDAO.find();
-		
+	public Portfolio handle(@Valid final RemovePortfolioNodeCommand command) {
+
+		final Portfolio portfolio = portfolioDAO.find();
+
 		if (portfolio == null) {
 			throw new PortfolioNotFoundException();
 		}
-		
-		Integer nodeID = command.getNodeID();	
-		
-		TreeNode node = treeManagementService.findNode(portfolio, new FindNodeByIDPredicate(nodeID));
-		
+
+		final Integer nodeID = command.getNodeID();
+
+		final TreeNode node = treeManagementService.findNode(portfolio, new FindNodeByIDPredicate(nodeID));
+
 		if (node != null) {
 			removeNode(node);
 		}
-		
+
 		treeManagementService.removeNode(portfolio, nodeID);
-		
+
 		portfolioDAO.save(portfolio);
-		
+
 		return portfolio;
 	}
-	
-	private void removeNode(TreeNode node) {
-		
+
+	private void removeNode(final TreeNode node) {
+
 		if (PortfolioUtils.isProjectNode(node)) {
-			gate.dispatch(new DeleteProjectCommand(((ProjectNode) node).getProjectId()));
+			gate.dispatchAsync(new DeleteProjectCommand(((ProjectNode) node).getProjectId()));
 		}
-		
-		for(TreeNode child : node.getNodes()) {
+
+		for(final TreeNode child : node.getNodes()) {
 			removeNode(child);
 		}
-		
-	}
 
+	}
+	
 }

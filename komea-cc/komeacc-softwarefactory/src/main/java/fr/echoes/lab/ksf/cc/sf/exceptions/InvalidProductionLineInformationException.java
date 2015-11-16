@@ -1,8 +1,8 @@
 package fr.echoes.lab.ksf.cc.sf.exceptions;
 
-import com.tocea.corolla.utils.domain.CorollaDomainException;
+import com.tocea.corolla.utils.domain.KsfDomainException;
 
-public class InvalidProductionLineInformationException extends CorollaDomainException {
+public class InvalidProductionLineInformationException extends KsfDomainException {
 
 	public InvalidProductionLineInformationException(String msg) {
 		super(msg);

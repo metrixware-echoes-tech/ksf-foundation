@@ -19,14 +19,14 @@
  */
 package com.tocea.corolla.users.exceptions;
 
-import com.tocea.corolla.utils.domain.CorollaDomainException;
+import com.tocea.corolla.utils.domain.KsfDomainException;
 
 /**
  * @author sleroy
  *
  */
 public class AlreadyExistingUserWithLoginException extends
-		CorollaDomainException {
+		KsfDomainException {
 	public AlreadyExistingUserWithLoginException(final String _message) {
 		super("User with this login is already existing   "+ _message);
 

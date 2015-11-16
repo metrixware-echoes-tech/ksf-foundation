@@ -26,7 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tocea.corolla.cqrs.gate.conf.CorollaCqrsConfiguration;
+import com.tocea.corolla.cqrs.gate.conf.CqrsConfiguration;
 import com.tocea.corolla.cqrs.gate.spring.api.ICommandExecutionListener;
 
 /**
@@ -62,7 +62,7 @@ public class CommandTraceSerializationService implements ICommandExecutionListen
 	private static final Logger LOGGER = LoggerFactory.getLogger(CommandTraceSerializationService.class);
 	
 	@Autowired
-	private CorollaCqrsConfiguration configuration;
+	private CqrsConfiguration configuration;
 	
 	private ObjectMapper objectMapper;
 	
@@ -70,8 +70,8 @@ public class CommandTraceSerializationService implements ICommandExecutionListen
 		super();
 	}
 	
-	public CommandTraceSerializationService(final CorollaCqrsConfiguration _corollaCqrsConfiguration) {
-		configuration = _corollaCqrsConfiguration;
+	public CommandTraceSerializationService(final CqrsConfiguration _cqrsConfiguration) {
+		configuration = _cqrsConfiguration;
 		
 	}
 	

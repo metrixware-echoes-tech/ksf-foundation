@@ -19,9 +19,9 @@
  */
 package com.tocea.corolla.users.exceptions;
 
-import com.tocea.corolla.utils.domain.CorollaDomainException;
+import com.tocea.corolla.utils.domain.KsfDomainException;
 
-public class RoleOperationForbiddenException extends CorollaDomainException {
+public class RoleOperationForbiddenException extends KsfDomainException {
 
 	private static final String MESSAGE = "Operation forbidden on this role";
 	

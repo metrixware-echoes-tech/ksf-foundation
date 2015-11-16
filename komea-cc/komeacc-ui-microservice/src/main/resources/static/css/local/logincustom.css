@@ -10,7 +10,7 @@ and open the template in the editor.
 
 body{
 
- background: #eee url('../../pictures/fondLogin.jpg');
+ background: #eee url('../../pictures/fondLogin.png');
     background-position: center top;
     background-size: 100% auto;
 
@@ -20,15 +20,7 @@ html,body{
     position: relative;
     height: 100%;
 }
-.bgImageContainer{
-    background-image:url('../../pictures/fondLogin.jpg'); 
-    width:500px;
-    height:400px;
-    /*-webkit-filter: blur(5px);*/
-    filter: blur(5px);
-    z-index:0;
-    position:absolute;
-}
+
 
 .login-container{
     position: relative;
@@ -114,8 +106,6 @@ html,body{
 
 .form-box input[type="text"]{
     border-radius: 5px 5px 0 0;
-    text-transform: lowercase;
-
 }
 
 .form-box input[type="password"]{

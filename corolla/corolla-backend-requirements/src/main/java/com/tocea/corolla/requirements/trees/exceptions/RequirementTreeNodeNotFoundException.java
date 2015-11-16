@@ -19,9 +19,9 @@
  */
 package com.tocea.corolla.requirements.trees.exceptions;
 
-import com.tocea.corolla.utils.domain.CorollaDomainException;
+import com.tocea.corolla.utils.domain.KsfDomainException;
 
-public class RequirementTreeNodeNotFoundException extends CorollaDomainException {
+public class RequirementTreeNodeNotFoundException extends KsfDomainException {
 
 	private static final String MESSAGE = "Requirement tree node not found";
 	

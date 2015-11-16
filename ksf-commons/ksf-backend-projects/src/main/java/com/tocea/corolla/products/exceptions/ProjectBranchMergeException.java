@@ -19,9 +19,9 @@
  */
 package com.tocea.corolla.products.exceptions;
 
-import com.tocea.corolla.utils.domain.CorollaDomainException;
+import com.tocea.corolla.utils.domain.KsfDomainException;
 
-public class ProjectBranchMergeException extends CorollaDomainException {
+public class ProjectBranchMergeException extends KsfDomainException {
 	
 	public ProjectBranchMergeException(Throwable cause) {
 		super("Cannot merge these two project branches", cause);

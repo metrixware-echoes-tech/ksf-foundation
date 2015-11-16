@@ -19,9 +19,9 @@
  */
 package com.tocea.corolla.revisions.exceptions;
 
-import com.tocea.corolla.utils.domain.CorollaDomainException;
+import com.tocea.corolla.utils.domain.KsfDomainException;
 
-public class MissingCommitInformationException extends CorollaDomainException {
+public class MissingCommitInformationException extends KsfDomainException {
 
 	public MissingCommitInformationException(String message) {
 		super(message);

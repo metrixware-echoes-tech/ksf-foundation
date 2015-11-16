@@ -19,9 +19,9 @@
  */
 package com.tocea.corolla.requirements.trees.exceptions;
 
-import com.tocea.corolla.utils.domain.CorollaDomainException;
+import com.tocea.corolla.utils.domain.KsfDomainException;
 
-public class RequirementTreeNodeAlreadyExistException extends CorollaDomainException {
+public class RequirementTreeNodeAlreadyExistException extends KsfDomainException {
 	
 	private static String MESSAGE = "This requirement tree node already exists";
 	

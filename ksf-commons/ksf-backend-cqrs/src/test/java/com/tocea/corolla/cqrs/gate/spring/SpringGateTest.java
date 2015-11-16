@@ -15,7 +15,7 @@ public class SpringGateTest {
 
 	
 	@Mock
-	private SequentialCommandExecutorService sequentialCommandExecutorService;
+	private CommandExecutorFactoryService commandExecutorFactoryService;
 
 	@InjectMocks
 	private SpringGate springGate;
@@ -23,7 +23,7 @@ public class SpringGateTest {
 	@Test
 	public void testDispatch() throws Exception {
 		springGate.dispatch(COMMAND);
-		verify(sequentialCommandExecutorService, Mockito.times(1)).run(COMMAND);
+		verify(commandExecutorFactoryService, Mockito.times(1)).run(COMMAND);
 	}
 	
 

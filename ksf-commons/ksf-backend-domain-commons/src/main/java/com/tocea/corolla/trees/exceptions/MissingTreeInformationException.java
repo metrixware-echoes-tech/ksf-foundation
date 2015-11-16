@@ -19,9 +19,9 @@
  */
 package com.tocea.corolla.trees.exceptions;
 
-import com.tocea.corolla.utils.domain.CorollaDomainException;
+import com.tocea.corolla.utils.domain.KsfDomainException;
 
-public class MissingTreeInformationException extends CorollaDomainException {
+public class MissingTreeInformationException extends KsfDomainException {
 
 	public MissingTreeInformationException(String msg) {
 		super(msg);

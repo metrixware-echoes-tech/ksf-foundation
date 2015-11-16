@@ -19,9 +19,9 @@
  */
 package com.tocea.corolla.products.exceptions;
 
-import com.tocea.corolla.utils.domain.CorollaDomainException;
+import com.tocea.corolla.utils.domain.KsfDomainException;
 
-public class MissingProjectStatusInformationException extends CorollaDomainException {
+public class MissingProjectStatusInformationException extends KsfDomainException {
 
 	public MissingProjectStatusInformationException(String msg) {
 		super(msg);

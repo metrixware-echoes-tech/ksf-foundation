@@ -19,9 +19,9 @@
  */
 package com.tocea.corolla.products.exceptions;
 
-import com.tocea.corolla.utils.domain.CorollaDomainException;
+import com.tocea.corolla.utils.domain.KsfDomainException;
 
-public class InvalidProjectStatusInformationException extends CorollaDomainException {
+public class InvalidProjectStatusInformationException extends KsfDomainException {
 
 	public InvalidProjectStatusInformationException(String message) {
 		super(message);

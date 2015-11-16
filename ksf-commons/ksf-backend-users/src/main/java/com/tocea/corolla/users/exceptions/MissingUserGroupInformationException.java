@@ -19,9 +19,9 @@
  */
 package com.tocea.corolla.users.exceptions;
 
-import com.tocea.corolla.utils.domain.CorollaDomainException;
+import com.tocea.corolla.utils.domain.KsfDomainException;
 
-public class MissingUserGroupInformationException extends CorollaDomainException {
+public class MissingUserGroupInformationException extends KsfDomainException {
 
 	public MissingUserGroupInformationException(final String _message) {
 		super(_message);

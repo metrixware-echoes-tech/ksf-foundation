@@ -55,13 +55,13 @@ import com.tocea.corolla.utils.datatable.DataTableList;
 public class UserRestController {
 	@Autowired
 	private Gate			gate;
-	
+
 	@Autowired
 	private UserDtoService	dtoService;
-	
+
 	@Autowired
 	private UserValidation	userValidation;
-	
+
 	@Secured({ Permission.ADMIN, Permission.ADMIN_USERS })
 	@RequestMapping(value = "/delete/{login}", method = RequestMethod.GET)
 	public void deleteUser(@PathVariable final String login,
@@ -72,11 +72,11 @@ public class UserRestController {
 		if (login.equals(_principal.getName())) {
 			throw new OperationForbidenWithThisLoginException();
 		}
-		
-		gate.dispatch(new DeleteUserCommand(login));
-		
+
+		gate.dispatchAsync(new DeleteUserCommand(login));
+
 	}
-	
+
 	@Secured({ Permission.ADMIN, Permission.ADMIN_USERS })
 	@RequestMapping(value = "/disable/{login}", method = RequestMethod.GET)
 	public void disableUser(@PathVariable final String login,
@@ -87,10 +87,10 @@ public class UserRestController {
 		if (login.equals(_principal.getName())) {
 			throw new OperationForbidenWithThisLoginException();
 		}
-		
-		gate.dispatch(new DisableUserCommand(login));
+
+		gate.dispatchAsync(new DisableUserCommand(login));
 	}
-	
+
 	@Secured({ Permission.ADMIN, Permission.ADMIN_USERS })
 	@RequestMapping(value = "/enable/{login}", method = RequestMethod.GET)
 	public void enableUser(@PathVariable final String login,
@@ -101,29 +101,29 @@ public class UserRestController {
 		if (login.equals(_principal.getName())) {
 			throw new OperationForbidenWithThisLoginException();
 		}
-		
-		gate.dispatch(new EnableUserCommand(login));
+
+		gate.dispatchAsync(new EnableUserCommand(login));
 	}
-	
+
 	@RequestMapping("/all")
 	public DataTableList<UserDto> getAllUsers() {
 		final DataTableList<UserDto> userTable = new DataTableList();
 		userTable.addAll(dtoService.getUsersDtoList());
 		return userTable;
 	}
-	
+
 	@RequestMapping("/allwithrole")
 	public DataTableList<UserWithRoleDto> getAllUsersWithRole() {
 		final DataTableList<UserWithRoleDto> userTable = new DataTableList();
 		userTable.addAll(dtoService.getUsersWithRoleList());
 		return userTable;
 	}
-	
+
 	@ExceptionHandler(Exception.class)
 	@ResponseBody
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
 	public JsonError handleException(final Exception e) {
 		return new JsonError(e.getMessage());
 	}
-	
+
 }

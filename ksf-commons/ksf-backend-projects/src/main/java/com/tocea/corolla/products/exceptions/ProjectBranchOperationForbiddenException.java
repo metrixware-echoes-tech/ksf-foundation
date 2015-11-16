@@ -19,9 +19,9 @@
  */
 package com.tocea.corolla.products.exceptions;
 
-import com.tocea.corolla.utils.domain.CorollaDomainException;
+import com.tocea.corolla.utils.domain.KsfDomainException;
 
-public class ProjectBranchOperationForbiddenException extends CorollaDomainException {
+public class ProjectBranchOperationForbiddenException extends KsfDomainException {
 
 	public ProjectBranchOperationForbiddenException(String message) {
 		super(message);

@@ -19,13 +19,13 @@ import com.tocea.corolla.requirements.trees.domain.RequirementsTree;
 public class DeletedBranchEventHandler {
 	@Autowired
 	private IRequirementsTreeDAO requirementsTreeDAO;
-
+	
 	@Autowired
 	private IRequirementDAO requirementDAO;
-
+	
 	@Autowired
 	private Gate gate;
-
+	
 	@Subscribe
 	public void deleteBranchHandler(final EventBranchDeleted _event) {
 		final ProjectBranch branch = _event.getBranch();
@@ -34,14 +34,14 @@ public class DeletedBranchEventHandler {
 		if (requirementsTree != null) {
 			requirementsTreeDAO.delete(requirementsTree);
 		}
-		
+
 		final Collection<Requirement> requirements = requirementDAO.findByProjectBranchId(branch.getId());
-		
+
 		// Delete all the requirements attached to this branch
 		for (final Requirement requirement : requirements) {
-			gate.dispatch(new DeleteRequirementCommand(requirement.getId()));
+			gate.dispatchAsync(new DeleteRequirementCommand(requirement.getId()));
 		}
-		
+
 	}
-	
+
 }

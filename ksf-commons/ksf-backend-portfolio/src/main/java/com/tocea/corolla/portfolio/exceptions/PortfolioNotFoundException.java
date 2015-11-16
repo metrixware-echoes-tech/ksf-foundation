@@ -19,9 +19,9 @@
  */
 package com.tocea.corolla.portfolio.exceptions;
 
-import com.tocea.corolla.utils.domain.CorollaDomainException;
+import com.tocea.corolla.utils.domain.KsfDomainException;
 
-public class PortfolioNotFoundException extends CorollaDomainException {
+public class PortfolioNotFoundException extends KsfDomainException {
 
 	private static final String MESSAGE = "Portfolio not found";
 	

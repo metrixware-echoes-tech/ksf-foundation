@@ -19,9 +19,9 @@
  */
 package com.tocea.corolla.requirements.exceptions;
 
-import com.tocea.corolla.utils.domain.CorollaDomainException;
+import com.tocea.corolla.utils.domain.KsfDomainException;
 
-public class RequirementTypeAlreadyExistException extends CorollaDomainException {
+public class RequirementTypeAlreadyExistException extends KsfDomainException {
 
 	private static String MESSAGE = "This requirement type already exists";
 	

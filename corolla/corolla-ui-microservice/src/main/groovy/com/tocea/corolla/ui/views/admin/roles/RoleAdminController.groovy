@@ -19,8 +19,9 @@ import com.tocea.corolla.users.domain.Permission
 import com.tocea.corolla.users.validation.UserValidation
 
 /**
- * @author sleroy
+ * The Class RoleAdminController manipulates the views associated to the role management.
  *
+ * @author sleroy
  */
 @Secured([
 	Permission.ADMIN,
@@ -28,47 +29,47 @@ import com.tocea.corolla.users.validation.UserValidation
 ])
 @Controller
 public class RoleAdminController {
-
-
+	
+	
 	@Autowired
 	private IRoleDAO roleDAO
-
+	
 	@Autowired
 	private UserValidation validation
 	
 	@Autowired
 	private Gate gate
-
+	
 	@ModelAttribute("menu")
 	public String setMenu() {
 		return "admin"
 	}
-
+	
 	@RequestMapping("/ui/admin/roles")
 	public ModelAndView getHomePage() {
 		
 		def ModelAndView model = new ModelAndView("admin/roles")
 		model.addObject "roles", roleDAO.findAll()
-
+		
 		return model
 	}
-
+	
 	@RequestMapping("/ui/admin/roles/default/{id}")
 	public String marksRoleAsDefault(@PathVariable String id) {
 		
 		if (roleDAO.findOne(id) != null) {
-			gate.dispatch(new MarksRoleAsDefaultCommand(id))
+			gate.dispatchAsync(new MarksRoleAsDefaultCommand(id))
 		}
 		
 		return "redirect:/ui/admin/roles"
 		
 	}
-
+	
 	@RequestMapping("/ui/admin/roles/duplicate/{id}")
 	public String duplicateRole(@PathVariable String id) {
 		
 		if (roleDAO.findOne(id) != null) {
-			gate.dispatch(new DuplicateRoleCommand(id))
+			gate.dispatchAsync(new DuplicateRoleCommand(id))
 		}
 		
 		return "redirect:/ui/admin/roles"

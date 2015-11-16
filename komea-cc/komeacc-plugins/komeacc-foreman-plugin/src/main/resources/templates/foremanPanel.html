@@ -1,47 +1,171 @@
-	<table class="table table-striped">
-													<thead>
-														<tr>
-															<th>Name</th>
-															<th>Operating System</th>
-															<th>
-																<div class="text-right"></div>
-															</th>
-														</tr>
-													</thead>
-													<tbody>
-														<tr>
-															<td>Target 1</td>
-															<td><img alt=""
-																src="project_overview_files/Debian-85d813ee291f23961be994e379ce25032711107ecca09dc5ebc4d.png" />
-																Debian 8.2</td>
-															<td class="text-right">
-																<div class="btn-group">
-																	<span class="btn btn-sm btn-default"> <a
-																		class="glyphicon glyphicon-pencil"
-																		data-id="aid_hosts_obx.metrixware.local_edit"
-																		href="http://localhost:3000/hosts/obx.metrixware.local/edit">&nbsp;Edit</a>
-																	</span> <a class="btn btn-default btn-sm dropdown-toggle"
-																		data-id="aid_not_defined" data-toggle="dropdown"
-																		href="#"> <i class="caret"></i>
-																	</a>
-																	<ul class="dropdown-menu pull-right">
-																		<li><a class="glyphicon glyphicon-duplicate"
-																			data-id="aid_hosts_obx.metrixware.local_clone"
-																			href="http://localhost:3000/hosts/obx.metrixware.local/clone">&nbsp;Clone</a>
-																		</li>
-																		<li><a action="destroy"
-																			class="delete glyphicon glyphicon-trash"
-																			data-confirm="Are you sure you want to delete Environment1?"
-																			data-id="aid_hosts_obx.metrixware.local"
-																			data-method="delete"
-																			href="http://localhost:3000/hosts/obx.metrixware.local"
-																			rel="nofollow">&nbsp;Delete</a></li>
-																	</ul>
-																</div>
-																<button class="btn btn-default glyphicon glyphicon-play"
-																	data-target="#GSCCModal" data-toggle="modal"
-																	type="button">&nbsp;Instantiate</button>
-															</td>
-														</tr>
-													</tbody>
-												</table>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+      
+<head></head>
+<body>
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Operating System</th>
+			<th>
+				<div class="text-right"></div>
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>Target 1</td>
+			<td><img alt=""
+				src="project_overview_files/Debian-85d813ee291f23961be994e379ce25032711107ecca09dc5ebc4d.png" />
+				Debian 8.2</td>
+			<td class="text-right">
+				<!-- div class="btn-group">
+					<span class="btn btn-sm btn-default"> <a
+						class="glyphicon glyphicon-pencil"
+						data-id="aid_hosts_obx.metrixware.local_edit"
+						href="http://localhost:3000/hosts/obx.metrixware.local/edit">&nbsp;Edit</a>
+					</span> <a class="btn btn-default btn-sm dropdown-toggle"
+						data-id="aid_not_defined" data-toggle="dropdown"
+						href="#"> <i class="caret"></i>
+					</a>
+					<ul class="dropdown-menu pull-right">
+						<li><a class="glyphicon glyphicon-duplicate"
+							data-id="aid_hosts_obx.metrixware.local_clone"
+							href="http://localhost:3000/hosts/obx.metrixware.local/clone">&nbsp;Clone</a>
+						</li>
+						<li><a action="destroy"
+							class="delete glyphicon glyphicon-trash"
+							data-confirm="Are you sure you want to delete Environment1?"
+							data-id="aid_hosts_obx.metrixware.local"
+							data-method="delete"
+							href="http://localhost:3000/hosts/obx.metrixware.local"
+							rel="nofollow">&nbsp;Delete</a></li>
+					</ul>
+				</div -->
+				<button class="btn btn-default glyphicon glyphicon-play"
+					data-target="#GSCCModal" data-toggle="modal"
+					type="button">&nbsp;Instantiate</button>
+			</td>
+		</tr>
+	</tbody>
+</table>
+<div aria-hidden="true" aria-labelledby="myModalLabel" class="modal fade in" id="createTargetModal" role="dialog" tabindex="-1">
+   <div class="modal-dialog">
+     <div class="modal-content">
+       <div class="modal-header">
+         <button aria-hidden="true" class="close" data-dismiss="modal" type="button">&times;</button>
+         <h4 class="modal-title" id="myModalLabel">Create Target</h4>
+       </div>
+       <div class="modal-body">
+         <form class="form-horizontal" role="form">
+           <div class="form-group">
+             <label class="control-label col-sm-2" for="name" required="true">Name:</label>
+             <div class="col-sm-10">
+               <input class="form-control" id="name" placeholder="Target name" type="text"/>
+             </div>
+           </div>
+           <div class="form-group">
+             <label class="control-label col-sm-2" for="source">Source</label>
+             <div class="col-sm-10">
+               <select class="form-control" id="source">
+                 <option selected="selected">source 1</option>
+                 <option>source 2</option>
+               </select>
+             </div>
+           </div>
+           <div class="form-group">
+             <label class="control-label col-sm-2" for="operatingsystem">Operating System</label>
+             <div class="col-sm-10">
+               <select class="form-control" id="operatingsystem">
+                 <option th:each="operatingSystem : ${operatingSystems}"
+                        th:value="${operatingSystem.id}" th:text="${operatingSystem.title}"></option>
+
+               </select>
+             </div>
+           </div>
+           <div class="form-group">
+             <label class="control-label col-sm-2" for="computeprofiles">Compute Profiles</label>
+             <div class="col-sm-10">
+               <select class="form-control" id="computeprofiles">
+                 <option th:each="computeProfile : ${computeProfiles}"
+                        th:value="${computeProfile.id}" th:text="${computeProfile.name}"></option>
+               </select>
+             </div>
+           </div>
+         </form>
+       </div>
+       <div class="modal-footer">
+         <button class="btn btn-default" data-dismiss="modal" type="button">Cancel</button>
+         <button class="btn btn-primary" type="button">Create</button>
+       </div>
+     </div>
+   </div>
+ </div>
+ <div aria-hidden="true" aria-labelledby="myModalLabel" class="modal fade in" id="createEnvModal" role="dialog" tabindex="-1" style="padding-left: 15px;">
+   <div class="modal-dialog">
+     <div class="modal-content">
+       <div class="modal-header">
+         <button aria-hidden="true" class="close" data-dismiss="modal" type="button">&times;</button>
+         <h4 class="modal-title" id="myModalLabel">Create Environment</h4>
+       </div>
+       <div class="modal-body">
+         <form action="/ui/foreman/environment/new" class="form-horizontal" id="new_env" method="post" role="form">
+           <div class="form-group">
+             <label class="control-label col-sm-2" for="source">Source</label>
+             <div class="col-sm-10">
+               <select class="form-control" id="env_source" onchange="selectSource()">
+               	<option value=""></option>
+               	<option th:each="env : ${environments}" th:value="${env.id}" th:text="${env.name}"></option>
+               </select>
+             </div>
+           </div>
+           <div class="form-group">
+             <div class="col-sm-12">
+               <textarea class="form-control" id="env_configuration" name="configuration" rows="15"></textarea>
+             </div>
+           </div>
+           <div class="form-group">
+             <div class="col-sm-12">
+               <input class="form-control" id="envName" name="name" placeholder="Environment Name" type="text"/>
+             </div>
+           </div>
+           <input name="projectId" type="hidden" th:value="${projectId}"/>
+         </form>
+       </div>
+       <div class="modal-footer">
+         <button class="btn btn-default" data-dismiss="modal" type="button">Cancel</button>
+         <button class="btn btn-primary" type="submit" onclick="$('#new_env').submit()">Create</button>
+       </div>
+     </div>
+   </div>
+ </div>
+<script type="text/javascript">
+
+	function displayCreateTargetModal() {
+		$('#createTargetModal').modal('show');
+	}
+	
+	function displayCreateEnvModal() {
+		$('#createEnvModal').modal('show');
+	}
+	
+	function selectSource() {
+		var sourceId = $('#env_source').val();
+		if (sourceId != "") {
+			$.get("/rest/foreman/environments/"+sourceId, function(data) {
+				if (data) {
+					$('#env_configuration').text(data.configuration);
+				}
+			});
+		}else{
+			$('#env_configuration').text("");
+		}
+	}
+	
+</script>
+</body>
+</html>

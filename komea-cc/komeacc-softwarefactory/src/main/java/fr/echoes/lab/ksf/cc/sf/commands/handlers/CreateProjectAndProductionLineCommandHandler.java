@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +16,10 @@ import com.tocea.corolla.cqrs.gate.Gate;
 import com.tocea.corolla.cqrs.handler.ICommandHandler;
 import com.tocea.corolla.products.commands.CreateProjectCommand;
 import com.tocea.corolla.products.domain.Project;
+import com.tocea.corolla.products.exceptions.InvalidProjectInformationException;
+import com.tocea.corolla.products.utils.EntityKeyGenerator;
 import com.tocea.corolla.users.dto.UserDto;
-import com.tocea.corolla.utils.domain.CorollaDomainException;
+import com.tocea.corolla.utils.domain.KsfDomainException;
 
 import fr.echoes.lab.ksf.cc.sf.commands.CreateProductionLineCommand;
 import fr.echoes.lab.ksf.cc.sf.commands.CreateProjectAndProductionLineCommand;
@@ -51,8 +54,18 @@ public class CreateProjectAndProductionLineCommandHandler implements ICommandHan
 		SFProjectDTO projectDTO = command.getProjectDTO();
 		
 		Project project = new Project();
-		project.setKey(projectDTO.getKey());
 		project.setName(projectDTO.getName());
+		
+		if (StringUtils.isEmpty(projectDTO.getKey())) {
+			String key = (new EntityKeyGenerator(projectDTO.getName())).generate();
+			if (StringUtils.isEmpty(key)) {
+				LOGGER.error("[CreateProjectAndProductionLineCommand] Cannot generate project key for project with name : {}", project.getName());
+				throw new InvalidProjectInformationException("Invalid project name.");
+			}
+			project.setKey(key);
+		}else{
+			project.setKey(projectDTO.getKey());
+		}
 		
 		UserDto userDTO = userDetailsRetrievingService.getCurrentUser();
 		if (userDTO != null) {
@@ -65,7 +78,7 @@ public class CreateProjectAndProductionLineCommandHandler implements ICommandHan
 			gate.dispatch(new CreateProjectCommand(project));
 		}catch(CommandExecutionException ex){
 			LOGGER.error("[CreateProjectAndProductionLineCommand] Cannot create project. Aborting production line creation.");
-			throw (CorollaDomainException) ex.getCause();
+			throw (KsfDomainException) ex.getCause();
 		}
 				
 		ProductionLine productionLine = new ProductionLine();
@@ -76,7 +89,7 @@ public class CreateProjectAndProductionLineCommandHandler implements ICommandHan
 			gate.dispatch(new CreateProductionLineCommand(productionLine));
 		}catch(CommandExecutionException ex){
 			LOGGER.error("[CreateProjectAndProductionLineCommand] Cannot create production line.");
-			throw (CorollaDomainException) ex.getCause();
+			throw (KsfDomainException) ex.getCause();
 		}
 		
 		return project;

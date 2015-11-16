@@ -26,3 +26,5 @@ bin
 .komea
 LAST_PUSH
 activemq-data
+.eclipse-pmd
+.pmd

@@ -19,9 +19,9 @@
  */
 package com.tocea.corolla.requirements.exceptions;
 
-import com.tocea.corolla.utils.domain.CorollaDomainException;
+import com.tocea.corolla.utils.domain.KsfDomainException;
 
-public class MissingRequirementTypeInformationException extends CorollaDomainException {
+public class MissingRequirementTypeInformationException extends KsfDomainException {
 
 	public MissingRequirementTypeInformationException(String message) {
 		super(message);

@@ -254,7 +254,7 @@ public class ProjectDetailsPageController {
 		Project project = findProjectOrFail(projectKey)
 		def node = treeManagementService.findNode(portfolioDAO.find(), new FindNodeByProjectIDPredicate(project.id))
 
-		gate.dispatch new RemovePortfolioNodeCommand(node.id)
+		gate.dispatchAsync new RemovePortfolioNodeCommand(node.id)
 
 		return new ModelAndView("redirect:/ui/portfolio/manager")
 	}

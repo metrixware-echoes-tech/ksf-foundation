@@ -19,9 +19,9 @@
  */
 package com.tocea.corolla.portfolio.exceptions;
 
-import com.tocea.corolla.utils.domain.CorollaDomainException;
+import com.tocea.corolla.utils.domain.KsfDomainException;
 
-public class ProjectNodeAlreadyExistException extends CorollaDomainException {
+public class ProjectNodeAlreadyExistException extends KsfDomainException {
 
 	private static final String MESSAGE = "This project node already exists";
 	

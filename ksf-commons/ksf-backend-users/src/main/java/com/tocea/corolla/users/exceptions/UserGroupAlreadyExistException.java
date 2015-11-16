@@ -19,9 +19,9 @@
  */
 package com.tocea.corolla.users.exceptions;
 
-import com.tocea.corolla.utils.domain.CorollaDomainException;
+import com.tocea.corolla.utils.domain.KsfDomainException;
 
-public class UserGroupAlreadyExistException extends CorollaDomainException {
+public class UserGroupAlreadyExistException extends KsfDomainException {
 
 	public UserGroupAlreadyExistException() {
 		super("This user group already exists");

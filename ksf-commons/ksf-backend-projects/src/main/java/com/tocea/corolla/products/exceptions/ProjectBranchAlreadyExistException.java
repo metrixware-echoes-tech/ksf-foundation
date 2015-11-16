@@ -19,9 +19,9 @@
  */
 package com.tocea.corolla.products.exceptions;
 
-import com.tocea.corolla.utils.domain.CorollaDomainException;
+import com.tocea.corolla.utils.domain.KsfDomainException;
 
-public class ProjectBranchAlreadyExistException extends CorollaDomainException {
+public class ProjectBranchAlreadyExistException extends KsfDomainException {
 
 	private static String MESSAGE = "This project branch already exists";
 	

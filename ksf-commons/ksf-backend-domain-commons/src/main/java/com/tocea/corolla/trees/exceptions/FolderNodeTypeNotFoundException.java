@@ -19,9 +19,9 @@
  */
 package com.tocea.corolla.trees.exceptions;
 
-import com.tocea.corolla.utils.domain.CorollaDomainException;
+import com.tocea.corolla.utils.domain.KsfDomainException;
 
-public class FolderNodeTypeNotFoundException extends CorollaDomainException {
+public class FolderNodeTypeNotFoundException extends KsfDomainException {
 
 	public FolderNodeTypeNotFoundException(String typeID) {
 		super("No folder node type found for the ID "+typeID);

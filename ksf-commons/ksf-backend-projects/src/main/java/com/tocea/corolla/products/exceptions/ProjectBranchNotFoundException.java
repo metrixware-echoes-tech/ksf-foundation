@@ -19,9 +19,9 @@
  */
 package com.tocea.corolla.products.exceptions;
 
-import com.tocea.corolla.utils.domain.CorollaDomainException;
+import com.tocea.corolla.utils.domain.KsfDomainException;
 
-public class ProjectBranchNotFoundException extends CorollaDomainException {
+public class ProjectBranchNotFoundException extends KsfDomainException {
 
 	private static String MESSAGE = "Branch not found";
 			

@@ -1,19 +1,19 @@
 /*
- * Corolla - A Tool to manage software requirements and test cases 
+ * Corolla - A Tool to manage software requirements and test cases
  * Copyright (C) 2015 Tocea
- * 
+ *
  * This file is part of Corolla.
- * 
+ *
  * Corolla is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 2 of the License, 
+ * the Free Software Foundation, either version 2 of the License,
  * or any later version.
- * 
+ *
  * Corolla is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with Corolla.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -59,141 +59,141 @@ import com.tocea.corolla.users.domain.Permission;
 @RestController
 @RequestMapping("/rest/requirements/tree")
 public class RequirementsTreeRestController {
-
+	
 	@Autowired
 	private IProjectDAO projectDAO;
-	
+
 	@Autowired
 	private IProjectBranchDAO projectBranchDAO;
-	
+
 	@Autowired
 	private IRequirementsTreeDAO requirementsTreeDAO;
-	
+
 	@Autowired
 	private IRequirementDAO requirementDAO;
-	
+
 	@Autowired
 	private IFolderNodeTypeDAO folderNodeTypeDAO;
-	
+
 	@Autowired
 	private Gate gate;
-	
-	@RequestMapping(value = "{projectKey}/{branchName}/")
-	@PreAuthorize("isAuthenticated()")
-	public RequirementsTree getTree(@PathVariable String projectKey, @PathVariable String branchName) {
-		
-		Project project = findProjectOrFail(projectKey);		
-		ProjectBranch branch = findProjectBranchOrFail(branchName, project);
 
-		RequirementsTree tree = requirementsTreeDAO.findByBranchId(branch.getId());
-		
-		return tree;
-	}
-	
-	@RequestMapping(value = "{projectKey}/{branchName}/jstree")
-	@PreAuthorize("isAuthenticated()")
-	public Collection<JsTreeNodeDTO> getJsTree(@PathVariable String projectKey, @PathVariable String branchName) {
-		
-		Project project = findProjectOrFail(projectKey);		
-		ProjectBranch branch = findProjectBranchOrFail(branchName, project);
-
-		RequirementsTree tree = requirementsTreeDAO.findByBranchId(branch.getId());
-		
-		Collection<String> ids = RequirementsTreeUtils.getRequirementsIDs(tree.getNodes());
-		
-		Collection<Requirement> requirements = Lists.newArrayList(requirementDAO.findAll(ids));
-		
-		Collection<JsTreeNodeDTO> nodes = Lists.newArrayList();
-		
-		for(TreeNode node : tree.getNodes()) {
-			
-			RequirementsJsTreeVisitor visitor = new RequirementsJsTreeVisitor(requirements);
-			node.accept(visitor);
-			nodes.add(visitor.getResult());
-			
-		}
-
-		return nodes;		
-	}
-	
-	@RequestMapping(value = "/{projectKey}/{branchName}/move/{fromID}/{toID}")
-	@Secured({ Permission.PROJECT_WRITE })
-	public RequirementsTree moveNode(@PathVariable String projectKey, @PathVariable String branchName, @PathVariable Integer fromID, @PathVariable Integer toID) {
-		
-		Project project = findProjectOrFail(projectKey);		
-		ProjectBranch branch = findProjectBranchOrFail(branchName, project);
-		
-		return gate.dispatch(new MoveRequirementTreeNodeCommand(branch, fromID, toID != 0 ? toID : null));
-	}
-	
 	@RequestMapping(value = "/{projectKey}/{branchName}/folders/add/{parentID}/{folderNodeTypeID}", method = RequestMethod.POST, consumes = "text/plain")
 	@Secured({ Permission.PROJECT_WRITE })
-	public FolderNode addTextNode(@PathVariable String projectKey, @PathVariable String branchName, @PathVariable Integer parentID, @PathVariable String folderNodeTypeID, @RequestBody String text) {
-		
-		Project project = findProjectOrFail(projectKey);		
-		ProjectBranch branch = findProjectBranchOrFail(branchName, project);
-		
-		FolderNodeType folderNodeType = folderNodeTypeDAO.findOne(folderNodeTypeID);
-		
+	public FolderNode addTextNode(@PathVariable final String projectKey, @PathVariable final String branchName, @PathVariable final Integer parentID, @PathVariable final String folderNodeTypeID, @RequestBody final String text)  {
+
+		final Project project = findProjectOrFail(projectKey);
+		final ProjectBranch branch = findProjectBranchOrFail(branchName, project);
+
+		final FolderNodeType folderNodeType = folderNodeTypeDAO.findOne(folderNodeTypeID);
+
 		return gate.dispatch(new CreateRequirementFolderNodeCommand(branch, parentID, text, folderNodeType));
 	}
-	
+
 	@RequestMapping(value = "/{projectKey}/{branchName}/folders/add/{folderNodeTypeID}", method = RequestMethod.POST, consumes = "text/plain")
 	@Secured({ Permission.PROJECT_WRITE })
-	public FolderNode addTextNode(@PathVariable String projectKey, @PathVariable String branchName, @PathVariable String folderNodeTypeID, @RequestBody String text) {
-		
+	public FolderNode addTextNode(@PathVariable final String projectKey, @PathVariable final String branchName, @PathVariable final String folderNodeTypeID, @RequestBody final String text)  {
+
 		return addTextNode(projectKey, branchName, null, folderNodeTypeID, text);
 	}
-	
-	@RequestMapping(value = "/{projectKey}/{branchName}/remove/{nodeID}")
-	@Secured({ Permission.PROJECT_WRITE })
-	public RequirementsTree removeNode(@PathVariable String projectKey, @PathVariable String branchName, @PathVariable Integer nodeID) {
-		
-		Project project = findProjectOrFail(projectKey);		
-		ProjectBranch branch = findProjectBranchOrFail(branchName, project);
-		
-		return gate.dispatch(new RemoveRequirementTreeNodeCommand(branch, nodeID));
-	}
-	
-	@RequestMapping(value = "/{projectKey}/{branchName}/folders/edit/{nodeID}", method = RequestMethod.POST, consumes = "text/plain")
-	@Secured({ Permission.PROJECT_WRITE })
-	public RequirementsTree editTextNode(@PathVariable String projectKey, @PathVariable String branchName, @PathVariable Integer nodeID, @RequestBody String text) {
-		
-		Project project = findProjectOrFail(projectKey);		
-		ProjectBranch branch = findProjectBranchOrFail(branchName, project);
-		
-		return gate.dispatch(new EditRequirementFolderNodeCommand(branch, nodeID, text));
-	}
-	
+
 	@RequestMapping(value = "/{projectKey}/{branchName}/folders/edit/type/{nodeID}/{typeID}")
 	@Secured({ Permission.PROJECT_WRITE })
-	public FolderNode changeFolderNodeType(@PathVariable String projectKey, @PathVariable String branchName, @PathVariable Integer nodeID, @PathVariable String typeID) {
-		
-		Project project = findProjectOrFail(projectKey);		
-		ProjectBranch branch = findProjectBranchOrFail(branchName, project);
-		
+	public FolderNode changeFolderNodeType(@PathVariable final String projectKey, @PathVariable final String branchName, @PathVariable final Integer nodeID, @PathVariable final String typeID)  {
+
+		final Project project = findProjectOrFail(projectKey);
+		final ProjectBranch branch = findProjectBranchOrFail(branchName, project);
+
 		return gate.dispatch(new ChangeRequirementFolderNodeTypeCommand(branch, nodeID, typeID));
 	}
-	
-	private Project findProjectOrFail(String projectKey) {
+
+	@RequestMapping(value = "/{projectKey}/{branchName}/folders/edit/{nodeID}", method = RequestMethod.POST, consumes = "text/plain")
+	@Secured({ Permission.PROJECT_WRITE })
+	public RequirementsTree editTextNode(@PathVariable final String projectKey, @PathVariable final String branchName, @PathVariable final Integer nodeID, @RequestBody final String text)  {
+
+		final Project project = findProjectOrFail(projectKey);
+		final ProjectBranch branch = findProjectBranchOrFail(branchName, project);
+
+		return gate.dispatch(new EditRequirementFolderNodeCommand(branch, nodeID, text));
+	}
+
+	@RequestMapping(value = "{projectKey}/{branchName}/jstree")
+	@PreAuthorize("isAuthenticated()")
+	public Collection<JsTreeNodeDTO> getJsTree(@PathVariable final String projectKey, @PathVariable final String branchName) {
+
+		final Project project = findProjectOrFail(projectKey);
+		final ProjectBranch branch = findProjectBranchOrFail(branchName, project);
 		
-		Project project = projectDAO.findByKey(projectKey);
-		
-		if (project == null) {
-			throw new ProjectNotFoundException();
+		final RequirementsTree tree = requirementsTreeDAO.findByBranchId(branch.getId());
+
+		final Collection<String> ids = RequirementsTreeUtils.getRequirementsIDs(tree.getNodes());
+
+		final Collection<Requirement> requirements = Lists.newArrayList(requirementDAO.findAll(ids));
+
+		final Collection<JsTreeNodeDTO> nodes = Lists.newArrayList();
+
+		for(final TreeNode node : tree.getNodes()) {
+
+			final RequirementsJsTreeVisitor visitor = new RequirementsJsTreeVisitor(requirements);
+			node.accept(visitor);
+			nodes.add(visitor.getResult());
+
 		}
 		
-		return project;
+		return nodes;
 	}
-	
-	private ProjectBranch findProjectBranchOrFail(String branchName, Project project) {
+
+	@RequestMapping(value = "{projectKey}/{branchName}/")
+	@PreAuthorize("isAuthenticated()")
+	public RequirementsTree getTree(@PathVariable final String projectKey, @PathVariable final String branchName) {
+
+		final Project project = findProjectOrFail(projectKey);
+		final ProjectBranch branch = findProjectBranchOrFail(branchName, project);
 		
-		ProjectBranch branch = projectBranchDAO.findByNameAndProjectId(branchName, project.getId());
-		
+		final RequirementsTree tree = requirementsTreeDAO.findByBranchId(branch.getId());
+
+		return tree;
+	}
+
+	@RequestMapping(value = "/{projectKey}/{branchName}/move/{fromID}/{toID}")
+	@Secured({ Permission.PROJECT_WRITE })
+	public RequirementsTree moveNode(@PathVariable final String projectKey, @PathVariable final String branchName, @PathVariable final Integer fromID, @PathVariable final Integer toID)  {
+
+		final Project project = findProjectOrFail(projectKey);
+		final ProjectBranch branch = findProjectBranchOrFail(branchName, project);
+
+		return gate.dispatch(new MoveRequirementTreeNodeCommand(branch, fromID, toID != 0 ? toID : null));
+	}
+
+	@RequestMapping(value = "/{projectKey}/{branchName}/remove/{nodeID}")
+	@Secured({ Permission.PROJECT_WRITE })
+	public RequirementsTree removeNode(@PathVariable final String projectKey, @PathVariable final String branchName, @PathVariable final Integer nodeID)  {
+
+		final Project project = findProjectOrFail(projectKey);
+		final ProjectBranch branch = findProjectBranchOrFail(branchName, project);
+
+		return gate.dispatch(new RemoveRequirementTreeNodeCommand(branch, nodeID));
+	}
+
+	private ProjectBranch findProjectBranchOrFail(final String branchName, final Project project) {
+
+		final ProjectBranch branch = projectBranchDAO.findByNameAndProjectId(branchName, project.getId());
+
 		if (branch == null) {
 			throw new ProjectBranchNotFoundException();
 		}
-		
+
 		return branch;
+	}
+
+	private Project findProjectOrFail(final String projectKey) {
+
+		final Project project = projectDAO.findByKey(projectKey);
+
+		if (project == null) {
+			throw new ProjectNotFoundException();
+		}
+
+		return project;
 	}
 }
