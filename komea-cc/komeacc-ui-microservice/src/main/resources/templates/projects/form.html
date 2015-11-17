@@ -12,9 +12,14 @@
 		<form class="form-horizontal project-form" th:object="${project}"
 			th:attr="action=@{${#strings.isEmpty(project.id)} ? '/ui/projects/new' : '/ui/projects/edit/'}"
 			method="post" id="form" action="">
+			
 			<div class="text-center">
 	            <h1 style="font-size:25px">New project</h1>
 	        </div>	
+	        <div class="alert alert-info alert-dismissible" role="alert">
+			  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			  To create a new project in <strong>KSF Command and Control</strong> you will need to provide <strong>a project's name</strong> and select all the <strong>tools</strong> that will be used in the project <i>(Foreman, Puppet, Redmine...)</i>.
+			</div>
 	        <ul class="bg-danger" th:if="${#fields.hasErrors('global')}">
           		<li th:each="err : ${#fields.errors('global')}" class="text-danger" th:text="${err}">Input is incorrect</li>
          	</ul>
@@ -37,8 +42,9 @@
 						<span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
 					</div>
 				</div>
-				<div class="form-group">
-	              <div class="col-sm-offset-3 col-sm-7">
+				<div class="form-group">		
+					<label class="col-md-3 control-label" style="padding-top: 30px;">Select the tool(s) that will be used for this project :</label>
+	              <div class="col-sm-7">	              
 	              	<ul class="app-list">
 	              		<li class="disabled" data-item="redmine">
 	              			<img th:src="@{/pictures/redmine.png}"/>
@@ -76,7 +82,7 @@
 					<label class="col-md-3 control-label" for="saveButton" />										
 					<div class="col-md-7">
 						<div class="pull-right">
-							<button id="saveButton" name="saveButton" class="btn btn-primary">Save</button>
+							<button id="saveButton" name="saveButton" class="btn btn-primary">Create project</button>
 							<a th:href="@{/ui/projects/}" id="cancelButton" name="cancelButton" class="btn btn-default">Cancel</a>
 						</div>
 					</div>
