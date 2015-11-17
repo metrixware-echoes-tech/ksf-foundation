@@ -47,16 +47,16 @@
                             <!--<button  class="btn btn-info btn-block login" type="submit">Login</button>-->
                             <div th:if="${param.error}" ><font color="red">Invalid username and password.</font></div>
                             <div th:if="${param.logout}">You have been logged out.</div>
-                            <button  class="btn btn-info btn-block login" type="submit">Login</button>
+                            <button onclick="loginForman();" class="btn btn-info btn-block login" type="submit">Login</button>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
-<!--        <div >
+        <div >
             <iframe id="formanFrame" name="formanFrame" th:src="${@foremanConfiguration.getForemanUrl()}" width="00" height="00">
             </iframe>
-        </div>-->
+        </div>
         <footer>
             <div class="container text-center">
                 <hr/>

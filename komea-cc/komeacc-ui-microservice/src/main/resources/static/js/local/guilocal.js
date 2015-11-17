@@ -16,7 +16,6 @@ function loginForman() {
 //    alert('login '+login );
     IE = window.ActiveXObject ? true : false;
     MOZ = window.sidebar ? true : false;
-//    alert(pageData.foremanUrl)
 
     if (IE)
     {
@@ -27,31 +26,21 @@ function loginForman() {
     }
 //
     var keyAuthen = contenu_iframe[0].value;
-//    var keyAuthen = document.getElementById("key").value;
 //    alert(keyAuthen);
-//    var frameContent = document.getElementById('formanFrame').contentDocument.body.innerHTML;
 
-//    $.get("https://https://passerelle:8443/users/login", function (data) {
-////        
-////        
-//        alert(data);
-//    });
 
 
     var parametres = {"utf8": '✓', "login[login]": login, "login[password]": password, "authenticity_token": keyAuthen};
     post_en_url(pageData.foremanUrl + "/users/login", parametres);
-//        post_en_url("https://10.1.10.9/users/login", parametres);
-//    monobjet = window.frames['formanFrame'].document;
-//    alert(monobjet);
-//    alert('dd');
-    }
 
-            function post_en_url(url, parametres) {
+}
+
+function post_en_url(url, parametres) {
 //Création dynamique du formulaire
     var form = document.createElement('form');
     form.setAttribute('method', 'post');
     form.setAttribute('action', url);
-    form.setAttribute('id','formForeman')
+    form.setAttribute('id', 'formForeman')
     form.setAttribute('accept-charset', 'UTF-8');
 //Ajout des paramètres sous forme de champs cachés
     for (var cle in parametres) {
@@ -65,19 +54,11 @@ function loginForman() {
     }
 //Ajout du formulaire à la page et soumission du formulaire
     document.body.appendChild(form);
-    $("#formForeman").ajaxSubmit({url: url, type: 'post'})
-//    var result = form.submit();
-//    alert(result)
-        }
+    $(form).ajaxSubmit()
+}
 
 ;
 
-
-//$(document).ready(function ()
-//{
-//    var idIframe = $('#formanFrame');
-//    alert(idIframe.contents().find("div").html());
-//});
 
 
 
