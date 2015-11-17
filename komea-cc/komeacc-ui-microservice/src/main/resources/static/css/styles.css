@@ -70,3 +70,8 @@
 html, body, iframe {
 	height: 100%;
 }
+
+.project-list-tools img {
+	width: 36px;
+	margin-right: 10px;
+}

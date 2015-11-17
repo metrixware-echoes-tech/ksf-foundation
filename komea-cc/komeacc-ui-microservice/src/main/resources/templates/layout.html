@@ -72,6 +72,11 @@
 		<script th:src="@{/js/jquery.resize.js}" src="../static/js/jquery.resize.js" type="text/javascript" />
 		<!-- BootStrap -->
 		<script th:src="@{/js/bootstrap.min.js}" src="../static/js/bootstrap.min.js" type="text/javascript" />
+		<script type="text/javascript">
+			$(function () {
+			  $('[data-toggle="tooltip"]').tooltip();
+			});
+		</script>
 		<div layout:fragment="footer" />
 	</body>
 </html>
