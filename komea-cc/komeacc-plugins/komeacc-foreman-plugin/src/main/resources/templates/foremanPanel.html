@@ -15,7 +15,7 @@
 			<td th:text="${target.getName()}"></td>
 			<td th:text="${target.getOperatingSystemName()}"></td>
 			<td class="text-right">
-				<!-- a th:href="'/ui/foreman/targets/instantiate?projectId=' + ${projectId} + '&amp;targetId=' + ${target.getId()}" class="btn btn-default glyphicon glyphicon-play" role="button">&nbsp;Instantiate</a -->
+				<a class="btn btn-default glyphicon glyphicon-pencil" disabled="disabled">&nbsp;Edit</a>				
 				<button type="button" class="btn btn-default glyphicon glyphicon-play btn-instantiate" role="button" th:attr="data-targetId=${target.getId()}" data-toggle="modal" data-target="#instantiateHostModal">&nbsp;Instantiate</button>				
 			</td>
 		</tr>
