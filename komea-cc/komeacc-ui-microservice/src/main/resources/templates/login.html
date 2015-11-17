@@ -37,20 +37,24 @@
                     <div class="avatar">
                         <img th:src="@{/pictures/KSF-logo.png}" width="120" /> 
                     </div>
+
                     <div class="form-box">
                         <form   th:action="@{/login}" method="post">
                             <input onClick="this.select();" name="username"  id="username" type="text" placeholder="username"></input>
                             <input onClick="this.select();" type="password" name="password" id="password" placeholder="password"/>
+                            <!--<input onClick="this.select();" type="text" name="key" id="key" placeholder="key"/>-->
                             <!--<input type="checkbox" name="remember-me" id="remember-me">Remember me</input>-->  
                             <!--<button  class="btn btn-info btn-block login" type="submit">Login</button>-->
-                            <button onclick="loginForman();" class="btn btn-info btn-block login" type="submit">Login</button>
+                            <div th:if="${param.error}" ><font color="red">Invalid username and password.</font></div>
+                            <div th:if="${param.logout}">You have been logged out.</div>
+                            <button  class="btn btn-info btn-block login" type="submit">Login</button>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
 <!--        <div >
-            <iframe id="formanFrame" name="formanFrame" src="https://10.1.10.9" width="00" height="00">
+            <iframe id="formanFrame" name="formanFrame" th:src="${@foremanConfiguration.getForemanUrl()}" width="00" height="00">
             </iframe>
         </div>-->
         <footer>
@@ -62,18 +66,23 @@
                 </p>
             </div>
         </footer>
-	<script type="text/javascript" th:inline="text">
-		var pageData = {
-				'foremanUrl': '[[${@foremanConfiguration.getForemanUrl()}]]'
-				
-		}
+        <script type="text/javascript" th:inline="text">
+            var pageData = {
+                'foremanUrl': '[[${@foremanConfiguration.getForemanUrl()}]]'
 
-	</script>
-        <script th:src="@{/js/local/guilocal.js}" src="../static/js/local/guilocal.js" type="text/javascript" />
+            }
+
+        </script>
+
+
+
         <script th:src="@{/js/jquery.min.js}" src="../static/js/jquery.min.js" type="text/javascript" />
         <script th:src="@{/js/jquery-ui.min.js}" src="../static/js/jquery-ui.min.js" type="text/javascript" />
         <script th:src="@{/js/jquery.resize.js}" src="../static/js/jquery.resize.js" type="text/javascript" />
-        <!-- BootStrap -->
         <script th:src="@{/js/bootstrap.min.js}" src="../static/js/bootstrap.min.js" type="text/javascript" />
+        <script th:src="@{/js/local/jquery.form.min.js}" src="../static/js/local/gjquery.form.min.js" type="text/javascript" />
+        <script th:src="@{/js/local/guilocal.js}" src="../static/js/local/guilocal.js" type="text/javascript" />
+        <!-- BootStrap -->
+
     </body>
 </html>
