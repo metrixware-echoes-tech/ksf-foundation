@@ -30,6 +30,18 @@
        </div>
        <form action="/ui/foreman/targets/new" class="form-horizontal" id="new_target" method="post" role="form" data-toggle="validator">
        	<div class="modal-body">   	 
+           <div class="alert alert-info alert-dismissible" role="alert">
+			  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			  This widget allows to create a <strong>Target</strong>. A Target is a configuration that will be used afterward to create new VMs instantly. <br/>
+			  To create a target, you will need to specify :
+			  <ul>
+			  	<li><strong>a Name</strong> : This is how you want to call the Target.</li>
+			  	<li><strong>an Environment</strong> : This is the set of Puppet modules you want to apply on the Target.</li>
+			  	<li><strong>an Operating System</strong> : This is the Operating System you want for the future VM.</li>
+			  	<li><strong>a Compute Profile</strong> : This is the kind of VM you want to create.</li>
+			  	<li><strong>the parameters</strong> for the specific environment you choosed. The field is prefilled with the default values from the Puppet modules embedded in the selected Environment.</li>
+			  </ul>
+			</div>
            <div class="form-group">
              <label class="control-label col-sm-2" for="name" required="true">Name:</label>
              <div class="col-sm-10">
@@ -66,7 +78,7 @@
            </div>
            <div class="form-group">
              <div class="col-sm-12">
-               <textarea class="form-control" id="puppetConfiguration" name="puppetConfiguration" rows="15"></textarea>
+               <textarea class="form-control" id="puppetConfiguration" name="puppetConfiguration" rows="15" placeholder="In this text field, you can set the parameters for the specific environment you choosed. The field is prefilled with the default values from the Puppet modules embedded in the selected Environment."></textarea>
              </div>
            </div>           
            <input name="projectId" type="hidden" th:value="${projectId}"/>        
