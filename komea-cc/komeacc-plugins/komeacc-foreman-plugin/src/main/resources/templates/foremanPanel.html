@@ -132,11 +132,11 @@
 		if (sourceId != "") {
 			$.get("/rest/foreman/environments/"+sourceId, function(data) {
 				if (data) {
-					$('#env_configuration').text(data.configuration);
+					$('#env_configuration').val(data.configuration);
 				}
 			});
 		}else{
-			$('#env_configuration').text("");
+			$('#env_configuration').val("");
 		}
 	}
 	

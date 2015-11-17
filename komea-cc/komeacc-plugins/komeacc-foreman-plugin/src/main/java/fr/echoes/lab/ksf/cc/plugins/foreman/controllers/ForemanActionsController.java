@@ -167,14 +167,14 @@ public class ForemanActionsController {
 
 
 		final String puppetConfiguration = target.getPuppetConfiguration();
-		LOGGER.info("[puppet] conf: " + puppetConfiguration);
+		LOGGER.info("[puppet] conf: {}", puppetConfiguration);
 
 		try {
 			final Host host = ForemanHelper.createHost(this.url, this.username, this.password, name, "1", "1", project.getName(), environment.getName(), Integer.parseInt(target.getOperationSystemId()), 1, target.getPuppetConfiguration());
 			final IForemanApi api = ForemanClient.createApi(this.url, this.username, this.password);
 			api.hostPower(host.id, "start");
 		} catch (final Exception e) {
-			LOGGER.error("[foreman] Host creation failed " + puppetConfiguration);
+			LOGGER.error("[foreman] Host creation failed : {}", puppetConfiguration);
 			errorHandler.registerError("Failed to instantiate target. Please verify your Foreman configuration.");
 		}
 
