@@ -15,7 +15,8 @@
 			<td th:text="${target.getName()}"></td>
 			<td th:text="${target.getOperatingSystemName()}"></td>
 			<td class="text-right">
-				<a th:href="'/ui/foreman/targets/instantiate?projectId=' + ${projectId} + '&amp;targetId=' + ${target.getId()}" class="btn btn-default glyphicon glyphicon-play" role="button">&nbsp;Instantiate</a>
+				<!-- a th:href="'/ui/foreman/targets/instantiate?projectId=' + ${projectId} + '&amp;targetId=' + ${target.getId()}" class="btn btn-default glyphicon glyphicon-play" role="button">&nbsp;Instantiate</a -->
+				<button type="button" class="btn btn-default glyphicon glyphicon-play btn-instantiate" role="button" th:attr="data-targetId=${target.getId()}" data-toggle="modal" data-target="#instantiateHostModal">&nbsp;Instantiate</button>				
 			</td>
 		</tr>
 	</tbody>
@@ -116,8 +117,46 @@
     </div>
   </div>
 </div>
+
+
+ <div aria-hidden="true" aria-labelledby="myModalLabel" class="modal fade in" id="instantiateHostModal" role="dialog" tabindex="-1" style="padding-left: 15px;">
+   <div class="modal-dialog">
+     <div class="modal-content">
+       <div class="modal-header">
+         <button aria-hidden="true" class="close" data-dismiss="modal" type="button">&times;</button>
+         <h4 class="modal-title" id="myModalLabel">Instantiate Host</h4>
+       </div>
+       <div class="modal-body">
+         <form action="/ui/foreman/targets/instantiate" class="form-horizontal" id="instantiate_host" method="post" role="form"  data-toggle="validator">
+           <div class="form-group">
+            <label class="control-label col-sm-2" for="hostName">Name</label>
+              <div class="col-sm-10">
+                <input class="form-control" id="hostName" name="hostName" placeholder="Host Name" type="text" required="required"/>
+              </div>
+            <input name="projectId" type="hidden" th:value="${projectId}"/>
+            <input name="targetId" id="targetId" type="hidden" value="" />
+           </div>
+	       <div class="modal-footer">
+    	     <button class="btn btn-default" data-dismiss="modal" type="button">Cancel</button>
+        	 <button class="btn btn-primary" type="submit">Instantiate</button>
+       		</div>
+         </form>
+       </div>
+     </div>
+   </div>
+ </div>
  
 <script type="text/javascript">
+
+	document.addEventListener("DOMContentLoaded", function(event) { 
+	
+		$(".btn-instantiate").click(function() {
+			 var targetId = $(this).attr("data-targetId");
+			 alert
+			 $("#targetId").attr("value", targetId);
+		});	
+
+	});	
 
 	function displayCreateTargetModal() {
 		$('#createTargetModal').modal('show');

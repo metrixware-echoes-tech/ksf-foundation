@@ -57,7 +57,7 @@ public class ForemanActionsController {
 
 	@Autowired
 	private IForemanTargetDAO targetDAO;
-	
+
 	@Autowired
 	private ForemanErrorHandlingService errorHandler;
 
@@ -92,19 +92,19 @@ public class ForemanActionsController {
 						puppetClient.installModule(moduleName, moduleVersion, envName);
 					} catch (final PuppetException e) {
 						LOGGER.error("Failed to create environment " + envName, e);
-						errorHandler.registerError("Failed to create Puppet environment.");
+						this.errorHandler.registerError("Failed to create Puppet environment.");
 					}
 			    }
 			}
 		} catch (final IOException e) {
 			LOGGER.error("Failed to create environment " + envName, e);
-			errorHandler.registerError("Failed to create Puppet environment. Error parsing configuration file.");
+			this.errorHandler.registerError("Failed to create Puppet environment. Error parsing configuration file.");
 		}
 		try {
 			ForemanHelper.importPuppetClasses(this.url, this.username, this.password, this.smartProxyId);
 		} catch (final Exception e) {
 			LOGGER.error("[foreman] Failed to import puppet classes.");
-			errorHandler.registerError("Failed to import Puppet classes.");
+			this.errorHandler.registerError("Failed to import Puppet classes.");
 		}
 	}
 
@@ -133,8 +133,13 @@ public class ForemanActionsController {
 	}
 
 
-	@RequestMapping(value = "/ui/foreman/targets/instantiate", method = RequestMethod.GET)
-	public String instantiateTarget(@RequestParam("projectId") String projectId, @RequestParam("targetId") String targetId) {
+	@RequestMapping(value = "/ui/foreman/targets/instantiate", method = RequestMethod.POST)
+	public String instantiateTarget(@RequestParam("projectId") String projectId, @RequestParam("hostName") String hostName, @RequestParam("targetId") String targetId) {
+
+
+		LOGGER.info("[puppet] hostName: " + hostName);
+		LOGGER.info("[puppet] targetId: " + targetId);
+
 		final Project project = this.projectDAO.findOne(projectId);
 
 		final ForemanTarget target = this.targetDAO.findOne(targetId);
@@ -152,7 +157,7 @@ public class ForemanActionsController {
 			api.hostPower(host.id, "start");
 		} catch (final Exception e) {
 			LOGGER.error("[foreman] Host creation failed " + puppetConfiguration);
-			errorHandler.registerError("Failed to instantiate target. Please verify your Foreman configuration.");
+			this.errorHandler.registerError("Failed to instantiate target. Please verify your Foreman configuration.");
 		}
 
 		return "redirect:/ui/projects/"+project.getKey();
