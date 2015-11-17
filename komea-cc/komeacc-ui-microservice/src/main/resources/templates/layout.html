@@ -56,6 +56,23 @@
     	</header>
         <!-- Main content -->
         <div layout:fragment="content" />
+		<!-- Loading Splash Screen -->
+		<aside class="loading-screen hidden" style="position:fixed; top:0; right:0; bottom:0; left:0; z-index:9999">
+			<div class="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4" style="position:absolute; top:50%; margin-top:-7em">
+				<div class="page-header">
+					<i class="text-primary fa fa-spin fa-fw pull-left fa-5x fa-spinner" style="text-shadow: 0px 0px 0.2ex;"></i>
+					<hgroup class="" style="text-shadow: 0px 0px 0.1ex;">
+						<h1 class="">
+							<span class="loading-screen-message">Loading...</span><br/>
+							<small></small>
+						</h1>
+					</hgroup>
+				</div>
+				<p class="loading-status text-info" style="text-align:center">
+					Page is loading, please wait. This may take up to several minutes.
+				</p>
+			</div>
+		</aside>
         <!-- Footer -->
         <footer>
 	      <div class="container text-center">
@@ -76,6 +93,19 @@
 			$(function () {
 			  $('[data-toggle="tooltip"]').tooltip();
 			});
+			function displayLoadingScreen(message) {
+				$('.content').addClass('hidden');
+				$('footer').addClass('hidden');
+				if (message) {
+					$('.loading-screen-message').text(message);
+				}
+				$('.loading-screen').removeClass('hidden');
+			}
+			function hideLoadingScreen() {
+				$('.loading-screen').addClass('hidden');
+				$('.content').removeClass('hidden');
+				$('footer').removeClass('hidden');
+			}
 		</script>
 		<div layout:fragment="footer" />
 	</body>
