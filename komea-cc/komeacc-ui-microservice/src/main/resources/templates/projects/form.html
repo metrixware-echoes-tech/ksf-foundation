@@ -9,6 +9,7 @@
 <body>
 	
 	<div layout:fragment="content">	
+		<div class="content">
 		<form class="form-horizontal project-form" th:object="${project}"
 			th:attr="action=@{${#strings.isEmpty(project.id)} ? '/ui/projects/new' : '/ui/projects/edit/'}"
 			method="post" id="form" action="">
@@ -89,9 +90,15 @@
 				</div>
 			</fieldset>
 		</form>
+		</div>
 	</div>
 	<div layout:fragment="footer">	
 		<script type="text/javascript">
+			$(document).ready(function() {
+				$('#saveButton').click(function(){
+					displayLoadingScreen('Creating project...');
+				});
+			});
 			/*$(document).ready(function() {
 				$('.app-list li').click(function() {
 					if ($(this).hasClass('disabled')) {
