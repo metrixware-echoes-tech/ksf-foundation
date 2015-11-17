@@ -6,10 +6,7 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Environment {
+public class PuppetClassParameters {
 
-	@JsonProperty("name") public String name;
-	@JsonProperty("id") public Integer id;
-	@JsonProperty("puppetclasses") public List<PuppetClass> puppetClasses = null;
-
+    @JsonProperty("results") public List<PuppetClassParameter> results = null;
 }

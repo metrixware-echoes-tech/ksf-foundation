@@ -1,15 +1,12 @@
 package fr.echoes.lab.foremanapi.model;
 
-import java.util.List;
-
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Environment {
+public class PuppetClass {
 
+	@JsonProperty("id") public String id;
 	@JsonProperty("name") public String name;
-	@JsonProperty("id") public Integer id;
-	@JsonProperty("puppetclasses") public List<PuppetClass> puppetClasses = null;
-
+	@JsonProperty("module_name") public String module_name;
 }

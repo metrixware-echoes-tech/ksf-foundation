@@ -14,6 +14,7 @@ import javax.ws.rs.core.MediaType;
 
 import fr.echoes.lab.foremanapi.model.ComputeProfiles;
 import fr.echoes.lab.foremanapi.model.ComputeResources;
+import fr.echoes.lab.foremanapi.model.Environment;
 import fr.echoes.lab.foremanapi.model.Environments;
 import fr.echoes.lab.foremanapi.model.Filter;
 import fr.echoes.lab.foremanapi.model.FilterWrapper;
@@ -26,6 +27,7 @@ import fr.echoes.lab.foremanapi.model.HostWrapper;
 import fr.echoes.lab.foremanapi.model.Hostgroups;
 import fr.echoes.lab.foremanapi.model.OperatingSystems;
 import fr.echoes.lab.foremanapi.model.Permissions;
+import fr.echoes.lab.foremanapi.model.PuppetClassParameters;
 import fr.echoes.lab.foremanapi.model.PuppetClasses;
 import fr.echoes.lab.foremanapi.model.Role;
 import fr.echoes.lab.foremanapi.model.RoleWrapper;
@@ -181,6 +183,20 @@ public interface IForemanApi {
 	HostPowerController.PowerStatus hostPower(
 			@PathParam("id") String id,
 			String powerAction);
+
+
+	@GET
+	@Path("/api/environments/{environment_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	Environment getEnvironment(
+			@PathParam("environment_id") Integer environment_id);
+
+	@GET
+	@Path("/api/puppetclasses/{puppet_class_id}/smart_class_parameters")
+	@Produces(MediaType.APPLICATION_JSON)
+	PuppetClassParameters getPuppetClassParameters(
+			@PathParam("puppet_class_id") String puppet_class_id);
+
 
 
 }
