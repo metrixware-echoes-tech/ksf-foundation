@@ -15,7 +15,7 @@ function loginForman() {
 //    alert('login '+login );
     IE = window.ActiveXObject ? true : false;
     MOZ = window.sidebar ? true : false;
-    alert(pageData.foremanUrl)
+//    alert(pageData.foremanUrl)
 
 //    if (IE)
 //    {
