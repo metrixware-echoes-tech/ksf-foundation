@@ -3,9 +3,6 @@
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout"
       >
-    <head>
-        <title>Home</title>
-    </head>
     <body>
 
         <div layout:fragment="content">	
@@ -21,6 +18,8 @@
                                 <th>Name</th>
                                 <th>Owner</th>
                                 <th>Tools</th>
+                                <th>Actions</th>
+                                <th></th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -34,6 +33,12 @@
                             		<img src="/pictures/foreman.png" alt="Foreman" data-toggle="tooltip" data-placement="bottom" title="Foreman" />
                             		<img src="/pictures/puppet.png" alt="Puppet" data-toggle="tooltip" data-placement="bottom" title="Puppet" />
                             	</td>
+                            	<td>
+                            		<a th:href="@{/ui/projects/}+${prod.project.key}" class="btn btn-primary">
+                            			<span class="glyphicon glyphicon-eye-open"></span> Display
+                            		</a>
+                            	</td>
+                            	<td></td>
                             	<td></td>
                             </tr>
                         </tbody>
