@@ -11,8 +11,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.ObjectWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,6 +34,8 @@ import fr.echoes.lab.foremanapi.model.NewHost;
 import fr.echoes.lab.foremanapi.model.NewRole;
 import fr.echoes.lab.foremanapi.model.NewUser;
 import fr.echoes.lab.foremanapi.model.Permissions;
+import fr.echoes.lab.foremanapi.model.PuppetClassParameter;
+import fr.echoes.lab.foremanapi.model.PuppetClassParameters;
 import fr.echoes.lab.foremanapi.model.Role;
 import fr.echoes.lab.foremanapi.model.RoleWrapper;
 import fr.echoes.lab.foremanapi.model.Roles;
@@ -274,11 +279,49 @@ public class ForemanHelper {
 		return null;
 	}
 
+
+
 	public static void importPuppetClasses(String url, String adminUserName,
 			String password, String smartProxyId) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
 		final IForemanApi api = ForemanClient.createApi(url, adminUserName, password);
 		api.importPuppetClasses(smartProxyId);
 	}
 
+	public static String getModulesPuppetClassParameters(String url, String adminUserName, String password, String environmentName) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException, JsonGenerationException, JsonMappingException, IOException {
+		final IForemanApi api = ForemanClient.createApi(url, adminUserName, password);
+		final Integer environmentId = findEnvironmentId(api, environmentName);
+
+
+		final Environment environment = api.getEnvironment(environmentId);
+
+		final Modules modules = new Modules();
+
+		for (final fr.echoes.lab.foremanapi.model.PuppetClass puppetClass : environment.puppetClasses) {
+			final Module module = modules.getOrCreateModule(puppetClass.module_name);
+			final PuppetClass pc = module.getOrCreatePuppetClass(puppetClass.name);
+			pc.setId(puppetClass.id);
+		}
+
+
+		for (final Module module : modules.modules.values()) {
+			for (final PuppetClass puppetClass : module.puppetClasses.values()) {
+				final PuppetClassParameters puppetClassParameters = api.getPuppetClassParameters(puppetClass.id);
+				for (final PuppetClassParameter puppetClassParameter : puppetClassParameters.results) {
+					final Parameter parameter = puppetClass.getOrCreateParameter(puppetClassParameter.parameter);
+					parameter.setId(puppetClassParameter.id);
+					parameter.setValue(puppetClassParameter.default_value);
+					parameter.setOverride(puppetClassParameter.override);
+				}
+			}
+		}
+
+		final ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+		return ow.writeValueAsString(modules);
+	}
+
+
+	public static void main(String[] args) {
+
+	}
 
 }

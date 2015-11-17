@@ -182,7 +182,7 @@ public class ForemanActionsController {
 			api.hostPower(host.id, "start");
 		} catch (final Exception e) {
 			LOGGER.error("[foreman] Host creation failed : {}", puppetConfiguration);
-			errorHandler.registerError("Failed to instantiate target. Please verify your Foreman configuration.");
+			this.errorHandler.registerError("Failed to instantiate target. Please verify your Foreman configuration.");
 		}
 
 

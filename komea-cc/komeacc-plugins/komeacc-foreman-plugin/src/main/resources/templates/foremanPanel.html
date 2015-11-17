@@ -39,7 +39,8 @@
            <div class="form-group">
              <label class="control-label col-sm-2" for="source">Environment</label>
              <div class="col-sm-10">
-               <select class="form-control" id="environment" name ="environment">
+               <select class="form-control" id="environment" name ="environment" onchange="selectTargetEnvironment()">
+               		<option value=""></option>
 					<option th:each="env : ${environments}" th:value="${env.id}" th:text="${env.name}"></option>
                </select>
              </div>
@@ -165,6 +166,20 @@
 	function displayCreateEnvModal() {
 		$('#createEnvModal').modal('show');
 	}
+	
+	function selectTargetEnvironment() {
+		var sourceId = $('#environment').val();
+		if (sourceId != "") {
+		
+			$.get("/rest/foreman/puppet_class_parameters/"+sourceId, function(data) {
+				if (data) {
+					$('#puppetConfiguration').val(data);
+				}
+			});
+		}else{
+			$('#env_configuration').val("");
+		}
+	}	
 	
 	function selectSource() {
 		var sourceId = $('#env_source').val();
