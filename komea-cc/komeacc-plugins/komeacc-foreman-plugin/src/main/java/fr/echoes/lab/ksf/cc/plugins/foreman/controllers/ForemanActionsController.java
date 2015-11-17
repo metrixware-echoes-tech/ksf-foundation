@@ -101,11 +101,17 @@ public class ForemanActionsController {
         try {
             final JsonNode rootNode = mapper.readTree(configuration);
             final JsonNode modulesNode = rootNode.get("modules");
+            if (modulesNode == null)  {
+            	return true;
+            }
             if (modulesNode.isArray()) {
                 final PuppetClient puppetClient = new PuppetClient();
                 for (final JsonNode moduleNode : modulesNode) {
-                    final String moduleName = moduleNode.path("name").asText();
-                    final String moduleVersion = moduleNode.path("version").asText();
+                    final String moduleName = moduleNode.path("name").asText(); // name is required
+                    if (moduleName == null) {
+                    	return false;
+                    }
+                    final String moduleVersion = moduleNode.path("version").asText(); // version is optional
                     try {
                         puppetClient.installModule(moduleName, moduleVersion, envName);
                     } catch (final PuppetException e) {

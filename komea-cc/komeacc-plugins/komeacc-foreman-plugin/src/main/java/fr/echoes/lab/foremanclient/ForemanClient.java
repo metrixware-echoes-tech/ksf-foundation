@@ -145,7 +145,6 @@ public class ForemanClient {
         return target.proxy(IForemanApi.class);
 	}
 
-
 	private static CredentialsProvider createCredentialsProvider(String username, String password) {
 		final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
 		credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(username, password));

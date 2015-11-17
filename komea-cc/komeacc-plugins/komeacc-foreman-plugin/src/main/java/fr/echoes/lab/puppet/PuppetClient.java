@@ -24,7 +24,6 @@ public class PuppetClient {
 	private static final String OPT_ENVIRONMENT = "--environment";
 	private static final String OPT_VERSION = "--version";
 
-//	private final List<IPuppetClientListener> listeners = new ArrayList<>();
 
 	public PuppetClient() {
 
@@ -72,24 +71,8 @@ public class PuppetClient {
 			throw new PuppetException(e);
 		}
 
-//		notifyListeners(name, version, environment);
+
 	}
 
-//	private void notifyListeners(String name, String version, String environment) {
-//		for (final IPuppetClientListener listener : this.listeners) {
-//			listener.moduleInstalled(name, version, environment);
-//		}
-//	}
-//
-//	public void addListener(IPuppetClientListener listener) {
-//		if (listener != null && !this.listeners.contains(listener)) {
-//			this.listeners.add(listener);
-//		}
-//	}
-//
-//	public void removeListener(IPuppetClientListener listener) {
-//		if (listener != null) {
-//			this.listeners.remove(listener);
-//		}
-//	}
+
 }

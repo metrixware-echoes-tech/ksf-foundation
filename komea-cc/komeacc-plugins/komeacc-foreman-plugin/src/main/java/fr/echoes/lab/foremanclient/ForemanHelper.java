@@ -279,12 +279,10 @@ public class ForemanHelper {
 		return null;
 	}
 
-
-
 	public static void importPuppetClasses(String url, String adminUserName,
 			String password, String smartProxyId) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
 		final IForemanApi api = ForemanClient.createApi(url, adminUserName, password);
-		api.importPuppetClasses(smartProxyId);
+		api.importPuppetClasses(smartProxyId, "{}"); // Doesn't work without a request body as second parameter ("{}")
 	}
 
 	public static String getModulesPuppetClassParameters(String url, String adminUserName, String password, String environmentName) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException, JsonGenerationException, JsonMappingException, IOException {
@@ -320,8 +318,5 @@ public class ForemanHelper {
 	}
 
 
-	public static void main(String[] args) {
-
-	}
 
 }
