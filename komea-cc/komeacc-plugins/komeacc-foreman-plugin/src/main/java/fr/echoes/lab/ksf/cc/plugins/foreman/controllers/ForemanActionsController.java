@@ -1,6 +1,12 @@
 package fr.echoes.lab.ksf.cc.plugins.foreman.controllers;
 
 import java.io.IOException;
+import java.util.Set;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.JsonNode;
@@ -70,11 +76,19 @@ public class ForemanActionsController {
 		env.setName(name);
 		env.setConfiguration(configuration);
 		env.setProjectId(projectId);
-
-		this.environmentDAO.save(env);
-
-		createEnvironment(name, configuration);
-
+		
+		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+	    Validator validator = factory.getValidator();
+	    Set<ConstraintViolation<ForemanEnvironnment>> errors = validator.validate(env);
+	    
+	    if (errors.size() == 0) {
+	    	this.environmentDAO.save(env);
+			createEnvironment(name, configuration);
+	    }else{
+	    	LOGGER.error("Failed to create environment {}", errors);
+			errorHandler.registerError("Invalid data provided. Failed to create environment.");
+	    }
+	    
 		return "redirect:/ui/projects/"+project.getKey();
 	}
 
@@ -91,7 +105,7 @@ public class ForemanActionsController {
 			        try {
 						puppetClient.installModule(moduleName, moduleVersion, envName);
 					} catch (final PuppetException e) {
-						LOGGER.error("Failed to create environment " + envName, e);
+						LOGGER.error("Failed to create environment {} : {}", envName, e);
 						errorHandler.registerError("Failed to create Puppet environment.");
 					}
 			    }
@@ -126,8 +140,17 @@ public class ForemanActionsController {
 
 		final ForemanEnvironnment environment = this.environmentDAO.findOne(env);
 		foremanTarget.setEnvironment(environment);
+		
+		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+	    Validator validator = factory.getValidator();
+	    Set<ConstraintViolation<ForemanTarget>> errors = validator.validate(foremanTarget);
 
-		this.targetDAO.save(foremanTarget);
+	    if (errors.size() == 0) {
+	    	this.targetDAO.save(foremanTarget);
+	    }else{
+	    	LOGGER.error("[foreman] Failed to create target : {}", errors);
+			errorHandler.registerError("Invalid data provided. Failed to create target.");
+	    }
 
 		return "redirect:/ui/projects/"+project.getKey();
 	}
