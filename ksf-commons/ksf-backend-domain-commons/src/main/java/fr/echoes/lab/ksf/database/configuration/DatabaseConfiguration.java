@@ -7,8 +7,10 @@ import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.stereotype.Component;
 
 /**
@@ -16,8 +18,9 @@ import org.springframework.stereotype.Component;
  * @author sleroy
  */
 @Profile("default")
-@Component
+@Configuration
 @ConfigurationProperties(prefix = "mongo")
+@EnableMongoRepositories(basePackages = {"fr.echoes.lab", "com.tocea"})
 class DatabaseConfiguration extends AbstractMongoConfiguration {
 
     private String host;
