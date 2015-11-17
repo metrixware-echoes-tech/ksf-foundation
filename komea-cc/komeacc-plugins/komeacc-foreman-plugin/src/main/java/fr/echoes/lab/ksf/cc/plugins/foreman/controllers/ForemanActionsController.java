@@ -55,6 +55,9 @@ public class ForemanActionsController {
     @Value("${ksf.foreman.host.computeResourceId}")
     private String computeResourceId;
 
+    @Value("${ksf.puppet.modulepath}")
+    private String puppetModulePath;
+
     @Autowired
     private IProjectDAO projectDAO;
 
@@ -113,7 +116,7 @@ public class ForemanActionsController {
                     }
                     final String moduleVersion = moduleNode.path("version").asText(); // version is optional
                     try {
-                        puppetClient.installModule(moduleName, moduleVersion, envName);
+                        puppetClient.installModule(moduleName, moduleVersion, envName, this.puppetModulePath);
                     } catch (final PuppetException e) {
                         success = false;
                         LOGGER.error("Failed to create environment {} : {}", envName, e);

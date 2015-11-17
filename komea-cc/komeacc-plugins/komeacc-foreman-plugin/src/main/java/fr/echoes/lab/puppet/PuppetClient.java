@@ -23,6 +23,7 @@ public class PuppetClient {
 	private static final String INSTALL = "install";
 	private static final String OPT_ENVIRONMENT = "--environment";
 	private static final String OPT_VERSION = "--version";
+	private static final String OPT_MODULE_PATH = "--modulepath";
 
 
 	public PuppetClient() {
@@ -37,7 +38,7 @@ public class PuppetClient {
 	 * @param environment the destination environment . can be {@code null}.
 	 * @throws PuppetException
 	 */
-	public void installModule(String name, String version, String environment) throws PuppetException {
+	public void installModule(String name, String version, String environment, String modulePath) throws PuppetException {
 		if (name == null) {
 			throw new NullPointerException("Puppet module name cannot be null");
 		}
@@ -56,6 +57,10 @@ public class PuppetClient {
 		if (environment != null) {
 			commandLine.add(OPT_ENVIRONMENT);
 			commandLine.add(environment);
+		}
+		if (modulePath != null) {
+			commandLine.add(OPT_MODULE_PATH);
+			commandLine.add(modulePath);
 		}
 
 		final ExternalProcessLauncher processLauncher = new ExternalProcessLauncher(commandLine);
