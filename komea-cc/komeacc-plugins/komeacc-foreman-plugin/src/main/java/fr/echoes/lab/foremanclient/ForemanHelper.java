@@ -200,7 +200,7 @@ public class ForemanHelper {
 		api.updateUser(user.id, userWrapper);
 	}
 
-	public static Host createHost(String url, String adminUserName, String password, String hostName, String computeResourceId, String computeProfileId, String hostGroupName, String environmentName, Integer operatingSystemId, Integer architectureId, String puppetConfiguration) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
+	public static Host createHost(String url, String adminUserName, String password, String hostName, String computeResourceId, String computeProfileId, String hostGroupName, String environmentName, String operatingSystemId, String architectureId, String puppetConfiguration, String domainId, String rootPassword) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
 
 		Host host = null;
 
@@ -209,10 +209,12 @@ public class ForemanHelper {
 		newHost.name = hostName;
 		newHost.compute_resource_id = computeResourceId;
 		newHost.compute_profile_id = computeProfileId;
-		newHost.hostgroup_id = findHostGroupId(api, hostGroupName);
-		newHost.environment_id = findEnvironmentId(api, environmentName);
+		newHost.hostgroup_id = String.valueOf(findHostGroupId(api, hostGroupName));
+		newHost.environment_id = String.valueOf(findEnvironmentId(api, environmentName));
 		newHost.operatingsystem_id = operatingSystemId;
 		newHost.architecture_id = architectureId;
+		newHost.domain_id = domainId;
+		newHost.root_pass = rootPassword;
 
 
 		final HostWrapper hostWrapper = new HostWrapper();

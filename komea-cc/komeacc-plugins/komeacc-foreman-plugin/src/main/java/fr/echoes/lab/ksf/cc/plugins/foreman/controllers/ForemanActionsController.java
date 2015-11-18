@@ -58,6 +58,12 @@ public class ForemanActionsController {
     @Value("${ksf.puppet.modulepath}")
     private String puppetModulePath;
 
+    @Value("${ksf.foreman.host.domainId}")
+    private String domainId;
+
+    @Value("${ksf.foreman.host.rootPassword}")
+    private String rootPassword;
+
     @Autowired
     private IProjectDAO projectDAO;
 
@@ -186,7 +192,7 @@ public class ForemanActionsController {
 		LOGGER.info("[puppet] conf: {}", puppetConfiguration);
 
 		try {
-			final Host host = ForemanHelper.createHost(this.url, this.username, this.password, name, "1", "1", project.getName(), environment.getName(), Integer.parseInt(target.getOperationSystemId()), 1, target.getPuppetConfiguration());
+			final Host host = ForemanHelper.createHost(this.url, this.username, this.password, name, "1", "1", project.getName(), environment.getName(), target.getOperationSystemId(), "1", target.getPuppetConfiguration(), this.domainId, this.rootPassword);
 			final IForemanApi api = ForemanClient.createApi(this.url, this.username, this.password);
 			api.hostPower(host.id, "start");
 		} catch (final Exception e) {
