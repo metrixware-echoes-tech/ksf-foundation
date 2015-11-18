@@ -25,7 +25,6 @@ function loginForman() {
             var contenu_iframe = document.getElementById("formanFrame").contentWindow.document.getElementsByName('authenticity_token');
 
         }
-//
         var keyAuthen = contenu_iframe[0].value;
     }
     catch (error)

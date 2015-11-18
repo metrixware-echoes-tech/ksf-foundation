@@ -108,15 +108,15 @@ public class ForemanActionsController {
         try {
             final JsonNode rootNode = mapper.readTree(configuration);
             final JsonNode modulesNode = rootNode.get("modules");
-            if (modulesNode == null)  {
-            	return true;
+            if (modulesNode == null) {
+                return true;
             }
             if (modulesNode.isArray()) {
                 final PuppetClient puppetClient = new PuppetClient();
                 for (final JsonNode moduleNode : modulesNode) {
                     final String moduleName = moduleNode.path("name").asText(); // name is required
                     if (moduleName == null) {
-                    	return false;
+                        return false;
                     }
                     final String moduleVersion = moduleNode.path("version").asText(); // version is optional
                     try {
@@ -176,14 +176,20 @@ public class ForemanActionsController {
         return "redirect:/ui/projects/" + project.getKey();
     }
 
-	@RequestMapping(value = "/ui/foreman/targets/instantiate", method = RequestMethod.POST)
-	public String instantiateTarget(@RequestParam("projectId") String projectId, @RequestParam("hostName") String hostName, @RequestParam("targetId") String targetId) {
+    @RequestMapping(value = "/ui/foreman/targets/instantiate", method = RequestMethod.POST)
+    public String instantiateTarget(@RequestParam("projectId") String projectId, @RequestParam("hostName") String hostName, @RequestParam("hostPass") String hostPass, @RequestParam("targetId") String targetId) {
 
-		final Project project = this.projectDAO.findOne(projectId);
+        final Project project = this.projectDAO.findOne(projectId);
 
-		final ForemanTarget target = this.targetDAO.findOne(targetId);
+        final ForemanTarget target = this.targetDAO.findOne(targetId);
 
-		final ForemanEnvironnment environment = target.getEnvironment();
+        final String name = target.getName();
+        String passwordVm = this.rootPassword;
+        if (StringUtils.isNotEmpty(hostPass)) {
+            passwordVm = hostPass;
+        }
+
+        final ForemanEnvironnment environment = target.getEnvironment();
 
 		String redirectURL = "/ui/projects/"+project.getKey();
 
@@ -199,15 +205,15 @@ public class ForemanActionsController {
 			LOGGER.info("[foreman] operatingSystemIdf: {}", operatingSystemId);
 			LOGGER.info("[puppet] conf: {}", puppetConfiguration);
 
-			final Host host = ForemanHelper.createHost(this.url, this.username, this.password, hostName, "1", "1", hostGroupName, environmentName, operatingSystemId, "1", puppetConfiguration, "2", this.rootPassword);
+			final Host host = ForemanHelper.createHost(this.url, this.username, this.password, hostName, "1", "1", hostGroupName, environmentName, operatingSystemId, "1", puppetConfiguration, "2", passwordVm);
 
-			//TODO find a way to generate the plugin tab ID dynamically
-			redirectURL += "?foremanHost="+host.name+"#pluginTab0";
-		} catch (final Exception e) {
+            //TODO find a way to generate the plugin tab ID dynamically
+            redirectURL += "?foremanHost=" + host.name + "#pluginTab0";
+        } catch (final Exception e) {
 			LOGGER.error("[foreman] Failed to create host {}.", hostName);
 
-			this.errorHandler.registerError("Failed to instantiate target. Please verify your Foreman configuration.");
-		}
-		return "redirect:"+redirectURL;
-	}
+            this.errorHandler.registerError("Failed to instantiate target. Please verify your Foreman configuration.");
+        }
+        return "redirect:" + redirectURL;
+    }
 }
