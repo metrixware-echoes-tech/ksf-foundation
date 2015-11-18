@@ -191,16 +191,19 @@ public class ForemanActionsController {
 		final String puppetConfiguration = target.getPuppetConfiguration();
 		LOGGER.info("[puppet] conf: {}", puppetConfiguration);
 
+		String redirectURL = "/ui/projects/"+project.getKey();
+		
 		try {
 			final Host host = ForemanHelper.createHost(this.url, this.username, this.password, name, "1", "1", project.getName(), environment.getName(), target.getOperationSystemId(), "1", target.getPuppetConfiguration(), this.domainId, this.rootPassword);
 			final IForemanApi api = ForemanClient.createApi(this.url, this.username, this.password);
 			api.hostPower(host.id, "start");
+			//TODO find a way to generate the plugin tab ID dynamically
+			redirectURL += "?foremanHost="+host.id+"#pluginTab0";
 		} catch (final Exception e) {
 			LOGGER.error("[foreman] Host creation failed : {}", puppetConfiguration);
 			this.errorHandler.registerError("Failed to instantiate target. Please verify your Foreman configuration.");
 		}
 
-
-		return "redirect:/ui/projects/"+project.getKey();
+		return "redirect:"+redirectURL;
 	}
 }

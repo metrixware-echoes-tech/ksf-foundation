@@ -105,11 +105,17 @@
 		</main>
 	</div>
 	
-	<script>
-	
-	
-	
-	</script>
+	<div layout:fragment="footer">
+		<script type="text/javascript">
+			$(document).ready(function() {
+				var hashQuery = window.location.hash;
+				console.log(hashQuery);
+				if (hashQuery) {
+					$('a[role=tab][href="'+hashQuery+'"]').click();
+				}
+			});
+		</script>
+	</div>
 	
 </body>
 </html>

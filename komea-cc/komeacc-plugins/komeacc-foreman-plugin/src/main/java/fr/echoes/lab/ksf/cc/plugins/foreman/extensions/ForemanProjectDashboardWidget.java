@@ -2,10 +2,15 @@ package fr.echoes.lab.ksf.cc.plugins.foreman.extensions;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
@@ -118,8 +123,23 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
 
 			@Override
 			public String getContent() {
+				
 				final Context ctx = new Context();
-				ctx.setVariable("foremanURL", ForemanProjectDashboardWidget.this.configurationService.getForemanUrl());
+				
+				HttpServletRequest request = 
+						((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
+						.getRequest();
+				
+				String foremanURL = ForemanProjectDashboardWidget.this.configurationService.getForemanUrl();
+				
+				String foremanHost = request.getParameter("foremanHost");
+				
+				if (StringUtils.isNotEmpty(foremanHost)) {
+					foremanURL += "/hosts/"+foremanHost;
+				}
+				
+				ctx.setVariable("foremanURL", foremanURL);
+				
 				return templateEngine.process("managementPanel", ctx);
 			}
 		};
