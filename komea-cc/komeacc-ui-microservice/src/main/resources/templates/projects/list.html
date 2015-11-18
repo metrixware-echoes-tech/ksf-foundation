@@ -34,8 +34,8 @@
                                 </td>
                                 <td th:text="${prod.user.firstName}+' '+${prod.user.lastName}"></td>
                             	<td class="project-list-tools">
-                            		<img src="/pictures/foreman.png" alt="Foreman" data-toggle="tooltip" data-placement="bottom" title="Foreman" />
-                            		<img src="/pictures/puppet.png" alt="Puppet" data-toggle="tooltip" data-placement="bottom" title="Puppet" />
+                            		<img th:src="@{/pictures/foreman.png}" alt="Foreman" data-toggle="tooltip" data-placement="bottom" title="Foreman" />
+                            		<img th:src="@{/pictures/puppet.png}" alt="Puppet" data-toggle="tooltip" data-placement="bottom" title="Puppet" />
                             	</td>
                             	<td>
                             		<a th:href="@{/ui/projects/}+${prod.project.key}" class="btn btn-primary">
