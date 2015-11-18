@@ -10,6 +10,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -149,7 +150,12 @@ public class ProjectController {
 	
 	private ProjectPagelistDTO createProjectPageListDTO(final Project project) {
 		
-		User findOne = userDao.findOne(project.getOwnerId());
+		User findOne = null;
+		
+		if (StringUtils.isNotEmpty(project.getOwnerId())) {
+			findOne = userDao.findOne(project.getOwnerId());
+		}
+		
 		if (findOne == null) {
 			findOne = new User();
 			findOne.setFirstName("");
