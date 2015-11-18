@@ -1,0 +1,27 @@
+/* couleur Metrixware canal historique pour JJ */
+.navbar-inverse {
+  background-color: black;
+}
+/* le logo ne dépasse pas, et on décale le titre de la page au milieu */
+
+.navbar-brand img {
+	width : 36px ; 
+	height : 32px ; 
+	margin-top: -5px ; 
+	margin-bottom : 6px;
+    padding-right: 4px;
+	float: left
+}
+
+h1 {text-align: center 
+}
+
+/* les fontes listes avec textes sont trop grandes */
+.first { font-size: medium
+}
+ul li blockquote { font-size: medium 
+}
+/* zoli footer à mettre aux normes */
+footer {
+  background-color: #D8D8E4;
+}

@@ -1,0 +1,219 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Périmètre &mdash; documentation Komea Software Factory 1.0.0</title>
+    
+    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootswatch-3.3.4/united/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="_static/my-styles.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="documentation Komea Software Factory 1.0.0" href="index.html" />
+    <link rel="next" title="Domaines fonctionnels" href="domaines_fonctionnels.html" />
+    <link rel="prev" title="Définitions" href="definitions.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body role="document">
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html"><img src="_static/KSF-logo.png">
+          Komea Software Factory</a>
+        <span class="navbar-text navbar-version pull-left"><b>1.0</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="http://echoes-tech.com/">Link</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="resume.html">Résumé</a></li>
+<li class="toctree-l1"><a class="reference internal" href="definitions.html">Définitions</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Périmètre</a></li>
+<li class="toctree-l1"><a class="reference internal" href="domaines_fonctionnels.html">Domaines fonctionnels</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="domaines_fonctionnels.html#les-conventions">Les Conventions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="domaines_fonctionnels.html#la-modelisation">La Modélisation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="domaines_fonctionnels.html#la-gestion-de-version">La Gestion de version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="domaines_fonctionnels.html#le-suivi-des-demandes">Le Suivi des demandes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="domaines_fonctionnels.html#la-revue-de-code">La Revue de code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="domaines_fonctionnels.html#la-forge-logicielle">La Forge logicielle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="domaines_fonctionnels.html#la-qualimetrie">La Qualimétrie</a></li>
+<li class="toctree-l2"><a class="reference internal" href="domaines_fonctionnels.html#les-tests-internes-automatises">Les Tests internes automatisés</a></li>
+<li class="toctree-l2"><a class="reference internal" href="domaines_fonctionnels.html#la-gestion-des-bibliotheques">La Gestion des bibliothèques</a></li>
+<li class="toctree-l2"><a class="reference internal" href="domaines_fonctionnels.html#le-parametrage-de-lapplication">Le Paramétrage de l’application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="domaines_fonctionnels.html#le-moteur-de-production">Le Moteur de production</a></li>
+<li class="toctree-l2"><a class="reference internal" href="domaines_fonctionnels.html#lide">L’IDE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="domaines_fonctionnels.html#lempaquetage">L’Empaquetage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="domaines_fonctionnels.html#les-tests-du-systeme">Les Tests du système</a></li>
+<li class="toctree-l2"><a class="reference internal" href="domaines_fonctionnels.html#le-serveur-dintegration-continue">Le Serveur d’intégration continue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="domaines_fonctionnels.html#le-processus-de-release">Le processus de release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="domaines_fonctionnels.html#le-tableau-de-bord">Le Tableau de bord</a></li>
+<li class="toctree-l2"><a class="reference internal" href="domaines_fonctionnels.html#la-documentation">La Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="domaines_fonctionnels.html#tableau-recapitulatif">Tableau récapitulatif</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="architecture_fonctionnelle.html">Architecture fonctionnelle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture_technique.html">Architecture technique</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="architecture_technique.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture_technique.html#briques-logicielles-maison">Briques logicielles &#8220;maison&#8221;</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="outils.html">Outils</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="outils_redmine.html">Redmine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="outils_jenkins.html">Jenkins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="outils_puppet.html">Puppet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="outils_foreman.html">Foreman</a></li>
+<li class="toctree-l2"><a class="reference internal" href="outils_foreman.html#connecteur-foreman">Connecteur Foreman</a></li>
+<li class="toctree-l2"><a class="reference internal" href="outils_komea_dashboard.html">Komea Dashboard</a></li>
+<li class="toctree-l2"><a class="reference internal" href="outils_komea_cc.html">Komea-CC</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Périmètre</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="definitions.html" title="Previous Chapter: Définitions"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Définitions</span>
+    </a>
+  </li>
+  <li>
+    <a href="domaines_fonctionnels.html" title="Next Chapter: Domaines fonctionnels"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Domaines fonc... &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="perimetre">
+<h1>Périmètre<a class="headerlink" href="#perimetre" title="Lien permanent vers ce titre">¶</a></h1>
+<ul>
+<li><p class="first">Contexte général</p>
+<blockquote>
+<div><p>Toutes les entreprises qui fabriquent du logiciel ont une usine logicielle.  Celle-ci est l&#8217;assemblage d&#8217;outils et de méthodes divers et variés au gré des modes, des projets et des compétences en présence. <strong>La fabrication de logiciel est de nos jours un axe stratégique vital pour beaucoup d&#8217;entreprises car elle conditionne leur survie et leur succès.</strong></p>
+</div></blockquote>
+</li>
+<li><p class="first">Principes gouvernant la conception du produit</p>
+<blockquote>
+<div><p>Il s&#8217;agit d&#8217;offrir les moyens d&#8217;améliorer l&#8217;usine logicielle. Le point de départ standard est un Audit permettant d&#8217;identifier la situation de l&#8217;usine logicielle du client par rapport aux bonnes pratiques et ses problèmes à résoudre. On va ensuite proposer de l&#8217;aide sous forme de formation et/ou de service outillé. On part donc de prestations de conseil vers la fourniture d&#8217;outils. Ces outils peuvent ensuite rester chez le client et générer du revenu récurent.
+<strong>La promesse de KSF est de pouvoir mettre en oeuvre un ensemble bien choisi d&#8217;outils de manière homogène et sans soucis dans différents projets.</strong></p>
+</div></blockquote>
+</li>
+<li><p class="first">Périmètre technico-fonctionnel</p>
+<blockquote>
+<div><p>On se focalise sur les usines logicielles C, C++. Cela ne signifie pas que l&#8217;usine ne peut pas être utilisée pour d&#8217;autres langages (Java, Php, etc.) mais qu&#8217;elle est pensée pour intégrer spécifiquement les contraintes de ces deux langages là (compilation, dependency hell, etc.) qui sont moindres dans les autres langages. <strong>Le périmètre couvre la construction logicielle, la gestion de projet et l&#8217;unification des services.</strong></p>
+</div></blockquote>
+</li>
+<li><p class="first">Cible, enjeux et objectifs commerciaux</p>
+<blockquote>
+<div><p>Les grandes entreprises ont généralement des équipes dédiées à l&#8217;industrialisation logicielle et des moyens leur permettant d&#8217;acquérir des outils sophistiqués. Ceci étant, elles mettent généralement en oeuvre des outils Open Source avec les moyens humains nécessaires pour les configurer, les intégrer et les exploiter. La cible est donc plutot une société éditrice de logiciel ayant besoin d&#8217;améliorer son processus de production logicielle. <strong>L&#8217;objectif est de créer un volume de business récurent avec de fortes marges (licences + maintenance).</strong></p>
+<p>Perspective : prendre à terme en charge la maintenance d&#8217;usines logicielles complètes de toute taille (y compris grandes entreprises et/ou usines cloud)</p>
+</div></blockquote>
+</li>
+</ul>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+      
+    </p>
+    <p>
+        &copy; Copyright 2015, Echoes.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

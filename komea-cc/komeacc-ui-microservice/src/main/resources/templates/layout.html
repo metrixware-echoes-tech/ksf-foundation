@@ -24,10 +24,11 @@
 	          	<a class="pull-left" th:href="@{/ui/projects}">
 	          		<img class="logo" th:src="@{/pictures/KSF-logo.png}" alt="KSF" />
 	          	</a>
-	            <a class="navbar-brand" th:href="@{/ui/projects}">Projects</a>
+	            <a class="navbar-brand" th:href="@{/ui/projects}" data-toggle="tooltip" data-placement="bottom" title="View project list">Projects</a>
+	            <a class="navbar-brand" th:href="@{/documentation/index.html}" target="_blank" data-toggle="tooltip" data-placement="bottom" title="View documentation" >Help</a>
 	          </div>
 	          <div class='navbar-form navbar-left' role='form'>
-	            <a class="btn-primary btn-sm glyphicon glyphicon-plus" data-toggle="tooltip" title="Create a new project" th:href="@{/ui/projects/new}"></a>
+	            <a class="btn-primary btn-sm glyphicon glyphicon-plus" data-toggle="tooltip" title="Create a new project" data-placement="bottom" th:href="@{/ui/projects/new}"></a>	            
 	          </div>
 	          <!-- User links -->
 	          <div class='navbar-collapse collapse' id='navbar'>

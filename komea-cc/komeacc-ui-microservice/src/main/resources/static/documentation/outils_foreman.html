@@ -1,0 +1,316 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Foreman &mdash; documentation Komea Software Factory 1.0.0</title>
+    
+    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootswatch-3.3.4/united/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="_static/my-styles.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  false
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-3.3.4/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="documentation Komea Software Factory 1.0.0" href="index.html" />
+    <link rel="up" title="Outils" href="outils.html" />
+    <link rel="next" title="Komea Dashboard" href="outils_komea_dashboard.html" />
+    <link rel="prev" title="Puppet" href="outils_puppet.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body role="document">
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html"><img src="_static/KSF-logo.png">
+          Komea Software Factory</a>
+        <span class="navbar-text navbar-version pull-left"><b>1.0</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="http://echoes-tech.com/">Link</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="resume.html">Résumé</a></li>
+<li class="toctree-l1"><a class="reference internal" href="definitions.html">Définitions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="perimetre.html">Périmètre</a></li>
+<li class="toctree-l1"><a class="reference internal" href="domaines_fonctionnels.html">Domaines fonctionnels</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="domaines_fonctionnels.html#les-conventions">Les Conventions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="domaines_fonctionnels.html#la-modelisation">La Modélisation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="domaines_fonctionnels.html#la-gestion-de-version">La Gestion de version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="domaines_fonctionnels.html#le-suivi-des-demandes">Le Suivi des demandes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="domaines_fonctionnels.html#la-revue-de-code">La Revue de code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="domaines_fonctionnels.html#la-forge-logicielle">La Forge logicielle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="domaines_fonctionnels.html#la-qualimetrie">La Qualimétrie</a></li>
+<li class="toctree-l2"><a class="reference internal" href="domaines_fonctionnels.html#les-tests-internes-automatises">Les Tests internes automatisés</a></li>
+<li class="toctree-l2"><a class="reference internal" href="domaines_fonctionnels.html#la-gestion-des-bibliotheques">La Gestion des bibliothèques</a></li>
+<li class="toctree-l2"><a class="reference internal" href="domaines_fonctionnels.html#le-parametrage-de-lapplication">Le Paramétrage de l’application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="domaines_fonctionnels.html#le-moteur-de-production">Le Moteur de production</a></li>
+<li class="toctree-l2"><a class="reference internal" href="domaines_fonctionnels.html#lide">L’IDE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="domaines_fonctionnels.html#lempaquetage">L’Empaquetage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="domaines_fonctionnels.html#les-tests-du-systeme">Les Tests du système</a></li>
+<li class="toctree-l2"><a class="reference internal" href="domaines_fonctionnels.html#le-serveur-dintegration-continue">Le Serveur d’intégration continue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="domaines_fonctionnels.html#le-processus-de-release">Le processus de release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="domaines_fonctionnels.html#le-tableau-de-bord">Le Tableau de bord</a></li>
+<li class="toctree-l2"><a class="reference internal" href="domaines_fonctionnels.html#la-documentation">La Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="domaines_fonctionnels.html#tableau-recapitulatif">Tableau récapitulatif</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="architecture_fonctionnelle.html">Architecture fonctionnelle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture_technique.html">Architecture technique</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="architecture_technique.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture_technique.html#briques-logicielles-maison">Briques logicielles &#8220;maison&#8221;</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="outils.html">Outils</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="outils_redmine.html">Redmine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="outils_jenkins.html">Jenkins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="outils_puppet.html">Puppet</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Foreman</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#connecteur-foreman">Connecteur Foreman</a></li>
+<li class="toctree-l2"><a class="reference internal" href="outils_komea_dashboard.html">Komea Dashboard</a></li>
+<li class="toctree-l2"><a class="reference internal" href="outils_komea_cc.html">Komea-CC</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Foreman</a><ul>
+<li><a class="reference internal" href="#what-is-foreman">What is Foreman?</a></li>
+<li><a class="reference internal" href="#with-foreman-you-can">With Foreman you can</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#connecteur-foreman">Connecteur Foreman</a><ul>
+<li><a class="reference internal" href="#installation-de-foreman-dans-l-usine">Installation de Foreman dans l&#8217;usine</a></li>
+<li><a class="reference internal" href="#creer-un-projet">Créer un Projet</a></li>
+<li><a class="reference internal" href="#gerer-un-environnement">Gérer un environnement :</a></li>
+<li><a class="reference internal" href="#creer-une-cible">Créer une cible</a></li>
+<li><a class="reference internal" href="#instancier-une-cible">Instancier une cible</a></li>
+<li><a class="reference internal" href="#supprimer-une-instance">Supprimer une instance</a></li>
+<li><a class="reference internal" href="#supprimer-une-cible">Supprimer une cible</a></li>
+<li><a class="reference internal" href="#supprimer-un-projet">Supprimer un Projet</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="outils_puppet.html" title="Previous Chapter: Puppet"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Puppet</span>
+    </a>
+  </li>
+  <li>
+    <a href="outils_komea_dashboard.html" title="Next Chapter: Komea Dashboard"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Komea Dashboard &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="foreman">
+<span id="outils-foreman"></span><h1>Foreman<a class="headerlink" href="#foreman" title="Lien permanent vers ce titre">¶</a></h1>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">source <a class="reference external" href="http://www.theforeman.org/">http://www.theforeman.org/</a></p>
+</div>
+<div class="section" id="what-is-foreman">
+<h2>What is Foreman?<a class="headerlink" href="#what-is-foreman" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Foreman is an open source project that helps system administrators manage servers throughout their lifecycle, from provisioning and configuration to orchestration and monitoring. Using Puppet, Chef, Salt, and Foreman&#8217;s smart proxy architecture, you can easily automate repetitive tasks, quickly deploy applications, and proactively manage change, both on-premise with VMs and bare-metal or in the cloud.</p>
+<p>Foreman provides comprehensive, interaction facilities including a web frontend, CLI and RESTful API which enables you to build higher level business logic on top of a solid foundation.</p>
+<p>Foreman is 5+ years old, and deployed in many organizations, managing from 10s to 10,000s of servers.</p>
+<p>It is used in distributions such as RDO and RHOS (Red Hat OpenStack distribution) and has an extensive library of plugins.</p>
+</div>
+<div class="section" id="with-foreman-you-can">
+<h2>With Foreman you can<a class="headerlink" href="#with-foreman-you-can" title="Lien permanent vers ce titre">¶</a></h2>
+<ul class="simple">
+<li>Discover, provision and upgrade your entire bare-metal infrastructure</li>
+<li>Create and manage instances across private and public clouds</li>
+<li>Group your hosts and manage them in bulk, regardless of location</li>
+<li>Review historical changes for auditing or troubleshooting</li>
+<li>Extend as needed via a robust plugin architecture</li>
+<li>Automatically build images (on each platform) per system definition to optimize deployment</li>
+</ul>
+<p>The following operating systems are known to install successfully from Foreman:</p>
+<p>RHEL CentOS Fedora Ubuntu Debian Solaris 8, 10</p>
+<p>OpenSUSE SLES Oracle Linux CoreOS FreeBSD Junos</p>
+<p>Foreman can provision on bare metal as well as the following cloud providers:</p>
+<p>Amazon EC2 Google Compute Engine Libvirt OpenStack oVirt and RHEV Rackspace VMware</p>
+</div>
+</div>
+<div class="section" id="connecteur-foreman">
+<h1>Connecteur Foreman<a class="headerlink" href="#connecteur-foreman" title="Lien permanent vers ce titre">¶</a></h1>
+<div class="section" id="installation-de-foreman-dans-l-usine">
+<h2>Installation de Foreman dans l&#8217;usine<a class="headerlink" href="#installation-de-foreman-dans-l-usine" title="Lien permanent vers ce titre">¶</a></h2>
+<ul class="simple">
+<li>authentification</li>
+<li>réseau</li>
+<li>hyperviseur</li>
+<li>proxies</li>
+<li>créer un rôle par défaut</li>
+<li>configuration des packs, OS, ...</li>
+</ul>
+</div>
+<div class="section" id="creer-un-projet">
+<h2>Créer un Projet<a class="headerlink" href="#creer-un-projet" title="Lien permanent vers ce titre">¶</a></h2>
+<p>on va créer des artefacts avec une régle de nommage liée au nom du projet (exemple : KSF)</p>
+<ul class="simple">
+<li>créer un host group</li>
+<li>créer des filtres sur les environnements, sur le host group</li>
+<li>ajouter les filtres au rôle de l&#8217;utilisateur : on ajoute le filtre</li>
+</ul>
+<p>(note) : pour créer un filtre sur le nom de projet, on crée un hostgroup qui sera ajouté aux requêtes pour filtrer la liste des hosts dans les vues (&amp;search=+hostgroup++%3D++&lt;projet&gt;)</p>
+<p>environnement (au sens Foreman) = ensemble de modules puppets dans une version donnée installables sur une ou plusieurs machines. Cet environnement est listé dans Foreman.</p>
+<p>Il est décrit dans un fichier géré dans KSF.</p>
+<p>surcharge de paramètres de modules : ensemble de variables/valeurs à appliquer aux modules.</p>
+<p>cible = environnement + OS + profil d&#8217;ordinateur + surcharge</p>
+</div>
+<div class="section" id="gerer-un-environnement">
+<h2>Gérer un environnement :<a class="headerlink" href="#gerer-un-environnement" title="Lien permanent vers ce titre">¶</a></h2>
+<p>créer,modifier,dupliquer,supprimer,... via un éditeur adhoc (=&gt; on copie physiquement les environnements dans /etc/puppet/environments/&lt;nom-env&gt;,=&gt; on installe dans puppet master
+)</p>
+</div>
+<div class="section" id="creer-une-cible">
+<h2>Créer une cible<a class="headerlink" href="#creer-une-cible" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Un wizard va permettre de documenter les variables suivantes :</p>
+<ul class="simple">
+<li>liste des environnement disponibles (choix simple) qui va servir de modèle pour créer la nouvelle cible</li>
+<li>OS (parmi les OS dispos) + profil d&#8217;ordinateur (parmi les profils d&#8217;ordinateur dispos)</li>
+</ul>
+<p>=&gt; on affecte dans le host group</p>
+<p>note : à partir du choix de l&#8217;OS, on essaiera de réutiliser l&#8217;interface Foreman autant que faire se peut.</p>
+<p>(*) format JSON avec 2 informations :</p>
+<ul class="simple">
+<li>nom du module, version minimale (voir exemple dans les modules puppet, le fichier metadata.json)</li>
+<li>surcharge des paramètres (voir description des modules dans Foreman)</li>
+</ul>
+</div>
+<div class="section" id="instancier-une-cible">
+<h2>Instancier une cible<a class="headerlink" href="#instancier-une-cible" title="Lien permanent vers ce titre">¶</a></h2>
+<ul class="simple">
+<li>liste de choix des cibles disponibles (choix multiple)</li>
+</ul>
+<p>=&gt; build de la VM qui héberge l&#8217;environnement</p>
+</div>
+<div class="section" id="supprimer-une-instance">
+<h2>Supprimer une instance<a class="headerlink" href="#supprimer-une-instance" title="Lien permanent vers ce titre">¶</a></h2>
+<ul class="simple">
+<li>liste de choix des VMs générées (choix multiple)</li>
+</ul>
+<p>=&gt; supprimer les VMs sélectionnées</p>
+</div>
+<div class="section" id="supprimer-une-cible">
+<h2>Supprimer une cible<a class="headerlink" href="#supprimer-une-cible" title="Lien permanent vers ce titre">¶</a></h2>
+<ul class="simple">
+<li>liste des cible disponibles (choix multiple)</li>
+</ul>
+<p>=&gt; suppression des environnements</p>
+</div>
+<div class="section" id="supprimer-un-projet">
+<h2>Supprimer un Projet<a class="headerlink" href="#supprimer-un-projet" title="Lien permanent vers ce titre">¶</a></h2>
+<ul class="simple">
+<li>supprimer toutes les instances</li>
+<li>supprimer toutes les cibles</li>
+<li>supprimer les filtres</li>
+<li>supprimer le host group</li>
+</ul>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+      
+    </p>
+    <p>
+        &copy; Copyright 2015, Echoes.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
