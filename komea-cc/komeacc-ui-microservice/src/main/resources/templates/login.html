@@ -18,19 +18,6 @@
 
     <body onload="donner_focus('username')" >
 
-
-        <!--        <div layout:fragment="content">
-        
-                    <div th:if="${param.error}">Invalid username and password.</div>
-                    <div th:if="${param.logout}">You have been logged out.</div>						
-                     wicket:message="value:login.submit.label" 
-                    <form class="form-horizontal" th:action="@{/login}" method="post">                
-                        <input id="username" type="text" name="username"></input>
-                        <input type="password" name="password" id="password" placeholder="Password" />
-                        <input type="checkbox" name="remember-me" id="remember-me"/>                
-                        <button type="submit" value="Sign in">Sign in</button>
-                    </form>-->
-        <!--</div>-->
         <div >	
             <div class="container">
                 <div class="login-container">
@@ -40,15 +27,12 @@
                     </div>
 
                     <div class="form-box">
-                        <form   th:action="@{/login}" method="post">
+                        <form id="loginForm"  th:action="@{/login}" method="post">
                             <input onClick="this.select();" name="username"  id="username" type="text" placeholder="username"></input>
                             <input onClick="this.select();" type="password" name="password" id="password" placeholder="password"/>
-                            <!--<input onClick="this.select();" type="text" name="key" id="key" placeholder="key"/>-->
-                            <!--<input type="checkbox" name="remember-me" id="remember-me">Remember me</input>-->  
-                            <!--<button  class="btn btn-info btn-block login" type="submit">Login</button>-->
                             <div th:if="${param.error}" ><font color="red">Invalid username and password.</font></div>
                             <div th:if="${param.logout}">You have been logged out.</div>
-                            <button onclick="loginForman();" class="btn btn-info btn-block login" type="submit">Login</button>
+                            <button onclick="loginForman();" class="btn btn-info btn-block login" type="button">Login</button>
                         </form>
                     </div>
                 </div>
