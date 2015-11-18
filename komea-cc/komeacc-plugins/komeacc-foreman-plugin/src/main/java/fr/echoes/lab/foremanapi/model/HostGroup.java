@@ -7,7 +7,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
 public class HostGroup {
 
 	@JsonProperty("name") 				public String name;
-	@JsonProperty("id") 				public Integer id;
+	@JsonProperty("id") 				public String id;
 	@JsonProperty("subnet_id") 			public Integer subnetId;
 	@JsonProperty("operatingsystem_id") public Integer operatingSystemId;
 	@JsonProperty("domain_id") 			public Integer domainId;
@@ -16,5 +16,7 @@ public class HostGroup {
 	@JsonProperty("title") 				public String title;
 //	@JsonProperty("parameters")       	public ArrayList<Map<String, String>> parameters;
 	@JsonProperty("puppetclass_ids") 	public Integer[] puppetclassIds;
+	@JsonProperty("subnet_name") 		public String subnet_name = "KSF ADS";
+
 
 }
