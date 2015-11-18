@@ -198,7 +198,7 @@ public class ForemanActionsController {
 			final IForemanApi api = ForemanClient.createApi(this.url, this.username, this.password);
 			api.hostPower(host.id, "start");
 			//TODO find a way to generate the plugin tab ID dynamically
-			redirectURL += "?foremanHost="+host.id+"#pluginTab0";
+			redirectURL += "?foremanHost="+host.name+"#pluginTab0";
 		} catch (final Exception e) {
 			LOGGER.error("[foreman] Host creation failed : {}", puppetConfiguration);
 			this.errorHandler.registerError("Failed to instantiate target. Please verify your Foreman configuration.");
