@@ -23,9 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.tocea.corolla.products.dao.IProjectDAO;
 import com.tocea.corolla.products.domain.Project;
 
-import fr.echoes.lab.foremanapi.IForemanApi;
 import fr.echoes.lab.foremanapi.model.Host;
-import fr.echoes.lab.foremanclient.ForemanClient;
 import fr.echoes.lab.foremanclient.ForemanHelper;
 import fr.echoes.lab.ksf.cc.plugins.foreman.dao.IForemanEnvironmentDAO;
 import fr.echoes.lab.ksf.cc.plugins.foreman.dao.IForemanTargetDAO;
@@ -185,25 +183,31 @@ public class ForemanActionsController {
 
 		final ForemanTarget target = this.targetDAO.findOne(targetId);
 
-		final String name = target.getName();
 		final ForemanEnvironnment environment = target.getEnvironment();
 
-		final String puppetConfiguration = target.getPuppetConfiguration();
-		LOGGER.info("[puppet] conf: {}", puppetConfiguration);
-
 		String redirectURL = "/ui/projects/"+project.getKey();
-		
+
 		try {
-			final Host host = ForemanHelper.createHost(this.url, this.username, this.password, name, "1", "1", project.getName(), environment.getName(), target.getOperationSystemId(), "1", target.getPuppetConfiguration(), this.domainId, this.rootPassword);
-			final IForemanApi api = ForemanClient.createApi(this.url, this.username, this.password);
-			api.hostPower(host.id, "start");
+
+			final String hostGroupName = hostName;
+			final String environmentName = environment.getName();
+			final String operatingSystemId = target.getOperationSystemId();
+			final String puppetConfiguration = target.getPuppetConfiguration();
+
+			LOGGER.info("[foreman] hostGroupName: {}", hostGroupName);
+			LOGGER.info("[foreman] environmentName: {}", environmentName);
+			LOGGER.info("[foreman] operatingSystemIdf: {}", operatingSystemId);
+			LOGGER.info("[puppet] conf: {}", puppetConfiguration);
+
+			final Host host = ForemanHelper.createHost(this.url, this.username, this.password, hostName, "1", "1", hostGroupName, environmentName, operatingSystemId, "1", puppetConfiguration, "2", this.rootPassword);
+
 			//TODO find a way to generate the plugin tab ID dynamically
 			redirectURL += "?foremanHost="+host.name+"#pluginTab0";
 		} catch (final Exception e) {
-			LOGGER.error("[foreman] Host creation failed : {}", puppetConfiguration);
+			LOGGER.error("[foreman] Failed to create host {}.", hostName);
+
 			this.errorHandler.registerError("Failed to instantiate target. Please verify your Foreman configuration.");
 		}
-
 		return "redirect:"+redirectURL;
 	}
 }

@@ -1,5 +1,8 @@
 package fr.echoes.lab.foremanapi.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 
@@ -7,5 +10,5 @@ import org.codehaus.jackson.annotate.JsonProperty;
 public class PuppetClasses {
 
 	@JsonProperty("total") public String total;
-	//@JsonProperty("results") public List<PuppetClass> results = null;
+	@JsonProperty("results") public Map<String, PuppetClass> results = new HashMap<String, PuppetClass>();
 }

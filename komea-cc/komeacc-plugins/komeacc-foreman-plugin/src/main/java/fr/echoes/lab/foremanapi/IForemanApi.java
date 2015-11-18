@@ -35,6 +35,7 @@ import fr.echoes.lab.foremanapi.model.Roles;
 import fr.echoes.lab.foremanapi.model.SmartVariable;
 import fr.echoes.lab.foremanapi.model.User;
 import fr.echoes.lab.foremanapi.model.UserWrapper;
+import fr.echoes.lab.foremanclient.model.PowerAction;
 
 
 public interface IForemanApi {
@@ -153,6 +154,13 @@ public interface IForemanApi {
 			String bodyContent);
 
 	@POST
+	@Path("/api/environments/{id}/puppetclasses")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	PuppetClasses getEnvironmentPuppetClasses(
+			@PathParam("id") String environmentId);
+
+	@POST
 	@Path("/api/hosts")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -183,14 +191,14 @@ public interface IForemanApi {
 	@Consumes(MediaType.APPLICATION_JSON)
 	HostPowerController.PowerStatus hostPower(
 			@PathParam("id") String id,
-			String powerAction);
+			PowerAction powerAction);
 
 
 	@GET
 	@Path("/api/environments/{environment_id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	Environment getEnvironment(
-			@PathParam("environment_id") Integer environment_id);
+			@PathParam("environment_id") String environment_id);
 
 	@GET
 	@Path("/api/puppetclasses/{puppet_class_id}/smart_class_parameters")

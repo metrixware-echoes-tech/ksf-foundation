@@ -9,7 +9,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
 public class Environment {
 
 	@JsonProperty("name") public String name;
-	@JsonProperty("id") public Integer id;
+	@JsonProperty("id") public String id;
 	@JsonProperty("puppetclasses") public List<PuppetClass> puppetClasses = null;
 
 }
