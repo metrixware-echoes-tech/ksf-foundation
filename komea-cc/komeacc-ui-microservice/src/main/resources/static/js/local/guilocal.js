@@ -17,15 +17,22 @@ function loginForman() {
     IE = window.ActiveXObject ? true : false;
     MOZ = window.sidebar ? true : false;
 
-    if (IE)
-    {
-        var contenu_iframe = window.frames['iframe_article'].document.getElementsByName('authenticity_token');
-    } else {
-        var contenu_iframe = document.getElementById("formanFrame").contentWindow.document.getElementsByName('authenticity_token');
+    try {
+        if (IE)
+        {
+            var contenu_iframe = window.frames['iframe_article'].document.getElementsByName('authenticity_token');
+        } else {
+            var contenu_iframe = document.getElementById("formanFrame").contentWindow.document.getElementsByName('authenticity_token');
 
-    }
+        }
 //
-    var keyAuthen = contenu_iframe[0].value;
+        var keyAuthen = contenu_iframe[0].value;
+    }
+    catch (error)
+    {
+        console.log(error);
+        submitLogin();
+    }
 //    alert(keyAuthen);
 
 
@@ -36,7 +43,7 @@ function loginForman() {
 }
 function submitLogin()
 {
-     $('#loginForm').submit();
+    $('#loginForm').submit();
 }
 
 
@@ -62,7 +69,7 @@ function post_en_url(url, parametres) {
 
     var options = {
         success: submitLogin(),
-        error : submitLogin()
+        error: submitLogin()
     }
 
     $(form).ajaxSubmit(options);
