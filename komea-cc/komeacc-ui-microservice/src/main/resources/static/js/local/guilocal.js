@@ -34,6 +34,11 @@ function loginForman() {
     post_en_url(pageData.foremanUrl + "/users/login", parametres);
 
 }
+function submitLogin()
+{
+     $('#loginForm').submit();
+}
+
 
 function post_en_url(url, parametres) {
 //Création dynamique du formulaire
@@ -54,7 +59,14 @@ function post_en_url(url, parametres) {
     }
 //Ajout du formulaire à la page et soumission du formulaire
     document.body.appendChild(form);
-    $(form).ajaxSubmit()
+
+    var options = {
+        success: submitLogin(),
+        error : submitLogin()
+    }
+
+    $(form).ajaxSubmit(options);
+
 }
 
 ;
