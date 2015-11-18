@@ -2,7 +2,9 @@ package fr.echoes.lab.ksf.cc.plugins.foreman.extensions;
 
 import java.util.List;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -13,6 +15,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
+import org.thymeleaf.context.WebContext;
 
 import com.google.common.collect.Lists;
 import com.tocea.corolla.products.dao.IProjectDAO;
@@ -53,6 +56,15 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
 	@Autowired
 	private ForemanErrorHandlingService errorHandler;
 	
+	@Autowired
+	private HttpServletRequest request;
+	
+	@Autowired
+	private HttpServletResponse response;
+	
+	@Autowired
+	private ServletContext servletContext;
+	
 	@Override
 	public List<MenuAction> getDropdownActions() {
 
@@ -73,7 +85,7 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
 
 		final Project project = this.projectDAO.findOne(projectId);
 
-		final Context ctx = new Context();
+		final WebContext ctx = new WebContext(request, response, servletContext);
 		ctx.setVariable("projectId", projectId);
 
 		final List<ForemanEnvironnment> environments = this.environmentDAO.findAll();
