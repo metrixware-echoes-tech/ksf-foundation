@@ -56,7 +56,8 @@ import fr.echoes.lab.ksf.cc.plugins.foreman.exceptions.ForemanHostAlreadyExistEx
 public class ForemanHelper {
 
 
-     private static final Logger LOGGER = LoggerFactory.getLogger(ForemanHelper.class);
+     private static final String DEFAULT_ENVIRONMENT_ID = "1";
+	private static final Logger LOGGER = LoggerFactory.getLogger(ForemanHelper.class);
 
      /**
      * Private constructor to prevent instantiation.
@@ -160,10 +161,10 @@ public class ForemanHelper {
           final HostGroupWrapper hostGroupWrapper = new HostGroupWrapper();
           final HostGroup hostGroup = new HostGroup();
           hostGroup.name = projectName;
-          hostGroup.subnet_id = "1";
+          hostGroup.subnet_id = DEFAULT_ENVIRONMENT_ID;
           hostGroup.realm_id = "";
-          hostGroup.architecture_id = "1";
-          hostGroup.operatingsystem_id = "1";
+          hostGroup.architecture_id = DEFAULT_ENVIRONMENT_ID;
+          hostGroup.operatingsystem_id = DEFAULT_ENVIRONMENT_ID;
           hostGroup.ptable_id = "54";
           hostGroup.medium_id = "2";
           hostGroup.domain_id = "2";
@@ -218,7 +219,7 @@ public class ForemanHelper {
     	  if (hostExists(url, adminUserName, password, hostName)) {
     		  throw new ForemanHostAlreadyExistException(hostName);
     	  }
-    	 
+
          //  final Host host = null;
     	 final IForemanApi api = ForemanClient.createApi(url, adminUserName, password);
 
@@ -279,11 +280,10 @@ public class ForemanHelper {
     	 final List<String> result = new ArrayList<String>();
 
     	 final String environmentId = findEnvironmentId(api, environmentName);
-    	 final Environment environment = api.getEnvironment(environmentId);
-
     	 if (environmentId == null) {
     		 return result;
     	 }
+    	 final Environment environment = api.getEnvironment(environmentId);
 
     	 final Set<String> moduleId = new HashSet<String>();
          for (final fr.echoes.lab.foremanapi.model.PuppetClass puppetClass : environment.puppetClasses) {
@@ -337,7 +337,7 @@ public class ForemanHelper {
                     return hostGroup.id;
                }
           }
-          return null;
+          return DEFAULT_ENVIRONMENT_ID;
      }
 
 

@@ -184,7 +184,7 @@ public class ForemanActionsController {
     }
 
     @RequestMapping(value = "/ui/foreman/targets/instantiate", method = RequestMethod.POST)
-    public String instantiateTarget(@RequestParam("projectId") String projectId, @RequestParam("hostName") String hostName, @RequestParam("hostPass") String hostPass, @RequestParam("targetId") String targetId, @RequestParam("computeprofiles") String computeProfileId) {
+    public String instantiateTarget(@RequestParam("projectId") String projectId, @RequestParam("hostName") String hostName, @RequestParam("hostPass") String hostPass, @RequestParam("targetId") String targetId) {
 
         final Project project = this.projectDAO.findOne(projectId);
 
@@ -215,9 +215,8 @@ public class ForemanActionsController {
 			LOGGER.info("[foreman] architectureId: {}", this.architectureId);
 			LOGGER.info("[foreman] puppetConfiguration: {}", puppetConfiguration);
 			LOGGER.info("[foreman] domainId: {}", this.domainId);
-			LOGGER.info("[foreman] computeProfileId: {}", computeProfileId);
 
-			final Host host = ForemanHelper.createHost(this.url, this.username, this.password, hostName, this.computeResourceId, computeProfileId, hostGroupName, environmentName, operatingSystemId, this.architectureId, puppetConfiguration, this.domainId, passwordVm);
+			final Host host = ForemanHelper.createHost(this.url, this.username, this.password, hostName, this.computeResourceId, this.computeProfileId, hostGroupName, environmentName, operatingSystemId, this.architectureId, puppetConfiguration, this.domainId, passwordVm);
 
             //TODO find a way to generate the plugin tab ID dynamically
             redirectURL += "?foremanHost=" + host.name + "#pluginTab0";
