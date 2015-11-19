@@ -32,7 +32,7 @@
                             <input onClick="this.select();" type="password" name="password" id="password" placeholder="password"/>
                             <div th:if="${param.error}" ><font color="red">Invalid username and password.</font></div>
                             <div th:if="${param.logout}">You have been logged out.</div>
-                            <button onclick="loginForman();" class="btn btn-info btn-block login" type="button">Login</button>
+                            <button  class="btn btn-info btn-block login" type="submit">Login</button>
                         </form>
                     </div>
                 </div>
