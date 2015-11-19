@@ -143,7 +143,7 @@ public class ForemanActionsController {
             ForemanHelper.importPuppetClasses(this.url, this.username, this.password, this.smartProxyId);
         } catch (final Exception e) {
             success = false;
-            LOGGER.error("[foreman] Failed to import puppet classes.");
+            LOGGER.error("[foreman] Failed to import puppet classes.", e);
             this.errorHandler.registerError("Failed to import Puppet classes.");
         }
         return success;
@@ -205,13 +205,11 @@ public class ForemanActionsController {
 			final String operatingSystemId = target.getOperationSystemId();
 			final String puppetConfiguration = target.getPuppetConfiguration();
 
-
 			LOGGER.info("[foreman] hostName: {}", hostName);
 			LOGGER.info("[foreman] computeResourceId: {}", this.computeResourceId);
 			LOGGER.info("[foreman] computeProfileId: {}", this.computeProfileId);
 			LOGGER.info("[puppet] hostGroupName: {}", hostGroupName);
 			LOGGER.info("[puppet] hostGroupName: {}", hostGroupName);
-
 
 			final Host host = ForemanHelper.createHost(this.url, this.username, this.password, hostName, this.computeResourceId, this.computeProfileId, hostGroupName, environmentName, operatingSystemId, this.architectureId, puppetConfiguration, this.domainId, passwordVm);
 

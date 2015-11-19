@@ -1,5 +1,6 @@
 package fr.echoes.lab.puppet;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +25,7 @@ public class PuppetClient {
 	private static final String OPT_ENVIRONMENT = "--environment";
 	private static final String OPT_VERSION = "--version";
 	private static final String OPT_MODULE_PATH = "--modulepath";
+	private static final String SUDO = "sudo";
 
 
 	public PuppetClient() {
@@ -39,13 +41,40 @@ public class PuppetClient {
 	 * @throws PuppetException
 	 */
 	public void installModule(String name, String version, String environment, String modulePath) throws PuppetException {
+
 		if (name == null) {
 			throw new NullPointerException("Puppet module name cannot be null");
 		}
 
 		LOGGER.info("Installing Puppet module. Name: {} Version: {} Environment: {}", name, version, environment);
 
+		String targetPath = null;
+
+		if (modulePath != null && environment != null) {
+			final File file = new File(modulePath, environment);
+			LOGGER.error("[puppet] Installing module into {}", file.getAbsolutePath());
+			final List<String> commandMkdir = new ArrayList<>();
+			commandMkdir.add(SUDO);
+			commandMkdir.add("mkdir");
+			commandMkdir.add("-p");
+			commandMkdir.add( file.getAbsolutePath());
+			final ExternalProcessLauncher processLauncher = new ExternalProcessLauncher(commandMkdir);
+			try {
+				final IProcessLaunchResult process = processLauncher.launchSync(true);
+				if (process.getExitValue() != 0) {
+					LOGGER.error("[puppet] Failed to create directory {}", file.getAbsoluteFile());
+				}
+			} catch (final ExternalProcessLauncherException e) {
+				LOGGER.error("[puppet] Failed to create directory {}", file.getAbsoluteFile());
+			}
+			targetPath = new File(modulePath, environment).toString();
+			targetPath = new File(targetPath, "modules").toString();
+		}
+
+
+
 		final List<String> commandLine = new ArrayList<>();
+		commandLine.add(SUDO);
 		commandLine.add(PUPPET_BIN);
 		commandLine.add(MODULE);
 		commandLine.add(INSTALL);
@@ -58,9 +87,10 @@ public class PuppetClient {
 			commandLine.add(OPT_ENVIRONMENT);
 			commandLine.add(environment);
 		}
-		if (modulePath != null) {
+
+		if (targetPath != null) {
 			commandLine.add(OPT_MODULE_PATH);
-			commandLine.add(modulePath);
+			commandLine.add(targetPath);
 		}
 
 		final ExternalProcessLauncher processLauncher = new ExternalProcessLauncher(commandLine);

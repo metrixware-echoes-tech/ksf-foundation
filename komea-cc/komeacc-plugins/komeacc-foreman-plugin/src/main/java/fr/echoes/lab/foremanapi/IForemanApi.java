@@ -150,7 +150,7 @@ public interface IForemanApi {
 	@Path("/api/smart_proxies/{id}/import_puppetclasses")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	PuppetClasses importPuppetClasses(
+	void importPuppetClasses(
 			@PathParam("id") String id,
 			String bodyContent);
 
