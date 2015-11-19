@@ -103,7 +103,7 @@ public class ForemanActionsController {
 
         } else {
             LOGGER.error("Failed to create environment {}", errors);
-            this.errorHandler.registerError("Invalid data provided. Failed to create environment.");
+            this.errorHandler.registerError("Invalid data provided. Failed to create environment.", errors);
         }
 
         return "redirect:/ui/projects/" + project.getKey();
