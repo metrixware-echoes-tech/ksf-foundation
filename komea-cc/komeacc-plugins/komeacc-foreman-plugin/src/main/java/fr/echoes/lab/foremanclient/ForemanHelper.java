@@ -6,9 +6,11 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.JsonGenerationException;
@@ -29,6 +31,7 @@ import fr.echoes.lab.foremanapi.model.HostGroup;
 import fr.echoes.lab.foremanapi.model.HostGroupWrapper;
 import fr.echoes.lab.foremanapi.model.HostWrapper;
 import fr.echoes.lab.foremanapi.model.Hostgroups;
+import fr.echoes.lab.foremanapi.model.Hosts;
 import fr.echoes.lab.foremanapi.model.NewFilter;
 import fr.echoes.lab.foremanapi.model.NewHost;
 import fr.echoes.lab.foremanapi.model.NewRole;
@@ -155,6 +158,9 @@ public class ForemanHelper {
           final HostGroupWrapper hostGroupWrapper = new HostGroupWrapper();
           final HostGroup hostGroup = new HostGroup();
           hostGroup.name = projectName;
+          hostGroup.subnet_id = "1";
+          hostGroup.ptable_id = "54";
+          hostGroup.medium_id = "2";
           hostGroupWrapper.setHostGroup(hostGroup);
           api.createHostGroups(hostGroupWrapper);
      }
@@ -211,14 +217,14 @@ public class ForemanHelper {
     	 newHost.name = hostName;
     	 newHost.compute_resource_id = computeResourceId;
     	 newHost.compute_profile_id = computeProfileId;
-    	 newHost.hostgroup_id = "1";
+    	 newHost.hostgroup_id = "15";
     	 newHost.environment_id = findEnvironmentId(api, environmentName);
     	 newHost.operatingsystem_id = operatingSystemId;
     	 newHost.architecture_id = architectureId;
     	 newHost.domain_id = domainId;
     	 newHost.root_pass = rootPassword;
 
-    	 newHost.puppetclass_ids = getPuppetClassesId(api, environmentName);
+    	 newHost.puppetclass_ids = findPuppetClassesId(api, environmentName);
 
     	 newHost.interfaces_attributes.put("0", new NetworkInterface() );
 
@@ -230,21 +236,23 @@ public class ForemanHelper {
     	 return api.createHost(hostWrapper);
      }
 
-     private static List<String> getPuppetClassesId(IForemanApi api, String environmentName) {
-    	 final String environmentId = findEnvironmentId(api, environmentName);
-
+     private static List<String> findPuppetClassesId(IForemanApi api, String environmentName) {
     	 final List<String> result = new ArrayList<String>();
+
+    	 final String environmentId = findEnvironmentId(api, environmentName);
+    	 final Environment environment = api.getEnvironment(environmentId);
 
     	 if (environmentId == null) {
     		 return result;
     	 }
 
-    	 final Environment environment = api.getEnvironment(environmentId);
-
+    	 final Set<String> moduleId = new HashSet<String>();
          for (final fr.echoes.lab.foremanapi.model.PuppetClass puppetClass : environment.puppetClasses) {
-        	 result.add(puppetClass.id);
-        }
-
+        	 if (puppetClass.module_name.equals(puppetClass.name)) {
+        		 moduleId.add(puppetClass.id);
+        	 }
+         }
+         result.addAll(moduleId);
     	 return result;
 	}
 
@@ -311,35 +319,79 @@ public class ForemanHelper {
      }
 
      public static String getModulesPuppetClassParameters(String url, String adminUserName, String password, String environmentName) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException, JsonGenerationException, JsonMappingException, IOException {
-          final IForemanApi api = ForemanClient.createApi(url, adminUserName, password);
-          final String environmentId = findEnvironmentId(api, environmentName);
+    	 final IForemanApi api = ForemanClient.createApi(url, adminUserName, password);
+    	 final String environmentId = findEnvironmentId(api, environmentName);
 
 
-          final Environment environment = api.getEnvironment(environmentId);
+    	 final Environment environment = api.getEnvironment(environmentId);
 
-          final Modules modules = new Modules();
+    	 final Modules modules = new Modules();
 
-          for (final fr.echoes.lab.foremanapi.model.PuppetClass puppetClass : environment.puppetClasses) {
-               final Module module = modules.getOrCreateModule(puppetClass.module_name);
-               final PuppetClass pc = module.getOrCreatePuppetClass(puppetClass.name);
-               pc.setId(puppetClass.id);
-          }
+    	 final Set<String> moduleIds = new HashSet<String>();
+    	 for (final fr.echoes.lab.foremanapi.model.PuppetClass puppetClass : environment.puppetClasses) {
+    		 if (puppetClass.module_name.equals(puppetClass.name)) {
+    			 final Module module = modules.getOrCreateModule(puppetClass.module_name);
+    			 final PuppetClass pc = module.getOrCreatePuppetClass(puppetClass.name);
+    			 pc.setId(puppetClass.id);
+    			 moduleIds.add(puppetClass.id);
+    		 }
+    	 }
 
 
-          for (final Module module : modules.modules.values()) {
-               for (final PuppetClass puppetClass : module.puppetClasses.values()) {
-                    final PuppetClassParameters puppetClassParameters = api.getPuppetClassParameters(puppetClass.id);
-                    for (final PuppetClassParameter puppetClassParameter : puppetClassParameters.results) {
-                         final Parameter parameter = puppetClass.getOrCreateParameter(puppetClassParameter.parameter);
-                         parameter.setId(puppetClassParameter.id);
-                         parameter.setValue(puppetClassParameter.default_value);
-                         parameter.setOverride(puppetClassParameter.override);
-                    }
-               }
-          }
+    	 for (final Module module : modules.modules.values()) {
+    		 for (final PuppetClass puppetClass : module.puppetClasses.values()) {
+    			 final PuppetClassParameters puppetClassParameters = api.getPuppetClassParameters(puppetClass.id);
+    			 for (final PuppetClassParameter puppetClassParameter : puppetClassParameters.results) {
+    				 if (moduleIds.contains(puppetClassParameter.id)) {
+    					 final Parameter parameter = puppetClass.getOrCreateParameter(puppetClassParameter.parameter);
+    					 parameter.setId(puppetClassParameter.id);
+    					 parameter.setValue(puppetClassParameter.default_value);
+    					 parameter.setOverride(puppetClassParameter.override);
+    				 }
+    			 }
+    		 }
+    	 }
 
           final ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
           return ow.writeValueAsString(modules);
      }
 
+     public static boolean hostGroupExists(String url, String adminUserName, String password, String hostGroupName) {
+    	 if (StringUtils.isEmpty(hostGroupName)) {
+    		 throw new IllegalArgumentException("hostName cannot be null or empty");
+    	 }
+
+    	 try {
+    		 final IForemanApi api = ForemanClient.createApi(url, adminUserName, password);
+    		 final Hostgroups hostGroups = api.getHostGroups(null, null, null, null);
+    		 for (final HostGroup hostGroup : hostGroups.results) {
+    			 if (hostGroup.name.equalsIgnoreCase(hostGroupName)) {
+    				 return true;
+    			 }
+    		 }
+    	 } catch (final Exception e) {
+    		 LOGGER.error("Failed to check if the hostGroup exists", e);
+    	 }
+    	 return false;
+     }
+
+
+     public static boolean hostExists(String url, String adminUserName, String password, String hostName) {
+    	 if (StringUtils.isEmpty(hostName)) {
+    		 throw new IllegalArgumentException("hostName cannot be null or empty");
+    	 }
+
+    	 try {
+    		 final IForemanApi api = ForemanClient.createApi(url, adminUserName, password);
+    		 final Hosts hosts = api.getHosts();
+    		 for (final Host host : hosts.results) {
+    			 if (host.name.equalsIgnoreCase(hostName)) {
+    				 return true;
+    			 }
+    		 }
+    	 } catch (final Exception e) {
+    		 LOGGER.error("Failed to check if the host exists", e);
+    	 }
+    	 return false;
+     }
 }
