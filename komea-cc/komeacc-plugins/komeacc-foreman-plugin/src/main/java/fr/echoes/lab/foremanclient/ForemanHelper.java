@@ -58,6 +58,8 @@ public class ForemanHelper {
 
      private static final Logger LOGGER = LoggerFactory.getLogger(ForemanHelper.class);
 
+     public static final String PER_PAGE_RESULT = "1000";
+     
      /**
      * Private constructor to prevent instantiation.
      */
@@ -78,7 +80,7 @@ public class ForemanHelper {
                throw new IllegalArgumentException();
           }
 
-          final Roles roles = api.getRoles(null, null, null, null);
+          final Roles roles = api.getRoles(null, null, null, PER_PAGE_RESULT);
           for (final Role role : roles.results) {
                final String name = role.name;
                if (rolename.equals(name)) {
@@ -127,7 +129,7 @@ public class ForemanHelper {
 
      private static String[] getAllPermission(IForemanApi api, Filter filter, String resourceType) {
 
-          final Permissions permissions = api.getPermissions(null, null, resourceType, null);
+          final Permissions permissions = api.getPermissions(null, PER_PAGE_RESULT, resourceType, null);
 
           final String[] permissionIds = new String[permissions.results.size()];
           for (int i = 0; i < permissions.results.size(); i++) {
@@ -331,7 +333,7 @@ public class ForemanHelper {
      }
 
      private static String findEnvironmentId(IForemanApi api, String environmentName) {
-          final Environments environments = api.getEnvironments();
+          final Environments environments = api.getEnvironments(null, null, null, PER_PAGE_RESULT);
           for (final Environment hostGroup : environments.results) {
                if (hostGroup.name.equals(environmentName)) {
                     return hostGroup.id;
@@ -342,7 +344,7 @@ public class ForemanHelper {
 
 
      private static String findHostGroupId(IForemanApi api, String hostGroupName) {
-          final Hostgroups hostGroups = api.getHostGroups(null, null, null, null);
+          final Hostgroups hostGroups = api.getHostGroups(null, null, null, PER_PAGE_RESULT);
           for (final HostGroup hostGroup : hostGroups.results) {
                if (hostGroup.name.equals(hostGroupName)) {
                     return hostGroup.id;
@@ -379,7 +381,7 @@ public class ForemanHelper {
 
     	 for (final Module module : modules.modules.values()) {
     		 for (final PuppetClass puppetClass : module.puppetClasses.values()) {
-    			 final PuppetClassParameters puppetClassParameters = api.getPuppetClassParameters(puppetClass.id);
+    			 final PuppetClassParameters puppetClassParameters = api.getPuppetClassParameters(puppetClass.id, null, null, null, PER_PAGE_RESULT);
     			 for (final PuppetClassParameter puppetClassParameter : puppetClassParameters.results) {
     				 if (moduleIds.contains(puppetClassParameter.id)) {
     					 final Parameter parameter = puppetClass.getOrCreateParameter(puppetClassParameter.parameter);
@@ -402,7 +404,7 @@ public class ForemanHelper {
 
     	 try {
     		 final IForemanApi api = ForemanClient.createApi(url, adminUserName, password);
-    		 final Hostgroups hostGroups = api.getHostGroups(null, null, null, null);
+    		 final Hostgroups hostGroups = api.getHostGroups(null, null, null, PER_PAGE_RESULT);
     		 for (final HostGroup hostGroup : hostGroups.results) {
     			 if (hostGroup.name.equalsIgnoreCase(hostGroupName)) {
     				 return true;
@@ -422,7 +424,7 @@ public class ForemanHelper {
 
     	 try {
     		 final IForemanApi api = ForemanClient.createApi(url, adminUserName, password);
-    		 final Hosts hosts = api.getHosts();
+    		 final Hosts hosts = api.getHosts(null, null, null, PER_PAGE_RESULT);
     		 for (final Host host : hosts.results) {
     			 if (host.name.equalsIgnoreCase(hostName)) {
     				 return true;

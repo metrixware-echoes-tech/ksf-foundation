@@ -129,7 +129,11 @@ public interface IForemanApi {
 	@GET
 	@Path("/api/operatingsystems")
 	@Produces(MediaType.APPLICATION_JSON)
-	OperatingSystems getOperatingSystems();
+	OperatingSystems getOperatingSystems(
+			@QueryParam("search") String name,
+			@QueryParam("order") String order,
+			@QueryParam("page") String page,
+			@QueryParam("per_page") String perPage);
 
 	@GET
 	@Path("/api/compute_resources")
@@ -143,7 +147,11 @@ public interface IForemanApi {
 	@GET
 	@Path("/api/compute_profiles")
 	@Produces(MediaType.APPLICATION_JSON)
-	ComputeProfiles getComputeProfiles();
+	ComputeProfiles getComputeProfiles(
+			@QueryParam("search") String name,
+			@QueryParam("order") String order,
+			@QueryParam("page") String page,
+			@QueryParam("per_page") String perPage);
 
 
 	@POST
@@ -159,7 +167,11 @@ public interface IForemanApi {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	PuppetClasses getEnvironmentPuppetClasses(
-			@PathParam("id") String environmentId);
+			@PathParam("id") String environmentId,
+			@QueryParam("search") String name,
+			@QueryParam("order") String order,
+			@QueryParam("page") String page,
+			@QueryParam("per_page") String perPage);
 
 	@POST
 	@Path("/api/hosts")
@@ -170,17 +182,29 @@ public interface IForemanApi {
 	@GET
 	@Path("/api/hosts")
 	@Produces(MediaType.APPLICATION_JSON)
-	Hosts getHosts();
+	Hosts getHosts(
+			@QueryParam("search") String name,
+			@QueryParam("order") String order,
+			@QueryParam("page") String page,
+			@QueryParam("per_page") String perPage);
 
 	@GET
 	@Path("/api/environments")
 	@Produces(MediaType.APPLICATION_JSON)
-	Environments getEnvironments();
+	Environments getEnvironments(
+			@QueryParam("search") String name,
+			@QueryParam("order") String order,
+			@QueryParam("page") String page,
+			@QueryParam("per_page") String perPage);
 
 	@GET
 	@Path("/api/smart_class_parameters")
 	@Produces(MediaType.APPLICATION_JSON)
-	Environments getSmartClassParameters();
+	Environments getSmartClassParameters(
+			@QueryParam("search") String name,
+			@QueryParam("order") String order,
+			@QueryParam("page") String page,
+			@QueryParam("per_page") String perPage);
 
 	@POST
 	@Path("/api/smart_variables/{smart_variable_id}/override_values")
@@ -210,7 +234,11 @@ public interface IForemanApi {
 	@Path("/api/puppetclasses/{puppet_class_id}/smart_class_parameters")
 	@Produces(MediaType.APPLICATION_JSON)
 	PuppetClassParameters getPuppetClassParameters(
-			@PathParam("puppet_class_id") String puppet_class_id);
+			@PathParam("puppet_class_id") String puppet_class_id,
+			@QueryParam("search") String name,
+			@QueryParam("order") String order,
+			@QueryParam("page") String page,
+			@QueryParam("per_page") String perPage);
 
 
 
