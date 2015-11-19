@@ -1,7 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
     <head>
         <title>Komea Software Factory | Command and Control</title>
@@ -28,7 +27,7 @@
 	            <a class="navbar-brand" th:href="@{/documentation/index.html}" target="_blank" data-toggle="tooltip" data-placement="bottom" title="View documentation" >Help</a>
 	          </div>
 	          <div class='navbar-form navbar-left' role='form'>
-	            <a class="btn-primary btn-sm glyphicon glyphicon-plus" data-toggle="tooltip" title="Create a new project" data-placement="bottom" th:href="@{/ui/projects/new}"></a>	            
+	            <a style="margin-top: 3px; margin-left: -10px" class="btn-primary btn-sm glyphicon glyphicon-plus" data-toggle="tooltip" title="Create a new project" data-placement="bottom" th:href="@{/ui/projects/new}"></a>	            
 	          </div>
 	          <!-- User links -->
 	          <div class='navbar-collapse collapse' id='navbar'>
