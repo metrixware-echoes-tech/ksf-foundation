@@ -9,40 +9,50 @@ function donner_focus(chp)
     document.getElementById(chp).select();
 }
 
+$('#loginForm').submit(function(ev) {
+    ev.preventDefault();
+    loginForman();
+});
+
 function loginForman() {
-    var login = document.getElementById("username").value;
-    var password = document.getElementById("password").value;
+
+        var login = document.getElementById("username").value;
+        var password = document.getElementById("password").value;
 
 //    alert('login '+login );
-    IE = window.ActiveXObject ? true : false;
-    MOZ = window.sidebar ? true : false;
+        IE = window.ActiveXObject ? true : false;
+        MOZ = window.sidebar ? true : false;
 
-    try {
-        if (IE)
-        {
-            var contenu_iframe = window.frames['iframe_article'].document.getElementsByName('authenticity_token');
-        } else {
-            var contenu_iframe = document.getElementById("formanFrame").contentWindow.document.getElementsByName('authenticity_token');
+        try {
+            if (IE) {
+                var contenu_iframe = window.frames['iframe_article'].document.getElementsByName('authenticity_token');
+            } else {
+                var contenu_iframe = document.getElementById("formanFrame").contentWindow.document.getElementsByName('authenticity_token');
 
+            }
+            var keyAuthen = contenu_iframe[0].value;
         }
-        var keyAuthen = contenu_iframe[0].value;
-    }
-    catch (error)
-    {
-        console.log(error);
-        submitLogin();
-    }
+        catch (error) {
+            console.log(error);
+            submitLogin();
+        }
 //    alert(keyAuthen);
 
 
-
-    var parametres = {"utf8": '✓', "login[login]": login, "login[password]": password, "authenticity_token": keyAuthen};
-    post_en_url(pageData.foremanUrl + "/users/login", parametres);
+        var parametres = {
+            "utf8": '✓',
+            "login[login]": login,
+            "login[password]": password,
+            "authenticity_token": keyAuthen
+        };
+        post_en_url(pageData.foremanUrl + "/users/login", parametres);
 
 }
+
+
 function submitLogin()
 {
-    $('#loginForm').submit();
+    $('#loginForm').unbind().submit();
 }
 
 
