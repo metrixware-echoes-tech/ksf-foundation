@@ -180,7 +180,12 @@
    </div>
  </div>
  
-<script type="text/javascript">
+<script type="text/javascript" th:inline="text">
+
+	var restAPI = {
+        'puppetClassParameters': '[[@{/rest/foreman/puppet_class_parameters/}]]',
+        'environments': '[[@{/rest/foreman/environments/}]]'
+    }
 
 	document.addEventListener("DOMContentLoaded", function(event) { 
 	
@@ -204,7 +209,7 @@
 		var sourceId = $('#environment').val();
 		if (sourceId != "") {
 		
-			$.get("/rest/foreman/puppet_class_parameters/"+sourceId, function(data) {
+			$.get(restAPI.puppetClassParameters+sourceId, function(data) {
 				if (data) {
 					$('#puppetConfiguration').val(data);
 				}
@@ -217,7 +222,7 @@
 	function selectSource() {
 		var sourceId = $('#env_source').val();
 		if (sourceId != "") {
-			$.get("/rest/foreman/environments/"+sourceId, function(data) {
+			$.get(restAPI.environments+sourceId, function(data) {
 				if (data) {
 					$('#env_configuration').val(data.configuration);
 				}
