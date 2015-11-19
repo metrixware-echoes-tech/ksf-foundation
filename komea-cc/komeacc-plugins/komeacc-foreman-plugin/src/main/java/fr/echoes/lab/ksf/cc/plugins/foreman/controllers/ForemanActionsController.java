@@ -103,7 +103,7 @@ public class ForemanActionsController {
 
         } else {
             LOGGER.error("Failed to create environment {}", errors);
-            this.errorHandler.registerError("Invalid data provided. Failed to create environment.");
+            this.errorHandler.registerError("Invalid data provided. Failed to create environment.", errors);
         }
 
         return "redirect:/ui/projects/" + project.getKey();
@@ -177,7 +177,7 @@ public class ForemanActionsController {
             this.targetDAO.save(foremanTarget);
         } else {
             LOGGER.error("[foreman] Failed to create target : {}", errors);
-            this.errorHandler.registerError("Invalid data provided. Failed to create target.");
+            this.errorHandler.registerError("Invalid data provided. Failed to create target.", errors);
         }
 
         return "redirect:/ui/projects/" + project.getKey();
