@@ -53,6 +53,9 @@ public class ForemanActionsController {
     @Value("${ksf.foreman.host.computeResourceId}")
     private String computeResourceId;
 
+    @Value("${ksf.foreman.host.computeProfileId}")
+    private String computeProfileId;
+
     @Value("${ksf.puppet.modulepath}")
     private String puppetModulePath;
 
@@ -61,6 +64,9 @@ public class ForemanActionsController {
 
     @Value("${ksf.foreman.host.rootPassword}")
     private String rootPassword;
+
+    @Value("${ksf.foreman.host.architectureId}")
+    private String architectureId;
 
     @Autowired
     private IProjectDAO projectDAO;
@@ -199,12 +205,15 @@ public class ForemanActionsController {
 			final String operatingSystemId = target.getOperationSystemId();
 			final String puppetConfiguration = target.getPuppetConfiguration();
 
-			LOGGER.info("[foreman] hostGroupName: {}", hostGroupName);
-			LOGGER.info("[foreman] environmentName: {}", environmentName);
-			LOGGER.info("[foreman] operatingSystemIdf: {}", operatingSystemId);
-			LOGGER.info("[puppet] conf: {}", puppetConfiguration);
 
-			final Host host = ForemanHelper.createHost(this.url, this.username, this.password, hostName, "1", "1", hostGroupName, environmentName, operatingSystemId, "1", puppetConfiguration, "2", passwordVm);
+			LOGGER.info("[foreman] hostName: {}", hostName);
+			LOGGER.info("[foreman] computeResourceId: {}", this.computeResourceId);
+			LOGGER.info("[foreman] computeProfileId: {}", this.computeProfileId);
+			LOGGER.info("[puppet] hostGroupName: {}", hostGroupName);
+			LOGGER.info("[puppet] hostGroupName: {}", hostGroupName);
+
+
+			final Host host = ForemanHelper.createHost(this.url, this.username, this.password, hostName, this.computeResourceId, this.computeProfileId, hostGroupName, environmentName, operatingSystemId, this.architectureId, puppetConfiguration, this.domainId, passwordVm);
 
             //TODO find a way to generate the plugin tab ID dynamically
             redirectURL += "?foremanHost=" + host.name + "#pluginTab0";

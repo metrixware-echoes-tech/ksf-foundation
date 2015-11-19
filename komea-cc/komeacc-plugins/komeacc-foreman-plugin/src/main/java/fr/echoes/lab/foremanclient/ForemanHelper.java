@@ -5,6 +5,7 @@ import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -159,8 +160,12 @@ public class ForemanHelper {
           final HostGroup hostGroup = new HostGroup();
           hostGroup.name = projectName;
           hostGroup.subnet_id = "1";
+          hostGroup.realm_id = "";
+          hostGroup.architecture_id = "1";
+          hostGroup.operatingsystem_id = "1";
           hostGroup.ptable_id = "54";
           hostGroup.medium_id = "2";
+          hostGroup.domain_id = "2";
           hostGroupWrapper.setHostGroup(hostGroup);
           api.createHostGroups(hostGroupWrapper);
      }
@@ -217,7 +222,7 @@ public class ForemanHelper {
     	 newHost.name = hostName;
     	 newHost.compute_resource_id = computeResourceId;
     	 newHost.compute_profile_id = computeProfileId;
-    	 newHost.hostgroup_id = "15";
+    	 newHost.hostgroup_id = findHostGroupId(api, hostGroupName);
     	 newHost.environment_id = findEnvironmentId(api, environmentName);
     	 newHost.operatingsystem_id = operatingSystemId;
     	 newHost.architecture_id = architectureId;
@@ -234,6 +239,35 @@ public class ForemanHelper {
     	 configurePuppet(api, puppetConfiguration);
 
     	 return api.createHost(hostWrapper);
+     }
+
+     private static List<String> findPuppetClassesIdToInstall(IForemanApi api, String puppetConfiguration) throws Exception {
+
+    	 final Set<String> classesId = new HashSet<>();
+         final ObjectMapper mapper = new ObjectMapper();
+
+         try {
+             final JsonNode rootNode = mapper.readTree(puppetConfiguration);
+             final JsonNode modulesNode = rootNode.get("modules");
+             if (modulesNode == null) {
+                 return Collections.<String>emptyList();
+             }
+             if (modulesNode.isArray()) {
+
+            	 for (final JsonNode moduleNode : modulesNode) {
+            		 final JsonNode puppetClassesNode = modulesNode.get("puppetClasses");
+            		 if (puppetClassesNode.isArray()) {
+
+            		 }
+            	 }
+             }
+         } catch (final Exception e) {
+        	 final Exception ex = new Exception("Failed to parse puppet classes json", e);
+        	 LOGGER.error(ex.getMessage(), ex);
+        	 throw ex;
+         }
+
+           return new ArrayList<String>(classesId);
      }
 
      private static List<String> findPuppetClassesId(IForemanApi api, String environmentName) {
@@ -394,4 +428,6 @@ public class ForemanHelper {
     	 }
     	 return false;
      }
+
+
 }
