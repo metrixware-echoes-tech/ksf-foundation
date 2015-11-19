@@ -183,7 +183,6 @@ public class ForemanActionsController {
 
         final ForemanTarget target = this.targetDAO.findOne(targetId);
 
-        final String name = target.getName();
         String passwordVm = this.rootPassword;
         if (StringUtils.isNotEmpty(hostPass)) {
             passwordVm = hostPass;

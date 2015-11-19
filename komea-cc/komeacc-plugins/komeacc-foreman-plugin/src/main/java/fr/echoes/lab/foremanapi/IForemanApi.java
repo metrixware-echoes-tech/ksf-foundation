@@ -25,6 +25,7 @@ import fr.echoes.lab.foremanapi.model.HostGroupWrapper;
 import fr.echoes.lab.foremanapi.model.HostPowerController;
 import fr.echoes.lab.foremanapi.model.HostWrapper;
 import fr.echoes.lab.foremanapi.model.Hostgroups;
+import fr.echoes.lab.foremanapi.model.Hosts;
 import fr.echoes.lab.foremanapi.model.OperatingSystems;
 import fr.echoes.lab.foremanapi.model.Permissions;
 import fr.echoes.lab.foremanapi.model.PuppetClassParameters;
@@ -165,6 +166,11 @@ public interface IForemanApi {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	Host createHost(HostWrapper hostWrapper);
+
+	@GET
+	@Path("/api/hosts")
+	@Produces(MediaType.APPLICATION_JSON)
+	Hosts getHosts();
 
 	@GET
 	@Path("/api/environments")
