@@ -1,7 +1,9 @@
 package fr.echoes.lab.ksf.cc.plugins.foreman.model;
 
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import com.tocea.corolla.utils.domain.ObjectValidation;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.annotation.Id;
@@ -14,55 +16,64 @@ import com.tocea.corolla.products.domain.Project;
 
 @Document
 public class ForemanTarget {
+
 	@Id
 	@Field("_id")
-	private String				id;
+	private String id;
 
 	@NotEmpty
 	@Size(min = 3, max = 100)
+	@Pattern(regexp = ObjectValidation.URL_SAFE_PATTERN)
 	private String name;
 
 	@DBRef
-	private ForemanEnvironnment	environment;
+	private ForemanEnvironnment environment;
 
 	@DBRef
 	private Project project;
 
 	@NotBlank
-	private String	operatingSystemName;
+	private String operatingSystemName;
 
 	@NotBlank
-	private String	computeProfile;
+	private String computeProfile;
 
 	private String operatingSystemId;
 
 	private String puppetConfiguration;
 
 	public String getComputeProfile() {
+
 		return this.computeProfile;
 	}
 
 	public ForemanEnvironnment getEnvironment() {
+
 		return this.environment;
 	}
 
 	public String getId() {
+
 		return this.id;
 	}
 
 	public String getOperatingSystemName() {
+
 		return this.operatingSystemName;
 	}
 
 	public void setComputeProfile(final String _computeProfile) {
+
 		this.computeProfile = _computeProfile;
 	}
 
 	public void setEnvironment(final ForemanEnvironnment _environment) {
+
 		this.environment = _environment;
 	}
 
 	public void setId(final String _id) {
+
 		this.id = _id;
 	}
 
