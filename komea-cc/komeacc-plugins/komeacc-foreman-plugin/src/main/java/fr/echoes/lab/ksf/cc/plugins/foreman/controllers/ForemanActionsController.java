@@ -1,9 +1,6 @@
 package fr.echoes.lab.ksf.cc.plugins.foreman.controllers;
 
 import java.io.IOException;
-import java.security.KeyManagementException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
@@ -30,6 +27,7 @@ import fr.echoes.lab.foremanapi.model.Host;
 import fr.echoes.lab.foremanclient.ForemanHelper;
 import fr.echoes.lab.ksf.cc.plugins.foreman.dao.IForemanEnvironmentDAO;
 import fr.echoes.lab.ksf.cc.plugins.foreman.dao.IForemanTargetDAO;
+import fr.echoes.lab.ksf.cc.plugins.foreman.exceptions.ForemanHostAlreadyExistException;
 import fr.echoes.lab.ksf.cc.plugins.foreman.model.ForemanEnvironnment;
 import fr.echoes.lab.ksf.cc.plugins.foreman.model.ForemanTarget;
 import fr.echoes.lab.ksf.cc.plugins.foreman.services.ForemanErrorHandlingService;
@@ -223,26 +221,14 @@ public class ForemanActionsController {
 
             //TODO find a way to generate the plugin tab ID dynamically
             redirectURL += "?foremanHost=" + host.name + "#pluginTab0";
-        } catch (final Exception e) {
-			LOGGER.error("[foreman] Failed to create host {}.", hostName);
 
+        } catch (final ForemanHostAlreadyExistException e) {
+        	LOGGER.error("[foreman] Failed to create host {} : {}", hostName, e);
+        	this.errorHandler.registerError("Failed to instantiate target. The provided name is already used for another instance.");
+        }catch (final Exception e) {
+			LOGGER.error("[foreman] Failed to create host {} : {}.", hostName, e);
             this.errorHandler.registerError("Failed to instantiate target. Please verify your Foreman configuration.");
         }
         return "redirect:" + redirectURL;
     }
-
-    public static void main(String[] args) {
-		try {
-			ForemanHelper.createHost("https://ksf-ads.metrixware.local", "admin", "echoes", "createInstanceDCD1", "1", "1", "testcreatehostgroupdcd100", "production", "1", "1", "", "2", "rootPassword");
-		} catch (final KeyManagementException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (final NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (final KeyStoreException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 }
