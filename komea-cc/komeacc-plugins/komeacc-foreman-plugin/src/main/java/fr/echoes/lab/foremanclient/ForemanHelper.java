@@ -45,6 +45,7 @@ import fr.echoes.lab.foremanapi.model.Roles;
 import fr.echoes.lab.foremanapi.model.User;
 import fr.echoes.lab.foremanapi.model.UserWrapper;
 import fr.echoes.lab.foremanclient.model.NetworkInterface;
+import fr.echoes.lab.ksf.cc.plugins.foreman.exceptions.ForemanHostAlreadyExistException;
 
 /**
 * Noninstantiable Utilities class for working with the foreman API.
@@ -209,6 +210,10 @@ public class ForemanHelper {
 
      public static Host createHost(String url, String adminUserName, String password, String hostName, String computeResourceId, String computeProfileId, String hostGroupName, String environmentName, String operatingSystemId, String architectureId, String puppetConfiguration, String domainId, String rootPassword) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
 
+    	  if (hostExists(url, adminUserName, password, hostName)) {
+    		  throw new ForemanHostAlreadyExistException(hostName);
+    	  }
+    	 
          //  final Host host = null;
     	 final IForemanApi api = ForemanClient.createApi(url, adminUserName, password);
 

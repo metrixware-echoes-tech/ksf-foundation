@@ -27,6 +27,7 @@ import fr.echoes.lab.foremanapi.model.Host;
 import fr.echoes.lab.foremanclient.ForemanHelper;
 import fr.echoes.lab.ksf.cc.plugins.foreman.dao.IForemanEnvironmentDAO;
 import fr.echoes.lab.ksf.cc.plugins.foreman.dao.IForemanTargetDAO;
+import fr.echoes.lab.ksf.cc.plugins.foreman.exceptions.ForemanHostAlreadyExistException;
 import fr.echoes.lab.ksf.cc.plugins.foreman.model.ForemanEnvironnment;
 import fr.echoes.lab.ksf.cc.plugins.foreman.model.ForemanTarget;
 import fr.echoes.lab.ksf.cc.plugins.foreman.services.ForemanErrorHandlingService;
@@ -195,7 +196,7 @@ public class ForemanActionsController {
 		try {
 
 			final String hostGroupName = hostName;
-			final String environmentName = environment.getName();
+			final String environmentName = environment != null ? environment.getName() : "";
 			final String operatingSystemId = target.getOperationSystemId();
 			final String puppetConfiguration = target.getPuppetConfiguration();
 
@@ -203,14 +204,17 @@ public class ForemanActionsController {
 			LOGGER.info("[foreman] environmentName: {}", environmentName);
 			LOGGER.info("[foreman] operatingSystemIdf: {}", operatingSystemId);
 			LOGGER.info("[puppet] conf: {}", puppetConfiguration);
-
+			
 			final Host host = ForemanHelper.createHost(this.url, this.username, this.password, hostName, "1", "1", hostGroupName, environmentName, operatingSystemId, "1", puppetConfiguration, "2", passwordVm);
 
             //TODO find a way to generate the plugin tab ID dynamically
             redirectURL += "?foremanHost=" + host.name + "#pluginTab0";
-        } catch (final Exception e) {
-			LOGGER.error("[foreman] Failed to create host {}.", hostName);
-
+            
+        } catch (final ForemanHostAlreadyExistException e) {
+        	LOGGER.error("[foreman] Failed to create host {} : {}", hostName, e);
+        	this.errorHandler.registerError("Failed to instantiate target. The provided name is already used for another instance.");
+        }catch (final Exception e) {       
+			LOGGER.error("[foreman] Failed to create host {} : {}.", hostName, e);
             this.errorHandler.registerError("Failed to instantiate target. Please verify your Foreman configuration.");
         }
         return "redirect:" + redirectURL;
