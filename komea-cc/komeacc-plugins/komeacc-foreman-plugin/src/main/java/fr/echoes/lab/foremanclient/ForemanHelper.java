@@ -1,5 +1,6 @@
 package fr.echoes.lab.foremanclient;
 
+import java.io.File;
 import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
@@ -16,6 +17,7 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.ObjectWriter;
@@ -244,9 +246,13 @@ public class ForemanHelper {
     	 final HostWrapper hostWrapper = new HostWrapper();
     	 hostWrapper.setHost(newHost);
 
-    	 configurePuppet(api, puppetConfiguration);
+	     try {
+		     Modules modules = configurePuppet(api, puppetConfiguration);
+	     } catch (IOException e) {
+		     LOGGER.error(e.getMessage(),e);
+	     }
 
-    	 return api.createHost(hostWrapper);
+	     return api.createHost(hostWrapper);
      }
 
      private static List<String> findPuppetClassesIdToInstall(IForemanApi api, String puppetConfiguration) throws Exception {
@@ -297,39 +303,12 @@ public class ForemanHelper {
     	 return result;
 	}
 
-	private static void configurePuppet(IForemanApi api, String puppetConfiguration) {
+	private static Modules configurePuppet(IForemanApi api, String puppetConfiguration) throws IOException {
 
-          if (StringUtils.isEmpty(puppetConfiguration)) {
-               return;
-          }
+		ObjectMapper mapper = new ObjectMapper();
+		Modules modules = mapper.readValue(puppetConfiguration, Modules.class);
+		return modules;
 
-          final ObjectMapper mapper = new ObjectMapper();
-          try {
-               final JsonNode rootNode = mapper.readTree(puppetConfiguration);
-               final JsonNode modulesNode = rootNode.get("variables");
-               if (modulesNode.isArray()) {
-
-                    for (final JsonNode moduleNode : modulesNode) {
-                         final Map<String, String> overrideValuesMap = new HashMap<String, String>();
-                       final String variableId = moduleNode.path("variable_id").asText();
-                       final JsonNode overrideValues = moduleNode.path("override_value");
-                       if (overrideValues.isArray()) {
-                            final Iterator<String> fieldNames = overrideValues.getFieldNames();
-                            while (fieldNames.hasNext()) {
-                                 final String key = fieldNames.next();
-                                 overrideValuesMap.put(key, overrideValues.get(key).asText());
-                            }
-                       }
-                       if (overrideValuesMap.size() > 0) {
-                            api.overrideSmartVariable(variableId, overrideValuesMap);
-                       }
-                   }
-
-
-               }
-          } catch (final IOException e) {
-               LOGGER.error("Failed to override puppet module.", e);
-          }
      }
 
      private static String findEnvironmentId(IForemanApi api, String environmentName) {
