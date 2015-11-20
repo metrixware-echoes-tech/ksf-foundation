@@ -77,8 +77,8 @@ function post_en_url(url, parametres) {
     document.body.appendChild(form);
 
     var options = {
-        success: submitLogin(),
-        error: submitLogin()
+        success: submitLogin,
+        error: submitLogin
     }
 
     $(form).ajaxSubmit(options);
