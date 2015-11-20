@@ -19,6 +19,8 @@ public class ObjectValidation {
 	
 	public final static String URL_SAFE_PATTERN = "[\\w[-]?]*";
 	
+	public final static String HOSTNAME = "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$";
+	
 	private final Validator	validator;
 
 	public ObjectValidation() {
