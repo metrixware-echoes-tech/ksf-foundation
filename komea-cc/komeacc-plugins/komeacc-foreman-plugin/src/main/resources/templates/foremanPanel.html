@@ -51,7 +51,7 @@
            <div class="form-group">
              <label class="control-label col-sm-2" for="source">Environment</label>
              <div class="col-sm-10">
-               <select class="form-control" id="environment" name ="environment" onchange="selectTargetEnvironment()">
+               <select class="form-control" id="environment" name ="environment">
                		<option value=""></option>
 					<option th:each="env : ${environments}" th:value="${env.id}" th:text="${env.name}"></option>
                </select>
@@ -78,7 +78,134 @@
            </div>
            <div class="form-group">
              <div class="col-sm-12">
-               <textarea class="form-control" id="puppetConfiguration" name="puppetConfiguration" rows="15" placeholder="In this text field, you can set the parameters for the specific environment you choosed. The field is prefilled with the default values from the Puppet modules embedded in the selected Environment."></textarea>
+               <textarea class="form-control" id="puppetConfiguration" name="puppetConfiguration" rows="15" placeholder="In this text field, you can set the parameters for the specific environment you choosed. The field is prefilled with the default values from the Puppet modules embedded in the selected Environment." disabled="true">
+{
+  "modules" : {
+    "apache" : {
+      "puppetClasses" : {
+        "apache" : {
+          "parameters" : {
+            "allow_encoded_slashes" : {
+              "id" : "206",
+              "value" : "",
+              "override" : false
+            },
+            "default_ssl_cert" : {
+              "id" : "157",
+              "value" : "${$::apache::params::default_ssl_cert}",
+              "override" : false
+            },
+            "default_type" : {
+              "id" : "164",
+              "value" : "none",
+              "override" : false
+            },
+            "apache_name" : {
+              "id" : "150",
+              "value" : "${$::apache::params::apache_name}",
+              "override" : false
+            },
+            "default_ssl_chain" : {
+              "id" : "159",
+              "value" : "",
+              "override" : false
+            },
+            "default_ssl_vhost" : {
+              "id" : "156",
+              "value" : false,
+              "override" : false
+            },
+            "default_confd_files" : {
+              "id" : "155",
+              "value" : true,
+              "override" : false
+            },
+            "confd_dir" : {
+              "id" : "180",
+              "value" : "${$::apache::params::confd_dir}",
+              "override" : false
+            },
+            "conf_template" : {
+              "id" : "187",
+              "value" : "${$::apache::params::conf_template}",
+              "override" : false
+            },
+            "apache_version" : {
+              "id" : "202",
+              "value" : "${$::apache::version::default}",
+              "override" : false
+            },
+            "conf_dir" : {
+              "id" : "179",
+              "value" : "${$::apache::params::conf_dir}",
+              "override" : false
+            },
+            "default_charset" : {
+              "id" : "154",
+              "value" : "",
+              "override" : false
+            },
+            "default_mods" : {
+              "id" : "152",
+              "value" : true,
+              "override" : false
+            },
+            "default_ssl_key" : {
+              "id" : "158",
+              "value" : "${$::apache::params::default_ssl_key}",
+              "override" : false
+            },
+            "default_ssl_crl_check" : {
+              "id" : "163",
+              "value" : "",
+              "override" : false
+            },
+            "default_ssl_crl" : {
+              "id" : "162",
+              "value" : "",
+              "override" : false
+            },
+            "docroot" : {
+              "id" : "201",
+              "value" : "${$::apache::params::docroot}",
+              "override" : false
+            },
+            "default_vhost" : {
+              "id" : "153",
+              "value" : true,
+              "override" : true
+            },
+            "default_ssl_ca" : {
+              "id" : "160",
+              "value" : "",
+              "override" : false
+            },
+            "default_ssl_crl_path" : {
+              "id" : "161",
+              "value" : "",
+              "override" : false
+            }
+          },
+          "id" : "23"
+        }
+
+      }
+    },
+    "stdlib" : {
+      "puppetClasses" : {
+        "stdlib::stages" : {
+          "parameters" : { },
+          "id" : "20"
+        },
+        "stdlib" : {
+          "parameters" : { },
+          "id" : "19"
+        }
+      }
+    }
+  }
+}              
+               </textarea>
              </div>
            </div>           
            <input name="projectId" type="hidden" th:value="${projectId}"/>        

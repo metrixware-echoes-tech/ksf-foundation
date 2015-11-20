@@ -58,6 +58,9 @@ public class PuppetClient {
 			commandMkdir.add("mkdir");
 			commandMkdir.add("-p");
 			commandMkdir.add( file.getAbsolutePath());
+
+
+			LOGGER.info("[puppet] commandMkdir:" + StringUtils.join(commandMkdir, ' '));
 			final ExternalProcessLauncher processLauncher = new ExternalProcessLauncher(commandMkdir);
 			try {
 				final IProcessLaunchResult process = processLauncher.launchSync(true);
@@ -92,6 +95,8 @@ public class PuppetClient {
 			commandLine.add(OPT_MODULE_PATH);
 			commandLine.add(targetPath);
 		}
+
+		LOGGER.info("[puppet] commandLine:" + StringUtils.join(commandLine, ' '));
 
 		final ExternalProcessLauncher processLauncher = new ExternalProcessLauncher(commandLine);
 		try {

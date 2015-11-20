@@ -127,6 +127,7 @@ public class ForemanActionsController {
                     }
                     final String moduleVersion = moduleNode.path("version").asText(); // version is optional
                     try {
+                    	LOGGER.info("[foreman] puppetModulePath : {}", this.puppetModulePath);
                         puppetClient.installModule(moduleName, moduleVersion, envName, this.puppetModulePath);
                     } catch (final PuppetException e) {
                         success = false;

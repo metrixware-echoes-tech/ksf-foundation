@@ -1,23 +1,18 @@
 package fr.echoes.lab.foremanclient;
 
-import java.io.File;
 import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.ObjectWriter;
@@ -62,7 +57,7 @@ public class ForemanHelper {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ForemanHelper.class);
 
      public static final String PER_PAGE_RESULT = "1000";
-     
+
      /**
      * Private constructor to prevent instantiation.
      */
@@ -246,11 +241,11 @@ public class ForemanHelper {
     	 final HostWrapper hostWrapper = new HostWrapper();
     	 hostWrapper.setHost(newHost);
 
-	     try {
-		     Modules modules = configurePuppet(api, puppetConfiguration);
-	     } catch (IOException e) {
-		     LOGGER.error(e.getMessage(),e);
-	     }
+//	     try {
+//		     Modules modules = configurePuppet(api, puppetConfiguration);
+//	     } catch (IOException e) {
+//		     LOGGER.error(e.getMessage(),e);
+//	     }
 
 	     return api.createHost(hostWrapper);
      }
@@ -305,8 +300,8 @@ public class ForemanHelper {
 
 	private static Modules configurePuppet(IForemanApi api, String puppetConfiguration) throws IOException {
 
-		ObjectMapper mapper = new ObjectMapper();
-		Modules modules = mapper.readValue(puppetConfiguration, Modules.class);
+		final ObjectMapper mapper = new ObjectMapper();
+		final Modules modules = mapper.readValue(puppetConfiguration, Modules.class);
 		return modules;
 
      }
