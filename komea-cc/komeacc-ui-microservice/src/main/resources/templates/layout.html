@@ -24,7 +24,6 @@
 	          		<img class="logo" th:src="@{/pictures/KSF-logo.png}" alt="KSF" />
 	          	</a>
 	            <a class="navbar-brand" th:href="@{/ui/projects}" data-toggle="tooltip" data-placement="bottom" title="View project list">Projects</a>
-	            <a class="navbar-brand" th:href="@{/documentation/index.html}" target="_blank" data-toggle="tooltip" data-placement="bottom" title="View documentation" >Help</a>
 	          </div>
 	          <div class='navbar-form navbar-left' role='form'>
 	            <a style="margin-top: 3px; margin-left: -10px" class="btn-primary btn-sm glyphicon glyphicon-plus" data-toggle="tooltip" title="Create a new project" data-placement="bottom" th:href="@{/ui/projects/new}"></a>	            
@@ -49,6 +48,8 @@
 	                </ul>
 	              </li>
 	            </ul>
+	          	<a class="navbar-brand" th:href="@{/documentation/index.html}" target="_blank" data-toggle="tooltip" data-placement="bottom" title="View documentation" style="float:right" >Help</a>
+	          	<a class="navbar-brand" href="#" data-toggle="modal" data-target="#aboutModal" data-placement="bottom" title="View about" style="float:right" >About</a>	            
 	          </div>
 	        </div>
 	      </nav>
@@ -107,5 +108,77 @@
 			}
 		</script>
 		<div layout:fragment="footer" />
+		
+
+		 <div aria-hidden="true" aria-labelledby="myModalLabel" class="modal fade in" id="aboutModal" role="dialog" tabindex="-1" style="padding-left: 15px;">
+		   <div class="modal-dialog">
+		     <div class="modal-content">
+		       <div class="modal-header">
+		         <button aria-hidden="true" class="close" data-dismiss="modal" type="button">&times;</button>
+		         <h4 class="modal-title" id="myModalLabel">About</h4>
+		       </div>
+		       <div class="modal-body">
+				<img th:src="@{/pictures/logo_echoes.png}" alt="Echoes" height="50" />
+				<img th:src="@{/pictures/logo_mxw.png}" alt="MXW" height="50" style="float:right;" />
+				<div class="information">
+				<div class="container-wrapper">
+				<div class="information-section">
+				<h1 class="information-title">A propos de nous</h1>
+				<p class="information-text">Echoes Technologies, Echoes Labs (ex Tocea) et Metrixware s’unissent autour de la marque Echoes pour développer et commercialiser ensemble Komea Software Factory, une offre complète pour la modernisation des applications et des usines logicielles.
+			</p>
+				</div>
+				<div class="information-section">
+				<h1 class="information-title">Mission</h1>
+				<p class="information-text">Notre mission est simple : moderniser vos applications et vos usines logicielles.</p>
+				</div>
+				<div class="information-section">
+				<h1 class="information-title">Informations à propos de l'entreprise</h1>
+				<div class="information-text">
+				<p>Depuis sa création en 1995, le groupe Metrixware est un éditeur logiciel français, fournisseur stratégique de solutions de modernisation pour réduire le time-to-market, le coût de développement et de maintenance des applications, au cœur des systèmes d’information de toutes tailles : banques, assurances, éditeurs logiciels, administrations et industriels</p>
+				<p>Labellisé Entreprise Innovante dès 2006, le groupe Metrixware améliore en continu la qualité et l’intégrité des applications cœur de métiers de ses clients : re-engineering d’architectures, migrations de codes, cartographie et analyse d’impact, qualité du code et bonnes pratiques, industrialisation du processus de développement, mise en place de KPIs, réduction de la dette technique, certification Cleancode, etc.</p>
+				
+				<div class="information-subtext">
+				<p>Pour plus d'informations, visitez la <a href="http://www.echoes.fr">page de notre entreprise</a>.</p>
+				</div>
+				</div>
+			
+				<div class="information-section">
+				<h1 class="information-title">Informations à propos du produit</h1>
+				<p class="information-text"></p>
+				La promesse de Komea Software Factory (KSF) est de pouvoir mettre en oeuvre un ensemble bien choisi d’outils de manière homogène et sans soucis dans différents projets.
+			
+				A ce jour, le produit permet d'utiliser ensemble et de manière cohérente les produits suivants : 
+			
+				<ul>
+					<li><a href="https://git-scm.com/" target="_blank">Git</a></li>
+					<li><a href="https://jenkins-ci.org/" target="_blank">Jenkins</a></li>
+					<li><a href="http://www.redmine.org/" target="_blank">Redmine</a></li>
+					<li><a href="http://theforeman.org/" target="_blank">Foreman</a></li>
+					<li><a href="https://puppetlabs.com/" target="_blank">Puppet</a></li>
+				</ul>
+				</div>
+			
+				<div class="information-section">
+				<h1 class="information-title">Licences</h1>
+				<p class="information-text">KSF embarque plusieurs outils Open Source, ci-dessous la liste des licences qui leurs sont associées :
+			
+				<ul>
+				<li>Git : <a href="http://opensource.org/licenses/GPL-2.0" target="_blank">GNU General Public License v2 (GPL)</a>.</li>
+				<li>Jenkins : <a href="https://jenkins-ci.org/mit-license" target="_blank">MIT License</a>.</li>	
+				<li>Redmine : <a href="http://opensource.org/licenses/GPL-2.0" target="_blank">GNU General Public License v2 (GPL)</a>.</li>
+				<li>Foreman : <a href="http://www.gnu.org/licenses/gpl-3.0.en.html" target="_blank">GNU General Public License v3 (GPL)</a>.</li>	
+				<li>Puppet : <a href="http://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache License, Version 2.0</a>.</li>
+				</ul></p>
+				</div>
+				</div>
+
+		       </div>
+		     </div>
+		   </div>
+		 </div>
+		 </div>
+		 </div>
+		
+		
 	</body>
 </html>
