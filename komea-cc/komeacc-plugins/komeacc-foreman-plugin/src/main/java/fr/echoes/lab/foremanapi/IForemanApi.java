@@ -3,6 +3,7 @@ package fr.echoes.lab.foremanapi;
 import java.util.Map;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -36,6 +37,7 @@ import fr.echoes.lab.foremanapi.model.Roles;
 import fr.echoes.lab.foremanapi.model.SmartVariable;
 import fr.echoes.lab.foremanapi.model.User;
 import fr.echoes.lab.foremanapi.model.UserWrapper;
+import fr.echoes.lab.foremanapi.model.Users;
 import fr.echoes.lab.foremanclient.model.PowerAction;
 
 
@@ -83,6 +85,13 @@ public interface IForemanApi {
 			@QueryParam("page") String page,
 			@QueryParam("per_page") String perPage);
 
+    @DELETE
+    @Path("/api/roles/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    Roles deleteRoles(
+            @PathParam("id") String id
+    );
+
 	@GET
 	@Path("/api/roles/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -96,12 +105,26 @@ public interface IForemanApi {
 			@PathParam("id") String id);
 
 
+    @DELETE
+    @Path("/api/filters/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    Filter deleteFilter(
+            @PathParam("id") String id);
+
+
 	@POST
 	@Path("/api/hostgroups")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	HostGroup createHostGroups(
 			HostGroupWrapper hostGroup);
+
+    @DELETE
+    @Path("/api/hostgroups/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    HostGroup deleteHostGroups(
+            @PathParam("id") String id);
+
 
 	@GET
 	@Path("/api/permissions")
@@ -117,6 +140,11 @@ public interface IForemanApi {
 	@Produces(MediaType.APPLICATION_JSON)
 	User getUser(
 			@PathParam("id") String id);
+
+    @GET
+    @Path("/api/users/")
+    @Produces(MediaType.APPLICATION_JSON)
+    Users getUsers(@QueryParam("per_page") String perPage);
 
 	@PUT
 	@Path("/api/users/{id}")

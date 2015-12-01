@@ -29,7 +29,7 @@ public class ForemanProjectLifeCycleExtension implements IProjectLifecycleExtens
 
 	@Autowired
 	private ForemanConfigurationService configurationService;
-	
+
 	@Autowired
 	private ForemanErrorHandlingService errorHandler;
 
@@ -41,16 +41,22 @@ public class ForemanProjectLifeCycleExtension implements IProjectLifecycleExtens
 		final String logginName = SecurityContextHolder.getContext().getAuthentication().getName();
 		try {
 			ForemanHelper.createProject(this.url, this.username, this.password, _project.getName(), logginName);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			LOGGER.error("[foreman] project creation failed", e);
-			errorHandler.registerError("Unable to create Foreman project. Please verify your Foreman configuration.");
+			this.errorHandler.registerError("Unable to create Foreman project. Please verify your Foreman configuration.");
 		}
 	}
 
 	@Override
 	public void notifyDeletedProject(ProjectDto _project) {
-		// TODO Auto-generated method stub
+        try {
+            // TODO Auto-generated method stub
 
+            ForemanHelper.deleteProject(this.url, this.username, this.password, _project.getName());
+        } catch (final Exception ex) {
+            LOGGER.error("[foreman] project delete failed", ex);
+            this.errorHandler.registerError("Unable to delete Foreman project. Please verify your Foreman configuration.");
+        }
 	}
 
 	@Override

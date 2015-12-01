@@ -42,6 +42,7 @@ import fr.echoes.lab.foremanapi.model.RoleWrapper;
 import fr.echoes.lab.foremanapi.model.Roles;
 import fr.echoes.lab.foremanapi.model.User;
 import fr.echoes.lab.foremanapi.model.UserWrapper;
+import fr.echoes.lab.foremanapi.model.Users;
 import fr.echoes.lab.foremanclient.model.NetworkInterface;
 import fr.echoes.lab.ksf.cc.plugins.foreman.exceptions.ForemanHostAlreadyExistException;
 
@@ -156,6 +157,34 @@ public class ForemanHelper {
           addRoleToUser(api, userId, role.id );
      }
 
+    public static void deleteProject(String url, String adminUserName, String password, String projectName) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
+
+        final IForemanApi api = ForemanClient.createApi(url, adminUserName, password);
+        final Hostgroups hostGroups = api.getHostGroups(null, null, null, PER_PAGE_RESULT);
+        for (final HostGroup hostGroup : hostGroups.results) {
+            if (hostGroup.name.equalsIgnoreCase(projectName)) {
+                api.deleteHostGroups(hostGroup.id);
+                break;
+            }
+        }
+        final Role findRole = findRole(api, projectName);
+        final Users users = api.getUsers(PER_PAGE_RESULT);
+        for (final User user : users.results) {
+            removeRoleToUser(api, user.id, findRole.id);
+        }
+
+        if (findRole != null) {
+//            Filters filters = api.getFilters("1000");
+//            for (Filter filter : filters.results) {
+//                if (filter.role != null && findRole.id.equals(filter.role.id)) {
+//                    api.deleteFilter(filter.id);
+//                }
+//            }
+
+            api.deleteRoles(findRole.id);
+        }
+    }
+
      private static void createHostGroup(IForemanApi api, String projectName) {
           final HostGroupWrapper hostGroupWrapper = new HostGroupWrapper();
           final HostGroup hostGroup = new HostGroup();
@@ -193,24 +222,51 @@ public class ForemanHelper {
           return role;
      }
 
+     private static void removeRoleToUser(final IForemanApi api, String userId, String roleId) {
+         updateRoleTOuser(api, userId, roleId, false);
+     }
+
+     private static void updateRoleTOuser(final IForemanApi api, String userId, String roleId, boolean add) {
+         final User user = api.getUser(userId);
+
+         final List<String> roleIds = new ArrayList<String>();
+
+         for (final Role role : user.roles) {
+             roleIds.add(role.id);
+         }
+         if (add) {
+             roleIds.add(roleId);
+         } else {
+             roleIds.remove(roleId);
+         }
+         final NewUser newUser = new NewUser();
+
+         final UserWrapper userWrapper = new UserWrapper();
+         newUser.role_ids = roleIds;
+         userWrapper.setUser(newUser);
+
+         api.updateUser(user.id, userWrapper);
+     }
+
      private static void addRoleToUser(final IForemanApi api, String userId, String roleId) {
-          final User user = api.getUser(userId);
-
-          final List<String> roleIds = new ArrayList<String>();
-
-          for (final Role role : user.roles) {
-               roleIds.add(role.id);
-          }
-
-          roleIds.add(roleId);
-
-          final NewUser newUser = new NewUser();
-
-          final UserWrapper userWrapper = new UserWrapper();
-          newUser.role_ids = roleIds;
-          userWrapper.setUser(newUser);
-
-          api.updateUser(user.id, userWrapper);
+    	 updateRoleTOuser(api, userId, roleId, true);
+//          final User user = api.getUser(userId);
+//
+//          final List<String> roleIds = new ArrayList<String>();
+//
+//          for (final Role role : user.roles) {
+//               roleIds.add(role.id);
+//          }
+//
+//          roleIds.add(roleId);
+//
+//          final NewUser newUser = new NewUser();
+//
+//          final UserWrapper userWrapper = new UserWrapper();
+//          newUser.role_ids = roleIds;
+//          userWrapper.setUser(newUser);
+//
+//          api.updateUser(user.id, userWrapper);
      }
 
      public static Host createHost(String url, String adminUserName, String password, String hostName, String computeResourceId, String computeProfileId, String hostGroupName, String environmentName, String operatingSystemId, String architectureId, String puppetConfiguration, String domainId, String rootPassword) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
