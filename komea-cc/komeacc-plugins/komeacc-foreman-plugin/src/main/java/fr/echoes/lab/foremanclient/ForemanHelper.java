@@ -5,14 +5,14 @@ import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.ObjectWriter;
@@ -34,6 +34,7 @@ import fr.echoes.lab.foremanapi.model.NewFilter;
 import fr.echoes.lab.foremanapi.model.NewHost;
 import fr.echoes.lab.foremanapi.model.NewRole;
 import fr.echoes.lab.foremanapi.model.NewUser;
+import fr.echoes.lab.foremanapi.model.OverrideValueWrapper;
 import fr.echoes.lab.foremanapi.model.Permissions;
 import fr.echoes.lab.foremanapi.model.PuppetClassParameter;
 import fr.echoes.lab.foremanapi.model.PuppetClassParameters;
@@ -44,6 +45,7 @@ import fr.echoes.lab.foremanapi.model.User;
 import fr.echoes.lab.foremanapi.model.UserWrapper;
 import fr.echoes.lab.foremanapi.model.Users;
 import fr.echoes.lab.foremanclient.model.NetworkInterface;
+import fr.echoes.lab.foremanclient.model.PowerAction;
 import fr.echoes.lab.ksf.cc.plugins.foreman.exceptions.ForemanHostAlreadyExistException;
 
 /**
@@ -271,68 +273,53 @@ public class ForemanHelper {
 
      public static Host createHost(String url, String adminUserName, String password, String hostName, String computeResourceId, String computeProfileId, String hostGroupName, String environmentName, String operatingSystemId, String architectureId, String puppetConfiguration, String domainId, String rootPassword) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
 
-    	  if (hostExists(url, adminUserName, password, hostName)) {
-    		  throw new ForemanHostAlreadyExistException(hostName);
-    	  }
+   	  if (hostExists(url, adminUserName, password, hostName)) {
+		  throw new ForemanHostAlreadyExistException(hostName);
+	  }
 
-         //  final Host host = null;
-    	 final IForemanApi api = ForemanClient.createApi(url, adminUserName, password);
+     //  final Host host = null;
+	 final IForemanApi api = ForemanClient.createApi(url, adminUserName, password);
 
-    	 final NewHost newHost = new NewHost();
+	 final NewHost newHost = new NewHost();
 
-    	 newHost.name = hostName;
-    	 newHost.compute_resource_id = computeResourceId;
-    	 newHost.compute_profile_id = computeProfileId;
-    	 newHost.hostgroup_id = findHostGroupId(api, hostGroupName);
-    	 newHost.environment_id = findEnvironmentId(api, environmentName);
-    	 newHost.operatingsystem_id = operatingSystemId;
-    	 newHost.architecture_id = architectureId;
-    	 newHost.domain_id = domainId;
-    	 newHost.root_pass = rootPassword;
+	 final HostWrapper hostWrapper = new HostWrapper();
+	 hostWrapper.setHost(newHost);
 
-    	 newHost.puppetclass_ids = findPuppetClassesId(api, environmentName);
+	 newHost.name = hostName;
+	 newHost.compute_resource_id = computeResourceId;
+	 newHost.compute_profile_id = computeProfileId;
+	 newHost.hostgroup_id = findHostGroupId(api, hostGroupName);
+	 newHost.environment_id = findEnvironmentId(api, environmentName);
+	 newHost.operatingsystem_id = operatingSystemId;
+	 newHost.architecture_id = architectureId;
+	 newHost.domain_id = domainId;
+	 newHost.root_pass = rootPassword;
+	 newHost.interfaces_attributes.put("0", new NetworkInterface() );
 
-    	 newHost.interfaces_attributes.put("0", new NetworkInterface() );
 
-    	 final HostWrapper hostWrapper = new HostWrapper();
-    	 hostWrapper.setHost(newHost);
 
-//	     try {
-//		     Modules modules = configurePuppet(api, puppetConfiguration);
-//	     } catch (IOException e) {
-//		     LOGGER.error(e.getMessage(),e);
-//	     }
+	 Modules modules = null;
+	 boolean configureModules = true;
+	 try {
+		 modules = getModules(api, puppetConfiguration);
+		 newHost.puppetclass_ids = getModuleIds(modules);
+	 } catch (final IOException e) {
+		 LOGGER.error(e.getMessage(),e);
+		 configureModules = false;
+		 newHost.puppetclass_ids = findPuppetClassesId(api, environmentName);
+	 }
 
-	     return api.createHost(hostWrapper);
-     }
+	 final Host host = api.createHost(hostWrapper);
 
-     private static List<String> findPuppetClassesIdToInstall(IForemanApi api, String puppetConfiguration) throws Exception {
+	 if (configureModules) {
+		 configurePuppet(api, modules,host);
+	 }
 
-    	 final Set<String> classesId = new HashSet<>();
-         final ObjectMapper mapper = new ObjectMapper();
+	 final PowerAction powerAction = new PowerAction();
+	 powerAction.power_action = "start";
+	 api.hostPower(host.id, powerAction);
 
-         try {
-             final JsonNode rootNode = mapper.readTree(puppetConfiguration);
-             final JsonNode modulesNode = rootNode.get("modules");
-             if (modulesNode == null) {
-                 return Collections.<String>emptyList();
-             }
-             if (modulesNode.isArray()) {
-
-            	 for (final JsonNode moduleNode : modulesNode) {
-            		 final JsonNode puppetClassesNode = modulesNode.get("puppetClasses");
-            		 if (puppetClassesNode.isArray()) {
-
-            		 }
-            	 }
-             }
-         } catch (final Exception e) {
-        	 final Exception ex = new Exception("Failed to parse puppet classes json", e);
-        	 LOGGER.error(ex.getMessage(), ex);
-        	 throw ex;
-         }
-
-           return new ArrayList<String>(classesId);
+     return host;
      }
 
      private static List<String> findPuppetClassesId(IForemanApi api, String environmentName) {
@@ -354,14 +341,45 @@ public class ForemanHelper {
     	 return result;
 	}
 
-	private static Modules configurePuppet(IForemanApi api, String puppetConfiguration) throws IOException {
+     private static List<String> getModuleIds(Modules modules) {
+  	   final Set<Entry<String, Module>> modulesEntry = modules.modules.entrySet();
 
-		final ObjectMapper mapper = new ObjectMapper();
-		final Modules modules = mapper.readValue(puppetConfiguration, Modules.class);
-		return modules;
-
+  	   final List<String> ids = new ArrayList<>(modulesEntry.size());
+  	   for (final Entry<String, Module> entry : modulesEntry) {
+  		   final Module module = entry .getValue();
+  		   ids.add(module.id);
+  	   }
+  	   return ids;
      }
 
+      private static Modules getModules(IForemanApi api, String puppetConfiguration) throws IOException {
+          final ObjectMapper mapper = new ObjectMapper();
+          final Modules modules = mapper .readValue(puppetConfiguration, Modules.class);
+          return modules;
+      }
+
+  	private static void configurePuppet(IForemanApi api, Modules modules, Host host) {
+
+  		LOGGER.info("[foreman] Configure puppet smart clasees parameters");
+
+  		for (final Entry<String, Module> entry : modules.modules.entrySet()) {
+  			final Module module = entry .getValue();
+
+  			for (final Entry<String, PuppetClass> puppetClassEntry : module.puppetClasses .entrySet()) {
+  				final PuppetClass puppetClass = puppetClassEntry.getValue();
+  				for (final Entry<String, Parameter> puppetClassParametersEntry : puppetClass .parameters .entrySet()) {
+  					final Parameter parameter = puppetClassParametersEntry .getValue();
+  					final Boolean override = parameter.isOverride();
+  					if (override) {
+
+  						final String parameterId = parameter.getId();
+  						updateValue(api, parameterId, host.name, parameter.getValue(), parameter.isOverride());
+  					}
+  				}
+  			}
+  		}
+
+       }
      private static String findEnvironmentId(IForemanApi api, String environmentName) {
           final Environments environments = api.getEnvironments(null, null, null, PER_PAGE_RESULT);
           for (final Environment hostGroup : environments.results) {
@@ -389,7 +407,7 @@ public class ForemanHelper {
           api.importPuppetClasses(smartProxyId, "{}"); // Doesn't work without a request body as second parameter ("{}")
      }
 
-     public static String getModulesPuppetClassParameters(String url, String adminUserName, String password, String environmentName) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException, JsonGenerationException, JsonMappingException, IOException {
+     public static String getModulesPuppetClassParameters(String url, String adminUserName, String password, String environmentName, boolean allParameters) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException, JsonGenerationException, JsonMappingException, IOException {
     	 final IForemanApi api = ForemanClient.createApi(url, adminUserName, password);
     	 final String environmentId = findEnvironmentId(api, environmentName);
 
@@ -402,22 +420,23 @@ public class ForemanHelper {
     	 for (final fr.echoes.lab.foremanapi.model.PuppetClass puppetClass : environment.puppetClasses) {
     		 if (puppetClass.module_name.equals(puppetClass.name)) {
     			 final Module module = modules.getOrCreateModule(puppetClass.module_name);
+    			 module.id = puppetClass.id;
     			 final PuppetClass pc = module.getOrCreatePuppetClass(puppetClass.name);
     			 pc.setId(puppetClass.id);
     			 moduleIds.add(puppetClass.id);
     		 }
     	 }
 
-
     	 for (final Module module : modules.modules.values()) {
     		 for (final PuppetClass puppetClass : module.puppetClasses.values()) {
     			 final PuppetClassParameters puppetClassParameters = api.getPuppetClassParameters(puppetClass.id, null, null, null, PER_PAGE_RESULT);
     			 for (final PuppetClassParameter puppetClassParameter : puppetClassParameters.results) {
-    				 if (moduleIds.contains(puppetClassParameter.id)) {
+    				 if (allParameters || moduleIds.contains(puppetClassParameter.id)) {
     					 final Parameter parameter = puppetClass.getOrCreateParameter(puppetClassParameter.parameter);
     					 parameter.setId(puppetClassParameter.id);
     					 parameter.setValue(puppetClassParameter.default_value);
-    					 parameter.setOverride(puppetClassParameter.override);
+    					// parameter.setOverride(puppetClassParameter.override);
+    					 parameter.setOverride(false);
     				 }
     			 }
     		 }
@@ -466,4 +485,17 @@ public class ForemanHelper {
     	 return false;
      }
 
+     public static void updateValue(IForemanApi api, String smartClassParamId, String hostName, Object value, Boolean usePuppetDefault) {
+
+    	 try {
+			final OverrideValueWrapper overrideValueWrapper = new OverrideValueWrapper();
+			overrideValueWrapper.override_value = new HashMap<String, Object>();
+			overrideValueWrapper.override_value.put("match", "fqdn=" + hostName);
+			overrideValueWrapper.override_value.put("value", value);
+			overrideValueWrapper.override_value.put("use_puppet_default", usePuppetDefault.toString());
+			api.createOverrideValues(smartClassParamId, overrideValueWrapper);
+    	 } catch (final Exception e) {
+    		 LOGGER.error("Failed to configure smart class parameter " + smartClassParamId, e);
+    	 }
+     }
 }

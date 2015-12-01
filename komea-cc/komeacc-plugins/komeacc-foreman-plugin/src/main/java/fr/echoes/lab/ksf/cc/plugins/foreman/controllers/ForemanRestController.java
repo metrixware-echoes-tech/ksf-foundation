@@ -35,6 +35,9 @@ public class ForemanRestController {
     @Value("${ksf.foreman.password}")
     private String password;
 
+    @Value("${ksf.foreman.puppet.configuration.create.parameters.enabled}")
+    private Boolean createParametersEnabled;
+
 	@RequestMapping(value = "/rest/foreman/environments/all")
 	public List<ForemanEnvironnment> findAll() {
 
@@ -53,7 +56,7 @@ public class ForemanRestController {
 		String json = "";
 		final String environmentName = environment.getName();
 		try {
-			json = ForemanHelper.getModulesPuppetClassParameters(this.url, this.username, this.password, environmentName);
+			json = ForemanHelper.getModulesPuppetClassParameters(this.url, this.username, this.password, environmentName, this.createParametersEnabled);
 		} catch (final Exception e) {
             LOGGER.error("Failed to get puppet classes parameters for the environment: " + environmentName, e);
             this.errorHandler.registerError("Failed to get puppet classes parameters for " + environmentName);

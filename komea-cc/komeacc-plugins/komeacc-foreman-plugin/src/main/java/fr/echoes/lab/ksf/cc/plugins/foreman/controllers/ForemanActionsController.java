@@ -152,14 +152,14 @@ public class ForemanActionsController {
     }
 
     @RequestMapping(value = "/ui/foreman/targets/new", method = RequestMethod.POST)
-    public String createTarget(@RequestParam("projectId") String projectId, @RequestParam("name") String name, @RequestParam("environment") String env, @RequestParam("operatingsystem") String operatingsystem, @RequestParam("computeprofiles") String computeprofiles) {
+    public String createTarget(@RequestParam("projectId") String projectId, @RequestParam("name") String name, @RequestParam("environment") String env, @RequestParam("operatingsystem") String operatingsystem, @RequestParam("computeprofiles") String computeprofiles, @RequestParam("puppetConfiguration") String puppetConfiguration) {
         final Project project = this.projectDAO.findOne(projectId);
 
         final ForemanTarget foremanTarget = new ForemanTarget();
         foremanTarget.setProject(project);
         foremanTarget.setName(name);
         foremanTarget.setComputeProfile(computeprofiles);
-        foremanTarget.setPuppetConfiguration("");
+        foremanTarget.setPuppetConfiguration(puppetConfiguration);
 
         if (!StringUtils.isEmpty(operatingsystem)) {
             final String[] os = StringUtils.split(operatingsystem, '-');

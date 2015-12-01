@@ -6,6 +6,7 @@ import java.util.Map;
 
 public class Module {
 
+	public String id;
 	public final Map<String, PuppetClass> puppetClasses = new HashMap<String, PuppetClass>();
 
 	public PuppetClass getOrCreatePuppetClass(String puppetClassName) {

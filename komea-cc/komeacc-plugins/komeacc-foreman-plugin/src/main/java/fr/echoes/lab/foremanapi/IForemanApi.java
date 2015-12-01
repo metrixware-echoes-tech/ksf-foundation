@@ -24,16 +24,21 @@ import fr.echoes.lab.foremanapi.model.Host;
 import fr.echoes.lab.foremanapi.model.HostGroup;
 import fr.echoes.lab.foremanapi.model.HostGroupWrapper;
 import fr.echoes.lab.foremanapi.model.HostPowerController;
+import fr.echoes.lab.foremanapi.model.HostPuppetClasses;
 import fr.echoes.lab.foremanapi.model.HostWrapper;
 import fr.echoes.lab.foremanapi.model.Hostgroups;
 import fr.echoes.lab.foremanapi.model.Hosts;
 import fr.echoes.lab.foremanapi.model.OperatingSystems;
+import fr.echoes.lab.foremanapi.model.OverrideValueWrapper;
+import fr.echoes.lab.foremanapi.model.OverrideValues;
 import fr.echoes.lab.foremanapi.model.Permissions;
 import fr.echoes.lab.foremanapi.model.PuppetClassParameters;
 import fr.echoes.lab.foremanapi.model.PuppetClasses;
 import fr.echoes.lab.foremanapi.model.Role;
 import fr.echoes.lab.foremanapi.model.RoleWrapper;
 import fr.echoes.lab.foremanapi.model.Roles;
+import fr.echoes.lab.foremanapi.model.SmartClassParameterWrapper;
+import fr.echoes.lab.foremanapi.model.SmartClassParameters;
 import fr.echoes.lab.foremanapi.model.SmartVariable;
 import fr.echoes.lab.foremanapi.model.User;
 import fr.echoes.lab.foremanapi.model.UserWrapper;
@@ -268,6 +273,31 @@ public interface IForemanApi {
 			@QueryParam("page") String page,
 			@QueryParam("per_page") String perPage);
 
+	@GET
+	@Path("/api/hosts/{id}/puppetclasses")
+	@Produces(MediaType.APPLICATION_JSON)
+	HostPuppetClasses getHostPuppetClasses(@PathParam("id") String id);
 
+	@GET
+	@Path("/api/puppetclasses/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	SmartClassParameters getPuppetClasses(@PathParam("id") String id);
+
+	@GET
+	@Path("/api/smart_class_parameters/{smartClassParametesId}/override_values")
+	@Produces(MediaType.APPLICATION_JSON)
+	OverrideValues getOverrideValues(@PathParam("smartClassParametesId") String smartClassParametesId);
+
+	@POST
+	@Path("/api/smart_class_parameters/{smartClassParametesId}/override_values")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	OverrideValues createOverrideValues(@PathParam("smartClassParametesId") String smartClassParametesId, OverrideValueWrapper overrideValueWrapper);
+
+
+	@PUT
+	@Path("/api/smart_class_parameters/{smartClassParametersId}/override_values/{overrideValuesId}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	void overrideSmartClassParameter(@PathParam("smartClassParametersId") String smartClassParametersId, @PathParam("overrideValuesId") String overrideValuesId, SmartClassParameterWrapper smartClassParameterWrapper);
 
 }

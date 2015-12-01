@@ -18,7 +18,7 @@ public class Parameter {
 	public void setValue(Object values) {
 		this.value = values;
 	}
-	public boolean isOverride() {
+	public Boolean isOverride() {
 		return this.override;
 	}
 	public void setOverride(boolean override) {
