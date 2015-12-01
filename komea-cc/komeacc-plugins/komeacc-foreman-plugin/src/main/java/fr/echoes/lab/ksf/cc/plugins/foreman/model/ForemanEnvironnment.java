@@ -5,11 +5,12 @@ import java.io.Serializable;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-import com.tocea.corolla.utils.domain.ObjectValidation;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
+
+import fr.echoes.lab.ksf.cc.plugins.foreman.ForemanValidationConstants;
 
 @Document
 public class ForemanEnvironnment implements Serializable {
@@ -19,8 +20,8 @@ public class ForemanEnvironnment implements Serializable {
 	private String id;
 
 	@NotEmpty
-	@Size(min = 3, max = 100)
-	@Pattern(regexp = ObjectValidation.URL_SAFE_PATTERN)
+	@Size(min = ForemanValidationConstants.NAME_MIN_LENGTH, max = ForemanValidationConstants.NAME_MAX_LENGTH)
+	@Pattern(regexp = ForemanValidationConstants.ENVIRONMENT_NAME_PATTERN, message=ForemanValidationConstants.INCORRECT_ENVIRONMENT_NAME)
 	private String name;
 
 	private String configuration;
@@ -30,37 +31,37 @@ public class ForemanEnvironnment implements Serializable {
 
 	public String getConfiguration() {
 
-		return configuration;
+		return this.configuration;
 	}
 
 	public String getId() {
 
-		return id;
+		return this.id;
 	}
 
 	public String getName() {
 
-		return name;
+		return this.name;
 	}
 
 	public void setConfiguration(final String _configuration) {
 
-		configuration = _configuration;
+		this.configuration = _configuration;
 	}
 
 	public void setId(final String _id) {
 
-		id = _id;
+		this.id = _id;
 	}
 
 	public void setName(final String _name) {
 
-		name = _name;
+		this.name = _name;
 	}
 
 	public String getProjectId() {
 
-		return projectId;
+		return this.projectId;
 	}
 
 	public void setProjectId(String projectId) {
@@ -70,6 +71,6 @@ public class ForemanEnvironnment implements Serializable {
 
 	@Override
 	public String toString() {
-		return "ForemanEnvironnment [id=" + id + ", name=" + name + ", configuration=" + configuration + "]";
+		return "ForemanEnvironnment [id=" + this.id + ", name=" + this.name + ", configuration=" + this.configuration + "]";
 	}
 }

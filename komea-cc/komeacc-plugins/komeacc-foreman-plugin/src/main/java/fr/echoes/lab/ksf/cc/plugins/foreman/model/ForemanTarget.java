@@ -3,7 +3,6 @@ package fr.echoes.lab.ksf.cc.plugins.foreman.model;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-import com.tocea.corolla.utils.domain.ObjectValidation;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.annotation.Id;
@@ -12,6 +11,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import com.tocea.corolla.products.domain.Project;
+
+import fr.echoes.lab.ksf.cc.plugins.foreman.ForemanValidationConstants;
 
 
 @Document
@@ -22,8 +23,8 @@ public class ForemanTarget {
 	private String id;
 
 	@NotEmpty
-	@Size(min = 3, max = 100)
-	@Pattern(regexp = ObjectValidation.URL_SAFE_PATTERN)
+	@Size(min = ForemanValidationConstants.NAME_MIN_LENGTH, max = ForemanValidationConstants.NAME_MAX_LENGTH)
+	@Pattern(regexp = ForemanValidationConstants.TARGET_NAME_PATTERN, message=ForemanValidationConstants.INCORRECT_TARGET_NAME)
 	private String name;
 
 	@DBRef
