@@ -288,7 +288,7 @@ public class ForemanHelper {
 
 	 newHost.name = hostName;
 	 newHost.compute_resource_id = computeResourceId;
-	 newHost.compute_profile_id = "1";
+	 newHost.compute_profile_id = computeProfileId;
 	 newHost.hostgroup_id = findHostGroupId(api, hostGroupName);
 	 newHost.environment_id = findEnvironmentId(api, environmentName);
 	 newHost.operatingsystem_id = operatingSystemId;
@@ -348,7 +348,15 @@ public class ForemanHelper {
   	   final List<String> ids = new ArrayList<>(modulesEntry.size());
   	   for (final Entry<String, Module> entry : modulesEntry) {
   		   final Module module = entry .getValue();
-  		   ids.add(module.id);
+  		   if (module.id == null) {
+  			   if (module.puppetClasses != null) {
+  				   for (final PuppetClass ppc : module.puppetClasses.values()) {
+  					 ids.add(ppc.id);
+  				   }
+  			   }
+  		   } else {
+  			   ids.add(module.id);
+  		   }
   	   }
   	   return ids;
      }
@@ -529,5 +537,6 @@ public class ForemanHelper {
     		 LOGGER.error("Failed to configure smart class parameter " + smartClassParamId, e);
     	 }
      }
+
 
 }

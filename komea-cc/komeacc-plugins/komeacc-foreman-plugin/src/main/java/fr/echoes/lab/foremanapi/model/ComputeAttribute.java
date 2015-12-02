@@ -7,11 +7,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ComputeAttribute {
 
-	@JsonProperty("cpus")
-	public String cpus = "1";
-
-	@JsonProperty("memory")
-	public String memory = "536870912";
+//	@JsonProperty("cpus")
+//	public String cpus = "1";
+//
+//	@JsonProperty("memory")
+//	public String memory = "536870912";
 
 	@JsonProperty("start")
 	public String start = "1";
