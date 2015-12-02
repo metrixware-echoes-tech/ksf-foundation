@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -59,7 +60,7 @@ public class ForemanHelper {
      private static final String DEFAULT_ENVIRONMENT_ID = "1";
 	private static final Logger LOGGER = LoggerFactory.getLogger(ForemanHelper.class);
 
-     public static final String PER_PAGE_RESULT = "1000";
+     public static final String PER_PAGE_RESULT = String.valueOf(Integer.MAX_VALUE);
 
      /**
      * Private constructor to prevent instantiation.
@@ -287,7 +288,7 @@ public class ForemanHelper {
 
 	 newHost.name = hostName;
 	 newHost.compute_resource_id = computeResourceId;
-	 newHost.compute_profile_id = computeProfileId;
+	 newHost.compute_profile_id = "1";
 	 newHost.hostgroup_id = findHostGroupId(api, hostGroupName);
 	 newHost.environment_id = findEnvironmentId(api, environmentName);
 	 newHost.operatingsystem_id = operatingSystemId;
@@ -373,7 +374,7 @@ public class ForemanHelper {
   					if (override) {
 
   						final String parameterId = parameter.getId();
-  						updateValue(api, parameterId, host.name, parameter.getValue(), parameter.isOverride());
+  						updateValue(api, parameterId, host.name, parameter.getValue(), Boolean.FALSE);
   					}
   				}
   			}
@@ -417,6 +418,18 @@ public class ForemanHelper {
     	 final Modules modules = new Modules();
 
     	 final Set<String> moduleIds = new HashSet<String>();
+
+    	 final Map<String, List<fr.echoes.lab.foremanapi.model.PuppetClass>> specialCase = new HashMap<>();
+    	 for (final fr.echoes.lab.foremanapi.model.PuppetClass puppetClass : environment.puppetClasses) {
+
+    		 List<fr.echoes.lab.foremanapi.model.PuppetClass> list = specialCase.get(puppetClass.module_name);
+    		 if (list == null) {
+    			 list = new ArrayList<>();
+    			 specialCase.put(puppetClass.module_name, list);
+    		 }
+    		 list.add(puppetClass);
+    	 }
+
     	 for (final fr.echoes.lab.foremanapi.model.PuppetClass puppetClass : environment.puppetClasses) {
     		 if (puppetClass.module_name.equals(puppetClass.name)) {
     			 final Module module = modules.getOrCreateModule(puppetClass.module_name);
@@ -424,8 +437,24 @@ public class ForemanHelper {
     			 final PuppetClass pc = module.getOrCreatePuppetClass(puppetClass.name);
     			 pc.setId(puppetClass.id);
     			 moduleIds.add(puppetClass.id);
+    			 if (specialCase.containsKey(puppetClass.module_name)) {
+    				 specialCase.remove(puppetClass.module_name);
+    			 }
     		 }
     	 }
+
+
+    	 for (final Map.Entry<String, List<fr.echoes.lab.foremanapi.model.PuppetClass>> entry : specialCase.entrySet()) {
+    		 final String moduleName = entry.getKey();
+    		 final List<fr.echoes.lab.foremanapi.model.PuppetClass> values = entry.getValue();
+    		 final Module module = modules.getOrCreateModule(moduleName);
+    		 for (final fr.echoes.lab.foremanapi.model.PuppetClass value : values) {
+    			 final PuppetClass ppclass = module.getOrCreatePuppetClass(value.name);
+    			 ppclass.setId(value.id);
+    		 }
+
+    	 }
+
 
     	 for (final Module module : modules.modules.values()) {
     		 for (final PuppetClass puppetClass : module.puppetClasses.values()) {
@@ -441,6 +470,8 @@ public class ForemanHelper {
     			 }
     		 }
     	 }
+
+
 
           final ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
           return ow.writeValueAsString(modules);
@@ -498,4 +529,5 @@ public class ForemanHelper {
     		 LOGGER.error("Failed to configure smart class parameter " + smartClassParamId, e);
     	 }
      }
+
 }

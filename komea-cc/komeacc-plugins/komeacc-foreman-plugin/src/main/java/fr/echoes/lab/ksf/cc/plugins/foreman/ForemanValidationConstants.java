@@ -21,9 +21,9 @@ public class ForemanValidationConstants {
 
 	private static final String NAME_CANNOT_CONTAIN_SPECIAL_CHARACTERS = " name cannot contain special characters and must be between "+ NAME_MIN_LENGTH + " and " +  NAME_MAX_LENGTH + " characters in length.";
 
-	public static final String ENVIRONMENT_NAME_PATTERN = ObjectValidation.URL_SAFE_PATTERN;
+	public static final String ENVIRONMENT_NAME_PATTERN = ObjectValidation.HOSTNAME;
 
-	public static final String TARGET_NAME_PATTERN = ObjectValidation.URL_SAFE_PATTERN;
+	public static final String TARGET_NAME_PATTERN = ObjectValidation.HOSTNAME;
 
 	public static final String INCORRECT_ENVIRONMENT_NAME = "Environment" + NAME_CANNOT_CONTAIN_SPECIAL_CHARACTERS;
 

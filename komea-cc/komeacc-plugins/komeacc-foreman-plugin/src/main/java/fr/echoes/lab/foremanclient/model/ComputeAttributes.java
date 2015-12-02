@@ -8,7 +8,7 @@ public class ComputeAttributes {
 	public String type = "network";
 
 	@JsonProperty("network")
-	public String network = "default";
+	public String network = "ksf_ads";
 
 	@JsonProperty("model")
 	public String model = "virtio";

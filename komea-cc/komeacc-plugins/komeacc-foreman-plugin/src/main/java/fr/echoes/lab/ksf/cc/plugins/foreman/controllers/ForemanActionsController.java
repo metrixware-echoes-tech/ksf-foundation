@@ -206,10 +206,14 @@ public class ForemanActionsController {
 			final String environmentName = environment.getName();
 			final String operatingSystemId = target.getOperationSystemId();
 			final String puppetConfiguration = target.getPuppetConfiguration();
+			String computeProfileId = target.getComputeProfile();
+			if (StringUtils.isEmpty(computeProfileId)) {
+				computeProfileId = this.computeProfileId;
+			}
 
 			LOGGER.info("[foreman] hostName: {}", hostName);
 			LOGGER.info("[foreman] computeResourceId: {}", this.computeResourceId);
-			LOGGER.info("[foreman] computeProfileId: {}", this.computeProfileId);
+			LOGGER.info("[foreman] computeProfileId: {}", computeProfileId);
 			LOGGER.info("[foreman] hostGroupName: {}", hostGroupName);
 			LOGGER.info("[foreman] environmentName: {}", environmentName);
 			LOGGER.info("[foreman] operatingSystemId: {}", operatingSystemId);
@@ -217,7 +221,7 @@ public class ForemanActionsController {
 			LOGGER.info("[foreman] puppetConfiguration: {}", puppetConfiguration);
 			LOGGER.info("[foreman] domainId: {}", this.domainId);
 
-			final Host host = ForemanHelper.createHost(this.url, this.username, this.password, hostName, this.computeResourceId, this.computeProfileId, hostGroupName, environmentName, operatingSystemId, this.architectureId, puppetConfiguration, this.domainId, passwordVm);
+			final Host host = ForemanHelper.createHost(this.url, this.username, this.password, hostName, this.computeResourceId, computeProfileId, hostGroupName, environmentName, operatingSystemId, this.architectureId, puppetConfiguration, this.domainId, passwordVm);
 
             //TODO find a way to generate the plugin tab ID dynamically
             redirectURL += "?foremanHost=" + host.name + "#pluginTab0";

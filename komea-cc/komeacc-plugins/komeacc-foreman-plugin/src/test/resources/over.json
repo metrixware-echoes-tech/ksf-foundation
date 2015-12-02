@@ -1,1503 +1,45 @@
 {
   "modules" : {
-    "apache" : {
+    "staging" : {
+      "id" : "8",
       "puppetClasses" : {
-        "apache::mod::proxy" : {
+        "staging" : {
           "parameters" : {
-            "allow_from" : {
-              "id" : "340",
-              "value" : "",
-              "override" : false
-            },
-            "apache_version" : {
-              "id" : "341",
-              "value" : "${$::apache::apache_version}",
-              "override" : false
-            },
-            "proxy_requests" : {
-              "id" : "339",
-              "value" : "Off",
-              "override" : false
-            }
-          },
-          "id" : "72"
-        },
-        "apache::mod::vhost_alias" : {
-          "parameters" : { },
-          "id" : "50"
-        },
-        "apache::mod::itk" : {
-          "parameters" : {
-            "apache_version" : {
-              "id" : "351",
-              "value" : "${$::apache::apache_version}",
-              "override" : false
-            },
-            "serverlimit" : {
-              "id" : "348",
-              "value" : "256",
-              "override" : false
-            },
-            "minspareservers" : {
-              "id" : "346",
-              "value" : "5",
-              "override" : false
-            },
-            "startservers" : {
-              "id" : "345",
-              "value" : "8",
-              "override" : false
-            },
-            "maxrequestsperchild" : {
-              "id" : "350",
-              "value" : "4000",
-              "override" : false
-            },
-            "maxspareservers" : {
-              "id" : "347",
-              "value" : "20",
-              "override" : false
-            },
-            "maxclients" : {
-              "id" : "349",
-              "value" : "256",
-              "override" : false
-            }
-          },
-          "id" : "77"
-        },
-        "apache::mod::deflate" : {
-          "parameters" : {
-            "types" : {
-              "id" : "363",
-              "value" : [ "text/html text/plain text/xml", "text/css", "application/x-javascript application/javascript application/ecmascript", "application/rss+xml" ],
-              "override" : false
-            },
-            "notes" : {
-              "id" : "364",
-              "value" : {
-                "Input" : "instream",
-                "Output" : "outstream",
-                "Ratio" : "ratio"
-              },
-              "override" : false
-            }
-          },
-          "id" : "81"
-        },
-        "apache::confd::no_accf" : {
-          "parameters" : { },
-          "id" : "27"
-        },
-        "apache::mod::mime_magic" : {
-          "parameters" : {
-            "magic_file" : {
-              "id" : "338",
-              "value" : "${::apache::conf_dir}/magic",
-              "override" : false
-            }
-          },
-          "id" : "71"
-        },
-        "apache::mod::disk_cache" : {
-          "parameters" : { },
-          "id" : "32"
-        },
-        "apache::mod::filter" : {
-          "parameters" : { },
-          "id" : "30"
-        },
-        "apache::default_confd_files" : {
-          "parameters" : {
-            "all" : {
-              "id" : "217",
-              "value" : true,
-              "override" : false
-            }
-          },
-          "id" : "29"
-        },
-        "apache::mod::dev" : {
-          "parameters" : { },
-          "id" : "39"
-        },
-        "apache::mod::negotiation" : {
-          "parameters" : {
-            "language_priority" : {
-              "id" : "311",
-              "value" : [ "en", "ca", "cs", "da", "de", "el", "eo", "es", "et", "fr", "he", "hr", "it", "ja", "ko", "ltz", "nl", "nn", "no", "pl", "pt", "pt-BR", "ru", "sv", "zh-CN", "zh-TW" ],
-              "override" : false
-            },
-            "force_language_priority" : {
-              "id" : "310",
-              "value" : "Prefer Fallback",
-              "override" : false
-            }
-          },
-          "id" : "61"
-        },
-        "apache::mod::python" : {
-          "parameters" : { },
-          "id" : "35"
-        },
-        "apache::mod::perl" : {
-          "parameters" : { },
-          "id" : "64"
-        },
-        "apache::mod::dav" : {
-          "parameters" : { },
-          "id" : "31"
-        },
-        "apache::mod::authn_file" : {
-          "parameters" : { },
-          "id" : "49"
-        },
-        "apache::mod::headers" : {
-          "parameters" : { },
-          "id" : "70"
-        },
-        "apache::mod::pagespeed" : {
-          "parameters" : {
-            "css_inline_max_bytes" : {
-              "id" : "266",
-              "value" : 2048,
-              "override" : false
-            },
-            "forbid_filters" : {
-              "id" : "258",
-              "value" : [ ],
-              "override" : false
-            },
-            "additional_configuration" : {
-              "id" : "282",
-              "value" : { },
-              "override" : false
-            },
-            "allow_view_stats" : {
-              "id" : "278",
-              "value" : [ ],
-              "override" : false
-            },
-            "filter_xhtml" : {
-              "id" : "251",
-              "value" : false,
-              "override" : false
-            },
-            "disable_filters" : {
-              "id" : "256",
-              "value" : [ ],
-              "override" : false
-            },
-            "image_inline_max_bytes" : {
-              "id" : "268",
-              "value" : 2048,
-              "override" : false
-            },
-            "collect_statistics" : {
-              "id" : "276",
-              "value" : "on",
-              "override" : false
-            },
-            "css_image_inline_max_bytes" : {
-              "id" : "267",
-              "value" : 2048,
-              "override" : false
-            },
-            "css_flatten_max_bytes" : {
-              "id" : "265",
-              "value" : 2048,
-              "override" : false
-            },
-            "file_cache_clean_interval_ms" : {
-              "id" : "262",
-              "value" : 3600000,
-              "override" : false
-            },
-            "css_outline_min_bytes" : {
-              "id" : "270",
-              "value" : 3000,
-              "override" : false
-            },
-            "apache_version" : {
-              "id" : "283",
-              "value" : "${$::apache::apache_version}",
-              "override" : false
-            },
-            "allow_pagespeed_console" : {
-              "id" : "279",
-              "value" : [ ],
-              "override" : false
-            },
-            "file_cache_size_kb" : {
-              "id" : "261",
-              "value" : 102400,
-              "override" : false
-            },
-            "image_max_rewrites_at_once" : {
-              "id" : "273",
-              "value" : 8,
-              "override" : false
-            },
-            "allow_pagespeed_message" : {
-              "id" : "280",
-              "value" : [ ],
-              "override" : false
-            },
-            "enable_filters" : {
-              "id" : "257",
-              "value" : [ ],
-              "override" : false
-            },
-            "additional_domains" : {
-              "id" : "260",
-              "value" : "",
-              "override" : false
-            },
-            "cache_path" : {
-              "id" : "252",
-              "value" : "/var/cache/mod_pagespeed/",
-              "override" : false
-            }
-          },
-          "id" : "53"
-        },
-        "apache" : {
-          "parameters" : {
-            "allow_encoded_slashes" : {
-              "id" : "206",
-              "value" : "",
-              "override" : false
-            },
-            "default_ssl_cert" : {
-              "id" : "157",
-              "value" : "${$::apache::params::default_ssl_cert}",
-              "override" : false
-            },
-            "default_type" : {
-              "id" : "164",
-              "value" : "none",
-              "override" : false
-            },
-            "apache_name" : {
-              "id" : "150",
-              "value" : "${$::apache::params::apache_name}",
-              "override" : false
-            },
-            "default_ssl_chain" : {
-              "id" : "159",
-              "value" : "",
-              "override" : false
-            },
-            "default_ssl_vhost" : {
-              "id" : "156",
-              "value" : false,
-              "override" : false
-            },
-            "default_confd_files" : {
-              "id" : "155",
-              "value" : true,
-              "override" : false
-            },
-            "confd_dir" : {
-              "id" : "180",
-              "value" : "${$::apache::params::confd_dir}",
-              "override" : false
-            },
-            "conf_template" : {
-              "id" : "187",
-              "value" : "${$::apache::params::conf_template}",
-              "override" : false
-            },
-            "apache_version" : {
-              "id" : "202",
-              "value" : "${$::apache::version::default}",
-              "override" : false
-            },
-            "conf_dir" : {
-              "id" : "179",
-              "value" : "${$::apache::params::conf_dir}",
-              "override" : false
-            },
-            "default_charset" : {
-              "id" : "154",
-              "value" : "",
-              "override" : false
-            },
-            "default_mods" : {
-              "id" : "152",
-              "value" : true,
-              "override" : false
-            },
-            "default_ssl_key" : {
-              "id" : "158",
-              "value" : "${$::apache::params::default_ssl_key}",
-              "override" : false
-            },
-            "default_ssl_crl_check" : {
-              "id" : "163",
-              "value" : "",
-              "override" : false
-            },
-            "default_ssl_crl" : {
-              "id" : "162",
-              "value" : "",
-              "override" : false
-            },
-            "docroot" : {
-              "id" : "201",
-              "value" : "${$::apache::params::docroot}",
-              "override" : false
-            },
-            "default_vhost" : {
-              "id" : "153",
-              "value" : true,
-              "override" : true
-            },
-            "default_ssl_ca" : {
-              "id" : "160",
-              "value" : "",
-              "override" : false
-            },
-            "default_ssl_crl_path" : {
-              "id" : "161",
-              "value" : "",
-              "override" : false
-            }
-          },
-          "id" : "23"
-        },
-        "apache::mod::authz_default" : {
-          "parameters" : { },
-          "id" : "68"
-        },
-        "apache::mod::fcgid" : {
-          "parameters" : {
-            "options" : {
-              "id" : "289",
-              "value" : { },
-              "override" : false
-            }
-          },
-          "id" : "57"
-        },
-        "apache::mod::remoteip" : {
-          "parameters" : {
-            "apache_version" : {
-              "id" : "399",
-              "value" : "${$::apache::apache_version}",
-              "override" : false
-            },
-            "proxies_header" : {
-              "id" : "397",
-              "value" : "",
-              "override" : false
-            },
-            "header" : {
-              "id" : "395",
-              "value" : "X-Forwarded-For",
-              "override" : false
-            },
-            "trusted_proxy_ips" : {
-              "id" : "398",
-              "value" : "",
-              "override" : false
-            },
-            "proxy_ips" : {
-              "id" : "396",
-              "value" : [ "127.0.0.1" ],
-              "override" : false
-            }
-          },
-          "id" : "86"
-        },
-        "apache::mod::cgid" : {
-          "parameters" : { },
-          "id" : "36"
-        },
-        "apache::mod::auth_basic" : {
-          "parameters" : { },
-          "id" : "84"
-        },
-        "apache::mod::setenvif" : {
-          "parameters" : { },
-          "id" : "73"
-        },
-        "apache::mod::proxy_connect" : {
-          "parameters" : {
-            "apache_version" : {
-              "id" : "247",
-              "value" : "${$::apache::apache_version}",
-              "override" : false
-            }
-          },
-          "id" : "47"
-        },
-        "apache::mod::rewrite" : {
-          "parameters" : { },
-          "id" : "38"
-        },
-        "apache::mod::proxy_http" : {
-          "parameters" : { },
-          "id" : "69"
-        },
-        "apache::mod::rpaf" : {
-          "parameters" : {
-            "header" : {
-              "id" : "220",
-              "value" : "X-Forwarded-For",
-              "override" : false
-            },
-            "sethostname" : {
-              "id" : "218",
-              "value" : true,
-              "override" : false
-            },
-            "proxy_ips" : {
-              "id" : "219",
-              "value" : [ "127.0.0.1" ],
-              "override" : false
-            }
-          },
-          "id" : "33"
-        },
-        "apache::mod::authn_core" : {
-          "parameters" : {
-            "apache_version" : {
-              "id" : "414",
-              "value" : "${$::apache::apache_version}",
-              "override" : false
-            }
-          },
-          "id" : "94"
-        },
-        "apache::package" : {
-          "parameters" : {
-            "mpm_module" : {
-              "id" : "423",
-              "value" : "${$::apache::params::mpm_module}",
-              "override" : false
-            },
-            "ensure" : {
-              "id" : "422",
-              "value" : "present",
-              "override" : false
-            }
-          },
-          "id" : "101"
-        },
-        "apache::mod::dav_fs" : {
-          "parameters" : { },
-          "id" : "56"
-        },
-        "apache::mod::security" : {
-          "parameters" : {
-            "restricted_extensions" : {
-              "id" : "228",
-              "value" : ".asa/ .asax/ .ascx/ .axd/ .backup/ .bak/ .bat/ .cdx/ .cer/ .cfg/ .cmd/ .com/ .config/ .conf/ .cs/ .csproj/ .csr/ .dat/ .db/ .dbf/ .dll/ .dos/ .htr/ .htw/ .ida/ .idc/ .idq/ .inc/ .ini/ .key/ .licx/ .lnk/ .log/ .mdb/ .old/ .pass/ .pdb/ .pol/ .printer/ .pwd/ .resources/ .resx/ .sql/ .sys/ .vb/ .vbs/ .vbproj/ .vsdisco/ .webinfo/ .xsd/ .xsx/",
-              "override" : false
-            },
-            "modsec_dir" : {
-              "id" : "225",
-              "value" : "${$::apache::params::modsec_dir}",
-              "override" : false
-            },
-            "allowed_methods" : {
-              "id" : "226",
-              "value" : "GET HEAD POST OPTIONS",
-              "override" : false
-            },
-            "crs_package" : {
-              "id" : "223",
-              "value" : "${$::apache::params::modsec_crs_package}",
-              "override" : false
-            },
-            "content_types" : {
-              "id" : "227",
-              "value" : "application/x-www-form-urlencoded|multipart/form-data|text/xml|application/xml|application/x-amf",
-              "override" : false
-            },
-            "activated_rules" : {
-              "id" : "224",
-              "value" : "${$::apache::params::modsec_default_rules}",
-              "override" : false
-            },
-            "restricted_headers" : {
-              "id" : "229",
-              "value" : "/Proxy-Connection/ /Lock-Token/ /Content-Range/ /Translate/ /via/ /if/",
-              "override" : false
-            }
-          },
-          "id" : "37"
-        },
-        "apache::default_mods" : {
-          "parameters" : {
-            "all" : {
-              "id" : "209",
-              "value" : true,
-              "override" : false
-            },
-            "apache_version" : {
-              "id" : "211",
-              "value" : "${$::apache::apache_version}",
-              "override" : false
-            },
-            "mods" : {
-              "id" : "210",
-              "value" : "",
-              "override" : false
-            }
-          },
-          "id" : "26"
-        },
-        "apache::mod::php" : {
-          "parameters" : {
-            "template" : {
-              "id" : "409",
-              "value" : "apache/mod/php5.conf.erb",
+            "exec_path" : {
+              "id" : "27",
+              "value" : "${$staging::params::exec_path}",
               "override" : false
             },
             "path" : {
-              "id" : "406",
-              "value" : "",
+              "id" : "23",
+              "value" : "${$staging::params::path}",
               "override" : false
             },
-            "root_group" : {
-              "id" : "411",
-              "value" : "${$::apache::params::root_group}",
+            "owner" : {
+              "id" : "24",
+              "value" : "${$staging::params::owner}",
               "override" : false
             },
-            "extensions" : {
-              "id" : "407",
-              "value" : [ ".php" ],
+            "group" : {
+              "id" : "25",
+              "value" : "${$staging::params::group}",
               "override" : false
             },
-            "package_name" : {
-              "id" : "404",
-              "value" : "",
-              "override" : false
-            },
-            "source" : {
-              "id" : "410",
-              "value" : "",
-              "override" : false
-            },
-            "content" : {
-              "id" : "408",
-              "value" : "",
-              "override" : false
-            },
-            "package_ensure" : {
-              "id" : "405",
-              "value" : "present",
+            "mode" : {
+              "id" : "26",
+              "value" : "${$staging::params::mode}",
               "override" : false
             }
           },
-          "id" : "92"
-        },
-        "apache::mod::ssl" : {
-          "parameters" : {
-            "apache_version" : {
-              "id" : "308",
-              "value" : "${$::apache::apache_version}",
-              "override" : false
-            },
-            "ssl_openssl_conf_cmd" : {
-              "id" : "301",
-              "value" : "",
-              "override" : false
-            },
-            "ssl_options" : {
-              "id" : "300",
-              "value" : [ "StdEnvVars" ],
-              "override" : false
-            },
-            "ssl_pass_phrase_dialog" : {
-              "id" : "305",
-              "value" : "builtin",
-              "override" : false
-            },
-            "ssl_honorcipherorder" : {
-              "id" : "303",
-              "value" : "On",
-              "override" : false
-            },
-            "ssl_random_seed_bytes" : {
-              "id" : "306",
-              "value" : "512",
-              "override" : false
-            },
-            "package_name" : {
-              "id" : "309",
-              "value" : "",
-              "override" : false
-            },
-            "ssl_cipher" : {
-              "id" : "302",
-              "value" : "HIGH:MEDIUM:!aNULL:!MD5",
-              "override" : false
-            },
-            "ssl_cryptodevice" : {
-              "id" : "299",
-              "value" : "builtin",
-              "override" : false
-            },
-            "ssl_sessioncachetimeout" : {
-              "id" : "307",
-              "value" : "300",
-              "override" : false
-            },
-            "ssl_compression" : {
-              "id" : "298",
-              "value" : false,
-              "override" : false
-            },
-            "ssl_protocol" : {
-              "id" : "304",
-              "value" : [ "all", "-SSLv2", "-SSLv3" ],
-              "override" : false
-            }
-          },
-          "id" : "59"
-        },
-        "apache::mod::dir" : {
-          "parameters" : {
-            "indexes" : {
-              "id" : "413",
-              "value" : [ "index.html", "index.html.var", "index.cgi", "index.pl", "index.php", "index.xhtml" ],
-              "override" : false
-            },
-            "dir" : {
-              "id" : "412",
-              "value" : "public_html",
-              "override" : false
-            }
-          },
-          "id" : "93"
-        },
-        "apache::mod::cache" : {
-          "parameters" : { },
-          "id" : "42"
-        },
-        "apache::mod::geoip" : {
-          "parameters" : {
-            "output" : {
-              "id" : "357",
-              "value" : "All",
-              "override" : false
-            },
-            "scan_proxy_header_field" : {
-              "id" : "360",
-              "value" : "",
-              "override" : false
-            },
-            "flag" : {
-              "id" : "356",
-              "value" : "Standard",
-              "override" : false
-            },
-            "use_last_xforwarededfor_ip" : {
-              "id" : "361",
-              "value" : "",
-              "override" : false
-            },
-            "enable" : {
-              "id" : "354",
-              "value" : false,
-              "override" : false
-            },
-            "db_file" : {
-              "id" : "355",
-              "value" : "/usr/share/GeoIP/GeoIP.dat",
-              "override" : false
-            },
-            "enable_utf8" : {
-              "id" : "358",
-              "value" : "",
-              "override" : false
-            },
-            "scan_proxy_headers" : {
-              "id" : "359",
-              "value" : "",
-              "override" : false
-            }
-          },
-          "id" : "79"
-        },
-        "apache::proxy" : {
-          "parameters" : { },
-          "id" : "98"
-        },
-        "apache::mod::auth_kerb" : {
-          "parameters" : { },
-          "id" : "76"
-        },
-        "apache::mod::authnz_ldap" : {
-          "parameters" : {
-            "verifyServerCert" : {
-              "id" : "234",
-              "value" : true,
-              "override" : false
-            }
-          },
-          "id" : "45"
-        },
-        "apache::mod::reqtimeout" : {
-          "parameters" : {
-            "timeouts" : {
-              "id" : "249",
-              "value" : [ "header=20-40,minrate=500", "body=10,minrate=500" ],
-              "override" : false
-            }
-          },
-          "id" : "52"
-        },
-        "apache::mod::proxy_ajp" : {
-          "parameters" : { },
-          "id" : "51"
-        },
-        "apache::mod::passenger" : {
-          "parameters" : {
-            "passenger_ruby" : {
-              "id" : "374",
-              "value" : "${$::apache::params::passenger_ruby}",
-              "override" : false
-            },
-            "mod_package" : {
-              "id" : "380",
-              "value" : "",
-              "override" : false
-            },
-            "passenger_stat_throttle_rate" : {
-              "id" : "370",
-              "value" : "",
-              "override" : false
-            },
-            "mod_lib_path" : {
-              "id" : "383",
-              "value" : "",
-              "override" : false
-            },
-            "mod_path" : {
-              "id" : "385",
-              "value" : "",
-              "override" : false
-            },
-            "passenger_max_pool_size" : {
-              "id" : "376",
-              "value" : "",
-              "override" : false
-            },
-            "passenger_min_instances" : {
-              "id" : "377",
-              "value" : "",
-              "override" : false
-            },
-            "passenger_app_env" : {
-              "id" : "379",
-              "value" : "",
-              "override" : false
-            },
-            "passenger_high_performance" : {
-              "id" : "367",
-              "value" : "",
-              "override" : false
-            },
-            "passenger_pool_idle_time" : {
-              "id" : "368",
-              "value" : "",
-              "override" : false
-            },
-            "mod_id" : {
-              "id" : "384",
-              "value" : "",
-              "override" : false
-            },
-            "rack_autodetect" : {
-              "id" : "371",
-              "value" : "",
-              "override" : false
-            },
-            "passenger_max_requests" : {
-              "id" : "369",
-              "value" : "",
-              "override" : false
-            },
-            "passenger_use_global_queue" : {
-              "id" : "378",
-              "value" : "",
-              "override" : false
-            },
-            "mod_lib" : {
-              "id" : "382",
-              "value" : "",
-              "override" : false
-            },
-            "mod_package_ensure" : {
-              "id" : "381",
-              "value" : "",
-              "override" : false
-            },
-            "passenger_conf_file" : {
-              "id" : "365",
-              "value" : "${$::apache::params::passenger_conf_file}",
-              "override" : false
-            },
-            "passenger_root" : {
-              "id" : "373",
-              "value" : "${$::apache::params::passenger_root}",
-              "override" : false
-            },
-            "passenger_conf_package_file" : {
-              "id" : "366",
-              "value" : "${$::apache::params::passenger_conf_package_file}",
-              "override" : false
-            },
-            "passenger_default_ruby" : {
-              "id" : "375",
-              "value" : "${$::apache::params::passenger_default_ruby}",
-              "override" : false
-            }
-          },
-          "id" : "83"
-        },
-        "apache::mod::cgi" : {
-          "parameters" : { },
-          "id" : "91"
-        },
-        "apache::mod::userdir" : {
-          "parameters" : {
-            "apache_version" : {
-              "id" : "287",
-              "value" : "${$::apache::apache_version}",
-              "override" : false
-            },
-            "disable_root" : {
-              "id" : "286",
-              "value" : true,
-              "override" : false
-            },
-            "options" : {
-              "id" : "288",
-              "value" : [ "MultiViews", "Indexes", "SymLinksIfOwnerMatch", "IncludesNoExec" ],
-              "override" : false
-            },
-            "dir" : {
-              "id" : "285",
-              "value" : "public_html",
-              "override" : false
-            },
-            "home" : {
-              "id" : "284",
-              "value" : "/home",
-              "override" : false
-            }
-          },
-          "id" : "55"
-        },
-        "apache::dev" : {
-          "parameters" : { },
-          "id" : "25"
-        },
-        "apache::mod::wsgi" : {
-          "parameters" : {
-            "wsgi_socket_prefix" : {
-              "id" : "333",
-              "value" : "${$::apache::params::wsgi_socket_prefix}",
-              "override" : false
-            },
-            "mod_path" : {
-              "id" : "337",
-              "value" : "",
-              "override" : false
-            },
-            "package_name" : {
-              "id" : "336",
-              "value" : "",
-              "override" : false
-            },
-            "wsgi_python_path" : {
-              "id" : "334",
-              "value" : "",
-              "override" : false
-            },
-            "wsgi_python_home" : {
-              "id" : "335",
-              "value" : "",
-              "override" : false
-            }
-          },
-          "id" : "67"
-        },
-        "apache::mod::event" : {
-          "parameters" : {
-            "apache_version" : {
-              "id" : "242",
-              "value" : "${$::apache::apache_version}",
-              "override" : false
-            },
-            "listenbacklog" : {
-              "id" : "244",
-              "value" : "511",
-              "override" : false
-            },
-            "serverlimit" : {
-              "id" : "241",
-              "value" : "25",
-              "override" : false
-            },
-            "minsparethreads" : {
-              "id" : "237",
-              "value" : "25",
-              "override" : false
-            },
-            "maxrequestworkers" : {
-              "id" : "245",
-              "value" : "250",
-              "override" : false
-            },
-            "maxsparethreads" : {
-              "id" : "238",
-              "value" : "75",
-              "override" : false
-            },
-            "threadsperchild" : {
-              "id" : "239",
-              "value" : "25",
-              "override" : false
-            },
-            "startservers" : {
-              "id" : "235",
-              "value" : "2",
-              "override" : false
-            },
-            "maxrequestsperchild" : {
-              "id" : "240",
-              "value" : "0",
-              "override" : false
-            },
-            "threadlimit" : {
-              "id" : "243",
-              "value" : "64",
-              "override" : false
-            },
-            "maxconnectionsperchild" : {
-              "id" : "246",
-              "value" : "0",
-              "override" : false
-            },
-            "maxclients" : {
-              "id" : "236",
-              "value" : "150",
-              "override" : false
-            }
-          },
-          "id" : "46"
-        },
-        "apache::ssl" : {
-          "parameters" : { },
-          "id" : "97"
-        },
-        "apache::mod::mime" : {
-          "parameters" : {
-            "mime_support_package" : {
-              "id" : "221",
-              "value" : "${$::apache::params::mime_support_package}",
-              "override" : false
-            },
-            "mime_types_config" : {
-              "id" : "222",
-              "value" : "${$::apache::params::mime_types_config}",
-              "override" : false
-            }
-          },
-          "id" : "34"
-        },
-        "apache::mod::suphp" : {
-          "parameters" : { },
-          "id" : "95"
-        },
-        "apache::service" : {
-          "parameters" : {
-            "service_enable" : {
-              "id" : "213",
-              "value" : true,
-              "override" : false
-            },
-            "service_name" : {
-              "id" : "212",
-              "value" : "${$::apache::params::service_name}",
-              "override" : false
-            },
-            "service_ensure" : {
-              "id" : "214",
-              "value" : "running",
-              "override" : false
-            },
-            "service_manage" : {
-              "id" : "215",
-              "value" : true,
-              "override" : false
-            },
-            "service_restart" : {
-              "id" : "216",
-              "value" : "",
-              "override" : false
-            }
-          },
-          "id" : "28"
-        },
-        "apache::mod::authz_user" : {
-          "parameters" : { },
-          "id" : "82"
-        },
-        "apache::mod::speling" : {
-          "parameters" : { },
-          "id" : "63"
-        },
-        "apache::mod::info" : {
-          "parameters" : {
-            "allow_from" : {
-              "id" : "342",
-              "value" : [ "127.0.0.1", "::1" ],
-              "override" : false
-            },
-            "apache_version" : {
-              "id" : "343",
-              "value" : "${$::apache::apache_version}",
-              "override" : false
-            },
-            "restrict_access" : {
-              "id" : "344",
-              "value" : true,
-              "override" : false
-            }
-          },
-          "id" : "75"
-        },
-        "apache::mod::expires" : {
-          "parameters" : {
-            "expires_by_type" : {
-              "id" : "402",
-              "value" : "",
-              "override" : false
-            },
-            "expires_active" : {
-              "id" : "400",
-              "value" : true,
-              "override" : false
-            },
-            "expires_default" : {
-              "id" : "401",
-              "value" : "",
-              "override" : false
-            }
-          },
-          "id" : "87"
-        },
-        "apache::mod::status" : {
-          "parameters" : {
-            "allow_from" : {
-              "id" : "230",
-              "value" : [ "127.0.0.1", "::1" ],
-              "override" : false
-            },
-            "apache_version" : {
-              "id" : "232",
-              "value" : "${$::apache::apache_version}",
-              "override" : false
-            },
-            "extended_status" : {
-              "id" : "231",
-              "value" : "On",
-              "override" : false
-            },
-            "status_path" : {
-              "id" : "233",
-              "value" : "/server-status",
-              "override" : false
-            }
-          },
-          "id" : "44"
-        },
-        "apache::mod::worker" : {
-          "parameters" : {
-            "apache_version" : {
-              "id" : "394",
-              "value" : "${$::apache::apache_version}",
-              "override" : false
-            },
-            "serverlimit" : {
-              "id" : "392",
-              "value" : "25",
-              "override" : false
-            },
-            "minsparethreads" : {
-              "id" : "388",
-              "value" : "25",
-              "override" : false
-            },
-            "maxsparethreads" : {
-              "id" : "389",
-              "value" : "75",
-              "override" : false
-            },
-            "threadsperchild" : {
-              "id" : "390",
-              "value" : "25",
-              "override" : false
-            },
-            "startservers" : {
-              "id" : "386",
-              "value" : "2",
-              "override" : false
-            },
-            "maxrequestsperchild" : {
-              "id" : "391",
-              "value" : "0",
-              "override" : false
-            },
-            "threadlimit" : {
-              "id" : "393",
-              "value" : "64",
-              "override" : false
-            },
-            "maxclients" : {
-              "id" : "387",
-              "value" : "150",
-              "override" : false
-            }
-          },
-          "id" : "85"
-        },
-        "apache::mod::actions" : {
-          "parameters" : { },
-          "id" : "54"
-        },
-        "apache::mod::fastcgi" : {
-          "parameters" : { },
-          "id" : "74"
-        },
-        "apache::php" : {
-          "parameters" : { },
-          "id" : "102"
-        },
-        "apache::mod::shib" : {
-          "parameters" : {
-            "suppress_warning" : {
-              "id" : "403",
-              "value" : false,
-              "override" : false
-            }
-          },
-          "id" : "90"
-        },
-        "apache::mod::include" : {
-          "parameters" : { },
-          "id" : "60"
-        },
-        "apache::mod::proxy_html" : {
-          "parameters" : { },
-          "id" : "88"
-        },
-        "apache::mod::auth_cas" : {
-          "parameters" : {
-            "cas_cache_clean_interval" : {
-              "id" : "328",
-              "value" : "",
-              "override" : false
-            },
-            "suppress_warning" : {
-              "id" : "332",
-              "value" : false,
-              "override" : false
-            },
-            "cas_cookie_path" : {
-              "id" : "318",
-              "value" : "${$::apache::params::cas_cookie_path}",
-              "override" : false
-            },
-            "cas_authoritative" : {
-              "id" : "331",
-              "value" : "",
-              "override" : false
-            },
-            "cas_certificate_path" : {
-              "id" : "322",
-              "value" : "",
-              "override" : false
-            },
-            "cas_validate_depth" : {
-              "id" : "321",
-              "value" : "",
-              "override" : false
-            },
-            "cas_version" : {
-              "id" : "319",
-              "value" : 2,
-              "override" : false
-            },
-            "cas_debug" : {
-              "id" : "320",
-              "value" : "Off",
-              "override" : false
-            },
-            "cas_login_url" : {
-              "id" : "316",
-              "value" : null,
-              "override" : true
-            },
-            "cas_cookie_http_only" : {
-              "id" : "330",
-              "value" : "",
-              "override" : false
-            },
-            "cas_proxy_validate_url" : {
-              "id" : "323",
-              "value" : "",
-              "override" : false
-            },
-            "cas_validate_url" : {
-              "id" : "317",
-              "value" : null,
-              "override" : true
-            },
-            "cas_timeout" : {
-              "id" : "326",
-              "value" : "",
-              "override" : false
-            },
-            "cas_idle_timeout" : {
-              "id" : "327",
-              "value" : "",
-              "override" : false
-            },
-            "cas_cookie_domain" : {
-              "id" : "329",
-              "value" : "",
-              "override" : false
-            },
-            "cas_root_proxied_as" : {
-              "id" : "324",
-              "value" : "",
-              "override" : false
-            },
-            "cas_cookie_entropy" : {
-              "id" : "325",
-              "value" : "",
-              "override" : false
-            }
-          },
-          "id" : "66"
-        },
-        "apache::mod::peruser" : {
-          "parameters" : {
-            "maxprocessors" : {
-              "id" : "292",
-              "value" : "10",
-              "override" : false
-            },
-            "minspareprocessors" : {
-              "id" : "290",
-              "value" : "2",
-              "override" : false
-            },
-            "expiretimeout" : {
-              "id" : "296",
-              "value" : "120",
-              "override" : false
-            },
-            "keepalive" : {
-              "id" : "297",
-              "value" : "Off",
-              "override" : false
-            },
-            "minprocessors" : {
-              "id" : "291",
-              "value" : "2",
-              "override" : false
-            },
-            "maxrequestsperchild" : {
-              "id" : "294",
-              "value" : "1000",
-              "override" : false
-            },
-            "idletimeout" : {
-              "id" : "295",
-              "value" : "120",
-              "override" : false
-            },
-            "maxclients" : {
-              "id" : "293",
-              "value" : "150",
-              "override" : false
-            }
-          },
-          "id" : "58"
-        },
-        "apache::mod::suexec" : {
-          "parameters" : { },
-          "id" : "40"
-        },
-        "apache::params" : {
-          "parameters" : { },
-          "id" : "99"
-        },
-        "apache::mod::version" : {
-          "parameters" : {
-            "apache_version" : {
-              "id" : "362",
-              "value" : "${$::apache::apache_version}",
-              "override" : false
-            }
-          },
-          "id" : "80"
-        },
-        "apache::version" : {
-          "parameters" : { },
-          "id" : "100"
-        },
-        "apache::mod::dav_svn" : {
-          "parameters" : {
-            "authz_svn_enabled" : {
-              "id" : "248",
-              "value" : false,
-              "override" : false
-            }
-          },
-          "id" : "48"
-        },
-        "apache::mod::prefork" : {
-          "parameters" : {
-            "apache_version" : {
-              "id" : "421",
-              "value" : "${$::apache::apache_version}",
-              "override" : false
-            },
-            "serverlimit" : {
-              "id" : "418",
-              "value" : "256",
-              "override" : false
-            },
-            "minspareservers" : {
-              "id" : "416",
-              "value" : "5",
-              "override" : false
-            },
-            "startservers" : {
-              "id" : "415",
-              "value" : "8",
-              "override" : false
-            },
-            "maxrequestsperchild" : {
-              "id" : "420",
-              "value" : "4000",
-              "override" : false
-            },
-            "maxspareservers" : {
-              "id" : "417",
-              "value" : "20",
-              "override" : false
-            },
-            "maxclients" : {
-              "id" : "419",
-              "value" : "256",
-              "override" : false
-            }
-          },
-          "id" : "96"
-        },
-        "apache::mod::xsendfile" : {
-          "parameters" : { },
-          "id" : "43"
-        },
-        "apache::mod::proxy_balancer" : {
-          "parameters" : { },
-          "id" : "41"
-        },
-        "apache::mod::autoindex" : {
-          "parameters" : { },
-          "id" : "89"
-        },
-        "apache::mod::nss" : {
-          "parameters" : {
-            "transfer_log" : {
-              "id" : "313",
-              "value" : "${::apache::params::logroot}/access.log",
-              "override" : false
-            },
-            "error_log" : {
-              "id" : "314",
-              "value" : "${::apache::params::logroot}/error.log",
-              "override" : false
-            },
-            "passwd_file" : {
-              "id" : "315",
-              "value" : "",
-              "override" : false
-            }
-          },
-          "id" : "65"
-        },
-        "apache::python" : {
-          "parameters" : { },
-          "id" : "24"
-        },
-        "apache::mod::ldap" : {
-          "parameters" : {
-            "apache_version" : {
-              "id" : "312",
-              "value" : "${$::apache::apache_version}",
-              "override" : false
-            }
-          },
-          "id" : "62"
-        },
-        "apache::mod::alias" : {
-          "parameters" : {
-            "apache_version" : {
-              "id" : "352",
-              "value" : "${$apache::apache_version}",
-              "override" : false
-            },
-            "icons_options" : {
-              "id" : "353",
-              "value" : "Indexes MultiViews",
-              "override" : false
-            }
-          },
-          "id" : "78"
+          "id" : "8"
         }
       }
     },
     "apt" : {
+      "id" : "128",
       "puppetClasses" : {
         "apt" : {
           "parameters" : {
-            "proxy" : {
-              "id" : "605",
-              "value" : { },
-              "override" : false
-            },
-            "settings" : {
-              "id" : "610",
-              "value" : { },
-              "override" : false
-            },
-            "sources" : {
-              "id" : "606",
-              "value" : { },
-              "override" : false
-            },
-            "keys" : {
-              "id" : "607",
-              "value" : { },
-              "override" : false
-            },
-            "ppas" : {
-              "id" : "608",
-              "value" : { },
-              "override" : false
-            },
             "update" : {
               "id" : "603",
               "value" : { },
@@ -1508,6 +50,31 @@
               "value" : { },
               "override" : false
             },
+            "keys" : {
+              "id" : "607",
+              "value" : { },
+              "override" : false
+            },
+            "settings" : {
+              "id" : "610",
+              "value" : { },
+              "override" : false
+            },
+            "proxy" : {
+              "id" : "605",
+              "value" : { },
+              "override" : false
+            },
+            "ppas" : {
+              "id" : "608",
+              "value" : { },
+              "override" : false
+            },
+            "sources" : {
+              "id" : "606",
+              "value" : { },
+              "override" : false
+            },
             "purge" : {
               "id" : "604",
               "value" : { },
@@ -1515,555 +82,1345 @@
             }
           },
           "id" : "128"
-        },
-        "apt::backports" : {
-          "parameters" : {
-            "pin" : {
-              "id" : "615",
-              "value" : 200,
-              "override" : false
-            },
-            "release" : {
-              "id" : "612",
-              "value" : "",
-              "override" : false
-            },
-            "repos" : {
-              "id" : "613",
-              "value" : "",
-              "override" : false
-            },
-            "location" : {
-              "id" : "611",
-              "value" : "",
-              "override" : false
-            },
-            "key" : {
-              "id" : "614",
-              "value" : "",
-              "override" : false
-            }
-          },
-          "id" : "129"
-        },
-        "apt::update" : {
-          "parameters" : { },
-          "id" : "130"
-        },
-        "apt::params" : {
-          "parameters" : { },
-          "id" : "131"
         }
       }
     },
-    "firewall" : {
+    "jenkins" : {
+      "id" : "135",
       "puppetClasses" : {
-        "firewall" : {
+        "jenkins" : {
           "parameters" : {
-            "ensure" : {
-              "id" : "1",
-              "value" : "running",
+            "port" : {
+              "id" : "976",
+              "value" : "${$jenkins::params::port}",
               "override" : false
             },
-            "service_name" : {
-              "id" : "2",
-              "value" : "${$::firewall::params::service_name}",
-              "override" : false
-            },
-            "package_name" : {
-              "id" : "3",
-              "value" : "${$::firewall::params::package_name}",
-              "override" : false
-            }
-          },
-          "id" : "1"
-        },
-        "firewall::linux::redhat" : {
-          "parameters" : {
-            "ensure" : {
-              "id" : "7",
-              "value" : "running",
-              "override" : false
-            },
-            "enable" : {
-              "id" : "8",
-              "value" : true,
-              "override" : false
-            },
-            "service_name" : {
-              "id" : "9",
-              "value" : "${$::firewall::params::service_name}",
-              "override" : false
-            },
-            "package_name" : {
-              "id" : "10",
-              "value" : "${$::firewall::params::package_name}",
-              "override" : false
-            }
-          },
-          "id" : "3"
-        },
-        "firewall::params" : {
-          "parameters" : { },
-          "id" : "7"
-        },
-        "firewall::linux::archlinux" : {
-          "parameters" : {
-            "ensure" : {
-              "id" : "11",
-              "value" : "running",
-              "override" : false
-            },
-            "enable" : {
-              "id" : "12",
-              "value" : true,
-              "override" : false
-            },
-            "service_name" : {
-              "id" : "13",
-              "value" : "${$::firewall::params::service_name}",
-              "override" : false
-            },
-            "package_name" : {
-              "id" : "14",
-              "value" : "${$::firewall::params::package_name}",
-              "override" : false
-            }
-          },
-          "id" : "4"
-        },
-        "firewall::linux::debian" : {
-          "parameters" : {
-            "ensure" : {
-              "id" : "15",
-              "value" : "running",
-              "override" : false
-            },
-            "enable" : {
-              "id" : "16",
-              "value" : true,
-              "override" : false
-            },
-            "service_name" : {
-              "id" : "17",
-              "value" : "${$::firewall::params::service_name}",
-              "override" : false
-            },
-            "package_name" : {
-              "id" : "18",
-              "value" : "${$::firewall::params::package_name}",
-              "override" : false
-            }
-          },
-          "id" : "5"
-        },
-        "firewall::linux" : {
-          "parameters" : {
-            "ensure" : {
-              "id" : "4",
-              "value" : "running",
-              "override" : false
-            },
-            "service_name" : {
-              "id" : "5",
-              "value" : "${$::firewall::params::service_name}",
-              "override" : false
-            },
-            "package_name" : {
-              "id" : "6",
-              "value" : "${$::firewall::params::package_name}",
-              "override" : false
-            }
-          },
-          "id" : "2"
-        },
-        "firewall::linux::gentoo" : {
-          "parameters" : {
-            "ensure" : {
-              "id" : "19",
-              "value" : "running",
-              "override" : false
-            },
-            "enable" : {
-              "id" : "20",
-              "value" : true,
-              "override" : false
-            },
-            "service_name" : {
-              "id" : "21",
-              "value" : "${$::firewall::params::service_name}",
-              "override" : false
-            },
-            "package_name" : {
-              "id" : "22",
-              "value" : "${$::firewall::params::package_name}",
-              "override" : false
-            }
-          },
-          "id" : "6"
-        }
-      }
-    },
-    "ldap" : {
-      "puppetClasses" : {
-        "ldap::client::install" : {
-          "parameters" : { },
-          "id" : "14"
-        },
-        "ldap::server" : {
-          "parameters" : {
-            "db_config_template" : {
-              "id" : "124",
-              "value" : "${$ldap::params::server_db_config_template}",
-              "override" : false
-            },
-            "configpw" : {
-              "id" : "52",
+            "slaveagentport" : {
+              "id" : "980",
               "value" : "",
               "override" : false
             },
-            "access" : {
-              "id" : "88",
-              "value" : "${$ldap::params::server_access}",
-              "override" : false
-            },
-            "config_template" : {
-              "id" : "118",
-              "value" : "${$ldap::params::server_config_template}",
-              "override" : false
-            },
-            "db_config_file" : {
-              "id" : "122",
-              "value" : "${$ldap::params::server_db_config_file}",
-              "override" : false
-            },
-            "bind_anon" : {
-              "id" : "105",
-              "value" : "${$ldap::params::server_bind_anon}",
-              "override" : true
-            },
-            "authz_regexp" : {
-              "id" : "102",
-              "value" : "${$ldap::params::server_authz_regexp}",
-              "override" : false
-            },
-            "configdn" : {
-              "id" : "51",
+            "cli_ssh_keyfile" : {
+              "id" : "973",
               "value" : "",
               "override" : false
             },
-            "access_for_ldapi_rootdn" : {
-              "id" : "91",
+            "lts" : {
+              "id" : "954",
+              "value" : "${$jenkins::params::lts}",
+              "override" : false
+            },
+            "configure_firewall" : {
+              "id" : "966",
               "value" : "",
               "override" : false
             },
-            "db_config_file_mode" : {
-              "id" : "123",
-              "value" : "${$ldap::params::server_db_config_file_mode}",
+            "service_ensure" : {
+              "id" : "961",
+              "value" : "${$jenkins::params::service_ensure}",
               "override" : false
             },
-            "default_file" : {
-              "id" : "119",
-              "value" : "${$ldap::params::server_default_file}",
+            "version" : {
+              "id" : "953",
+              "value" : "${$jenkins::params::version}",
               "override" : false
             },
-            "bind_v2" : {
-              "id" : "106",
-              "value" : "${$ldap::params::server_bind_v2}",
+            "job_hash" : {
+              "id" : "964",
+              "value" : { },
               "override" : false
             },
-            "default_file_mode" : {
-              "id" : "120",
-              "value" : "${$ldap::params::server_default_file_mode}",
+            "package_provider" : {
+              "id" : "959",
+              "value" : "${$jenkins::params::package_provider}",
               "override" : false
             },
-            "access_writeable_on_sync_provider_only" : {
-              "id" : "90",
+            "repo" : {
+              "id" : "955",
+              "value" : "${$jenkins::params::repo}",
+              "override" : false
+            },
+            "executors" : {
+              "id" : "979",
               "value" : "",
               "override" : false
             },
-            "backend" : {
-              "id" : "57",
-              "value" : "${$ldap::params::server_backend}",
+            "localstatedir" : {
+              "id" : "978",
+              "value" : "${$::jenkins::params::localstatedir}",
               "override" : false
             },
-            "default_template" : {
-              "id" : "121",
-              "value" : "${$ldap::params::server_default_template}",
-              "override" : false
-            },
-            "config" : {
-              "id" : "103",
-              "value" : "${$ldap::params::config}",
-              "override" : false
-            },
-            "config_file" : {
-              "id" : "116",
-              "value" : "${$ldap::params::server_config_file}",
-              "override" : false
-            },
-            "config_directory" : {
-              "id" : "113",
-              "value" : "${$ldap::params::ldap_config_directory}",
-              "override" : false
-            },
-            "config_file_mode" : {
-              "id" : "117",
-              "value" : "${$ldap::params::server_config_file_mode}",
-              "override" : false
-            }
-          },
-          "id" : "16"
-        },
-        "ldap::server::config" : {
-          "parameters" : { },
-          "id" : "10"
-        },
-        "ldap::server::service" : {
-          "parameters" : { },
-          "id" : "12"
-        },
-        "ldap::params" : {
-          "parameters" : { },
-          "id" : "17"
-        },
-        "ldap::server::install" : {
-          "parameters" : { },
-          "id" : "11"
-        },
-        "ldap::client::config" : {
-          "parameters" : { },
-          "id" : "13"
-        },
-        "ldap::client" : {
-          "parameters" : {
-            "ssl_reqcert" : {
-              "id" : "35",
-              "value" : "${$ldap::params::client_ssl_reqcert}",
-              "override" : false
-            },
-            "config_template" : {
-              "id" : "41",
-              "value" : "${$ldap::params::client_config_template}",
-              "override" : false
-            },
-            "ssl_key" : {
-              "id" : "34",
-              "value" : "${$ldap::params::client_ssl_key}",
-              "override" : false
-            },
-            "ssl_cacert" : {
-              "id" : "32",
-              "value" : "${$ldap::params::client_ssl_cacert}",
-              "override" : false
-            },
-            "net_ldap_package_name" : {
-              "id" : "43",
-              "value" : "${$ldap::params::net_ldap_package_name}",
-              "override" : false
-            },
-            "net_ldap_package_ensure" : {
-              "id" : "44",
-              "value" : "${$ldap::params::net_ldap_package_ensure}",
-              "override" : false
-            },
-            "ssl" : {
-              "id" : "30",
-              "value" : "${$ldap::params::client_ssl}",
-              "override" : false
-            },
-            "uri" : {
-              "id" : "28",
-              "value" : null,
-              "override" : true
-            },
-            "package_ensure" : {
-              "id" : "38",
-              "value" : "${$ldap::params::client_package_ensure}",
-              "override" : false
-            },
-            "timelimit" : {
-              "id" : "47",
-              "value" : "${$ldap::params::client_timelimit}",
-              "override" : false
-            },
-            "ssl_ciphersuite" : {
-              "id" : "36",
-              "value" : "${$ldap::params::client_ssl_ciphersuite}",
-              "override" : false
-            },
-            "sizelimit" : {
-              "id" : "46",
-              "value" : "${$ldap::params::client_sizelimit}",
-              "override" : false
-            },
-            "ssl_cacertdir" : {
-              "id" : "31",
-              "value" : "${$ldap::params::client_ssl_cacertdir}",
-              "override" : false
-            },
-            "manage_package_dependencies" : {
-              "id" : "42",
-              "value" : "${$ldap::params::manage_package_dependencies}",
-              "override" : false
-            },
-            "net_ldap_package_provider" : {
-              "id" : "45",
-              "value" : "${$ldap::params::net_ldap_package_provider}",
-              "override" : false
-            },
-            "package_name" : {
-              "id" : "37",
-              "value" : "${$ldap::params::client_package_name}",
-              "override" : false
-            },
-            "config_file" : {
-              "id" : "40",
-              "value" : "${$ldap::params::client_config_file}",
-              "override" : false
-            },
-            "config_directory" : {
-              "id" : "39",
-              "value" : "${$ldap::params::ldap_config_directory}",
-              "override" : false
-            },
-            "base" : {
-              "id" : "29",
-              "value" : null,
-              "override" : true
-            },
-            "ssl_cert" : {
-              "id" : "33",
-              "value" : "${$ldap::params::client_ssl_cert}",
-              "override" : false
-            }
-          },
-          "id" : "15"
-        }
-      }
-    },
-    "tomcat" : {
-      "puppetClasses" : {
-        "tomcat" : {
-          "parameters" : {
-            "manage_group" : {
-              "id" : "431",
-              "value" : true,
-              "override" : true
-            },
-            "purge_connectors" : {
-              "id" : "428",
+            "direct_download" : {
+              "id" : "957",
               "value" : false,
               "override" : false
             },
-            "catalina_home" : {
-              "id" : "424",
-              "value" : "${$::tomcat::params::catalina_home}",
+            "repo_proxy" : {
+              "id" : "968",
+              "value" : "",
               "override" : false
             },
-            "install_from_source" : {
-              "id" : "427",
-              "value" : true,
-              "override" : true
+            "no_proxy_list" : {
+              "id" : "971",
+              "value" : "",
+              "override" : false
             },
-            "user" : {
-              "id" : "425",
-              "value" : "${$::tomcat::params::user}",
-              "override" : true
+            "service_enable" : {
+              "id" : "960",
+              "value" : "${$jenkins::params::service_enable}",
+              "override" : false
             },
-            "group" : {
-              "id" : "426",
-              "value" : "${$::tomcat::params::group}",
-              "override" : true
+            "install_java" : {
+              "id" : "967",
+              "value" : "${$jenkins::params::install_java}",
+              "override" : false
+            },
+            "config_hash" : {
+              "id" : "962",
+              "value" : { },
+              "override" : false
+            },
+            "cli_try_sleep" : {
+              "id" : "975",
+              "value" : "${$jenkins::params::cli_try_sleep}",
+              "override" : false
+            },
+            "package_name" : {
+              "id" : "956",
+              "value" : "${$jenkins::params::package_name}",
+              "override" : false
+            },
+            "cli_tries" : {
+              "id" : "974",
+              "value" : "${$jenkins::params::cli_tries}",
+              "override" : false
+            },
+            "cli" : {
+              "id" : "972",
+              "value" : "",
+              "override" : false
+            },
+            "manage_group" : {
+              "id" : "983",
+              "value" : "${$::jenkins::params::manage_group}",
+              "override" : false
+            },
+            "proxy_host" : {
+              "id" : "969",
+              "value" : "",
+              "override" : false
+            },
+            "libdir" : {
+              "id" : "977",
+              "value" : "${$jenkins::params::libdir}",
+              "override" : false
+            },
+            "plugin_hash" : {
+              "id" : "963",
+              "value" : { },
+              "override" : false
+            },
+            "user_hash" : {
+              "id" : "965",
+              "value" : { },
+              "override" : false
+            },
+            "proxy_port" : {
+              "id" : "970",
+              "value" : "",
+              "override" : false
             },
             "manage_user" : {
-              "id" : "430",
-              "value" : true,
-              "override" : true
+              "id" : "981",
+              "value" : "${$::jenkins::params::manage_user}",
+              "override" : false
             },
-            "purge_realms" : {
-              "id" : "429",
-              "value" : false,
+            "package_cache_dir" : {
+              "id" : "958",
+              "value" : "${$jenkins::params::package_cache_dir}",
+              "override" : false
+            },
+            "group" : {
+              "id" : "984",
+              "value" : "${$::jenkins::params::group}",
+              "override" : false
+            },
+            "user" : {
+              "id" : "982",
+              "value" : "${$::jenkins::params::user}",
               "override" : false
             }
           },
-          "id" : "103"
-        },
-        "tomcat::params" : {
-          "parameters" : { },
-          "id" : "104"
+          "id" : "135"
         }
       }
     },
     "wrappers" : {
+      "id" : null,
       "puppetClasses" : {
-        "wrappers::mongodb::db" : {
+        "wrappers::tomcat::instance" : {
           "parameters" : {
             "resources" : {
-              "id" : "616",
+              "id" : "433",
               "value" : { },
-              "override" : true
+              "override" : false
             }
           },
-          "id" : "132"
+          "id" : "106"
+        },
+        "wrappers::account" : {
+          "parameters" : {
+            "resources" : {
+              "id" : "1023",
+              "value" : { },
+              "override" : false
+            }
+          },
+          "id" : "227"
+        },
+        "wrappers::haproxy::frontend" : {
+          "parameters" : {
+            "resources" : {
+              "id" : "1017",
+              "value" : { },
+              "override" : false
+            }
+          },
+          "id" : "221"
         },
         "wrappers::tomcat::service" : {
           "parameters" : {
             "resources" : {
               "id" : "432",
               "value" : { },
-              "override" : true
+              "override" : false
             }
           },
           "id" : "105"
+        },
+        "wrappers::systemenv::var" : {
+          "parameters" : {
+            "resources" : {
+              "id" : "942",
+              "value" : "http_proxy:\n  value: \"'http://echoes:echoes@proxy-ads:3128'\"\nhttps_proxy:\n  value: \"'http://echoes:echoes@proxy-ads:3128'\"\nHTTP_PROXY:\n  value: \"'http://echoes:echoes@proxy-ads:3128'\"\nHTTPS_PROXY:\n  value: \"'http://echoes:echoes@proxy-ads:3128'\""
+              ,
+              "override" : true
+            }
+          },
+          "id" : "215"
+        },
+        "wrappers::package" : {
+          "parameters" : {
+            "resources" : {
+              "id" : "1022",
+              "value" : { },
+              "override" : false
+            }
+          },
+          "id" : "226"
+        },
+        "wrappers::postgresql::server::db" : {
+          "parameters" : {
+            "resources" : {
+              "id" : "1019",
+              "value" : { },
+              "override" : false
+            }
+          },
+          "id" : "223"
+        },
+        "wrappers::mysql::db" : {
+          "parameters" : {
+            "resources" : {
+              "id" : "1018",
+              "value" : { },
+              "override" : false
+            }
+          },
+          "id" : "222"
+        },
+        "wrappers::firewall" : {
+          "parameters" : {
+            "resources" : {
+              "id" : "1015",
+              "value" : { },
+              "override" : false
+            }
+          },
+          "id" : "219"
+        },
+        "wrappers::user" : {
+          "parameters" : {
+            "resources" : {
+              "id" : "1021",
+              "value" : { },
+              "override" : false
+            }
+          },
+          "id" : "225"
+        },
+        "wrappers::postgresql::server::role" : {
+          "parameters" : {
+            "resources" : {
+              "id" : "1020",
+              "value" : { },
+              "override" : false
+            }
+          },
+          "id" : "224"
+        },
+        "wrappers::haproxy::backend" : {
+          "parameters" : {
+            "resources" : {
+              "id" : "1016",
+              "value" : { },
+              "override" : false
+            }
+          },
+          "id" : "220"
         },
         "wrappers::apache::vhost" : {
           "parameters" : {
             "resources" : {
               "id" : "434",
               "value" : { },
-              "override" : true
+              "override" : false
             }
           },
           "id" : "107"
-        },
-        "wrappers::tomcat::instance" : {
-          "parameters" : {
-            "resources" : {
-              "id" : "433",
-              "value" : { },
-              "override" : true
-            }
-          },
-          "id" : "106"
-        },
-        "wrappers::ldap::entries" : {
-          "parameters" : {
-            "password" : {
-              "id" : "619",
-              "value" : "password",
-              "override" : true
-            },
-            "domain" : {
-              "id" : "618",
-              "value" : "localhost.localdomain",
-              "override" : true
-            },
-            "resources" : {
-              "id" : "620",
-              "value" : { },
-              "override" : true
-            }
-          },
-          "id" : "134"
-        },
-        "wrappers::apache::foreman" : {
+        }
+      }
+    },
+    "stdlib" : {
+      "id" : "19",
+      "puppetClasses" : {
+        "stdlib" : {
           "parameters" : { },
-          "id" : "109"
+          "id" : "19"
+        }
+      }
+    },
+    "zypprepo" : {
+      "id" : "214",
+      "puppetClasses" : {
+        "zypprepo" : {
+          "parameters" : { },
+          "id" : "214"
+        }
+      }
+    },
+    "java" : {
+      "id" : "157",
+      "puppetClasses" : {
+        "java" : {
+          "parameters" : {
+            "java_alternative" : {
+              "id" : "1027",
+              "value" : "",
+              "override" : false
+            },
+            "java_alternative_path" : {
+              "id" : "1028",
+              "value" : "",
+              "override" : false
+            },
+            "package" : {
+              "id" : "1026",
+              "value" : "",
+              "override" : false
+            },
+            "distribution" : {
+              "id" : "1024",
+              "value" : "jdk",
+              "override" : false
+            },
+            "version" : {
+              "id" : "1025",
+              "value" : "present",
+              "override" : false
+            }
+          },
+          "id" : "157"
+        }
+      }
+    },
+    "apache" : {
+      "id" : "23",
+      "puppetClasses" : {
+        "apache" : {
+          "parameters" : {
+            "default_ssl_crl_check" : {
+              "id" : "163",
+              "value" : "",
+              "override" : false
+            },
+            "mod_enable_dir" : {
+              "id" : "184",
+              "value" : "${$::apache::params::mod_enable_dir}",
+              "override" : false
+            },
+            "default_charset" : {
+              "id" : "154",
+              "value" : "",
+              "override" : false
+            },
+            "pidfile" : {
+              "id" : "1265",
+              "value" : "${$::apache::params::pidfile}",
+              "override" : false
+            },
+            "service_name" : {
+              "id" : "151",
+              "value" : "${$::apache::params::service_name}",
+              "override" : false
+            },
+            "purge_vhost_dir" : {
+              "id" : "171",
+              "value" : "",
+              "override" : false
+            },
+            "vhost_include_pattern" : {
+              "id" : "1264",
+              "value" : "${$::apache::params::vhost_include_pattern}",
+              "override" : false
+            },
+            "conf_template" : {
+              "id" : "187",
+              "value" : "${$::apache::params::conf_template}",
+              "override" : false
+            },
+            "default_type" : {
+              "id" : "164",
+              "value" : "none",
+              "override" : false
+            },
+            "default_ssl_ca" : {
+              "id" : "160",
+              "value" : "",
+              "override" : false
+            },
+            "ports_file" : {
+              "id" : "200",
+              "value" : "${$::apache::params::ports_file}",
+              "override" : false
+            },
+            "mpm_module" : {
+              "id" : "185",
+              "value" : "${$::apache::params::mpm_module}",
+              "override" : false
+            },
+            "default_ssl_vhost" : {
+              "id" : "156",
+              "value" : false,
+              "override" : false
+            },
+            "default_ssl_key" : {
+              "id" : "158",
+              "value" : "${$::apache::params::default_ssl_key}",
+              "override" : false
+            },
+            "default_confd_files" : {
+              "id" : "155",
+              "value" : true,
+              "override" : false
+            },
+            "default_ssl_crl" : {
+              "id" : "162",
+              "value" : "",
+              "override" : false
+            },
+            "rewrite_lock" : {
+              "id" : "1266",
+              "value" : "",
+              "override" : false
+            },
+            "package_ensure" : {
+              "id" : "207",
+              "value" : "installed",
+              "override" : false
+            },
+            "use_systemd" : {
+              "id" : "1267",
+              "value" : "${$::apache::params::use_systemd}",
+              "override" : false
+            },
+            "service_enable" : {
+              "id" : "166",
+              "value" : true,
+              "override" : false
+            },
+            "confd_dir" : {
+              "id" : "180",
+              "value" : "${$::apache::params::confd_dir}",
+              "override" : false
+            },
+            "keepalive_timeout" : {
+              "id" : "194",
+              "value" : "${$::apache::params::keepalive_timeout}",
+              "override" : false
+            },
+            "apache_name" : {
+              "id" : "150",
+              "value" : "${$::apache::params::apache_name}",
+              "override" : false
+            },
+            "vhost_enable_dir" : {
+              "id" : "182",
+              "value" : "${$::apache::params::vhost_enable_dir}",
+              "override" : false
+            },
+            "vhost_dir" : {
+              "id" : "181",
+              "value" : "${$::apache::params::vhost_dir}",
+              "override" : false
+            },
+            "conf_dir" : {
+              "id" : "179",
+              "value" : "${$::apache::params::conf_dir}",
+              "override" : false
+            },
+            "max_keepalive_requests" : {
+              "id" : "195",
+              "value" : "${$::apache::params::max_keepalive_requests}",
+              "override" : false
+            },
+            "default_ssl_chain" : {
+              "id" : "159",
+              "value" : "",
+              "override" : false
+            },
+            "purge_configs" : {
+              "id" : "170",
+              "value" : true,
+              "override" : false
+            },
+            "mod_dir" : {
+              "id" : "183",
+              "value" : "${$::apache::params::mod_dir}",
+              "override" : false
+            },
+            "serveradmin" : {
+              "id" : "173",
+              "value" : "root@localhost",
+              "override" : false
+            },
+            "service_manage" : {
+              "id" : "167",
+              "value" : true,
+              "override" : false
+            },
+            "logroot" : {
+              "id" : "196",
+              "value" : "${$::apache::params::logroot}",
+              "override" : false
+            },
+            "purge_vdir" : {
+              "id" : "172",
+              "value" : false,
+              "override" : false
+            },
+            "service_ensure" : {
+              "id" : "168",
+              "value" : "running",
+              "override" : false
+            },
+            "trace_enable" : {
+              "id" : "205",
+              "value" : "On",
+              "override" : false
+            },
+            "logroot_mode" : {
+              "id" : "197",
+              "value" : "${$::apache::params::logroot_mode}",
+              "override" : false
+            },
+            "server_root" : {
+              "id" : "178",
+              "value" : "${$::apache::params::server_root}",
+              "override" : false
+            },
+            "apache_version" : {
+              "id" : "202",
+              "value" : "${$::apache::version::default}",
+              "override" : false
+            },
+            "allow_encoded_slashes" : {
+              "id" : "206",
+              "value" : "",
+              "override" : false
+            },
+            "keepalive" : {
+              "id" : "193",
+              "value" : "${$::apache::params::keepalive}",
+              "override" : false
+            },
+            "log_formats" : {
+              "id" : "199",
+              "value" : { },
+              "override" : false
+            },
+            "httpd_dir" : {
+              "id" : "177",
+              "value" : "${$::apache::params::httpd_dir}",
+              "override" : false
+            },
+            "default_ssl_cert" : {
+              "id" : "157",
+              "value" : "${$::apache::params::default_ssl_cert}",
+              "override" : false
+            },
+            "server_signature" : {
+              "id" : "204",
+              "value" : "On",
+              "override" : false
+            },
+            "docroot" : {
+              "id" : "201",
+              "value" : "${$::apache::params::docroot}",
+              "override" : false
+            },
+            "dev_packages" : {
+              "id" : "1263",
+              "value" : "${$::apache::params::dev_packages}",
+              "override" : false
+            },
+            "manage_group" : {
+              "id" : "190",
+              "value" : true,
+              "override" : false
+            },
+            "default_vhost" : {
+              "id" : "153",
+              "value" : true,
+              "override" : false
+            },
+            "error_documents" : {
+              "id" : "175",
+              "value" : false,
+              "override" : false
+            },
+            "servername" : {
+              "id" : "188",
+              "value" : "${$::apache::params::servername}",
+              "override" : false
+            },
+            "ip" : {
+              "id" : "165",
+              "value" : "",
+              "override" : false
+            },
+            "sendfile" : {
+              "id" : "174",
+              "value" : "On",
+              "override" : false
+            },
+            "manage_user" : {
+              "id" : "189",
+              "value" : true,
+              "override" : false
+            },
+            "use_optional_includes" : {
+              "id" : "208",
+              "value" : "${$::apache::params::use_optional_includes}",
+              "override" : false
+            },
+            "default_ssl_crl_path" : {
+              "id" : "161",
+              "value" : "",
+              "override" : false
+            },
+            "default_mods" : {
+              "id" : "152",
+              "value" : true,
+              "override" : false
+            },
+            "lib_path" : {
+              "id" : "186",
+              "value" : "${$::apache::params::lib_path}",
+              "override" : false
+            },
+            "service_restart" : {
+              "id" : "169",
+              "value" : "",
+              "override" : false
+            },
+            "log_level" : {
+              "id" : "198",
+              "value" : "${$::apache::params::log_level}",
+              "override" : false
+            },
+            "server_tokens" : {
+              "id" : "203",
+              "value" : "OS",
+              "override" : false
+            },
+            "group" : {
+              "id" : "192",
+              "value" : "${$::apache::params::group}",
+              "override" : false
+            },
+            "user" : {
+              "id" : "191",
+              "value" : "${$::apache::params::user}",
+              "override" : false
+            },
+            "timeout" : {
+              "id" : "176",
+              "value" : "120",
+              "override" : false
+            }
+          },
+          "id" : "23"
+        }
+      }
+    },
+    "postgresql" : {
+      "id" : null,
+      "puppetClasses" : {
+        "postgresql::server::reload" : {
+          "parameters" : { },
+          "id" : "200"
+        },
+        "postgresql::lib::java" : {
+          "parameters" : {
+            "package_name" : {
+              "id" : "1252",
+              "value" : "${$postgresql::params::java_package_name}",
+              "override" : false
+            },
+            "package_ensure" : {
+              "id" : "1253",
+              "value" : "present",
+              "override" : false
+            }
+          },
+          "id" : "207"
+        },
+        "postgresql::lib::perl" : {
+          "parameters" : {
+            "package_name" : {
+              "id" : "1258",
+              "value" : "${$postgresql::params::perl_package_name}",
+              "override" : false
+            },
+            "package_ensure" : {
+              "id" : "1259",
+              "value" : "present",
+              "override" : false
+            }
+          },
+          "id" : "210"
+        },
+        "postgresql::repo::apt_postgresql_org" : {
+          "parameters" : { },
+          "id" : "202"
+        },
+        "postgresql::server::postgis" : {
+          "parameters" : {
+            "package_name" : {
+              "id" : "1198",
+              "value" : "${$postgresql::params::postgis_package_name}",
+              "override" : false
+            },
+            "package_ensure" : {
+              "id" : "1199",
+              "value" : "present",
+              "override" : false
+            }
+          },
+          "id" : "195"
+        },
+        "postgresql::server::contrib" : {
+          "parameters" : {
+            "package_name" : {
+              "id" : "1200",
+              "value" : "${$postgresql::params::contrib_package_name}",
+              "override" : false
+            },
+            "package_ensure" : {
+              "id" : "1201",
+              "value" : "present",
+              "override" : false
+            }
+          },
+          "id" : "196"
+        },
+        "postgresql::client" : {
+          "parameters" : {
+            "file_ensure" : {
+              "id" : "1206",
+              "value" : "file",
+              "override" : false
+            },
+            "validcon_script_path" : {
+              "id" : "1207",
+              "value" : "${$postgresql::params::validcon_script_path}",
+              "override" : false
+            },
+            "package_name" : {
+              "id" : "1208",
+              "value" : "${$postgresql::params::client_package_name}",
+              "override" : false
+            },
+            "package_ensure" : {
+              "id" : "1209",
+              "value" : "present",
+              "override" : false
+            }
+          },
+          "id" : "203"
+        },
+        "postgresql::server::install" : {
+          "parameters" : { },
+          "id" : "193"
+        },
+        "postgresql::lib::docs" : {
+          "parameters" : {
+            "package_name" : {
+              "id" : "1256",
+              "value" : "${$postgresql::params::docs_package_name}",
+              "override" : false
+            },
+            "package_ensure" : {
+              "id" : "1257",
+              "value" : "present",
+              "override" : false
+            }
+          },
+          "id" : "209"
+        },
+        "postgresql::server::passwd" : {
+          "parameters" : { },
+          "id" : "197"
+        },
+        "postgresql::lib::python" : {
+          "parameters" : {
+            "package_name" : {
+              "id" : "1254",
+              "value" : "${$postgresql::params::python_package_name}",
+              "override" : false
+            },
+            "package_ensure" : {
+              "id" : "1255",
+              "value" : "present",
+              "override" : false
+            }
+          },
+          "id" : "208"
+        },
+        "postgresql::repo" : {
+          "parameters" : {
+            "proxy" : {
+              "id" : "1251",
+              "value" : "",
+              "override" : false
+            },
+            "version" : {
+              "id" : "1250",
+              "value" : "",
+              "override" : false
+            }
+          },
+          "id" : "206"
+        },
+        "postgresql::server::service" : {
+          "parameters" : { },
+          "id" : "194"
+        },
+        "postgresql::globals" : {
+          "parameters" : {
+            "java_package_name" : {
+              "id" : "1161",
+              "value" : "",
+              "override" : false
+            },
+            "pg_hba_conf_defaults" : {
+              "id" : "1180",
+              "value" : "",
+              "override" : false
+            },
+            "devel_package_name" : {
+              "id" : "1160",
+              "value" : "",
+              "override" : false
+            },
+            "pg_hba_conf_path" : {
+              "id" : "1176",
+              "value" : "",
+              "override" : false
+            },
+            "recovery_conf_path" : {
+              "id" : "1179",
+              "value" : "",
+              "override" : false
+            },
+            "default_database" : {
+              "id" : "1171",
+              "value" : "",
+              "override" : false
+            },
+            "perl_package_name" : {
+              "id" : "1163",
+              "value" : "",
+              "override" : false
+            },
+            "server_package_name" : {
+              "id" : "1158",
+              "value" : "",
+              "override" : false
+            },
+            "locale" : {
+              "id" : "1193",
+              "value" : "",
+              "override" : false
+            },
+            "service_name" : {
+              "id" : "1168",
+              "value" : "",
+              "override" : false
+            },
+            "logdir" : {
+              "id" : "1185",
+              "value" : "",
+              "override" : false
+            },
+            "postgis_version" : {
+              "id" : "1189",
+              "value" : "",
+              "override" : false
+            },
+            "needs_initdb" : {
+              "id" : "1191",
+              "value" : "",
+              "override" : false
+            },
+            "version" : {
+              "id" : "1188",
+              "value" : "",
+              "override" : false
+            },
+            "initdb_path" : {
+              "id" : "1173",
+              "value" : "",
+              "override" : false
+            },
+            "manage_pg_hba_conf" : {
+              "id" : "1194",
+              "value" : "",
+              "override" : false
+            },
+            "encoding" : {
+              "id" : "1192",
+              "value" : "",
+              "override" : false
+            },
+            "postgresql_conf_path" : {
+              "id" : "1178",
+              "value" : "",
+              "override" : false
+            },
+            "manage_pg_ident_conf" : {
+              "id" : "1195",
+              "value" : "",
+              "override" : false
+            },
+            "repo_proxy" : {
+              "id" : "1190",
+              "value" : "",
+              "override" : false
+            },
+            "docs_package_name" : {
+              "id" : "1162",
+              "value" : "",
+              "override" : false
+            },
+            "psql_path" : {
+              "id" : "1175",
+              "value" : "",
+              "override" : false
+            },
+            "service_provider" : {
+              "id" : "1169",
+              "value" : "",
+              "override" : false
+            },
+            "service_status" : {
+              "id" : "1170",
+              "value" : "",
+              "override" : false
+            },
+            "validcon_script_path" : {
+              "id" : "1172",
+              "value" : "",
+              "override" : false
+            },
+            "createdb_path" : {
+              "id" : "1174",
+              "value" : "",
+              "override" : false
+            },
+            "postgis_package_name" : {
+              "id" : "1167",
+              "value" : "",
+              "override" : false
+            },
+            "plpython_package_name" : {
+              "id" : "1165",
+              "value" : "",
+              "override" : false
+            },
+            "xlogdir" : {
+              "id" : "1184",
+              "value" : "",
+              "override" : false
+            },
+            "plperl_package_name" : {
+              "id" : "1164",
+              "value" : "",
+              "override" : false
+            },
+            "manage_package_repo" : {
+              "id" : "1197",
+              "value" : "",
+              "override" : false
+            },
+            "client_package_name" : {
+              "id" : "1157",
+              "value" : "",
+              "override" : false
+            },
+            "bindir" : {
+              "id" : "1183",
+              "value" : "",
+              "override" : false
+            },
+            "manage_recovery_conf" : {
+              "id" : "1196",
+              "value" : "",
+              "override" : false
+            },
+            "contrib_package_name" : {
+              "id" : "1159",
+              "value" : "",
+              "override" : false
+            },
+            "python_package_name" : {
+              "id" : "1166",
+              "value" : "",
+              "override" : false
+            },
+            "pg_ident_conf_path" : {
+              "id" : "1177",
+              "value" : "",
+              "override" : false
+            },
+            "group" : {
+              "id" : "1187",
+              "value" : "",
+              "override" : false
+            },
+            "user" : {
+              "id" : "1186",
+              "value" : "",
+              "override" : false
+            },
+            "confdir" : {
+              "id" : "1182",
+              "value" : "",
+              "override" : false
+            },
+            "datadir" : {
+              "id" : "1181",
+              "value" : "",
+              "override" : false
+            }
+          },
+          "id" : "190"
+        },
+        "postgresql::server::plperl" : {
+          "parameters" : {
+            "package_name" : {
+              "id" : "1205",
+              "value" : "${$postgresql::server::plperl_package_name}",
+              "override" : false
+            },
+            "package_ensure" : {
+              "id" : "1204",
+              "value" : "present",
+              "override" : false
+            }
+          },
+          "id" : "199"
+        },
+        "postgresql::repo::yum_postgresql_org" : {
+          "parameters" : { },
+          "id" : "201"
+        },
+        "postgresql::server" : {
+          "parameters" : {
+            "port" : {
+              "id" : "1225",
+              "value" : "${$postgresql::params::port}",
+              "override" : false
+            },
+            "pg_hba_conf_defaults" : {
+              "id" : "1240",
+              "value" : "${$postgresql::params::pg_hba_conf_defaults}",
+              "override" : false
+            },
+            "pg_hba_conf_path" : {
+              "id" : "1233",
+              "value" : "${$postgresql::params::pg_hba_conf_path}",
+              "override" : false
+            },
+            "recovery_conf_path" : {
+              "id" : "1236",
+              "value" : "${$postgresql::params::recovery_conf_path}",
+              "override" : false
+            },
+            "default_database" : {
+              "id" : "1223",
+              "value" : "${$postgresql::params::default_database}",
+              "override" : false
+            },
+            "service_manage" : {
+              "id" : "1218",
+              "value" : "${$postgresql::params::service_manage}",
+              "override" : false
+            },
+            "service_reload" : {
+              "id" : "1221",
+              "value" : "${$postgresql::params::service_reload}",
+              "override" : false
+            },
+            "locale" : {
+              "id" : "1245",
+              "value" : "${$postgresql::params::locale}",
+              "override" : false
+            },
+            "ipv4acls" : {
+              "id" : "1228",
+              "value" : "${$postgresql::params::ipv4acls}",
+              "override" : false
+            },
+            "service_name" : {
+              "id" : "1219",
+              "value" : "${$postgresql::params::service_name}",
+              "override" : false
+            },
+            "service_ensure" : {
+              "id" : "1216",
+              "value" : "${$postgresql::params::service_ensure}",
+              "override" : false
+            },
+            "logdir" : {
+              "id" : "1239",
+              "value" : "${$postgresql::params::logdir}",
+              "override" : false
+            },
+            "needs_initdb" : {
+              "id" : "1243",
+              "value" : "${$postgresql::params::needs_initdb}",
+              "override" : false
+            },
+            "version" : {
+              "id" : "1249",
+              "value" : "",
+              "override" : false
+            },
+            "initdb_path" : {
+              "id" : "1230",
+              "value" : "${$postgresql::params::initdb_path}",
+              "override" : false
+            },
+            "postgres_password" : {
+              "id" : "1210",
+              "value" : "",
+              "override" : false
+            },
+            "manage_pg_hba_conf" : {
+              "id" : "1246",
+              "value" : "${$postgresql::params::manage_pg_hba_conf}",
+              "override" : false
+            },
+            "encoding" : {
+              "id" : "1244",
+              "value" : "${$postgresql::params::encoding}",
+              "override" : false
+            },
+            "package_ensure" : {
+              "id" : "1213",
+              "value" : "${$postgresql::params::package_ensure}",
+              "override" : false
+            },
+            "postgresql_conf_path" : {
+              "id" : "1235",
+              "value" : "${$postgresql::params::postgresql_conf_path}",
+              "override" : false
+            },
+            "manage_pg_ident_conf" : {
+              "id" : "1247",
+              "value" : "${$postgresql::params::manage_pg_ident_conf}",
+              "override" : false
+            },
+            "service_enable" : {
+              "id" : "1217",
+              "value" : "${$postgresql::params::service_enable}",
+              "override" : false
+            },
+            "psql_path" : {
+              "id" : "1232",
+              "value" : "${$postgresql::params::psql_path}",
+              "override" : false
+            },
+            "service_provider" : {
+              "id" : "1220",
+              "value" : "${$postgresql::params::service_provider}",
+              "override" : false
+            },
+            "service_status" : {
+              "id" : "1222",
+              "value" : "${$postgresql::params::service_status}",
+              "override" : false
+            },
+            "createdb_path" : {
+              "id" : "1231",
+              "value" : "${$postgresql::params::createdb_path}",
+              "override" : false
+            },
+            "package_name" : {
+              "id" : "1211",
+              "value" : "${$postgresql::params::server_package_name}",
+              "override" : false
+            },
+            "plpython_package_name" : {
+              "id" : "1215",
+              "value" : "${$postgresql::params::plpython_package_name}",
+              "override" : false
+            },
+            "xlogdir" : {
+              "id" : "1238",
+              "value" : "${$postgresql::params::xlogdir}",
+              "override" : false
+            },
+            "ip_mask_allow_all_users" : {
+              "id" : "1227",
+              "value" : "${$postgresql::params::ip_mask_allow_all_users}",
+              "override" : false
+            },
+            "plperl_package_name" : {
+              "id" : "1214",
+              "value" : "${$postgresql::params::plperl_package_name}",
+              "override" : false
+            },
+            "client_package_name" : {
+              "id" : "1212",
+              "value" : "${$postgresql::params::client_package_name}",
+              "override" : false
+            },
+            "ipv6acls" : {
+              "id" : "1229",
+              "value" : "${$postgresql::params::ipv6acls}",
+              "override" : false
+            },
+            "ip_mask_deny_postgres_user" : {
+              "id" : "1226",
+              "value" : "${$postgresql::params::ip_mask_deny_postgres_user}",
+              "override" : false
+            },
+            "manage_recovery_conf" : {
+              "id" : "1248",
+              "value" : "${$postgresql::params::manage_recovery_conf}",
+              "override" : false
+            },
+            "pg_ident_conf_path" : {
+              "id" : "1234",
+              "value" : "${$postgresql::params::pg_ident_conf_path}",
+              "override" : false
+            },
+            "listen_addresses" : {
+              "id" : "1224",
+              "value" : "${$postgresql::params::listen_addresses}",
+              "override" : false
+            },
+            "group" : {
+              "id" : "1242",
+              "value" : "${$postgresql::params::group}",
+              "override" : false
+            },
+            "user" : {
+              "id" : "1241",
+              "value" : "${$postgresql::params::user}",
+              "override" : false
+            },
+            "datadir" : {
+              "id" : "1237",
+              "value" : "${$postgresql::params::datadir}",
+              "override" : false
+            }
+          },
+          "id" : "204"
+        },
+        "postgresql::server::plpython" : {
+          "parameters" : {
+            "package_name" : {
+              "id" : "1203",
+              "value" : "${$postgresql::server::plpython_package_name}",
+              "override" : false
+            },
+            "package_ensure" : {
+              "id" : "1202",
+              "value" : "present",
+              "override" : false
+            }
+          },
+          "id" : "198"
+        },
+        "postgresql::server::config" : {
+          "parameters" : { },
+          "id" : "192"
+        },
+        "postgresql::lib::devel" : {
+          "parameters" : {
+            "package_name" : {
+              "id" : "1260",
+              "value" : "${$postgresql::params::devel_package_name}",
+              "override" : false
+            },
+            "package_ensure" : {
+              "id" : "1261",
+              "value" : "present",
+              "override" : false
+            },
+            "link_pg_config" : {
+              "id" : "1262",
+              "value" : "${$postgresql::params::link_pg_config}",
+              "override" : false
+            }
+          },
+          "id" : "211"
+        },
+        "postgresql::server::initdb" : {
+          "parameters" : { },
+          "id" : "191"
+        },
+        "postgresql::params" : {
+          "parameters" : { },
+          "id" : "205"
+        }
+      }
+    },
+    "systemenv" : {
+      "id" : "216",
+      "puppetClasses" : {
+        "systemenv" : {
+          "parameters" : { },
+          "id" : "216"
         }
       }
     },
     "concat" : {
+      "id" : null,
       "puppetClasses" : {
         "concat::setup" : {
           "parameters" : { },
@@ -2071,723 +1428,298 @@
         }
       }
     },
-    "vim" : {
+    "redmine" : {
+      "id" : "181",
       "puppetClasses" : {
-        "vim::params" : {
-          "parameters" : { },
-          "id" : "22"
-        },
-        "vim" : {
+        "redmine" : {
           "parameters" : {
-            "opt_nocompatible" : {
-              "id" : "139",
-              "value" : "${$vim::params::nocompatible}",
+            "webroot" : {
+              "id" : "1151",
+              "value" : "${apache::docroot}/redmine",
               "override" : false
             },
-            "ensure" : {
-              "id" : "133",
-              "value" : "present",
+            "smtp_password" : {
+              "id" : "1148",
+              "value" : "",
               "override" : false
             },
-            "opt_lastposition" : {
-              "id" : "143",
-              "value" : "${$vim::params::lastposition}",
+            "install_dir" : {
+              "id" : "1152",
+              "value" : "/usr/src/redmine",
               "override" : false
             },
-            "package" : {
-              "id" : "135",
-              "value" : "${$vim::params::package}",
+            "plugins" : {
+              "id" : "1155",
+              "value" : { },
               "override" : false
             },
-            "opt_backspace" : {
-              "id" : "140",
-              "value" : "${$vim::params::backspace}",
+            "vhost_aliases" : {
+              "id" : "1149",
+              "value" : "redmine",
               "override" : false
             },
-            "opt_misc" : {
-              "id" : "148",
-              "value" : "${$vim::params::misc}",
-              "override" : true
-            },
-            "opt_bg_shading" : {
-              "id" : "141",
-              "value" : "${$vim::params::background}",
-              "override" : true
-            },
-            "conf_file" : {
-              "id" : "138",
-              "value" : "${$vim::params::conf}",
+            "smtp_server" : {
+              "id" : "1143",
+              "value" : "localhost",
               "override" : false
             },
-            "opt_powersave" : {
-              "id" : "145",
-              "value" : "${$vim::params::powersave}",
-              "override" : true
-            },
-            "opt_indent" : {
-              "id" : "142",
-              "value" : "${$vim::params::indent}",
-              "override" : true
-            },
-            "opt_syntax" : {
-              "id" : "147",
-              "value" : "${$vim::params::syntax}",
-              "override" : true
-            },
-            "set_as_default" : {
-              "id" : "132",
-              "value" : "${$vim::params::set_as_default}",
+            "database_adapter" : {
+              "id" : "1142",
+              "value" : "",
               "override" : false
             },
-            "set_editor_cmd" : {
-              "id" : "136",
-              "value" : "${$vim::params::set_editor_cmd}",
+            "production_database" : {
+              "id" : "1140",
+              "value" : "redmine",
               "override" : false
             },
-            "opt_ruler" : {
-              "id" : "146",
-              "value" : "${$vim::params::ruler}",
+            "database_password" : {
+              "id" : "1139",
+              "value" : "redmine",
               "override" : false
             },
-            "autoupgrade" : {
-              "id" : "134",
+            "provider" : {
+              "id" : "1153",
+              "value" : "git",
+              "override" : false
+            },
+            "vhost_servername" : {
+              "id" : "1150",
+              "value" : "redmine",
+              "override" : false
+            },
+            "override_options" : {
+              "id" : "1154",
+              "value" : { },
+              "override" : false
+            },
+            "version" : {
+              "id" : "1135",
+              "value" : "",
+              "override" : false
+            },
+            "smtp_username" : {
+              "id" : "1147",
+              "value" : "",
+              "override" : false
+            },
+            "smtp_port" : {
+              "id" : "1145",
+              "value" : 25,
+              "override" : false
+            },
+            "www_subdir" : {
+              "id" : "1156",
+              "value" : "",
+              "override" : false
+            },
+            "smtp_domain" : {
+              "id" : "1144",
+              "value" : "${$::domain}",
+              "override" : false
+            },
+            "download_url" : {
+              "id" : "1136",
+              "value" : "https://github.com/redmine/redmine",
+              "override" : false
+            },
+            "database_server" : {
+              "id" : "1137",
+              "value" : "localhost",
+              "override" : false
+            },
+            "development_database" : {
+              "id" : "1141",
+              "value" : "redmine_development",
+              "override" : false
+            },
+            "database_user" : {
+              "id" : "1138",
+              "value" : "redmine",
+              "override" : false
+            },
+            "smtp_authentication" : {
+              "id" : "1146",
               "value" : false,
-              "override" : false
-            },
-            "test_editor_set" : {
-              "id" : "137",
-              "value" : "${$vim::params::test_editor_set}",
-              "override" : false
-            },
-            "opt_matchparen" : {
-              "id" : "144",
-              "value" : "${$vim::params::matchparen}",
-              "override" : false
-            },
-            "opt_maps" : {
-              "id" : "149",
-              "value" : "${$vim::params::maps}",
               "override" : false
             }
           },
-          "id" : "21"
+          "id" : "181"
         }
       }
     },
-    "mongodb" : {
+    "mysql" : {
+      "id" : "160",
       "puppetClasses" : {
-        "mongodb::repo" : {
+        "mysql" : {
           "parameters" : {
-            "ensure" : {
-              "id" : "583",
-              "value" : "${$mongodb::params::ensure}",
-              "override" : false
-            }
-          },
-          "id" : "126"
-        },
-        "mongodb::mongos::config" : {
-          "parameters" : {
-            "ensure" : {
-              "id" : "569",
-              "value" : "${$mongodb::mongos::ensure}",
-              "override" : false
-            },
-            "config_content" : {
-              "id" : "571",
-              "value" : "${$mongodb::mongos::config_content}",
-              "override" : false
-            },
-            "configdb" : {
-              "id" : "572",
-              "value" : "${$mongodb::mongos::configdb}",
-              "override" : false
-            },
-            "config" : {
-              "id" : "570",
-              "value" : "${$mongodb::mongos::config}",
-              "override" : false
-            }
-          },
-          "id" : "123"
-        },
-        "mongodb::repo::yum" : {
-          "parameters" : { },
-          "id" : "117"
-        },
-        "mongodb::shardsvr" : {
-          "parameters" : {
-            "shards" : {
-              "id" : "501",
-              "value" : "",
-              "override" : false
-            }
-          },
-          "id" : "118"
-        },
-        "mongodb::globals" : {
-          "parameters" : {
-            "mongos_service_manage" : {
-              "id" : "490",
+            "port" : {
+              "id" : "1047",
               "value" : "",
               "override" : false
             },
-            "mongos_service_name" : {
-              "id" : "491",
+            "etc_root_password" : {
+              "id" : "1037",
               "value" : "",
               "override" : false
             },
-            "bind_ip" : {
-              "id" : "497",
+            "client_package_ensure" : {
+              "id" : "1031",
               "value" : "",
               "override" : false
             },
-            "service_enable" : {
-              "id" : "487",
+            "max_allowed_packet" : {
+              "id" : "1041",
               "value" : "",
               "override" : false
             },
-            "service_name" : {
-              "id" : "489",
+            "ssl_key" : {
+              "id" : "1059",
               "value" : "",
               "override" : false
             },
             "server_package_name" : {
-              "id" : "483",
+              "id" : "1052",
               "value" : "",
               "override" : false
             },
-            "service_provider" : {
-              "id" : "492",
+            "manage_service" : {
+              "id" : "1040",
               "value" : "",
               "override" : false
             },
-            "version" : {
-              "id" : "498",
+            "pidfile" : {
+              "id" : "1046",
               "value" : "",
               "override" : false
             },
-            "client_package_name" : {
-              "id" : "484",
+            "root_group" : {
+              "id" : "1050",
               "value" : "",
               "override" : false
             },
-            "ipv6" : {
-              "id" : "496",
+            "ssl" : {
+              "id" : "1056",
               "value" : "",
               "override" : false
             },
-            "service_status" : {
-              "id" : "493",
+            "manage_config_file" : {
+              "id" : "1039",
               "value" : "",
-              "override" : false
-            },
-            "service_ensure" : {
-              "id" : "488",
-              "value" : "",
-              "override" : false
-            },
-            "use_enterprise_repo" : {
-              "id" : "500",
-              "value" : "",
-              "override" : false
-            },
-            "mongod_service_manage" : {
-              "id" : "486",
-              "value" : "",
-              "override" : false
-            },
-            "user" : {
-              "id" : "494",
-              "value" : "",
-              "override" : false
-            },
-            "manage_package_repo" : {
-              "id" : "499",
-              "value" : "",
-              "override" : false
-            },
-            "group" : {
-              "id" : "495",
-              "value" : "",
-              "override" : false
-            },
-            "mongos_package_name" : {
-              "id" : "485",
-              "value" : "",
-              "override" : false
-            }
-          },
-          "id" : "111"
-        },
-        "mongodb::server::config" : {
-          "parameters" : { },
-          "id" : "112"
-        },
-        "mongodb::repo::apt" : {
-          "parameters" : { },
-          "id" : "116"
-        },
-        "mongodb::server::service" : {
-          "parameters" : { },
-          "id" : "114"
-        },
-        "mongodb::server" : {
-          "parameters" : {
-            "configsvr" : {
-              "id" : "551",
-              "value" : "",
-              "override" : false
-            },
-            "ensure" : {
-              "id" : "505",
-              "value" : "${$mongodb::params::ensure}",
-              "override" : false
-            },
-            "logpath" : {
-              "id" : "519",
-              "value" : "${$mongodb::params::logpath}",
-              "override" : false
-            },
-            "auth" : {
-              "id" : "529",
-              "value" : false,
-              "override" : false
-            },
-            "bind_ip" : {
-              "id" : "520",
-              "value" : "${$mongodb::params::bind_ip}",
-              "override" : false
-            },
-            "cpu" : {
-              "id" : "528",
-              "value" : "",
-              "override" : false
-            },
-            "maxconns" : {
-              "id" : "539",
-              "value" : "",
-              "override" : false
-            },
-            "config_content" : {
-              "id" : "560",
-              "value" : "",
-              "override" : false
-            },
-            "master" : {
-              "id" : "565",
-              "value" : "",
-              "override" : false
-            },
-            "directoryperdb" : {
-              "id" : "537",
-              "value" : "",
-              "override" : false
-            },
-            "fork" : {
-              "id" : "523",
-              "value" : "${$mongodb::params::fork}",
-              "override" : false
-            },
-            "journal" : {
-              "id" : "525",
-              "value" : "${$mongodb::params::journal}",
-              "override" : false
-            },
-            "ipv6" : {
-              "id" : "521",
-              "value" : "",
-              "override" : false
-            },
-            "keyfile" : {
-              "id" : "556",
-              "value" : "",
-              "override" : false
-            },
-            "logappend" : {
-              "id" : "522",
-              "value" : true,
-              "override" : false
-            },
-            "diaglog" : {
-              "id" : "536",
-              "value" : "",
-              "override" : false
-            },
-            "config" : {
-              "id" : "508",
-              "value" : "${$mongodb::params::config}",
-              "override" : false
-            },
-            "dbpath" : {
-              "id" : "509",
-              "value" : "${$mongodb::params::dbpath}",
-              "override" : false
-            },
-            "key" : {
-              "id" : "557",
-              "value" : "",
-              "override" : false
-            },
-            "group" : {
-              "id" : "507",
-              "value" : "${$mongodb::params::group}",
-              "override" : false
-            }
-          },
-          "id" : "121"
-        },
-        "mongodb::mongos::service" : {
-          "parameters" : {
-            "bind_ip" : {
-              "id" : "581",
-              "value" : "${$mongodb::mongos::bind_ip}",
-              "override" : false
-            },
-            "port" : {
-              "id" : "582",
-              "value" : "${$mongodb::mongos::port}",
-              "override" : false
-            },
-            "service_enable" : {
-              "id" : "577",
-              "value" : "${$mongodb::mongos::service_enable}",
               "override" : false
             },
             "service_name" : {
-              "id" : "576",
-              "value" : "${$mongodb::mongos::service_name}",
+              "id" : "1053",
+              "value" : "",
               "override" : false
             },
-            "service_status" : {
-              "id" : "579",
-              "value" : "${$mongodb::mongos::service_status}",
+            "basedir" : {
+              "id" : "1029",
+              "value" : "",
               "override" : false
             },
-            "service_provider" : {
-              "id" : "580",
-              "value" : "${$mongodb::mongos::service_provider}",
+            "bind_address" : {
+              "id" : "1030",
+              "value" : "",
               "override" : false
             },
-            "service_ensure" : {
-              "id" : "578",
-              "value" : "${$mongodb::mongos::service_ensure}",
+            "config_template" : {
+              "id" : "1034",
+              "value" : "",
               "override" : false
             },
-            "service_manage" : {
-              "id" : "575",
-              "value" : "${$mongodb::mongos::service_manage}",
-              "override" : false
-            }
-          },
-          "id" : "125"
-        },
-        "mongodb::server::install" : {
-          "parameters" : { },
-          "id" : "113"
-        },
-        "mongodb::client" : {
-          "parameters" : {
-            "ensure" : {
-              "id" : "503",
-              "value" : "${$mongodb::params::package_ensure_client}",
-              "override" : false
-            },
-            "package_name" : {
-              "id" : "504",
-              "value" : "${$mongodb::params::client_package_name}",
-              "override" : false
-            }
-          },
-          "id" : "120"
-        },
-        "mongodb::mongos::install" : {
-          "parameters" : {
-            "package_name" : {
-              "id" : "574",
-              "value" : "${$mongodb::mongos::package_name}",
+            "ssl_cert" : {
+              "id" : "1058",
+              "value" : "",
               "override" : false
             },
             "package_ensure" : {
-              "id" : "573",
-              "value" : "${$mongodb::mongos::package_ensure}",
-              "override" : false
-            }
-          },
-          "id" : "124"
-        },
-        "mongodb::mongos" : {
-          "parameters" : {
-            "ensure" : {
-              "id" : "584",
-              "value" : "${$mongodb::params::mongos_ensure}",
+              "id" : "1044",
+              "value" : "",
               "override" : false
             },
-            "logpath" : {
-              "id" : "598",
-              "value" : "${$mongodb::params::mongos_logpath}",
+            "socket" : {
+              "id" : "1055",
+              "value" : "",
               "override" : false
             },
-            "bind_ip" : {
-              "id" : "600",
+            "attempt_compatibility_mode" : {
+              "id" : "1061",
+              "value" : false,
+              "override" : false
+            },
+            "max_connections" : {
+              "id" : "1042",
+              "value" : "",
+              "override" : false
+            },
+            "old_root_password" : {
+              "id" : "1043",
               "value" : "",
               "override" : false
             },
             "restart" : {
-              "id" : "602",
-              "value" : "${$mongodb::params::mongos_restart}",
-              "override" : false
-            },
-            "service_enable" : {
-              "id" : "591",
-              "value" : "${$mongodb::params::mongos_service_enable}",
-              "override" : false
-            },
-            "service_name" : {
-              "id" : "590",
-              "value" : "${$mongodb::params::mongos_service_name}",
-              "override" : false
-            },
-            "unixsocketprefix" : {
-              "id" : "596",
-              "value" : "${$mongodb::params::mongos_unixsocketprefix}",
+              "id" : "1049",
+              "value" : "",
               "override" : false
             },
             "service_provider" : {
-              "id" : "589",
-              "value" : "${$mongodb::params::mongos_service_provider}",
-              "override" : false
-            },
-            "config_content" : {
-              "id" : "586",
+              "id" : "1054",
               "value" : "",
               "override" : false
             },
-            "configdb" : {
-              "id" : "587",
-              "value" : "${$mongodb::params::mongos_configdb}",
-              "override" : false
-            },
-            "package_ensure" : {
-              "id" : "594",
-              "value" : "${$mongodb::params::package_ensure_mongos}",
-              "override" : false
-            },
-            "service_manage" : {
-              "id" : "588",
-              "value" : "${$mongodb::params::mongos_service_manage}",
-              "override" : false
-            },
-            "fork" : {
-              "id" : "599",
-              "value" : "${$mongodb::params::mongos_fork}",
-              "override" : false
-            },
-            "pidfilepath" : {
-              "id" : "597",
-              "value" : "${$mongodb::params::mongos_pidfilepath}",
-              "override" : false
-            },
-            "port" : {
-              "id" : "601",
+            "log_error" : {
+              "id" : "1038",
               "value" : "",
               "override" : false
             },
-            "package_name" : {
-              "id" : "595",
-              "value" : "${$mongodb::params::mongos_package_name}",
-              "override" : false
-            },
-            "service_status" : {
-              "id" : "593",
-              "value" : "${$mongodb::params::mongos_service_status}",
-              "override" : false
-            },
-            "service_ensure" : {
-              "id" : "592",
-              "value" : "${$mongodb::params::mongos_service_ensure}",
-              "override" : false
-            },
-            "config" : {
-              "id" : "585",
-              "value" : "${$mongodb::params::mongos_config}",
-              "override" : false
-            }
-          },
-          "id" : "127"
-        },
-        "mongodb::client::install" : {
-          "parameters" : { },
-          "id" : "115"
-        },
-        "mongodb::params" : {
-          "parameters" : { },
-          "id" : "122"
-        },
-        "mongodb" : {
-          "parameters" : {
-            "configsvr" : {
-              "id" : "472",
+            "ssl_ca" : {
+              "id" : "1057",
               "value" : "",
               "override" : false
             },
-            "init" : {
-              "id" : "437",
-              "value" : "${$mongodb::params::service_provider}",
-              "override" : false
-            },
-            "logpath" : {
-              "id" : "443",
-              "value" : "${$mongodb::params::logpath}",
-              "override" : false
-            },
-            "auth" : {
-              "id" : "453",
+            "config_file" : {
+              "id" : "1033",
               "value" : "",
               "override" : false
             },
-            "bind_ip" : {
-              "id" : "481",
+            "root_password" : {
+              "id" : "1051",
               "value" : "",
               "override" : false
             },
-            "mms_name" : {
-              "id" : "466",
+            "client_package_name" : {
+              "id" : "1032",
               "value" : "",
               "override" : false
             },
-            "cpu" : {
-              "id" : "451",
+            "purge_conf_dir" : {
+              "id" : "1048",
               "value" : "",
               "override" : false
             },
-            "enable_10gen" : {
-              "id" : "436",
+            "php_package_name" : {
+              "id" : "1045",
               "value" : "",
               "override" : false
             },
-            "mms_token" : {
-              "id" : "465",
+            "default_engine" : {
+              "id" : "1036",
               "value" : "",
               "override" : false
             },
-            "master" : {
-              "id" : "470",
+            "tmpdir" : {
+              "id" : "1060",
               "value" : "",
               "override" : false
             },
-            "fork" : {
-              "id" : "445",
-              "value" : "${$mongodb::params::fork}",
-              "override" : false
-            },
-            "journal" : {
-              "id" : "448",
-              "value" : "",
-              "override" : false
-            },
-            "ipv6" : {
-              "id" : "480",
-              "value" : "",
-              "override" : false
-            },
-            "keyfile" : {
-              "id" : "478",
-              "value" : "",
-              "override" : false
-            },
-            "noauth" : {
-              "id" : "452",
-              "value" : "",
-              "override" : false
-            },
-            "mms_interval" : {
-              "id" : "467",
-              "value" : "",
-              "override" : false
-            },
-            "logappend" : {
-              "id" : "444",
-              "value" : true,
-              "override" : false
-            },
-            "location" : {
-              "id" : "438",
-              "value" : "",
-              "override" : false
-            },
-            "dbpath" : {
-              "id" : "447",
-              "value" : "${$mongodb::params::dbpath}",
-              "override" : false
-            },
-            "key" : {
-              "id" : "479",
+            "datadir" : {
+              "id" : "1035",
               "value" : "",
               "override" : false
             }
           },
-          "id" : "110"
-        },
-        "mongodb::replset" : {
-          "parameters" : {
-            "sets" : {
-              "id" : "502",
-              "value" : "",
-              "override" : false
-            }
-          },
-          "id" : "119"
-        }
-      }
-    },
-    "staging" : {
-      "puppetClasses" : {
-        "staging" : {
-          "parameters" : {
-            "mode" : {
-              "id" : "26",
-              "value" : "${$staging::params::mode}",
-              "override" : false
-            },
-            "owner" : {
-              "id" : "24",
-              "value" : "${$staging::params::owner}",
-              "override" : false
-            },
-            "path" : {
-              "id" : "23",
-              "value" : "${$staging::params::path}",
-              "override" : false
-            },
-            "exec_path" : {
-              "id" : "27",
-              "value" : "${$staging::params::exec_path}",
-              "override" : false
-            },
-            "group" : {
-              "id" : "25",
-              "value" : "${$staging::params::group}",
-              "override" : false
-            }
-          },
-          "id" : "8"
-        },
-        "staging::params" : {
-          "parameters" : { },
-          "id" : "9"
-        }
-      }
-    },
-    "stdlib" : {
-      "puppetClasses" : {
-        "stdlib::stages" : {
-          "parameters" : { },
-          "id" : "20"
-        },
-        "stdlib" : {
-          "parameters" : { },
-          "id" : "19"
+          "id" : "160"
         }
       }
     }
