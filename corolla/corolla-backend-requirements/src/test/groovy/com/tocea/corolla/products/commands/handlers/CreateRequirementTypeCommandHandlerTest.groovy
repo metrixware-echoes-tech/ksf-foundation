@@ -17,6 +17,7 @@ import com.tocea.corolla.revisions.services.IRevisionService
 import com.tocea.corolla.test.utils.FunctionalDocRule
 import com.tocea.corolla.utils.functests.FunctionalTestDoc
 
+
 @FunctionalTestDoc(requirementName = "ADD_REQUIREMENT_TYPE")
 class CreateRequirementTypeCommandHandlerTest extends Specification {
 
@@ -49,7 +50,7 @@ class CreateRequirementTypeCommandHandlerTest extends Specification {
 	}
 	
 	def "it should not create two requirement type with the same key"() {
-		
+	
 		given:
 			def type = new RequirementType()
 			type.key = "REQ"

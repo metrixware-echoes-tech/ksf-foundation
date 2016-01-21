@@ -221,6 +221,12 @@ allprojects {
     }
 
     test {
+
+        // exclude Selenium Tests
+        useJUnit {
+          excludeCategories 'fr.echoes.labs.ksf.foundation.tests.SeleniumTests'
+        }
+
         if (project.hasProperty("logTest")) {
             // listen to events in the test execution lifecycle
             beforeTest { descriptor ->
@@ -304,6 +310,12 @@ subprojects {
             html.enabled = true
             xml.enabled = true
             csv.enabled = false
+        }
+    }
+
+    task seleniumTest(type: Test) {
+        useJUnit {
+          includeCategories 'fr.echoes.labs.ksf.foundation.tests.SeleniumTests'
         }
     }
 }

@@ -1,9 +1,14 @@
+
+project.description = "Komea Software Factory : Command & Control"
+
 buildscript {
     repositories {
         mavenLocal()
         mavenCentral()
     }
-    dependencies { classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}") }
+    dependencies {
+      classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
 }
 
 apply plugin: 'war'
@@ -11,14 +16,14 @@ apply plugin: 'java'
 apply plugin: 'groovy'
 apply plugin: 'spring-boot'
 
-
 jar {
     baseName = 'komeacc-gui'
     version = ''
 }
 
-
-project.description = "Komea Software Factory : Command & Control"
+war {
+  baseName = 'komea-cc'
+}
 
 configurations { providedRuntime }
 
@@ -27,20 +32,21 @@ springBoot {
 }
 
 dependencies {
-    compile project(":ksf-commons:ksf-backend-microservice")	
+
+  compile project(":ksf-commons:ksf-backend-microservice")
 	compile project(":komea-cc:komeacc-softwarefactory")
 	compile project(":komea-cc:komeacc-plugin-api")
-	
+
 	// Plugins preloaded
 	compile project(":komea-cc:komeacc-plugins:komeacc-foreman-plugin")
 	compile project(":komea-cc:komeacc-plugins:komeacc-puppet-plugin")
 	compile project(":komea-cc:komeacc-plugins:komeacc-jenkins-plugin")
 	compile project(":komea-cc:komeacc-plugins:komeacc-redmine-plugin")
-	
+
 	compile("org.springframework.boot:spring-boot-starter-thymeleaf:${springBootVersion}")
-    providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
-    testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
+  providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
+
+  // Test Frameworks
+  testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
+
 }
-
-war { baseName = 'komea-cc' }
-
