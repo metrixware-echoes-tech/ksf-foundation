@@ -1,11 +1,13 @@
-package fr.echoes.labs.ksf.foundation.ui
+package fr.echoes.labs.ksf.foundation.tests.ui
 
 import org.openqa.selenium.By
 import org.openqa.selenium.WebElement
 import org.openqa.selenium.support.ui.ExpectedConditions
 import org.openqa.selenium.support.ui.WebDriverWait
 
-class LoginGroovyPageTest extends SeleniumSpecification {
+import fr.echoes.labs.ksf.foundation.tests.conf.SeleniumSpecification;
+
+class LoginPageTest extends SeleniumSpecification {
 
 	private static final long DEFAULT_LOOKUP_TIMEOUT = 30;
 	

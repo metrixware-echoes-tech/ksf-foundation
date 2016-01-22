@@ -225,6 +225,7 @@ allprojects {
         // exclude Selenium Tests
         useJUnit {
           excludeCategories 'fr.echoes.labs.ksf.foundation.tests.SeleniumTests'
+          excludeCategories 'fr.echoes.labs.ksf.foundation.tests.SmokeTests'
         }
 
         if (project.hasProperty("logTest")) {
@@ -311,6 +312,12 @@ subprojects {
             xml.enabled = true
             csv.enabled = false
         }
+    }
+
+    task smokeTest(type: Test) {
+      useJUnit {
+        includeCategories 'fr.echoes.labs.ksf.foundation.tests.SmokeTests'
+      }
     }
 
     task seleniumTest(type: Test) {
