@@ -1,0 +1,99 @@
+spring.profiles.active=test,demo
+
+### SECURITY
+ksf.security.passwordStrength=-1
+ksf.security.allowURLRewriting=false
+ksf.security.internalRememberToken=cc01ac2d3512fe13f0216abd0a3d444a8e6de805
+#ksf.security.defaultPasswordLength=8
+#ksf.security.defaultSaltLength=32	
+#security.user.password=password
+security.basic.enabled=false
+management.security.enabled=true
+
+# LDAP
+# Anonymous credentials for ldap server
+ksf.security.ldap.url=ldap://ares
+ksf.security.ldap.root=dc=tocea,dc=com
+ksf.security.ldap.managerDn=
+ksf.security.ldap.managerPassword=
+ksf.security.ldap.port=389
+ksf.security.ldap.pooled=true
+
+#--------------------
+#ksf.security.ldap.userDnPattern=uid={0},ou=people
+# OR
+ksf.security.ldap.userSearchFilter=(uid={0})
+ksf.security.ldap.userSearchBase=ou=people
+#-------------------
+# To Retrieve user details with lookup
+ksf.security.ldap.userDetailsLookup=cn={0},ou=people
+
+ksf.security.ldap.groupSearchBase=ou=groups
+#ksf.security.ldap.groupRoleAttribute=
+#ksf.security.ldap.groupSearchFilter=
+#ksf.security.ldap.field_cn=
+#ksf.security.ldap.field_sn=
+#ksf.security.ldap.field_givenname=
+#ksf.security.ldap.field_uid=
+#ksf.security.ldap.field_email=
+
+# Foreman plug-in
+ksf.foreman.url = https://ksf-ads.metrixware.local
+#ksf.foreman.url = https://pc-ksf.metrixware.local
+ksf.foreman.username = admin
+ksf.foreman.password = echoes
+#ksf.foreman.password = foreman234
+
+ksf.puppet.modulepath = /etc/puppet/environments
+ksf.foreman.puppet.configuration.create.parameters.enabled = true
+
+ksf.foreman.host.smartProxyId = 1
+#ksf.foreman.host.puppetCa = pc-ksf.metrixware.local
+#ksf.foreman.host.puppetMaster = pc-ksf.metrixware.local
+ksf.foreman.host.computeProfileId = 1
+ksf.foreman.host.computeResourceId = 1
+ksf.foreman.host.architectureId = 1
+ksf.foreman.host.domainId = 2  
+ksf.foreman.host.rootPassword = rootroot 
+
+				
+# HTTP
+management.port=8080
+
+
+// CQRS
+corolla.settings.cqrs.loggingEnabled=true
+corolla.settings.cqrs.profilingEnabled=true
+corolla.settings.cqrs.tracingEnabled=false
+corolla.settings.cqrs.traceFile=command.json
+corolla.settings.cqrs.asyncEventQueries=false
+
+corolla.settings.cqrs.corePoolSize=4
+corolla.settings.cqrs.maxPoolSize=-1
+corolla.settings.cqrs.queueCapacity=-1
+corolla.settings.cqrs.threadPriority=5
+corolla.settings.cqrs.keepAliveSeconds=60
+
+
+#MONGO
+mongo.host=localhost
+mongo.port=27017
+mongo.dbname=corolla
+ 
+spring.jpa.hibernate.ddl-auto=create-drop
+#spring.jpa.generate-ddl = false
+#spring.jpa.hibernate.ddl-auto = none
+
+
+spring.thymeleaf.check-template-location=true
+spring.thymeleaf.prefix=classpath:/templates/
+spring.thymeleaf.suffix=.html
+spring.thymeleaf.mode=XHTML
+spring.thymeleaf.encoding=UTF-8
+spring.thymeleaf.content-type=text/html
+spring.thymeleaf.cache=false
+
+spring.mvc.favicon.enabled=false
+
+logging.level.org.springframework.web=INFO
+logging.level.org.hibernate=ERROR
