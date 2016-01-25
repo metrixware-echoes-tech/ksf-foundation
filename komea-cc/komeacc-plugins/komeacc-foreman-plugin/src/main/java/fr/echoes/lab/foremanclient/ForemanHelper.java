@@ -18,7 +18,7 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.ObjectWriter;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.LoggerFactory;	
 
 import fr.echoes.lab.foremanapi.IForemanApi;
 import fr.echoes.lab.foremanapi.model.Environment;
@@ -149,9 +149,7 @@ public class ForemanHelper {
           return permissionIds;
      }
 
-     public static void createProject(String url, String adminUserName, String password, String projectName, String userId) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
-
-          final IForemanApi api = ForemanClient.createApi(url, adminUserName, password);
+     public static void createProject(IForemanApi api, String projectName, String userId) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
 
           createHostGroup(api, projectName);
 
@@ -160,9 +158,8 @@ public class ForemanHelper {
           addRoleToUser(api, userId, role.id );
      }
 
-    public static void deleteProject(String url, String adminUserName, String password, String projectName) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
+    public static void deleteProject(IForemanApi api, String projectName) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
 
-        final IForemanApi api = ForemanClient.createApi(url, adminUserName, password);
         final Hostgroups hostGroups = api.getHostGroups(null, null, null, PER_PAGE_RESULT);
         for (final HostGroup hostGroup : hostGroups.results) {
             if (hostGroup.name.equalsIgnoreCase(projectName)) {
@@ -272,14 +269,11 @@ public class ForemanHelper {
 //          api.updateUser(user.id, userWrapper);
      }
 
-     public static Host createHost(String url, String adminUserName, String password, String hostName, String computeResourceId, String computeProfileId, String hostGroupName, String environmentName, String operatingSystemId, String architectureId, String puppetConfiguration, String domainId, String rootPassword) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
+     public static Host createHost(IForemanApi api, String hostName, String computeResourceId, String computeProfileId, String hostGroupName, String environmentName, String operatingSystemId, String architectureId, String puppetConfiguration, String domainId, String rootPassword) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
 
-   	  if (hostExists(url, adminUserName, password, hostName)) {
+   	  if (hostExists(api, hostName)) {
 		  throw new ForemanHostAlreadyExistException(hostName);
 	  }
-
-     //  final Host host = null;
-	 final IForemanApi api = ForemanClient.createApi(url, adminUserName, password);
 
 	 final NewHost newHost = new NewHost();
 
@@ -410,16 +404,12 @@ public class ForemanHelper {
           return null;
      }
 
-     public static void importPuppetClasses(String url, String adminUserName,
-               String password, String smartProxyId) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
-          final IForemanApi api = ForemanClient.createApi(url, adminUserName, password);
+     public static void importPuppetClasses(IForemanApi api, String smartProxyId) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
           api.importPuppetClasses(smartProxyId, "{}"); // Doesn't work without a request body as second parameter ("{}")
      }
 
-     public static String getModulesPuppetClassParameters(String url, String adminUserName, String password, String environmentName, boolean allParameters) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException, JsonGenerationException, JsonMappingException, IOException {
-    	 final IForemanApi api = ForemanClient.createApi(url, adminUserName, password);
+     public static String getModulesPuppetClassParameters(IForemanApi api , String environmentName, boolean allParameters) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException, JsonGenerationException, JsonMappingException, IOException {
     	 final String environmentId = findEnvironmentId(api, environmentName);
-
 
     	 final Environment environment = api.getEnvironment(environmentId);
 
@@ -485,13 +475,12 @@ public class ForemanHelper {
           return ow.writeValueAsString(modules);
      }
 
-     public static boolean hostGroupExists(String url, String adminUserName, String password, String hostGroupName) {
+     public static boolean hostGroupExists(IForemanApi api , String hostGroupName) {
     	 if (StringUtils.isEmpty(hostGroupName)) {
     		 throw new IllegalArgumentException("hostName cannot be null or empty");
     	 }
 
     	 try {
-    		 final IForemanApi api = ForemanClient.createApi(url, adminUserName, password);
     		 final Hostgroups hostGroups = api.getHostGroups(null, null, null, PER_PAGE_RESULT);
     		 for (final HostGroup hostGroup : hostGroups.results) {
     			 if (hostGroup.name.equalsIgnoreCase(hostGroupName)) {
@@ -505,13 +494,11 @@ public class ForemanHelper {
      }
 
 
-     public static boolean hostExists(String url, String adminUserName, String password, String hostName) {
+     public static boolean hostExists(IForemanApi api, String hostName) {
     	 if (StringUtils.isEmpty(hostName)) {
     		 throw new IllegalArgumentException("hostName cannot be null or empty");
     	 }
-
     	 try {
-    		 final IForemanApi api = ForemanClient.createApi(url, adminUserName, password);
     		 final Hosts hosts = api.getHosts(null, null, null, PER_PAGE_RESULT);
     		 for (final Host host : hosts.results) {
     			 if (host.name.equalsIgnoreCase(hostName)) {

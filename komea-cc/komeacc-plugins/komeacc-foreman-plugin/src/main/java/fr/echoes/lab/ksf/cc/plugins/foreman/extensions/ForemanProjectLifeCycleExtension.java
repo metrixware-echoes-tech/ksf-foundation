@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import fr.echoes.lab.foremanapi.IForemanApi;
 import fr.echoes.lab.foremanclient.ForemanHelper;
+import fr.echoes.lab.ksf.cc.plugins.foreman.services.ForemanClientFactory;
 import fr.echoes.lab.ksf.cc.plugins.foreman.services.ForemanConfigurationService;
 import fr.echoes.lab.ksf.cc.plugins.foreman.services.ForemanErrorHandlingService;
 import fr.echoes.lab.ksf.extensions.annotations.Extension;
@@ -17,15 +19,6 @@ import fr.echoes.lab.ksf.extensions.projects.ProjectDto;
 public class ForemanProjectLifeCycleExtension implements IProjectLifecycleExtension {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ForemanProjectLifeCycleExtension.class);
-
-	@Value("${ksf.foreman.url}")
-	private String url;
-
-	@Value("${ksf.foreman.username}")
-	private String username;
-
-	@Value("${ksf.foreman.password}")
-	private String password;
 
 	@Autowired
 	private ForemanConfigurationService configurationService;
@@ -40,7 +33,9 @@ public class ForemanProjectLifeCycleExtension implements IProjectLifecycleExtens
 
 		final String logginName = SecurityContextHolder.getContext().getAuthentication().getName();
 		try {
-			ForemanHelper.createProject(this.url, this.username, this.password, _project.getName(), logginName);
+			final IForemanApi foremanApi = new ForemanClientFactory().createForemanClient();
+			
+			ForemanHelper.createProject(foremanApi, _project.getName(), logginName);
 		} catch (final Exception e) {
 			LOGGER.error("[foreman] project creation failed", e);
 			this.errorHandler.registerError("Unable to create Foreman project. Please verify your Foreman configuration.");
@@ -52,7 +47,9 @@ public class ForemanProjectLifeCycleExtension implements IProjectLifecycleExtens
         try {
             // TODO Auto-generated method stub
 
-            ForemanHelper.deleteProject(this.url, this.username, this.password, _project.getName());
+        	final IForemanApi foremanApi = new ForemanClientFactory().createForemanClient();
+        	
+            ForemanHelper.deleteProject(foremanApi, _project.getName());
         } catch (final Exception ex) {
             LOGGER.error("[foreman] project delete failed", ex);
             this.errorHandler.registerError("Unable to delete Foreman project. Please verify your Foreman configuration.");

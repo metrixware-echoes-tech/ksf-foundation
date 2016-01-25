@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.tocea.corolla.products.dao.IProjectDAO;
 import com.tocea.corolla.products.domain.Project;
 
+import fr.echoes.lab.foremanapi.IForemanApi;
 import fr.echoes.lab.foremanapi.model.Host;
 import fr.echoes.lab.foremanclient.ForemanHelper;
 import fr.echoes.lab.ksf.cc.plugins.foreman.dao.IForemanEnvironmentDAO;
@@ -30,6 +31,7 @@ import fr.echoes.lab.ksf.cc.plugins.foreman.dao.IForemanTargetDAO;
 import fr.echoes.lab.ksf.cc.plugins.foreman.exceptions.ForemanHostAlreadyExistException;
 import fr.echoes.lab.ksf.cc.plugins.foreman.model.ForemanEnvironnment;
 import fr.echoes.lab.ksf.cc.plugins.foreman.model.ForemanTarget;
+import fr.echoes.lab.ksf.cc.plugins.foreman.services.ForemanClientFactory;
 import fr.echoes.lab.ksf.cc.plugins.foreman.services.ForemanErrorHandlingService;
 import fr.echoes.lab.puppet.PuppetClient;
 import fr.echoes.lab.puppet.PuppetException;
@@ -38,15 +40,6 @@ import fr.echoes.lab.puppet.PuppetException;
 public class ForemanActionsController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ForemanActionsController.class);
-
-    @Value("${ksf.foreman.url}")
-    private String url;
-
-    @Value("${ksf.foreman.username}")
-    private String username;
-
-    @Value("${ksf.foreman.password}")
-    private String password;
 
     @Value("${ksf.foreman.host.smartProxyId}")
     private String smartProxyId;
@@ -142,7 +135,10 @@ public class ForemanActionsController {
             this.errorHandler.registerError("Failed to create Puppet environment. Error parsing configuration file.");
         }
         try {
-            ForemanHelper.importPuppetClasses(this.url, this.username, this.password, this.smartProxyId);
+
+        	final IForemanApi foremanApi = new ForemanClientFactory().createForemanClient();
+
+            ForemanHelper.importPuppetClasses(foremanApi, this.smartProxyId);
         } catch (final Exception e) {
             //success = false;
             LOGGER.error("[foreman] Failed to import puppet classes.", e);
@@ -221,7 +217,9 @@ public class ForemanActionsController {
 			LOGGER.info("[foreman] puppetConfiguration: {}", puppetConfiguration);
 			LOGGER.info("[foreman] domainId: {}", this.domainId);
 
-			final Host host = ForemanHelper.createHost(this.url, this.username, this.password, hostName, this.computeResourceId, computeProfileId, hostGroupName, environmentName, operatingSystemId, this.architectureId, puppetConfiguration, this.domainId, passwordVm);
+        	final IForemanApi foremanApi = new ForemanClientFactory().createForemanClient();
+			
+			final Host host = ForemanHelper.createHost(foremanApi, hostName, this.computeResourceId, computeProfileId, hostGroupName, environmentName, operatingSystemId, this.architectureId, puppetConfiguration, this.domainId, passwordVm);
 
             //TODO find a way to generate the plugin tab ID dynamically
             redirectURL += "?foremanHost=" + host.name + "#pluginTab0";

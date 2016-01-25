@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import fr.echoes.lab.foremanapi.IForemanApi;
 import fr.echoes.lab.foremanclient.ForemanHelper;
 import fr.echoes.lab.ksf.cc.plugins.foreman.dao.IForemanEnvironmentDAO;
 import fr.echoes.lab.ksf.cc.plugins.foreman.model.ForemanEnvironnment;
+import fr.echoes.lab.ksf.cc.plugins.foreman.services.ForemanClientFactory;
 import fr.echoes.lab.ksf.cc.plugins.foreman.services.ForemanErrorHandlingService;
 
 @RestController
@@ -26,14 +28,6 @@ public class ForemanRestController {
     @Autowired
     private ForemanErrorHandlingService errorHandler;
 
-    @Value("${ksf.foreman.url}")
-    private String url;
-
-    @Value("${ksf.foreman.username}")
-    private String username;
-
-    @Value("${ksf.foreman.password}")
-    private String password;
 
     @Value("${ksf.foreman.puppet.configuration.create.parameters.enabled}")
     private Boolean createParametersEnabled;
@@ -56,7 +50,10 @@ public class ForemanRestController {
 		String json = "";
 		final String environmentName = environment.getName();
 		try {
-			json = ForemanHelper.getModulesPuppetClassParameters(this.url, this.username, this.password, environmentName, this.createParametersEnabled);
+
+			final IForemanApi foremanApi = new ForemanClientFactory().createForemanClient();
+
+			json = ForemanHelper.getModulesPuppetClassParameters(foremanApi, environmentName, this.createParametersEnabled);
 		} catch (final Exception e) {
             LOGGER.error("Failed to get puppet classes parameters for the environment: " + environmentName, e);
             this.errorHandler.registerError("Failed to get puppet classes parameters for " + environmentName);
