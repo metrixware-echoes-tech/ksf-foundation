@@ -50,3 +50,20 @@ dependencies {
   testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
 
 }
+
+bower {
+
+  installBase = 'src/main/resources/static/assets/'
+
+  'bootstrap'('3.3.2') {
+    source 'dist/**'
+  }
+
+  'jquery'('2.0.2')
+  'jquery-ui'('1.11.4')
+  'jquery-resize'('https://github.com/sdecima/javascript-detect-element-resize.git')
+
+  'components-font-awesome'('4.3.0')
+  'ionicons'('2.0.1')
+
+}
