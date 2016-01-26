@@ -28,3 +28,5 @@ LAST_PUSH
 activemq-data
 .eclipse-pmd
 .pmd
+node_modules
+**/src/main/resources/static/assets/
