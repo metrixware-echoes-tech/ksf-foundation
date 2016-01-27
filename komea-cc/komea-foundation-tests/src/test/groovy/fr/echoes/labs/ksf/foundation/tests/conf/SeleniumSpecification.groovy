@@ -7,7 +7,8 @@ import org.openqa.selenium.phantomjs.PhantomJSDriver
 import org.openqa.selenium.phantomjs.PhantomJSDriverService
 import org.openqa.selenium.remote.DesiredCapabilities
 
-import fr.echoes.labs.ksf.foundation.tests.SeleniumTests;
+import fr.echoes.labs.ksf.foundation.tests.SeleniumTests
+import fr.echoes.labs.ksf.foundation.tests.ui.actions.AbstractSeleniumAction;
 import groovy.util.logging.Slf4j;
 import spock.lang.Shared
 import spock.lang.Specification
@@ -18,6 +19,8 @@ public abstract class SeleniumSpecification extends KomeaFoundationSpecification
 
 	@Shared
 	protected WebDriver driver;
+	
+	private static final long DEFAULT_LOOKUP_TIMEOUT = 30;
 	
 	def setup() {
 		
@@ -36,6 +39,14 @@ public abstract class SeleniumSpecification extends KomeaFoundationSpecification
 	
 	def cleanup() {
 		driver.quit()
+	}
+	
+	def executeAction(AbstractSeleniumAction action) {
+		
+		action.setWebDriver driver
+		action.setProperties props
+		action.execute()
+		
 	}
 	
 }
