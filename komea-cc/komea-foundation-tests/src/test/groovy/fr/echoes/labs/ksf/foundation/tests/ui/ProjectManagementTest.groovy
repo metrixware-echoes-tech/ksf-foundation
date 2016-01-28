@@ -1,6 +1,7 @@
 package fr.echoes.labs.ksf.foundation.tests.ui
 
 import fr.echoes.labs.ksf.foundation.tests.conf.SeleniumSpecification;
+import fr.echoes.labs.ksf.foundation.tests.ui.actions.ClickOnProjectDeleteButton
 import fr.echoes.labs.ksf.foundation.tests.ui.actions.CreateProjectAction;
 import fr.echoes.labs.ksf.foundation.tests.ui.actions.LoginAction
 import fr.echoes.labs.ksf.foundation.tests.utils.SeleniumUtils
@@ -38,17 +39,15 @@ class ProjectManagementTest extends SeleniumSpecification {
 			assert driver.getCurrentUrl().contains("/ui/projects/"+projectName)
 			
 		when: "he displays the project list"
-			driver.get props.serverUrl() + "/ui/projects"
-		
-		then: "the new project should appear in the project list"
+			navigateTo "/ui/projects"
 			def table = driver.findElement(By.className(props.PROJECT_LIST_SELECTOR))
 			def projectRow = SeleniumUtils.extractRowWithText(table, projectName, 0)
+		
+		then: "the new project should appear in the project list"		
 			assert projectRow != null
 			
 		when: "he clicks on the delete button"
-			def btnDelete = projectRow.findElement(By.className("btn-danger"))
-			SeleniumUtils.acceptConfirmBox(driver)
-			btnDelete.click()
+			executeAction new ClickOnProjectDeleteButton(projectName)
 			table = driver.findElement(By.className(props.PROJECT_LIST_SELECTOR))
 			projectRow = SeleniumUtils.extractRowWithText(table, projectName, 0)
 			
@@ -81,12 +80,8 @@ class ProjectManagementTest extends SeleniumSpecification {
 			assert element.getAttribute("innerText").contains("project already exists");
 			
 		cleanup: "delete project"
-			driver.get props.serverUrl() + "/ui/projects"
-			def table = driver.findElement(By.className(props.PROJECT_LIST_SELECTOR))
-			def projectRow = SeleniumUtils.extractRowWithText(table, projectName, 0)
-			def btnDelete = projectRow.findElement(By.className("btn-danger"))
-			SeleniumUtils.acceptConfirmBox(driver)
-			btnDelete.click()
+			navigateTo "/ui/projects"
+			executeAction new ClickOnProjectDeleteButton(projectName)
 	
 	}
 	
