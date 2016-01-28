@@ -20,8 +20,6 @@ public abstract class SeleniumSpecification extends KomeaFoundationSpecification
 	@Shared
 	protected WebDriver driver;
 	
-	private static final long DEFAULT_LOOKUP_TIMEOUT = 30;
-	
 	def setup() {
 		
 		// PhantomJS Driver Configuration

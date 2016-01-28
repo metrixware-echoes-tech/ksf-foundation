@@ -18,8 +18,8 @@ class LoginPageTest extends SeleniumSpecification {
 		
 		when: "the user submit the login form with valid credentials"
 			executeAction new LoginAction(username, password)
-			WebDriverWait wait = new WebDriverWait(driver, SeleniumSpecification.DEFAULT_LOOKUP_TIMEOUT);
-			wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("project-list")));
+			WebDriverWait wait = new WebDriverWait(driver, props.DEFAULT_LOOKUP_TIMEOUT);
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By.className(props.PROJECT_LIST_SELECTOR)));
 		
 		then: "he should be redirected to the project list view"
 			assert driver.getCurrentUrl().contains("/ui/projects");

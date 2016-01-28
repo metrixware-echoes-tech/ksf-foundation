@@ -15,11 +15,11 @@ import org.openqa.selenium.support.ui.ExpectedConditions
 import spock.lang.Specification
 
 class ProjectManagementTest extends SeleniumSpecification {
-
+	
 	def WebDriverWait wait
 	
 	def setup() {
-		wait = new WebDriverWait(driver, SeleniumSpecification.DEFAULT_LOOKUP_TIMEOUT)
+		wait = new WebDriverWait(driver, props.DEFAULT_LOOKUP_TIMEOUT)
 	}
 	
 	def "the user should be able to manage projects"() {
@@ -28,7 +28,7 @@ class ProjectManagementTest extends SeleniumSpecification {
 			def username = props.defaultUsername()
 			def password = props.defaultPassword()
 			executeAction new LoginAction(username, password)
-			wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("project-list")));
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By.className(props.PROJECT_LIST_SELECTOR)));
 	
 		when: "he should be able to create a project"
 			def projectName = "SeleniumProject"
@@ -41,16 +41,19 @@ class ProjectManagementTest extends SeleniumSpecification {
 			driver.get props.serverUrl() + "/ui/projects"
 		
 		then: "the new project should appear in the project list"
-			def projectRow = retrieveProjectRow(projectName)
+			def table = driver.findElement(By.className(props.PROJECT_LIST_SELECTOR))
+			def projectRow = SeleniumUtils.extractRowWithText(table, projectName, 0)
 			assert projectRow != null
 			
 		when: "he clicks on the delete button"
 			def btnDelete = projectRow.findElement(By.className("btn-danger"))
 			SeleniumUtils.acceptConfirmBox(driver)
 			btnDelete.click()
+			table = driver.findElement(By.className(props.PROJECT_LIST_SELECTOR))
+			projectRow = SeleniumUtils.extractRowWithText(table, projectName, 0)
 			
 		then: "the project should have been deleted"
-			assert retrieveProjectRow(projectName) == null
+			assert projectRow == null
 					
 	}
 	
@@ -60,7 +63,7 @@ class ProjectManagementTest extends SeleniumSpecification {
 			def username = props.defaultUsername()
 			def password = props.defaultPassword()
 			executeAction new LoginAction(username, password)
-			wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("project-list")))
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By.className(props.PROJECT_LIST_SELECTOR)))
 			
 		and: "a project has already been created"
 			def projectName = "SeleniumProject"
@@ -79,27 +82,12 @@ class ProjectManagementTest extends SeleniumSpecification {
 			
 		cleanup: "delete project"
 			driver.get props.serverUrl() + "/ui/projects"
-			def projectRow = retrieveProjectRow(projectName)
+			def table = driver.findElement(By.className(props.PROJECT_LIST_SELECTOR))
+			def projectRow = SeleniumUtils.extractRowWithText(table, projectName, 0)
 			def btnDelete = projectRow.findElement(By.className("btn-danger"))
 			SeleniumUtils.acceptConfirmBox(driver)
 			btnDelete.click()
 	
-	}
-	
-	private WebElement retrieveProjectRow(String projectName) {
-		
-		WebElement table = driver.findElement(By.className("project-list"))
-		
-		List<WebElement> rows = table.findElement(By.tagName("tbody")).findElements(By.tagName('tr'))
-		
-		for(WebElement row : rows) {
-			WebElement cell = row.findElements(By.tagName('td')).get(0)
-			if (cell.getAttribute("innerText").contains(projectName)) {
-				return row
-			}
-		}
-		
-		return null
 	}
 	
 }
