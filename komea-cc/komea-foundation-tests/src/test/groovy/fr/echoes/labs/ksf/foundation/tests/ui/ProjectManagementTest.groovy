@@ -16,13 +16,18 @@ import spock.lang.Specification
 
 class ProjectManagementTest extends SeleniumSpecification {
 
+	def WebDriverWait wait
+	
+	def setup() {
+		wait = new WebDriverWait(driver, SeleniumSpecification.DEFAULT_LOOKUP_TIMEOUT)
+	}
+	
 	def "the user should be able to manage projects"() {
 		
-		given: "the users has successfully logged in"
+		given: "the user has successfully logged in"
 			def username = props.defaultUsername()
 			def password = props.defaultPassword()
 			executeAction new LoginAction(username, password)
-			WebDriverWait wait = new WebDriverWait(driver, SeleniumSpecification.DEFAULT_LOOKUP_TIMEOUT);
 			wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("project-list")));
 	
 		when: "he should be able to create a project"
@@ -47,6 +52,38 @@ class ProjectManagementTest extends SeleniumSpecification {
 		then: "the project should have been deleted"
 			assert retrieveProjectRow(projectName) == null
 					
+	}
+	
+	def "the user should not be able to create a project that already exists"() {
+		
+		given: "the user has successfully logged in"
+			def username = props.defaultUsername()
+			def password = props.defaultPassword()
+			executeAction new LoginAction(username, password)
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("project-list")))
+			
+		and: "a project has already been created"
+			def projectName = "SeleniumProject"
+			executeAction new CreateProjectAction(projectName)
+			assert driver.getCurrentUrl().contains("/ui/projects/"+projectName)
+			
+		when: "the user create a project with the same name that the one that already exists"
+			executeAction new CreateProjectAction(projectName)
+		
+		then: "the user should be warned that the project already exists"
+			def selector = By.className("text-danger")
+			wait.until(ExpectedConditions.visibilityOfElementLocated(selector))			
+			assert driver.getCurrentUrl().contains("/ui/projects/new")
+			WebElement element = driver.findElement(selector)
+			assert element.getAttribute("innerText").contains("project already exists");
+			
+		cleanup: "delete project"
+			driver.get props.serverUrl() + "/ui/projects"
+			def projectRow = retrieveProjectRow(projectName)
+			def btnDelete = projectRow.findElement(By.className("btn-danger"))
+			SeleniumUtils.acceptConfirmBox(driver)
+			btnDelete.click()
+	
 	}
 	
 	private WebElement retrieveProjectRow(String projectName) {
