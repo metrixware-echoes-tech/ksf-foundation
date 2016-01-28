@@ -10,7 +10,6 @@ import spock.lang.Specification;
 @Slf4j
 abstract class KomeaFoundationSpecification extends Specification {
 
-	protected TestProperties properties;
 	protected TestProperties props;
 	
 	def setup() {
@@ -18,21 +17,19 @@ abstract class KomeaFoundationSpecification extends Specification {
 		// Load properties file
 		URL url = this.getClass().getClassLoader().getResource("environment.properties")
 		PropertyBinder<TestProperties> binder = PropertyBinder.forType(TestProperties.class);
-		properties = binder.bind(new File(url.getPath()));
+		props = binder.bind(new File(url.getPath()));
 		
 		printEnvironmentConfiguration()
-		
-		props = properties
 		
 	}
 	
 	def printEnvironmentConfiguration() {
 		
 		log.info "Scanning configuration environment..."
-		log.info "Komea Foundation URL :" + properties.serverUrl()
-		log.info "Foreman URL : " + properties.foremanUrl()
-		log.info "Default username : " + properties.defaultUsername()
-		log.info "Default password : " + properties.defaultPassword()
+		log.info "Komea Foundation URL :" + props.serverUrl()
+		log.info "Foreman URL : " + props.foremanUrl()
+		log.info "Default username : " + props.defaultUsername()
+		log.info "Default password : " + props.defaultPassword()
 		
 	}
 	

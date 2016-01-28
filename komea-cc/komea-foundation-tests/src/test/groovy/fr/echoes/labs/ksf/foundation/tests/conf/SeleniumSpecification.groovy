@@ -39,6 +39,10 @@ public abstract class SeleniumSpecification extends KomeaFoundationSpecification
 		driver.quit()
 	}
 	
+	def navigateTo(String page) {		
+		driver.get props.serverUrl() + page
+	}
+	
 	def executeAction(AbstractSeleniumAction action) {
 		
 		action.setWebDriver driver
