@@ -13,18 +13,25 @@ import fr.echoes.lab.foremanapi.model.Permission;
 import fr.echoes.lab.foremanapi.model.Role
 import fr.echoes.lab.foremanapi.model.Roles
 import fr.echoes.lab.foremanapi.model.User;
-import fr.echoes.lab.foremanclient.ForemanClient;
-import fr.echoes.lab.foremanclient.ForemanHelper;
+import fr.echoes.lab.foremanclient.ForemanClient
+import fr.echoes.lab.foremanclient.ForemanService
+import fr.echoes.lab.foremanclient.IForemanService;
 import spock.lang.Specification;
 
 
-class ForemanHelperTest extends Specification {
+class ForemanServiceTest extends Specification {
+	
+	def IForemanService foremanService
+	def IForemanApi foremanApi
+	
+	def setup() {
+		foremanService = new ForemanService()
+		foremanApi = Mock()
+	}
 	
 	def "it should create a host"() {
 
 		given:
-			IForemanApi foremanApi = Mock()
-		and:
 			Role role = new Role()
 			role.builtin = "1"
 			role.name = "Default user"
@@ -62,7 +69,7 @@ class ForemanHelperTest extends Specification {
 			foremanApi.createFilter(_) >> filter
 			foremanApi.getUser(_) >> user
 		when:
-			ForemanHelper.createProject(foremanApi, "testProject", "groovy")
+			foremanService.createProject(foremanApi, "testProject", "groovy")
 			
 		then:
 			notThrown Exception
@@ -71,8 +78,6 @@ class ForemanHelperTest extends Specification {
 	
 	def "it should return that the host exists "() {
 		given:
-			IForemanApi foremanApi = Mock()
-		and:
 			Hosts hosts = new Hosts()
 			Host host = new Host()
 			host.name = "existingHost"
@@ -80,7 +85,7 @@ class ForemanHelperTest extends Specification {
 			hosts.results.add(host)
 			foremanApi.getHosts(_, _, _,_) >> hosts
 		when:
-			def exist = ForemanHelper.hostExists(foremanApi, "existingHost")
+			def exist = foremanService.hostExists(foremanApi, "existingHost")
 		then:
 			exist
 	}
@@ -96,7 +101,7 @@ class ForemanHelperTest extends Specification {
 			hosts.results.add(host)
 			foremanApi.getHosts(_, _, _,_) >> hosts
 		when:
-			def exist = ForemanHelper.hostExists(foremanApi, "notExistingHost")
+			def exist = foremanService.hostExists(foremanApi, "notExistingHost")
 		then:
 			!exist
 	}		
@@ -112,7 +117,7 @@ class ForemanHelperTest extends Specification {
 			hostgroups.results.add(hostGroup)
 			foremanApi.getHostGroups(_, _, _,_) >> hostgroups
 		when:
-			def exist = ForemanHelper.hostGroupExists(foremanApi, "existingHostGroup")
+			def exist = foremanService.hostGroupExists(foremanApi, "existingHostGroup")
 		then:
 			exist == true
 	}
@@ -128,7 +133,7 @@ class ForemanHelperTest extends Specification {
 			hostgroups.results.add(hostGroup)
 			foremanApi.getHostGroups(_, _, _,_) >> hostgroups
 		when:
-			def exist = ForemanHelper.hostGroupExists(foremanApi, "notExistingHostGroup")
+			def exist = foremanService.hostGroupExists(foremanApi, "notExistingHostGroup")
 		then:
 			exist == false
 	}

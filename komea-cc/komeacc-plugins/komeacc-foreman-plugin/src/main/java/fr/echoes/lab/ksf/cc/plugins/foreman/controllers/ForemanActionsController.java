@@ -14,7 +14,6 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -25,14 +24,17 @@ import com.tocea.corolla.products.domain.Project;
 
 import fr.echoes.lab.foremanapi.IForemanApi;
 import fr.echoes.lab.foremanapi.model.Host;
-import fr.echoes.lab.foremanclient.ForemanHelper;
+import fr.echoes.lab.foremanclient.IForemanService;
 import fr.echoes.lab.ksf.cc.plugins.foreman.dao.IForemanEnvironmentDAO;
 import fr.echoes.lab.ksf.cc.plugins.foreman.dao.IForemanTargetDAO;
 import fr.echoes.lab.ksf.cc.plugins.foreman.exceptions.ForemanHostAlreadyExistException;
 import fr.echoes.lab.ksf.cc.plugins.foreman.model.ForemanEnvironnment;
+import fr.echoes.lab.ksf.cc.plugins.foreman.model.ForemanHostDescriptor;
 import fr.echoes.lab.ksf.cc.plugins.foreman.model.ForemanTarget;
 import fr.echoes.lab.ksf.cc.plugins.foreman.services.ForemanClientFactory;
+import fr.echoes.lab.ksf.cc.plugins.foreman.services.ForemanConfigurationService;
 import fr.echoes.lab.ksf.cc.plugins.foreman.services.ForemanErrorHandlingService;
+import fr.echoes.lab.ksf.cc.plugins.foreman.services.ForemanHostDescriptorFactory;
 import fr.echoes.lab.puppet.PuppetClient;
 import fr.echoes.lab.puppet.PuppetException;
 
@@ -40,27 +42,9 @@ import fr.echoes.lab.puppet.PuppetException;
 public class ForemanActionsController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ForemanActionsController.class);
-
-    @Value("${ksf.foreman.host.smartProxyId}")
-    private String smartProxyId;
-
-    @Value("${ksf.foreman.host.computeResourceId}")
-    private String computeResourceId;
-
-    @Value("${ksf.foreman.host.computeProfileId}")
-    private String computeProfileId;
-
-    @Value("${ksf.puppet.modulepath}")
-    private String puppetModulePath;
-
-    @Value("${ksf.foreman.host.domainId}")
-    private String domainId;
-
-    @Value("${ksf.foreman.host.rootPassword}")
-    private String rootPassword;
-
-    @Value("${ksf.foreman.host.architectureId}")
-    private String architectureId;
+    
+    @Autowired
+    private ForemanConfigurationService configurationService;
 
     @Autowired
     private IProjectDAO projectDAO;
@@ -73,6 +57,15 @@ public class ForemanActionsController {
 
     @Autowired
     private ForemanErrorHandlingService errorHandler;
+    
+    @Autowired
+    private IForemanService foremanService;
+    
+    @Autowired
+    private ForemanClientFactory foremanClientFactory;
+    
+    @Autowired
+    private ForemanHostDescriptorFactory hostDescriptorFactory;
 
     @RequestMapping(value = "/ui/foreman/environment/new", method = RequestMethod.POST)
     public String createEnvironment(@RequestParam("projectId") String projectId, @RequestParam("name") String name, @RequestParam("configuration") String configuration) {
@@ -103,6 +96,7 @@ public class ForemanActionsController {
     }
 
     private boolean createEnvironment(String envName, String configuration) {
+    	
         final ObjectMapper mapper = new ObjectMapper();
         boolean success = true;
         try {
@@ -120,8 +114,8 @@ public class ForemanActionsController {
                     }
                     final String moduleVersion = moduleNode.path("version").asText(); // version is optional
                     try {
-                    	LOGGER.info("[foreman] puppetModulePath : {}", this.puppetModulePath);
-                        puppetClient.installModule(moduleName, moduleVersion, envName, this.puppetModulePath);
+                    	LOGGER.info("[foreman] puppetModulePath : {}", configurationService.getPuppetModulePath());
+                        puppetClient.installModule(moduleName, moduleVersion, envName, configurationService.getPuppetModulePath());
                     } catch (final PuppetException e) {
                         success = false;
                         LOGGER.error("Failed to create environment {} : {}", envName, e);
@@ -136,9 +130,9 @@ public class ForemanActionsController {
         }
         try {
 
-        	final IForemanApi foremanApi = new ForemanClientFactory().createForemanClient();
-
-            ForemanHelper.importPuppetClasses(foremanApi, this.smartProxyId);
+        	final IForemanApi foremanApi = foremanClientFactory.createForemanClient();
+            foremanService.importPuppetClasses(foremanApi, configurationService.getSmartProxyId());
+            
         } catch (final Exception e) {
             //success = false;
             LOGGER.error("[foreman] Failed to import puppet classes.", e);
@@ -186,40 +180,19 @@ public class ForemanActionsController {
         final Project project = this.projectDAO.findOne(projectId);
 
         final ForemanTarget target = this.targetDAO.findOne(targetId);
-
-        String passwordVm = this.rootPassword;
-        if (StringUtils.isNotEmpty(hostPass)) {
-            passwordVm = hostPass;
-        }
-
+        
         final ForemanEnvironnment environment = target.getEnvironment();
 
 		String redirectURL = "/ui/projects/"+project.getKey();
 
 		try {
-
-			final String hostGroupName = project.getName();
-			final String environmentName = environment.getName();
-			final String operatingSystemId = target.getOperationSystemId();
-			final String puppetConfiguration = target.getPuppetConfiguration();
-			String computeProfileId = target.getComputeProfile();
-			if (StringUtils.isEmpty(computeProfileId)) {
-				computeProfileId = this.computeProfileId;
-			}
-
-			LOGGER.info("[foreman] hostName: {}", hostName);
-			LOGGER.info("[foreman] computeResourceId: {}", this.computeResourceId);
-			LOGGER.info("[foreman] computeProfileId: {}", computeProfileId);
-			LOGGER.info("[foreman] hostGroupName: {}", hostGroupName);
-			LOGGER.info("[foreman] environmentName: {}", environmentName);
-			LOGGER.info("[foreman] operatingSystemId: {}", operatingSystemId);
-			LOGGER.info("[foreman] architectureId: {}", this.architectureId);
-			LOGGER.info("[foreman] puppetConfiguration: {}", puppetConfiguration);
-			LOGGER.info("[foreman] domainId: {}", this.domainId);
-
-        	final IForemanApi foremanApi = new ForemanClientFactory().createForemanClient();
 			
-			final Host host = ForemanHelper.createHost(foremanApi, hostName, this.computeResourceId, computeProfileId, hostGroupName, environmentName, operatingSystemId, this.architectureId, puppetConfiguration, this.domainId, passwordVm);
+			// Create a host descriptor using the provided data and the data from the configuration file
+			ForemanHostDescriptor hostDescriptor = hostDescriptorFactory.createHostDescriptor(project, target, hostName, hostPass);
+        	
+			// Call Foreman to create the VM
+			final IForemanApi foremanApi = foremanClientFactory.createForemanClient();
+			final Host host = foremanService.createHost(foremanApi, hostDescriptor);
 
             //TODO find a way to generate the plugin tab ID dynamically
             redirectURL += "?foremanHost=" + host.name + "#pluginTab0";
@@ -231,6 +204,7 @@ public class ForemanActionsController {
 			LOGGER.error("[foreman] Failed to create host {} : {}.", hostName, e);
             this.errorHandler.registerError("Failed to instantiate target. Please verify your Foreman configuration.");
         }
+		
         return "redirect:" + redirectURL;
     }
 }

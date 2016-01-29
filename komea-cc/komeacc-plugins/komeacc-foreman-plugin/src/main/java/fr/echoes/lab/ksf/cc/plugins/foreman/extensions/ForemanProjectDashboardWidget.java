@@ -23,7 +23,7 @@ import com.tocea.corolla.products.domain.Project;
 
 import fr.echoes.lab.foremanapi.IForemanApi;
 import fr.echoes.lab.foremanclient.ForemanClient;
-import fr.echoes.lab.foremanclient.ForemanHelper;
+import fr.echoes.lab.foremanclient.ForemanService;
 import fr.echoes.lab.ksf.cc.extensions.gui.project.dashboard.IProjectTabPanel;
 import fr.echoes.lab.ksf.cc.extensions.gui.project.dashboard.MenuAction;
 import fr.echoes.lab.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
@@ -99,9 +99,9 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
 
 			final IForemanApi foremanApi = ForemanClient.createApi(this.configurationService.getForemanUrl(), this.configurationService.getForemanUsername(), this.configurationService.getForemanPassword());
 
-			ctx.setVariable("operatingSystems", Lists.newArrayList(foremanApi.getOperatingSystems(null, null, null, ForemanHelper.PER_PAGE_RESULT).results));
+			ctx.setVariable("operatingSystems", Lists.newArrayList(foremanApi.getOperatingSystems(null, null, null, ForemanService.PER_PAGE_RESULT).results));
 
-			ctx.setVariable("computeProfiles", Lists.newArrayList(foremanApi.getComputeProfiles(null, null, null, ForemanHelper.PER_PAGE_RESULT).results));
+			ctx.setVariable("computeProfiles", Lists.newArrayList(foremanApi.getComputeProfiles(null, null, null, ForemanService.PER_PAGE_RESULT).results));
 
 		} catch (final Exception e) {
 			LOGGER.error("[foreman] Foreman API call failed : {}", e);

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 import fr.echoes.lab.foremanapi.IForemanApi;
 import fr.echoes.lab.foremanclient.ForemanClient;
-import fr.echoes.lab.foremanclient.ForemanHelper;
+import fr.echoes.lab.foremanclient.ForemanService;
 import fr.echoes.lab.ksf.cc.plugins.foreman.exceptions.ForemanConfigurationException;
 import fr.echoes.lab.ksf.cc.plugins.foreman.services.ForemanConfigurationService;
 

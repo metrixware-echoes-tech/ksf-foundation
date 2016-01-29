@@ -11,7 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import com.tocea.corolla.products.dao.IProjectDAO;
 
 import fr.echoes.lab.foremanapi.IForemanApi;
-import fr.echoes.lab.foremanclient.ForemanHelper;
+import fr.echoes.lab.foremanclient.IForemanService;
 import fr.echoes.lab.ksf.cc.plugins.foreman.dao.IForemanTargetDAO;
 import fr.echoes.lab.ksf.cc.plugins.foreman.model.ForemanTarget;
 import fr.echoes.lab.ksf.cc.plugins.foreman.services.ForemanClientFactory;
@@ -26,6 +26,9 @@ public class ForemanProjectLifeCycleExtension implements IProjectLifecycleExtens
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ForemanProjectLifeCycleExtension.class);
 
+	@Autowired
+	private IForemanService foremanService;
+	
 	@Autowired
 	private ForemanConfigurationService configurationService;
 	
@@ -51,7 +54,7 @@ public class ForemanProjectLifeCycleExtension implements IProjectLifecycleExtens
 			
 			// Create the project in Foreman
 			final IForemanApi foremanApi = foremanClientFactory.createForemanClient();		
-			ForemanHelper.createProject(foremanApi, _project.getName(), logginName);
+			foremanService.createProject(foremanApi, _project.getName(), logginName);
 			
 		} catch (final Exception e) {
 			LOGGER.error("[foreman] project creation failed", e);
@@ -69,7 +72,7 @@ public class ForemanProjectLifeCycleExtension implements IProjectLifecycleExtens
         	
         	// Delete project data in Foreman
         	final IForemanApi foremanApi = foremanClientFactory.createForemanClient();
-            ForemanHelper.deleteProject(foremanApi, _project.getName());
+            foremanService.deleteProject(foremanApi, _project.getName());
             
         } catch (final Exception ex) {
             LOGGER.error("[foreman] project delete failed", ex);
