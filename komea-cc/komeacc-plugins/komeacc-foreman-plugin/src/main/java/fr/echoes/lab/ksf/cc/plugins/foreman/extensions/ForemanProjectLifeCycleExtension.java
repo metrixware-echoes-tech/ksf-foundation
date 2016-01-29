@@ -2,11 +2,11 @@ package fr.echoes.lab.ksf.cc.plugins.foreman.extensions;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.context.ApplicationContext;
 
 import com.tocea.corolla.products.dao.IProjectDAO;
 
@@ -15,11 +15,11 @@ import fr.echoes.lab.foremanclient.IForemanService;
 import fr.echoes.lab.ksf.cc.plugins.foreman.dao.IForemanTargetDAO;
 import fr.echoes.lab.ksf.cc.plugins.foreman.model.ForemanTarget;
 import fr.echoes.lab.ksf.cc.plugins.foreman.services.ForemanClientFactory;
-import fr.echoes.lab.ksf.cc.plugins.foreman.services.ForemanConfigurationService;
 import fr.echoes.lab.ksf.cc.plugins.foreman.services.ForemanErrorHandlingService;
 import fr.echoes.lab.ksf.extensions.annotations.Extension;
 import fr.echoes.lab.ksf.extensions.projects.IProjectLifecycleExtension;
 import fr.echoes.lab.ksf.extensions.projects.ProjectDto;
+import fr.echoes.lab.ksf.users.security.api.ICurrentUserService;
 
 @Extension
 public class ForemanProjectLifeCycleExtension implements IProjectLifecycleExtension {
@@ -28,9 +28,6 @@ public class ForemanProjectLifeCycleExtension implements IProjectLifecycleExtens
 
 	@Autowired
 	private IForemanService foremanService;
-	
-	@Autowired
-	private ForemanConfigurationService configurationService;
 	
 	@Autowired
 	private ForemanClientFactory foremanClientFactory;
@@ -43,13 +40,33 @@ public class ForemanProjectLifeCycleExtension implements IProjectLifecycleExtens
 	
 	@Autowired
 	private IProjectDAO projectDAO;
+	
+	@Autowired
+	private ApplicationContext applicationContext;
+	
+	private ICurrentUserService currentUserService;
 
+	public void init() {
+		if (currentUserService == null) {
+			currentUserService = applicationContext.getBean(ICurrentUserService.class);
+		}
+	}
+	
 	@Override
 	public void notifyCreatedProject(ProjectDto _project) {
 
-		LOGGER.info("[foreman] project creation detected : "+_project.getKey());
-
-		final String logginName = SecurityContextHolder.getContext().getAuthentication().getName();
+		init();
+		
+		final String logginName = currentUserService.getCurrentUserLogin();
+		//SecurityContextHolder.getContext().getAuthentication().getName();
+		
+		if (StringUtils.isEmpty(logginName)) {
+			LOGGER.error("[Foreman] No user found. Aborting project creation in Foreman module");
+			return;
+		}
+		
+		LOGGER.info("[Foreman] project {} creation detected [demanded by: {}]", _project.getKey(), logginName);
+		
 		try {
 			
 			// Create the project in Foreman
@@ -57,13 +74,14 @@ public class ForemanProjectLifeCycleExtension implements IProjectLifecycleExtens
 			foremanService.createProject(foremanApi, _project.getName(), logginName);
 			
 		} catch (final Exception e) {
-			LOGGER.error("[foreman] project creation failed", e);
+			LOGGER.error("[Foreman] project creation failed", e);
 			this.errorHandler.registerError("Unable to create Foreman project. Please verify your Foreman configuration.");
 		}
 	}
 
 	@Override
 	public void notifyDeletedProject(ProjectDto _project) {
+		
         try {
 
         	// Delete targets associated to the project
