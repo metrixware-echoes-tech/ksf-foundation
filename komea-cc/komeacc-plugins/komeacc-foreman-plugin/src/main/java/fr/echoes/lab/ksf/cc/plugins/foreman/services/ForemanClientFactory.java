@@ -27,11 +27,13 @@ public class ForemanClientFactory {
 	public IForemanApi createForemanClient() throws Exception {
 		
 		// Manually inject the bean for breaking a circular dependency issue
-		currentUserService = applicationContext.getBean(ICurrentUserService.class);
+		//currentUserService = applicationContext.getBean(ICurrentUserService.class);
 		
 		String url = configurationService.getForemanUrl();
-		String username = currentUserService.getCurrentUserLogin();
-		String password = (String) SecurityContextHolder.getContext().getAuthentication().getCredentials();
+		//String username = currentUserService.getCurrentUserLogin();
+		//String password = (String) SecurityContextHolder.getContext().getAuthentication().getCredentials();
+		String username = configurationService.getForemanUsername();
+		String password = configurationService.getForemanPassword();
 		
 		LOGGER.info("[foreman-plugin] init foreman client api for user {} on {}", username, url);
 			
