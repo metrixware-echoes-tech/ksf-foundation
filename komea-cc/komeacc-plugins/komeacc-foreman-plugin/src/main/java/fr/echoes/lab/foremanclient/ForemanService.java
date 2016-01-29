@@ -21,8 +21,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.sun.javafx.embed.HostDragStartListener;
-
 import fr.echoes.lab.foremanapi.IForemanApi;
 import fr.echoes.lab.foremanapi.model.Environment;
 import fr.echoes.lab.foremanapi.model.Environments;
@@ -166,6 +164,13 @@ public class ForemanService implements IForemanService {
     @Override
 	public void deleteProject(IForemanApi api, String projectName) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
 
+    	// Delete the hosts associated to the project
+    	List<Host> hosts = findHostsByProject(api, projectName);
+    	for (Host host : hosts) {
+    		api.deleteHost(host.id);
+    	}
+    	
+    	// Delete the host groups
         final Hostgroups hostGroups = api.getHostGroups(null, null, null, PER_PAGE_RESULT);
         for (final HostGroup hostGroup : hostGroups.results) {
             if (hostGroup.name.equalsIgnoreCase(projectName)) {
@@ -173,6 +178,8 @@ public class ForemanService implements IForemanService {
                 break;
             }
         }
+        
+        // Delete the role
         final Role findRole = findRole(api, projectName);
         final Users users = api.getUsers(PER_PAGE_RESULT);
         for (final User user : users.results) {

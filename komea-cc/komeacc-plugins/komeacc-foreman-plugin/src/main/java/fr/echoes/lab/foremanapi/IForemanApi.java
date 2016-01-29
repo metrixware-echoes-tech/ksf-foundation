@@ -303,10 +303,14 @@ public interface IForemanApi {
 	@Consumes(MediaType.APPLICATION_JSON)
 	OverrideValues createOverrideValues(@PathParam("smartClassParametesId") String smartClassParametesId, OverrideValueWrapper overrideValueWrapper);
 
-
 	@PUT
 	@Path("/api/smart_class_parameters/{smartClassParametersId}/override_values/{overrideValuesId}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	void overrideSmartClassParameter(@PathParam("smartClassParametersId") String smartClassParametersId, @PathParam("overrideValuesId") String overrideValuesId, SmartClassParameterWrapper smartClassParameterWrapper);
 
+	@DELETE
+	@Path("/api/hosts/{id}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	void deleteHost(@PathParam("id") String id);
+	
 }
