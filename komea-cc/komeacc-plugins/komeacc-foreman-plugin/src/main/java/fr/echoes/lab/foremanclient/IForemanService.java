@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -36,5 +37,7 @@ public interface IForemanService {
 
 	public void updateValue(IForemanApi api, String smartClassParamId, String hostName, Object value,
 			Boolean usePuppetDefault);
+	
+	public List<Host> findHostsByProject(IForemanApi api, String projectName);
 
 }

@@ -21,6 +21,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.sun.javafx.embed.HostDragStartListener;
+
 import fr.echoes.lab.foremanapi.IForemanApi;
 import fr.echoes.lab.foremanapi.model.Environment;
 import fr.echoes.lab.foremanapi.model.Environments;
@@ -187,6 +189,7 @@ public class ForemanService implements IForemanService {
 
             api.deleteRoles(findRole.id);
         }
+        
     }
 
      private void createHostGroup(IForemanApi api, String projectName) {
@@ -551,6 +554,15 @@ public class ForemanService implements IForemanService {
     		 LOGGER.error("Failed to configure smart class parameter " + smartClassParamId, e);
     	 }
      }
+
+	@Override
+	public List<Host> findHostsByProject(IForemanApi api, String projectName) {
+		
+		Hosts hosts = api.getHostsByHostGroup(projectName, null, null, null, PER_PAGE_RESULT);
+		
+		return hosts != null ? hosts.results : null;
+		
+	}
 
 
 }

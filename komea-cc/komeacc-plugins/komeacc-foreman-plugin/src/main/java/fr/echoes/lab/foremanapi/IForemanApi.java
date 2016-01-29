@@ -57,6 +57,15 @@ public interface IForemanApi {
 			@QueryParam("page") String page,
 			@QueryParam("per_page") String perPage);
 
+	@GET
+	@Path("/api/hostgroups/{id}/hosts")
+	@Produces(MediaType.APPLICATION_JSON)
+	Hosts getHostsByHostGroup(
+			@PathParam("id") String id,
+			@QueryParam("search") String name,
+			@QueryParam("order") String order,
+			@QueryParam("page") String page,
+			@QueryParam("per_page") String perPage);
 
 	@GET
 	@Path("/api/filters")
