@@ -16,7 +16,7 @@ import fr.echoes.lab.ksf.extensions.projects.ProjectDto;
 import fr.echoes.lab.ksf.users.security.api.ICurrentUserService;
 
 /**
- * @author DCD
+ * @author dcollard
  *
  */
 @Extension

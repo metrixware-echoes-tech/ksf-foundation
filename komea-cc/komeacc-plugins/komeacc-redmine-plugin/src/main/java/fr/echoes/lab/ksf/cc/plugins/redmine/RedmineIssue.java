@@ -1,7 +1,7 @@
 package fr.echoes.lab.ksf.cc.plugins.redmine;
 
 /**
- * @author DCD
+ * @author dcollard
  *
  */
 public class RedmineIssue {

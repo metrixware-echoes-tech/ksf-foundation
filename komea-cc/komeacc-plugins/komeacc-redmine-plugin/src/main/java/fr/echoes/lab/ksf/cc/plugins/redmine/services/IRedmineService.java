@@ -6,8 +6,9 @@ import fr.echoes.lab.ksf.cc.plugins.redmine.RedmineExtensionException;
 import fr.echoes.lab.ksf.cc.plugins.redmine.RedmineIssue;
 import fr.echoes.lab.ksf.cc.plugins.redmine.RedmineQuery;
 
+
 /**
- * @author DCD
+ * @author dcollard
  *
  */
 public interface IRedmineService {

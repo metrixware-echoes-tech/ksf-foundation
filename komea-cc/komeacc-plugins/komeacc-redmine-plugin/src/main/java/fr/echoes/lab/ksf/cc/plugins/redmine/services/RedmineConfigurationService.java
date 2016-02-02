@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 /**
- * @author DCD
+ * @author dcollard
  *
  */
 @Service("redmineConfiguration")

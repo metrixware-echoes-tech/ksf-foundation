@@ -24,7 +24,7 @@ import fr.echoes.lab.ksf.cc.plugins.redmine.RedmineQuery;
 /**
  * Spring Service for working with the foreman API.
  *
- * @author DCD
+ * @author dcollard
  *
  */
 @Service
