@@ -72,7 +72,7 @@
 											<div class="panel-heading">												
 												<img th:src="@{${widget.getIconUrl()}}"/>
 												<h3 class="panel-title" th:text="${widget.title}"></h3>													
-												<ul class="nav nav-pills navbar-right">
+												<ul th:if="${widget.getDropdownActions() != null}" class="nav nav-pills navbar-right">
 												  <li role="presentation" class="dropdown">
 												    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
 												      Actions <span class="caret"></span>
