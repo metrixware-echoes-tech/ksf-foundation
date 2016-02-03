@@ -1,5 +1,6 @@
 package fr.echoes.lab.ksf.cc.plugins.redmine.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -73,9 +74,9 @@ public class RedmineService implements IRedmineService {
 	}
 
 	@Override
-	public List<RedmineIssue> queryIssues(RedmineQuery query) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<RedmineIssue> queryIssues(RedmineQuery query) throws RedmineExtensionException {
+		final List<RedmineIssue> redmineIssues = new ArrayList<>();
+		return redmineIssues;
 	}
 
 }

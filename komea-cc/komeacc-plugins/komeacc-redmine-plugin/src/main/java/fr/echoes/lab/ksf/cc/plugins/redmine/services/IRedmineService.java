@@ -36,6 +36,6 @@ public interface IRedmineService {
 	 * @param query
 	 * @return
 	 */
-	public List<RedmineIssue> queryIssues(RedmineQuery query);
+	public List<RedmineIssue> queryIssues(RedmineQuery query) throws RedmineExtensionException;
 
 }

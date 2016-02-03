@@ -19,12 +19,17 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
 import com.google.common.collect.Lists;
 import com.tocea.corolla.products.dao.IProjectDAO;
+import com.tocea.corolla.products.domain.Project;
 
 import fr.echoes.lab.ksf.cc.extensions.gui.project.dashboard.IProjectTabPanel;
 import fr.echoes.lab.ksf.cc.extensions.gui.project.dashboard.MenuAction;
 import fr.echoes.lab.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
+import fr.echoes.lab.ksf.cc.plugins.redmine.RedmineIssue;
+import fr.echoes.lab.ksf.cc.plugins.redmine.RedmineQuery;
+import fr.echoes.lab.ksf.cc.plugins.redmine.services.IRedmineService;
 import fr.echoes.lab.ksf.cc.plugins.redmine.services.RedmineConfigurationService;
 import fr.echoes.lab.ksf.cc.plugins.redmine.services.RedmineErrorHandlingService;
+import fr.echoes.lab.ksf.cc.plugins.redmine.services.RedmineService;
 
 /**
  * @author dcollard
@@ -64,10 +69,27 @@ public class RedmineProjectDashboardWidget implements ProjectDashboardWidget {
 	@Override
 	public String getHtmlPanelBody(String projectId) {
 
-//		final Project project = this.projectDAO.findOne(projectId);
+		final Project project = this.projectDAO.findOne(projectId);
 
 		final WebContext ctx = new WebContext(this.request, this.response, this.servletContext);
 		ctx.setVariable("projectId", projectId);
+
+		final String projectName = project.getName();
+
+		try {
+
+			final IRedmineService redmine = new RedmineService();
+
+			final RedmineQuery query = new RedmineQuery.Builder().projectName(projectName).build();
+
+			final List<RedmineIssue> issues = redmine.queryIssues(query);
+
+			ctx.setVariable("issues", issues);
+
+		} catch (final Exception e) {
+			LOGGER.error("[Redmine] Failed to list issues for project: " + projectName, e);
+			this.errorHandler.registerError(e.getMessage());
+		}
 
 		ctx.setVariable("redmineError", this.errorHandler.retrieveError());
 
