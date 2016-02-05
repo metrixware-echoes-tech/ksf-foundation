@@ -1,4 +1,4 @@
-package fr.echoes.lab.ksf.database.configuration;
+package fr.echoes.labs.ksf.database.configuration;
 
 import com.google.common.collect.Lists;
 import com.mongodb.Mongo;

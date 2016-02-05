@@ -1,4 +1,4 @@
-package fr.echoes.lab.ksf.cc.extmanager.projects.ui;
+package fr.echoes.labs.ksf.cc.extmanager.projects.ui;
 
 import java.util.List;
 

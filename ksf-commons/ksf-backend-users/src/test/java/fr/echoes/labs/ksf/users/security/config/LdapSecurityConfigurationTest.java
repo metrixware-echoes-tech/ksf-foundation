@@ -1,4 +1,4 @@
-package fr.echoes.lab.ksf.users.security.config;
+package fr.echoes.labs.ksf.users.security.config;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;

@@ -1,4 +1,4 @@
-package fr.echoes.lab.ksf.cc.plugins.redmine.services;
+package fr.echoes.labs.ksf.cc.plugins.redmine.services;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

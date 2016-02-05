@@ -1,4 +1,4 @@
-package fr.echoes.lab.ksf.cc.plugins.redmine.extensions;
+package fr.echoes.labs.ksf.cc.plugins.redmine.extensions;
 
 import org.springframework.beans.factory.annotation.Autowired;
 

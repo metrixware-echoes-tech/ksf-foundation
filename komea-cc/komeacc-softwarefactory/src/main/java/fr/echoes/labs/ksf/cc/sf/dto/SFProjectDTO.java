@@ -1,4 +1,4 @@
-package fr.echoes.lab.ksf.cc.sf.dto;
+package fr.echoes.labs.ksf.cc.sf.dto;
 
 import java.util.List;
 

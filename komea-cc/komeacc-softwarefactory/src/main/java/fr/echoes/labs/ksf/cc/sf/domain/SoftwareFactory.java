@@ -1,4 +1,4 @@
-package fr.echoes.lab.ksf.cc.sf.domain;
+package fr.echoes.labs.ksf.cc.sf.domain;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.annotation.Id;

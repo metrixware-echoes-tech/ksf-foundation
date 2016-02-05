@@ -1,4 +1,4 @@
-package fr.echoes.lab.ksf.cc.sf.exceptions;
+package fr.echoes.labs.ksf.cc.sf.exceptions;
 
 import com.tocea.corolla.utils.domain.KsfDomainException;
 

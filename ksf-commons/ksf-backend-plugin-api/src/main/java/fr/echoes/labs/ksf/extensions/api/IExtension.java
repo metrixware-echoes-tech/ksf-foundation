@@ -1,4 +1,4 @@
-package fr.echoes.lab.ksf.extensions.api;
+package fr.echoes.labs.ksf.extensions.api;
 
 /**
  * Marker interface for extension points.

@@ -1,4 +1,4 @@
-package fr.echoes.lab.ksf.cc.ui;
+package fr.echoes.labs.ksf.cc.ui;
 
 import com.tocea.corolla.cqrs.gate.Gate;
 import com.tocea.corolla.users.commands.CreateRoleCommand;

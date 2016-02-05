@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package fr.echoes.lab.ksf.cc.ui.views.projects;
+package fr.echoes.labs.ksf.cc.ui.views.projects;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,9 +36,9 @@ import com.tocea.corolla.users.domain.User;
 
 import fr.echoes.lab.ksf.cc.extensions.gui.project.dashboard.IProjectTabPanel;
 import fr.echoes.lab.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
-import fr.echoes.lab.ksf.cc.extmanager.projects.ui.IProjectDashboardExtensionManager;
 import fr.echoes.lab.ksf.cc.sf.commands.CreateProjectAndProductionLineCommand;
 import fr.echoes.lab.ksf.cc.sf.dto.SFProjectDTO;
+import fr.echoes.labs.ksf.cc.extmanager.projects.ui.IProjectDashboardExtensionManager;
 
 /**
  *

@@ -3,14 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package fr.echoes.lab.ksf.cc.ui.views.plugins;
+package fr.echoes.labs.ksf.cc.ui.views.plugins;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import fr.echoes.lab.ksf.cc.extmanager.ui.IPluginMVCExtensionManager;
+import fr.echoes.labs.ksf.cc.extmanager.ui.IPluginMVCExtensionManager;
 
 /**
  * This service delegates the render to plugins.

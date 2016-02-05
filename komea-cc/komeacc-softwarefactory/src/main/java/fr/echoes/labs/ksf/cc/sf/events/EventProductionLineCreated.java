@@ -1,4 +1,4 @@
-package fr.echoes.lab.ksf.cc.sf.events;
+package fr.echoes.labs.ksf.cc.sf.events;
 
 import fr.echoes.lab.ksf.cc.sf.domain.ProductionLine;
 

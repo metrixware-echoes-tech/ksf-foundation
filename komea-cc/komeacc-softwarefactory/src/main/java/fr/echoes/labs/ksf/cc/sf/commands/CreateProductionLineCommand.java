@@ -1,4 +1,4 @@
-package fr.echoes.lab.ksf.cc.sf.commands;
+package fr.echoes.labs.ksf.cc.sf.commands;
 
 import javax.validation.constraints.NotNull;
 

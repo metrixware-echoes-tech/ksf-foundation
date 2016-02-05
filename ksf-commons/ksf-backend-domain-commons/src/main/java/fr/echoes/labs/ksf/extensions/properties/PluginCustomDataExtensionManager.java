@@ -1,4 +1,4 @@
-package fr.echoes.lab.ksf.extensions.properties;
+package fr.echoes.labs.ksf.extensions.properties;
 
 import javax.annotation.PostConstruct;
 

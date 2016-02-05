@@ -1,6 +1,7 @@
-package fr.echoes.lab.ksf.cc.ui;
+package fr.echoes.labs.ksf.cc.ui;
 
-import fr.echoes.lab.ksf.cc.KomeaCCGuiApplication;
+import fr.echoes.labs.ksf.cc.KomeaCCGuiApplication;
+
 import org.junit.After;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

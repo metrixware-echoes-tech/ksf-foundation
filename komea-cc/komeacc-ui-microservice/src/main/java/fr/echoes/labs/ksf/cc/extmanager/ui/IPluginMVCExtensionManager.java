@@ -1,4 +1,4 @@
-package fr.echoes.lab.ksf.cc.extmanager.ui;
+package fr.echoes.labs.ksf.cc.extmanager.ui;
 
 import fr.echoes.lab.ksf.cc.extensions.gui.IPluginGuiControllerExtension;
 

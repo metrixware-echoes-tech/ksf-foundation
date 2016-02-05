@@ -1,4 +1,4 @@
-package fr.echoes.lab.ksf.cc.ui.views
+package fr.echoes.labs.ksf.cc.ui.views
 
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry

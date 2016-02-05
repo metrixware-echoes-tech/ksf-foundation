@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package fr.echoes.lab.ksf.cc.ui.views.main;
+package fr.echoes.labs.ksf.cc.ui.views.main;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

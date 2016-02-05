@@ -1,4 +1,4 @@
-package fr.echoes.lab.ksf.cc.plugins.redmine.services;
+package fr.echoes.labs.ksf.cc.plugins.redmine.services;
 
 import java.util.List;
 

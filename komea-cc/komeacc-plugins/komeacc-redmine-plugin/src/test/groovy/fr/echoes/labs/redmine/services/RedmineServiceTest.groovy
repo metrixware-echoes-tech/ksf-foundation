@@ -1,4 +1,4 @@
-package fr.echoes.lab.redmine.services
+package fr.echoes.labs.redmine.services
 
 import spock.lang.Specification
 import fr.echoes.lab.ksf.cc.plugins.redmine.services.IRedmineService

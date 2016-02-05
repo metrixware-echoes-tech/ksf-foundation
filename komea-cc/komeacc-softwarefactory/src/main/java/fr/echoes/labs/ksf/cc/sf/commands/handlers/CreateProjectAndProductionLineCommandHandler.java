@@ -1,4 +1,4 @@
-package fr.echoes.lab.ksf.cc.sf.commands.handlers;
+package fr.echoes.labs.ksf.cc.sf.commands.handlers;
 
 import java.util.List;
 

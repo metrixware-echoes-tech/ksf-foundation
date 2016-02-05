@@ -1,4 +1,4 @@
-package fr.echoes.lab.ksf.cc.ui.security
+package fr.echoes.labs.ksf.cc.ui.security
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory

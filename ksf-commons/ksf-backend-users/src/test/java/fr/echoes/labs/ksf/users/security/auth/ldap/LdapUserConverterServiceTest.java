@@ -1,4 +1,4 @@
-package fr.echoes.lab.ksf.users.security.auth.ldap;
+package fr.echoes.labs.ksf.users.security.auth.ldap;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;

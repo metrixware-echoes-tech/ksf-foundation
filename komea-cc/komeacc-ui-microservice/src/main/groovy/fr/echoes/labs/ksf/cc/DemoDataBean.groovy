@@ -1,7 +1,7 @@
 /**
  *
  */
-package fr.echoes.lab.ksf.cc
+package fr.echoes.labs.ksf.cc
 
 import fr.echoes.lab.ksf.cc.sf.dao.ISFApplicationTypeDAO
 import fr.echoes.lab.ksf.cc.sf.dao.ISoftwareFactoryDAO

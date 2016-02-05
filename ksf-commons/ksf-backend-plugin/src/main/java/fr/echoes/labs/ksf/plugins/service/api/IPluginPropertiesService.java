@@ -1,4 +1,4 @@
-package fr.echoes.lab.ksf.plugins.service.api;
+package fr.echoes.labs.ksf.plugins.service.api;
 
 import java.util.Properties;
 

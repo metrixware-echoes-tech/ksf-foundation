@@ -1,4 +1,4 @@
-package fr.echoes.lab.ksf.extensions.events;
+package fr.echoes.labs.ksf.extensions.events;
 
 import org.springframework.beans.factory.annotation.Autowired;
 

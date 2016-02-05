@@ -1,4 +1,4 @@
-package fr.echoes.lab.ksf.plugins.api;
+package fr.echoes.labs.ksf.plugins.api;
 
 import java.util.Collection;
 

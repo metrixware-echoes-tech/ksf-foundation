@@ -1,4 +1,4 @@
-package fr.echoes.lab.ksf.extensions.events;
+package fr.echoes.labs.ksf.extensions.events;
 
 /**
  * This class describes an event once converted into Json.

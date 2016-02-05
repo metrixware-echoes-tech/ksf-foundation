@@ -1,4 +1,4 @@
-package fr.echoes.lab.ksf.cc.ui;
+package fr.echoes.labs.ksf.cc.ui;
 
 import static org.junit.Assert.assertNotNull;
 

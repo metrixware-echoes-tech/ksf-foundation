@@ -1,4 +1,4 @@
-package fr.echoes.lab.ksf.cc.sf.domain;
+package fr.echoes.labs.ksf.cc.sf.domain;
 
 import javax.validation.constraints.NotNull;
 

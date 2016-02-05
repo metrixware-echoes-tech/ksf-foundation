@@ -1,4 +1,4 @@
-package fr.echoes.lab.ksf.extensions.events;
+package fr.echoes.labs.ksf.extensions.events;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;

@@ -1,4 +1,4 @@
-package fr.echoes.lab.ksf.cc.plugins.redmine.extensions;
+package fr.echoes.labs.ksf.cc.plugins.redmine.extensions;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;

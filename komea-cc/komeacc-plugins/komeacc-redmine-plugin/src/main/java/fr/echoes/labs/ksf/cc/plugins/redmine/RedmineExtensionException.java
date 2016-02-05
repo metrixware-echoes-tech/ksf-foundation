@@ -1,4 +1,4 @@
-package fr.echoes.lab.ksf.cc.plugins.redmine;
+package fr.echoes.labs.ksf.cc.plugins.redmine;
 
 /**
  * @author dcollard

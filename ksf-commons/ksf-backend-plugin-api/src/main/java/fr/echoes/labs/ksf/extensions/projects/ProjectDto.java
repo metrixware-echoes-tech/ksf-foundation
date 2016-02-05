@@ -1,4 +1,4 @@
-package fr.echoes.lab.ksf.extensions.projects;
+package fr.echoes.labs.ksf.extensions.projects;
 
 import java.net.URL;
 import java.util.List;

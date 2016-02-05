@@ -1,4 +1,4 @@
-package fr.echoes.lab.ksf.cc
+package fr.echoes.labs.ksf.cc
 
 import javax.servlet.Filter
 
