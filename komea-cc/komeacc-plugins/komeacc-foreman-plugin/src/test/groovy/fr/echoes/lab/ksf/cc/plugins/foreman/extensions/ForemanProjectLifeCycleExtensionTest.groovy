@@ -15,6 +15,7 @@ import fr.echoes.lab.ksf.cc.plugins.foreman.model.ForemanTarget;
 import fr.echoes.lab.ksf.cc.plugins.foreman.services.ForemanClientFactory;
 import fr.echoes.lab.ksf.extensions.projects.ProjectDto
 import fr.echoes.lab.ksf.users.security.api.ICurrentUserService;
+import fr.echoes.labs.ksf.cc.plugins.foreman.extensions.ForemanProjectLifeCycleExtension;
 import spock.lang.Specification;
 
 class ForemanProjectLifeCycleExtensionTest extends Specification {

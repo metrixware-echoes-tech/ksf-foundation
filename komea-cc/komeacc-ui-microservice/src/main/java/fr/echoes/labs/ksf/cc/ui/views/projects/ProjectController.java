@@ -34,11 +34,11 @@ import com.tocea.corolla.products.exceptions.ProjectNotFoundException;
 import com.tocea.corolla.users.dao.IUserDAO;
 import com.tocea.corolla.users.domain.User;
 
-import fr.echoes.lab.ksf.cc.extensions.gui.project.dashboard.IProjectTabPanel;
-import fr.echoes.lab.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
-import fr.echoes.lab.ksf.cc.sf.commands.CreateProjectAndProductionLineCommand;
-import fr.echoes.lab.ksf.cc.sf.dto.SFProjectDTO;
+import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.IProjectTabPanel;
+import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
 import fr.echoes.labs.ksf.cc.extmanager.projects.ui.IProjectDashboardExtensionManager;
+import fr.echoes.labs.ksf.cc.sf.commands.CreateProjectAndProductionLineCommand;
+import fr.echoes.labs.ksf.cc.sf.dto.SFProjectDTO;
 
 /**
  *

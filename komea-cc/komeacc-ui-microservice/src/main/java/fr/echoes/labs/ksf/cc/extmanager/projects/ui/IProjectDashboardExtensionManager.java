@@ -2,7 +2,7 @@ package fr.echoes.labs.ksf.cc.extmanager.projects.ui;
 
 import java.util.List;
 
-import fr.echoes.lab.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
+import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
 
 /**
  * This interface defines the widgets provided by plugins to fill the project

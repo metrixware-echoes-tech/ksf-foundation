@@ -9,8 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import fr.echoes.lab.ksf.cc.extensions.gui.IPluginGuiControllerExtension;
-import fr.echoes.lab.ksf.extensions.annotations.ExtensionPoint;
+import fr.echoes.labs.ksf.cc.extensions.gui.IPluginGuiControllerExtension;
+import fr.echoes.labs.ksf.extensions.annotations.ExtensionPoint;
 
 @ExtensionPoint
 public class PluginMVCExtensionManager implements IPluginMVCExtensionManager {

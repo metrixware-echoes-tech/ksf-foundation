@@ -12,9 +12,9 @@ import com.tocea.corolla.products.commands.CreateProjectCommand;
 import com.tocea.corolla.products.dao.IProjectDAO;
 import com.tocea.corolla.products.domain.Project;
 
-import fr.echoes.lab.ksf.cc.sf.commands.CreateProjectAndProductionLineCommand;
-import fr.echoes.lab.ksf.cc.sf.dto.SFProjectDTO;
-import fr.echoes.lab.ksf.cc.ui.AbstractSpringTest;
+import fr.echoes.labs.ksf.cc.sf.commands.CreateProjectAndProductionLineCommand;
+import fr.echoes.labs.ksf.cc.sf.dto.SFProjectDTO;
+import fr.echoes.labs.ksf.cc.ui.AbstractSpringTest;
 
 public class CreateProjectTest extends AbstractSpringTest{
 
