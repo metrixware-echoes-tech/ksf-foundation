@@ -24,7 +24,7 @@ public class JsonEventListenerExtensionManagerTest {
 		Mockito.doNothing().when(extension).notifyEvent(argumentCaptor.capture());
 		jsonEventListenerExtensionManager.listenAnyEvent(new DemoJsonClass());
 		assertEquals(1, argumentCaptor.getAllValues().size());
-		assertEquals("fr.echoes.lab.ksf.extensions.events.JsonEventListenerExtensionManagerTest$DemoJsonClass",
+		assertEquals("fr.echoes.labs.ksf.extensions.events.JsonEventListenerExtensionManagerTest$DemoJsonClass",
 				argumentCaptor.getValue().getEventName());
 		System.out.println(argumentCaptor.getValue().getJsonData());
 		assertEquals("{\"firstName\":\"Sylvain\",\"lastName\":\"Leroy\"}",

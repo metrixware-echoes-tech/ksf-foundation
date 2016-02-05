@@ -10,11 +10,11 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 import org.springframework.transaction.annotation.EnableTransactionManagement
 
 @SpringBootApplication
-@ComponentScan(value=["com.tocea", "fr.echoes.lab"])
+@ComponentScan(value=["com.tocea", "fr.echoes.labs"])
 @EnableAutoConfiguration
 @EnableConfigurationProperties
 //@EnableTransactionManagement
-@EnableMongoRepositories(value=["com.tocea", "fr.echoes.lab.ksf"])
+@EnableMongoRepositories(value=["com.tocea", "fr.echoes.labs.ksf"])
 @EnableMongoAuditing
 //@EnableWebMvc
 class CorollaGuiApplication {
