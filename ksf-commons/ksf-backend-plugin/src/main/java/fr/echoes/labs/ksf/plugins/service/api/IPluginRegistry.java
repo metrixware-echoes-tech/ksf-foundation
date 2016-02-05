@@ -2,7 +2,7 @@ package fr.echoes.labs.ksf.plugins.service.api;
 
 import java.util.List;
 
-import fr.echoes.lab.ksf.plugins.api.IPlugin;
+import fr.echoes.labs.ksf.plugins.api.IPlugin;
 
 /**
  * This interface defines the interface to manipulate the plugins.

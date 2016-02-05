@@ -11,8 +11,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import fr.echoes.lab.ksf.users.security.config.SecurityConfiguration;
-import fr.echoes.lab.ksf.users.security.utils.SecurityLoggers;
+import fr.echoes.labs.ksf.users.security.config.SecurityConfiguration;
+import fr.echoes.labs.ksf.users.security.utils.SecurityLoggers;
 
 /**
  * This class defines Beans required to manipulate passwords inside the komea

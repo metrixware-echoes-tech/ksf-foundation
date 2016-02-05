@@ -3,7 +3,7 @@ package fr.echoes.labs.ksf.plugins.api;
 import java.io.Closeable;
 import java.util.List;
 
-import fr.echoes.lab.ksf.extensions.api.IExtension;
+import fr.echoes.labs.ksf.extensions.api.IExtension;
 
 /**
  * This interface declares a plugin and the informations that it should provide.

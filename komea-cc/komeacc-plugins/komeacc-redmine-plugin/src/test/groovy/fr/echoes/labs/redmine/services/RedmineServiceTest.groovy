@@ -1,8 +1,8 @@
 package fr.echoes.labs.redmine.services
 
 import spock.lang.Specification
-import fr.echoes.lab.ksf.cc.plugins.redmine.services.IRedmineService
-import fr.echoes.lab.ksf.cc.plugins.redmine.services.RedmineService
+import fr.echoes.labs.ksf.cc.plugins.redmine.services.IRedmineService
+import fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineService
 
 /**
  * @author dcollard

@@ -1,6 +1,6 @@
 package fr.echoes.labs.ksf.extensions.projects;
 
-import fr.echoes.lab.ksf.extensions.api.IExtension;
+import fr.echoes.labs.ksf.extensions.api.IExtension;
 
 /**
  * This interface provides to the plugin a way to handle events associated to

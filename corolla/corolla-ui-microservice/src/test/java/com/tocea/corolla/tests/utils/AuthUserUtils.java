@@ -1,9 +1,10 @@
 package com.tocea.corolla.tests.utils;
 
-import fr.echoes.lab.ksf.users.security.auth.AuthUser;
 import com.tocea.corolla.users.domain.Permission;
 import com.tocea.corolla.users.domain.Role;
 import com.tocea.corolla.users.domain.User;
+
+import fr.echoes.labs.ksf.users.security.auth.AuthUser;
 
 public class AuthUserUtils {
 

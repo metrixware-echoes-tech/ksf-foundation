@@ -45,7 +45,7 @@ import com.tocea.corolla.revisions.domain.ICommit;
 import com.tocea.corolla.revisions.exceptions.InvalidCommitInformationException;
 import com.tocea.corolla.revisions.exceptions.SnapshotBuildFailureException;
 
-import fr.echoes.lab.ksf.users.security.api.ICurrentUserService;
+import fr.echoes.labs.ksf.users.security.api.ICurrentUserService;
 
 @Service
 public class JaversRevisionService implements IRevisionService {

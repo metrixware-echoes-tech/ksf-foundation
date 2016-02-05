@@ -16,7 +16,7 @@ import com.tocea.corolla.revisions.domain.Commit
 import com.tocea.corolla.revisions.services.IRevisionService
 import com.tocea.corolla.test.utils.FunctionalDocRule
 import com.tocea.corolla.utils.functests.FunctionalTestDoc
-import fr.echoes.lab.ksf.users.security.api.ICurrentUserService
+import fr.echoes.labs.ksf.users.security.api.ICurrentUserService
 
 class JaversRevisionServiceTest extends Specification {
 

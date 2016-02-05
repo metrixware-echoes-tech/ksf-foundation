@@ -7,7 +7,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.security.ldap.DefaultSpringSecurityContextSource;
 import org.springframework.stereotype.Component;
 
-import fr.echoes.lab.ksf.users.security.utils.SecurityLoggers;
+import fr.echoes.labs.ksf.users.security.utils.SecurityLoggers;
 
 /**
  * This class defines the security configuration for Corolla;

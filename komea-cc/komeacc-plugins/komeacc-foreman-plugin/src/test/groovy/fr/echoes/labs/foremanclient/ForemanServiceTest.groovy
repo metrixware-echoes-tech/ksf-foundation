@@ -1,34 +1,27 @@
 package fr.echoes.labs.foremanclient
-import java.security.KeyManagementException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-
-import fr.echoes.lab.foremanapi.IForemanApi;
-import fr.echoes.lab.foremanapi.model.Filter
-import fr.echoes.lab.foremanapi.model.Host
-import fr.echoes.lab.foremanapi.model.HostGroup;
-import fr.echoes.lab.foremanapi.model.Hostgroups;
-import fr.echoes.lab.foremanapi.model.Hosts;
-import fr.echoes.lab.foremanapi.model.Permission;
-import fr.echoes.lab.foremanapi.model.Role
-import fr.echoes.lab.foremanapi.model.Roles
-import fr.echoes.lab.foremanapi.model.User;
-import fr.echoes.lab.foremanclient.ForemanClient
-import fr.echoes.lab.foremanclient.ForemanService
-import fr.echoes.lab.foremanclient.IForemanService;
-import spock.lang.Specification;
+import spock.lang.Specification
+import fr.echoes.labs.foremanapi.IForemanApi
+import fr.echoes.labs.foremanapi.model.Filter
+import fr.echoes.labs.foremanapi.model.Host
+import fr.echoes.labs.foremanapi.model.HostGroup
+import fr.echoes.labs.foremanapi.model.Hostgroups
+import fr.echoes.labs.foremanapi.model.Hosts
+import fr.echoes.labs.foremanapi.model.Permission
+import fr.echoes.labs.foremanapi.model.Role
+import fr.echoes.labs.foremanapi.model.Roles
+import fr.echoes.labs.foremanapi.model.User
 
 
 class ForemanServiceTest extends Specification {
-	
+
 	def IForemanService foremanService
 	def IForemanApi foremanApi
-	
+
 	def setup() {
 		foremanService = new ForemanService()
 		foremanApi = Mock()
 	}
-	
+
 	def "it should create a host"() {
 
 		given:
@@ -36,31 +29,31 @@ class ForemanServiceTest extends Specification {
 			role.builtin = "1"
 			role.name = "Default user"
 			role.id = "1"
-	
+
 			Filter filter = new Filter()
 			filter.search = null
 			filter.resource_type = "Architecture";
 			filter.unlimited = true
 			filter.id = "1"
-			
+
 			Permission permission = new Permission()
 			permission.name = "view_architectures"
 			permission.id = "1"
-			
+
 			filter.permissions = new ArrayList<Permission>()
 			filter.permissions.add(permission)
-	
+
 			role.filters = new ArrayList<Filter>()
 			role.filters.add(filter)
-			
+
 			User user = new User()
 			user.id = "1"
 			user.roles = new ArrayList<Role>()
-	
+
 			def roles = new Roles();
 			roles.results = new ArrayList<Role>();
 			roles.results.add(role)
-			
+
 		and:
 			foremanApi.getRoles(_, _, _, _) >> roles
 			foremanApi.getRole(_) >> role
@@ -70,12 +63,12 @@ class ForemanServiceTest extends Specification {
 			foremanApi.getUser(_) >> user
 		when:
 			foremanService.createProject(foremanApi, "testProject", "groovy")
-			
+
 		then:
 			notThrown Exception
 
 	}
-	
+
 	def "it should return that the host exists "() {
 		given:
 			Hosts hosts = new Hosts()
@@ -89,7 +82,7 @@ class ForemanServiceTest extends Specification {
 		then:
 			exist
 	}
-	
+
 	def "it should return that the host doesn't exist"() {
 		given:
 			IForemanApi foremanApi = Mock()
@@ -104,7 +97,7 @@ class ForemanServiceTest extends Specification {
 			def exist = foremanService.hostExists(foremanApi, "notExistingHost")
 		then:
 			!exist
-	}		
+	}
 
 	def "it should return that the host group exists "() {
 		given:
@@ -137,5 +130,5 @@ class ForemanServiceTest extends Specification {
 		then:
 			exist == false
 	}
-			
+
 }

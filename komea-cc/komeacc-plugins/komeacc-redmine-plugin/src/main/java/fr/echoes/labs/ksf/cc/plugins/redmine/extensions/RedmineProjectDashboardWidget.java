@@ -21,15 +21,15 @@ import com.google.common.collect.Lists;
 import com.tocea.corolla.products.dao.IProjectDAO;
 import com.tocea.corolla.products.domain.Project;
 
-import fr.echoes.lab.ksf.cc.extensions.gui.project.dashboard.IProjectTabPanel;
-import fr.echoes.lab.ksf.cc.extensions.gui.project.dashboard.MenuAction;
-import fr.echoes.lab.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
-import fr.echoes.lab.ksf.cc.plugins.redmine.RedmineIssue;
-import fr.echoes.lab.ksf.cc.plugins.redmine.RedmineQuery;
-import fr.echoes.lab.ksf.cc.plugins.redmine.services.IRedmineService;
-import fr.echoes.lab.ksf.cc.plugins.redmine.services.RedmineConfigurationService;
-import fr.echoes.lab.ksf.cc.plugins.redmine.services.RedmineErrorHandlingService;
-import fr.echoes.lab.ksf.cc.plugins.redmine.services.RedmineService;
+import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.IProjectTabPanel;
+import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.MenuAction;
+import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
+import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineIssue;
+import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineQuery;
+import fr.echoes.labs.ksf.cc.plugins.redmine.services.IRedmineService;
+import fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineConfigurationService;
+import fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineErrorHandlingService;
+import fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineService;
 
 /**
  * @author dcollard

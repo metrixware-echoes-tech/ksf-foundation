@@ -1,6 +1,6 @@
 package fr.echoes.labs.ksf.users.security.auth;
 
-import static fr.echoes.lab.ksf.users.security.utils.SecurityLoggers.SECURITY_LOGGER;
+import static fr.echoes.labs.ksf.users.security.utils.SecurityLoggers.SECURITY_LOGGER;
 
 import javax.transaction.Transactional;
 
@@ -21,8 +21,8 @@ import com.tocea.corolla.users.dto.AnonymousUserDto;
 import com.tocea.corolla.users.dto.UserDto;
 import com.tocea.corolla.utils.serviceapi.IReadonlyService;
 
-import fr.echoes.lab.ksf.users.security.api.IAuthenticatedUserService;
-import fr.echoes.lab.ksf.users.security.auth.ldap.LdapUserConverterService;
+import fr.echoes.labs.ksf.users.security.api.IAuthenticatedUserService;
+import fr.echoes.labs.ksf.users.security.auth.ldap.LdapUserConverterService;
 
 /**
  * Une fois que l'authentification est passée (Credentials vérifiés), ce service

@@ -8,8 +8,8 @@ import org.springframework.security.ldap.DefaultSpringSecurityContextSource;
 import org.springframework.security.ldap.SpringSecurityLdapTemplate;
 import org.springframework.stereotype.Component;
 
-import fr.echoes.lab.ksf.users.security.config.LdapSecurityConfiguration;
-import fr.echoes.lab.ksf.users.security.utils.SecurityLoggers;
+import fr.echoes.labs.ksf.users.security.config.LdapSecurityConfiguration;
+import fr.echoes.labs.ksf.users.security.utils.SecurityLoggers;
 
 @Component
 public class LdapUtilsFactory {

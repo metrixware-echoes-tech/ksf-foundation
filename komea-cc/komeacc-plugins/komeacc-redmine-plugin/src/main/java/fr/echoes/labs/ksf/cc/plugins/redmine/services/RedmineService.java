@@ -23,9 +23,9 @@ import com.taskadapter.redmineapi.bean.Tracker;
 import com.taskadapter.redmineapi.bean.User;
 import com.taskadapter.redmineapi.bean.Version;
 
-import fr.echoes.lab.ksf.cc.plugins.redmine.RedmineExtensionException;
-import fr.echoes.lab.ksf.cc.plugins.redmine.RedmineIssue;
-import fr.echoes.lab.ksf.cc.plugins.redmine.RedmineQuery;
+import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineExtensionException;
+import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineIssue;
+import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineQuery;
 
 
 

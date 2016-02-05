@@ -1,6 +1,6 @@
 package fr.echoes.labs.ksf.cc.sf.events;
 
-import fr.echoes.lab.ksf.cc.sf.domain.ProductionLine;
+import fr.echoes.labs.ksf.cc.sf.domain.ProductionLine;
 
 public class EventProductionLineCreated {
 

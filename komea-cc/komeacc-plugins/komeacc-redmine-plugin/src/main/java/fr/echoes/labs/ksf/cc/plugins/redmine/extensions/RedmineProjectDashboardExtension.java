@@ -2,9 +2,9 @@ package fr.echoes.labs.ksf.cc.plugins.redmine.extensions;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import fr.echoes.lab.ksf.cc.extensions.gui.project.dashboard.IProjectDashboardExtension;
-import fr.echoes.lab.ksf.cc.extensions.gui.project.dashboard.IProjectDashboardWidgets;
-import fr.echoes.lab.ksf.extensions.annotations.Extension;
+import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.IProjectDashboardExtension;
+import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.IProjectDashboardWidgets;
+import fr.echoes.labs.ksf.extensions.annotations.Extension;
 
 @Extension
 public class RedmineProjectDashboardExtension implements IProjectDashboardExtension {

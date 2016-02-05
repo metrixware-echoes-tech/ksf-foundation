@@ -19,8 +19,8 @@ import com.tocea.corolla.users.dto.UserDto;
 import com.tocea.corolla.users.service.EmailValidationService;
 import com.tocea.corolla.utils.domain.ObjectValidation;
 
-import fr.echoes.lab.ksf.users.security.config.LdapSecurityConfiguration;
-import fr.echoes.lab.ksf.users.security.utils.SecurityLoggers;
+import fr.echoes.labs.ksf.users.security.config.LdapSecurityConfiguration;
+import fr.echoes.labs.ksf.users.security.utils.SecurityLoggers;
 
 /**
  * This service provides utilities method to convert an Ldap User to a Database

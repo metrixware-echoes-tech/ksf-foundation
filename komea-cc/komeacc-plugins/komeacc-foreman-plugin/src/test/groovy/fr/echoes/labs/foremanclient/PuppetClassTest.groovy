@@ -1,18 +1,16 @@
 package fr.echoes.labs.foremanclient
 import spock.lang.Specification
-import fr.echoes.lab.foremanclient.PuppetClass
-import fr.echoes.lab.foremanclient.Parameter
 
 
 class PuppetClassTest extends Specification {
-	
+
 	def "ParameterClass.parameters should be empty"() {
 		given:
 			PuppetClass puppetClass = new PuppetClass()
 		expect:
 			puppetClass.parameters.size() == 0
 	}
-	
+
 	def "Should create and return a Parameter"() {
 		given:
 			PuppetClass puppetClass = new PuppetClass()
@@ -33,5 +31,5 @@ class PuppetClassTest extends Specification {
 			puppetClass.parameters.size() == 1
 			puppetClass.parameters.get("parameterName") == parameter
 	}
-		
+
 }

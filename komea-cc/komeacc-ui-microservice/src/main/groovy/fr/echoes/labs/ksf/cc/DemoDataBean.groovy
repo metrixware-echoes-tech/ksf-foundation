@@ -3,11 +3,11 @@
  */
 package fr.echoes.labs.ksf.cc
 
-import fr.echoes.lab.ksf.cc.sf.dao.ISFApplicationTypeDAO
-import fr.echoes.lab.ksf.cc.sf.dao.ISoftwareFactoryDAO
-import fr.echoes.lab.ksf.cc.sf.domain.SFApplication
-import fr.echoes.lab.ksf.cc.sf.domain.SFApplicationType
-import fr.echoes.lab.ksf.cc.sf.domain.SoftwareFactory
+import fr.echoes.labs.ksf.cc.sf.dao.ISFApplicationTypeDAO
+import fr.echoes.labs.ksf.cc.sf.dao.ISoftwareFactoryDAO
+import fr.echoes.labs.ksf.cc.sf.domain.SFApplication
+import fr.echoes.labs.ksf.cc.sf.domain.SFApplicationType
+import fr.echoes.labs.ksf.cc.sf.domain.SoftwareFactory
 import groovy.util.logging.Slf4j
 
 import javax.annotation.PostConstruct
@@ -44,44 +44,44 @@ import com.tocea.corolla.users.domain.UserGroup
 @Component
 @Slf4j
 public class DemoDataBean {
-	
+
 	static final String ADMIN_USERS = ADMIN_USERS
-	
+
 	@Autowired
 	def IRoleDAO					roleDAO
-	
+
 	@Autowired
 	def IUserDAO					userDAO
-	
+
 	@Autowired
 	def IUserGroupDAO				groupDAO
-	
+
 	@Autowired
 	def IProjectDAO					projectDAO
-	
+
 	@Autowired
 	def ISFApplicationTypeDAO		applicationTypeDAO
-	
+
 	@Autowired
 	def ISoftwareFactoryDAO			softwareFactoryDAO
-	
+
 	@Autowired
 	def PasswordEncoder				passwordEncoder
-	
+
 	@Autowired
 	def Gate						gate
-	
+
 	@SuppressWarnings("nls")
 	@PostConstruct
 	public void init() throws MalformedURLException {
-		
+
 		/*
 		 * Admin role
 		 */
 		final Role roleAdmin = this.newRole("Administrator", "Administrator role", Permission.list())
 		roleAdmin.roleProtected = true
 		this.gate.dispatch new EditRoleCommand(roleAdmin)
-		
+
 		/*
 		 * Roles
 		 */
@@ -90,7 +90,7 @@ public class DemoDataBean {
 		final Role roleTestManager = this.newRole("Test manager", "Test Manager", [Permission.REST])
 		final Role roleApplicationManager = this.newRole(	"Application manager",
 				"Application manager", [Permission.REST])
-		
+
 		/*
 		 * Users
 		 */
@@ -110,49 +110,49 @@ public class DemoDataBean {
 		this.newUser(	"Saroumane", "LeBlanch", "saroumane.leblanc@lotr.com",
 				"saroumane",
 				"fuckSauron..", roleAdmin)
-        
+
         def projet1 = new Project()
         projet1.setName("test")
         projet1.setOwnerId(jsnow.getId())
         projet1.setKey("keyTest")
         this.saveProject(projet1)
-        
+
             def projet2 = new Project()
         projet2.setName("test1")
         projet2.setOwnerId(jsnow.getId())
         projet2.setKey("keyTest1")
         this.saveProject(projet2)
-        
+
             def projet = new Project()
         projet.setName("test2")
         projet.setOwnerId(jsnow.getId())
         projet.setKey("keyTest2")
         this.saveProject(projet)
-		
+
 		/*
 		 * User Groups
 		 */
 		def developers = this.newGroup("developers", [jsnow, scarreau])
-		
-		
+
+
 		/*
 		 * Software Factory
 		 */
 		def softwareFactory = new SoftwareFactory(name: "Demo SF");
 		softwareFactoryDAO.save(softwareFactory);
-		
+
 		def foreman = new SFApplicationType(name: "foreman");
 		applicationTypeDAO.save(foreman)
-		
+
 		def foremanApp = new SFApplication(
-			name: "Foreman-1", 
+			name: "Foreman-1",
 			type: foreman,
 			softwareFactory: softwareFactory,
 			url: "http://"
 		);
-		
+
 	}
-	
+
 	/**
 	 * Creates a new role.
 	 *
@@ -174,7 +174,7 @@ public class DemoDataBean {
 		log.info("new role created [_id:"+role.getId()+"]")
 		return role
 	}
-	
+
 	/**
 	 * Creates a new role.
 	 *
@@ -197,7 +197,7 @@ public class DemoDataBean {
 		log.info("new role created [_id:"+role.getId()+"]")
 		return role
 	}
-	
+
 	public User newUser(final String _firstName, final String _lastName,
 			final String _email, final String _login,
 			final String _password, final Role _rolePO) {
@@ -216,45 +216,45 @@ public class DemoDataBean {
 		log.info("new user created [_id:"+user.getId()+"]")
 		return user
 	}
-	
+
 	public UserGroup newGroup(final String name, List<User> users) {
-		
+
 		def group = new UserGroup()
 		group.setName(name)
 		group.setUserIds(users.collect { it.login })
-		
+
 		this.gate.dispatch new CreateUserGroupCommand(group)
 		log.info("new user group created [_id: {}", group.getId())
-		
+
 		return group
-		
+
 	}
-	
+
 	public Project saveProject(project) {
-		
+
 		this.gate.dispatch new CreateProjectCommand(project)
-		
+
 		return project
-		
+
 	}
-	
+
 	public Project editProject(project) {
-		
+
 		this.gate.dispatch new EditProjectCommand(project)
-		
+
 		return project
 	}
-	
-	
-	
+
+
+
 	@PreDestroy
 	public void destroy() {
-		
+
 		projectDAO.deleteAll()
 		userDAO.deleteAll()
 		roleDAO.deleteAll()
 		groupDAO.deleteAll()
-		
+
 	}
-	
+
 }

@@ -8,12 +8,12 @@ import org.springframework.context.ApplicationContext;
 
 import com.tocea.corolla.products.dao.IProjectDAO;
 
-import fr.echoes.lab.ksf.cc.plugins.redmine.services.IRedmineService;
-import fr.echoes.lab.ksf.cc.plugins.redmine.services.RedmineErrorHandlingService;
-import fr.echoes.lab.ksf.extensions.annotations.Extension;
-import fr.echoes.lab.ksf.extensions.projects.IProjectLifecycleExtension;
-import fr.echoes.lab.ksf.extensions.projects.ProjectDto;
-import fr.echoes.lab.ksf.users.security.api.ICurrentUserService;
+import fr.echoes.labs.ksf.cc.plugins.redmine.services.IRedmineService;
+import fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineErrorHandlingService;
+import fr.echoes.labs.ksf.extensions.annotations.Extension;
+import fr.echoes.labs.ksf.extensions.projects.IProjectLifecycleExtension;
+import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
+import fr.echoes.labs.ksf.users.security.api.ICurrentUserService;
 
 /**
  * @author dcollard

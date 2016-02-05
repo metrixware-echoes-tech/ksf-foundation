@@ -13,8 +13,8 @@ import org.springframework.stereotype.Component;
 
 import com.tocea.corolla.users.domain.User;
 
-import fr.echoes.lab.ksf.users.security.api.PasswordGenerator;
-import fr.echoes.lab.ksf.users.security.config.LdapSecurityConfiguration;
+import fr.echoes.labs.ksf.users.security.api.PasswordGenerator;
+import fr.echoes.labs.ksf.users.security.config.LdapSecurityConfiguration;
 
 @Component
 public class LdapAttributesUserDetailsMapper implements AttributesMapper<User> {

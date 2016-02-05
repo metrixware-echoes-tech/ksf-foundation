@@ -5,8 +5,8 @@ import org.springframework.security.crypto.codec.Hex;
 import org.springframework.security.crypto.keygen.KeyGenerators;
 import org.springframework.stereotype.Service;
 
-import fr.echoes.lab.ksf.users.security.api.PasswordGenerator;
-import fr.echoes.lab.ksf.users.security.config.SecurityConfiguration;
+import fr.echoes.labs.ksf.users.security.api.PasswordGenerator;
+import fr.echoes.labs.ksf.users.security.config.SecurityConfiguration;
 
 /**
  * This service provides a method generate keys, salt and passwords.

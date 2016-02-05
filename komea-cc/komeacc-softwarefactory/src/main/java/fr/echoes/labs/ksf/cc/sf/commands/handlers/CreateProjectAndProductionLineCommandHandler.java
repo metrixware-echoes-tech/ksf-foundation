@@ -21,15 +21,15 @@ import com.tocea.corolla.products.utils.EntityKeyGenerator;
 import com.tocea.corolla.users.dto.UserDto;
 import com.tocea.corolla.utils.domain.KsfDomainException;
 
-import fr.echoes.lab.ksf.cc.sf.commands.CreateProductionLineCommand;
-import fr.echoes.lab.ksf.cc.sf.commands.CreateProjectAndProductionLineCommand;
-import fr.echoes.lab.ksf.cc.sf.dao.ISFApplicationDAO;
-import fr.echoes.lab.ksf.cc.sf.dao.ISFApplicationTypeDAO;
-import fr.echoes.lab.ksf.cc.sf.domain.ProductionLine;
-import fr.echoes.lab.ksf.cc.sf.domain.SFApplication;
-import fr.echoes.lab.ksf.cc.sf.domain.SFApplicationType;
-import fr.echoes.lab.ksf.cc.sf.dto.SFProjectDTO;
-import fr.echoes.lab.ksf.users.security.auth.UserDetailsRetrievingService;
+import fr.echoes.labs.ksf.cc.sf.commands.CreateProductionLineCommand;
+import fr.echoes.labs.ksf.cc.sf.commands.CreateProjectAndProductionLineCommand;
+import fr.echoes.labs.ksf.cc.sf.dao.ISFApplicationDAO;
+import fr.echoes.labs.ksf.cc.sf.dao.ISFApplicationTypeDAO;
+import fr.echoes.labs.ksf.cc.sf.domain.ProductionLine;
+import fr.echoes.labs.ksf.cc.sf.domain.SFApplication;
+import fr.echoes.labs.ksf.cc.sf.domain.SFApplicationType;
+import fr.echoes.labs.ksf.cc.sf.dto.SFProjectDTO;
+import fr.echoes.labs.ksf.users.security.auth.UserDetailsRetrievingService;
 
 @CommandHandler
 public class CreateProjectAndProductionLineCommandHandler implements ICommandHandler<CreateProjectAndProductionLineCommand, Project> {

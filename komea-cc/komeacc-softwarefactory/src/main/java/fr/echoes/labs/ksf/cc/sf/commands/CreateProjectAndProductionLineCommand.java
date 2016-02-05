@@ -4,7 +4,7 @@ import javax.validation.constraints.NotNull;
 
 import com.tocea.corolla.cqrs.annotations.CommandOptions;
 
-import fr.echoes.lab.ksf.cc.sf.dto.SFProjectDTO;
+import fr.echoes.labs.ksf.cc.sf.dto.SFProjectDTO;
 
 @CommandOptions
 public class CreateProjectAndProductionLineCommand {

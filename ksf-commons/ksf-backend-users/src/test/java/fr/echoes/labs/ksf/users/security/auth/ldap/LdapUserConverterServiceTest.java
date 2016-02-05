@@ -15,9 +15,9 @@ import org.springframework.security.ldap.DefaultSpringSecurityContextSource;
 import com.tocea.corolla.cqrs.gate.Gate;
 import com.tocea.corolla.users.domain.User;
 
-import fr.echoes.lab.ksf.users.security.auth.PasswordGeneratorService;
-import fr.echoes.lab.ksf.users.security.config.LdapSecurityConfiguration;
-import fr.echoes.lab.ksf.users.security.config.SecurityConfiguration;
+import fr.echoes.labs.ksf.users.security.auth.PasswordGeneratorService;
+import fr.echoes.labs.ksf.users.security.config.LdapSecurityConfiguration;
+import fr.echoes.labs.ksf.users.security.config.SecurityConfiguration;
 
 @RunWith(MockitoJUnitRunner.class)
 public class LdapUserConverterServiceTest {

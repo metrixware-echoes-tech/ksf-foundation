@@ -1,8 +1,5 @@
 package fr.echoes.labs.foremanclient
 import spock.lang.Specification
-import fr.echoes.lab.foremanclient.Module
-import fr.echoes.lab.foremanclient.Modules;
-import fr.echoes.lab.foremanclient.PuppetClass;
 
 
 class ModulesTest extends Specification {
@@ -34,5 +31,5 @@ class ModulesTest extends Specification {
 			modules.modules.size() == 1
 			modules.modules.get("moduleName") == module
 	}
-	
+
 }

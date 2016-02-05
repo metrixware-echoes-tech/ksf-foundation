@@ -8,7 +8,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import fr.echoes.lab.ksf.users.security.config.SecurityConfiguration;
+import fr.echoes.labs.ksf.users.security.config.SecurityConfiguration;
 
 
 

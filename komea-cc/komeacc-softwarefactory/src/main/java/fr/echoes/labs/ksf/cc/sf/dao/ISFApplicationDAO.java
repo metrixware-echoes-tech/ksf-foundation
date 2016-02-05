@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-import fr.echoes.lab.ksf.cc.sf.domain.SFApplication;
-import fr.echoes.lab.ksf.cc.sf.domain.SFApplicationType;
+import fr.echoes.labs.ksf.cc.sf.domain.SFApplication;
+import fr.echoes.labs.ksf.cc.sf.domain.SFApplicationType;
 
 public interface ISFApplicationDAO extends MongoRepository<SFApplication, String> {
 

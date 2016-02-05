@@ -18,9 +18,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import fr.echoes.lab.ksf.users.security.config.LdapSecurityConfiguration;
-import fr.echoes.lab.ksf.users.security.config.SecurityConfiguration;
-import fr.echoes.lab.ksf.users.security.utils.SecurityLoggers;
+import fr.echoes.labs.ksf.users.security.config.LdapSecurityConfiguration;
+import fr.echoes.labs.ksf.users.security.config.SecurityConfiguration;
+import fr.echoes.labs.ksf.users.security.utils.SecurityLoggers;
 
 /**
  * This class default initializes the KSF Security Authentication mechanism
