@@ -1,4 +1,4 @@
-package fr.echoes.lab.ksf.users.security.factories;
+package fr.echoes.labs.ksf.users.security.factories;
 
 import org.apache.commons.lang3.Validate;
 import org.springframework.beans.factory.annotation.Autowired;

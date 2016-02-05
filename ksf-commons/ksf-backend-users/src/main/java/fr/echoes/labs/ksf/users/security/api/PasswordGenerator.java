@@ -1,4 +1,4 @@
-package fr.echoes.lab.ksf.users.security.api;
+package fr.echoes.labs.ksf.users.security.api;
 
 /**
  * This service provides methods to generate salt, key, passwords.

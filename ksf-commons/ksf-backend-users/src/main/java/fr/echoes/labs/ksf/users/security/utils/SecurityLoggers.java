@@ -1,4 +1,4 @@
-package fr.echoes.lab.ksf.users.security.utils;
+package fr.echoes.labs.ksf.users.security.utils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

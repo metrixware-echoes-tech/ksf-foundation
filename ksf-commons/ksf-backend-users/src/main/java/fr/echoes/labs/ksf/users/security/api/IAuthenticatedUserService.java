@@ -1,4 +1,4 @@
-package fr.echoes.lab.ksf.users.security.api;
+package fr.echoes.labs.ksf.users.security.api;
 
 import com.tocea.corolla.users.dto.UserDto;
 /**

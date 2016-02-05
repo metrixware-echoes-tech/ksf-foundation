@@ -1,4 +1,4 @@
-package fr.echoes.lab.ksf.users.security.auth;
+package fr.echoes.labs.ksf.users.security.auth;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.codec.Hex;

@@ -1,4 +1,4 @@
-package fr.echoes.lab.ksf.users.security.auth.ldap;
+package fr.echoes.labs.ksf.users.security.auth.ldap;
 
 import java.text.MessageFormat;
 import java.util.Locale;

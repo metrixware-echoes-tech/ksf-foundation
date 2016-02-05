@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package fr.echoes.lab.ksf.users.security.auth;
+package fr.echoes.labs.ksf.users.security.auth;
 
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;

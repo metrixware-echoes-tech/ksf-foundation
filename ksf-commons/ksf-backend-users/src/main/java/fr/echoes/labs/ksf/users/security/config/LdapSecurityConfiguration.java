@@ -1,7 +1,7 @@
 /**
  *
  */
-package fr.echoes.lab.ksf.users.security.config;
+package fr.echoes.labs.ksf.users.security.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.security.ldap.DefaultSpringSecurityContextSource;

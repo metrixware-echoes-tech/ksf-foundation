@@ -1,4 +1,4 @@
-package fr.echoes.lab.ksf.users.security.auth.ldap.health;
+package fr.echoes.labs.ksf.users.security.auth.ldap.health;
 
 import java.util.List;
 
