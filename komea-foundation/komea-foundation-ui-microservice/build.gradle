@@ -17,31 +17,31 @@ apply plugin: 'groovy'
 apply plugin: 'spring-boot'
 
 jar {
-    baseName = 'komeacc-gui'
+    baseName = 'komea-foundation-gui'
     version = ''
 }
 
 war {
-  baseName = 'komea-cc'
+  baseName = 'komea-foundation'
 }
 
 configurations { providedRuntime }
 
 springBoot {
-    mainClass = "fr.echoes.lab.ksf.cc.KomeaCCGuiApplication"
+    mainClass = "fr.echoes.lab.ksf.cc.KomeaFoundationGuiApplication.groovy"
 }
 
 dependencies {
 
   compile project(":ksf-commons:ksf-backend-microservice")
-	compile project(":komea-cc:komeacc-softwarefactory")
-	compile project(":komea-cc:komeacc-plugin-api")
+	compile project(":komea-foundation:komea-foundation-softwarefactory")
+	compile project(":komea-foundation:komea-foundation-plugin-api")
 
 	// Plugins preloaded
-	compile project(":komea-cc:komeacc-plugins:komeacc-foreman-plugin")
-	compile project(":komea-cc:komeacc-plugins:komeacc-puppet-plugin")
-	compile project(":komea-cc:komeacc-plugins:komeacc-jenkins-plugin")
-	compile project(":komea-cc:komeacc-plugins:komeacc-redmine-plugin")
+	compile project(":komea-foundation:komea-foundation-plugins:komea-foundation-foreman-plugin")
+	compile project(":komea-foundation:komea-foundation-plugins:komea-foundation-puppet-plugin")
+	compile project(":komea-foundation:komea-foundation-plugins:komea-foundation-jenkins-plugin")
+	compile project(":komea-foundation:komea-foundation-plugins:komea-foundation-redmine-plugin")
 
 	compile("org.springframework.boot:spring-boot-starter-thymeleaf:${springBootVersion}")
   providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
