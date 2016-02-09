@@ -21,7 +21,7 @@ public class JsonMappingTest {
 		Modules modules = mapper.readValue(new File("src/test/resources/over.json"), Modules.class);
 
 		Assert.assertNotNull(modules);
-		Assert.assertEquals(11, modules.modules.size());
+		Assert.assertEquals(13, modules.modules.size());
 	}
 	
 }
