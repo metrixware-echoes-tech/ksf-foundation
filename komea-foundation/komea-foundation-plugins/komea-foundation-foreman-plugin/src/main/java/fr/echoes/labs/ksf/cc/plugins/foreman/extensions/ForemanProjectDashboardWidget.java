@@ -69,15 +69,15 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
 	@Override
 	public List<MenuAction> getDropdownActions() {
 
-		final MenuAction actionCreateTarget = new MenuAction();
-		actionCreateTarget.setActionName("Create Target");
-		actionCreateTarget.setUrl("javascript:displayCreateTargetModal()");
-
 		final MenuAction actionCreateEnv = new MenuAction();
 		actionCreateEnv.setActionName("Create Environment");
 		actionCreateEnv.setUrl("javascript:displayCreateEnvModal()");
 
-		return Lists.newArrayList(actionCreateTarget, actionCreateEnv);
+		final MenuAction actionCreateTarget = new MenuAction();
+		actionCreateTarget.setActionName("Create Target");
+		actionCreateTarget.setUrl("javascript:displayCreateTargetModal()");
+
+		return Lists.newArrayList(actionCreateEnv, actionCreateTarget);
 
 	}
 
