@@ -23,7 +23,7 @@ public class PluginMVCExtensionManager implements IPluginMVCExtensionManager {
 	private IPluginGuiControllerExtension[] extensions;
 	
 	/* (non-Javadoc)
-	 * @see fr.echoes.lab.ksf.cc.extmanager.ui.IPluginMVCExtensionManager#getGuiController(java.lang.String)
+	 * @see fr.echoes.labs.ksf.cc.extmanager.ui.IPluginMVCExtensionManager#getGuiController(java.lang.String)
 	 */
 	@Override
 	public IPluginGuiControllerExtension getGuiController(final String _pluginGuiExtension) {

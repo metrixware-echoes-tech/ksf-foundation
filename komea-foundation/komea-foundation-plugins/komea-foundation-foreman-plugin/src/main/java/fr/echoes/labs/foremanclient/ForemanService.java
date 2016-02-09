@@ -146,7 +146,7 @@ public class ForemanService implements IForemanService {
      }
 
      /* (non-Javadoc)
-	 * @see fr.echoes.lab.foremanclient.IForemanService#createProject(fr.echoes.lab.foremanapi.IForemanApi, java.lang.String, java.lang.String)
+	 * @see fr.echoes.labs.foremanclient.IForemanService#createProject(fr.echoes.labs.foremanapi.IForemanApi, java.lang.String, java.lang.String)
 	 */
     @Override
 	public void createProject(IForemanApi api, String projectName, String userId) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
@@ -159,7 +159,7 @@ public class ForemanService implements IForemanService {
      }
 
     /* (non-Javadoc)
-	 * @see fr.echoes.lab.foremanclient.IForemanService#deleteProject(fr.echoes.lab.foremanapi.IForemanApi, java.lang.String)
+	 * @see fr.echoes.labs.foremanclient.IForemanService#deleteProject(fr.echoes.labs.foremanapi.IForemanApi, java.lang.String)
 	 */
     @Override
 	public void deleteProject(IForemanApi api, String projectName) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
@@ -284,7 +284,7 @@ public class ForemanService implements IForemanService {
      }
 
      /* (non-Javadoc)
-	 * @see fr.echoes.lab.foremanclient.IForemanService#createHost(fr.echoes.lab.foremanapi.IForemanApi, fr.echoes.lab.ksf.cc.plugins.foreman.model.ForemanHostDescriptor)
+	 * @see fr.echoes.labs.foremanclient.IForemanService#createHost(fr.echoes.labs.foremanapi.IForemanApi, fr.echoes.labs.ksf.cc.plugins.foreman.model.ForemanHostDescriptor)
 	 */
     @Override
 	public Host createHost(IForemanApi api, ForemanHostDescriptor parameterObject) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
@@ -422,7 +422,7 @@ public class ForemanService implements IForemanService {
      }
 
      /* (non-Javadoc)
-	 * @see fr.echoes.lab.foremanclient.IForemanService#importPuppetClasses(fr.echoes.lab.foremanapi.IForemanApi, java.lang.String)
+	 * @see fr.echoes.labs.foremanclient.IForemanService#importPuppetClasses(fr.echoes.labs.foremanapi.IForemanApi, java.lang.String)
 	 */
     @Override
 	public void importPuppetClasses(IForemanApi api, String smartProxyId) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
@@ -430,7 +430,7 @@ public class ForemanService implements IForemanService {
      }
 
      /* (non-Javadoc)
-	 * @see fr.echoes.lab.foremanclient.IForemanService#getModulesPuppetClassParameters(fr.echoes.lab.foremanapi.IForemanApi, java.lang.String, boolean)
+	 * @see fr.echoes.labs.foremanclient.IForemanService#getModulesPuppetClassParameters(fr.echoes.labs.foremanapi.IForemanApi, java.lang.String, boolean)
 	 */
     @Override
 	public String getModulesPuppetClassParameters(IForemanApi api , String environmentName, boolean allParameters) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException, JsonGenerationException, JsonMappingException, IOException {
@@ -501,7 +501,7 @@ public class ForemanService implements IForemanService {
      }
 
      /* (non-Javadoc)
-	 * @see fr.echoes.lab.foremanclient.IForemanService#hostGroupExists(fr.echoes.lab.foremanapi.IForemanApi, java.lang.String)
+	 * @see fr.echoes.labs.foremanclient.IForemanService#hostGroupExists(fr.echoes.labs.foremanapi.IForemanApi, java.lang.String)
 	 */
     @Override
 	public boolean hostGroupExists(IForemanApi api , String hostGroupName) {
@@ -524,7 +524,7 @@ public class ForemanService implements IForemanService {
 
 
      /* (non-Javadoc)
-	 * @see fr.echoes.lab.foremanclient.IForemanService#hostExists(fr.echoes.lab.foremanapi.IForemanApi, java.lang.String)
+	 * @see fr.echoes.labs.foremanclient.IForemanService#hostExists(fr.echoes.labs.foremanapi.IForemanApi, java.lang.String)
 	 */
     @Override
 	public boolean hostExists(IForemanApi api, String hostName) {
@@ -545,7 +545,7 @@ public class ForemanService implements IForemanService {
      }
 
      /* (non-Javadoc)
-	 * @see fr.echoes.lab.foremanclient.IForemanService#updateValue(fr.echoes.lab.foremanapi.IForemanApi, java.lang.String, java.lang.String, java.lang.Object, java.lang.Boolean)
+	 * @see fr.echoes.labs.foremanclient.IForemanService#updateValue(fr.echoes.labs.foremanapi.IForemanApi, java.lang.String, java.lang.String, java.lang.Object, java.lang.Boolean)
 	 */
     @Override
 	public void updateValue(IForemanApi api, String smartClassParamId, String hostName, Object value, Boolean usePuppetDefault) {

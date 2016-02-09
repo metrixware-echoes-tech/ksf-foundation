@@ -28,7 +28,7 @@ war {
 configurations { providedRuntime }
 
 springBoot {
-    mainClass = "fr.echoes.lab.ksf.cc.KomeaFoundationGuiApplication.groovy"
+    mainClass = "fr.echoes.labs.ksf.cc.KomeaFoundationGuiApplication"
 }
 
 dependencies {

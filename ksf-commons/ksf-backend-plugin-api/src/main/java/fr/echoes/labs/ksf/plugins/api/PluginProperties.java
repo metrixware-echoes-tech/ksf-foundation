@@ -36,7 +36,7 @@ public class PluginProperties implements IPluginPropertiesDefinition {
 	 * (non-Javadoc)
 	 *
 	 * @see
-	 * fr.echoes.lab.ksf.plugins.api.IPluginPropertiesDefinition#getProperties()
+	 * fr.echoes.labs.ksf.plugins.api.IPluginPropertiesDefinition#getProperties()
 	 */
 	@Override
 	public Collection<PluginProperty> getProperties() {

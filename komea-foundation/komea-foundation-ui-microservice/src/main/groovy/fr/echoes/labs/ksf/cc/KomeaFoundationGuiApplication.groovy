@@ -16,9 +16,9 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @EnableMongoRepositories(value=["com.tocea", "fr.echoes.labs"])
 @EnableMongoAuditing
 //@EnableWebMvc
-public class KomeaCCGuiApplication {
+public class KomeaFoundationGuiApplication {
 
 	public static void main(final String[] args) {
-		SpringApplication.run(KomeaCCGuiApplication.class, args)
+		SpringApplication.run(KomeaFoundationGuiApplication.class, args)
 	}
 }

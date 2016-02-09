@@ -1,6 +1,6 @@
 package fr.echoes.labs.ksf.cc.ui;
 
-import fr.echoes.labs.ksf.cc.KomeaCCGuiApplication;
+import fr.echoes.labs.ksf.cc.KomeaFoundationGuiApplication;
 
 import org.junit.After;
 import org.junit.runner.RunWith;
@@ -14,7 +14,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 @ActiveProfiles({ "test" })
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = { KomeaCCGuiApplication.class })
+@SpringApplicationConfiguration(classes = { KomeaFoundationGuiApplication.class })
 @WebAppConfiguration
 @IntegrationTest({"server.port=0", "management.port=0"})
 public abstract class AbstractSpringTest {

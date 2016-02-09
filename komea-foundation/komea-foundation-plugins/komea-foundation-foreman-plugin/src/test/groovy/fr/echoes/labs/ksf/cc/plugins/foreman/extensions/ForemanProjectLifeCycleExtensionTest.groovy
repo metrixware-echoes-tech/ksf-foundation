@@ -1,4 +1,4 @@
-package fr.echoes.lab.ksf.cc.plugins.foreman.extensions
+package fr.echoes.labs.ksf.cc.plugins.foreman.extensions
 
 import spock.lang.Specification
 
