@@ -114,7 +114,7 @@ public class RedmineProjectDashboardWidget implements ProjectDashboardWidget {
 
 			@Override
 			public String getTitle() {
-				return "forge (Redmine)";
+				return "Forge (Redmine)";
 			}
 
 			@Override
