@@ -33,6 +33,11 @@ if (project.hasProperty('remote')) {
     println ("WARNING : Utilisation de Nexus en local (Echoes/Lab) $nexusURL")
 }
 
+if (project.version.endsWith('-SNAPSHOT')) {
+  ext.isRelease = false
+}else{
+  ext.isRelease = true
+}
 def getGitBranch()  {
 	
     def gitExe = GIT
@@ -292,9 +297,13 @@ allprojects {
     }
 	
     uploadArchives {
+        def publishURL = nexusURL+"/nexus/content/repositories/ksf"
+        if (!isRelease) {
+          publishURL += "-snapshots"
+        }
         repositories {
             mavenDeployer {
-                repository(url: "http://zeus.tocea:8081/nexus/content/repositories/corolla")
+                repository(url: publishURL)
                 {
                     authentication(userName: mavenUser, password: mavenPassword)
                 }
