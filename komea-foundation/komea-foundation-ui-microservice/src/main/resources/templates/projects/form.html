@@ -19,7 +19,7 @@
 	        </div>	
 	        <div class="alert alert-info alert-dismissible" role="alert">
 			  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			  To create a new project in <strong>KSF Command and Control</strong> you will need to provide <strong>a project's name</strong> and select all the <strong>tools</strong> that will be used in the project <i>(Foreman, Puppet, Redmine...)</i>.
+			  To create a new project in <strong>Komea Foundation</strong> you will need to provide <strong>a project's name</strong> and select all the <strong>tools</strong> that will be used in the project <i>(Foreman, Puppet, Redmine...)</i>.
 			</div>
 	        <ul class="bg-danger" th:if="${#fields.hasErrors('global')}">
           		<li th:each="err : ${#fields.errors('global')}" class="text-danger" th:text="${err}">Input is incorrect</li>
@@ -47,34 +47,13 @@
 					<label class="col-md-3 control-label" style="padding-top: 30px;">Select the tool(s) that will be used for this project :</label>
 	              <div class="col-sm-7">	              
 	              	<ul class="app-list">
-	              		<li class="disabled" data-item="redmine">
-	              			<img th:src="@{/pictures/redmine.png}"/>
-	              			<label>Redmine</label>
-	              		</li>
-	              		<li class="active" data-item="foreman">
-	              			<img th:src="@{/pictures/foreman.png}"/>
-	              			<label>Foreman</label>
-	              		</li>
-	              		<li class="active" data-item="puppet">
-	              			<img th:src="@{/pictures/puppet.png}"/>
-	              			<label>Puppet</label>
-	              		</li>
-	              		<li class="disabled" data-item="git">
-	              			<img th:src="@{/pictures/git.png}"/>
-	              			<label>Git</label>
-	              		</li>
-	              		<li class="disabled" data-item="jenkins">
-	              			<img th:src="@{/pictures/jenkins.png}"/>
-	              			<label>Jenkins</label>
-	              		</li>
+	              		<li th:each="widget : ${@projectDashboardWidgets.getDashboardWidgets()}" th:attr="data-item=@{${widget.getTitle()}}">
+	              			<img th:src="@{${widget.getIconUrl()}}"/>
+	              			<label th:text="@{${widget.getTitle()}}"></label>
+	              		</li>	              	
 	              	</ul>
 	              	<div class="hidden">
-	              		<input name="applications[]" id="applications_" value="jenkins" type="checkbox"/> Jenkins
-	                	<input name="applications[]" id="applications_" value="redmine" type="checkbox"/> Redmine
-	                	<input name="applications[]" id="applications_" value="foreman" type="checkbox"/> Foreman
-	                	<input name="applications[]" id="applications_" value="git" type="checkbox"/> Git
-	                	<input name="applications[]" id="applications_" value="jenkins" type="checkbox"/> Jenkins
-	                	<input name="applications[]" id="applications_" value="puppet" type="checkbox"/> Puppet
+	              		<input name="applications[]" id="applications_" type="checkbox" th:each="widget : ${@projectDashboardWidgets.getDashboardWidgets()}" th:value="@{${widget.getTitle()}}"/>
 	              	</div>
 	              </div>
 	            </div>																									
@@ -99,18 +78,18 @@
 					displayLoadingScreen('Creating project...');
 				});
 			});
-			/*$(document).ready(function() {
+			$(document).ready(function() {
 				$('.app-list li').click(function() {
 					if ($(this).hasClass('disabled')) {
 						return false;
 					}
 					selectItem(this);
 					var item = $(this).data('item');
-					if (item == "foreman") {
-						selectItem($('.app-list li[data-item=puppet]'));
+					if (item == "Foreman") {
+						selectItem($('.app-list li[data-item=Puppet]'));
 					}
-					if (item == "puppet") {
-						selectItem($('.app-list li[data-item=foreman]'));
+					if (item == "Puppet") {
+						selectItem($('.app-list li[data-item=Foreman]'));
 					}
 					return true;
 				});
@@ -128,7 +107,7 @@
 						$(input).prop('checked', !checked);
 					}
 				});
-			}*/
+			}
 		</script>
 	</div>
 </body>

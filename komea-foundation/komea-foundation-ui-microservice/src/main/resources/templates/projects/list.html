@@ -11,7 +11,7 @@
                 <div class="content">
                 	<div class="alert alert-info alert-dismissible" role="alert">
 					  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					  Welcome to <strong>KSF Command and Control</strong>! From this panel, you will be able to see the list of all your projects managed by Komea Software Factory.
+					  Welcome to <strong>Komea Foundation</strong>! From this panel, you will be able to see the list of all your projects managed by Komea Software Factory.
 					</div>
                     <h1>
                         Projects
@@ -33,9 +33,8 @@
                                     <a th:text="${prod.project.name}" th:href="@{/ui/projects/}+${prod.project.key}"></a>
                                 </td>
                                 <td th:text="${prod.user.firstName}+' '+${prod.user.lastName}"></td>
-                            	<td class="project-list-tools">
-                            		<img th:src="@{/pictures/foreman.png}" alt="Foreman" data-toggle="tooltip" data-placement="bottom" title="Foreman" />
-                            		<img th:src="@{/pictures/puppet.png}" alt="Puppet" data-toggle="tooltip" data-placement="bottom" title="Puppet" />
+                      			<td class="project-list-tools">
+                            		<img th:src="@{${widget.getIconUrl()}}" th:alt="@{${widget.getTitle()}}" data-toggle="tooltip" data-placement="bottom" th:title="@{${widget.getTitle()}}" th:each="widget : ${@projectDashboardWidgets.getDashboardWidgets()}" />
                             	</td>
                             	<td>
                             		<a th:href="@{/ui/projects/}+${prod.project.key}" class="btn btn-primary">

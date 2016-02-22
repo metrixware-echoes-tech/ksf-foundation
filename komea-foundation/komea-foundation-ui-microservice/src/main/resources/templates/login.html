@@ -42,15 +42,9 @@
             <iframe id="formanFrame" name="formanFrame" th:src="${@foremanConfiguration.getForemanUrl()}" width="00" height="00">
             </iframe>
         </div>
-        <footer>
-            <div class="container text-center">
-                <hr/>
-                <p class="text-muted" style="color: white;">
-                    KSF v1.0.3 @ 2015 
-                    <a href="http://www.echoes.fr/" style="color: white;">Echoes</a>
-                </p>
-            </div>
-        </footer>
+
+		<footer th:include="footer :: footer" style="color: white;" />
+
         <script type="text/javascript" th:inline="text">
             var pageData = {
                 'foremanUrl': '[[${@foremanConfiguration.getForemanUrl()}]]'
@@ -58,7 +52,6 @@
             }
 
         </script>
-
 
 
         <script th:src="@{/js/jquery.min.js}" src="../static/js/jquery.min.js" type="text/javascript" />
