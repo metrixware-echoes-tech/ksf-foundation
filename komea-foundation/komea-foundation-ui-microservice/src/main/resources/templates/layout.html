@@ -3,7 +3,7 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
     <head>
-        <title>Komea Software Factory | Command and Control</title>
+        <title>KSF</title>
 		<link rel="icon" type="image/png" th:href="@{/pictures/KSF-favicon.png}" href="../static/pictures/KSF-favicon.png" />
         <!-- Bootstrap -->
 		<link th:href="@{/assets/bootstrap/css/bootstrap.min.css}" href="../static/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
@@ -73,16 +73,10 @@
 				</p>
 			</div>
 		</aside>
+
         <!-- Footer -->
-        <footer>
-	      <div class="container text-center">
-	        <hr/>
-	        <p class="text-muted">
-	          @ 2015
-	          <a href="http://www.echoes.fr/" target="_blank">Echoes</a>
-	        </p>
-	      </div>
-	    </footer>
+		<footer th:include="footer :: footer" />
+
         <!-- jQuery -->
 		<script th:src="@{/assets/jquery/jquery.js}" src="../static/assets/jquery/jquery.js" type="text/javascript" />
 		<script th:src="@{/assets/jquery-ui/jquery-ui.js}" src="../static/assets/jquery-ui/jquery-ui.js" type="text/javascript" />
@@ -107,6 +101,7 @@
 				$('footer').removeClass('hidden');
 			}
 		</script>
+
 		<div layout:fragment="footer" />
 
 
