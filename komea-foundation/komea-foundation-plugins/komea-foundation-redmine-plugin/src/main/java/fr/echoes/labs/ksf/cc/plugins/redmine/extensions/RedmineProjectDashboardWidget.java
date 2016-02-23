@@ -80,7 +80,7 @@ public class RedmineProjectDashboardWidget implements ProjectDashboardWidget {
 
 		try {
 
-			final RedmineQuery query = new RedmineQuery.Builder().projectName("taskadapter").build();
+			final RedmineQuery query = new RedmineQuery.Builder().projectName(projectName).build();
 
 			final List<RedmineIssue> issues = this.redmineService.queryIssues(query);
 

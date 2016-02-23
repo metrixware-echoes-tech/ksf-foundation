@@ -8,7 +8,7 @@ public class RedmineIssue {
 
 	private final Integer id;
 
-    private String name;
+    private String subject;
 	private String tracker;
     private String targetVersion;
     private String category;
@@ -23,14 +23,6 @@ public class RedmineIssue {
 
     public Integer getId() {
     	return this.id;
-    }
-
-    public String getName() {
-    	return this.name;
-    }
-
-    public void setName(String name) {
-    	this.name = name;
     }
 
     public String getTracker() {
@@ -79,5 +71,13 @@ public class RedmineIssue {
 
 	public void setAssignee(String assignee) {
 		this.assignee = assignee;
+	}
+
+	public String getSubject() {
+		return subject;
+	}
+
+	public void setSubject(String subject) {
+		this.subject = subject;
 	}
 }

@@ -8,9 +8,8 @@
 	<thead>
 		<tr>
 			<th>#</th>
-			<th>Tracker</th>
 			<th>Version cible</th>
-			<th>Catégorie</th>
+			<!--/* <th>Catégorie</th> */-->
 			<th>Status</th>
 			<th>Priorité</th>
 			<th>Sujet</th>
@@ -20,12 +19,11 @@
 	<tbody>
 		<tr th:each="issue : ${issues}">
 			<td th:text="${issue.getId()}"></td>
-			<td th:text="${issue.getTracker()}"></td>
 			<td th:text="${issue.getTargetVersion()}"></td>
-			<td th:text="${issue.getCategory()}"></td>
+			<!--/* <td th:text="${issue.getCategory()}"></td> */-->
 			<td th:text="${issue.getStatus()}"></td>
 			<td th:text="${issue.getPriority()}"></td>
-			<td th:text="${issue.getName()}"></td>
+			<td th:text="${issue.getSubject()}"></td>
 			<td th:text="${issue.getAssignee()}"></td>
 		</tr>
 	</tbody>

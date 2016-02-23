@@ -7,6 +7,10 @@ import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.IProjectDashboardE
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.IProjectDashboardWidgets;
 import fr.echoes.labs.ksf.extensions.annotations.Extension;
 
+/**
+ * @author dcollard
+ *
+ */
 @Order(value=1)
 @Extension
 public class RedmineProjectDashboardExtension implements IProjectDashboardExtension {

@@ -91,25 +91,34 @@ public class RedmineService implements IRedmineService {
 	public List<RedmineIssue> queryIssues(RedmineQuery query) throws RedmineExtensionException {
 		Objects.requireNonNull(query);
 
-		final List<RedmineIssue> redmineIssues = new ArrayList<>();
 
-		final RedmineManager mgr = createRedmineManager();
-		if (mgr == null) {
+		final RedmineManager redmineManager = createRedmineManager();
+		if (redmineManager == null) {
 			return Collections.<RedmineIssue>emptyList();
 		}
 
 		List<Issue> issues;
+		final List<RedmineIssue> redmineIssues;
+		final String projectName = query.getProjectName();
+
 		try {
-			final IssueManager issueManager = mgr.getIssueManager();
-			issues = issueManager.getIssues(query.getProjectName(), null);
+			final IssueManager issueManager = redmineManager.getIssueManager();
+			
+			final String projectIdentifier = findProjectIdentifier(redmineManager, projectName);
+			if (projectIdentifier == null) {
+				throw new RedmineExtensionException("Cannot find project " + projectName); 
+			}
+
+			issues = issueManager.getIssues(projectIdentifier, null);
+			redmineIssues = new ArrayList<>(issues.size());
+
 		} catch (final RedmineException e) {
-			throw new RedmineExtensionException("Failed to list the issues of " + query.getProjectName(), e);
+			throw new RedmineExtensionException("Failed to list the issues of " + projectName, e);
 		}
+		
+
 		for (final Issue issue : issues) {
-
-			final RedmineIssue redmiIssue = createRedmineIssue(issue);
-			redmineIssues.add(redmiIssue);
-
+			redmineIssues.add(createRedmineIssue(issue));			
 		}
 		return redmineIssues;
 	}
@@ -127,7 +136,7 @@ public class RedmineService implements IRedmineService {
 
 		redmiIssue.setCategory(categoryName);
 
-		redmiIssue.setName(StringUtils.defaultString(issue.getSubject()));
+		redmiIssue.setSubject(StringUtils.defaultString(issue.getSubject()));
 
 		redmiIssue.setPriority(StringUtils.defaultString(issue.getPriorityText()));
 		redmiIssue.setStatus(StringUtils.defaultString(issue.getStatusName()));
@@ -142,4 +151,17 @@ public class RedmineService implements IRedmineService {
 		redmiIssue.setTracker(trackerName);
 		return redmiIssue;
 	}
+	
+	
+	private String findProjectIdentifier(RedmineManager redmineManager, String projectName) throws RedmineException {
+		final ProjectManager projectManager = redmineManager.getProjectManager();
+
+		for (Project project : projectManager.getProjects()) {
+			if (projectName.equals(project.getName())) {
+				return project.getIdentifier();
+			}
+		}
+		return null;
+	}
+	
 }
