@@ -1,5 +1,6 @@
 package fr.echoes.labs.komea.foundation.plugins.git.services;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 /**
@@ -9,19 +10,17 @@ import org.springframework.stereotype.Service;
 @Service("gitConfiguration")
 public class GitConfigurationService {
 
-//    @Value("${ksf.git.featurePrefix}")
-//    private String featurePrefix;
-//    
-//    @Value("${ksf.git.releasePrefix}")
-//    private String releasePrefix;
-//
-//    @Value("${ksf.git.hotFixPrefix}")
-//    private String hotFixPrefix;
-//    
-//    @Value("${ksf.git.supportPrefix}")
-//    private String supportPrefix;
-//    
-//    @Value("${ksf.git.tagPrefix}")
-//    private String tagPrefix;
+	@Value("${ksf.scmUrl}")
+	private String scmUrl;
 
+	@Value("${ksf.git.workingDirectory}")
+	private String gitWorkingdirectory;
+
+	public String getScmUrl() {
+		return this.scmUrl;
+	}
+
+	public String getGitWorkingdirectory() {
+		return this.gitWorkingdirectory;
+	}
 }

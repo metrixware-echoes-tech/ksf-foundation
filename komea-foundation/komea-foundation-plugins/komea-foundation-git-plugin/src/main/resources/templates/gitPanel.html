@@ -1,2 +1,26 @@
 <div class="alert alert-danger" role="alert" th:text="${gitError}" th:if="${gitError != null}">
 </div>
+
+
+<div class="input-group">
+	<input type="text" class="form-control" readonly="" value="https://github.com/FreeCodeCamp/FreeCodeCamp.git" />
+	<span class="input-group-btn">
+		<button class="btn btn-default" type="button" data-clipboard-text="https://github.com/FreeCodeCamp/FreeCodeCamp.git"  id="git-repo-copy-button"><span class="glyphicon glyphicon-copy"></span></button>
+	</span>
+</div>
+
+
+<script type="text/javascript">
+
+document.addEventListener("DOMContentLoaded", function(event) {
+
+	var client = new ZeroClipboard( document.getElementById("git-repo-copy-button") );
+	client.on( "ready", function( readyEvent ) {
+
+			client.on( "aftercopy", function( event ) {
+				event.target.style.display = "none";
+			});
+	});
+});
+
+</script>

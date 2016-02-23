@@ -9,6 +9,7 @@ import fr.echoes.labs.komea.foundation.plugins.git.GitExtensionException;
  */
 public interface IGitService {
 
+
 	/**
 	 * Creates a new project.
 	 *
@@ -24,5 +25,6 @@ public interface IGitService {
 	 * @return
 	 */
 	public void deleteProject(String projectName) throws GitExtensionException;
+
 
 }

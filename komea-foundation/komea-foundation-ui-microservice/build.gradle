@@ -1,5 +1,5 @@
 
-project.description = "Komea Software Factory : Command & Control"
+project.description = "Komea Software Factory : Komea Foundation"
 
 buildscript {
     repositories {
@@ -63,6 +63,7 @@ bower {
   'jquery'('2.0.2')
   'jquery-ui'('1.11.4')
   'jquery-resize'('https://github.com/sdecima/javascript-detect-element-resize.git')
+  'zeroclipboard'('https://github.com/zeroclipboard/zeroclipboard.git')
 
   'components-font-awesome'('4.3.0')
   'ionicons'('2.0.1')

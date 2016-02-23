@@ -5,10 +5,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.core.annotation.Order;
 
 import com.tocea.corolla.products.dao.IProjectDAO;
 
 import fr.echoes.labs.komea.foundation.plugins.git.services.GitErrorHandlingService;
+import fr.echoes.labs.komea.foundation.plugins.git.services.IGitService;
 import fr.echoes.labs.ksf.extensions.annotations.Extension;
 import fr.echoes.labs.ksf.extensions.projects.IProjectLifecycleExtension;
 import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
@@ -18,6 +20,7 @@ import fr.echoes.labs.ksf.users.security.api.ICurrentUserService;
  * @author dcollard
  *
  */
+@Order(value=2)
 @Extension
 public class GitProjectLifeCycleExtension implements IProjectLifecycleExtension {
 
@@ -25,6 +28,9 @@ public class GitProjectLifeCycleExtension implements IProjectLifecycleExtension 
 
 	@Autowired
 	private GitErrorHandlingService errorHandler;
+
+	@Autowired
+	private IGitService gitService;
 
 	@Autowired
 	private IProjectDAO projectDAO;
