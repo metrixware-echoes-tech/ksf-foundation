@@ -18,6 +18,9 @@ public class JenkinsConfigurationService {
 
 	@Value("${ksf.scmUrl}")
 	private String scmUrl;
+	
+	@Value("${ksf.jenkins.useFolders}")
+	private boolean useFolders;
 
 	public String getUrl() {
         if ('/' == this.url.charAt(this.url.length() - 1)) {
@@ -32,5 +35,9 @@ public class JenkinsConfigurationService {
 
 	public String getScmUrl() {
 		return this.scmUrl;
+	}
+
+	public boolean useFolders() {
+		return this.useFolders;
 	}
 }

@@ -27,5 +27,12 @@ public interface IJenkinsService {
 	 */
 	public void deleteProject(String projectName) throws JenkinsExtensionException;
 
+	/**
+	 * Returns the build history.
+	 * 
+	 * @param projectName the project name.
+	 * @return a list of {@link JenkinsBuildInfo}. Is never {@code null}. 
+	 * @throws JenkinsExtensionException
+	 */
 	public List<JenkinsBuildInfo> getBuildInfo(String projectName) throws JenkinsExtensionException; 
 }

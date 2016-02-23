@@ -1,31 +1,39 @@
 package fr.echoes.labs.komea.foundation.plugins.jenkins.services;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * @author dcollard
  *
  */
 public class JenkinsBuildInfo {
 
-	private long time;
-	private String id;
+	private final int number;
+	private final String buildUrl;
+	private final String time;
 
-	JenkinsBuildInfo(String id, long time) {
-		this.id = id;
-		this.time = time;
-	}
-	
-	public String getId() {
-		return id;
+	JenkinsBuildInfo(int number, long timestamp, String buildUrl) {
+		this.number = number;
+		this.time = convert(timestamp);
+		this.buildUrl = buildUrl;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	private String convert(long timestamp) {
+		final SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss");
+		return dateFormat.format(new Date(timestamp));
 	}
-	
-	public long getTime() {
-		return time;
+
+	public int getNumber() {
+		return this.number;
 	}
-	public void setTime(long time) {
-		this.time = time;
+
+	public String getTime() {
+		return this.time;
 	}
+
+	public String getBuildUrl() {
+		return this.buildUrl;
+	}
+
 }

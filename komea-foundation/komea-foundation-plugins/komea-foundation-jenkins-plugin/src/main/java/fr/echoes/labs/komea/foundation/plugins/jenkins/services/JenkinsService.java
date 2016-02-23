@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,9 +16,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.common.base.Charsets;
+import com.google.common.base.Optional;
 import com.google.common.io.Resources;
 import com.offbytwo.jenkins.JenkinsServer;
-import com.offbytwo.jenkins.client.JenkinsHttpClient;
+import com.offbytwo.jenkins.model.Build;
+import com.offbytwo.jenkins.model.FolderJob;
+import com.offbytwo.jenkins.model.JobWithDetails;
 
 import fr.echoes.labs.komea.foundation.plugins.jenkins.JenkinsExtensionException;
 
@@ -32,6 +36,10 @@ import fr.echoes.labs.komea.foundation.plugins.jenkins.JenkinsExtensionException
 @Service
 public class JenkinsService implements IJenkinsService {
 
+	private static final String DEVELOP = "develop";
+
+	private static final String MASTER = "master";
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(JenkinsService.class);
 
 	@Autowired
@@ -40,18 +48,32 @@ public class JenkinsService implements IJenkinsService {
 	@Override
 	public void createProject(String projectName)
 			throws JenkinsExtensionException {
-		JenkinsHttpClient client;
+		final JenkinsServer jenkins;
 		try {
-			client = new JenkinsHttpClient(new URI(configurationService.getUrl()));
+			jenkins = createJenkinsClient();
 
 			final String resolvedXmlConfig = createXmlConfig(projectName);
 
-			client.post_xml("/createItem?name=" + projectName, resolvedXmlConfig, false);
-		} catch (final URISyntaxException e) {
-			LOGGER.error("Failed to create Jenkins job", e);
-		} catch (final IOException e) {
-			LOGGER.error("Failed to create Jenkins job", e);
+			if (this.configurationService.useFolders()) {
+				jenkins.createFolder(projectName);
+				final JobWithDetails root = jenkins.getJob(projectName);
+				final Optional<FolderJob> projectFolder = jenkins.getFolderJob(root);
+				jenkins.createJob(projectFolder.get(), MASTER, resolvedXmlConfig);
+				jenkins.createJob(projectFolder.get(), DEVELOP, resolvedXmlConfig);
+
+			} else {
+				jenkins.createJob(projectName + " - " + MASTER, resolvedXmlConfig);
+				jenkins.createJob(projectName + " - " + DEVELOP, resolvedXmlConfig);
+			}
+
+
+		} catch (final Exception e) {
+			throw new JenkinsExtensionException("Failed to create Jenkins job", e);
 		}
+	}
+
+	private JenkinsServer createJenkinsClient() throws URISyntaxException {
+		return new JenkinsServer(new URI(this.configurationService.getUrl()));
 	}
 
 	private String createXmlConfig(String projectName) throws IOException {
@@ -80,7 +102,26 @@ public class JenkinsService implements IJenkinsService {
 	@Override
 	public List<JenkinsBuildInfo> getBuildInfo(String projectName)
 			throws JenkinsExtensionException {
+		JenkinsServer jenkins;
+		try {
+			jenkins = createJenkinsClient();
+			final JobWithDetails root = jenkins.getJob(projectName);
 
-		return null;
+			final List<Build> builds = root.getBuilds();
+			final List<JenkinsBuildInfo> buildsInfo = new ArrayList<JenkinsBuildInfo>(builds.size());
+			for (final Build build : builds) {
+				buildsInfo.add(createJenkinsBuildInfo(build));
+			}
+			return buildsInfo;
+		} catch (final Exception e) {
+			throw new JenkinsExtensionException("Failed to retrieve build history", e);
+		}
+	}
+
+	private JenkinsBuildInfo createJenkinsBuildInfo(Build build) throws IOException {
+		final int buildNumber = build.getNumber();
+		final String buildUrl = build.getUrl();
+		final long timestamp = build.details().getTimestamp();
+		return new JenkinsBuildInfo(buildNumber, timestamp, buildUrl);
 	}
 }

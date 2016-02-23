@@ -21,6 +21,9 @@ import com.google.common.collect.Lists;
 import com.tocea.corolla.products.dao.IProjectDAO;
 import com.tocea.corolla.products.domain.Project;
 
+import fr.echoes.labs.komea.foundation.plugins.jenkins.JenkinsExtensionException;
+import fr.echoes.labs.komea.foundation.plugins.jenkins.services.IJenkinsService;
+import fr.echoes.labs.komea.foundation.plugins.jenkins.services.JenkinsBuildInfo;
 import fr.echoes.labs.komea.foundation.plugins.jenkins.services.JenkinsConfigurationService;
 import fr.echoes.labs.komea.foundation.plugins.jenkins.services.JenkinsErrorHandlingService;
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.IProjectTabPanel;
@@ -40,6 +43,9 @@ public class JenkinsProjectDashboardWidget implements ProjectDashboardWidget {
 
 	@Autowired
 	private JenkinsConfigurationService configurationService;
+
+	@Autowired
+	private IJenkinsService jenkinsService;
 
 	@Autowired
 	private IProjectDAO projectDAO;
@@ -71,6 +77,15 @@ public class JenkinsProjectDashboardWidget implements ProjectDashboardWidget {
 		ctx.setVariable("projectId", projectId);
 
 		final String projectName = project.getName();
+
+		try {
+			final List<JenkinsBuildInfo> buildInfo = this.jenkinsService.getBuildInfo(projectName);
+
+			ctx.setVariable("jenkinsBuildHistory", buildInfo);
+		} catch (final JenkinsExtensionException e) {
+			LOGGER.error("[Jenkins] Failed to retrieve build history", e);
+			this.errorHandler.registerError(e);
+		}
 
 		ctx.setVariable("jenkinsError", this.errorHandler.retrieveError());
 

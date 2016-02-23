@@ -1,4 +1,16 @@
 <div class="alert alert-danger" role="alert" th:text="${jenkinsError}" th:if="${jenkinsError != null}">
 </div>
 
+<h2>Build History</h2>
 
+<table>
+	<tbody>
+		<tr th:each="buildInfo : ${jenkinsBuildHistory}">
+			<td>
+				<span></span>
+				<span><a th:href="${buildInfo.getBuildUrl()}" th:text="'#' + ${buildInfo.getNumber()}"></a></span>
+				<span th:text="${buildInfo.getTime()}"></span>
+			</td>
+		</tr>
+	</tbody>
+</table>
