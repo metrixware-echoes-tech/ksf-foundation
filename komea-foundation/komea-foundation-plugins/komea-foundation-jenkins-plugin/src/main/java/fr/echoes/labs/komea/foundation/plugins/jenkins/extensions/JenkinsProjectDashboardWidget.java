@@ -107,9 +107,9 @@ public class JenkinsProjectDashboardWidget implements ProjectDashboardWidget {
 						((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
 						.getRequest();
 
-//				final String url = JenkinsProjectDashboardWidget.this.configurationService.getUrl();
-//
-//				ctx.setVariable("jenkinsURL", url);
+				final String url = JenkinsProjectDashboardWidget.this.configurationService.getUrl();
+
+				ctx.setVariable("jenkinsURL", url);
 
 				return templateEngine.process("managementPanel", ctx);
 			}
