@@ -29,7 +29,6 @@ import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineQuery;
 import fr.echoes.labs.ksf.cc.plugins.redmine.services.IRedmineService;
 import fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineConfigurationService;
 import fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineErrorHandlingService;
-import fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineService;
 
 /**
  * @author dcollard
@@ -60,6 +59,9 @@ public class RedmineProjectDashboardWidget implements ProjectDashboardWidget {
 	@Autowired
 	private ServletContext servletContext;
 
+	@Autowired
+	private IRedmineService redmineService;
+
 	@Override
 	public List<MenuAction> getDropdownActions() {
 
@@ -78,17 +80,15 @@ public class RedmineProjectDashboardWidget implements ProjectDashboardWidget {
 
 		try {
 
-			final IRedmineService redmine = new RedmineService();
+			final RedmineQuery query = new RedmineQuery.Builder().projectName("taskadapter").build();
 
-			final RedmineQuery query = new RedmineQuery.Builder().projectName(projectName).build();
-
-			final List<RedmineIssue> issues = redmine.queryIssues(query);
+			final List<RedmineIssue> issues = this.redmineService.queryIssues(query);
 
 			ctx.setVariable("issues", issues);
 
 		} catch (final Exception e) {
 			LOGGER.error("[Redmine] Failed to list issues for project: " + projectName, e);
-			this.errorHandler.registerError(e.getMessage());
+			this.errorHandler.registerError(e.getMessage(), e);
 		}
 
 		ctx.setVariable("redmineError", this.errorHandler.retrieveError());

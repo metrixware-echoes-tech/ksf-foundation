@@ -1,5 +1,9 @@
-<div class="alert alert-danger" role="alert" th:text="${redmineError}" th:if="${redmineError != null}">
+<div class="alert alert-danger" role="alert" th:if="${redmineError != null}">
+	<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+	<span class="sr-only">Error:</span>
+	<span th:text="${redmineError}" th:remove="tag"></span>
 </div>
+
 <table class="table table-striped">
 	<thead>
 		<tr>

@@ -16,6 +16,9 @@ public class RedmineConfigurationService {
     @Value("${ksf.redmine.apiAccessKey}")
     private String appiAccessKey;
 
+//    @Value("${ksf.redmine.apiAccessKey}")
+//    private String appiAccessKey;
+
 	public String getUrl() {
         if ('/' == this.url.charAt(this.url.length() - 1)) {
             this.url = this.url.substring(0, this.url.length() - 1);
@@ -26,4 +29,6 @@ public class RedmineConfigurationService {
 	public String getApiAccessKey() {
 		return this.appiAccessKey;
 	}
+
+
 }

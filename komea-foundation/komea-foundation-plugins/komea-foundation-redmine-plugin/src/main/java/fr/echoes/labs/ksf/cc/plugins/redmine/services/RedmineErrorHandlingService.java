@@ -5,8 +5,11 @@ import java.util.Set;
 import javax.servlet.http.HttpSession;
 import javax.validation.ConstraintViolation;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.google.common.base.Throwables;
 
 /**
  * @author dcollard
@@ -26,9 +29,26 @@ public class RedmineErrorHandlingService {
 		registerError(e.getMessage());
 	}
 
+	public void registerException(Exception e) {
+		final Throwable rootCause = Throwables.getRootCause(e);
+		registerError(rootCause.getMessage());
+	}
+
+	public void registerError(String errorMsg, Throwable throwable) {
+		String message = errorMsg != null ? errorMsg : StringUtils.EMPTY;
+		if (throwable != null) {
+			final Throwable rootCause = Throwables.getRootCause(throwable);
+			if (rootCause != null && rootCause.getMessage() != null) {
+				message =  message + END_LINE + rootCause.getMessage();
+			}
+		}
+		registerError(message);
+	}
+
 	public void registerError(String errorMsg) {
 		this.session.setAttribute(this.SESSION_ITEM, errorMsg);
 	}
+
 
 	public <T> void registerError(String errorMsg, Set<ConstraintViolation<T>> errors) {
 		final StringBuilder sb = new StringBuilder(errorMsg);

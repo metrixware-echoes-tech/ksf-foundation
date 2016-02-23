@@ -1,6 +1,7 @@
 package fr.echoes.labs.ksf.cc.plugins.redmine.services;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -44,9 +45,14 @@ public class RedmineService implements IRedmineService {
 	private RedmineConfigurationService configurationService;
 
 	private RedmineManager createRedmineManager() {
-		final String apiAccessKey = this.configurationService.getApiAccessKey();
-		final String url = this.configurationService.getUrl();
-		final RedmineManager mgr = RedmineManagerFactory.createWithApiKey(url, apiAccessKey);
+		RedmineManager mgr = null;
+		try {
+			final String apiAccessKey = this.configurationService.getApiAccessKey();
+			final String url = this.configurationService.getUrl();
+			mgr = RedmineManagerFactory.createWithApiKey(url, apiAccessKey);
+		} catch (final Exception e) {
+			LOGGER.error("Failed to create Redmine manager", e);
+		}
 		return mgr;
 	}
 
@@ -60,6 +66,7 @@ public class RedmineService implements IRedmineService {
 
 		try {
 			projectManager.createProject(project);
+
 		} catch (final RedmineException e) {
 			throw new RedmineExtensionException("Failed to create projet " + projectName, e);
 		}
@@ -87,6 +94,9 @@ public class RedmineService implements IRedmineService {
 		final List<RedmineIssue> redmineIssues = new ArrayList<>();
 
 		final RedmineManager mgr = createRedmineManager();
+		if (mgr == null) {
+			return Collections.<RedmineIssue>emptyList();
+		}
 
 		List<Issue> issues;
 		try {
@@ -132,5 +142,4 @@ public class RedmineService implements IRedmineService {
 		redmiIssue.setTracker(trackerName);
 		return redmiIssue;
 	}
-
 }
