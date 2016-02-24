@@ -3,9 +3,9 @@
 
 
 <div class="input-group">
-	<input type="text" class="form-control" readonly="" value="https://github.com/FreeCodeCamp/FreeCodeCamp.git" />
+	<input type="text" class="form-control" readonly="" th:value="${gitRepoUrl}" />
 	<span class="input-group-btn">
-		<button class="btn btn-default" type="button" data-clipboard-text="https://github.com/FreeCodeCamp/FreeCodeCamp.git"  id="git-repo-copy-button"><span class="glyphicon glyphicon-copy"></span></button>
+		<button class="btn btn-default" type="button" th:attr="data-clipboard-text=${gitRepoUrl}" id="git-repo-copy-button"><span class="glyphicon glyphicon-copy"></span></button>
 	</span>
 </div>
 
@@ -15,12 +15,7 @@
 document.addEventListener("DOMContentLoaded", function(event) {
 
 	var client = new ZeroClipboard( document.getElementById("git-repo-copy-button") );
-	client.on( "ready", function( readyEvent ) {
 
-			client.on( "aftercopy", function( event ) {
-				event.target.style.display = "none";
-			});
-	});
 });
 
 </script>

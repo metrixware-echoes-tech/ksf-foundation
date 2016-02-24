@@ -69,6 +69,8 @@ public class GitProjectDashboardWidget implements ProjectDashboardWidget {
 
 		final String projectName = project.getName();
 
+		ctx.setVariable("gitRepoUrl", this.configurationService.getScmUrl() + '/' + projectName + ".git");
+
 		ctx.setVariable("gitError", this.errorHandler.retrieveError());
 
 		return templateEngine.process("gitPanel", ctx);
