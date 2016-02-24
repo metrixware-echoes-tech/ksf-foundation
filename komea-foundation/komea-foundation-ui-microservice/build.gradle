@@ -43,6 +43,7 @@ dependencies {
 	compile project(":komea-foundation:komea-foundation-plugins:komea-foundation-jenkins-plugin")
 	compile project(":komea-foundation:komea-foundation-plugins:komea-foundation-redmine-plugin")
 	compile project(":komea-foundation:komea-foundation-plugins:komea-foundation-git-plugin")
+  compile project(":komea-foundation:komea-foundation-plugins:komea-foundation-nexus-plugin")
 
 	compile("org.springframework.boot:spring-boot-starter-thymeleaf:${springBootVersion}")
   providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
