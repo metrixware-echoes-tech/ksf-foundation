@@ -11,7 +11,7 @@ import fr.echoes.labs.ksf.extensions.annotations.Extension;
  * @author dcollard
  *
  */
-@Order(value=6)
+@Order(value=5)
 @Extension
 public class NexusProjectDashboardExtension implements IProjectDashboardExtension {
 
