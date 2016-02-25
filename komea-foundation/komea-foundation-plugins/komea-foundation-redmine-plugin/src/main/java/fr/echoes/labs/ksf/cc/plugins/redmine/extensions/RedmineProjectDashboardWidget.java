@@ -88,7 +88,7 @@ public class RedmineProjectDashboardWidget implements ProjectDashboardWidget {
 
 		} catch (final Exception e) {
 			LOGGER.error("[Redmine] Failed to list issues for project: " + projectName, e);
-			this.errorHandler.registerError(e.getMessage(), e);
+			this.errorHandler.registerError(e.getMessage());
 		}
 
 		ctx.setVariable("redmineError", this.errorHandler.retrieveError());

@@ -1,31 +1,33 @@
 <div class="alert alert-danger" role="alert" th:if="${redmineError != null}">
-	<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
 	<span class="sr-only">Error:</span>
 	<span th:text="${redmineError}" th:remove="tag"></span>
 </div>
 
-<table class="table table-striped">
-	<thead>
-		<tr>
-			<th>#</th>
-			<th>Version cible</th>
-			<!--/* <th>Catégorie</th> */-->
-			<th>Status</th>
-			<th>Priorité</th>
-			<th>Sujet</th>
-			<th>Assigé à</th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr th:each="issue : ${issues}">
-			<td th:text="${issue.getId()}"></td>
-			<td th:text="${issue.getTargetVersion()}"></td>
-			<!--/* <td th:text="${issue.getCategory()}"></td> */-->
-			<td th:text="${issue.getStatus()}"></td>
-			<td th:text="${issue.getPriority()}"></td>
-			<td th:text="${issue.getSubject()}"></td>
-			<td th:text="${issue.getAssignee()}"></td>
-		</tr>
-	</tbody>
-</table>
+<div th:if="${redmineError == null}" th:remove="tag">
 
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>Version cible</th>
+				<!--/* <th>Catégorie</th> */-->
+				<th>Status</th>
+				<th>Priorité</th>
+				<th>Sujet</th>
+				<th>Assigé à</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="issue : ${issues}">
+				<td th:text="${issue.getId()}"></td>
+				<td th:text="${issue.getTargetVersion()}"></td>
+				<!--/* <td th:text="${issue.getCategory()}"></td> */-->
+				<td th:text="${issue.getStatus()}"></td>
+				<td th:text="${issue.getPriority()}"></td>
+				<td th:text="${issue.getSubject()}"></td>
+				<td th:text="${issue.getAssignee()}"></td>
+			</tr>
+		</tbody>
+	</table>
+
+</div>

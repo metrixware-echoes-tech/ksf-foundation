@@ -106,6 +106,9 @@ public class JenkinsService implements IJenkinsService {
 		try {
 			jenkins = createJenkinsClient();
 			final JobWithDetails root = jenkins.getJob(projectName);
+			if (root == null) {
+				throw new JenkinsExtensionException("The job \"" + projectName +"\" doesn't exist");
+			}
 
 			final List<Build> builds = root.getBuilds();
 			final List<JenkinsBuildInfo> buildsInfo = new ArrayList<JenkinsBuildInfo>(builds.size());
@@ -113,6 +116,8 @@ public class JenkinsService implements IJenkinsService {
 				buildsInfo.add(createJenkinsBuildInfo(build));
 			}
 			return buildsInfo;
+		} catch (JenkinsExtensionException e) {
+			throw e;
 		} catch (final Exception e) {
 			throw new JenkinsExtensionException("Failed to retrieve build history", e);
 		}
