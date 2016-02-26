@@ -21,6 +21,9 @@ public class JenkinsConfigurationService {
 	
 	@Value("${ksf.jenkins.useFolders}")
 	private boolean useFolders;
+	
+	@Value("${ksf.jenkins.builsdPerJobLimit}")
+	private int builsdPerJobLimit;
 
 	public String getUrl() {
         if ('/' == this.url.charAt(this.url.length() - 1)) {
@@ -40,4 +43,9 @@ public class JenkinsConfigurationService {
 	public boolean useFolders() {
 		return this.useFolders;
 	}
+
+	public int getBuilsdPerJobLimit() {
+		return builsdPerJobLimit;
+	}
+
 }

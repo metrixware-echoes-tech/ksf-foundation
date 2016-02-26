@@ -52,18 +52,25 @@ public class JenkinsService implements IJenkinsService {
 		final JenkinsServer jenkins;
 		try {
 			jenkins = createJenkinsClient();
-
-			final String resolvedXmlConfig = createXmlConfig(projectName);
+			
+			final String scmUrl = this.configurationService.getScmUrl() + '/' + projectName + ".git";
 
 			if (this.configurationService.useFolders()) {
 				jenkins.createFolder(projectName);
-				final JobWithDetails root = jenkins.getJob(projectName);
-				final Optional<FolderJob> projectFolder = jenkins.getFolderJob(root);
-				jenkins.createJob(projectFolder.get(), getJobName(projectName, MASTER), resolvedXmlConfig);
-				jenkins.createJob(projectFolder.get(), getJobName(projectName, DEVELOP), resolvedXmlConfig);
+
+				final FolderJob projectFolder = getProjectParentFolder(jenkins, projectName);
+
+				String resolvedXmlConfig = createXmlConfig(projectName, scmUrl, MASTER);
+				jenkins.createJob(projectFolder, getJobName(projectName, MASTER), resolvedXmlConfig);
+				
+				resolvedXmlConfig = createXmlConfig(projectName, scmUrl, DEVELOP);
+				jenkins.createJob(projectFolder, getJobName(projectName, DEVELOP), resolvedXmlConfig);
 
 			} else {
+				String resolvedXmlConfig = createXmlConfig(projectName, scmUrl, MASTER);
 				jenkins.createJob(getJobName(projectName, MASTER), resolvedXmlConfig);
+				
+				resolvedXmlConfig = createXmlConfig(projectName, scmUrl, DEVELOP);
 				jenkins.createJob(getJobName(projectName, DEVELOP), resolvedXmlConfig);
 			}
 
@@ -71,6 +78,12 @@ public class JenkinsService implements IJenkinsService {
 		} catch (final Exception e) {
 			throw new JenkinsExtensionException("Failed to create Jenkins job", e);
 		}
+	}
+
+	private FolderJob getProjectParentFolder(final JenkinsServer jenkins, String projectName) throws IOException {
+		final JobWithDetails root = jenkins.getJob(projectName);
+		final Optional<FolderJob> projectFolder = jenkins.getFolderJob(root);
+		return projectFolder.get();
 	}
 
 	private String getJobName(String projectName, String branchName) {
@@ -81,16 +94,16 @@ public class JenkinsService implements IJenkinsService {
 		return new JenkinsServer(new URI(this.configurationService.getUrl()));
 	}
 
-	private String createXmlConfig(String projectName) throws IOException {
+	private String createXmlConfig(String projectName, String scmUrl, String branchName) throws IOException {
 		final URL url = com.google.common.io.Resources.getResource(this.configurationService.getTemplateName());
 
 		final String templateXml = Resources.toString(url, Charsets.UTF_8);
 
 		final Map<String, String> variables = new HashMap<String, String>();
 
-		final String scmUrl = this.configurationService.getScmUrl() + '/' + projectName + ".git";
 
 		variables.put("scmUrl", scmUrl);
+		variables.put("branchName", branchName);
 
 		final StrSubstitutor sub = new StrSubstitutor(variables);
 		final String resolvedXml = sub.replace(templateXml);
@@ -111,12 +124,14 @@ public class JenkinsService implements IJenkinsService {
 		try {
 			
 			jenkins = createJenkinsClient();
-			final JobWithDetails root = jenkins.getJob(projectName);
-			if (root == null) {
-				throw new JenkinsExtensionException("The job \"" + projectName +"\" doesn't exist");
-			}
+			
+			final boolean useFolder = this.configurationService.useFolders();
 
-			final List<Build> builds = root.getBuilds();
+			final int builsdPerJobLimit = this.configurationService.getBuilsdPerJobLimit();
+			
+			final List<Build> builds = getJobBuilds(projectName, jenkins, MASTER, useFolder, builsdPerJobLimit);
+			builds.addAll(getJobBuilds(projectName, jenkins, DEVELOP, useFolder, builsdPerJobLimit));
+			
 			final List<JenkinsBuildInfo> buildsInfo = new ArrayList<JenkinsBuildInfo>(builds.size());
 			for (final Build build : builds) {
 				
@@ -128,6 +143,28 @@ public class JenkinsService implements IJenkinsService {
 		} catch (final Exception e) {
 			throw new JenkinsExtensionException("Failed to retrieve build history", e);
 		}
+	}
+
+	private List<Build> getJobBuilds(String projectName, JenkinsServer jenkins, String branchName, boolean useFolder, int builsdPerJobLimit)
+			throws IOException, JenkinsExtensionException {
+
+		final JobWithDetails root;
+		if (useFolder) {
+			final FolderJob projectFolder = getProjectParentFolder(jenkins, projectName);
+			root = jenkins.getJob(projectFolder, getJobName(projectName, branchName));
+		} else {
+			root = jenkins.getJob(getJobName(projectName, branchName));
+		}
+
+		if (root == null) {
+			throw new JenkinsExtensionException("The job \"" + projectName +"\" doesn't exist");
+		}
+
+		final List<Build> builds = root.getBuilds();
+		if (builds.size() > builsdPerJobLimit) {
+			return  new ArrayList<Build>(builds.subList(0, builds.size()));
+		}
+		return builds;
 	}
 
 	private JenkinsBuildInfo createJenkinsBuildInfo(Build build, String jobName) throws IOException {
