@@ -6,6 +6,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,6 +89,8 @@ public class RedmineProjectDashboardWidget implements ProjectDashboardWidget {
 
 			final List<RedmineIssue> issues = this.redmineService.queryIssues(query);
 
+			ctx.setVariable("issuesBase", "/ui/projects/" + project.getKey() + "?redmineIssue=");
+			
 			ctx.setVariable("issues", issues);
 
 		} catch (final Exception e) {
@@ -130,8 +133,14 @@ public class RedmineProjectDashboardWidget implements ProjectDashboardWidget {
 						((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
 						.getRequest();
 
-				final String url = RedmineProjectDashboardWidget.this.configurationService.getUrl();
+				String url = RedmineProjectDashboardWidget.this.configurationService.getUrl();
 
+				final String redmineIssue = request.getParameter("redmineIssue");
+				
+				if (StringUtils.isNotEmpty(redmineIssue)) {
+					url += "/issues/" + redmineIssue;
+				}				
+				
 				ctx.setVariable("redmineURL", url);
 
 				return templateEngine.process("managementPanel", ctx);

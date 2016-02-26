@@ -195,7 +195,7 @@ public class ForemanActionsController {
 			final Host host = foremanService.createHost(foremanApi, hostDescriptor);
 
             //TODO find a way to generate the plugin tab ID dynamically
-            redirectURL += "?foremanHost=" + host.name + "#pluginTab0";
+            redirectURL += "?foremanHost=" + host.name + "#pluginTab3";
 
         } catch (final ForemanHostAlreadyExistException e) {
         	LOGGER.error("[foreman] Failed to create host {} : {}", hostName, e);
