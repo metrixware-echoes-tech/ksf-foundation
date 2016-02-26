@@ -20,6 +20,7 @@ import com.google.common.base.Optional;
 import com.google.common.io.Resources;
 import com.offbytwo.jenkins.JenkinsServer;
 import com.offbytwo.jenkins.model.Build;
+import com.offbytwo.jenkins.model.BuildWithDetails;
 import com.offbytwo.jenkins.model.FolderJob;
 import com.offbytwo.jenkins.model.JobWithDetails;
 
@@ -58,18 +59,22 @@ public class JenkinsService implements IJenkinsService {
 				jenkins.createFolder(projectName);
 				final JobWithDetails root = jenkins.getJob(projectName);
 				final Optional<FolderJob> projectFolder = jenkins.getFolderJob(root);
-				jenkins.createJob(projectFolder.get(), MASTER, resolvedXmlConfig);
-				jenkins.createJob(projectFolder.get(), DEVELOP, resolvedXmlConfig);
+				jenkins.createJob(projectFolder.get(), getJobName(projectName, MASTER), resolvedXmlConfig);
+				jenkins.createJob(projectFolder.get(), getJobName(projectName, DEVELOP), resolvedXmlConfig);
 
 			} else {
-				jenkins.createJob(projectName + " - " + MASTER, resolvedXmlConfig);
-				jenkins.createJob(projectName + " - " + DEVELOP, resolvedXmlConfig);
+				jenkins.createJob(getJobName(projectName, MASTER), resolvedXmlConfig);
+				jenkins.createJob(getJobName(projectName, DEVELOP), resolvedXmlConfig);
 			}
 
 
 		} catch (final Exception e) {
 			throw new JenkinsExtensionException("Failed to create Jenkins job", e);
 		}
+	}
+
+	private String getJobName(String projectName, String branchName) {
+		return projectName + " - " + branchName;
 	}
 
 	private JenkinsServer createJenkinsClient() throws URISyntaxException {
@@ -104,6 +109,7 @@ public class JenkinsService implements IJenkinsService {
 			throws JenkinsExtensionException {
 		JenkinsServer jenkins;
 		try {
+			
 			jenkins = createJenkinsClient();
 			final JobWithDetails root = jenkins.getJob(projectName);
 			if (root == null) {
@@ -113,7 +119,8 @@ public class JenkinsService implements IJenkinsService {
 			final List<Build> builds = root.getBuilds();
 			final List<JenkinsBuildInfo> buildsInfo = new ArrayList<JenkinsBuildInfo>(builds.size());
 			for (final Build build : builds) {
-				buildsInfo.add(createJenkinsBuildInfo(build));
+				
+				buildsInfo.add(createJenkinsBuildInfo(build, projectName));
 			}
 			return buildsInfo;
 		} catch (JenkinsExtensionException e) {
@@ -123,10 +130,13 @@ public class JenkinsService implements IJenkinsService {
 		}
 	}
 
-	private JenkinsBuildInfo createJenkinsBuildInfo(Build build) throws IOException {
+	private JenkinsBuildInfo createJenkinsBuildInfo(Build build, String jobName) throws IOException {
 		final int buildNumber = build.getNumber();
 		final String buildUrl = build.getUrl();
-		final long timestamp = build.details().getTimestamp();
-		return new JenkinsBuildInfo(buildNumber, timestamp, buildUrl);
+		final BuildWithDetails details = build.details();
+		final long timestamp = details.getTimestamp();
+		final int duration = details.getDuration();
+		final String result = details.getResult().name();
+		return new JenkinsBuildInfo(buildNumber, jobName, timestamp, duration,  buildUrl, result);
 	}
 }

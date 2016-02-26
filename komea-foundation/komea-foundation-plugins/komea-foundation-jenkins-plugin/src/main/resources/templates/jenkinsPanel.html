@@ -4,19 +4,16 @@
 </div>
 
 <div th:if="${jenkinsError == null}" th:remove="tag">
-
-	<h2>Build History</h2>
 	
-	<table>
-		<tbody>
-			<tr th:each="buildInfo : ${jenkinsBuildHistory}">
-				<td>
-					<span></span>
-					<span><a th:href="${buildInfo.getBuildUrl()}" th:text="'#' + ${buildInfo.getNumber()}"></a></span>
-					<span th:text="${buildInfo.getTime()}"></span>
-				</td>
-			</tr>
-		</tbody>
-	</table>
+	<div>
+  		<a th:href="${buildInfo.getBuildUrl()}" class="list-group-item" th:each="buildInfo : ${jenkinsBuildHistory}">
+    		<strong>
+    			<span th:text="${buildInfo.getJobName()} + '-' + ${buildInfo.getNumber()}"></span>
+    			<span th:text="' [' + ${buildInfo.getResult()} + ']'" th:class="${buildInfo.getResult() == 'SUCCESS' ? 'text-success' : buildInfo.getResult() == 'FAILURE' ? 'text-danger' : ''}"></span>
+    		</strong>
+    		<p th:text="${buildInfo.getTime()}" class="text-muted"></p>
+  		</a>
+	</div>
+
 
 </div>
