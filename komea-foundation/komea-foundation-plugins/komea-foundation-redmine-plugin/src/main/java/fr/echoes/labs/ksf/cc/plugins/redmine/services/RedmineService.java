@@ -100,6 +100,8 @@ public class RedmineService implements IRedmineService {
 		List<Issue> issues;
 		final List<RedmineIssue> redmineIssues;
 		final String projectName = query.getProjectName();
+		final int resultItemsLimit = query.getResultItemsLimit();
+		final int resultNumberOfItems;
 
 		try {
 			final IssueManager issueManager = redmineManager.getIssueManager();
@@ -110,16 +112,22 @@ public class RedmineService implements IRedmineService {
 			}
 
 			issues = issueManager.getIssues(projectIdentifier, null);
-			redmineIssues = new ArrayList<>(issues.size());
+			if (resultItemsLimit > 0) {
+				resultNumberOfItems = Math.min(issues.size(), resultItemsLimit);
+			} else {
+				resultNumberOfItems = issues.size();
+			}
+			redmineIssues = new ArrayList<>(resultNumberOfItems);
 
 		} catch (final RedmineException e) {
 			throw new RedmineExtensionException("Failed to list the issues of " + projectName, e);
 		}
-		
 
-		for (final Issue issue : issues) {
+		for (int i = 0; i < resultNumberOfItems; i++) {
+			final Issue issue = issues.get(i);
 			redmineIssues.add(createRedmineIssue(issue));			
 		}
+
 		return redmineIssues;
 	}
 

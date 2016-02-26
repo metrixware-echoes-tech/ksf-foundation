@@ -15,6 +15,9 @@ public class RedmineConfigurationService {
 
     @Value("${ksf.redmine.apiAccessKey}")
     private String appiAccessKey;
+    
+    @Value("${ksf.redmine.resultItemsLimit}")
+    private int resultItemsLimit;
 
 	public String getUrl() {
         if ('/' == this.url.charAt(this.url.length() - 1)) {
@@ -27,5 +30,8 @@ public class RedmineConfigurationService {
 		return this.appiAccessKey;
 	}
 
+	public int getResultItemsLimit() {
+		return resultItemsLimit;
+	}
 
 }

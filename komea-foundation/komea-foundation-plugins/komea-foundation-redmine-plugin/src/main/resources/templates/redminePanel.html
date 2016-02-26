@@ -5,7 +5,7 @@
 
 <div th:if="${redmineError == null}" th:remove="tag">
 
-	<table class="table table-striped">
+	<table class="table table-striped tableRowEllipsis">
 		<thead>
 			<tr>
 				<th>#</th>
@@ -24,7 +24,7 @@
 				<!--/* <td th:text="${issue.getCategory()}"></td> */-->
 				<td th:text="${issue.getStatus()}"></td>
 				<td th:text="${issue.getPriority()}"></td>
-				<td th:text="${issue.getSubject()}"></td>
+				<td th:text="${issue.getSubject()}" data-toggle="tooltip" th:title="${issue.getSubject()}" data-container="body"></td>
 				<td th:text="${issue.getAssignee()}"></td>
 			</tr>
 		</tbody>

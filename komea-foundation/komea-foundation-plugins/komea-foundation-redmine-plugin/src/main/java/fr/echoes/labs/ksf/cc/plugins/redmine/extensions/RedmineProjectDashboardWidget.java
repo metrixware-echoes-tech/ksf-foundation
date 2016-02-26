@@ -26,6 +26,7 @@ import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.MenuAction;
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
 import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineIssue;
 import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineQuery;
+import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineQuery.Builder;
 import fr.echoes.labs.ksf.cc.plugins.redmine.services.IRedmineService;
 import fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineConfigurationService;
 import fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineErrorHandlingService;
@@ -72,7 +73,6 @@ public class RedmineProjectDashboardWidget implements ProjectDashboardWidget {
 	public String getHtmlPanelBody(String projectId) {
 
 		final Project project = this.projectDAO.findOne(projectId);
-
 		final WebContext ctx = new WebContext(this.request, this.response, this.servletContext);
 		ctx.setVariable("projectId", projectId);
 
@@ -80,7 +80,11 @@ public class RedmineProjectDashboardWidget implements ProjectDashboardWidget {
 
 		try {
 
-			final RedmineQuery query = new RedmineQuery.Builder().projectName(projectName).build();
+			final Builder redmineQuerryBuilder = new RedmineQuery.Builder();
+			redmineQuerryBuilder.projectName(projectName);
+			redmineQuerryBuilder.resultItemsLimit(configurationService.getResultItemsLimit());
+
+			final RedmineQuery query = redmineQuerryBuilder.build();
 
 			final List<RedmineIssue> issues = this.redmineService.queryIssues(query);
 
