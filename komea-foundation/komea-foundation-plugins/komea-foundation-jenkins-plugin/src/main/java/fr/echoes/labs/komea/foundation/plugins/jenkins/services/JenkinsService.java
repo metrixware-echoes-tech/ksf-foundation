@@ -162,7 +162,7 @@ public class JenkinsService implements IJenkinsService {
 
 		final List<Build> builds = root.getBuilds();
 		if (builds.size() > builsdPerJobLimit) {
-			return  new ArrayList<Build>(builds.subList(0, builds.size()));
+			return  new ArrayList<Build>(builds.subList(0, builsdPerJobLimit));
 		}
 		return builds;
 	}

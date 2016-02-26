@@ -1,11 +1,14 @@
 package fr.echoes.labs.komea.foundation.plugins.jenkins.extensions;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,6 +84,8 @@ public class JenkinsProjectDashboardWidget implements ProjectDashboardWidget {
 		try {
 			final List<JenkinsBuildInfo> buildInfo = this.jenkinsService.getBuildInfo(projectName);
 
+			ctx.setVariable("buildBase", "/ui/projects/" + project.getKey() + "?buildUrl=");
+			
 			ctx.setVariable("jenkinsBuildHistory", buildInfo);
 		} catch (final JenkinsExtensionException e) {
 			LOGGER.error("[Jenkins] Failed to retrieve build history", e);
@@ -122,8 +127,21 @@ public class JenkinsProjectDashboardWidget implements ProjectDashboardWidget {
 						((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
 						.getRequest();
 
-				final String url = JenkinsProjectDashboardWidget.this.configurationService.getUrl();
+				String url = JenkinsProjectDashboardWidget.this.configurationService.getUrl();
 
+				final String buildUrl = request.getParameter("buildUrl");
+				
+				if (StringUtils.isNotEmpty(buildUrl)) {
+					
+					try {
+						url = URLDecoder.decode(buildUrl, "UTF-8");
+					} catch (UnsupportedEncodingException e) {
+						LOGGER.error("", e);
+						url = JenkinsProjectDashboardWidget.this.configurationService.getUrl();
+					}
+				}					
+				
+				
 				ctx.setVariable("jenkinsURL", url);
 
 				return templateEngine.process("managementPanel", ctx);
