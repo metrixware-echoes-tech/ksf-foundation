@@ -1,5 +1,6 @@
 package fr.echoes.labs.ksf.cc.plugins.redmine.services;
 
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -62,7 +63,7 @@ public class RedmineService implements IRedmineService {
 
 		final RedmineManager mgr = createRedmineManager();
 		final ProjectManager projectManager = mgr.getProjectManager();
-		final Project project = ProjectFactory.create(projectName, projectName);
+		final Project project = ProjectFactory.create(projectName, createIdentifier(projectName));
 
 		try {
 			projectManager.createProject(project);
@@ -72,6 +73,9 @@ public class RedmineService implements IRedmineService {
 		}
 	}
 
+	private String createIdentifier(String projectName) {
+		return  Normalizer.normalize(projectName, Normalizer.Form.NFD).replaceAll("[^\\dA-Za-z ]", "").replaceAll("\\s+","-" ).toLowerCase();
+	}
 
 	@Override
 	public void deleteProject(String projectName) throws RedmineExtensionException {
@@ -105,10 +109,10 @@ public class RedmineService implements IRedmineService {
 
 		try {
 			final IssueManager issueManager = redmineManager.getIssueManager();
-			
+
 			final String projectIdentifier = findProjectIdentifier(redmineManager, projectName);
 			if (projectIdentifier == null) {
-				throw new RedmineExtensionException("Cannot find project " + projectName); 
+				throw new RedmineExtensionException("Cannot find project " + projectName);
 			}
 
 			issues = issueManager.getIssues(projectIdentifier, null);
@@ -125,7 +129,7 @@ public class RedmineService implements IRedmineService {
 
 		for (int i = 0; i < resultNumberOfItems; i++) {
 			final Issue issue = issues.get(i);
-			redmineIssues.add(createRedmineIssue(issue));			
+			redmineIssues.add(createRedmineIssue(issue));
 		}
 
 		return redmineIssues;
@@ -159,8 +163,8 @@ public class RedmineService implements IRedmineService {
 		redmiIssue.setTracker(trackerName);
 		return redmiIssue;
 	}
-	
-	
+
+
 	private String findProjectIdentifier(RedmineManager redmineManager, String projectName) throws RedmineException {
 		final ProjectManager projectManager = redmineManager.getProjectManager();
 
@@ -171,5 +175,5 @@ public class RedmineService implements IRedmineService {
 		}
 		return null;
 	}
-	
+
 }
