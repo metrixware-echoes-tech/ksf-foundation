@@ -16,6 +16,12 @@ public class GitConfigurationService {
 	@Value("${ksf.git.workingDirectory}")
 	private String gitWorkingdirectory;
 
+	@Value("${ksf.buildSystem.defaultScript}")
+	private String buildScript;
+
+	@Value("${ksf.artifacts.publishScript}")
+	private String publishScript;
+
 	public String getScmUrl() {
 		return this.scmUrl;
 	}
@@ -23,4 +29,13 @@ public class GitConfigurationService {
 	public String getGitWorkingdirectory() {
 		return this.gitWorkingdirectory;
 	}
+
+	public String getBuildScript() {
+		return this.buildScript;
+	}
+
+	public String getPublishScript() {
+		return this.publishScript;
+	}
+
 }

@@ -60,6 +60,15 @@ public class GitProjectLifeCycleExtension implements IProjectLifecycleExtension 
 		}
 
 		LOGGER.info("[Git] project {} creation detected [demanded by: {}]", project.getKey(), logginName);
+
+		try {
+
+			this.gitService.createProject(project.getName());
+		} catch (final Exception ex) {
+			LOGGER.error("[Git] Failed to create project {} ", project.getName(), ex);
+			this.errorHandler.registerError("Unable to create Git repository.");
+		}
+
 	}
 
 	@Override
