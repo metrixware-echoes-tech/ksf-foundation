@@ -18,12 +18,18 @@ public class JenkinsConfigurationService {
 
 	@Value("${ksf.scmUrl}")
 	private String scmUrl;
-	
+
 	@Value("${ksf.jenkins.useFolders}")
 	private boolean useFolders;
-	
+
 	@Value("${ksf.jenkins.builsdPerJobLimit}")
 	private int builsdPerJobLimit;
+
+	@Value("${ksf.buildSystem.defaultScript}")
+	private String buildScript;
+
+	@Value("${ksf.artifacts.publishScript}")
+	private String publishScript;
 
 	public String getUrl() {
         if ('/' == this.url.charAt(this.url.length() - 1)) {
@@ -45,7 +51,14 @@ public class JenkinsConfigurationService {
 	}
 
 	public int getBuilsdPerJobLimit() {
-		return builsdPerJobLimit;
+		return this.builsdPerJobLimit;
 	}
 
+	public String getBuildScript() {
+		return this.buildScript;
+	}
+
+	public String getPublishScript() {
+		return this.publishScript;
+	}
 }

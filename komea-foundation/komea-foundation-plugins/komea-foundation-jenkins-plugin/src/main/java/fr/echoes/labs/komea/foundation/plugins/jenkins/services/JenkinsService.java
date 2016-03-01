@@ -52,7 +52,7 @@ public class JenkinsService implements IJenkinsService {
 		final JenkinsServer jenkins;
 		try {
 			jenkins = createJenkinsClient();
-			
+
 			final String scmUrl = this.configurationService.getScmUrl() + '/' + projectName + ".git";
 
 			if (this.configurationService.useFolders()) {
@@ -61,17 +61,17 @@ public class JenkinsService implements IJenkinsService {
 				final FolderJob projectFolder = getProjectParentFolder(jenkins, projectName);
 
 				String resolvedXmlConfig = createXmlConfig(projectName, scmUrl, MASTER);
-				jenkins.createJob(projectFolder, getJobName(projectName, MASTER), resolvedXmlConfig);
-				
+				jenkins.createJob(projectFolder, getJobName(projectName, MASTER), resolvedXmlConfig, false);
+
 				resolvedXmlConfig = createXmlConfig(projectName, scmUrl, DEVELOP);
-				jenkins.createJob(projectFolder, getJobName(projectName, DEVELOP), resolvedXmlConfig);
+				jenkins.createJob(projectFolder, getJobName(projectName, DEVELOP), resolvedXmlConfig, false);
 
 			} else {
 				String resolvedXmlConfig = createXmlConfig(projectName, scmUrl, MASTER);
-				jenkins.createJob(getJobName(projectName, MASTER), resolvedXmlConfig);
-				
+				jenkins.createJob(getJobName(projectName, MASTER), resolvedXmlConfig, false);
+
 				resolvedXmlConfig = createXmlConfig(projectName, scmUrl, DEVELOP);
-				jenkins.createJob(getJobName(projectName, DEVELOP), resolvedXmlConfig);
+				jenkins.createJob(getJobName(projectName, DEVELOP), resolvedXmlConfig, false);
 			}
 
 
@@ -101,9 +101,10 @@ public class JenkinsService implements IJenkinsService {
 
 		final Map<String, String> variables = new HashMap<String, String>();
 
-
 		variables.put("scmUrl", scmUrl);
 		variables.put("branchName", branchName);
+		variables.put("buildScript", this.configurationService.getBuildScript());
+		variables.put("publishScript", this.configurationService.getPublishScript());
 
 		final StrSubstitutor sub = new StrSubstitutor(variables);
 		final String resolvedXml = sub.replace(templateXml);
@@ -122,19 +123,19 @@ public class JenkinsService implements IJenkinsService {
 			throws JenkinsExtensionException {
 		JenkinsServer jenkins;
 		try {
-			
+
 			jenkins = createJenkinsClient();
-			
+
 			final boolean useFolder = this.configurationService.useFolders();
 
 			final int builsdPerJobLimit = this.configurationService.getBuilsdPerJobLimit();
-			
+
 			final List<Build> builds = getJobBuilds(projectName, jenkins, MASTER, useFolder, builsdPerJobLimit);
 			builds.addAll(getJobBuilds(projectName, jenkins, DEVELOP, useFolder, builsdPerJobLimit));
-			
+
 			final List<JenkinsBuildInfo> buildsInfo = new ArrayList<JenkinsBuildInfo>(builds.size());
 			for (final Build build : builds) {
-				
+
 				buildsInfo.add(createJenkinsBuildInfo(build, projectName));
 			}
 			return buildsInfo;

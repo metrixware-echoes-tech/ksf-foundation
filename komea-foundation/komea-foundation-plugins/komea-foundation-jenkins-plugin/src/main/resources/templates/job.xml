@@ -7,9 +7,6 @@
 		<configVersion>2</configVersion>
 		<userRemoteConfigs>
 			<hudson.plugins.git.UserRemoteConfig>
-				<name />
-				<refspec />
-				<credentialsId />
 				<url>${scmUrl}</url>
 			</hudson.plugins.git.UserRemoteConfig>
 		</userRemoteConfigs>
@@ -18,45 +15,37 @@
 				<name>${branchName}</name>
 			</hudson.plugins.git.BranchSpec>
 		</branches>
-		<disableSubmodules>false</disableSubmodules>
-		<recursiveSubmodules>false</recursiveSubmodules>
 		<doGenerateSubmoduleConfigurations>false
 		</doGenerateSubmoduleConfigurations>
-		<authorOrCommitter>false</authorOrCommitter>
-		<clean>false</clean>
-		<wipeOutWorkspace>false</wipeOutWorkspace>
-		<pruneBranches>false</pruneBranches>
-		<remotePoll>false</remotePoll>
-		<ignoreNotifyCommit>false</ignoreNotifyCommit>
-		<useShallowClone>false</useShallowClone>
-		<buildChooser class="hudson.plugins.git.util.DefaultBuildChooser" />
-		<gitTool>Default</gitTool>
 		<submoduleCfg class="list" />
-		<relativeTargetDir />
-		<reference />
-		<excludedRegions />
-		<excludedUsers />
-		<gitConfigName />
-		<gitConfigEmail />
-		<skipTag>false</skipTag>
-		<includedRegions />
-		<scmName />
+		<extensions>
+			<hudson.plugins.git.extensions.impl.PerBuildTag />
+		</extensions>
 	</scm>
 	<canRoam>true</canRoam>
 	<disabled>false</disabled>
 	<blockBuildWhenDownstreamBuilding>false
 	</blockBuildWhenDownstreamBuilding>
 	<blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-	<triggers class="vector" />
+	<triggers />
 	<concurrentBuild>false</concurrentBuild>
 	<builders>
 		<hudson.tasks.Shell>
-			<command>./configure
-				make
-				make test
-			</command>
+			<command>${buildScript}</command>
 		</hudson.tasks.Shell>
 	</builders>
-	<publishers />
+	<publishers>
+		<org.jenkinsci.plugins.postbuildscript.PostBuildScript
+			plugin="postbuildscript">
+			<genericScriptFileList>
+				<org.jenkinsci.plugins.postbuildscript.GenericScript>
+					<filePath>${publishScript}</filePath>
+				</org.jenkinsci.plugins.postbuildscript.GenericScript>
+			</genericScriptFileList>
+			<scriptOnlyIfSuccess>true</scriptOnlyIfSuccess>
+			<scriptOnlyIfFailure>false</scriptOnlyIfFailure>
+			<markBuildUnstable>false</markBuildUnstable>
+		</org.jenkinsci.plugins.postbuildscript.PostBuildScript>
+	</publishers>
 	<buildWrappers />
 </project>
