@@ -11,6 +11,8 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -50,6 +52,8 @@ public class ProjectController {
 	private static String FORM_PROJECT 	= "projects/form";
 	private static String LIST_PAGE		= "projects/list";
 	private static String VIEW_PAGE		= "projects/overview";
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(ProjectController.class);
 
 	@Autowired
 	private IProjectDashboardExtensionManager projectDashboardExtensionManager;
@@ -99,6 +103,11 @@ public class ProjectController {
 		final SFProjectDTO project = new SFProjectDTO();
 		final ModelAndView model = new ModelAndView(FORM_PROJECT);
 		model.addObject("project", project);
+
+		final List<Project> projects = this.projectDao.findAll();
+
+		model.addObject("projects", projects);
+
 		return model;
 
 	}

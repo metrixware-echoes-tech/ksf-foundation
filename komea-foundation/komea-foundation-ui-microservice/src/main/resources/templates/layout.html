@@ -12,6 +12,8 @@
 		<link th:href="@{/assets/components-font-awesome/font-awesome.css}" href="../static/assets/components-font-awesome/font-awesome.css" rel="stylesheet" type="text/css" />
 		<!-- Ionicons 2.0.0 -->
 		<link th:href="@{/assets/ionicons/ionicons.css}" href="../static/assets/ionicons/ionicons.css" rel="stylesheet" type="text/css" />
+		<!-- jQuery TreeGrid -->
+		<link th:href="@{/assets/jquery-treegrid/jquery.treegrid.css}" href="../static/assets/jquery-treegrid/jquery.treegrid.css" rel="stylesheet" type="text/css" />
 		<!-- Custom Style -->
 		<link th:href="@{/css/styles.css}" href="../static/css/styles.css" rel="stylesheet" type="text/css" />
 		<link th:href="@{/css/local/komea-foundation.css}" href="../static/css/local/komea-foundation.css" rel="stylesheet" type="text/css"/>
@@ -82,8 +84,17 @@
 		<script th:src="@{/assets/jquery/jquery.js}" src="../static/assets/jquery/jquery.js" type="text/javascript" />
 		<script th:src="@{/assets/jquery-ui/jquery-ui.js}" src="../static/assets/jquery-ui/jquery-ui.js" type="text/javascript" />
 		<script th:src="@{/assets/jquery-resize/detect-element-resize.js}" src="../static/assets/detect-element-resize.js" type="text/javascript" />
+		
 		<!-- BootStrap -->
 		<script th:src="@{/assets/bootstrap/js/bootstrap.min.js}" src="../static/assets/boostrap/bootstrap.js" type="text/javascript" />
+
+		<!--  ZeroClipboard -->
+		<script th:src="@{/assets/zeroclipboard/ZeroClipboard.js}" src="../static/assets/ZeroClipboard.js" type="text/javascript" />
+
+		<!-- jQuery TreeGrid -->
+		<script th:src="@{/assets/jquery-treegrid/jquery.treegrid.js}" src="../static/assets/jquery-treegrid/jquery.treegrid.js" type="text/javascript" />
+		<script th:src="@{/assets/jquery-treegrid/jquery.treegrid.bootstrap3.js}" src="../static/assets/jquery-treegrid/jquery.treegrid.bootstrap3.js" type="text/javascript" />
+
 		<script type="text/javascript">
 			$(function () {
 			  $('[data-toggle="tooltip"]').tooltip();
@@ -101,10 +112,19 @@
 				$('.content').removeClass('hidden');
 				$('footer').removeClass('hidden');
 			}
+
+            $(document).ready(function() {
+            	
+            	// jQuery TreeGrid
+                $('.tree').treegrid({
+                    expanderExpandedClass: 'glyphicon glyphicon-minus text-muted',
+                    expanderCollapsedClass: 'glyphicon glyphicon-plus text-muted'
+                });
+
+            });			
+
 		</script>
 		
-		<!--  ZeroClipboard -->
-		<script th:src="@{/assets/zeroclipboard/ZeroClipboard.js}" src="../static/assets/ZeroClipboard.js" type="text/javascript" />
 
 		<div layout:fragment="footer" />
 

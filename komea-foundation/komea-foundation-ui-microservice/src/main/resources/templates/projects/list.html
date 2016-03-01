@@ -16,7 +16,8 @@
                     <h1>
                         Projects
                     </h1>
-                    <table class="table table-striped project-list">
+
+                    <table class="table table-striped project-list tree">
                         <thead>
                             <tr>
                                 <th>Name</th>
@@ -28,8 +29,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr th:each="prod : ${projects}">
-                                <td>
+                            <tr th:each="prod : ${projects}" th:class="'treegrid-' + ${prod.getProject().getId()}" th:classappend="${prod.getProject().getParentId() != null ? 'treegrid-parent-' + prod.getProject().getParentId() : '' }">
+								<td>
                                     <a th:text="${prod.project.name}" th:href="@{/ui/projects/}+${prod.project.key}"></a>
                                 </td>
                                 <td th:text="${prod.user.firstName}+' '+${prod.user.lastName}"></td>

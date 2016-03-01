@@ -3,13 +3,6 @@
  */
 package fr.echoes.labs.ksf.cc
 
-import fr.echoes.labs.ksf.cc.sf.dao.ISFApplicationTypeDAO
-import fr.echoes.labs.ksf.cc.sf.dao.ISoftwareFactoryDAO
-import fr.echoes.labs.ksf.cc.sf.domain.SFApplication
-import fr.echoes.labs.ksf.cc.sf.domain.SFApplicationType
-import fr.echoes.labs.ksf.cc.sf.domain.SoftwareFactory
-import groovy.util.logging.Slf4j
-
 import javax.annotation.PostConstruct
 import javax.annotation.PreDestroy
 
@@ -35,6 +28,13 @@ import com.tocea.corolla.users.domain.Permission
 import com.tocea.corolla.users.domain.Role
 import com.tocea.corolla.users.domain.User
 import com.tocea.corolla.users.domain.UserGroup
+
+import fr.echoes.labs.ksf.cc.sf.dao.ISFApplicationTypeDAO
+import fr.echoes.labs.ksf.cc.sf.dao.ISoftwareFactoryDAO
+import fr.echoes.labs.ksf.cc.sf.domain.SFApplication
+import fr.echoes.labs.ksf.cc.sf.domain.SFApplicationType
+import fr.echoes.labs.ksf.cc.sf.domain.SoftwareFactory
+import groovy.util.logging.Slf4j
 
 /**
  * @author sleroy
@@ -111,23 +111,59 @@ public class DemoDataBean {
 				"saroumane",
 				"fuckSauron..", roleAdmin)
 
+		def projet = new Project()
+		projet.setName("test2")
+		projet.setOwnerId(jsnow.getId())
+		projet.setKey("keyTest2")
+		this.saveProject(projet)
+
         def projet1 = new Project()
         projet1.setName("test")
         projet1.setOwnerId(jsnow.getId())
         projet1.setKey("keyTest")
         this.saveProject(projet1)
 
-            def projet2 = new Project()
+        def projet2 = new Project()
         projet2.setName("test1")
         projet2.setOwnerId(jsnow.getId())
         projet2.setKey("keyTest1")
         this.saveProject(projet2)
 
-            def projet = new Project()
-        projet.setName("test2")
-        projet.setOwnerId(jsnow.getId())
-        projet.setKey("keyTest2")
-        this.saveProject(projet)
+
+		def projet3 = new Project()
+		projet3.setName("test3")
+		projet3.setOwnerId(jsnow.getId())
+		projet3.setKey("keyTest3")
+		this.saveProject(projet3)
+
+		def projet3SubProject1 = new Project()
+		projet3SubProject1.setName("test3 subproject 1")
+		projet3SubProject1.setOwnerId(jsnow.getId())
+		projet3SubProject1.setKey("test3Subproject1")
+		projet3SubProject1.setParentId(projet3.getId())
+
+		this.saveProject(projet3SubProject1)
+
+		def projet3SubProject2 = new Project()
+		projet3SubProject2.setName("test3 subproject 2")
+		projet3SubProject2.setOwnerId(jsnow.getId())
+		projet3SubProject2.setKey("test3Subproject2")
+		projet3SubProject2.setParentId(projet3.getId())
+		this.saveProject(projet3SubProject2)
+
+		def projet3SubProject2SubProject1 = new Project()
+		projet3SubProject2SubProject1.setName("test3 subproject 2 subproject 1")
+		projet3SubProject2SubProject1.setOwnerId(jsnow.getId())
+		projet3SubProject2SubProject1.setKey("test3Subproject2 subproject 1")
+		projet3SubProject2SubProject1.setParentId(projet3SubProject2.getId())
+		this.saveProject(projet3SubProject2SubProject1)
+
+		def projet3SubProject3 = new Project()
+		projet3SubProject3.setName("test3 subproject 3")
+		projet3SubProject3.setOwnerId(jsnow.getId())
+		projet3SubProject3.setKey("test3Subproject3")
+		projet3SubProject3.setParentId(projet3.getId())
+		this.saveProject(projet3SubProject3)
 
 		/*
 		 * User Groups

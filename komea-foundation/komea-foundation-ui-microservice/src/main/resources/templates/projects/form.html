@@ -35,19 +35,29 @@
 <!-- 					</div> -->
 <!-- 				</div> -->
 				<!-- Name input-->
+				
 				<div class="form-group">
-					<label class="col-md-3 control-label" for="name">Name</label>
+					<label class="col-md-3 control-label" for="name">Name*</label>
 					<div class="col-md-7">
 						<input id="name" name="name" placeholder="Project Name" class="form-control input-md" required="required"
 							data-parsley-trigger="focusin focusout change" data-parsley-range="[3, 30]" type="text" th:field="*{name}" />
 						<span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
 					</div>
 				</div>
+				<div class="form-group">
+					<label class="col-md-3 control-label" for="parentProject">Parent project</label>
+               		<div class="col-md-7">
+						<select class="form-control" id="parentId" name="parentId">
+							<option value=""></option>
+							<option value="" th:each="project : ${projects}"  th:value="${project.id}" th:text="${project.name}"></option>
+						</select>
+					</div>
+				</div>				
 				<div class="form-group">		
 					<label class="col-md-3 control-label" style="padding-top: 30px;">Select the tool(s) that will be used for this project :</label>
 	              <div class="col-sm-7">	              
 	              	<ul class="app-list">
-	              		<li th:each="widget : ${@projectDashboardWidgets.getDashboardWidgets()}" th:attr="data-item=@{${widget.getTitle()}}">
+	              		<li th:each="widget : ${@projectDashboardWidgets.getDashboardWidgets()}" th:attr="data-item=@{${widget.getTitle()}}" class="active">
 	              			<img th:src="@{${widget.getIconUrl()}}"/>
 	              			<label th:text="@{${widget.getTitle()}}"></label>
 	              		</li>	              	
@@ -78,7 +88,7 @@
 					displayLoadingScreen('Creating project...');
 				});
 			});
-			$(document).ready(function() {
+/* 			$(document).ready(function() {
 				$('.app-list li').click(function() {
 					if ($(this).hasClass('disabled')) {
 						return false;
@@ -107,7 +117,7 @@
 						$(input).prop('checked', !checked);
 					}
 				});
-			}
+			} */
 		</script>
 	</div>
 </body>
