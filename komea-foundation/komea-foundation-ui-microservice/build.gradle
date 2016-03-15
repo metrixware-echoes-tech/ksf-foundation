@@ -3,11 +3,15 @@ project.description = "Komea Software Factory : Komea Foundation"
 
 buildscript {
     repositories {
-        mavenLocal()
-        mavenCentral()
+      mavenLocal()
+      mavenCentral()
+      maven {
+        url "https://plugins.gradle.org/m2/"
+      }        
     }
     dependencies {
       classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+      classpath("gradle.plugin.com.craigburke.gradle:bower-installer-gradle:2.5.1")
     }
 }
 
@@ -15,6 +19,13 @@ apply plugin: 'war'
 apply plugin: 'java'
 apply plugin: 'groovy'
 apply plugin: 'spring-boot'
+apply plugin: 'com.craigburke.bower-installer'
+
+/* Install Bower dependencies during build */
+build.dependsOn bowerInstall
+
+/* Clean Bower dependencies during a Gradle Clean task */
+clean.dependsOn bowerClean
 
 jar {
     baseName = 'komea-foundation-gui'

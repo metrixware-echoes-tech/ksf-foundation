@@ -65,17 +65,6 @@ def getGitBranch()  {
     }
 }
 
-buildscript {
-  repositories {
-    maven {
-      url "https://plugins.gradle.org/m2/"
-    }
-  }
-  dependencies {
-    classpath "gradle.plugin.com.craigburke.gradle:bower-installer-gradle:2.5.1"
-  }
-}
-
 /**
 Specific parent plugin
  */
@@ -110,13 +99,6 @@ allprojects {
     apply plugin: 'findbugs'
     apply plugin: 'maven-publish'
     apply plugin: 'groovy'
-    apply plugin: "com.craigburke.bower-installer"
-
-    /* Install Bower dependencies during build */
-    build.dependsOn bowerInstall
-
-    /* Clean Bower dependencies during a Gradle Clean task */
-    clean.dependsOn bowerClean
 
     /** REPOSITORIES */
     repositories {
