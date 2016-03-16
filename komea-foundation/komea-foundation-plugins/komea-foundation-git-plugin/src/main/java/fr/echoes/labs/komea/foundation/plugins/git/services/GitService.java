@@ -38,20 +38,40 @@ public class GitService implements IGitService {
 		final String gitProjectUri = this.configuration.getScmUrl() + '/' + projectName + ".git";
 		final File workingDirectory = new File(this.configuration.getGitWorkingdirectory());
 		try {
-			FileUtils.forceMkdir(workingDirectory);
+			if (workingDirectory.exists()) {
+				if (!workingDirectory.isDirectory()) {
+					LOGGER.error("Cannot use {} as a Git working directory as it is not a directory.", workingDirectory.getPath());
+					throw new GitExtensionException("Failed to create Git working directory.");
+				}
+			} else {
+				FileUtils.forceMkdir(workingDirectory);
+			}
 
 			// Clone project
 			LOGGER.debug("Cloning the repository {} into {}", gitProjectUri, workingDirectory);
 			final Git git = Git.cloneRepository().setURI(gitProjectUri).setDirectory(workingDirectory).call();
 
+			// Clone the repository, create the master and develop branches.
+			// Add the build and publish scripts and push the modification to origin
 			LOGGER.debug("Initializing the repository");
 			initRepo(workingDirectory, git);
 
+			// Delete the working directory
 			LOGGER.debug("Deleting the working directory: {}", workingDirectory);
-			FileUtils.deleteDirectory(workingDirectory);
+
+			// Delete Git local repository
+			FileUtils.deleteDirectory(git.getRepository().getWorkTree());
+
+			deleteWorkingDirectoryIfEmpty(workingDirectory);
 
 		} catch (final Exception e) {
 			throw new GitExtensionException(e);
+		}
+	}
+
+	private void deleteWorkingDirectoryIfEmpty(File workingDirectory) {
+		if (workingDirectory.isDirectory() && workingDirectory.listFiles().length == 0) {
+			FileUtils.deleteQuietly(workingDirectory);
 		}
 	}
 
