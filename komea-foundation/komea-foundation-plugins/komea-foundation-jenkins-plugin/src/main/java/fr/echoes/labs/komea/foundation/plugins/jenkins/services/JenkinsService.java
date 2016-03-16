@@ -175,6 +175,6 @@ public class JenkinsService implements IJenkinsService {
 		final long timestamp = details.getTimestamp();
 		final int duration = details.getDuration();
 		final String result = details.getResult().name();
-		return new JenkinsBuildInfo(buildNumber, jobName, timestamp, duration,  buildUrl, result);
+		return new JenkinsBuildInfo(buildNumber, details.getFullDisplayName(), timestamp, duration,  buildUrl, result);
 	}
 }
