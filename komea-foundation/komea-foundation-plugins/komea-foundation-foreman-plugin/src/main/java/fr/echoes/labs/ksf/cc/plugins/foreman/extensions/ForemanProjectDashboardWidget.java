@@ -56,16 +56,16 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
 
 	@Autowired
 	private ForemanErrorHandlingService errorHandler;
-	
+
 	@Autowired
 	private HttpServletRequest request;
-	
+
 	@Autowired
 	private HttpServletResponse response;
-	
+
 	@Autowired
 	private ServletContext servletContext;
-	
+
 	@Override
 	public List<MenuAction> getDropdownActions() {
 
@@ -86,15 +86,15 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
 
 		final Project project = this.projectDAO.findOne(projectId);
 
-		final WebContext ctx = new WebContext(request, response, servletContext);
+		final WebContext ctx = new WebContext(this.request, this.response, this.servletContext);
 		ctx.setVariable("projectId", projectId);
 
 		final List<ForemanEnvironnment> environments = this.environmentDAO.findAll();
 		ctx.setVariable("environments", environments);
 
-		final Iterable<ForemanTarget> projectTargets = targetDAO.findByProject(project);
+		final Iterable<ForemanTarget> projectTargets = this.targetDAO.findByProject(project);
 		ctx.setVariable("targets", projectTargets);
-		
+
 		try {
 
 			final IForemanApi foremanApi = ForemanClient.createApi(this.configurationService.getForemanUrl(), this.configurationService.getForemanUsername(), this.configurationService.getForemanPassword());
@@ -105,10 +105,10 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
 
 		} catch (final Exception e) {
 			LOGGER.error("[foreman] Foreman API call failed : {}", e);
-			errorHandler.registerError("Unable to invoke Foreman. Please verify your Foreman configuration");
+			this.errorHandler.registerError("Unable to invoke Foreman. Please verify your Foreman configuration");
 		}
-		
-		ctx.setVariable("foremanError", errorHandler.retrieveError());
+
+		ctx.setVariable("foremanError", this.errorHandler.retrieveError());
 
 		return templateEngine.process("foremanPanel", ctx);
 	}
@@ -136,24 +136,24 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
 
 			@Override
 			public String getContent() {
-				
+
 				final Context ctx = new Context();
-				
-				HttpServletRequest request = 
+
+				HttpServletRequest request =
 						((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
 						.getRequest();
-				
+
 				String foremanURL = ForemanProjectDashboardWidget.this.configurationService.getForemanUrl();
-				
+
 				String foremanHost = request.getParameter("foremanHost");
-				
+
 				if (StringUtils.isNotEmpty(foremanHost)) {
 					foremanURL += "/hosts/"+foremanHost;
 				}
-				
+
 				ctx.setVariable("foremanURL", foremanURL);
-				
-				return templateEngine.process("managementPanel", ctx);
+
+				return templateEngine.process("foremanManagementPanel", ctx);
 			}
 		};
 

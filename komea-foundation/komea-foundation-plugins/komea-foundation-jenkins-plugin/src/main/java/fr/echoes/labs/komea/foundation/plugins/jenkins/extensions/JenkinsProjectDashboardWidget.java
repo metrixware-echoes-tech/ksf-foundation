@@ -85,7 +85,7 @@ public class JenkinsProjectDashboardWidget implements ProjectDashboardWidget {
 			final List<JenkinsBuildInfo> buildInfo = this.jenkinsService.getBuildInfo(projectName);
 
 			ctx.setVariable("buildBase", "/ui/projects/" + project.getKey() + "?buildUrl=");
-			
+
 			ctx.setVariable("jenkinsBuildHistory", buildInfo);
 		} catch (final JenkinsExtensionException e) {
 			LOGGER.error("[Jenkins] Failed to retrieve build history", e);
@@ -130,21 +130,21 @@ public class JenkinsProjectDashboardWidget implements ProjectDashboardWidget {
 				String url = JenkinsProjectDashboardWidget.this.configurationService.getUrl();
 
 				final String buildUrl = request.getParameter("buildUrl");
-				
+
 				if (StringUtils.isNotEmpty(buildUrl)) {
-					
+
 					try {
 						url = URLDecoder.decode(buildUrl, "UTF-8");
 					} catch (UnsupportedEncodingException e) {
 						LOGGER.error("", e);
 						url = JenkinsProjectDashboardWidget.this.configurationService.getUrl();
 					}
-				}					
-				
-				
+				}
+
+
 				ctx.setVariable("jenkinsURL", url);
 
-				return templateEngine.process("managementPanel", ctx);
+				return templateEngine.process("jenkinsManagementPanel", ctx);
 			}
 		};
 

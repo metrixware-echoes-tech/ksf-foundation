@@ -79,7 +79,7 @@ public class NexusProjectDashboardWidget implements ProjectDashboardWidget {
 
 				ctx.setVariable("nexusURL", url);
 
-				return templateEngine.process("managementPanel", ctx);
+				return templateEngine.process("nexusManagementPanel", ctx);
 			}
 		};
 
