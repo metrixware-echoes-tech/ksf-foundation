@@ -51,17 +51,9 @@
 														<strong>Owner:</strong>
 														<label th:text="${projectData.user.firstName+' '+projectData.user.lastName}">User</label>
 													</li>
-<!-- 													<li> -->
-<!-- 														<h5> -->
-<!-- 															<strong>Creation date:</strong> 2015-11-09 09:06:06 UTC -->
-<!-- 														</h5> -->
-<!-- 													</li> -->
-<!-- 													<li> -->
-<!-- 														<h5> -->
-<!-- 															<strong>Repository:</strong> test.git -->
-<!-- 														</h5> -->
-<!-- 													</li> -->
 												</ul>
+
+												<a id="createReleaseButton" name="createReleaseButton" class="btn btn-primary" title="Create a new release" data-placement="bottom" th:href="@{/ui/projects} + '/' + ${projectData.project.key} + '/releases/new'">Create Release</a>
 												
 											</div>
 										</div>

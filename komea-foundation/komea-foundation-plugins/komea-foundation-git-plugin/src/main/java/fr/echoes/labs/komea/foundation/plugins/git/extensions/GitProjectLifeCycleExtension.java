@@ -88,4 +88,16 @@ public class GitProjectLifeCycleExtension implements IProjectLifecycleExtension 
 
 	}
 
+	@Override
+	public void notifyCreatedRelease(ProjectDto project) {
+		try {
+
+			this.gitService.createRelease(project.getName());
+		} catch (final Exception ex) {
+			LOGGER.error("[Git] Failed to create release for project {} ", project.getName(), ex);
+			this.errorHandler.registerError("Failed to create release.");
+		}
+
+	}
+
 }

@@ -11,6 +11,7 @@ import com.tocea.corolla.products.domain.Project;
 import com.tocea.corolla.products.events.EventNewProjectCreated;
 import com.tocea.corolla.products.events.EventProjectDeleted;
 import com.tocea.corolla.products.events.EventProjectUpdated;
+import com.tocea.corolla.products.events.EventReleaseCreated;
 
 import fr.echoes.labs.ksf.extensions.projects.IProjectLifecycleExtension;
 import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
@@ -29,11 +30,11 @@ public class ProjectLifecycleExtensionManager {
 
 	@Subscribe
 	public void notifyCreation(final EventNewProjectCreated _event) {
-		if (extensions == null) {
+		if (this.extensions == null) {
 			return;
 		}
 		final ProjectDto projectDto = newProjectDto(_event.getCreatedProject());
-		for (final IProjectLifecycleExtension extension : extensions) {
+		for (final IProjectLifecycleExtension extension : this.extensions) {
 
 			extension.notifyCreatedProject(projectDto);
 		}
@@ -42,23 +43,35 @@ public class ProjectLifecycleExtensionManager {
 
 	@Subscribe
 	public void notifyCreation(final EventProjectDeleted _event) {
-		if (extensions == null) {
+		if (this.extensions == null) {
 			return;
 		}
 		final ProjectDto projectDto = newProjectDto(_event.getProject());
-		for (final IProjectLifecycleExtension extension : extensions) {
+		for (final IProjectLifecycleExtension extension : this.extensions) {
 			extension.notifyDeletedProject(projectDto);
 		}
 
 	}
 
 	@Subscribe
+	public void notifyCreation(final EventReleaseCreated event) {
+		if (this.extensions == null) {
+			return;
+		}
+		final ProjectDto projectDto = newProjectDto(event.getProject());
+		for (final IProjectLifecycleExtension extension : this.extensions) {
+			extension.notifyCreatedRelease(projectDto);
+		}
+
+	}
+
+	@Subscribe
 	public void notifyCreation(final EventProjectUpdated _event) {
-		if (extensions == null) {
+		if (this.extensions == null) {
 			return;
 		}
 		final ProjectDto projectDto = newProjectDto(_event.getProject());
-		for (final IProjectLifecycleExtension extension : extensions) {
+		for (final IProjectLifecycleExtension extension : this.extensions) {
 			extension.notifyUpdatedProject(projectDto);
 		}
 

@@ -10,11 +10,13 @@ import fr.echoes.labs.ksf.extensions.api.IExtension;
  *
  */
 public interface IProjectLifecycleExtension extends IExtension{
-	void notifyCreatedProject(ProjectDto _project);
-	
-	void notifyDeletedProject(ProjectDto _project);
-	
-	void notifyDuplicatedProject(ProjectDto _project);
-	
-	void notifyUpdatedProject(ProjectDto _project);
+	void notifyCreatedProject(ProjectDto project);
+
+	void notifyDeletedProject(ProjectDto project);
+
+	void notifyDuplicatedProject(ProjectDto project);
+
+	void notifyUpdatedProject(ProjectDto project);
+
+	void notifyCreatedRelease(ProjectDto project);
 }

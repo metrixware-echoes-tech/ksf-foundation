@@ -28,51 +28,51 @@ public class ForemanProjectLifeCycleExtension implements IProjectLifecycleExtens
 
 	@Autowired
 	private IForemanService foremanService;
-	
+
 	@Autowired
 	private ForemanClientFactory foremanClientFactory;
 
 	@Autowired
 	private ForemanErrorHandlingService errorHandler;
-	
+
 	@Autowired
 	private IForemanTargetDAO targetDAO;
-	
+
 	@Autowired
 	private IProjectDAO projectDAO;
-	
+
 	@Autowired
 	private ApplicationContext applicationContext;
-	
+
 	private ICurrentUserService currentUserService;
 
 	public void init() {
-		if (currentUserService == null) {
-			currentUserService = applicationContext.getBean(ICurrentUserService.class);
+		if (this.currentUserService == null) {
+			this.currentUserService = this.applicationContext.getBean(ICurrentUserService.class);
 		}
 	}
-	
+
 	@Override
 	public void notifyCreatedProject(ProjectDto _project) {
 
 		init();
-		
-		final String logginName = currentUserService.getCurrentUserLogin();
+
+		final String logginName = this.currentUserService.getCurrentUserLogin();
 		//SecurityContextHolder.getContext().getAuthentication().getName();
-		
+
 		if (StringUtils.isEmpty(logginName)) {
 			LOGGER.error("[Foreman] No user found. Aborting project creation in Foreman module");
 			return;
 		}
-		
+
 		LOGGER.info("[Foreman] project {} creation detected [demanded by: {}]", _project.getKey(), logginName);
-		
+
 		try {
-			
+
 			// Create the project in Foreman
-			final IForemanApi foremanApi = foremanClientFactory.createForemanClient();		
-			foremanService.createProject(foremanApi, _project.getName(), logginName);
-			
+			final IForemanApi foremanApi = this.foremanClientFactory.createForemanClient();
+			this.foremanService.createProject(foremanApi, _project.getName(), logginName);
+
 		} catch (final Exception e) {
 			LOGGER.error("[Foreman] project creation failed", e);
 			this.errorHandler.registerError("Unable to create Foreman project. Please verify your Foreman configuration.");
@@ -81,17 +81,17 @@ public class ForemanProjectLifeCycleExtension implements IProjectLifecycleExtens
 
 	@Override
 	public void notifyDeletedProject(ProjectDto _project) {
-		
+
         try {
 
         	// Delete targets associated to the project
-        	List<ForemanTarget> targets = targetDAO.findByProject(projectDAO.findOne(_project.getId()));
-        	targetDAO.delete(targets);
-        	
+        	List<ForemanTarget> targets = this.targetDAO.findByProject(this.projectDAO.findOne(_project.getId()));
+        	this.targetDAO.delete(targets);
+
         	// Delete project data in Foreman
-        	final IForemanApi foremanApi = foremanClientFactory.createForemanClient();
-            foremanService.deleteProject(foremanApi, _project.getName());
-            
+        	final IForemanApi foremanApi = this.foremanClientFactory.createForemanClient();
+            this.foremanService.deleteProject(foremanApi, _project.getName());
+
         } catch (final Exception ex) {
             LOGGER.error("[foreman] project delete failed", ex);
             this.errorHandler.registerError("Unable to delete Foreman project. Please verify your Foreman configuration.");
@@ -106,6 +106,12 @@ public class ForemanProjectLifeCycleExtension implements IProjectLifecycleExtens
 
 	@Override
 	public void notifyUpdatedProject(ProjectDto _project) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void notifyCreatedRelease(ProjectDto project) {
 		// TODO Auto-generated method stub
 
 	}

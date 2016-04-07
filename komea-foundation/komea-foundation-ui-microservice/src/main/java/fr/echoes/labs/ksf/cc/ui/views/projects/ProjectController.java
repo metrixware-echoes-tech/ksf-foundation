@@ -29,6 +29,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.google.common.collect.Lists;
 import com.tocea.corolla.cqrs.gate.CommandExecutionException;
 import com.tocea.corolla.cqrs.gate.Gate;
+import com.tocea.corolla.products.commands.CreateReleaseCommand;
 import com.tocea.corolla.products.commands.DeleteProjectCommand;
 import com.tocea.corolla.products.dao.IProjectDAO;
 import com.tocea.corolla.products.domain.Project;
@@ -96,6 +97,22 @@ public class ProjectController {
 			return model;
 		}
 	}
+
+
+	@RequestMapping(value = "/ui/projects/{projectKey}/releases/new")
+	public ModelAndView createRelease(@PathVariable final String projectKey) {
+
+		final Project project = this.projectDao.findByKey(projectKey);
+
+		if (project == null) {
+			throw new ProjectNotFoundException();
+		}
+
+    	this.gate.dispatch(new CreateReleaseCommand(project));
+
+		return new ModelAndView("redirect:/ui/projects/");
+	}
+
 
 	@RequestMapping(value = "/ui/projects/new")
 	public ModelAndView getCreatePage() {

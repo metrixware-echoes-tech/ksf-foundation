@@ -5,9 +5,11 @@ import java.io.IOException;
 import java.util.Objects;
 
 import org.apache.commons.io.FileUtils;
+import org.eclipse.jgit.api.CreateBranchCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.NoFilepatternException;
+import org.eclipse.jgit.lib.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,9 @@ import fr.echoes.labs.komea.foundation.plugins.git.GitExtensionException;
 @Service
 public class GitService implements IGitService {
 
+	private static final String RELEASE = "release";
+	private static final String DEVELOP = "develop";
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(GitService.class);
 
 	@Autowired
@@ -36,22 +41,19 @@ public class GitService implements IGitService {
 		Objects.requireNonNull(projectName);
 
 		final String gitProjectUri = this.configuration.getScmUrl() + '/' + projectName + ".git";
-		final File workingDirectory = new File(this.configuration.getGitWorkingdirectory());
+
+		File workingDirectory = null;
+		Git git = null;
 		try {
-			if (workingDirectory.exists()) {
-				if (!workingDirectory.isDirectory()) {
-					LOGGER.error("Cannot use {} as a Git working directory as it is not a directory.", workingDirectory.getPath());
-					throw new GitExtensionException("Failed to create Git working directory.");
-				}
-			} else {
-				FileUtils.forceMkdir(workingDirectory);
-			}
+			workingDirectory = createCloneDestinationDirectory(projectName);
 
 			// Clone project
 			LOGGER.debug("Cloning the repository {} into {}", gitProjectUri, workingDirectory);
-			final Git git = Git.cloneRepository().setURI(gitProjectUri).setDirectory(workingDirectory).call();
 
-			// Clone the repository, create the master and develop branches.
+			// Clone the repository
+			git = Git.cloneRepository().setURI(gitProjectUri).setDirectory(workingDirectory).call();
+
+			// Create the master and develop branches.
 			// Add the build and publish scripts and push the modification to origin
 			LOGGER.debug("Initializing the repository");
 			initRepo(workingDirectory, git);
@@ -59,20 +61,35 @@ public class GitService implements IGitService {
 			// Delete the working directory
 			LOGGER.debug("Deleting the working directory: {}", workingDirectory);
 
-			// Delete Git local repository
-			FileUtils.deleteDirectory(git.getRepository().getWorkTree());
-
-			deleteWorkingDirectoryIfEmpty(workingDirectory);
-
 		} catch (final Exception e) {
 			throw new GitExtensionException(e);
+		} finally {
+			if (git != null) {
+				git.close();
+			}
+			try {
+				FileUtils.deleteDirectory(workingDirectory);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
-	private void deleteWorkingDirectoryIfEmpty(File workingDirectory) {
-		if (workingDirectory.isDirectory() && workingDirectory.listFiles().length == 0) {
-			FileUtils.deleteQuietly(workingDirectory);
+	private File createCloneDestinationDirectory(final String projectName)
+			throws GitExtensionException, IOException {
+
+		final File workingDirectory = new File(this.configuration.getGitWorkingdirectory(), projectName);
+
+		if (workingDirectory.exists()) {
+			if (!workingDirectory.isDirectory()) {
+				LOGGER.error("Cannot use {} as a Git working directory as it is not a directory.", workingDirectory.getPath());
+				throw new GitExtensionException("Failed to create Git working directory.");
+			}
+		} else {
+			FileUtils.forceMkdir(workingDirectory);
 		}
+
+		return workingDirectory;
 	}
 
 	/**
@@ -94,8 +111,8 @@ public class GitService implements IGitService {
 
 		// Create develop branch
 		LOGGER.debug("Creating the develop branch");
-		git.branchCreate().setName("develop").call();
-		git.push().add("develop").call();
+		git.branchCreate().setName(DEVELOP).call();
+		git.push().add(DEVELOP).call();
 	}
 
 	/**
@@ -115,4 +132,49 @@ public class GitService implements IGitService {
 	public void deleteProject(String projectName) throws GitExtensionException {
 		Objects.requireNonNull(projectName);
 	}
+
+	@Override
+	public void createRelease(String projectName) throws GitExtensionException {
+		Objects.requireNonNull(projectName);
+
+		final String gitProjectUri = this.configuration.getScmUrl() + '/' + projectName + ".git";
+
+		File workingDirectory = null;
+		Git git = null;
+
+		try {
+			workingDirectory = createCloneDestinationDirectory(projectName);
+
+			// Clone project
+			LOGGER.debug("Cloning the repository {} into {}", gitProjectUri, workingDirectory);
+			git = Git.cloneRepository().setURI(gitProjectUri).setDirectory(workingDirectory).call();
+
+			git.checkout()
+					.setName(DEVELOP)
+					.setCreateBranch(true)
+					.setUpstreamMode(
+							CreateBranchCommand.SetupUpstreamMode.TRACK)
+					.setStartPoint(
+							Constants.DEFAULT_REMOTE_NAME + "/" + DEVELOP)
+					.call();
+			git.branchCreate().setName(RELEASE).call();
+			git.push().add(RELEASE).call();
+
+
+		} catch (final Exception e) {
+			throw new GitExtensionException(e);
+		} finally {
+			if (git != null) {
+				git.close();
+			}
+			try {
+				// Delete Git local repository
+				FileUtils.deleteDirectory(workingDirectory);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+	}
+
 }

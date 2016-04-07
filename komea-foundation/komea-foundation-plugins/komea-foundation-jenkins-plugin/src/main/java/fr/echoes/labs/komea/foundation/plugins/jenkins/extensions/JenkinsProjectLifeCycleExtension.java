@@ -95,4 +95,10 @@ public class JenkinsProjectLifeCycleExtension implements IProjectLifecycleExtens
 
 	}
 
+	@Override
+	public void notifyCreatedRelease(ProjectDto project) {
+		// TODO Auto-generated method stub
+
+	}
+
 }

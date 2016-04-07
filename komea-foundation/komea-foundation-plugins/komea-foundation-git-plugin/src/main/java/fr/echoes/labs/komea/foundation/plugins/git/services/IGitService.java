@@ -26,5 +26,13 @@ public interface IGitService {
 	 */
 	public void deleteProject(String projectName) throws GitExtensionException;
 
+	/**
+	 *
+	 *
+	 * @param projectName
+	 * @throws GitExtensionException
+	 */
+	public void createRelease(String projectName) throws GitExtensionException;
+
 
 }
