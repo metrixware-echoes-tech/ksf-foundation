@@ -77,22 +77,22 @@ public class GitProjectLifeCycleExtension implements IProjectLifecycleExtension 
 	}
 
 	@Override
-	public void notifyDuplicatedProject(ProjectDto _project) {
+	public void notifyDuplicatedProject(ProjectDto project) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void notifyUpdatedProject(ProjectDto _project) {
+	public void notifyUpdatedProject(ProjectDto project) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void notifyCreatedRelease(ProjectDto project) {
+	public void notifyCreatedRelease(ProjectDto project, String releaseVersion) {
 		try {
 
-			this.gitService.createRelease(project.getName());
+			this.gitService.createRelease(project.getName(), releaseVersion);
 		} catch (final Exception ex) {
 			LOGGER.error("[Git] Failed to create release for project {} ", project.getName(), ex);
 			this.errorHandler.registerError("Failed to create release.");

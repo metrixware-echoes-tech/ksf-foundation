@@ -3,7 +3,9 @@ package fr.echoes.labs.ksf.cc.plugins.redmine.services;
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import org.apache.commons.lang3.StringUtils;
@@ -174,6 +176,64 @@ public class RedmineService implements IRedmineService {
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public List<String> getVersions(String projectName) throws RedmineExtensionException {
+		Objects.requireNonNull(projectName);
+
+		final List<String> result;
+		final RedmineManager mgr = createRedmineManager();
+		final ProjectManager projectManager = mgr.getProjectManager();
+		final String projectKey =  createIdentifier(projectName);
+		try {
+			Project project = projectManager.getProjectByKey(projectKey);
+			final List<Version> versions = projectManager.getVersions(project.getId());
+
+			final Map<String, List<String>> projectVersionMap = new HashMap<String, List<String>>();
+
+			// Loop through the list of versions and build a map with the projects names as keys and lists
+			// of versions as values. The version with another status than "open" are ignored.
+			for (Version version : versions) {
+
+				if (!Version.STATUS_OPEN.equals(version.getStatus())) {
+					LOGGER.info("[Redmine] The {} version \"{}\" was ignored.", version.getStatus(), version.getName());
+					continue;
+				}
+
+				final String versionProjectName = version.getProject().getName();
+
+				List<String> versionList = projectVersionMap.get(versionProjectName);
+				if (versionList == null) {
+					versionList = new ArrayList<String>();
+					projectVersionMap.put(versionProjectName, versionList);
+				}
+				versionList.add(version.getName());
+			}
+
+			if (!versions.isEmpty()) {
+
+				// If there are versions directly related to the project (same project name) only these versions will be returned.
+				// If the versions are not directly related to the project all the versions will be returned.
+				if (projectVersionMap.containsKey(projectName)) {
+					result = projectVersionMap.get(projectName);
+				} else {
+					result = new ArrayList<String>();
+					for (Map.Entry<String, List<String>> entry : projectVersionMap.entrySet()) {
+						result.addAll(entry.getValue());
+					}
+
+				}
+
+			} else {
+				result = Collections.<String>emptyList();
+			}
+
+
+		} catch (RedmineException e) {
+			throw new RedmineExtensionException("Failed to retrieve project \"" + projectName +"\" versions", e);
+		}
+		return result;
 	}
 
 }

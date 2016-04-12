@@ -96,7 +96,7 @@ public class RedmineProjectLifeCycleExtension implements IProjectLifecycleExtens
 	}
 
 	@Override
-	public void notifyCreatedRelease(ProjectDto project) {
+	public void notifyCreatedRelease(ProjectDto project, String releaseVersion) {
 		// TODO Auto-generated method stub
 
 	}

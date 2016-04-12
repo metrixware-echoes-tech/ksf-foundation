@@ -60,7 +60,7 @@ public class ProjectLifecycleExtensionManager {
 		}
 		final ProjectDto projectDto = newProjectDto(event.getProject());
 		for (final IProjectLifecycleExtension extension : this.extensions) {
-			extension.notifyCreatedRelease(projectDto);
+			extension.notifyCreatedRelease(projectDto, event.getReleaseVersion());
 		}
 
 	}

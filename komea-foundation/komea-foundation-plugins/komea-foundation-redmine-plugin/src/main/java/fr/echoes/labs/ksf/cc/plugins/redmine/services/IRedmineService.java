@@ -31,11 +31,21 @@ public interface IRedmineService {
 
 
 	/**
-	 * Get the Redmine issues for the given query.
+	 * Gets the Redmine issues for the given query.
 	 *
 	 * @param query
 	 * @return
 	 */
 	public List<RedmineIssue> queryIssues(RedmineQuery query) throws RedmineExtensionException;
+
+
+	/**
+	 * Returns the list of versions for this project.
+	 *
+	 * @param projectName the project name
+	 * @return a list of versions as a list of strings.
+	 * @throws RedmineExtensionException
+	 */
+	public List<String> getVersions(String projectName) throws RedmineExtensionException;
 
 }

@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -98,9 +99,8 @@ public class ProjectController {
 		}
 	}
 
-
-	@RequestMapping(value = "/ui/projects/{projectKey}/releases/new")
-	public ModelAndView createRelease(@PathVariable final String projectKey) {
+	@RequestMapping(value = "/ui/projects/releases/new")
+	public ModelAndView createRelease(@RequestParam("projectKey") final String projectKey, @RequestParam("releaseVersion") final String releaseVersion) {
 
 		final Project project = this.projectDao.findByKey(projectKey);
 
@@ -108,9 +108,9 @@ public class ProjectController {
 			throw new ProjectNotFoundException();
 		}
 
-    	this.gate.dispatch(new CreateReleaseCommand(project));
+    	this.gate.dispatch(new CreateReleaseCommand(project, releaseVersion));
 
-		return new ModelAndView("redirect:/ui/projects/");
+		return new ModelAndView("redirect:/ui/projects/" + project.getKey());
 	}
 
 

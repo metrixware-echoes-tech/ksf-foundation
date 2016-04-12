@@ -30,9 +30,10 @@ public interface IGitService {
 	 *
 	 *
 	 * @param projectName
+	 * @param releaseVersion
 	 * @throws GitExtensionException
 	 */
-	public void createRelease(String projectName) throws GitExtensionException;
+	public void createRelease(String projectName, String releaseVersion) throws GitExtensionException;
 
 
 }

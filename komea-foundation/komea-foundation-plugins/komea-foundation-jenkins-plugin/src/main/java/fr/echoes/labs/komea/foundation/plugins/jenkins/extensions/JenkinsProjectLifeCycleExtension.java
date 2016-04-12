@@ -96,8 +96,14 @@ public class JenkinsProjectLifeCycleExtension implements IProjectLifecycleExtens
 	}
 
 	@Override
-	public void notifyCreatedRelease(ProjectDto project) {
-		// TODO Auto-generated method stub
+	public void notifyCreatedRelease(ProjectDto project, String releaseVersion) {
+		try {
+
+			this.jenkinsService.createRelease(project.getName(), releaseVersion);
+		} catch (final Exception ex) {
+			LOGGER.error("[Git] Failed to create release for project {} ", project.getName(), ex);
+			this.errorHandler.registerError("Failed to create release.");
+		}
 
 	}
 

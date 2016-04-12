@@ -18,5 +18,5 @@ public interface IProjectLifecycleExtension extends IExtension{
 
 	void notifyUpdatedProject(ProjectDto project);
 
-	void notifyCreatedRelease(ProjectDto project);
+	void notifyCreatedRelease(ProjectDto project, String releaseName);
 }

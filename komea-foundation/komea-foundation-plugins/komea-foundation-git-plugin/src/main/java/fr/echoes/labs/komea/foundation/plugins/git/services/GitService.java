@@ -28,7 +28,6 @@ import fr.echoes.labs.komea.foundation.plugins.git.GitExtensionException;
 @Service
 public class GitService implements IGitService {
 
-	private static final String RELEASE = "release";
 	private static final String DEVELOP = "develop";
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(GitService.class);
@@ -134,7 +133,7 @@ public class GitService implements IGitService {
 	}
 
 	@Override
-	public void createRelease(String projectName) throws GitExtensionException {
+	public void createRelease(String projectName, String releaseVersion) throws GitExtensionException {
 		Objects.requireNonNull(projectName);
 
 		final String gitProjectUri = this.configuration.getScmUrl() + '/' + projectName + ".git";
@@ -157,8 +156,10 @@ public class GitService implements IGitService {
 					.setStartPoint(
 							Constants.DEFAULT_REMOTE_NAME + "/" + DEVELOP)
 					.call();
-			git.branchCreate().setName(RELEASE).call();
-			git.push().add(RELEASE).call();
+
+			final String branchName = getBranchName(projectName, releaseVersion);
+			git.branchCreate().setName(branchName).call();
+			git.push().add(branchName).call();
 
 
 		} catch (final Exception e) {
@@ -175,6 +176,10 @@ public class GitService implements IGitService {
 			}
 		}
 
+	}
+
+	private String getBranchName(String projectName, String releaseVersion) {
+		return releaseVersion;
 	}
 
 }
