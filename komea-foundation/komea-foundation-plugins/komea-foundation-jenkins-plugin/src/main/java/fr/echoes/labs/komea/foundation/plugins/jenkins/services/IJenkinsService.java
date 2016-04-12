@@ -29,10 +29,18 @@ public interface IJenkinsService {
 
 	/**
 	 * Returns the build history.
-	 * 
+	 *
 	 * @param projectName the project name.
-	 * @return a list of {@link JenkinsBuildInfo}. Is never {@code null}. 
+	 * @return a list of {@link JenkinsBuildInfo}. Is never {@code null}.
 	 * @throws JenkinsExtensionException
 	 */
-	public List<JenkinsBuildInfo> getBuildInfo(String projectName) throws JenkinsExtensionException; 
+	public List<JenkinsBuildInfo> getBuildInfo(String projectName) throws JenkinsExtensionException;
+
+
+	/**
+	 * @param name
+	 * @param releaseVersion
+	 * @throws JenkinsExtensionException
+	 */
+	public void createRelease(String name, String releaseVersion) throws JenkinsExtensionException;
 }

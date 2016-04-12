@@ -60,17 +60,17 @@ public class JenkinsService implements IJenkinsService {
 
 				final FolderJob projectFolder = getProjectParentFolder(jenkins, projectName);
 
-				String resolvedXmlConfig = createXmlConfig(projectName, scmUrl, MASTER);
+				String resolvedXmlConfig = createConfigXml(projectName, scmUrl, MASTER);
 				jenkins.createJob(projectFolder, getJobName(projectName, MASTER), resolvedXmlConfig, false);
 
-				resolvedXmlConfig = createXmlConfig(projectName, scmUrl, DEVELOP);
+				resolvedXmlConfig = createConfigXml(projectName, scmUrl, DEVELOP);
 				jenkins.createJob(projectFolder, getJobName(projectName, DEVELOP), resolvedXmlConfig, false);
 
 			} else {
-				String resolvedXmlConfig = createXmlConfig(projectName, scmUrl, MASTER);
+				String resolvedXmlConfig = createConfigXml(projectName, scmUrl, MASTER);
 				jenkins.createJob(getJobName(projectName, MASTER), resolvedXmlConfig, false);
 
-				resolvedXmlConfig = createXmlConfig(projectName, scmUrl, DEVELOP);
+				resolvedXmlConfig = createConfigXml(projectName, scmUrl, DEVELOP);
 				jenkins.createJob(getJobName(projectName, DEVELOP), resolvedXmlConfig, false);
 			}
 
@@ -94,10 +94,7 @@ public class JenkinsService implements IJenkinsService {
 		return new JenkinsServer(new URI(this.configurationService.getUrl()));
 	}
 
-	private String createXmlConfig(String projectName, String scmUrl, String branchName) throws IOException {
-		final URL url = com.google.common.io.Resources.getResource(this.configurationService.getTemplateName());
-
-		final String templateXml = Resources.toString(url, Charsets.UTF_8);
+	private String createConfigXml(String projectName, String scmUrl, String branchName) throws IOException {
 
 		final Map<String, String> variables = new HashMap<String, String>();
 
@@ -106,6 +103,20 @@ public class JenkinsService implements IJenkinsService {
 		variables.put("buildScript", this.configurationService.getBuildScript());
 		variables.put("publishScript", this.configurationService.getPublishScript());
 
+		final URL url = com.google.common.io.Resources.getResource(this.configurationService.getTemplateName());
+		return substituteText(url, variables);
+	}
+
+	/**
+	 * Replaces all the occurrences of variables with their matching values.
+	 *
+	 * @param url
+	 * @param variables the map with the variables' values, can be null.
+	 * @return
+	 * @throws IOException
+	 */
+	private String substituteText(URL url, Map<String, String> variables) throws IOException {
+		final String templateXml = Resources.toString(url, Charsets.UTF_8);
 		final StrSubstitutor sub = new StrSubstitutor(variables);
 		final String resolvedXml = sub.replace(templateXml);
 		return resolvedXml;
@@ -176,5 +187,35 @@ public class JenkinsService implements IJenkinsService {
 		final int duration = details.getDuration();
 		final String result = details.getResult().name();
 		return new JenkinsBuildInfo(buildNumber, details.getFullDisplayName(), timestamp, duration,  buildUrl, result);
+	}
+
+	@Override
+	public void createRelease(String projectName, String releaseVersion) throws JenkinsExtensionException {
+		final JenkinsServer jenkins;
+		try {
+			jenkins = createJenkinsClient();
+
+			final String scmUrl = this.configurationService.getScmUrl() + '/' + projectName + ".git";
+
+			final String branchName = getBranchName(projectName, releaseVersion);
+
+			if (this.configurationService.useFolders()) {
+				final FolderJob projectFolder = getProjectParentFolder(jenkins, projectName);
+
+				String resolvedXmlConfig = createConfigXml(projectName, scmUrl, branchName);
+				jenkins.createJob(projectFolder, getJobName(projectName, branchName), resolvedXmlConfig, false);
+			} else {
+				String resolvedXmlConfig = createConfigXml(projectName, scmUrl, branchName);
+				jenkins.createJob(getJobName(projectName, branchName), resolvedXmlConfig, false);
+			}
+
+
+		} catch (final Exception e) {
+			throw new JenkinsExtensionException("Failed to create Jenkins job", e);
+		}
+	}
+
+	private String getBranchName(String projectName, String releaseVersion) {
+		return releaseVersion;
 	}
 }
