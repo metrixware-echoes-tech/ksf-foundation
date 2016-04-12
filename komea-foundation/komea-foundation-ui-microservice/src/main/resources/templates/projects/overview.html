@@ -5,7 +5,7 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorator="layout">
 <head>
-<title>Home</title>
+	<title>Home</title>
 </head>
 <body>
 
@@ -14,136 +14,82 @@
 		<div class="content project-overview">
 			<div class="row">
 				<div class="span12" role="tabpanel">
-					
+
 					<ul class="nav nav-tabs tabSelect" id="toolsTab" role="tablist">
-						<li class="active" role="presentation">
-							<a aria-controls="overview" data-toggle="tab" href="#overview" role="tab"> 
-								Project Overview
-							</a>
-						</li>
-						<li role="presentation" th:each="panel,it : ${panels}" >
-							<a th:attr="aria-controls=${'#pluginTab'+it.index}" 
-								th:href="${'#pluginTab'+it.index}"
-								data-toggle="tab" 
-								role="tab"
-								th:text="${panel.title}">								
-							</a>
-						</li>
+						<li class="active" role="presentation"><a
+							aria-controls="overview" data-toggle="tab" href="#overview"
+							role="tab"> Project Overview </a></li>
+						<li role="presentation" th:each="panel,it : ${panels}"><a
+							th:attr="aria-controls=${'#pluginTab'+it.index}"
+							th:href="${'#pluginTab'+it.index}" data-toggle="tab" role="tab"
+							th:text="${panel.title}"> </a></li>
 					</ul>
-					
+
 					<div class="tab-content">
 						<div class="tab-pane active" id="overview" role="tabpanel">
 
 							<div class="container-fluid overview-container">
 								<div class="row">
-									<div class="col-sm-6">
-										<div class="panel panel-default">
-											<div class="panel-heading">
-												<h3 class="panel-title">Project information</h3>
-											</div>
-											<div class="panel-body">												
-												<ul class="project-properties" style="list-style-type: none">
-													<li>
-														<strong>Name:</strong> 
-														<label th:text="${projectData.project.name}">test</label>
-													</li>
-													<li>
-														<strong>Owner:</strong>
-														<label th:text="${projectData.user.firstName+' '+projectData.user.lastName}">User</label>
-													</li>
-												</ul>
+								
+								    <!--/* Project information panel */-->
+									<div class="col-sm-6" th:include="projectInformation :: projectInformationPanel" />
 
-												<button type="button" id="createReleaseButton" name="createReleaseButton" class="btn btn-primary" title="Create a new release" data-toggle="modal" data-target="#createReleaseModal" th:disabled="${@projectInformationManager.getVersions(projectData.project.name).isEmpty()}">Create Release</button>
-												
-											</div>
-										</div>
-									</div>
-
-									<div class="col-sm-6" th:each="widget : ${@projectDashboardWidgets.getDashboardWidgets()}" th:if="${widget.getHtmlPanelBody(projectData.project.id) != null}">
+									<div class="col-sm-6"
+										th:each="widget : ${@projectDashboardWidgets.getDashboardWidgets()}"
+										th:if="${widget.getHtmlPanelBody(projectData.project.id) != null}">
 										<div class="panel panel-warning project-widget-panel">
-											<div class="panel-heading">												
-												<img th:src="@{${widget.getIconUrl()}}"/>
-												<h3 class="panel-title" th:text="${widget.title}"></h3>													
-												<ul th:if="${widget.getDropdownActions() != null}" class="nav nav-pills navbar-right">
-												  <li role="presentation" class="dropdown">
-												    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-												      Actions <span class="caret"></span>
-												    </a>
-												    <ul class="dropdown-menu">
-												      <li th:each="action : ${widget.getDropdownActions()}">
-												      	<a th:href="${action.url}" th:text="${action.actionName}"></a>
-												      </li>
-												    </ul>
-												  </li>
-												</ul>																				
+											<div class="panel-heading">
+												<img th:src="@{${widget.getIconUrl()}}" />
+												<h3 class="panel-title" th:text="${widget.title}"></h3>
+												<ul th:if="${widget.getDropdownActions() != null}"
+													class="nav nav-pills navbar-right">
+													<li role="presentation" class="dropdown"><a
+														class="dropdown-toggle" data-toggle="dropdown" href="#"
+														role="button" aria-haspopup="true" aria-expanded="false">
+															Actions <span class="caret"></span>
+													</a>
+														<ul class="dropdown-menu">
+															<li th:each="action : ${widget.getDropdownActions()}">
+																<a th:href="${action.url}"
+																th:text="${action.actionName}"></a>
+															</li>
+														</ul></li>
+												</ul>
 											</div>
-											<div class="panel-body" th:utext="${widget.getHtmlPanelBody(projectData.project.id)}"></div>
+											<div class="panel-body"
+												th:utext="${widget.getHtmlPanelBody(projectData.project.id)}"></div>
 										</div>
 									</div>
-									
+
 								</div>
 							</div>
 						</div>
-						<div th:each="panel,it : ${panels}" 
-							class="tab-pane" 
-							th:utext="${panel.content}"
-							th:attr="id=${'pluginTab'+it.index}" 
-							role="tabpanel">
-						</div>
+						<div th:each="panel,it : ${panels}" class="tab-pane"
+							th:utext="${panel.content}" th:attr="id=${'pluginTab'+it.index}"
+							role="tabpanel"></div>
 					</div>
 				</div>
 			</div>
 		</div>
 
-		<div aria-hidden="true" aria-labelledby="myModalLabel"
-			class="modal fade in" id="createReleaseModal" role="dialog"
-			tabindex="-1" style="padding-left: 15px;">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button aria-hidden="true" class="close" data-dismiss="modal"
-							type="button">&times;</button>
-						<h4 class="modal-title" id="myModalLabel">Create Release</h4>
-					</div>
-					<div class="modal-body">
-						<form th:attr="action=@{/ui/projects/releases/new}"
-							class="form-horizontal" id="instantiate_host" method="post"
-							role="form" data-toggle="validator">
-							<div class="form-group">
-								<label class="control-label col-sm-2" for="hostName">Release Version</label>
-								<div class="col-sm-10">
-								    <input name="projectKey" type="hidden" th:value="${projectData.project.key}" />  
-               						<select class="form-control" id="releaseVersion" name ="releaseVersion">
-										<option th:each="release : ${@projectInformationManager.getVersions(projectData.project.name)}" th:value="${release}" th:text="${release}"></option>
-               						</select>										
-								</div>
-							</div>
-							<div class="modal-footer">
-								<button class="btn btn-default" data-dismiss="modal"
-									type="button">Cancel</button>
-								<button class="btn btn-primary" type="submit">Create</button>
-							</div>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
+		<!--/* Create release modal. This modal is opened by using the "Create Release" button form the Project Information panel */-->
+		<div th:include="projectInformation :: projectInformationModal" />
 
 		</main>
 	</div>
-	
-	
+
+
 	<div layout:fragment="footer">
 		<script type="text/javascript">
 			$(document).ready(function() {
 				var hashQuery = window.location.hash;
 				console.log(hashQuery);
 				if (hashQuery) {
-					$('a[role=tab][href="'+hashQuery+'"]').click();
+					$('a[role=tab][href="' + hashQuery + '"]').click();
 				}
 			});
 		</script>
 	</div>
-	
+
 </body>
 </html>

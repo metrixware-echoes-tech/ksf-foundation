@@ -1,0 +1,64 @@
+<!--/* Project Information panel */-->
+<div  th:fragment="projectInformationPanel">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 class="panel-title">Project Information</h3>
+		</div>
+		<div class="panel-body">												
+			<ul class="project-properties" style="list-style-type: none">
+				<li>
+					<strong>Name:</strong> 
+					<label th:text="${projectData.project.name}">test</label>
+				</li>
+				<li>
+					<strong>Owner:</strong>
+					<label th:text="${projectData.user.firstName+' '+projectData.user.lastName}">User</label>
+				</li>
+			</ul>
+	
+			<!--/* Button uses to open the Create Release modal */-->
+			<button type="button" id="createReleaseButton" name="createReleaseButton" class="btn btn-primary" title="Create a new release" data-toggle="modal" data-target="#createReleaseModal" th:disabled="${@projectInformationManager.getVersions(projectData.project.name).isEmpty()}">Create Release</button>
+			
+		</div>
+	</div>
+</div>
+
+<!--/* Create Release modal */-->
+<div th:fragment="projectInformationModal">
+	<div aria-hidden="true" aria-labelledby="myModalLabel" class="modal fade in" id="createReleaseModal" role="dialog" tabindex="-1" style="padding-left: 15px;">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button aria-hidden="true" class="close" data-dismiss="modal" type="button">&times;</button>
+					<h4 class="modal-title">Create Release</h4>
+				</div>
+				<div class="modal-body">
+					<form th:attr="action=@{/ui/projects/releases/new}"
+						class="form-horizontal" id="instantiate_host" method="post"
+						role="form" data-toggle="validator">
+						<div class="form-group">
+							<label class="control-label col-sm-2" for="hostName">Release
+								Version</label>
+							<div class="col-sm-10">
+							
+								<input name="projectKey" type="hidden" th:value="${projectData.project.key}" />
+	
+								<select class="form-control" id="releaseVersion" name="releaseVersion">
+									<option
+										th:each="release : ${@projectInformationManager.getVersions(projectData.project.name)}"
+										th:value="${release}" th:text="${release}">
+									</option>
+								</select>
+							</div>
+						</div>
+	
+						<div class="modal-footer">
+							<button class="btn btn-default" data-dismiss="modal" type="button">Cancel</button>
+							<button class="btn btn-primary" type="submit">Create</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
