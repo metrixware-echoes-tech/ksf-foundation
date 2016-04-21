@@ -5,15 +5,23 @@
  */
 package fr.echoes.labs.ksf.users.security.auth;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.apache.commons.lang3.Validate;
+import org.jasig.cas.client.validation.Cas20ServiceTicketValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ldap.core.ContextSource;
 import org.springframework.ldap.core.support.BaseLdapPathContextSource;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.cas.ServiceProperties;
+import org.springframework.security.cas.authentication.CasAssertionAuthenticationToken;
+import org.springframework.security.cas.authentication.CasAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configurers.ldap.LdapAuthenticationProviderConfigurer;
+import org.springframework.security.core.userdetails.AuthenticationUserDetailsService;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -41,61 +49,104 @@ public class UserAuthenticationManager {
 
 	@Autowired
 	private SecurityConfiguration security;
-	
+
 	@Autowired()
 	private ContextSource ldapContextSource;
 
 	public void initializeKsfAuth(final AuthenticationManagerBuilder auth) throws Exception {
 		// also see LdapAuthenticationProviderConfigurer and @code ContextSourceBuilder
-		
+
 		//		auth.inMemoryAuthentication().withUser("user").password("password1")
 		//				.roles("GUI")
-		if (ldapSecurity.hasConfigurationProvided()) {
+		if (this.ldapSecurity.hasConfigurationProvided()) {
 			LOGGER.info("Initialization of LDAP Authentication provider");
-			initializeLdapAuthenticationManager(auth);
+//			initializeLdapAuthenticationManager(auth);
 		}
 		LOGGER.info("Initialization of DAO Authentication provider");
+//		final DaoAuthenticationProvider userEmbeddedAuthenticationProvider = new DaoAuthenticationProvider();
+//		userEmbeddedAuthenticationProvider.setPasswordEncoder(new BCryptPasswordEncoder(this.security.getPasswordStrength()));
+//		userEmbeddedAuthenticationProvider.setUserDetailsService(this.userDetailsService);
+//		auth.authenticationProvider(userEmbeddedAuthenticationProvider);
+
+
 		final DaoAuthenticationProvider userEmbeddedAuthenticationProvider = new DaoAuthenticationProvider();
-		userEmbeddedAuthenticationProvider.setPasswordEncoder(new BCryptPasswordEncoder(security.getPasswordStrength()));
-		userEmbeddedAuthenticationProvider.setUserDetailsService(userDetailsService);
-		auth.authenticationProvider(userEmbeddedAuthenticationProvider);
+		userEmbeddedAuthenticationProvider.setPasswordEncoder(new BCryptPasswordEncoder(this.security.getPasswordStrength()));
+		userEmbeddedAuthenticationProvider.setUserDetailsService(this.userDetailsService);
+		auth.authenticationProvider(casAuthenticationProvider());
 
 		// keep the credentials in the session for using them against a REST API
 		auth.eraseCredentials(false);
 	}
-	
+
+	private CasAuthenticationProvider casAuthenticationProvider() {
+		CasAuthenticationProvider casAuthenticationProvider = new CasAuthenticationProvider();
+		casAuthenticationProvider.setAuthenticationUserDetailsService(customUserDetailsService());
+		casAuthenticationProvider.setServiceProperties(serviceProperties());
+		casAuthenticationProvider.setTicketValidator(cas20ServiceTicketValidator());
+		casAuthenticationProvider.setKey("an_id_for_this_auth_provider_only");
+		return casAuthenticationProvider;
+	}
+
+	private Cas20ServiceTicketValidator cas20ServiceTicketValidator() {
+		return new Cas20ServiceTicketValidator("http://localhost:8880/cas/");
+	}
+
+	public Set<String> adminList() {
+		Set<String> admins = new HashSet<String>();
+		String adminUserName = "admin";
+
+		admins.add("admin");
+		if (adminUserName != null && !adminUserName.isEmpty()) {
+			admins.add(adminUserName);
+		}
+
+
+		return admins;
+	}
+
+	private AuthenticationUserDetailsService<CasAssertionAuthenticationToken> customUserDetailsService() {
+		return new CustomUserDetailsService(adminList());
+	}
+
+	private ServiceProperties serviceProperties() {
+		ServiceProperties sp = new ServiceProperties();
+		sp.setService("http://localhost:8888/login/cas");
+		sp.setSendRenew(false);
+		return sp;
+	}
+
 	private void initializeLdapAuthenticationManager(final AuthenticationManagerBuilder auth) throws Exception {
 		LdapAuthenticationProviderConfigurer<AuthenticationManagerBuilder> ldapAuth = auth.ldapAuthentication();
 
-		SecurityLoggers.LDAP_LOGGER.info("Enabling LDAP Authentication on server {}", ldapSecurity.getUrl());
-		ldapSecurity.clearManagerDN();
-		Validate.notNull(ldapContextSource);
-		ldapAuth = ldapAuth.contextSource((BaseLdapPathContextSource) ldapContextSource);
+		SecurityLoggers.LDAP_LOGGER.info("Enabling LDAP Authentication on server {}", this.ldapSecurity.getUrl());
+		this.ldapSecurity.clearManagerDN();
+		Validate.notNull(this.ldapContextSource);
+		ldapAuth = ldapAuth.contextSource((BaseLdapPathContextSource) this.ldapContextSource);
 
-		if (ldapSecurity.hasUserDN()) {
+		if (this.ldapSecurity.hasUserDN()) {
 			SecurityLoggers.LDAP_LOGGER.info("Ldap Security base on UserDN pattern");
 			ldapAuth = ldapAuth
-					.userDnPatterns(ldapSecurity.getUserDnPattern());
+					.userDnPatterns(this.ldapSecurity.getUserDnPattern());
 
-		} else if (ldapSecurity.hasUserSearch()) {
+		} else if (this.ldapSecurity.hasUserSearch()) {
 			SecurityLoggers.LDAP_LOGGER.info("Ldap Security base on UserDN pattern");
 			ldapAuth = ldapAuth
-					.userSearchBase(ldapSecurity.getUserSearchBase())
-					.userSearchFilter(ldapSecurity.getUserSearchFilter());
+					.userSearchBase(this.ldapSecurity.getUserSearchBase())
+					.userSearchFilter(this.ldapSecurity.getUserSearchFilter());
 		}
-		if (!ldapSecurity.getGroupSearchBase().isEmpty()) {
-			SecurityLoggers.LDAP_LOGGER.info("Setting groupSearchBase={}", ldapSecurity.getGroupSearchBase());
-			ldapAuth = ldapAuth.groupSearchBase(ldapSecurity.getGroupSearchBase());
+		if (!this.ldapSecurity.getGroupSearchBase().isEmpty()) {
+			SecurityLoggers.LDAP_LOGGER.info("Setting groupSearchBase={}", this.ldapSecurity.getGroupSearchBase());
+			ldapAuth = ldapAuth.groupSearchBase(this.ldapSecurity.getGroupSearchBase());
 		}
-		if (!ldapSecurity.getGroupRoleAttribute().isEmpty()) {
-			SecurityLoggers.LDAP_LOGGER.info("Setting groupRoleAttribute={}", ldapSecurity.getGroupRoleAttribute());
-			ldapAuth = ldapAuth.groupRoleAttribute(ldapSecurity.getGroupRoleAttribute());
+		if (!this.ldapSecurity.getGroupRoleAttribute().isEmpty()) {
+			SecurityLoggers.LDAP_LOGGER.info("Setting groupRoleAttribute={}", this.ldapSecurity.getGroupRoleAttribute());
+			ldapAuth = ldapAuth.groupRoleAttribute(this.ldapSecurity.getGroupRoleAttribute());
 		}
-		if (!ldapSecurity.getGroupSearchFilter().isEmpty()) {
-			SecurityLoggers.LDAP_LOGGER.info("Setting groupSearchFilter={}", ldapSecurity.getGroupSearchFilter());
-			ldapAuth = ldapAuth.groupSearchFilter(ldapSecurity.getGroupSearchFilter());
+		if (!this.ldapSecurity.getGroupSearchFilter().isEmpty()) {
+			SecurityLoggers.LDAP_LOGGER.info("Setting groupSearchFilter={}", this.ldapSecurity.getGroupSearchFilter());
+			ldapAuth = ldapAuth.groupSearchFilter(this.ldapSecurity.getGroupSearchFilter());
 
 		}
-		
+
 	}
 }
