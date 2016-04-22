@@ -1,6 +1,7 @@
 package fr.echoes.labs.ksf.cc.ui.security;
 
 import org.jasig.cas.client.session.SingleSignOutFilter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.cas.ServiceProperties;
 import org.springframework.security.cas.web.CasAuthenticationEntryPoint;
 import org.springframework.security.cas.web.CasAuthenticationFilter;
@@ -13,6 +14,7 @@ import org.springframework.security.web.authentication.session.SessionFixationPr
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import fr.echoes.labs.ksf.users.security.config.CasSecurityConfiguration;
 import fr.echoes.labs.ksf.users.security.config.CsrfCookieGeneratorFilter;
 
 /**
@@ -20,6 +22,9 @@ import fr.echoes.labs.ksf.users.security.config.CsrfCookieGeneratorFilter;
  *
  */
 public class CasWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
+
+	@Autowired
+	private CasSecurityConfiguration conf;
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -32,52 +37,46 @@ public class CasWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapte
 				.antMatchers("/login", "/logout", "/secure").authenticated().antMatchers("/filtered")
 				.hasAuthority("ROLE_ADMIN").anyRequest().authenticated();
 
-		/**
-		 * <logout invalidate-session="true" delete-cookies="JSESSIONID" />
-		 */
+		// <logout invalidate-session="true" delete-cookies="JSESSIONID" />
 		http.logout().logoutUrl("/logout").logoutSuccessUrl("/").invalidateHttpSession(true)
 				.deleteCookies("JSESSIONID");
-
-		// http.csrf();
 	}
 
 	public SessionAuthenticationStrategy sessionStrategy() {
-		SessionAuthenticationStrategy sessionStrategy = new SessionFixationProtectionStrategy();
+		final SessionAuthenticationStrategy sessionStrategy = new SessionFixationProtectionStrategy();
 		return sessionStrategy;
 	}
 
 	public CasAuthenticationFilter casAuthenticationFilter() throws Exception {
-		CasAuthenticationFilter casAuthenticationFilter = new CasAuthenticationFilter();
+		final CasAuthenticationFilter casAuthenticationFilter = new CasAuthenticationFilter();
 		casAuthenticationFilter.setAuthenticationManager(authenticationManager());
 		casAuthenticationFilter.setSessionAuthenticationStrategy(sessionStrategy());
 		return casAuthenticationFilter;
 	}
 
 	public CasAuthenticationEntryPoint casAuthenticationEntryPoint() {
-		CasAuthenticationEntryPoint casAuthenticationEntryPoint = new CasAuthenticationEntryPoint();
-		casAuthenticationEntryPoint.setLoginUrl("http://localhost:8880/cas/login");
+		final CasAuthenticationEntryPoint casAuthenticationEntryPoint = new CasAuthenticationEntryPoint();
+		casAuthenticationEntryPoint.setLoginUrl(this.conf.getLoginUrl());
 		casAuthenticationEntryPoint.setServiceProperties(serviceProperties());
 		return casAuthenticationEntryPoint;
 	}
 
 	public ServiceProperties serviceProperties() {
-		ServiceProperties sp = new ServiceProperties();
-		sp.setService("http://localhost:8888/login/cas");
+		final ServiceProperties sp = new ServiceProperties();
+		sp.setService(this.conf.getServiceUrl());
 		sp.setSendRenew(false);
 		return sp;
 	}
 
 	public SingleSignOutFilter singleSignOutFilter() {
-		SingleSignOutFilter singleSignOutFilter = new SingleSignOutFilter();
-		singleSignOutFilter.setCasServerUrlPrefix("http://localhost:8880/cas/");
+		final SingleSignOutFilter singleSignOutFilter = new SingleSignOutFilter();
+		singleSignOutFilter.setCasServerUrlPrefix(this.conf.getPrefix());
 		return singleSignOutFilter;
 	}
 
 	public LogoutFilter requestCasGlobalLogoutFilter() {
-		LogoutFilter logoutFilter = new LogoutFilter("http://localhost:8880/cas/logout" + "?service="
-				+ "http://localhost:8888/", new SecurityContextLogoutHandler());
-		// logoutFilter.setFilterProcessesUrl("/logout");
-		// logoutFilter.setFilterProcessesUrl("/j_spring_cas_security_logout");
+		final LogoutFilter logoutFilter = new LogoutFilter(this.conf.getLogoutUrl() + "?service="
+				+ this.conf.getServiceHome(), new SecurityContextLogoutHandler());
 		logoutFilter.setLogoutRequestMatcher(new AntPathRequestMatcher("/logout", "POST"));
 		return logoutFilter;
 	}

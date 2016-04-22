@@ -15,6 +15,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ldap.core.ContextSource;
 import org.springframework.ldap.core.support.BaseLdapPathContextSource;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.cas.ServiceProperties;
 import org.springframework.security.cas.authentication.CasAssertionAuthenticationToken;
 import org.springframework.security.cas.authentication.CasAuthenticationProvider;
@@ -22,8 +24,10 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.authentication.configurers.ldap.LdapAuthenticationProviderConfigurer;
 import org.springframework.security.core.userdetails.AuthenticationUserDetailsService;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import fr.echoes.labs.ksf.users.security.config.CasSecurityConfiguration;
 import fr.echoes.labs.ksf.users.security.config.LdapSecurityConfiguration;
 import fr.echoes.labs.ksf.users.security.config.SecurityConfiguration;
 import fr.echoes.labs.ksf.users.security.utils.SecurityLoggers;
@@ -48,6 +52,9 @@ public class UserAuthenticationManager {
 	@Autowired
 	private SecurityConfiguration security;
 
+	@Autowired
+	private CasSecurityConfiguration casSecurityConfiguration;
+
 	@Autowired()
 	private ContextSource ldapContextSource;
 
@@ -61,22 +68,23 @@ public class UserAuthenticationManager {
 //			initializeLdapAuthenticationManager(auth);
 		}
 		LOGGER.info("Initialization of DAO Authentication provider");
-//		final DaoAuthenticationProvider userEmbeddedAuthenticationProvider = new DaoAuthenticationProvider();
-//		userEmbeddedAuthenticationProvider.setPasswordEncoder(new BCryptPasswordEncoder(this.security.getPasswordStrength()));
-//		userEmbeddedAuthenticationProvider.setUserDetailsService(this.userDetailsService);
+
 //		auth.authenticationProvider(userEmbeddedAuthenticationProvider);
 
-
-//		final DaoAuthenticationProvider userEmbeddedAuthenticationProvider = new DaoAuthenticationProvider();
-//		userEmbeddedAuthenticationProvider.setPasswordEncoder(new BCryptPasswordEncoder(this.security.getPasswordStrength()));
-//		userEmbeddedAuthenticationProvider.setUserDetailsService(this.userDetailsService);
 		auth.authenticationProvider(casAuthenticationProvider());
 
 		// keep the credentials in the session for using them against a REST API
 		auth.eraseCredentials(false);
 	}
 
-	private CasAuthenticationProvider casAuthenticationProvider() {
+	private AuthenticationProvider daoAuthenticationProvider() {
+		final DaoAuthenticationProvider userEmbeddedAuthenticationProvider = new DaoAuthenticationProvider();
+		userEmbeddedAuthenticationProvider.setPasswordEncoder(new BCryptPasswordEncoder(this.security.getPasswordStrength()));
+		userEmbeddedAuthenticationProvider.setUserDetailsService(this.userDetailsService);
+		return userEmbeddedAuthenticationProvider;
+	}
+
+	private AuthenticationProvider casAuthenticationProvider() {
 		final CasAuthenticationProvider casAuthenticationProvider = new CasAuthenticationProvider();
 		casAuthenticationProvider.setAuthenticationUserDetailsService(customUserDetailsService());
 		casAuthenticationProvider.setServiceProperties(serviceProperties());
@@ -86,7 +94,7 @@ public class UserAuthenticationManager {
 	}
 
 	private Cas20ServiceTicketValidator cas20ServiceTicketValidator() {
-		return new Cas20ServiceTicketValidator("http://localhost:8880/cas/");
+		return new Cas20ServiceTicketValidator(this.casSecurityConfiguration.getPrefix());
 	}
 
 	public Set<String> adminList() {
@@ -103,7 +111,6 @@ public class UserAuthenticationManager {
 	}
 
 	private AuthenticationUserDetailsService<CasAssertionAuthenticationToken> customUserDetailsService() {
-		//return new CustomUserDetailsService(adminList());
 		return new UserDetailsRetrievingService(adminList());
 	}
 
