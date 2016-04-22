@@ -15,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ldap.core.ContextSource;
 import org.springframework.ldap.core.support.BaseLdapPathContextSource;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.cas.ServiceProperties;
 import org.springframework.security.cas.authentication.CasAssertionAuthenticationToken;
 import org.springframework.security.cas.authentication.CasAuthenticationProvider;
@@ -23,7 +22,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.authentication.configurers.ldap.LdapAuthenticationProviderConfigurer;
 import org.springframework.security.core.userdetails.AuthenticationUserDetailsService;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import fr.echoes.labs.ksf.users.security.config.LdapSecurityConfiguration;
@@ -69,9 +67,9 @@ public class UserAuthenticationManager {
 //		auth.authenticationProvider(userEmbeddedAuthenticationProvider);
 
 
-		final DaoAuthenticationProvider userEmbeddedAuthenticationProvider = new DaoAuthenticationProvider();
-		userEmbeddedAuthenticationProvider.setPasswordEncoder(new BCryptPasswordEncoder(this.security.getPasswordStrength()));
-		userEmbeddedAuthenticationProvider.setUserDetailsService(this.userDetailsService);
+//		final DaoAuthenticationProvider userEmbeddedAuthenticationProvider = new DaoAuthenticationProvider();
+//		userEmbeddedAuthenticationProvider.setPasswordEncoder(new BCryptPasswordEncoder(this.security.getPasswordStrength()));
+//		userEmbeddedAuthenticationProvider.setUserDetailsService(this.userDetailsService);
 		auth.authenticationProvider(casAuthenticationProvider());
 
 		// keep the credentials in the session for using them against a REST API
@@ -79,7 +77,7 @@ public class UserAuthenticationManager {
 	}
 
 	private CasAuthenticationProvider casAuthenticationProvider() {
-		CasAuthenticationProvider casAuthenticationProvider = new CasAuthenticationProvider();
+		final CasAuthenticationProvider casAuthenticationProvider = new CasAuthenticationProvider();
 		casAuthenticationProvider.setAuthenticationUserDetailsService(customUserDetailsService());
 		casAuthenticationProvider.setServiceProperties(serviceProperties());
 		casAuthenticationProvider.setTicketValidator(cas20ServiceTicketValidator());
@@ -92,8 +90,8 @@ public class UserAuthenticationManager {
 	}
 
 	public Set<String> adminList() {
-		Set<String> admins = new HashSet<String>();
-		String adminUserName = "admin";
+		final Set<String> admins = new HashSet<String>();
+		final String adminUserName = "admin";
 
 		admins.add("admin");
 		if (adminUserName != null && !adminUserName.isEmpty()) {
@@ -105,11 +103,12 @@ public class UserAuthenticationManager {
 	}
 
 	private AuthenticationUserDetailsService<CasAssertionAuthenticationToken> customUserDetailsService() {
-		return new CustomUserDetailsService(adminList());
+		//return new CustomUserDetailsService(adminList());
+		return new UserDetailsRetrievingService(adminList());
 	}
 
 	private ServiceProperties serviceProperties() {
-		ServiceProperties sp = new ServiceProperties();
+		final ServiceProperties sp = new ServiceProperties();
 		sp.setService("http://localhost:8888/login/cas");
 		sp.setSendRenew(false);
 		return sp;

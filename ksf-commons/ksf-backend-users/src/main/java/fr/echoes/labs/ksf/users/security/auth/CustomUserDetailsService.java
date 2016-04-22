@@ -20,7 +20,7 @@ import fr.echoes.labs.ksf.users.security.config.AppUserDetails;
  */
 public class CustomUserDetailsService implements AuthenticationUserDetailsService<CasAssertionAuthenticationToken> {
 
-	private final Logger log = LoggerFactory.getLogger(CustomUserDetailsService.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(CustomUserDetailsService.class);
 
 	private Set<String> admins;
 
@@ -38,11 +38,11 @@ public class CustomUserDetailsService implements AuthenticationUserDetailsServic
 
 	@Override
 	public UserDetails loadUserDetails(CasAssertionAuthenticationToken token) throws UsernameNotFoundException {
-		String login = token.getPrincipal().toString();
-		String lowercaseLogin = login.toLowerCase();
+		final String login = token.getPrincipal().toString();
+		final String lowercaseLogin = login.toLowerCase();
 
-		this.log.debug("Authenticating '{}'", login);
-		List<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>();
+		LOGGER.debug("Authenticating '{}'", login);
+		final List<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>();
 
 		if (this.admins != null && this.admins.contains(lowercaseLogin)) {
 			grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
