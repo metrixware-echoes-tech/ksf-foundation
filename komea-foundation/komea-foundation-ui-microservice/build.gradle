@@ -77,9 +77,10 @@ bower {
   'jquery-resize'('https://github.com/sdecima/javascript-detect-element-resize.git')
   'components-font-awesome'('4.3.0')
   'ionicons'('2.0.1')
-
   'zeroclipboard'('2.2.0')
 
+  'salvattore'('1.0.9')
+  
   'jquery-treegrid'('0.3.0') {
 	  source 'js/**'
 	  source 'css/**'
