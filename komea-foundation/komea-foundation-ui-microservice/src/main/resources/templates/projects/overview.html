@@ -29,12 +29,14 @@
 						<div class="tab-pane active" id="overview" role="tabpanel">
 
 							<div class="container-fluid overview-container">
-								<div class="row">
+																
+								<!-- div class="row" -->
 								
 								    <!--/* Project information panel */-->
-									<div class="col-sm-6" th:include="projectInformation :: projectInformationPanel" />
+								<div id="widgetsGrid" data-columns="">
+									<div class="widget" th:include="projectInformation :: projectInformationPanel" />
 
-									<div class="col-sm-6"
+									<div class="widget"
 										th:each="widget : ${@projectDashboardWidgets.getDashboardWidgets()}"
 										th:if="${widget.getHtmlPanelBody(projectData.project.id) != null}">
 										<div class="panel panel-warning project-widget-panel">
@@ -60,8 +62,8 @@
 												th:utext="${widget.getHtmlPanelBody(projectData.project.id)}"></div>
 										</div>
 									</div>
-
-								</div>
+                                </div>
+								<!-- /div -->
 							</div>
 						</div>
 						<div th:each="panel,it : ${panels}" class="tab-pane"
