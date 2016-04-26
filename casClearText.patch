@@ -1,0 +1,270 @@
+diff --git a/komea-foundation/komea-foundation-ui-microservice/src/main/java/fr/echoes/labs/ksf/cc/ui/views/projects/ProjectController.java b/komea-foundation/komea-foundation-ui-microservice/src/main/java/fr/echoes/labs/ksf/cc/ui/views/projects/ProjectController.java
+index e52faab..f312aea 100644
+--- a/komea-foundation/komea-foundation-ui-microservice/src/main/java/fr/echoes/labs/ksf/cc/ui/views/projects/ProjectController.java
++++ b/komea-foundation/komea-foundation-ui-microservice/src/main/java/fr/echoes/labs/ksf/cc/ui/views/projects/ProjectController.java
+@@ -7,6 +7,7 @@ package fr.echoes.labs.ksf.cc.ui.views.projects;
+ 
+ import java.util.ArrayList;
+ import java.util.List;
++import java.util.Map;
+ 
+ import javax.validation.Valid;
+ 
+@@ -15,6 +16,7 @@ import org.slf4j.Logger;
+ import org.slf4j.LoggerFactory;
+ import org.springframework.beans.factory.annotation.Autowired;
+ import org.springframework.http.HttpStatus;
++import org.springframework.http.ResponseEntity;
+ import org.springframework.stereotype.Controller;
+ import org.springframework.validation.BindingResult;
+ import org.springframework.validation.ObjectError;
+@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
+ import org.springframework.web.bind.annotation.RequestMethod;
+ import org.springframework.web.bind.annotation.RequestParam;
+ import org.springframework.web.bind.annotation.ResponseStatus;
++import org.springframework.web.client.RestTemplate;
+ import org.springframework.web.servlet.ModelAndView;
+ 
+ import com.google.common.collect.Lists;
+@@ -176,6 +179,26 @@ public class ProjectController {
+     	return new ModelAndView("redirect:/ui/projects/");
+     }
+ 
++    
++    @RequestMapping(value = "/ui/validate")
++    public ModelAndView validate() {
++
++        RestTemplate restTemplate = new RestTemplate();
++        ResponseEntity<String> response = restTemplate.getForEntity("http://localhost:7777/cas/p3/serviceValidate?service=http://localhost:8888/&ticket=QQIMux0k2Em", String.class);
++        System.out.println(response.getBody());
++    	
++    	
++    	final ModelAndView model = new ModelAndView(LIST_PAGE);
++		final List<Project> findAll = this.projectDao.findAll();
++		final List<ProjectPagelistDTO> projectsList = new ArrayList<>();
++
++		for (final Project pr : findAll) {
++			projectsList.add(createProjectPageListDTO(pr));
++		}
++
++		model.addObject("projects", projectsList);
++		return model;
++    }    
+ 
+ 	@ResponseStatus(value = HttpStatus.NOT_FOUND)
+ 	@ExceptionHandler({
+diff --git a/komea-foundation/komea-foundation-ui-microservice/src/main/resources/templates/nav.html b/komea-foundation/komea-foundation-ui-microservice/src/main/resources/templates/nav.html
+index 000b199..7f60779 100644
+--- a/komea-foundation/komea-foundation-ui-microservice/src/main/resources/templates/nav.html
++++ b/komea-foundation/komea-foundation-ui-microservice/src/main/resources/templates/nav.html
+@@ -1,4 +1,4 @@
+-ï»¿<div th:fragment="navbar">
++<div th:fragment="navbar">
+ 	<nav class='navbar navbar-inverse navbar-static-top'>
+ 		<div class='container-fluid'>
+ 			<div class='navbar-header'>
+@@ -7,6 +7,7 @@
+ 				</a> <a class="navbar-brand" th:href="@{/ui/projects}"
+ 					data-toggle="tooltip" data-placement="bottom"
+ 					title="View project list">Projects</a>
++					<a th:href="@{/ui/validate}">validate</a>
+ 			</div>
+ 			<div class='navbar-form navbar-left' role='form'>
+ 				<a style="margin-top: 3px; margin-left: -10px"
+@@ -63,9 +64,9 @@
+ 							<div class="information-section">
+ 								<h1 class="information-title">A propos de nous</h1>
+ 								<p class="information-text">Echoes Technologies, Echoes Labs
+-									(ex Tocea) et Metrixware sâ€™unissent autour de la marque Echoes
+-									pour dÃ©velopper et commercialiser ensemble Komea Software
+-									Factory, une offre complÃ¨te pour la modernisation des
++									(ex Tocea) et Metrixware s’unissent autour de la marque Echoes
++									pour développer et commercialiser ensemble Komea Software
++									Factory, une offre complète pour la modernisation des
+ 									applications et des usines logicielles.</p>
+ 							</div>
+ 							<div class="information-section">
+@@ -74,22 +75,22 @@
+ 									moderniser vos applications et vos usines logicielles.</p>
+ 							</div>
+ 							<div class="information-section">
+-								<h1 class="information-title">Informations Ã  propos de
++								<h1 class="information-title">Informations à propos de
+ 									l'entreprise</h1>
+ 								<div class="information-text">
+-									<p>Depuis sa crÃ©ation en 1995, le groupe Metrixware est un
+-										Ã©diteur logiciel franÃ§ais, fournisseur stratÃ©gique de
+-										solutions de modernisation pour rÃ©duire le time-to-market, le
+-										coÃ»t de dÃ©veloppement et de maintenance des applications, au
+-										cÅ“ur des systÃ¨mes dâ€™information de toutes tailles : banques,
+-										assurances, Ã©diteurs logiciels, administrations et industriels</p>
+-									<p>LabellisÃ© Entreprise Innovante dÃ¨s 2006, le groupe
+-										Metrixware amÃ©liore en continu la qualitÃ© et lâ€™intÃ©gritÃ© des
+-										applications cÅ“ur de mÃ©tiers de ses clients : re-engineering
+-										dâ€™architectures, migrations de codes, cartographie et analyse
+-										dâ€™impact, qualitÃ© du code et bonnes pratiques,
+-										industrialisation du processus de dÃ©veloppement, mise en place
+-										de KPIs, rÃ©duction de la dette technique, certification
++									<p>Depuis sa création en 1995, le groupe Metrixware est un
++										éditeur logiciel français, fournisseur stratégique de
++										solutions de modernisation pour réduire le time-to-market, le
++										coût de développement et de maintenance des applications, au
++										cœur des systèmes d’information de toutes tailles : banques,
++										assurances, éditeurs logiciels, administrations et industriels</p>
++									<p>Labellisé Entreprise Innovante dès 2006, le groupe
++										Metrixware améliore en continu la qualité et l’intégrité des
++										applications cœur de métiers de ses clients : re-engineering
++										d’architectures, migrations de codes, cartographie et analyse
++										d’impact, qualité du code et bonnes pratiques,
++										industrialisation du processus de développement, mise en place
++										de KPIs, réduction de la dette technique, certification
+ 										Cleancode, etc.</p>
+ 
+ 									<div class="information-subtext">
+@@ -101,13 +102,13 @@
+ 								</div>
+ 
+ 								<div class="information-section">
+-									<h1 class="information-title">Informations Ã  propos du
++									<h1 class="information-title">Informations à propos du
+ 										produit</h1>
+ 									<p class="information-text"></p>
+ 									La promesse de Komea Software Factory (KSF) est de pouvoir
+-									mettre en oeuvre un ensemble bien choisi dâ€™outils de maniÃ¨re
+-									homogÃ¨ne et sans soucis dans diffÃ©rents projets. A ce jour, le
+-									produit permet d'utiliser ensemble et de maniÃ¨re cohÃ©rente les
++									mettre en oeuvre un ensemble bien choisi d’outils de manière
++									homogène et sans soucis dans différents projets. A ce jour, le
++									produit permet d'utiliser ensemble et de manière cohérente les
+ 									produits suivants :
+ 
+ 									<ul>
+@@ -123,7 +124,7 @@
+ 									<h1 class="information-title">Licences</h1>
+ 									<p class="information-text">KSF embarque plusieurs outils
+ 										Open Source, ci-dessous la liste des licences qui leurs sont
+-										associÃ©es :
++										associées :
+ 									<ul>
+ 										<li>Git : <a
+ 											href="http://opensource.org/licenses/GPL-2.0" target="_blank">GNU
+diff --git a/ksf-commons/ksf-backend-users/src/main/java/fr/echoes/labs/ksf/users/security/auth/UserAuthenticationManager.java b/ksf-commons/ksf-backend-users/src/main/java/fr/echoes/labs/ksf/users/security/auth/UserAuthenticationManager.java
+index 40269cb..a001bbc 100644
+--- a/ksf-commons/ksf-backend-users/src/main/java/fr/echoes/labs/ksf/users/security/auth/UserAuthenticationManager.java
++++ b/ksf-commons/ksf-backend-users/src/main/java/fr/echoes/labs/ksf/users/security/auth/UserAuthenticationManager.java
+@@ -94,7 +94,9 @@ public class UserAuthenticationManager {
+ 	}
+ 
+ 	private Cas20ServiceTicketValidator cas20ServiceTicketValidator() {
+-		return new Cas20ServiceTicketValidator(this.casSecurityConfiguration.getPrefix());
++		return new Cas20ServiceTicketValidator(this.casSecurityConfiguration.getPrefix()) {
++			
++		};
+ 	}
+ 
+ 	public Set<String> adminList() {
+diff --git a/ksf-commons/ksf-backend-users/src/main/java/fr/echoes/labs/ksf/users/security/auth/UserDetailsRetrievingService.java b/ksf-commons/ksf-backend-users/src/main/java/fr/echoes/labs/ksf/users/security/auth/UserDetailsRetrievingService.java
+index 29809e1..2138383 100644
+--- a/ksf-commons/ksf-backend-users/src/main/java/fr/echoes/labs/ksf/users/security/auth/UserDetailsRetrievingService.java
++++ b/ksf-commons/ksf-backend-users/src/main/java/fr/echoes/labs/ksf/users/security/auth/UserDetailsRetrievingService.java
+@@ -2,16 +2,31 @@ package fr.echoes.labs.ksf.users.security.auth;
+ 
+ import static fr.echoes.labs.ksf.users.security.utils.SecurityLoggers.SECURITY_LOGGER;
+ 
++import java.nio.charset.StandardCharsets;
++import java.security.InvalidKeyException;
++import java.security.KeyFactory;
++import java.security.NoSuchAlgorithmException;
++import java.security.PrivateKey;
++import java.security.spec.InvalidKeySpecException;
++import java.security.spec.KeySpec;
++import java.security.spec.PKCS8EncodedKeySpec;
+ import java.util.ArrayList;
++import java.util.Base64;
+ import java.util.Collection;
+ import java.util.List;
+ import java.util.Locale;
++import java.util.Map;
+ import java.util.Set;
+ 
++import javax.crypto.BadPaddingException;
++import javax.crypto.Cipher;
++import javax.crypto.IllegalBlockSizeException;
++import javax.crypto.NoSuchPaddingException;
+ import javax.transaction.Transactional;
+ 
+ import org.springframework.beans.factory.annotation.Autowired;
+ import org.springframework.security.cas.authentication.CasAssertionAuthenticationToken;
++import org.springframework.security.cas.authentication.CasAuthenticationToken;
+ import org.springframework.security.core.Authentication;
+ import org.springframework.security.core.GrantedAuthority;
+ import org.springframework.security.core.authority.SimpleGrantedAuthority;
+@@ -84,6 +99,10 @@ public class UserDetailsRetrievingService implements UserDetailsService, IReadon
+ 				return anonymousUser;
+ 			}
+ 			final Object principal = authentication.getPrincipal();
++			
++			final CasAuthenticationToken token =  (CasAuthenticationToken) principal;
++			Map<String, Object> attributes = token.getAssertion().getAttributes();
++			
+ 			if (principal instanceof String) {
+ 				return anonymousUser;
+ 			} else if (principal instanceof LdapUserDetails) {
+@@ -96,7 +115,12 @@ public class UserDetailsRetrievingService implements UserDetailsService, IReadon
+ 				final Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
+ 				final String username = userDetails.getUsername();
+ 				final String password = userDetails.getPassword();
++				
++				//final String encodedPsw = (String) attributes.get("credential");				
++				
+ 
++				System.out.println(decryptPassword(password));
++				
+ 				final UserDto userDto = new UserDto();
+ 				userDto.setLogin(username);
+ 				userDto.setFirstName(username);
+@@ -112,7 +136,44 @@ public class UserDetailsRetrievingService implements UserDetailsService, IReadon
+ 		return anonymousUser;
+ 
+ 	}
++	
++	private String decryptPassword(String cryptedPassword) {
++		try {
++		KeyFactory kf = KeyFactory.getInstance("RSA");
++		// Read privateKeyDerByteArray from DER file.
++		KeySpec keySpec = new PKCS8EncodedKeySpec("MIICXAIBAAKBgQDe6UA0Gkg9uRejnb2pxJJh7WwJz6Hkb8+Kp6BS3RK6jzY9eYQxZ04Rf0h3GkW7jSsWvZXrZ2I4bihRXPpgZHYDeG1kHvl6VYtmWYheiZ5unPsiBmIu2TNY2TMqY8ENfoJTC4OI6ZI0lP8WpLoNRPqdcchP5Wz8X1wbhows4rpaRQIDAQABAoGAWFJVJQ/Q1dvzuNl0X8LKOVDoQM7rF2cR9Z9LT+nWVOMPm7X9IdILxbUIEmDvhkt96im+MCKrcS58fRh5AB5t/16k9RRLLNC5x422g8sYgoxJmT+vnzy1uDMBXVQItmX9ecxALNHUOWzJjhuTuj4lQPC5M+02U53eZsSKeL+UcCECQQD1kVmbK/7BLYhkaVx0SzGbxx+tnFtv6/gjxl4j1ZQdJZ+c4VvytVSSXQfDu3mPfqq296Ej3/8lNeqH3I59W9OdAkEA6GGAJV+0lVY5Sw72jXCuBsWYv26tDENB+2BkcaB3E4n+Y+raYNLEdIfJKr0oGlLWMGr0WqnHNadIy1RxZAHEyQJADeTXaQwoMc3dtbCwZnQKroGprSz3j3GObJfAo85lvvBuA3ZMuYLA8jcJRW3KBvBnwEpqd5ko2nYeeuljtnwHkQJAAquEHmnQGFsqQ1uDp7JgvYEttR1fbaGkM3AzFz8hvx65xoofQjeJvFEHFa+gs1S6U0oXTqdeu5YVdwicWOrQSQJBAOYhUMKTW2Z//J8lDJ7VhcmJLsJZv0+ZQqGP4KUAWy6Sc/2a7BIpFc2A79Rbza2FqNq4oTltQYvoUKEzvprPHpg=".getBytes(StandardCharsets.UTF_8));
++
++			PrivateKey privKey = kf.generatePrivate(keySpec);
++			final PrivateKey privateKey = kf.generatePrivate(keySpec);
++			final Cipher cipher = Cipher.getInstance(privateKey.getAlgorithm());
++			final byte[] cred64 = Base64.getDecoder().decode(cryptedPassword);
++			cipher.init(Cipher.DECRYPT_MODE, privateKey);
++			final byte[] cipherData = cipher.doFinal(cred64);
++			return new String(cipherData);
++		} catch (InvalidKeySpecException e) {
++			// TODO Auto-generated catch block
++			e.printStackTrace();
++		} catch (NoSuchAlgorithmException e) {
++			// TODO Auto-generated catch block
++			e.printStackTrace();
++		} catch (NoSuchPaddingException e) {
++			// TODO Auto-generated catch block
++			e.printStackTrace();
++		} catch (InvalidKeyException e) {
++			// TODO Auto-generated catch block
++			e.printStackTrace();
++		} catch (IllegalBlockSizeException e) {
++			// TODO Auto-generated catch block
++			e.printStackTrace();
++		} catch (BadPaddingException e) {
++			// TODO Auto-generated catch block
++			e.printStackTrace();
++		}
++		return null;
++	}
+ 
++	
++	
+ 	@Override
+ 	public String getCurrentUserLogin() {
+ 		return getCurrentUser().getLogin();

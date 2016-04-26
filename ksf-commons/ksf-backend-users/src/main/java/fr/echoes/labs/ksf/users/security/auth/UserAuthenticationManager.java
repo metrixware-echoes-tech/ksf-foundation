@@ -116,7 +116,7 @@ public class UserAuthenticationManager {
 
 	private ServiceProperties serviceProperties() {
 		final ServiceProperties sp = new ServiceProperties();
-		sp.setService("http://localhost:8888/login/cas");
+		sp.setService(casSecurityConfiguration.getServiceUrl());
 		sp.setSendRenew(false);
 		return sp;
 	}
