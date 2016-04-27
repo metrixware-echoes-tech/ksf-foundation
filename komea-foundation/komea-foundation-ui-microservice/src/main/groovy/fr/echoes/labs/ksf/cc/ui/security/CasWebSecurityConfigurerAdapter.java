@@ -77,7 +77,7 @@ public class CasWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapte
 	public LogoutFilter requestCasGlobalLogoutFilter() {
 		final LogoutFilter logoutFilter = new LogoutFilter(this.conf.getLogoutUrl() + "?service="
 				+ this.conf.getServiceHome(), new SecurityContextLogoutHandler());
-		logoutFilter.setLogoutRequestMatcher(new AntPathRequestMatcher("/logout", "POST"));
+		logoutFilter.setLogoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"));
 		return logoutFilter;
 	}
 }
