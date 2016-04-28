@@ -100,4 +100,11 @@ public class GitProjectLifeCycleExtension implements IProjectLifecycleExtension 
 
 	}
 
+	@Override
+	public void notifyCreatedFeature(ProjectDto project, String featureId,
+			String featureSubject) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

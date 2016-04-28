@@ -100,20 +100,23 @@ public class ForemanProjectLifeCycleExtension implements IProjectLifecycleExtens
 
 	@Override
 	public void notifyDuplicatedProject(ProjectDto _project) {
-		// TODO Auto-generated method stub
-
+		// Do nothing
 	}
 
 	@Override
 	public void notifyUpdatedProject(ProjectDto _project) {
-		// TODO Auto-generated method stub
-
+		// Do nothing
 	}
 
 	@Override
 	public void notifyCreatedRelease(ProjectDto project, String releaseVersion) {
-		// TODO Auto-generated method stub
+		// Do nothing
+	}
 
+	@Override
+	public void notifyCreatedFeature(ProjectDto project, String featureId,
+			String featureSubject) {
+		// Do nothing
 	}
 
 }
