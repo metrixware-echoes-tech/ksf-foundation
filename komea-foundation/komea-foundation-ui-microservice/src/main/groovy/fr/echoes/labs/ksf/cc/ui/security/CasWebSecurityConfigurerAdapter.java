@@ -28,11 +28,16 @@ public class CasWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapte
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.addFilterAfter(new CsrfCookieGeneratorFilter(), CsrfFilter.class).exceptionHandling()
-				.authenticationEntryPoint(casAuthenticationEntryPoint()).and().addFilter(casAuthenticationFilter())
-				.addFilterBefore(singleSignOutFilter(), CasAuthenticationFilter.class)
-				.addFilterBefore(requestCasGlobalLogoutFilter(), LogoutFilter.class);
+//		http.addFilterAfter(new CsrfCookieGeneratorFilter(), CsrfFilter.class).exceptionHandling()
+//				.authenticationEntryPoint(casAuthenticationEntryPoint()).and().addFilter(casAuthenticationFilter())
+//				.addFilterBefore(singleSignOutFilter(), CasAuthenticationFilter.class)
+//				.addFilterBefore(requestCasGlobalLogoutFilter(), LogoutFilter.class);
 
+		http.exceptionHandling()
+			.authenticationEntryPoint(casAuthenticationEntryPoint()).and().addFilter(casAuthenticationFilter())
+			.addFilterBefore(singleSignOutFilter(), CasAuthenticationFilter.class)
+			.addFilterBefore(requestCasGlobalLogoutFilter(), LogoutFilter.class);		
+		
 		http.headers().frameOptions().disable().authorizeRequests().antMatchers("/").permitAll()
 				.antMatchers("/login", "/logout", "/secure").authenticated().antMatchers("/filtered")
 				.hasAuthority("ROLE_ADMIN").anyRequest().authenticated();
@@ -40,6 +45,7 @@ public class CasWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapte
 		// <logout invalidate-session="true" delete-cookies="JSESSIONID" />
 		http.logout().logoutUrl("/logout").logoutSuccessUrl("/").invalidateHttpSession(true)
 				.deleteCookies("JSESSIONID");
+		http.csrf().disable();
 	}
 
 	public SessionAuthenticationStrategy sessionStrategy() {
