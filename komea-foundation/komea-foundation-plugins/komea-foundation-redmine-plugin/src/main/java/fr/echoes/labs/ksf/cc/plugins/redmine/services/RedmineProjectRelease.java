@@ -12,6 +12,10 @@ import fr.echoes.labs.ksf.cc.extensions.services.project.IProjectVersions;
 import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineExtensionException;
 
 
+/**
+ * @author dcollard
+ *
+ */
 @Service
 public class RedmineProjectRelease implements IProjectVersions {
 

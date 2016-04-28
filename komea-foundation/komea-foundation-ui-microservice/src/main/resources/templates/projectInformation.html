@@ -1,4 +1,4 @@
-<!--/* Project Information panel */-->
+﻿<!--/* Project Information panel */-->
 <div  th:fragment="projectInformationPanel">
 	<div class="panel panel-default">
 		<div class="panel-heading">
@@ -15,6 +15,23 @@
 					<label th:text="${projectData.user.firstName+' '+projectData.user.lastName}">User</label>
 				</li>
 			</ul>
+
+			<table class="table table-striped tableRowEllipsis">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>Sujet</th>
+						<th>Assigé à</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="feature : ${@projectInformationManager.getFeatures(projectData.project.name)}">
+						<td th:text="${feature.getId()}"></td>
+						<td th:text="${feature.getSubject()}"></td>
+						<td th:text="${feature.getAssignee()}"></td>
+					</tr>
+				</tbody>
+			</table>
 	
 			<!--/* Button uses to open the Create Release modal */-->
 			<button type="button" id="createReleaseButton" name="createReleaseButton" class="btn btn-primary" title="Create a new release" data-toggle="modal" data-target="#createReleaseModal" th:disabled="${@projectInformationManager.getVersions(projectData.project.name).isEmpty()}">Create Release</button>

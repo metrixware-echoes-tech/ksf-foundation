@@ -27,6 +27,7 @@ import com.taskadapter.redmineapi.bean.Tracker;
 import com.taskadapter.redmineapi.bean.User;
 import com.taskadapter.redmineapi.bean.Version;
 
+import fr.echoes.labs.ksf.cc.extensions.services.project.IProjectFeature;
 import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineExtensionException;
 import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineIssue;
 import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineQuery;
@@ -234,6 +235,26 @@ public class RedmineService implements IRedmineService {
 			throw new RedmineExtensionException("Failed to retrieve project \"" + projectName +"\" versions", e);
 		}
 		return result;
+	}
+
+	@Override
+	public List<IProjectFeature> getFeatures(String projectName)
+			throws RedmineExtensionException {
+		Objects.requireNonNull(projectName);
+		
+		final List<String> result;
+		final RedmineManager mgr = createRedmineManager();
+		final ProjectManager projectManager = mgr.getProjectManager();
+		final String projectKey =  createIdentifier(projectName);
+		try {
+			Project project = projectManager.getProjectByKey(projectKey);
+
+
+
+		} catch (RedmineException e) {
+			throw new RedmineExtensionException("Failed to retrieve project \"" + projectName +"\" versions", e);
+		}
+		return null;
 	}
 
 }
