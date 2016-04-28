@@ -1,4 +1,4 @@
-ï»¿<!--/* Project Information panel */-->
+<!--/* Project Information panel */-->
 <div  th:fragment="projectInformationPanel">
 	<div class="panel panel-default">
 		<div class="panel-heading">
@@ -20,8 +20,9 @@
 				<thead>
 					<tr>
 						<th>#</th>
-						<th>Sujet</th>
-						<th>AssigÃ© Ã </th>
+						<th>Feature</th>
+						<th>Assigé à</th>
+						<th></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -29,6 +30,7 @@
 						<td th:text="${feature.getId()}"></td>
 						<td th:text="${feature.getSubject()}"></td>
 						<td th:text="${feature.getAssignee()}"></td>
+						<td><button type="button" name="createFeatureButton" class="createFeatureButton btn btn-primary" title="Create the feature" data-toggle="modal" data-target="#createReleaseModal" th:disabled="${@projectInformationManager.getVersions(projectData.project.name).isEmpty()}">Create</button></td>
 					</tr>
 				</tbody>
 			</table>

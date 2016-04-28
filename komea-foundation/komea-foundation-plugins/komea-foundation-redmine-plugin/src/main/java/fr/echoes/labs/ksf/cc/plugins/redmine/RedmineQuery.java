@@ -8,10 +8,14 @@ public class RedmineQuery {
 
 	private final String projectName;
 	private int resultItemsLimit;
-
+	private int trackerId;
+	private int statusId;
+	
 	public static class Builder {
 		private String projectName;
-		private int resultItemsLimit;
+		private int resultItemsLimit = -1;
+		private int trackerId = -1;
+		private int statusId = -1;
 
 		public Builder projectName(String projectName) {
 			this.projectName = projectName;
@@ -22,6 +26,16 @@ public class RedmineQuery {
 			this.resultItemsLimit = resultItemsLimit;
 			return this;
 		}
+		
+		public Builder trackerId(int trackerId) {
+			this.trackerId = trackerId;
+			return this;			
+		}
+
+		public Builder statusId(int statusId) {
+			this.statusId = statusId;
+			return this;			
+		}		
 
 		public RedmineQuery build() {
 			return new RedmineQuery(this);
@@ -31,14 +45,35 @@ public class RedmineQuery {
 	private RedmineQuery(Builder builder) {
 		this.projectName = builder.projectName;
 		this.resultItemsLimit = builder.resultItemsLimit;
+		this.trackerId = builder.trackerId;
+		this.statusId = builder.statusId;
 	}
 
+	/**
+	 * @return the projectName
+	 */
 	public String getProjectName() {
 		return this.projectName;
 	}
 
+	/**
+	 * @return the resultItemsLimit
+	 */
 	public int getResultItemsLimit() {
 		return resultItemsLimit;
 	}
 
+	/**
+	 * @return the trackerId
+	 */
+	public int getTrackerId() {
+		return trackerId;
+	}
+
+	/**
+	 * @return the statusId
+	 */
+	public int getStatusId() {
+		return statusId;
+	}
 }

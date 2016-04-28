@@ -28,9 +28,11 @@ import com.taskadapter.redmineapi.bean.User;
 import com.taskadapter.redmineapi.bean.Version;
 
 import fr.echoes.labs.ksf.cc.extensions.services.project.IProjectFeature;
+import fr.echoes.labs.ksf.cc.extensions.services.project.ProjectFeatue;
 import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineExtensionException;
 import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineIssue;
 import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineQuery;
+import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineQuery.Builder;
 
 
 
@@ -132,6 +134,14 @@ public class RedmineService implements IRedmineService {
 
 		for (int i = 0; i < resultNumberOfItems; i++) {
 			final Issue issue = issues.get(i);
+			if (query.getStatusId() != -1 && query.getStatusId() != issue.getStatusId()) {
+				continue;
+			}
+
+			if (query.getTrackerId() != -1 && issue.getTracker() != null && query.getTrackerId() != issue.getTracker().getId()) {
+				continue;
+			}
+
 			redmineIssues.add(createRedmineIssue(issue));
 		}
 
@@ -241,20 +251,25 @@ public class RedmineService implements IRedmineService {
 	public List<IProjectFeature> getFeatures(String projectName)
 			throws RedmineExtensionException {
 		Objects.requireNonNull(projectName);
+		final Builder redmineQuerryBuilder = new RedmineQuery.Builder();
+
+		redmineQuerryBuilder.projectName(projectName)
+		                    .trackerId(configurationService.getFeatureTrackerId())
+		                    .statusId(configurationService.getFeatureStatusNewId());
+
 		
-		final List<String> result;
-		final RedmineManager mgr = createRedmineManager();
-		final ProjectManager projectManager = mgr.getProjectManager();
-		final String projectKey =  createIdentifier(projectName);
-		try {
-			Project project = projectManager.getProjectByKey(projectKey);
-
-
-
-		} catch (RedmineException e) {
-			throw new RedmineExtensionException("Failed to retrieve project \"" + projectName +"\" versions", e);
+		final RedmineQuery query = redmineQuerryBuilder.build();
+		final List<RedmineIssue> issues = queryIssues(query);
+		
+		final List<IProjectFeature> features = new ArrayList<IProjectFeature>(issues.size());
+		for (RedmineIssue issue : issues) {
+			ProjectFeatue feature = new ProjectFeatue();
+			feature.setId(String.valueOf(issue.getId()));
+			feature.setSubject(issue.getSubject());
+			feature.setAssignee(issue.getAssignee());
+			features.add(feature);
 		}
-		return null;
+		return features;
 	}
 
 }
