@@ -30,6 +30,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.google.common.collect.Lists;
 import com.tocea.corolla.cqrs.gate.CommandExecutionException;
 import com.tocea.corolla.cqrs.gate.Gate;
+import com.tocea.corolla.products.commands.CreateFeatureCommand;
 import com.tocea.corolla.products.commands.CreateReleaseCommand;
 import com.tocea.corolla.products.commands.DeleteProjectCommand;
 import com.tocea.corolla.products.dao.IProjectDAO;
@@ -113,6 +114,20 @@ public class ProjectController {
 		return new ModelAndView("redirect:/ui/projects/" + project.getKey());
 	}
 
+	@RequestMapping(value = "/ui/projects/features/new")
+	public ModelAndView createFeature(@RequestParam("projectKey") final String projectKey, @RequestParam("featureId") final String featureId, @RequestParam("featureSubject") final String featureSubject) {
+
+		final Project project = this.projectDao.findByKey(projectKey);
+
+		if (project == null) {
+			throw new ProjectNotFoundException();
+		}
+
+    	this.gate.dispatch(new CreateFeatureCommand(project, featureId, featureSubject));
+
+		return new ModelAndView("redirect:/ui/projects/" + project.getKey());
+	}	
+	
 
 	@RequestMapping(value = "/ui/projects/new")
 	public ModelAndView getCreatePage() {
