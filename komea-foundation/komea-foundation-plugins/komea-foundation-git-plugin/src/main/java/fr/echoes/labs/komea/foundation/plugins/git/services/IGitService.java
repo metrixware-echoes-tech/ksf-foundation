@@ -27,13 +27,21 @@ public interface IGitService {
 	public void deleteProject(String projectName) throws GitExtensionException;
 
 	/**
+	 * Creates a new branch for the given release.
 	 *
-	 *
-	 * @param projectName
-	 * @param releaseVersion
+	 * @param projectName the project name
+	 * @param releaseVersion the release version
 	 * @throws GitExtensionException
 	 */
 	public void createRelease(String projectName, String releaseVersion) throws GitExtensionException;
 
+	/**
+	 * Creates a new branch for the given feature.
+	 * 
+	 * @param projectName the project name
+	 * @param featureId the feature ID
+	 * @param featureSubject the feature subject
+	 */
+	public void createFeature(String projectName, String featureId, String featureSubject)  throws GitExtensionException;
 
 }

@@ -87,7 +87,8 @@ public class JenkinsService implements IJenkinsService {
 	}
 
 	private String getJobName(String projectName, String branchName) {
-		return projectName + " - " + branchName;
+		String string = projectName + " - " + branchName;
+		return string.replace('/', ' ');
 	}
 
 	private JenkinsServer createJenkinsClient() throws URISyntaxException {
@@ -191,13 +192,22 @@ public class JenkinsService implements IJenkinsService {
 
 	@Override
 	public void createRelease(String projectName, String releaseVersion) throws JenkinsExtensionException {
+		final String branchName = getReleaseBranchName(projectName, releaseVersion);
+		createJob(projectName, branchName);
+	}
+
+	@Override
+	public void createFeature(String projectName, String featureId, String featureSubject) throws JenkinsExtensionException {
+		final String branchName = getFeatureBranchName(projectName, featureId, featureSubject);
+		createJob(projectName, branchName);
+	}
+
+	private void createJob(String projectName, String branchName) throws JenkinsExtensionException {
 		final JenkinsServer jenkins;
 		try {
 			jenkins = createJenkinsClient();
 
 			final String scmUrl = this.configurationService.getScmUrl() + '/' + projectName + ".git";
-
-			final String branchName = getBranchName(projectName, releaseVersion);
 
 			if (this.configurationService.useFolders()) {
 				final FolderJob projectFolder = getProjectParentFolder(jenkins, projectName);
@@ -209,13 +219,18 @@ public class JenkinsService implements IJenkinsService {
 				jenkins.createJob(getJobName(projectName, branchName), resolvedXmlConfig, false);
 			}
 
-
 		} catch (final Exception e) {
 			throw new JenkinsExtensionException("Failed to create Jenkins job", e);
-		}
+		}		
+	}
+	
+	private String getReleaseBranchName(String projectName, String releaseVersion) {
+		return "release/" + releaseVersion;
+	}
+	
+	private String getFeatureBranchName(String projectName, String featureId,
+			String featureSubject) {
+		return "feature/" + featureId;
 	}
 
-	private String getBranchName(String projectName, String releaseVersion) {
-		return releaseVersion;
-	}
 }

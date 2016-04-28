@@ -10,6 +10,7 @@ import org.springframework.core.annotation.Order;
 import com.tocea.corolla.products.dao.IProjectDAO;
 
 import fr.echoes.labs.ksf.cc.plugins.redmine.services.IRedmineService;
+import fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineConfigurationService;
 import fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineErrorHandlingService;
 import fr.echoes.labs.ksf.extensions.annotations.Extension;
 import fr.echoes.labs.ksf.extensions.projects.IProjectLifecycleExtension;
@@ -37,6 +38,9 @@ public class RedmineProjectLifeCycleExtension implements IProjectLifecycleExtens
 
 	@Autowired
 	private ApplicationContext applicationContext;
+
+	@Autowired
+	private RedmineConfigurationService configurationService;
 
 	private ICurrentUserService currentUserService;
 
@@ -102,10 +106,16 @@ public class RedmineProjectLifeCycleExtension implements IProjectLifecycleExtens
 	}
 
 	@Override
-	public void notifyCreatedFeature(ProjectDto project, String featureId,
+	public void notifyCreatedFeature(ProjectDto project, String ticketId,
 			String featureSubject) {
-		// TODO Auto-generated method stub
-		
+
+		try {
+			this.redmineService.changeStatus(ticketId, this.configurationService.getFeatureStatusAssignedId());
+
+		} catch (final Exception ex) {
+			LOGGER.error("[Redmine] Failed to change ticket #{} status", ticketId, ex);
+			this.errorHandler.registerError("Failed to change Redmine ticket status. Please verify your Redmine configuration.");
+		}
 	}
 
 }

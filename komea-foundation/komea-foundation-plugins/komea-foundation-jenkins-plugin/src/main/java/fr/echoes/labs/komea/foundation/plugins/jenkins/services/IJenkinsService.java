@@ -36,11 +36,22 @@ public interface IJenkinsService {
 	 */
 	public List<JenkinsBuildInfo> getBuildInfo(String projectName) throws JenkinsExtensionException;
 
-
 	/**
-	 * @param name
-	 * @param releaseVersion
+	 * Creates a new Jenkins job for the given release.
+	 *
+	 * @param projectName the project name
+	 * @param releaseVersion the release version
 	 * @throws JenkinsExtensionException
 	 */
 	public void createRelease(String name, String releaseVersion) throws JenkinsExtensionException;
+
+	/**
+	 * Creates a new Jenkins job for the given feature.
+	 *
+	 * @param projectName the project name
+	 * @param featureId the feature ID
+	 * @param featureSubject the feature subject
+	 * @throws JenkinsExtensionException
+	 */	
+	public void createFeature(String projectName, String featureId, String featureSubject) throws JenkinsExtensionException;
 }

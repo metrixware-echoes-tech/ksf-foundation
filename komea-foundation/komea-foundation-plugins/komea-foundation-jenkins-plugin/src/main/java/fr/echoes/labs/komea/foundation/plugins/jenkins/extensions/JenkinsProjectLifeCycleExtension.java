@@ -108,10 +108,14 @@ public class JenkinsProjectLifeCycleExtension implements IProjectLifecycleExtens
 	}
 
 	@Override
-	public void notifyCreatedFeature(ProjectDto project, String featureId,
-			String featureSubject) {
-		// TODO Auto-generated method stub
-		
+	public void notifyCreatedFeature(ProjectDto project, String featureId, String featureSubject) {
+		try {
+
+			this.jenkinsService.createFeature(project.getName(), featureId, featureSubject);
+		} catch (final Exception ex) {
+			LOGGER.error("[Git] Failed to create release for project {} ", project.getName(), ex);
+			this.errorHandler.registerError("Failed to create release.");
+		}
 	}
 
 }

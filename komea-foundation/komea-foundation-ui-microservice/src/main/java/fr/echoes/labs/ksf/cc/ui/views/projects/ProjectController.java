@@ -123,7 +123,7 @@ public class ProjectController {
 			throw new ProjectNotFoundException();
 		}
 
-    	this.gate.dispatch(new CreateFeatureCommand(project, featureId, featureSubject));
+        this.gate.dispatch(new CreateFeatureCommand(project, featureId, featureSubject));
 
 		return new ModelAndView("redirect:/ui/projects/" + project.getKey());
 	}	

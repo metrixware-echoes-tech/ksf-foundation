@@ -1,4 +1,4 @@
-﻿<!--/* Project Information panel */-->
+<!--/* Project Information panel */-->
 <div  th:fragment="projectInformationPanel">
 	<div class="panel panel-default">
 		<div class="panel-heading">
@@ -20,7 +20,7 @@
 				<thead>
 					<tr>
 						<th>#</th>
-						<th>Feature</th>
+						<th>Feature</th> 
 						<th>Assigé à</th>
 						<th></th>
 					</tr>
@@ -34,10 +34,16 @@
 							<form th:attr="action=@{/ui/projects/features/new}"
 								class="form-horizontal" method="post"
 								role="form" data-toggle="validator">
+
 								<input name="projectKey" type="hidden" th:value="${projectData.project.key}" />
 								<input name="featureId" type="hidden" th:value="${feature.getId()}" />
 								<input name="featureSubject" type="hidden" th:value="${feature.getSubject()}" />
-								<button class="btn btn-primary" type="submit">Create</button>
+								<div th:if="${feature.getStatus() == T(fr.echoes.labs.ksf.cc.extensions.services.project.FeatureStatus).NEW}" th:remove="tag">
+									<button class="glyphicon glyphicon-play" type="submit" style="color:DarkGreen"></button>
+								</div>
+								<div th:if="${feature.getStatus() == T(fr.echoes.labs.ksf.cc.extensions.services.project.FeatureStatus).CREATED}" th:remove="tag">
+									<button class="glyphicon glyphicon-stop" type="submit" style="color:DarkRed"></button>
+								</div>
 							</form>
 						</td>
 					</tr>

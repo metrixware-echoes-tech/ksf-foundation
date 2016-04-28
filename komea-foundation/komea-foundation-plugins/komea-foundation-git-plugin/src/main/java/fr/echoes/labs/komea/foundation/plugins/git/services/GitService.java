@@ -132,36 +132,34 @@ public class GitService implements IGitService {
 		Objects.requireNonNull(projectName);
 	}
 
-	@Override
-	public void createRelease(String projectName, String releaseVersion) throws GitExtensionException {
+	private void createBranch(String projectName, String branchName) throws GitExtensionException {
 		Objects.requireNonNull(projectName);
-
+		
 		final String gitProjectUri = this.configuration.getScmUrl() + '/' + projectName + ".git";
-
+		
 		File workingDirectory = null;
 		Git git = null;
-
+		
 		try {
 			workingDirectory = createCloneDestinationDirectory(projectName);
-
+			
 			// Clone project
 			LOGGER.debug("Cloning the repository {} into {}", gitProjectUri, workingDirectory);
 			git = Git.cloneRepository().setURI(gitProjectUri).setDirectory(workingDirectory).call();
-
+			
 			git.checkout()
-					.setName(DEVELOP)
-					.setCreateBranch(true)
-					.setUpstreamMode(
-							CreateBranchCommand.SetupUpstreamMode.TRACK)
+			.setName(DEVELOP)
+			.setCreateBranch(true)
+			.setUpstreamMode(
+					CreateBranchCommand.SetupUpstreamMode.TRACK)
 					.setStartPoint(
 							Constants.DEFAULT_REMOTE_NAME + "/" + DEVELOP)
-					.call();
-
-			final String branchName = getBranchName(projectName, releaseVersion);
+							.call();
+			
 			git.branchCreate().setName(branchName).call();
 			git.push().add(branchName).call();
-
-
+			
+			
 		} catch (final Exception e) {
 			throw new GitExtensionException(e);
 		} finally {
@@ -174,12 +172,28 @@ public class GitService implements IGitService {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		}
-
+		}		
 	}
 
-	private String getBranchName(String projectName, String releaseVersion) {
-		return releaseVersion;
+	@Override
+	public void createRelease(String projectName, String releaseVersion) throws GitExtensionException {
+		final String branchName = getReleaseBranchName(projectName, releaseVersion);
+		createBranch(projectName, branchName);
+	}
+
+	@Override
+	public void createFeature(String projectName, String featureId, String featureSubject) throws GitExtensionException {
+		final String branchName = getFeatureBranchName(projectName, featureId, featureSubject);
+		createBranch(projectName, branchName);
+	}
+
+	private String getReleaseBranchName(String projectName, String releaseVersion) {
+		return "release/" + releaseVersion;
+	}
+
+	private String getFeatureBranchName(String projectName, String featureId,
+			String featureSubject) {
+		return "feature/" + featureId;
 	}
 
 }

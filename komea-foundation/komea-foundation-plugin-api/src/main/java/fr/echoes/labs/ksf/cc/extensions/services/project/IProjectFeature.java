@@ -20,5 +20,10 @@ public interface IProjectFeature {
 	 * @return the assignee
 	 */
 	public abstract String getAssignee();
+	
+	/**
+	 * @return the status
+	 */
+	public FeatureStatus getStatus();
 
 }

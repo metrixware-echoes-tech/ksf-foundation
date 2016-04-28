@@ -27,6 +27,7 @@ import com.taskadapter.redmineapi.bean.Tracker;
 import com.taskadapter.redmineapi.bean.User;
 import com.taskadapter.redmineapi.bean.Version;
 
+import fr.echoes.labs.ksf.cc.extensions.services.project.FeatureStatus;
 import fr.echoes.labs.ksf.cc.extensions.services.project.IProjectFeature;
 import fr.echoes.labs.ksf.cc.extensions.services.project.ProjectFeatue;
 import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineExtensionException;
@@ -181,7 +182,7 @@ public class RedmineService implements IRedmineService {
 	private String findProjectIdentifier(RedmineManager redmineManager, String projectName) throws RedmineException {
 		final ProjectManager projectManager = redmineManager.getProjectManager();
 
-		for (Project project : projectManager.getProjects()) {
+		for (final Project project : projectManager.getProjects()) {
 			if (projectName.equals(project.getName())) {
 				return project.getIdentifier();
 			}
@@ -198,14 +199,14 @@ public class RedmineService implements IRedmineService {
 		final ProjectManager projectManager = mgr.getProjectManager();
 		final String projectKey =  createIdentifier(projectName);
 		try {
-			Project project = projectManager.getProjectByKey(projectKey);
+			final Project project = projectManager.getProjectByKey(projectKey);
 			final List<Version> versions = projectManager.getVersions(project.getId());
 
 			final Map<String, List<String>> projectVersionMap = new HashMap<String, List<String>>();
 
 			// Loop through the list of versions and build a map with the projects names as keys and lists
 			// of versions as values. The version with another status than "open" are ignored.
-			for (Version version : versions) {
+			for (final Version version : versions) {
 
 				if (!Version.STATUS_OPEN.equals(version.getStatus())) {
 					LOGGER.info("[Redmine] The {} version \"{}\" was ignored.", version.getStatus(), version.getName());
@@ -230,7 +231,7 @@ public class RedmineService implements IRedmineService {
 					result = projectVersionMap.get(projectName);
 				} else {
 					result = new ArrayList<String>();
-					for (Map.Entry<String, List<String>> entry : projectVersionMap.entrySet()) {
+					for (final Map.Entry<String, List<String>> entry : projectVersionMap.entrySet()) {
 						result.addAll(entry.getValue());
 					}
 
@@ -241,7 +242,7 @@ public class RedmineService implements IRedmineService {
 			}
 
 
-		} catch (RedmineException e) {
+		} catch (final RedmineException e) {
 			throw new RedmineExtensionException("Failed to retrieve project \"" + projectName +"\" versions", e);
 		}
 		return result;
@@ -251,25 +252,54 @@ public class RedmineService implements IRedmineService {
 	public List<IProjectFeature> getFeatures(String projectName)
 			throws RedmineExtensionException {
 		Objects.requireNonNull(projectName);
+
+		final List<IProjectFeature> features = new ArrayList<IProjectFeature>();
+
+		features.addAll((buildFeaturesList(projectName, this.configurationService.getFeatureStatusNewId(), FeatureStatus.NEW)));
+		features.addAll((buildFeaturesList(projectName, this.configurationService.getFeatureStatusNewId(), FeatureStatus.CREATED)));
+
+		return features;
+	}
+
+	private List<IProjectFeature> buildFeaturesList(String projectName, int satusId, FeatureStatus status) throws RedmineExtensionException {
 		final Builder redmineQuerryBuilder = new RedmineQuery.Builder();
 
 		redmineQuerryBuilder.projectName(projectName)
-		                    .trackerId(configurationService.getFeatureTrackerId())
-		                    .statusId(configurationService.getFeatureStatusNewId());
+		                    .trackerId(this.configurationService.getFeatureTrackerId())
+		                    .statusId(satusId);
 
-		
+
 		final RedmineQuery query = redmineQuerryBuilder.build();
 		final List<RedmineIssue> issues = queryIssues(query);
-		
+
 		final List<IProjectFeature> features = new ArrayList<IProjectFeature>(issues.size());
-		for (RedmineIssue issue : issues) {
-			ProjectFeatue feature = new ProjectFeatue();
+		for (final RedmineIssue issue : issues) {
+			final ProjectFeatue feature = new ProjectFeatue();
 			feature.setId(String.valueOf(issue.getId()));
 			feature.setSubject(issue.getSubject());
 			feature.setAssignee(issue.getAssignee());
+			feature.setStatus(status);
 			features.add(feature);
 		}
 		return features;
+	}
+
+	@Override
+	public void changeStatus(String ticketId, int statusId) throws RedmineExtensionException {
+
+		final RedmineManager redmineManager = createRedmineManager();
+
+		if (redmineManager == null) {
+			return;
+		}
+
+		final IssueManager issueManager = redmineManager.getIssueManager();
+		try {
+			final Issue issue = issueManager.getIssueById(Integer.valueOf(ticketId));
+			issue.setStatusId(statusId);
+		} catch (final Exception e) {
+			throw new RedmineExtensionException("Failed to change ticket status.", e);
+		}
 	}
 
 }

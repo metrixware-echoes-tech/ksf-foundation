@@ -22,7 +22,7 @@ public class CreateReleaseCommand {
 
 	public CreateReleaseCommand(Project project, String releaseVersion) {
 		this.project = project;
-		this.setReleaseVersion(releaseVersion);
+		this.releaseVersion = releaseVersion;
 	}
 
 	public Project getProject() {
@@ -35,10 +35,6 @@ public class CreateReleaseCommand {
 
 	public String getReleaseVersion() {
 		return this.releaseVersion;
-	}
-
-	public void setReleaseVersion(String releaseVersion) {
-		this.releaseVersion = releaseVersion;
 	}
 
 }

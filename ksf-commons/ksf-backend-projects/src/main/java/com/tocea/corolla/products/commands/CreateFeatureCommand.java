@@ -18,9 +18,6 @@ public class CreateFeatureCommand {
 	private Project project;
 
 	@NotEmpty
-	private String featureVersion;
-
-	@NotEmpty
 	private String featureId;
 	
 	@NotEmpty

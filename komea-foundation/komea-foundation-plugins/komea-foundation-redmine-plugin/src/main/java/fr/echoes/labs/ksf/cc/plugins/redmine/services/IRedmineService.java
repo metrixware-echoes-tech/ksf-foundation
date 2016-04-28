@@ -58,4 +58,13 @@ public interface IRedmineService {
 	 */
 	public List<IProjectFeature> getFeatures(String projectName) throws RedmineExtensionException;
 
+	/**
+	 * Changes the ticked status.
+	 * 
+	 * @param ticketId 
+	 * @param statusId
+	 * @throws RedmineExtensionException
+	 */
+	public void changeStatus(String ticketId, int statusId) throws RedmineExtensionException;
+
 }
