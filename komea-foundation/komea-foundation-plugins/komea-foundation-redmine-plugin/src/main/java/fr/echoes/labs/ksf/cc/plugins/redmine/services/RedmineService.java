@@ -297,6 +297,7 @@ public class RedmineService implements IRedmineService {
 		try {
 			final Issue issue = issueManager.getIssueById(Integer.valueOf(ticketId));
 			issue.setStatusId(statusId);
+			issueManager.update(issue);
 		} catch (final Exception e) {
 			throw new RedmineExtensionException("Failed to change ticket status.", e);
 		}
