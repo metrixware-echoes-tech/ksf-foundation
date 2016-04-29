@@ -12,7 +12,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 
-import fr.echoes.labs.ksf.users.security.auth.UserAuthenticationManager
+import fr.echoes.labs.ksf.users.security.auth.IUserAuthenticationManager;
 
 /**
  * Check the ISSUE https://github.com/spring-projects/spring-boot/issues/1801
@@ -30,7 +30,7 @@ public class GuiSecurityConfig extends WebSecurityConfigurerAdapter {
     private static final Logger LOGGER = LoggerFactory.getLogger(GuiSecurityConfig.class);
 
     @Autowired
-    def UserAuthenticationManager ksfUserAuthentication;
+    def IUserAuthenticationManager ksfUserAuthentication;
 
     @Override
     public void configure(final AuthenticationManagerBuilder auth)
