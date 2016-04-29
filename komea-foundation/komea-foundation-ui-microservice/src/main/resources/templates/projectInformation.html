@@ -4,7 +4,12 @@
 		<div class="panel-heading">
 			<h3 class="panel-title">Project Information</h3>
 		</div>
-		<div class="panel-body">												
+
+
+<div th:with="features=${@projectInformationManager.getFeatures(projectData.project.name)}" th:remove="tag">
+<div th:with="releases=${@projectInformationManager.getVersions(projectData.project.name)}" th:remove="tag">
+		<div class="panel-body">
+
 			<ul class="project-properties" style="list-style-type: none">
 				<li>
 					<strong>Name:</strong> 
@@ -16,7 +21,9 @@
 				</li>
 			</ul>
 
-			<table class="table table-striped tableRowEllipsis">
+
+
+			<table class="table table-striped tableRowEllipsis" th:with="features=${@projectInformationManager.getFeatures(projectData.project.name)}" th:if="${not #lists.isEmpty(features)}">
 				<thead>
 					<tr>
 						<th>#</th>
@@ -26,7 +33,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="feature : ${@projectInformationManager.getFeatures(projectData.project.name)}">
+					<tr th:each="feature : ${features}">
 						<td th:text="${feature.getId()}"></td>
 						<td th:text="${feature.getSubject()}"></td>
 						<td th:text="${feature.getAssignee()}"></td>
@@ -49,16 +56,44 @@
 					</tr>
 				</tbody>
 			</table>
+
+			
+    		<table class="table table-striped tableRowEllipsis" th:if="${not #lists.isEmpty(releases)}">
+				<thead>
+					<tr>
+						<th>Release</th> 
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="release : ${releases}">
+						<td th:text="${release}"></td>
+						<td>
+							<form th:attr="action=@{/ui/projects/releases/new}"
+								class="form-horizontal" method="post"
+								role="form" data-toggle="validator">
+
+								<input name="projectKey" type="hidden" th:value="${projectData.project.key}" />
+								<input name="releaseVersion" type="hidden" th:value="${release}" />
+								<button class="glyphicon glyphicon-play" type="submit" style="color:DarkGreen"></button>
+							</form>
+						</td>
+					</tr>
+				</tbody>
+			</table>			
 	
 			<!--/* Button uses to open the Create Release modal */-->
-			<button type="button" id="createReleaseButton" name="createReleaseButton" class="btn btn-primary" title="Create a new release" data-toggle="modal" data-target="#createReleaseModal" th:disabled="${@projectInformationManager.getVersions(projectData.project.name).isEmpty()}">Create Release</button>
+			<!-- button type="button" id="createReleaseButton" name="createReleaseButton" class="btn btn-primary" title="Create a new release" data-toggle="modal" data-target="#createReleaseModal" th:disabled="${@projectInformationManager.getVersions(projectData.project.name).isEmpty()}">Create Release</button -->
 			
 		</div>
+</div>
+</div>
+		
 	</div>
 </div>
 
 <!--/* Create Release modal */-->
-<div th:fragment="projectInformationModal">
+<!-- div th:fragment="projectInformationModal">
 	<div aria-hidden="true" aria-labelledby="myModalLabel" class="modal fade in" id="createReleaseModal" role="dialog" tabindex="-1" style="padding-left: 15px;">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -95,4 +130,4 @@
 			</div>
 		</div>
 	</div>
-</div>
+</div -->
