@@ -1,4 +1,9 @@
-spring.profiles.active=test,demo
+# HTTP
+server.port = 8888
+management.port=8080
+
+# For authentication 2 profiles are available: internalAuth and casAuth 
+spring.profiles.active=test,demo,internalAuth
 
 ### SECURITY
 ksf.security.passwordStrength=-1
@@ -37,6 +42,9 @@ ksf.security.ldap.groupSearchBase=ou=groups
 #ksf.security.ldap.field_uid=
 #ksf.security.ldap.field_email=
 
+# Plug-ins shared properties
+ksf.scmUrl=ssh://gitolite@git.demo-esf.echoes-tech.com
+
 # Foreman plug-in
 ksf.foreman.url = https://ksf-ads.metrixware.local
 #ksf.foreman.url = https://pc-ksf.metrixware.local
@@ -56,9 +64,33 @@ ksf.foreman.host.architectureId = 1
 ksf.foreman.host.domainId = 2  
 ksf.foreman.host.rootPassword = rootroot 
 
-				
-# HTTP
-management.port=8080
+
+# Redmine plug-in
+ksf.redmine.url=http://forge.demo-esf.echoes-tech.com
+ksf.redmine.apiAccessKey=90dd0509d0e1a450fe3f45fe632d17caa1c9bd73
+ksf.redmine.resultItemsLimit=10
+ksf.redmine.featureTrackerId=2
+ksf.redmine.featureStatusNewId=1
+ksf.redmine.featureStatusAssignedId=2
+ksf.redmine.featureStatusClosedId=5
+
+# Jenkins plug-in 
+ksf.jenkins.url=http://jenkins.demo-esf.echoes-tech.com
+ksf.jenkins.templateName=templates/job.xml
+ksf.jenkins.useFolders=true
+ksf.jenkins.builsdPerJobLimit=5
+
+# Build System
+ksf.buildSystem.defaultScript=build.sh
+
+# Artifact management
+ksf.artifacts.publishScript=publish.sh
+
+# Git plug-in
+ksf.git.workingDirectory=/var/lib/ksf/git
+
+# Nexus plug-in
+ksf.nexus.url=http://ksf-ads.metrixware.local:8081/nexus/
 
 
 // CQRS
@@ -97,3 +129,12 @@ spring.mvc.favicon.enabled=false
 
 logging.level.org.springframework.web=INFO
 logging.level.org.hibernate=ERROR
+
+# Central Authentication Service
+ksf.security.cas.loginUrl = http://localhost:7777/cas/login
+ksf.security.cas.logoutUrl = http://localhost:7777/cas/logout
+ksf.security.cas.prefix = http://localhost:7777/cas/
+ksf.security.cas.serviceUrl = http://localhost:8888/login/cas
+ksf.security.cas.serviceHome = http://localhost:8888/
+
+
