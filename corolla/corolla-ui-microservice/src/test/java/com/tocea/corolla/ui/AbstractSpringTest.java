@@ -15,7 +15,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import com.tocea.corolla.CorollaGuiApplication;
 import com.tocea.corolla.cqrs.gate.spring.api.IAsynchronousTaskPoolService;
 
-@ActiveProfiles({ "test" })
+@ActiveProfiles({ "test,internalAuth" })
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = { CorollaGuiApplication.class })
 @WebAppConfiguration
@@ -26,11 +26,11 @@ public abstract class AbstractSpringTest {
 
 	@Autowired
 	private MongoTemplate mongoTemplate;
-	
+
 
 	@Autowired
 	private IAsynchronousTaskPoolService taskPoolService;
-	
+
 	@After
 	public void cleanDB() {
 		waitTask();
@@ -39,18 +39,18 @@ public abstract class AbstractSpringTest {
 		//                mongoTemplate.getCollection(collectionName).findAndRemove(null);
 		//            }
 		//        }
-		mongoTemplate.getDb().dropDatabase();
+		this.mongoTemplate.getDb().dropDatabase();
 	}
-	
+
 	protected void waitTask() {
-		while(taskPoolService.getExecutorService().getActiveCount() > 0  ) {
+		while(this.taskPoolService.getExecutorService().getActiveCount() > 0  ) {
 			try {
-				LOGGER.info("Thread active={} pool={}", taskPoolService.getExecutorService().getActiveCount(), taskPoolService.getExecutorService().getPoolSize());
+				LOGGER.info("Thread active={} pool={}", this.taskPoolService.getExecutorService().getActiveCount(), this.taskPoolService.getExecutorService().getPoolSize());
 				Thread.sleep(1);
 			} catch (final InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
 	}
-	
+
 }

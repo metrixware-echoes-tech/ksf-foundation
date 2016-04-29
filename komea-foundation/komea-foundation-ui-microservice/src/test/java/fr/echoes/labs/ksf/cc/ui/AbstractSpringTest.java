@@ -1,7 +1,5 @@
 package fr.echoes.labs.ksf.cc.ui;
 
-import fr.echoes.labs.ksf.cc.KomeaFoundationGuiApplication;
-
 import org.junit.After;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +10,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-@ActiveProfiles({ "test" })
+import fr.echoes.labs.ksf.cc.KomeaFoundationGuiApplication;
+
+@ActiveProfiles({ "test,internalAuth" })
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = { KomeaFoundationGuiApplication.class })
 @WebAppConfiguration
@@ -21,7 +21,7 @@ public abstract class AbstractSpringTest {
 
 	@Autowired
 	private MongoTemplate mongoTemplate;
-	
+
 	@After
 	public void cleanDB() {
 //		for (String collectionName : mongoTemplate.getCollectionNames()) {
@@ -29,7 +29,7 @@ public abstract class AbstractSpringTest {
 //                mongoTemplate.getCollection(collectionName).findAndRemove(null);
 //            }
 //        }
-		mongoTemplate.getDb().dropDatabase();
+		this.mongoTemplate.getDb().dropDatabase();
 	}
-	
+
 }
