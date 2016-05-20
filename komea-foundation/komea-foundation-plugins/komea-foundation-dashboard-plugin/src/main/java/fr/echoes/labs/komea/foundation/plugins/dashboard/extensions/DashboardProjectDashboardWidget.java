@@ -64,7 +64,7 @@ public class DashboardProjectDashboardWidget implements ProjectDashboardWidget {
 
 			@Override
 			public String getTitle() {
-				return "Repository Manager (" + DashboardProjectDashboardWidget.this.getTitle() + ")";
+				return DashboardProjectDashboardWidget.this.getTitle();
 			}
 
 			@Override
