@@ -27,7 +27,7 @@ ext.tests_frameworks = [
 ]
 
 ext.GIT = "git"
-ext.nexusURL = "http://zeus:8081"
+ext.nexusURL = "http://zeus.metrixware.local:8081"
 
 if (project.hasProperty('remote')) {
     ext.nexusURL = "http://scm.tocea.com:90"
