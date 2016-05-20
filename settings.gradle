@@ -29,6 +29,7 @@ include "komea-foundation:komea-foundation-plugins:komea-foundation-redmine-plug
 include "komea-foundation:komea-foundation-plugins:komea-foundation-jenkins-plugin"
 include "komea-foundation:komea-foundation-plugins:komea-foundation-git-plugin"
 include "komea-foundation:komea-foundation-plugins:komea-foundation-nexus-plugin"
+include "komea-foundation:komea-foundation-plugins:komea-foundation-dashboard-plugin"
 include "komea-foundation:komea-foundation-plugin-api"
 include "komea-foundation:komea-foundation-softwarefactory"
 include "komea-foundation:komea-foundation-tests"

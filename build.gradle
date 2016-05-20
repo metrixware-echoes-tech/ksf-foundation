@@ -22,8 +22,8 @@ ext.tests_frameworks = [
 	"cglib:cglib-nodep:${TEST_CGLIB}",
 	"org.hamcrest:hamcrest-core:${TEST_HAMCREST}",
 	"org.objenesis:objenesis:${TEST_OBJENESIS}",
-	"com.tocea.frameworks:bench4j-core:${TEST_BENCH4J}",
-	"com.tocea.frameworks:bench4j-htmlreport:${TEST_BENCH4J}"
+/*	"com.tocea.frameworks:bench4j-core:${TEST_BENCH4J}",
+	"com.tocea.frameworks:bench4j-htmlreport:${TEST_BENCH4J}" */
 ]
 
 ext.GIT = "git"
@@ -128,7 +128,7 @@ allprojects {
 
         }
 
-        maven { url "http://dl.bintray.com/sleroy/maven" }
+        /* maven { url "http://dl.bintray.com/sleroy/maven" } */
 
     }
 
@@ -193,8 +193,6 @@ allprojects {
         compile "org.mongodb:mongo-java-driver:$MONGO_DRIVER"
         compile "com.github.fakemongo:fongo:$FONGO"
         testCompile "com.lordofthejars:nosqlunit-mongodb:$TEST_NOSQLUNIT"
-
-        compile "org.komea.dashboard:client-timeseries-storage:$CLIENT_TIMESERIES_STORAGE"
 
         testCompile LOGGING
 
