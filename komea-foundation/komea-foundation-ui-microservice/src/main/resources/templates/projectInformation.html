@@ -28,7 +28,7 @@
 					<tr>
 						<th>#</th>
 						<th>Feature</th> 
-						<th>AssigÃ© Ã </th>
+						<!-- th>Assigé à</th -->
 						<th></th>
 					</tr>
 				</thead>
@@ -36,7 +36,7 @@
 					<tr th:each="feature : ${features}">
 						<td th:text="${feature.getId()}"></td>
 						<td th:text="${feature.getSubject()}"></td>
-						<td th:text="${feature.getAssignee()}"></td>
+						<!--  td th:text="${feature.getAssignee()}"></td -->
 						<td>
 							<form th:attr="action=@{/ui/projects/features/new}"
 								class="form-horizontal" method="post"

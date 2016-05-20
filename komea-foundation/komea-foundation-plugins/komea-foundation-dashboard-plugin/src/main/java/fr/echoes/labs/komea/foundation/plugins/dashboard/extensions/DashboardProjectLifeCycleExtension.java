@@ -1,6 +1,10 @@
 package fr.echoes.labs.komea.foundation.plugins.dashboard.extensions;
 
+import java.text.Normalizer;
+
 import org.apache.commons.lang3.StringUtils;
+import org.komea.organization.model.EntityType;
+import org.komea.organization.storage.client.OrganizationStorageClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +13,7 @@ import org.springframework.core.annotation.Order;
 
 import com.tocea.corolla.products.dao.IProjectDAO;
 
+import fr.echoes.labs.ksf.cc.plugins.dashboard.services.DashboardConfigurationService;
 import fr.echoes.labs.ksf.extensions.annotations.Extension;
 import fr.echoes.labs.ksf.extensions.projects.IProjectLifecycleExtension;
 import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
@@ -30,6 +35,9 @@ public class DashboardProjectLifeCycleExtension implements IProjectLifecycleExte
 	@Autowired
 	private ApplicationContext applicationContext;
 
+	@Autowired
+	private DashboardConfigurationService configurationService;	
+	
 	private ICurrentUserService currentUserService;
 
 	public void init() {
@@ -54,6 +62,14 @@ public class DashboardProjectLifeCycleExtension implements IProjectLifecycleExte
 		LOGGER.info("[Dashboard] project {} creation detected [demanded by: {}]", project.getKey(), logginName);
 
 
+		final String projectName = project.getName();
+		final String projectKey = createIdentifier(projectName);
+		
+		final String url = configurationService.getUrl() + "/organization";
+		
+		OrganizationStorageClient organizationStorageClient = new OrganizationStorageClient(url);
+		final EntityType projectEntity = new EntityType().setKey(projectKey).setName(projectName);
+		organizationStorageClient.createEntityTypesIfNotExist(projectEntity);
 	}
 
 	@Override
@@ -85,4 +101,7 @@ public class DashboardProjectLifeCycleExtension implements IProjectLifecycleExte
 	
 	}
 
+	private String createIdentifier(String projectName) {
+		return  Normalizer.normalize(projectName, Normalizer.Form.NFD).replaceAll("[^\\dA-Za-z ]", "").replaceAll("\\s+","-" ).toLowerCase();
+	}
 }
