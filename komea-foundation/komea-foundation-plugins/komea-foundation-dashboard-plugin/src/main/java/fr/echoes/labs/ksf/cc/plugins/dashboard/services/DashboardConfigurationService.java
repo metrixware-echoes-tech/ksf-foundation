@@ -12,12 +12,22 @@ public class DashboardConfigurationService {
 
     @Value("${ksf.dashboard.url}")
     private String url;
+    
+    @Value("${ksf.dashboard.customPeriod:30}")
+    private int customPeriod;
 
 	public String getUrl() {
         if ('/' == this.url.charAt(this.url.length() - 1)) {
             this.url = this.url.substring(0, this.url.length() - 1);
         }
         return this.url;
+	}
+	
+	/**
+	 * @return the dashboard time period in days (default value is 30 days). 
+	 */
+	public int getCustomPeriod() {
+		return customPeriod;
 	}
 
 }

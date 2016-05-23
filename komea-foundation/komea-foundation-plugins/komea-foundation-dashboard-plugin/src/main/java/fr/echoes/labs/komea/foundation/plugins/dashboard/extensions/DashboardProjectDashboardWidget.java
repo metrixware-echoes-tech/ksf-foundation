@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,13 +94,21 @@ public class DashboardProjectDashboardWidget implements ProjectDashboardWidget {
 					if (!url.endsWith("/")) {
 						url = url + '/';
 					}
-					url = url + "#list_entities=" + projectId;
+					url = url + "/web/guest/standard-dashboard#list_entities=" + projectId + customPeriod();
 				}
 				
 				
 				ctx.setVariable("dashboardURL", url);
 
 				return templateEngine.process("dashboardManagementPanel", ctx);
+			}
+
+			private String customPeriod() {
+				final int periodInDays = configurationService.getCustomPeriod();
+				final DateTime dateTime = new DateTime();
+				final long endPeriod = dateTime.getMillis();
+				final long startPeriod = dateTime.minusDays(periodInDays).getMillis();
+				return ";custom_period=LAST_X_DAYS," + startPeriod + ',' +  endPeriod + ',' + periodInDays;
 			}
 		};
 
@@ -123,5 +132,4 @@ public class DashboardProjectDashboardWidget implements ProjectDashboardWidget {
 	private String createIdentifier(String projectName) {
 		return  Normalizer.normalize(projectName, Normalizer.Form.NFD).replaceAll("[^\\dA-Za-z ]", "").replaceAll("\\s+","-" ).toLowerCase();
 	}	
-
 }
