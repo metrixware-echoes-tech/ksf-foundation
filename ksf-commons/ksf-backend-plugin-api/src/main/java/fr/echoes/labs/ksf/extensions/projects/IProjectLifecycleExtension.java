@@ -22,4 +22,7 @@ public interface IProjectLifecycleExtension extends IExtension{
 
 	void notifyCreatedFeature(ProjectDto project, String featureId,
 			String featureSubject);
+
+	void notifyClosedFeature(ProjectDto projectDto, String featureId,
+			String featureSubject);
 }

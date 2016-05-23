@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.google.common.eventbus.Subscribe;
 import com.tocea.corolla.cqrs.annotations.EventHandler;
 import com.tocea.corolla.products.domain.Project;
+import com.tocea.corolla.products.events.EventFeatureClosed;
 import com.tocea.corolla.products.events.EventFeatureCreated;
 import com.tocea.corolla.products.events.EventNewProjectCreated;
 import com.tocea.corolla.products.events.EventProjectDeleted;
@@ -76,7 +77,19 @@ public class ProjectLifecycleExtensionManager {
 			extension.notifyCreatedFeature(projectDto, event.getFeatureId(), event.getFeatureSubject());
 		}
 
-	}	
+	}
+	
+	@Subscribe
+	public void notifyCreation(final EventFeatureClosed event) {
+		if (this.extensions == null) {
+			return;
+		}
+		final ProjectDto projectDto = newProjectDto(event.getProject());
+		for (final IProjectLifecycleExtension extension : this.extensions) {
+			extension.notifyClosedFeature(projectDto, event.getFeatureId(), event.getFeatureSubject());
+		}
+
+	}		
 	
 
 	@Subscribe

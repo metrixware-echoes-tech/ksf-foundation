@@ -119,4 +119,11 @@ public class ForemanProjectLifeCycleExtension implements IProjectLifecycleExtens
 		// Do nothing
 	}
 
+	@Override
+	public void notifyClosedFeature(ProjectDto projectDto, String featureId,
+			String featureSubject) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

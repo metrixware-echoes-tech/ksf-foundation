@@ -104,4 +104,11 @@ public class DashboardProjectLifeCycleExtension implements IProjectLifecycleExte
 	private String createIdentifier(String projectName) {
 		return  Normalizer.normalize(projectName, Normalizer.Form.NFD).replaceAll("[^\\dA-Za-z ]", "").replaceAll("\\s+","-" ).toLowerCase();
 	}
+
+	@Override
+	public void notifyClosedFeature(ProjectDto projectDto, String featureId,
+			String featureSubject) {
+		// TODO Auto-generated method stub
+		
+	}
 }
