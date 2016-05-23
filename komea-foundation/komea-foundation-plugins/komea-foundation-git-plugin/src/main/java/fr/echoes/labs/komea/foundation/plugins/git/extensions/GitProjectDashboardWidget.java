@@ -88,7 +88,7 @@ public class GitProjectDashboardWidget implements ProjectDashboardWidget {
 
 
 	@Override
-	public List<IProjectTabPanel> getTabPanels(String projectKey) {
+	public List<IProjectTabPanel> getTabPanels(final String projectKey) {
 
 		return Lists.newArrayList();
 	}

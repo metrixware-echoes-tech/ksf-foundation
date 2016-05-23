@@ -119,7 +119,7 @@ public class RedmineProjectDashboardWidget implements ProjectDashboardWidget {
 
 
 	@Override
-	public List<IProjectTabPanel> getTabPanels(String projectKey) {
+	public List<IProjectTabPanel> getTabPanels(final String projectKey) {
 		
 		final IProjectTabPanel iframePanel = new IProjectTabPanel() {
 

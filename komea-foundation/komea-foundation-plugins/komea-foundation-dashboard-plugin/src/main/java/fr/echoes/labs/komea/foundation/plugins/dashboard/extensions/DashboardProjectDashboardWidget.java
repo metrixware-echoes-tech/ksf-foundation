@@ -66,7 +66,7 @@ public class DashboardProjectDashboardWidget implements ProjectDashboardWidget {
 
 
 	@Override
-	public List<IProjectTabPanel> getTabPanels(String projectKey) {
+	public List<IProjectTabPanel> getTabPanels(final String projectKey) {
 
 		final Project project = this.projectDao.findByKey(projectKey);
 
