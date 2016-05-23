@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.apache.commons.lang3.text.StrSubstitutor;
 import org.slf4j.Logger;
@@ -54,7 +55,7 @@ public class JenkinsService implements IJenkinsService {
 			jenkins = createJenkinsClient();
 
 			final String scmUrl = this.configurationService.getScmUrl() + '/' + projectName + ".git";
-
+			
 			if (this.configurationService.useFolders()) {
 				jenkins.createFolder(projectName);
 
@@ -231,6 +232,13 @@ public class JenkinsService implements IJenkinsService {
 	private String getFeatureBranchName(String projectName, String featureId,
 			String featureSubject) {
 		return "feature/" + featureId;
+	}
+
+	@Override
+	public String getJobId(String projectName) throws JenkinsExtensionException {
+		Objects.requireNonNull(projectName);
+		
+		return null;
 	}
 
 }

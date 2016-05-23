@@ -59,6 +59,15 @@ public interface IRedmineService {
 	public List<IProjectFeature> getFeatures(String projectName) throws RedmineExtensionException;
 
 	/**
+	 * Returns the Redmine project ID. 
+	 * 
+	 * @param projectName the project name.
+	 * @return the project ID.
+	 * @throws RedmineExtensionException
+	 */
+	public String getProjectId(String projectName) throws RedmineExtensionException;
+
+	/**
 	 * Changes the ticked status.
 	 * 
 	 * @param ticketId 

@@ -25,6 +25,7 @@ import com.tocea.corolla.products.domain.Project;
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.IProjectTabPanel;
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.MenuAction;
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
+import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineExtensionException;
 import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineIssue;
 import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineQuery;
 import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineQuery.Builder;
@@ -64,6 +65,9 @@ public class RedmineProjectDashboardWidget implements ProjectDashboardWidget {
 	@Autowired
 	private IRedmineService redmineService;
 
+	@Autowired
+	IProjectDAO projectDao;	
+	
 	@Override
 	public List<MenuAction> getDropdownActions() {
 
@@ -115,8 +119,8 @@ public class RedmineProjectDashboardWidget implements ProjectDashboardWidget {
 
 
 	@Override
-	public List<IProjectTabPanel> getTabPanels() {
-
+	public List<IProjectTabPanel> getTabPanels(String projectKey) {
+		
 		final IProjectTabPanel iframePanel = new IProjectTabPanel() {
 
 			@Override
@@ -139,6 +143,18 @@ public class RedmineProjectDashboardWidget implements ProjectDashboardWidget {
 
 				if (StringUtils.isNotEmpty(redmineIssue)) {
 					url += "/issues/" + redmineIssue;
+				} else {
+					final Project project = projectDao.findByKey(projectKey);
+					if (project != null) {
+						try {
+							final String projectId = redmineService.getProjectId(project.getName());
+							if (StringUtils.isNotEmpty(projectId)) {
+								url += "/projects/" + projectId;			
+							}
+						} catch (RedmineExtensionException e) {
+							LOGGER.error("[Redmine] failed to construct Redmine project URL", e);
+						}											
+					}
 				}
 
 				ctx.setVariable("redmineURL", url);

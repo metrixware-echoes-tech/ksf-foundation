@@ -125,7 +125,7 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
 
 
 	@Override
-	public List<IProjectTabPanel> getTabPanels() {
+	public List<IProjectTabPanel> getTabPanels(String projectKey) {
 
 		final IProjectTabPanel iframePanel = new IProjectTabPanel() {
 

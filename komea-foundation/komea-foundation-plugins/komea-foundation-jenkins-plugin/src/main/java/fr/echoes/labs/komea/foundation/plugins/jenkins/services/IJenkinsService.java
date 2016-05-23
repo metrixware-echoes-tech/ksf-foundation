@@ -54,4 +54,13 @@ public interface IJenkinsService {
 	 * @throws JenkinsExtensionException
 	 */	
 	public void createFeature(String projectName, String featureId, String featureSubject) throws JenkinsExtensionException;
+	
+	/**
+	 * Returns the Jenkins job ID.
+	 * 
+	 * @param projectName the project name.
+	 * @return the job ID.
+	 * @throws JenkinsExtensionException
+	 */
+	public String getJobId(String projectName) throws JenkinsExtensionException;
 }

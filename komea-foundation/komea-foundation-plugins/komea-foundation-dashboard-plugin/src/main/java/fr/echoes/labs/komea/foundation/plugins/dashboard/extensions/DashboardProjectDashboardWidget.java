@@ -1,5 +1,6 @@
 package fr.echoes.labs.komea.foundation.plugins.dashboard.extensions;
 
+import java.text.Normalizer;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +16,9 @@ import org.thymeleaf.context.Context;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
 import com.google.common.collect.Lists;
+import com.tocea.corolla.products.dao.IProjectDAO;
+import com.tocea.corolla.products.domain.Project;
+import com.tocea.corolla.products.exceptions.ProjectNotFoundException;
 
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.IProjectTabPanel;
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.MenuAction;
@@ -35,10 +39,12 @@ public class DashboardProjectDashboardWidget implements ProjectDashboardWidget {
 
 	@Autowired
 	private DashboardConfigurationService configurationService;
+
+	@Autowired
+	IProjectDAO projectDao;	
 	
 	@Override
 	public List<MenuAction> getDropdownActions() {
-
 		return null;
 	}
 
@@ -59,7 +65,11 @@ public class DashboardProjectDashboardWidget implements ProjectDashboardWidget {
 
 
 	@Override
-	public List<IProjectTabPanel> getTabPanels() {
+	public List<IProjectTabPanel> getTabPanels(String projectKey) {
+
+		final Project project = this.projectDao.findByKey(projectKey);
+
+		
 		final IProjectTabPanel iframePanel = new IProjectTabPanel() {
 
 			@Override
@@ -76,8 +86,17 @@ public class DashboardProjectDashboardWidget implements ProjectDashboardWidget {
 						((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
 						.getRequest();
 
-				final String url = DashboardProjectDashboardWidget.this.configurationService.getUrl();
+				String url = DashboardProjectDashboardWidget.this.configurationService.getUrl();
 
+				if (project != null) {
+					String projectId = createIdentifier(project.getName());
+					if (!url.endsWith("/")) {
+						url = url + '/';
+					}
+					url = url + "#list_entities=" + projectId;
+				}
+				
+				
 				ctx.setVariable("dashboardURL", url);
 
 				return templateEngine.process("dashboardManagementPanel", ctx);
@@ -100,5 +119,9 @@ public class DashboardProjectDashboardWidget implements ProjectDashboardWidget {
 		return templateEngine;
 
 	}
+	
+	private String createIdentifier(String projectName) {
+		return  Normalizer.normalize(projectName, Normalizer.Form.NFD).replaceAll("[^\\dA-Za-z ]", "").replaceAll("\\s+","-" ).toLowerCase();
+	}	
 
 }

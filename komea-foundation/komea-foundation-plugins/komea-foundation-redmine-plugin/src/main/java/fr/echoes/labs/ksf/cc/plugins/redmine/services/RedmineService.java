@@ -303,4 +303,24 @@ public class RedmineService implements IRedmineService {
 		}
 	}
 
+	@Override
+	public String getProjectId(String projectName) throws RedmineExtensionException {
+
+		Objects.requireNonNull(projectName);
+
+
+		final RedmineManager redmineManager = createRedmineManager();
+		if (redmineManager == null) {
+			return null;
+		}
+		
+		final String id;
+		try {
+			id = findProjectIdentifier(redmineManager, projectName);
+		} catch (RedmineException e) {
+			throw new RedmineExtensionException("Failed to get project \"" + projectName + "\" ID", e);
+		}
+		return id;
+	}
+
 }

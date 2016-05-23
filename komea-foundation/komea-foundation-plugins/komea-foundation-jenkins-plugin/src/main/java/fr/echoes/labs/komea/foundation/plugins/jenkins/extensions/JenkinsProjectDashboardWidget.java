@@ -64,6 +64,9 @@ public class JenkinsProjectDashboardWidget implements ProjectDashboardWidget {
 
 	@Autowired
 	private ServletContext servletContext;
+	
+	@Autowired
+	IProjectDAO projectDao;	
 
 	@Override
 	public List<MenuAction> getDropdownActions() {
@@ -109,8 +112,10 @@ public class JenkinsProjectDashboardWidget implements ProjectDashboardWidget {
 
 
 	@Override
-	public List<IProjectTabPanel> getTabPanels() {
+	public List<IProjectTabPanel> getTabPanels(String projectKey) {
 
+		final Project project = this.projectDao.findByKey(projectKey);
+		
 		final IProjectTabPanel iframePanel = new IProjectTabPanel() {
 
 			@Override

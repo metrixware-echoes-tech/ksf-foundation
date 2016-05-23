@@ -189,7 +189,7 @@ public class ProjectController {
 		final List<ProjectDashboardWidget> widgets = this.projectDashboardExtensionManager.getDashboardWidgets();
 
 		for(final ProjectDashboardWidget widget : widgets) {
-			panels.addAll(widget.getTabPanels());
+			panels.addAll(widget.getTabPanels(projectKey));
 		}
 
 		model.addObject("widgets", widgets);
