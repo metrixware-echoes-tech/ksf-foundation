@@ -114,8 +114,6 @@ public class JenkinsProjectDashboardWidget implements ProjectDashboardWidget {
 	@Override
 	public List<IProjectTabPanel> getTabPanels(String projectKey) {
 
-		final Project project = this.projectDao.findByKey(projectKey);
-		
 		final IProjectTabPanel iframePanel = new IProjectTabPanel() {
 
 			@Override
@@ -144,6 +142,16 @@ public class JenkinsProjectDashboardWidget implements ProjectDashboardWidget {
 						LOGGER.error("", e);
 						url = JenkinsProjectDashboardWidget.this.configurationService.getUrl();
 					}
+				} else {
+					try {
+						final Project project = projectDao.findByKey(projectKey);
+						final String jobId = jenkinsService.getJobId(project.getName());
+						if (StringUtils.isNotEmpty(jobId)) {
+							url = url + "/job/" + jobId;
+						}
+					} catch (JenkinsExtensionException e) {
+						LOGGER.error("[Jenkins] failed to construct Jenkins project URL", e);
+					}					
 				}
 
 

@@ -62,16 +62,16 @@ public interface IRedmineService {
 	 * Returns the Redmine project ID. 
 	 * 
 	 * @param projectName the project name.
-	 * @return the project ID.
+	 * @return the project ID or {@code null} if the given project cannot be found.
 	 * @throws RedmineExtensionException
 	 */
 	public String getProjectId(String projectName) throws RedmineExtensionException;
 
 	/**
-	 * Changes the ticked status.
+	 * Changes the ticket status.
 	 * 
-	 * @param ticketId 
-	 * @param statusId
+	 * @param ticketId the ticket ID.
+	 * @param statusId the new status.
 	 * @throws RedmineExtensionException
 	 */
 	public void changeStatus(String ticketId, int statusId) throws RedmineExtensionException;

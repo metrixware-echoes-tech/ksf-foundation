@@ -59,7 +59,7 @@ public interface IJenkinsService {
 	 * Returns the Jenkins job ID.
 	 * 
 	 * @param projectName the project name.
-	 * @return the job ID.
+	 * @return the job ID or {@code null} if the given project cannot be found.
 	 * @throws JenkinsExtensionException
 	 */
 	public String getJobId(String projectName) throws JenkinsExtensionException;

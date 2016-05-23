@@ -23,6 +23,7 @@ import com.offbytwo.jenkins.JenkinsServer;
 import com.offbytwo.jenkins.model.Build;
 import com.offbytwo.jenkins.model.BuildWithDetails;
 import com.offbytwo.jenkins.model.FolderJob;
+import com.offbytwo.jenkins.model.Job;
 import com.offbytwo.jenkins.model.JobWithDetails;
 
 import fr.echoes.labs.komea.foundation.plugins.jenkins.JenkinsExtensionException;
@@ -236,7 +237,23 @@ public class JenkinsService implements IJenkinsService {
 
 	@Override
 	public String getJobId(String projectName) throws JenkinsExtensionException {
+
 		Objects.requireNonNull(projectName);
+
+		try {
+
+			final JenkinsServer jenkinsClient = createJenkinsClient();
+			final Map<String, Job> jobs = jenkinsClient.getJobs();
+			for (Map.Entry<String, Job> entry : jobs.entrySet()) {
+				final Job job = entry.getValue();
+				if (projectName.equals(job.getName())) {
+					return entry.getKey();
+				}
+			}
+			
+		} catch (final Exception e) {
+			throw new JenkinsExtensionException("Failed to retrieve build history", e);
+		}
 		
 		return null;
 	}
