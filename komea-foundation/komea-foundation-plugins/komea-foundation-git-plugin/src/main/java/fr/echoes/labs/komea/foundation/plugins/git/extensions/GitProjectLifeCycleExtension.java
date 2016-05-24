@@ -106,16 +106,26 @@ public class GitProjectLifeCycleExtension implements IProjectLifecycleExtension 
 
 			this.gitService.createFeature(project.getName(), featureId, featureSubject);
 		} catch (final Exception ex) {
-			LOGGER.error("[Git] Failed to create release for project {} ", project.getName(), ex);
+			LOGGER.error("[Git] Failed to create feature for project {} ", project.getName(), ex);
 			this.errorHandler.registerError("Failed to create release.");
 		}		
 	}
 
 	@Override
-	public void notifyClosedFeature(ProjectDto projectDto, String featureId,
+	public void notifyFinishedFeature(ProjectDto project, String featureId,
 			String featureSubject) {
-		// TODO Auto-generated method stub
+		try {
+			this.gitService.closeFeature(project.getName(), featureId, featureSubject);
+		} catch (final Exception ex) {
+			LOGGER.error("[Git] Failed to close feature for project {} ", project.getName(), ex);
+			this.errorHandler.registerError("Failed to create release.");
+		}		
+	}
 
+	@Override
+	public void notifyFinishedRelease(ProjectDto project, String releaseName) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

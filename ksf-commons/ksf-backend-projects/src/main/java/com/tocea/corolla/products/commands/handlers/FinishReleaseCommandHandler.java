@@ -10,12 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.tocea.corolla.cqrs.annotations.CommandHandler;
 import com.tocea.corolla.cqrs.gate.Gate;
 import com.tocea.corolla.cqrs.handler.ICommandHandler;
-import com.tocea.corolla.products.commands.CloseFeatureCommand;
-import com.tocea.corolla.products.commands.CreateFeatureCommand;
+import com.tocea.corolla.products.commands.FinishFeatureCommand;
 import com.tocea.corolla.products.dao.IProjectBranchDAO;
 import com.tocea.corolla.products.dao.IProjectDAO;
 import com.tocea.corolla.products.domain.Project;
-import com.tocea.corolla.products.events.EventFeatureCreated;
+import com.tocea.corolla.products.events.EventFeatureFinished;
 import com.tocea.corolla.products.exceptions.ProjectNotFoundException;
 
 
@@ -25,9 +24,9 @@ import com.tocea.corolla.products.exceptions.ProjectNotFoundException;
  */
 @CommandHandler
 @Transactional
-public class CloseFeatureCommandHandler implements ICommandHandler<CloseFeatureCommand, Project> {
+public class FinishReleaseCommandHandler implements ICommandHandler<FinishFeatureCommand, Project> {
 
-	private static final Logger LOG = LoggerFactory.getLogger(CloseFeatureCommandHandler.class);
+	private static final Logger LOG = LoggerFactory.getLogger(FinishReleaseCommandHandler.class);
 
 	@Autowired
 	private IProjectDAO projectDAO;
@@ -45,7 +44,7 @@ public class CloseFeatureCommandHandler implements ICommandHandler<CloseFeatureC
 	 * @return
 	 */
 	@Override
-	public Project handle(@Valid final CloseFeatureCommand command) {
+	public Project handle(@Valid final FinishFeatureCommand command) {
 
 		final Project project = command.getProject();
 		final String featureId = command.getFeatureId();
@@ -55,7 +54,7 @@ public class CloseFeatureCommandHandler implements ICommandHandler<CloseFeatureC
 			throw new ProjectNotFoundException();
 		}
 
-		this.gate.dispatchEvent(new EventFeatureCreated(project, featureId, featureSubject));
+		this.gate.dispatchEvent(new EventFeatureFinished(project, featureId, featureSubject));
 
 
 		return project;

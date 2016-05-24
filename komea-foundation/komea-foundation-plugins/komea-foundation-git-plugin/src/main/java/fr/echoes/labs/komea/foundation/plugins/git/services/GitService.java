@@ -7,9 +7,20 @@ import java.util.Objects;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.CreateBranchCommand;
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.MergeCommand;
+import org.eclipse.jgit.api.MergeResult;
+import org.eclipse.jgit.api.errors.CannotDeleteCurrentBranchException;
+import org.eclipse.jgit.api.errors.CheckoutConflictException;
+import org.eclipse.jgit.api.errors.ConcurrentRefUpdateException;
 import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.api.errors.InvalidMergeHeadsException;
 import org.eclipse.jgit.api.errors.NoFilepatternException;
+import org.eclipse.jgit.api.errors.NoHeadException;
+import org.eclipse.jgit.api.errors.NoMessageException;
+import org.eclipse.jgit.api.errors.NotMergedException;
+import org.eclipse.jgit.api.errors.WrongRepositoryStateException;
 import org.eclipse.jgit.lib.Constants;
+import org.eclipse.jgit.lib.Ref;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +50,7 @@ public class GitService implements IGitService {
 	public void createProject(String projectName) throws GitExtensionException {
 		Objects.requireNonNull(projectName);
 
-		final String gitProjectUri = this.configuration.getScmUrl() + '/' + projectName + ".git";
+		final String gitProjectUri = getGitProjectUrl(projectName);
 
 		File workingDirectory = null;
 		Git git = null;
@@ -68,8 +79,8 @@ public class GitService implements IGitService {
 			}
 			try {
 				FileUtils.deleteDirectory(workingDirectory);
-			} catch (IOException e) {
-				e.printStackTrace();
+			} catch (final IOException e) {
+				LOGGER.warn("Failed to delete the directory " + workingDirectory.getName(), e);
 			}
 		}
 	}
@@ -132,10 +143,12 @@ public class GitService implements IGitService {
 		Objects.requireNonNull(projectName);
 	}
 
+	
+	
 	private void createBranch(String projectName, String branchName) throws GitExtensionException {
 		Objects.requireNonNull(projectName);
 		
-		final String gitProjectUri = this.configuration.getScmUrl() + '/' + projectName + ".git";
+		final String gitProjectUri = getGitProjectUrl(projectName);
 		
 		File workingDirectory = null;
 		Git git = null;
@@ -169,12 +182,27 @@ public class GitService implements IGitService {
 			try {
 				// Delete Git local repository
 				FileUtils.deleteDirectory(workingDirectory);
-			} catch (IOException e) {
-				e.printStackTrace();
+			} catch (final IOException e) {
+				LOGGER.warn("Failed to delete the directory " + workingDirectory.getName(), e);
 			}
 		}		
 	}
 
+	private MergeResult mergeBranches(Git git, String originBranch, String destinationBranch) throws IOException, NoHeadException, ConcurrentRefUpdateException, CheckoutConflictException, InvalidMergeHeadsException, WrongRepositoryStateException, NoMessageException, GitAPIException  {			
+
+		final MergeCommand mergeCommand = git.merge();
+		final Ref ref = git.getRepository().exactRef(originBranch);
+		mergeCommand.include(ref);
+		return mergeCommand.call();
+			
+	}
+		
+
+	private void deleteBranche(Git git, String branchName) throws NotMergedException, CannotDeleteCurrentBranchException, GitAPIException {
+		git.branchDelete().setBranchNames(branchName).call();
+	}
+	
+	
 	@Override
 	public void createRelease(String projectName, String releaseVersion) throws GitExtensionException {
 		final String branchName = getReleaseBranchName(projectName, releaseVersion);
@@ -187,6 +215,62 @@ public class GitService implements IGitService {
 		createBranch(projectName, branchName);
 	}
 
+	@Override
+	public void closeFeature(String projectName, String featureId,
+			String featureSubject) throws GitExtensionException {
+		
+		final String gitProjectUri = getGitProjectUrl(projectName);
+		final String branchName = getFeatureBranchName(projectName, featureId, featureSubject);
+
+		File workingDirectory = null;
+		Git git = null;
+		
+		try {
+			workingDirectory = createCloneDestinationDirectory(projectName);
+			
+			// Clone project
+			LOGGER.debug("Cloning the repository {} into {}", gitProjectUri, workingDirectory);
+			git = Git.cloneRepository().setURI(gitProjectUri).setDirectory(workingDirectory).call();
+			
+			git.checkout()
+			.setName(branchName)
+			.setCreateBranch(true)
+			.setUpstreamMode(
+					CreateBranchCommand.SetupUpstreamMode.TRACK)
+					.setStartPoint(
+							Constants.DEFAULT_REMOTE_NAME + "/" + branchName)
+							.call();
+
+			final MergeResult mergeResult = mergeBranches(git, branchName, DEVELOP);
+			if (mergeResult.getMergeStatus().equals(MergeResult.MergeStatus.CONFLICTING)) {
+				
+			} else {
+				deleteBranche(git, branchName);			
+			}	
+
+			
+		} catch (final Exception e) {
+			throw new GitExtensionException(e);
+		} finally {
+			if (git != null) {
+				git.close();
+			}
+			try {
+				// Delete Git local repository
+				FileUtils.deleteDirectory(workingDirectory);
+			} catch (final IOException e) {
+				LOGGER.warn("Failed to delete the directory " + workingDirectory.getName(), e);
+			}
+		}					
+		
+
+
+	}
+
+	private String getGitProjectUrl(String projectName) {
+		return this.configuration.getScmUrl() + '/' + projectName + ".git";
+	}
+
 	private String getReleaseBranchName(String projectName, String releaseVersion) {
 		return "release/" + releaseVersion;
 	}
@@ -195,5 +279,6 @@ public class GitService implements IGitService {
 			String featureSubject) {
 		return "feature/" + featureId;
 	}
+
 
 }

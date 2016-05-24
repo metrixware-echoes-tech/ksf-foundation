@@ -4,7 +4,7 @@ package fr.echoes.labs.ksf.cc.extensions.services.project;
  * @author dcollard
  *
  */
-public class ProjectFeatue implements IProjectFeature {
+public class ProjectFeature implements IProjectFeature {
 
 	private String id;
 	private String subject;

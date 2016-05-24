@@ -8,12 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.google.common.eventbus.Subscribe;
 import com.tocea.corolla.cqrs.annotations.EventHandler;
 import com.tocea.corolla.products.domain.Project;
-import com.tocea.corolla.products.events.EventFeatureClosed;
 import com.tocea.corolla.products.events.EventFeatureCreated;
+import com.tocea.corolla.products.events.EventFeatureFinished;
 import com.tocea.corolla.products.events.EventNewProjectCreated;
 import com.tocea.corolla.products.events.EventProjectDeleted;
 import com.tocea.corolla.products.events.EventProjectUpdated;
 import com.tocea.corolla.products.events.EventReleaseCreated;
+import com.tocea.corolla.products.events.EventReleaseFinished;
 
 import fr.echoes.labs.ksf.extensions.projects.IProjectLifecycleExtension;
 import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
@@ -66,6 +67,18 @@ public class ProjectLifecycleExtensionManager {
 		}
 
 	}
+	
+	@Subscribe
+	public void notifyCreation(final EventReleaseFinished event) {
+		if (this.extensions == null) {
+			return;
+		}
+		final ProjectDto projectDto = newProjectDto(event.getProject());
+		for (final IProjectLifecycleExtension extension : this.extensions) {
+			extension.notifyCreatedRelease(projectDto, event.getReleaseVersion());
+		}
+
+	}	
 
 	@Subscribe
 	public void notifyCreation(final EventFeatureCreated event) {
@@ -80,13 +93,13 @@ public class ProjectLifecycleExtensionManager {
 	}
 	
 	@Subscribe
-	public void notifyCreation(final EventFeatureClosed event) {
+	public void notifyCreation(final EventFeatureFinished event) {
 		if (this.extensions == null) {
 			return;
 		}
 		final ProjectDto projectDto = newProjectDto(event.getProject());
 		for (final IProjectLifecycleExtension extension : this.extensions) {
-			extension.notifyClosedFeature(projectDto, event.getFeatureId(), event.getFeatureSubject());
+			extension.notifyFinishedFeature(projectDto, event.getFeatureId(), event.getFeatureSubject());
 		}
 
 	}		

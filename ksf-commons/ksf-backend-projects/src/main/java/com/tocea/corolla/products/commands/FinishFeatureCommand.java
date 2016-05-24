@@ -12,7 +12,7 @@ import com.tocea.corolla.products.domain.Project;
  *
  */
 @CommandOptions
-public class CloseFeatureCommand {
+public class FinishFeatureCommand {
 
 	@NotNull
 	private Project project;
@@ -23,7 +23,7 @@ public class CloseFeatureCommand {
 	@NotEmpty
 	private String featureSubject;	
 	
-	public CloseFeatureCommand(Project project, String featureId, String featureSubject) {
+	public FinishFeatureCommand(Project project, String featureId, String featureSubject) {
 		this.project = project;
 		this.featureId = featureId;
 		this.featureSubject = featureSubject;

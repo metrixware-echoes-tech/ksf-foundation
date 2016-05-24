@@ -67,7 +67,7 @@ public class DashboardProjectLifeCycleExtension implements IProjectLifecycleExte
 		
 		final String url = configurationService.getUrl() + "/organization";
 		
-		OrganizationStorageClient organizationStorageClient = new OrganizationStorageClient(url);
+		final OrganizationStorageClient organizationStorageClient = new OrganizationStorageClient(url);
 		final EntityType projectEntity = new EntityType().setKey(projectKey).setName(projectName);
 		organizationStorageClient.createEntityTypesIfNotExist(projectEntity);
 	}
@@ -105,8 +105,15 @@ public class DashboardProjectLifeCycleExtension implements IProjectLifecycleExte
 		return  Normalizer.normalize(projectName, Normalizer.Form.NFD).replaceAll("[^\\dA-Za-z ]", "").replaceAll("\\s+","-" ).toLowerCase();
 	}
 
+
 	@Override
-	public void notifyClosedFeature(ProjectDto projectDto, String featureId,
+	public void notifyFinishedRelease(ProjectDto project, String releaseName) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void notifyFinishedFeature(ProjectDto projectDto, String featureId,
 			String featureSubject) {
 		// TODO Auto-generated method stub
 		

@@ -42,6 +42,16 @@ public interface IGitService {
 	 * @param featureId the feature ID
 	 * @param featureSubject the feature subject
 	 */
-	public void createFeature(String projectName, String featureId, String featureSubject)  throws GitExtensionException;
+	public void createFeature(String projectName, String featureId, String featureSubject) throws GitExtensionException;
+
+	/**
+	 * Closes the feature branch.
+	 * 
+	 * @param projectName the project name
+	 * @param featureId the feature ID
+	 * @param featureSubject the feature subject
+	 * @throws GitExtensionException
+	 */
+	public void closeFeature(String projectName, String featureId, String featureSubject) throws GitExtensionException;
 
 }

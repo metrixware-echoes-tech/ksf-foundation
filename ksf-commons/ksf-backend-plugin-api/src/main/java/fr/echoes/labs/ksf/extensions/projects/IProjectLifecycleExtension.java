@@ -19,10 +19,12 @@ public interface IProjectLifecycleExtension extends IExtension{
 	void notifyUpdatedProject(ProjectDto project);
 
 	void notifyCreatedRelease(ProjectDto project, String releaseName);
+	
+	void notifyFinishedRelease(ProjectDto project, String releaseName);
 
 	void notifyCreatedFeature(ProjectDto project, String featureId,
 			String featureSubject);
 
-	void notifyClosedFeature(ProjectDto projectDto, String featureId,
+	void notifyFinishedFeature(ProjectDto projectDto, String featureId,
 			String featureSubject);
 }

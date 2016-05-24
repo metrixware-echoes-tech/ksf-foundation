@@ -119,7 +119,13 @@ public class JenkinsProjectLifeCycleExtension implements IProjectLifecycleExtens
 	}
 
 	@Override
-	public void notifyClosedFeature(ProjectDto projectDto, String featureId,
+	public void notifyFinishedRelease(ProjectDto project, String releaseName) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void notifyFinishedFeature(ProjectDto projectDto, String featureId,
 			String featureSubject) {
 		// TODO Auto-generated method stub
 		

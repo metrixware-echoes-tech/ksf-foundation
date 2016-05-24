@@ -85,7 +85,7 @@ public class ForemanProjectLifeCycleExtension implements IProjectLifecycleExtens
         try {
 
         	// Delete targets associated to the project
-        	List<ForemanTarget> targets = this.targetDAO.findByProject(this.projectDAO.findOne(_project.getId()));
+        	final List<ForemanTarget> targets = this.targetDAO.findByProject(this.projectDAO.findOne(_project.getId()));
         	this.targetDAO.delete(targets);
 
         	// Delete project data in Foreman
@@ -120,7 +120,13 @@ public class ForemanProjectLifeCycleExtension implements IProjectLifecycleExtens
 	}
 
 	@Override
-	public void notifyClosedFeature(ProjectDto projectDto, String featureId,
+	public void notifyFinishedRelease(ProjectDto project, String releaseName) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void notifyFinishedFeature(ProjectDto projectDto, String featureId,
 			String featureSubject) {
 		// TODO Auto-generated method stub
 		

@@ -6,13 +6,13 @@ import com.tocea.corolla.products.domain.Project;
  * @author dcollard
  *
  */
-public class EventFeatureClosed {
+public class EventFeatureFinished {
 
 	private final Project project;
 	private final String featureId;
 	private final String featureSubject;
 
-	public EventFeatureClosed(Project project, String featureId, String featureSubject) {
+	public EventFeatureFinished(Project project, String featureId, String featureSubject) {
 		this.project = project;
 		this.featureId = featureId;
 		this.featureSubject = featureSubject;
@@ -41,6 +41,6 @@ public class EventFeatureClosed {
 
 	@Override
 	public String toString() {
-		return EventFeatureClosed.class.getName() + " [project=" + this.project + ", featureId=" + this.featureId + ", featureSubject=" + this.featureSubject + "]";
+		return EventFeatureFinished.class.getName() + " [project=" + this.project + ", featureId=" + this.featureId + ", featureSubject=" + this.featureSubject + "]";
 	}
 }

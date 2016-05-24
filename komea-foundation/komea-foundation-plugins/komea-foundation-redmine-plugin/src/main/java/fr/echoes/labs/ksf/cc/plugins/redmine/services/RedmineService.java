@@ -29,7 +29,7 @@ import com.taskadapter.redmineapi.bean.Version;
 
 import fr.echoes.labs.ksf.cc.extensions.services.project.FeatureStatus;
 import fr.echoes.labs.ksf.cc.extensions.services.project.IProjectFeature;
-import fr.echoes.labs.ksf.cc.extensions.services.project.ProjectFeatue;
+import fr.echoes.labs.ksf.cc.extensions.services.project.ProjectFeature;
 import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineExtensionException;
 import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineIssue;
 import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineQuery;
@@ -274,7 +274,7 @@ public class RedmineService implements IRedmineService {
 
 		final List<IProjectFeature> features = new ArrayList<IProjectFeature>(issues.size());
 		for (final RedmineIssue issue : issues) {
-			final ProjectFeatue feature = new ProjectFeatue();
+			final ProjectFeature feature = new ProjectFeature();
 			feature.setId(String.valueOf(issue.getId()));
 			feature.setSubject(issue.getSubject());
 			feature.setAssignee(issue.getAssignee());

@@ -53,7 +53,7 @@
 							</div>
 
 							<div th:if="${feature.getStatus() == T(fr.echoes.labs.ksf.cc.extensions.services.project.FeatureStatus).CREATED}" th:remove="tag">
-							<form th:attr="action=@{/ui/projects/features/close}"
+							<form th:attr="action=@{/ui/projects/features/finish}"
 
 								class="form-horizontal" method="post"
 								role="form" data-toggle="validator">

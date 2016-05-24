@@ -30,10 +30,11 @@ import org.springframework.web.servlet.ModelAndView;
 import com.google.common.collect.Lists;
 import com.tocea.corolla.cqrs.gate.CommandExecutionException;
 import com.tocea.corolla.cqrs.gate.Gate;
-import com.tocea.corolla.products.commands.CloseFeatureCommand;
 import com.tocea.corolla.products.commands.CreateFeatureCommand;
 import com.tocea.corolla.products.commands.CreateReleaseCommand;
 import com.tocea.corolla.products.commands.DeleteProjectCommand;
+import com.tocea.corolla.products.commands.FinishFeatureCommand;
+import com.tocea.corolla.products.commands.FinishReleaseCommand;
 import com.tocea.corolla.products.dao.IProjectDAO;
 import com.tocea.corolla.products.domain.Project;
 import com.tocea.corolla.products.exceptions.ProjectNotFoundException;
@@ -115,6 +116,20 @@ public class ProjectController {
 		return new ModelAndView("redirect:/ui/projects/" + project.getKey());
 	}	
 
+	@RequestMapping(value = "/ui/projects/releases/finish")
+	public ModelAndView finishRelease(@RequestParam("projectKey") final String projectKey,  @RequestParam("releaseVersion") final String releaseVersion) {
+
+		final Project project = this.projectDao.findByKey(projectKey);
+
+		if (project == null) {
+			throw new ProjectNotFoundException();
+		}
+
+        this.gate.dispatch(new FinishReleaseCommand(project, releaseVersion));
+
+		return new ModelAndView("redirect:/ui/projects/" + project.getKey());
+	}	
+	
 	@RequestMapping(value = "/ui/projects/features/new")
 	public ModelAndView createFeature(@RequestParam("projectKey") final String projectKey, @RequestParam("featureId") final String featureId, @RequestParam("featureSubject") final String featureSubject) {
 
@@ -129,7 +144,7 @@ public class ProjectController {
 		return new ModelAndView("redirect:/ui/projects/" + project.getKey());
 	}
 	
-	@RequestMapping(value = "/ui/projects/features/close")
+	@RequestMapping(value = "/ui/projects/features/finish")
 	public ModelAndView closeFeature(@RequestParam("projectKey") final String projectKey, @RequestParam("featureId") final String featureId, @RequestParam("featureSubject") final String featureSubject) {
 
 		final Project project = this.projectDao.findByKey(projectKey);
@@ -138,11 +153,10 @@ public class ProjectController {
 			throw new ProjectNotFoundException();
 		}
 
-        this.gate.dispatch(new CloseFeatureCommand(project, featureId, featureSubject));
+        this.gate.dispatch(new FinishFeatureCommand(project, featureId, featureSubject));
 
 		return new ModelAndView("redirect:/ui/projects/" + project.getKey());
-	}	
-	
+	}
 
 	@RequestMapping(value = "/ui/projects/new")
 	public ModelAndView getCreatePage() {
