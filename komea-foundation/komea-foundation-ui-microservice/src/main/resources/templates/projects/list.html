@@ -24,8 +24,6 @@
                                 <th>Owner</th>
                                 <th>Tools</th>
                                 <th>Actions</th>
-                                <th></th>
-                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -35,7 +33,7 @@
                                 </td>
                                 <td th:text="${prod.user.firstName}+' '+${prod.user.lastName}"></td>
                       			<td class="project-list-tools">
-                            		<img th:src="@{${widget.getIconUrl()}}" th:alt="@{${widget.getTitle()}}" data-toggle="tooltip" data-placement="bottom" th:title="@{${widget.getTitle()}}" th:each="widget : ${@projectDashboardWidgets.getDashboardWidgets()}" />
+                            		<a th:each="widget,it : ${@projectDashboardWidgets.getDashboardWidgets()}" th:href="@{/ui/projects/}+${prod.project.key}+${'#pluginTab'+it.index}"><img th:src="@{${widget.getIconUrl()}}" th:alt="@{${widget.getTitle()}}" data-toggle="tooltip" data-placement="bottom" th:title="@{${widget.getTitle()}}" /></a>
                             	</td>
                             	<td>
                             		<a th:href="@{/ui/projects/}+${prod.project.key}" class="btn btn-primary">
@@ -45,8 +43,6 @@
                                         <span class="glyphicon glyphicon-trash"></span> Delete
                                     </a>
                             	</td>
-                            	<td></td>
-                            	<td></td>
                             </tr>
                         </tbody>
                     </table>
