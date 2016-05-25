@@ -2,9 +2,12 @@ package fr.echoes.labs.komea.foundation.plugins.git.services;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.text.StrSubstitutor;
 import org.eclipse.jgit.api.CreateBranchCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.MergeCommand;
@@ -50,7 +53,7 @@ public class GitService implements IGitService {
 	public void createProject(String projectName) throws GitExtensionException {
 		Objects.requireNonNull(projectName);
 
-		final String gitProjectUri = getGitProjectUrl(projectName);
+		final String gitProjectUri = getProjectScmUrl(projectName);
 
 		File workingDirectory = null;
 		Git git = null;
@@ -143,23 +146,23 @@ public class GitService implements IGitService {
 		Objects.requireNonNull(projectName);
 	}
 
-	
-	
 	private void createBranch(String projectName, String branchName) throws GitExtensionException {
 		Objects.requireNonNull(projectName);
-		
-		final String gitProjectUri = getGitProjectUrl(projectName);
-		
+
+		final String gitProjectUri = getProjectScmUrl(projectName);
+
+		LOGGER.info("Creating branch {} for project {}", branchName, projectName);
+
 		File workingDirectory = null;
 		Git git = null;
-		
+
 		try {
 			workingDirectory = createCloneDestinationDirectory(projectName);
-			
+
 			// Clone project
 			LOGGER.debug("Cloning the repository {} into {}", gitProjectUri, workingDirectory);
 			git = Git.cloneRepository().setURI(gitProjectUri).setDirectory(workingDirectory).call();
-			
+
 			git.checkout()
 			.setName(DEVELOP)
 			.setCreateBranch(true)
@@ -168,12 +171,13 @@ public class GitService implements IGitService {
 					.setStartPoint(
 							Constants.DEFAULT_REMOTE_NAME + "/" + DEVELOP)
 							.call();
-			
+
 			git.branchCreate().setName(branchName).call();
 			git.push().add(branchName).call();
-			
-			
+
+
 		} catch (final Exception e) {
+			LOGGER.error("Failed to create branch " + branchName + " for project " + projectName, e);
 			throw new GitExtensionException(e);
 		} finally {
 			if (git != null) {
@@ -185,24 +189,24 @@ public class GitService implements IGitService {
 			} catch (final IOException e) {
 				LOGGER.warn("Failed to delete the directory " + workingDirectory.getName(), e);
 			}
-		}		
+		}
 	}
 
-	private MergeResult mergeBranches(Git git, String originBranch, String destinationBranch) throws IOException, NoHeadException, ConcurrentRefUpdateException, CheckoutConflictException, InvalidMergeHeadsException, WrongRepositoryStateException, NoMessageException, GitAPIException  {			
+	private MergeResult mergeBranches(Git git, String originBranch, String destinationBranch) throws IOException, NoHeadException, ConcurrentRefUpdateException, CheckoutConflictException, InvalidMergeHeadsException, WrongRepositoryStateException, NoMessageException, GitAPIException  {
 
 		final MergeCommand mergeCommand = git.merge();
 		final Ref ref = git.getRepository().exactRef(originBranch);
 		mergeCommand.include(ref);
 		return mergeCommand.call();
-			
+
 	}
-		
+
 
 	private void deleteBranche(Git git, String branchName) throws NotMergedException, CannotDeleteCurrentBranchException, GitAPIException {
 		git.branchDelete().setBranchNames(branchName).call();
 	}
-	
-	
+
+
 	@Override
 	public void createRelease(String projectName, String releaseVersion) throws GitExtensionException {
 		final String branchName = getReleaseBranchName(projectName, releaseVersion);
@@ -218,20 +222,20 @@ public class GitService implements IGitService {
 	@Override
 	public void closeFeature(String projectName, String featureId,
 			String featureSubject) throws GitExtensionException {
-		
-		final String gitProjectUri = getGitProjectUrl(projectName);
+
+		final String gitProjectUri = getProjectScmUrl(projectName);
 		final String branchName = getFeatureBranchName(projectName, featureId, featureSubject);
 
 		File workingDirectory = null;
 		Git git = null;
-		
+
 		try {
 			workingDirectory = createCloneDestinationDirectory(projectName);
-			
+
 			// Clone project
 			LOGGER.debug("Cloning the repository {} into {}", gitProjectUri, workingDirectory);
 			git = Git.cloneRepository().setURI(gitProjectUri).setDirectory(workingDirectory).call();
-			
+
 			git.checkout()
 			.setName(branchName)
 			.setCreateBranch(true)
@@ -243,12 +247,12 @@ public class GitService implements IGitService {
 
 			final MergeResult mergeResult = mergeBranches(git, branchName, DEVELOP);
 			if (mergeResult.getMergeStatus().equals(MergeResult.MergeStatus.CONFLICTING)) {
-				
-			} else {
-				deleteBranche(git, branchName);			
-			}	
 
-			
+			} else {
+				deleteBranche(git, branchName);
+			}
+
+
 		} catch (final Exception e) {
 			throw new GitExtensionException(e);
 		} finally {
@@ -261,24 +265,32 @@ public class GitService implements IGitService {
 			} catch (final IOException e) {
 				LOGGER.warn("Failed to delete the directory " + workingDirectory.getName(), e);
 			}
-		}					
-		
-
-
+		}
 	}
 
-	private String getGitProjectUrl(String projectName) {
-		return this.configuration.getScmUrl() + '/' + projectName + ".git";
+	private String getProjectScmUrl(String projectName) {
+		final Map<String, String> variables = new HashMap<String, String>(2);
+		variables.put("scmUrl", this.configuration.getScmUrl());
+		variables.put("projectName", projectName);
+		return replaceVariables(this.configuration.getProjectScmUrlPattern(), variables);
 	}
-
 	private String getReleaseBranchName(String projectName, String releaseVersion) {
-		return "release/" + releaseVersion;
+		final Map<String, String> variables = new HashMap<String, String>(1);
+		variables.put("releaseVersion", releaseVersion);
+		return replaceVariables(this.configuration.getBranchReleasePattern(), variables);
 	}
 
-	private String getFeatureBranchName(String projectName, String featureId,
-			String featureSubject) {
-		return "feature/" + featureId;
+	private String getFeatureBranchName(String projectName, String featureId, String featureDescription) {
+		final Map<String, String> variables = new HashMap<String, String>(2);
+		variables.put("featureId", featureId);
+		variables.put("featureDescription", featureDescription);
+		return replaceVariables(this.configuration.getBranchFeaturePattern(), variables);
 	}
 
+	private String replaceVariables(String str, Map<String, String> variables) {
+		final StrSubstitutor sub = new StrSubstitutor(variables);
+		sub.setVariablePrefix("%{");
+		return sub.replace(str);
+	}
 
 }

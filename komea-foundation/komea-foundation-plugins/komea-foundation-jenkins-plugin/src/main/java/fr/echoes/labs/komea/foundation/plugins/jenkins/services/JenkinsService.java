@@ -55,8 +55,8 @@ public class JenkinsService implements IJenkinsService {
 		try {
 			jenkins = createJenkinsClient();
 
-			final String scmUrl = this.configurationService.getScmUrl() + '/' + projectName + ".git";
-			
+			final String scmUrl = getProjectScmUrl(projectName);
+
 			if (this.configurationService.useFolders()) {
 				jenkins.createFolder(projectName);
 
@@ -89,7 +89,7 @@ public class JenkinsService implements IJenkinsService {
 	}
 
 	private String getJobName(String projectName, String branchName) {
-		String string = projectName + " - " + branchName;
+		final String string = projectName + " - " + branchName;
 		return string.replace('/', ' ');
 	}
 
@@ -153,7 +153,7 @@ public class JenkinsService implements IJenkinsService {
 				buildsInfo.add(createJenkinsBuildInfo(build, projectName));
 			}
 			return buildsInfo;
-		} catch (JenkinsExtensionException e) {
+		} catch (final JenkinsExtensionException e) {
 			throw e;
 		} catch (final Exception e) {
 			throw new JenkinsExtensionException("Failed to retrieve build history", e);
@@ -209,27 +209,27 @@ public class JenkinsService implements IJenkinsService {
 		try {
 			jenkins = createJenkinsClient();
 
-			final String scmUrl = this.configurationService.getScmUrl() + '/' + projectName + ".git";
+			final String scmUrl = getProjectScmUrl(projectName);
 
 			if (this.configurationService.useFolders()) {
 				final FolderJob projectFolder = getProjectParentFolder(jenkins, projectName);
 
-				String resolvedXmlConfig = createConfigXml(projectName, scmUrl, branchName);
+				final String resolvedXmlConfig = createConfigXml(projectName, scmUrl, branchName);
 				jenkins.createJob(projectFolder, getJobName(projectName, branchName), resolvedXmlConfig, false);
 			} else {
-				String resolvedXmlConfig = createConfigXml(projectName, scmUrl, branchName);
+				final String resolvedXmlConfig = createConfigXml(projectName, scmUrl, branchName);
 				jenkins.createJob(getJobName(projectName, branchName), resolvedXmlConfig, false);
 			}
 
 		} catch (final Exception e) {
 			throw new JenkinsExtensionException("Failed to create Jenkins job", e);
-		}		
+		}
 	}
-	
+
 	private String getReleaseBranchName(String projectName, String releaseVersion) {
 		return "release/" + releaseVersion;
 	}
-	
+
 	private String getFeatureBranchName(String projectName, String featureId,
 			String featureSubject) {
 		return "feature/" + featureId;
@@ -244,18 +244,31 @@ public class JenkinsService implements IJenkinsService {
 
 			final JenkinsServer jenkinsClient = createJenkinsClient();
 			final Map<String, Job> jobs = jenkinsClient.getJobs();
-			for (Map.Entry<String, Job> entry : jobs.entrySet()) {
+			for (final Map.Entry<String, Job> entry : jobs.entrySet()) {
 				final Job job = entry.getValue();
 				if (projectName.equals(job.getName())) {
 					return entry.getKey();
 				}
 			}
-			
+
 		} catch (final Exception e) {
 			throw new JenkinsExtensionException("Failed to retrieve build history", e);
 		}
-		
+
 		return null;
+	}
+
+	private String getProjectScmUrl(String projectName) {
+		final Map<String, String> variables = new HashMap<String, String>(2);
+		variables.put("scmUrl", this.configurationService.getScmUrl());
+		variables.put("projectName", projectName);
+		return replaceVariables(this.configurationService.getProjectScmUrlPattern(), variables);
+	}
+
+	private String replaceVariables(String str, Map<String, String> variables) {
+		final StrSubstitutor sub = new StrSubstitutor(variables);
+		sub.setVariablePrefix("%{");
+		return sub.replace(str);
 	}
 
 }

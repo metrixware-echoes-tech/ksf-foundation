@@ -317,7 +317,7 @@ public class RedmineService implements IRedmineService {
 		final String id;
 		try {
 			id = findProjectIdentifier(redmineManager, projectName);
-		} catch (RedmineException e) {
+		} catch (final RedmineException e) {
 			throw new RedmineExtensionException("Failed to get project \"" + projectName + "\" ID", e);
 		}
 		return id;

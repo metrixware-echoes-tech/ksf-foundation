@@ -22,6 +22,15 @@ public class GitConfigurationService {
 	@Value("${ksf.artifacts.publishScript}")
 	private String publishScript;
 
+	@Value("${ksf.git.branch.releasePattern}")
+	private String branchReleasePattern;
+
+	@Value("${ksf.git.branch.featurePattern}")
+	private String branchFeaturePattern;
+
+	@Value("${ksf.projectScmUrlPattern}")
+	private String projectScmUrlPattern;
+
 	public String getScmUrl() {
 		return this.scmUrl;
 	}
@@ -36,6 +45,18 @@ public class GitConfigurationService {
 
 	public String getPublishScript() {
 		return this.publishScript;
+	}
+
+	public String getBranchReleasePattern() {
+		return this.branchReleasePattern;
+	}
+
+	public String getBranchFeaturePattern() {
+		return this.branchFeaturePattern;
+	}
+
+	public String getProjectScmUrlPattern() {
+		return this.projectScmUrlPattern;
 	}
 
 }

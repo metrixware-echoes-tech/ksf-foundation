@@ -31,6 +31,9 @@ public class JenkinsConfigurationService {
 	@Value("${ksf.artifacts.publishScript}")
 	private String publishScript;
 
+	@Value("${ksf.projectScmUrlPattern}")
+	private String projectScmUrlPattern;
+
 	public String getUrl() {
         if ('/' == this.url.charAt(this.url.length() - 1)) {
             this.url = this.url.substring(0, this.url.length() - 1);
@@ -60,5 +63,9 @@ public class JenkinsConfigurationService {
 
 	public String getPublishScript() {
 		return this.publishScript;
+	}
+
+	public String getProjectScmUrlPattern() {
+		return this.projectScmUrlPattern;
 	}
 }
