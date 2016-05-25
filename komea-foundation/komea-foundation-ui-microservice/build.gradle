@@ -75,8 +75,14 @@ bower {
 
   'jquery'('2.0.2')
   
+  'jquery-ui'('1.11.3')
+  
   'jquery-resize'('https://github.com/sdecima/javascript-detect-element-resize.git')
-  'components-font-awesome'('4.3.0')
+  'components-font-awesome'('4.6.3') {
+    source 'css/**' >> 'css/'
+    source 'fonts/**' >> 'fonts/'
+  }
+
   'ionicons'('2.0.1')
   'zeroclipboard'('2.2.0')
 
