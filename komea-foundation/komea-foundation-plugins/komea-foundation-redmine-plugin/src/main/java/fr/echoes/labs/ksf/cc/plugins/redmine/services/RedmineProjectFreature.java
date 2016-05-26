@@ -8,8 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import fr.echoes.labs.ksf.cc.extensions.services.project.IProjectFeatues;
-import fr.echoes.labs.ksf.cc.extensions.services.project.IProjectFeature;
+import fr.echoes.labs.ksf.cc.extensions.services.project.features.IProjectFeatues;
+import fr.echoes.labs.ksf.cc.extensions.services.project.features.IProjectFeature;
 import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineExtensionException;
 
 /**

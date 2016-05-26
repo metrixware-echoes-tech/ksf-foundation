@@ -1,6 +1,6 @@
 package fr.echoes.labs.ksf.cc.extensions.services.project;
 
-public enum FeatureStatus {
+public enum TicketStatus {
 	NEW,
 	CREATED
 }

@@ -10,9 +10,10 @@ import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
 
-import fr.echoes.labs.ksf.cc.extensions.services.project.IProjectFeatues;
-import fr.echoes.labs.ksf.cc.extensions.services.project.IProjectVersions;
-import fr.echoes.labs.ksf.cc.extensions.services.project.IProjectFeature;
+import fr.echoes.labs.ksf.cc.extensions.services.project.features.IProjectFeatues;
+import fr.echoes.labs.ksf.cc.extensions.services.project.features.IProjectFeature;
+import fr.echoes.labs.ksf.cc.extensions.services.project.versions.IProjectVersion;
+import fr.echoes.labs.ksf.cc.extensions.services.project.versions.IProjectVersions;
 
 /**
  * This service allows to obtain project information returned by the plug-ins.
@@ -30,25 +31,25 @@ public class ProjectInformationManager {
 	private IProjectVersions[] versions;
 
 	@Autowired(required = false)
-	private IProjectFeatues[] features;	
-	
+	private IProjectFeatues[] features;
+
 	/**
 	 * Returns the versions for this project.
 	 *
 	 * @param projectName the project name.
 	 * @return a list of versions.
 	 */
-	public List<String> getVersions(String projectName) {
+	public List<IProjectVersion> getVersions(String projectName) {
 
 		if (this.versions == null) {
 			LOGGER.info("getVersions : no versions.");
 			return Lists.newArrayList();
 		}
 
-		final List<String> result = new ArrayList<String>();
+		final List<IProjectVersion> result = new ArrayList<IProjectVersion>();
 
-		for (IProjectVersions projectRelease : this.versions) {
-			List<String> releases = projectRelease.getVersions(projectName);
+		for (final IProjectVersions projectRelease : this.versions) {
+			final List<IProjectVersion> releases = projectRelease.getVersions(projectName);
 			if (releases != null) {
 				result.addAll(releases);
 			}
@@ -56,7 +57,7 @@ public class ProjectInformationManager {
 		LOGGER.info("getVersions : the project \"{}\" has {} versions.", projectName, result.size());
 		return result;
 	}
-	
+
 	/**
 	 * Returns the features for this project.
 	 *
@@ -72,14 +73,14 @@ public class ProjectInformationManager {
 
 		final List<IProjectFeature> result = new ArrayList<IProjectFeature>();
 
-		for (IProjectFeatues projectFeature : this.features) {
-			List<IProjectFeature> features = projectFeature.getFeatures(projectName);
+		for (final IProjectFeatues projectFeature : this.features) {
+			final List<IProjectFeature> features = projectFeature.getFeatures(projectName);
 			if (features != null) {
 				result.addAll(features);
 			}
 		}
 		LOGGER.info("getVersions : the project \"{}\" has {} features.", projectName, result.size());
 		return result;
-	}	
+	}
 
 }

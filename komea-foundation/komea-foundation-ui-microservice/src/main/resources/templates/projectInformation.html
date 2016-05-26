@@ -39,7 +39,7 @@
 						<!--  td th:text="${feature.getAssignee()}"></td -->
 						<td>
 
-							<div th:if="${feature.getStatus() == T(fr.echoes.labs.ksf.cc.extensions.services.project.FeatureStatus).NEW}" th:remove="tag">
+							<div th:if="${feature.getStatus() == T(fr.echoes.labs.ksf.cc.extensions.services.project.TicketStatus).NEW}" th:remove="tag">
 							<form th:attr="action=@{/ui/projects/features/new}"
 
 								class="form-horizontal" method="post"
@@ -52,7 +52,7 @@
 							</form>
 							</div>
 
-							<div th:if="${feature.getStatus() == T(fr.echoes.labs.ksf.cc.extensions.services.project.FeatureStatus).CREATED}" th:remove="tag">
+							<div th:if="${feature.getStatus() == T(fr.echoes.labs.ksf.cc.extensions.services.project.TicketStatus).CREATED}" th:remove="tag">
 							<form th:attr="action=@{/ui/projects/features/finish}"
 
 								class="form-horizontal" method="post"
@@ -74,19 +74,22 @@
 				<thead>
 					<tr>
 						<th>Release</th> 
+						
 						<th></th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr th:each="release : ${releases}">
-						<td th:text="${release}"></td>
+						<!-- td th:text="${release.getId()}"></td -->
+						<td th:text="${release.getName()}"></td>
 						<td>
 							<form th:attr="action=@{/ui/projects/releases/new}"
 								class="form-horizontal" method="post"
 								role="form" data-toggle="validator">
 
 								<input name="projectKey" type="hidden" th:value="${projectData.project.key}" />
-								<input name="releaseVersion" type="hidden" th:value="${release}" />
+								<input name="releaseId" type="hidden" th:value="${release.getId()}" />
+								<input name="releaseVersion" type="hidden" th:value="${release.getName()}" />
 								<button class="glyphicon glyphicon-play" type="submit" style="color:DarkGreen"></button>
 							</form>
 						</td>

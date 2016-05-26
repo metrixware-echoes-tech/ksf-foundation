@@ -2,7 +2,8 @@ package fr.echoes.labs.ksf.cc.plugins.redmine.services;
 
 import java.util.List;
 
-import fr.echoes.labs.ksf.cc.extensions.services.project.IProjectFeature;
+import fr.echoes.labs.ksf.cc.extensions.services.project.features.IProjectFeature;
+import fr.echoes.labs.ksf.cc.extensions.services.project.versions.IProjectVersion;
 import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineExtensionException;
 import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineIssue;
 import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineQuery;
@@ -47,11 +48,11 @@ public interface IRedmineService {
 	 * @return a list of versions as a list of strings.
 	 * @throws RedmineExtensionException
 	 */
-	public List<String> getVersions(String projectName) throws RedmineExtensionException;
+	public List<IProjectVersion> getVersions(String projectName) throws RedmineExtensionException;
 
 	/**
 	 * Returns the list of features for this project.
-	 * 
+	 *
 	 * @param projectName the project name
 	 * @return a list of features
 	 * @throws RedmineExtensionException
@@ -59,8 +60,8 @@ public interface IRedmineService {
 	public List<IProjectFeature> getFeatures(String projectName) throws RedmineExtensionException;
 
 	/**
-	 * Returns the Redmine project ID. 
-	 * 
+	 * Returns the Redmine project ID.
+	 *
 	 * @param projectName the project name.
 	 * @return the project ID or {@code null} if the given project cannot be found.
 	 * @throws RedmineExtensionException
@@ -69,7 +70,7 @@ public interface IRedmineService {
 
 	/**
 	 * Changes the ticket status.
-	 * 
+	 *
 	 * @param ticketId the ticket ID.
 	 * @param statusId the new status.
 	 * @throws RedmineExtensionException

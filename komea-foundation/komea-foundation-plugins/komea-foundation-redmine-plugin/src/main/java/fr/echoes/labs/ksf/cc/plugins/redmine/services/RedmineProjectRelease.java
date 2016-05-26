@@ -8,7 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import fr.echoes.labs.ksf.cc.extensions.services.project.IProjectVersions;
+import fr.echoes.labs.ksf.cc.extensions.services.project.versions.IProjectVersion;
+import fr.echoes.labs.ksf.cc.extensions.services.project.versions.IProjectVersions;
 import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineExtensionException;
 
 
@@ -26,18 +27,18 @@ public class RedmineProjectRelease implements IProjectVersions {
 
 
 	@Override
-	public List<String> getVersions(String projectName) {
-		final List<String> releases;
+	public List<IProjectVersion> getVersions(String projectName) {
+		final List<IProjectVersion> releases;
 
 		try {
 			releases = this.redmineService.getVersions(projectName);
 
-		} catch (RedmineExtensionException e) {
+		} catch (final RedmineExtensionException e) {
 			LOGGER.error("RedmineProjectRelease.getReleases", e);
-			return Collections.<String>emptyList();
+			return Collections.<IProjectVersion>emptyList();
 		}
 
-		return releases != null ? releases : Collections.<String>emptyList();
+		return releases != null ? releases : Collections.<IProjectVersion>emptyList();
 	}
 
 }

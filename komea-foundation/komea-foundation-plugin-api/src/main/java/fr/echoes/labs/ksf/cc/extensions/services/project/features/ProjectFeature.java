@@ -1,4 +1,6 @@
-package fr.echoes.labs.ksf.cc.extensions.services.project;
+package fr.echoes.labs.ksf.cc.extensions.services.project.features;
+
+import fr.echoes.labs.ksf.cc.extensions.services.project.TicketStatus;
 
 /**
  * @author dcollard
@@ -9,14 +11,14 @@ public class ProjectFeature implements IProjectFeature {
 	private String id;
 	private String subject;
 	private String assignee;
-	private FeatureStatus status;
+	private TicketStatus status;
 
 	/* (non-Javadoc)
 	 * @see fr.echoes.labs.ksf.cc.extensions.services.project.IProjectFeature#getId()
 	 */
 	@Override
 	public String getId() {
-		return id;
+		return this.id;
 	}
 
 	/**
@@ -32,7 +34,7 @@ public class ProjectFeature implements IProjectFeature {
 	 */
 	@Override
 	public String getSubject() {
-		return subject;
+		return this.subject;
 	}
 
 	/**
@@ -48,7 +50,7 @@ public class ProjectFeature implements IProjectFeature {
 	 */
 	@Override
 	public String getAssignee() {
-		return assignee;
+		return this.assignee;
 	}
 
 	/**
@@ -60,14 +62,14 @@ public class ProjectFeature implements IProjectFeature {
 	}
 
 	@Override
-	public FeatureStatus getStatus() {
+	public TicketStatus getStatus() {
 		return this.status;
 	}
 
 	/**
 	 * @param status the status to set
 	 */
-	public void setStatus(FeatureStatus status) {
+	public void setStatus(TicketStatus status) {
 		this.status = status;
 	}
 

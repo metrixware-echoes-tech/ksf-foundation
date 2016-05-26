@@ -27,9 +27,11 @@ import com.taskadapter.redmineapi.bean.Tracker;
 import com.taskadapter.redmineapi.bean.User;
 import com.taskadapter.redmineapi.bean.Version;
 
-import fr.echoes.labs.ksf.cc.extensions.services.project.FeatureStatus;
-import fr.echoes.labs.ksf.cc.extensions.services.project.IProjectFeature;
-import fr.echoes.labs.ksf.cc.extensions.services.project.ProjectFeature;
+import fr.echoes.labs.ksf.cc.extensions.services.project.TicketStatus;
+import fr.echoes.labs.ksf.cc.extensions.services.project.features.IProjectFeature;
+import fr.echoes.labs.ksf.cc.extensions.services.project.features.ProjectFeature;
+import fr.echoes.labs.ksf.cc.extensions.services.project.versions.IProjectVersion;
+import fr.echoes.labs.ksf.cc.extensions.services.project.versions.ProjectVersion;
 import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineExtensionException;
 import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineIssue;
 import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineQuery;
@@ -191,10 +193,10 @@ public class RedmineService implements IRedmineService {
 	}
 
 	@Override
-	public List<String> getVersions(String projectName) throws RedmineExtensionException {
+	public List<IProjectVersion> getVersions(String projectName) throws RedmineExtensionException {
 		Objects.requireNonNull(projectName);
 
-		final List<String> result;
+		final List<IProjectVersion> result;
 		final RedmineManager mgr = createRedmineManager();
 		final ProjectManager projectManager = mgr.getProjectManager();
 		final String projectKey =  createIdentifier(projectName);
@@ -202,7 +204,9 @@ public class RedmineService implements IRedmineService {
 			final Project project = projectManager.getProjectByKey(projectKey);
 			final List<Version> versions = projectManager.getVersions(project.getId());
 
-			final Map<String, List<String>> projectVersionMap = new HashMap<String, List<String>>();
+
+
+			final Map<String, List<IProjectVersion>> projectVersionMap = new HashMap<String, List<IProjectVersion>>();
 
 			// Loop through the list of versions and build a map with the projects names as keys and lists
 			// of versions as values. The version with another status than "open" are ignored.
@@ -215,12 +219,15 @@ public class RedmineService implements IRedmineService {
 
 				final String versionProjectName = version.getProject().getName();
 
-				List<String> versionList = projectVersionMap.get(versionProjectName);
+				List<IProjectVersion> versionList = projectVersionMap.get(versionProjectName);
 				if (versionList == null) {
-					versionList = new ArrayList<String>();
+					versionList = new ArrayList<IProjectVersion>();
 					projectVersionMap.put(versionProjectName, versionList);
 				}
-				versionList.add(version.getName());
+				final ProjectVersion projectVersion = new ProjectVersion();
+				projectVersion.setId(String.valueOf(version.getId()));
+				projectVersion.setName(version.getName());
+				versionList.add(projectVersion);
 			}
 
 			if (!versions.isEmpty()) {
@@ -230,15 +237,15 @@ public class RedmineService implements IRedmineService {
 				if (projectVersionMap.containsKey(projectName)) {
 					result = projectVersionMap.get(projectName);
 				} else {
-					result = new ArrayList<String>();
-					for (final Map.Entry<String, List<String>> entry : projectVersionMap.entrySet()) {
+					result = new ArrayList<IProjectVersion>();
+					for (final Map.Entry<String, List<IProjectVersion>> entry : projectVersionMap.entrySet()) {
 						result.addAll(entry.getValue());
 					}
 
 				}
 
 			} else {
-				result = Collections.<String>emptyList();
+				result = Collections.<IProjectVersion>emptyList();
 			}
 
 
@@ -255,13 +262,13 @@ public class RedmineService implements IRedmineService {
 
 		final List<IProjectFeature> features = new ArrayList<IProjectFeature>();
 
-		features.addAll((buildFeaturesList(projectName, this.configurationService.getFeatureStatusNewId(), FeatureStatus.NEW)));
-		features.addAll((buildFeaturesList(projectName, this.configurationService.getFeatureStatusNewId(), FeatureStatus.CREATED)));
+		features.addAll((buildFeaturesList(projectName, this.configurationService.getFeatureStatusNewId(), TicketStatus.NEW)));
+		features.addAll((buildFeaturesList(projectName, this.configurationService.getFeatureStatusNewId(), TicketStatus.CREATED)));
 
 		return features;
 	}
 
-	private List<IProjectFeature> buildFeaturesList(String projectName, int satusId, FeatureStatus status) throws RedmineExtensionException {
+	private List<IProjectFeature> buildFeaturesList(String projectName, int satusId, TicketStatus status) throws RedmineExtensionException {
 		final Builder redmineQuerryBuilder = new RedmineQuery.Builder();
 
 		redmineQuerryBuilder.projectName(projectName)
@@ -313,7 +320,7 @@ public class RedmineService implements IRedmineService {
 		if (redmineManager == null) {
 			return null;
 		}
-		
+
 		final String id;
 		try {
 			id = findProjectIdentifier(redmineManager, projectName);

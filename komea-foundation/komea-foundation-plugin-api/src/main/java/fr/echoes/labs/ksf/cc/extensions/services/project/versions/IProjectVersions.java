@@ -1,12 +1,13 @@
-package fr.echoes.labs.ksf.cc.extensions.services.project;
+package fr.echoes.labs.ksf.cc.extensions.services.project.versions;
 
 import java.util.List;
+
 
 /**
  * @author dcollard
  *
  */
-public interface IProjectFeatues {
+public interface IProjectVersions {
 
 	/**
 	 * Returns the list of feature for the given project.
@@ -14,6 +15,6 @@ public interface IProjectFeatues {
 	 * @param projectName the project name.
 	 * @return a list of featues.
 	 */
-	public List<IProjectFeature> getFeatures(String projectName);
-	
+	public List<IProjectVersion> getVersions(String projectName);
+
 }
