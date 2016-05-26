@@ -9,11 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
+import com.tocea.corolla.products.domain.Project;
 
 import fr.echoes.labs.ksf.cc.extensions.services.project.features.IProjectFeatues;
 import fr.echoes.labs.ksf.cc.extensions.services.project.features.IProjectFeature;
 import fr.echoes.labs.ksf.cc.extensions.services.project.versions.IProjectVersion;
 import fr.echoes.labs.ksf.cc.extensions.services.project.versions.IProjectVersions;
+import fr.echoes.labs.ksf.cc.releases.dao.IReleaseDAO;
 
 /**
  * This service allows to obtain project information returned by the plug-ins.
@@ -33,18 +35,23 @@ public class ProjectInformationManager {
 	@Autowired(required = false)
 	private IProjectFeatues[] features;
 
+	@Autowired
+	IReleaseDAO releaseDao;
+
 	/**
 	 * Returns the versions for this project.
 	 *
 	 * @param projectName the project name.
 	 * @return a list of versions.
 	 */
-	public List<IProjectVersion> getVersions(String projectName) {
+	public List<IProjectVersion> getVersions(Project project) {
 
 		if (this.versions == null) {
 			LOGGER.info("getVersions : no versions.");
 			return Lists.newArrayList();
 		}
+
+		final String projectName = project.getName();
 
 		final List<IProjectVersion> result = new ArrayList<IProjectVersion>();
 
@@ -64,12 +71,14 @@ public class ProjectInformationManager {
 	 * @param projectName the project name.
 	 * @return a list of features.
 	 */
-	public List<IProjectFeature> getFeatures(String projectName) {
+	public List<IProjectFeature> getFeatures(Project project) {
 
 		if (this.features == null) {
 			LOGGER.info("getFeatures : no features.");
 			return Lists.newArrayList();
 		}
+
+		final String projectName = project.getName();
 
 		final List<IProjectFeature> result = new ArrayList<IProjectFeature>();
 

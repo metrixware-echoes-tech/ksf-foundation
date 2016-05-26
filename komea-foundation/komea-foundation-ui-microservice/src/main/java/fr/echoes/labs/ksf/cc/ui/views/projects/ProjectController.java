@@ -44,6 +44,7 @@ import com.tocea.corolla.users.domain.User;
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.IProjectTabPanel;
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
 import fr.echoes.labs.ksf.cc.extmanager.projects.ui.IProjectDashboardExtensionManager;
+import fr.echoes.labs.ksf.cc.releases.dao.IReleaseDAO;
 import fr.echoes.labs.ksf.cc.sf.commands.CreateProjectAndProductionLineCommand;
 import fr.echoes.labs.ksf.cc.sf.dto.SFProjectDTO;
 
@@ -68,6 +69,9 @@ public class ProjectController {
 
 	@Autowired
 	IUserDAO userDao;
+
+	@Autowired
+	IReleaseDAO releaseDao;
 
 	@Autowired
 	Gate gate;
@@ -114,7 +118,7 @@ public class ProjectController {
     	this.gate.dispatch(new CreateReleaseCommand(project, releaseVersion));
 
 		return new ModelAndView("redirect:/ui/projects/" + project.getKey());
-	}	
+	}
 
 	@RequestMapping(value = "/ui/projects/releases/finish")
 	public ModelAndView finishRelease(@RequestParam("projectKey") final String projectKey,  @RequestParam("releaseVersion") final String releaseVersion) {
@@ -128,8 +132,8 @@ public class ProjectController {
         this.gate.dispatch(new FinishReleaseCommand(project, releaseVersion));
 
 		return new ModelAndView("redirect:/ui/projects/" + project.getKey());
-	}	
-	
+	}
+
 	@RequestMapping(value = "/ui/projects/features/new")
 	public ModelAndView createFeature(@RequestParam("projectKey") final String projectKey, @RequestParam("featureId") final String featureId, @RequestParam("featureSubject") final String featureSubject) {
 
@@ -143,7 +147,7 @@ public class ProjectController {
 
 		return new ModelAndView("redirect:/ui/projects/" + project.getKey());
 	}
-	
+
 	@RequestMapping(value = "/ui/projects/features/finish")
 	public ModelAndView closeFeature(@RequestParam("projectKey") final String projectKey, @RequestParam("featureId") final String featureId, @RequestParam("featureSubject") final String featureSubject) {
 

@@ -6,8 +6,8 @@
 		</div>
 
 
-<div th:with="features=${@projectInformationManager.getFeatures(projectData.project.name)}" th:remove="tag">
-<div th:with="releases=${@projectInformationManager.getVersions(projectData.project.name)}" th:remove="tag">
+<div th:with="features=${@projectInformationManager.getFeatures(projectData.project)}" th:remove="tag">
+<div th:with="releases=${@projectInformationManager.getVersions(projectData.project)}" th:remove="tag">
 		<div class="panel-body">
 
 			<ul class="project-properties" style="list-style-type: none">
@@ -23,7 +23,7 @@
 
 
 
-			<table class="table table-striped tableRowEllipsis" th:with="features=${@projectInformationManager.getFeatures(projectData.project.name)}" th:if="${not #lists.isEmpty(features)}">
+			<table class="table table-striped tableRowEllipsis" th:if="${not #lists.isEmpty(features)}">
 				<thead>
 					<tr>
 						<th>#</th>
