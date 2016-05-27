@@ -45,6 +45,7 @@ import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.IProjectTabPanel;
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
 import fr.echoes.labs.ksf.cc.extmanager.projects.ui.IProjectDashboardExtensionManager;
 import fr.echoes.labs.ksf.cc.releases.dao.IReleaseDAO;
+import fr.echoes.labs.ksf.cc.releases.model.Release;
 import fr.echoes.labs.ksf.cc.sf.commands.CreateProjectAndProductionLineCommand;
 import fr.echoes.labs.ksf.cc.sf.dto.SFProjectDTO;
 
@@ -107,7 +108,7 @@ public class ProjectController {
 	}
 
 	@RequestMapping(value = "/ui/projects/releases/new")
-	public ModelAndView createRelease(@RequestParam("projectKey") final String projectKey, @RequestParam("releaseVersion") final String releaseVersion) {
+	public ModelAndView createRelease(@RequestParam("projectKey") final String projectKey, @RequestParam("releaseVersion") final String releaseVersion, @RequestParam("releaseId") final String releaseId) {
 
 		final Project project = this.projectDao.findByKey(projectKey);
 
@@ -115,7 +116,14 @@ public class ProjectController {
 			throw new ProjectNotFoundException();
 		}
 
+		final Release release = new Release();
+		release.setProjectId(project.getId());
+		release.setReleaseVersion(releaseVersion);
+		release.setReleaseId(releaseId);
+
     	this.gate.dispatch(new CreateReleaseCommand(project, releaseVersion));
+
+    	this.releaseDao.save(release);
 
 		return new ModelAndView("redirect:/ui/projects/" + project.getKey());
 	}

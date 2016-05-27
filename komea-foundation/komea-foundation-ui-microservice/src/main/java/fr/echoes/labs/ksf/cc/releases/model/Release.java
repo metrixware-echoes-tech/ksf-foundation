@@ -3,12 +3,10 @@ package fr.echoes.labs.ksf.cc.releases.model;
 import java.io.Serializable;
 
 import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
-
-import com.tocea.corolla.products.domain.Project;
 
 /**
  * @author dcollard
@@ -23,11 +21,14 @@ public class Release implements Serializable {
 	@Field("_id")
 	private String id;
 
-	@DBRef
-	private Project project;
+	@NotEmpty
+	private String projectId;
 
 	@NotBlank
 	private String releaseId;
+
+	@NotBlank
+	private String releaseVersion;
 
 	public String getId() {
 		return this.id;
@@ -35,14 +36,6 @@ public class Release implements Serializable {
 
 	public void setId(final String _id) {
 		this.id = _id;
-	}
-
-	public Project getProject() {
-		return this.project;
-	}
-
-	public void setProject(Project project) {
-		this.project = project;
 	}
 
 	/**
@@ -63,5 +56,34 @@ public class Release implements Serializable {
 	public String toString() {
 		return "Release [id=" + this.id + ", releaseId=" + this.getReleaseId() + "]";
 	}
+
+	/**
+	 * @return the projectId
+	 */
+	public String getProjectId() {
+		return this.projectId;
+	}
+
+	/**
+	 * @param projectId the projectId to set
+	 */
+	public void setProjectId(String projectId) {
+		this.projectId = projectId;
+	}
+
+	/**
+	 * @return the releaseVersion
+	 */
+	public String getReleaseVersion() {
+		return this.releaseVersion;
+	}
+
+	/**
+	 * @param releaseVersion the releaseVersion to set
+	 */
+	public void setReleaseVersion(String releaseVersion) {
+		this.releaseVersion = releaseVersion;
+	}
+
 
 }

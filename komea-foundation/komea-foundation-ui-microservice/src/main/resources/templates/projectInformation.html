@@ -62,6 +62,7 @@
 								<input name="featureId" type="hidden" th:value="${feature.getId()}" />
 								<input name="featureSubject" type="hidden" th:value="${feature.getSubject()}" />
 								<button class="glyphicon glyphicon-stop" type="submit" style="color:DarkRed"></button>
+								<button class="glyphicon glyphicon-info-sign" data-dismiss="modal" type="button" data-toggle="modal" data-target="#featureInformationl"></button>
 							</form>
 							</div>							
 						</td>
@@ -83,6 +84,8 @@
 						<!-- td th:text="${release.getId()}"></td -->
 						<td th:text="${release.getName()}"></td>
 						<td>
+						
+							<div th:if="${release.getStatus() == T(fr.echoes.labs.ksf.cc.extensions.services.project.TicketStatus).NEW}" th:remove="tag">
 							<form th:attr="action=@{/ui/projects/releases/new}"
 								class="form-horizontal" method="post"
 								role="form" data-toggle="validator">
@@ -92,6 +95,19 @@
 								<input name="releaseVersion" type="hidden" th:value="${release.getName()}" />
 								<button class="glyphicon glyphicon-play" type="submit" style="color:DarkGreen"></button>
 							</form>
+							</div>
+
+							<div th:if="${release.getStatus() == T(fr.echoes.labs.ksf.cc.extensions.services.project.TicketStatus).CREATED}" th:remove="tag">
+							<form th:attr="action=@{/ui/projects/releases/finish}"
+								class="form-horizontal" method="post"
+								role="form" data-toggle="validator">
+
+								<input name="projectKey" type="hidden" th:value="${projectData.project.key}" />
+								<input name="releaseId" type="hidden" th:value="${release.getId()}" />
+								<input name="releaseVersion" type="hidden" th:value="${release.getName()}" />
+								<button class="glyphicon glyphicon-stop" type="submit" style="color:DarkRed"></button>
+							</form>
+							</div>							
 						</td>
 					</tr>
 				</tbody>
@@ -106,6 +122,23 @@
 		
 	</div>
 </div>
+
+
+<!--/* Features modal */-->
+<div aria-hidden="true" aria-labelledby="myModalLabel" class="modal fade in" id="featureInformation" role="dialog" tabindex="-1" style="padding-left: 15px;">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button aria-hidden="true" class="close" data-dismiss="modal" type="button">&times;</button>
+					<h4 class="modal-title">Information</h4>
+				</div>
+				<div class="modal-body">
+
+				</div>
+			</div>
+		</div>
+</div>
+
 
 <!--/* Create Release modal */-->
 <!-- div th:fragment="projectInformationModal">

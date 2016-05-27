@@ -1,5 +1,7 @@
 package fr.echoes.labs.ksf.cc.extensions.services.project.versions;
 
+import fr.echoes.labs.ksf.cc.extensions.services.project.TicketStatus;
+
 /**
  * @author dcollard
  *
@@ -10,9 +12,11 @@ public class ProjectVersion implements IProjectVersion {
 
 	private String name;
 
+	private TicketStatus status = TicketStatus.NEW;
+
 	/**
-	 * @param id
-	 *            the id to set
+	 * @param id the id to set
+	 *
 	 */
 	public void setId(String id) {
 		this.id = id;
@@ -23,6 +27,14 @@ public class ProjectVersion implements IProjectVersion {
 	 */
 	public void setName(String name) {
 		this.name = name;
+	}
+
+
+	/**
+	 * @param status the status to set
+	 */
+	public void setStatus(TicketStatus status) {
+		this.status = status;
 	}
 
 	/* (non-Javadoc)
@@ -39,6 +51,14 @@ public class ProjectVersion implements IProjectVersion {
 	@Override
 	public String getName() {
 		return this.name;
+	}
+
+	/* (non-Javadoc)
+	 * @see fr.echoes.labs.ksf.cc.extensions.services.project.versions.IProjectVersion#getStatus()
+	 */
+	@Override
+	public TicketStatus getStatus() {
+		return this.status;
 	}
 
 }
