@@ -36,6 +36,7 @@ import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineExtensionException;
 import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineIssue;
 import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineQuery;
 import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineQuery.Builder;
+import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
 
 
 
@@ -330,4 +331,43 @@ public class RedmineService implements IRedmineService {
 		return id;
 	}
 
+	@Override
+	public void createTicket(ProjectDto foundationProject, String releaseVersion, String subject) throws RedmineExtensionException {
+
+		Objects.requireNonNull(foundationProject);
+		Objects.requireNonNull(releaseVersion);
+
+		final RedmineManager redmineManager = createRedmineManager();
+		if (redmineManager == null) {
+			return;
+		}
+
+		try {
+			final String projectIdentifier = findProjectIdentifier(redmineManager, foundationProject.getName());
+			final ProjectManager projectManager = redmineManager.getProjectManager();
+			final IssueManager issueManager = redmineManager.getIssueManager();
+
+			final Project redmineProject = projectManager.getProjectByKey(projectIdentifier);
+			final Version version = findVersion(projectManager, redmineProject, releaseVersion);
+
+			final Issue issue = new Issue();
+			issue.setProject(redmineProject);
+			issue.setTargetVersion(version);
+			issue.setSubject(subject);
+			issueManager.createIssue(issue);
+
+		} catch (final RedmineException e) {
+			throw new RedmineExtensionException("Failed to create ticket", e);
+		}
+	}
+
+	private Version findVersion(ProjectManager projectManager, Project redmineProject, String releaseVersion) throws RedmineException {
+		final List<Version> versions = projectManager.getVersions(redmineProject.getId());
+		for (final Version version : versions) {
+			if (StringUtils.equals(releaseVersion, version.getName())) {
+				return version;
+			}
+		}
+		return null;
+	}
 }

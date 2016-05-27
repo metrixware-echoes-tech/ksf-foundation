@@ -7,6 +7,7 @@ import fr.echoes.labs.ksf.cc.extensions.services.project.versions.IProjectVersio
 import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineExtensionException;
 import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineIssue;
 import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineQuery;
+import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
 
 
 /**
@@ -76,5 +77,15 @@ public interface IRedmineService {
 	 * @throws RedmineExtensionException
 	 */
 	public void changeStatus(String ticketId, int statusId) throws RedmineExtensionException;
+
+	/**
+	 * Creates a Redmine ticket.
+	 *
+	 * @param project the project
+	 * @param releaseVersion the release version
+	 * @param string the ticket title
+	 * @throws RedmineExtensionException
+	 */
+	public void createTicket(ProjectDto project, String releaseVersion, String title) throws RedmineExtensionException;
 
 }

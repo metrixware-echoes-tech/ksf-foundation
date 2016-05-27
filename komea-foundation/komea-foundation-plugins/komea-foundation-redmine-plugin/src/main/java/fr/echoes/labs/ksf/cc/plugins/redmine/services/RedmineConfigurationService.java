@@ -15,7 +15,7 @@ public class RedmineConfigurationService {
 
     @Value("${ksf.redmine.apiAccessKey}")
     private String appiAccessKey;
-    
+
     @Value("${ksf.redmine.resultItemsLimit}")
     private int resultItemsLimit;
 
@@ -23,15 +23,18 @@ public class RedmineConfigurationService {
     private int featureTrackerId;
 
     @Value("${ksf.redmine.featureStatusNewId}")
-    private int featureStatusNewId;    
-    
+    private int featureStatusNewId;
+
     @Value("${ksf.redmine.featureStatusAssignedId}")
     private int featureStatusAssignedId;
-    
+
     @Value("${ksf.redmine.featureStatusClosedId}")
-    private int featureStatusClosedId;    
-      
-    
+    private int featureStatusClosedId;
+
+    @Value("${ksf.redmine.releaseTicketMessagePattern}")
+    private String releaseTicketMessagePattern;
+
+
 	public String getUrl() {
         if ('/' == this.url.charAt(this.url.length() - 1)) {
             this.url = this.url.substring(0, this.url.length() - 1);
@@ -50,34 +53,41 @@ public class RedmineConfigurationService {
 	 * @return the resultItemsLimit
 	 */
 	public int getResultItemsLimit() {
-		return resultItemsLimit;
+		return this.resultItemsLimit;
 	}
 
 	/**
 	 * @return the featureTrackerId
 	 */
 	public int getFeatureTrackerId() {
-		return featureTrackerId;
+		return this.featureTrackerId;
 	}
 
 	/**
 	 * @return the featureStatusClosedId
 	 */
 	public int getFeatureStatusClosedId() {
-		return featureStatusClosedId;
+		return this.featureStatusClosedId;
 	}
 
 	/**
 	 * @return the featureStatusNewId
 	 */
 	public int getFeatureStatusNewId() {
-		return featureStatusNewId;
+		return this.featureStatusNewId;
 	}
 
 	/**
 	 * @return the featureStatusAssignedId
 	 */
 	public int getFeatureStatusAssignedId() {
-		return featureStatusAssignedId;
+		return this.featureStatusAssignedId;
+	}
+
+	/**
+	 * @return the releaseTicketMessagePattern
+	 */
+	public String getReleaseTicketMessagePattern() {
+		return this.releaseTicketMessagePattern;
 	}
 }

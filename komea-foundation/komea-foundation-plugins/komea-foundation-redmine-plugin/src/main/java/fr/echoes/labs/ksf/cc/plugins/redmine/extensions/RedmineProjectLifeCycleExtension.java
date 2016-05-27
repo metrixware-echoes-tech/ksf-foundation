@@ -1,6 +1,10 @@
 package fr.echoes.labs.ksf.cc.plugins.redmine.extensions;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.text.StrSubstitutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +13,7 @@ import org.springframework.core.annotation.Order;
 
 import com.tocea.corolla.products.dao.IProjectDAO;
 
+import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineExtensionException;
 import fr.echoes.labs.ksf.cc.plugins.redmine.services.IRedmineService;
 import fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineConfigurationService;
 import fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineErrorHandlingService;
@@ -101,8 +106,23 @@ public class RedmineProjectLifeCycleExtension implements IProjectLifecycleExtens
 
 	@Override
 	public void notifyCreatedRelease(ProjectDto project, String releaseVersion) {
-		// TODO Auto-generated method stub
+		try {
 
+
+			final String releaseTicketSubject = createReleaseTicketSubject(project, releaseVersion);
+
+			this.redmineService.createTicket(project, releaseVersion, releaseTicketSubject);
+		} catch (final RedmineExtensionException e) {
+			LOGGER.error("[Redmine] Failed to create a ticket for the release {} of the project {}", releaseVersion, project.getName());
+			this.errorHandler.registerError("Failed to create a Redmine ticket for the release.");
+		}
+	}
+
+	private String createReleaseTicketSubject(ProjectDto project, String releaseVersion) {
+		final Map<String, String> variables = new HashMap<String, String>(2);
+		variables.put("projectName", project.getName());
+		variables.put("releaseVersion", releaseVersion);
+		return replaceVariables(this.configurationService.getReleaseTicketMessagePattern(), variables);
 	}
 
 	@Override
@@ -122,13 +142,19 @@ public class RedmineProjectLifeCycleExtension implements IProjectLifecycleExtens
 	public void notifyFinishedFeature(ProjectDto projectDto, String featureId,
 			String featureSubject) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void notifyFinishedRelease(ProjectDto project, String releaseName) {
 		// TODO Auto-generated method stub
-		
+
+	}
+
+	private String replaceVariables(String str, Map<String, String> variables) {
+		final StrSubstitutor sub = new StrSubstitutor(variables);
+		sub.setVariablePrefix("%{");
+		return sub.replace(str);
 	}
 
 }

@@ -62,7 +62,7 @@
 								<input name="featureId" type="hidden" th:value="${feature.getId()}" />
 								<input name="featureSubject" type="hidden" th:value="${feature.getSubject()}" />
 								<button class="glyphicon glyphicon-stop" type="submit" style="color:DarkRed"></button>
-								<button class="glyphicon glyphicon-info-sign" data-dismiss="modal" type="button" data-toggle="modal" data-target="#featureInformationl"></button>
+								<button class="glyphicon glyphicon-info-sign" data-dismiss="modal" type="button" data-toggle="modal" data-target="#featureInformation"></button>
 							</form>
 							</div>							
 						</td>
@@ -106,12 +106,35 @@
 								<input name="releaseId" type="hidden" th:value="${release.getId()}" />
 								<input name="releaseVersion" type="hidden" th:value="${release.getName()}" />
 								<button class="glyphicon glyphicon-stop" type="submit" style="color:DarkRed"></button>
+								<button class="glyphicon glyphicon-info-sign" data-dismiss="modal" type="button" data-toggle="modal" data-target="#featureInformation"></button>
 							</form>
 							</div>							
 						</td>
 					</tr>
 				</tbody>
 			</table>			
+
+
+
+<div id="featureInformation" class="modal fade in" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Informations</h4>
+      </div>
+      <div class="modal-body">
+        <p></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
 	
 			<!--/* Button uses to open the Create Release modal */-->
 			<!-- button type="button" id="createReleaseButton" name="createReleaseButton" class="btn btn-primary" title="Create a new release" data-toggle="modal" data-target="#createReleaseModal" th:disabled="${@projectInformationManager.getVersions(projectData.project.name).isEmpty()}">Create Release</button -->
@@ -121,22 +144,6 @@
 </div>
 		
 	</div>
-</div>
-
-
-<!--/* Features modal */-->
-<div aria-hidden="true" aria-labelledby="myModalLabel" class="modal fade in" id="featureInformation" role="dialog" tabindex="-1" style="padding-left: 15px;">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button aria-hidden="true" class="close" data-dismiss="modal" type="button">&times;</button>
-					<h4 class="modal-title">Information</h4>
-				</div>
-				<div class="modal-body">
-
-				</div>
-			</div>
-		</div>
 </div>
 
 
