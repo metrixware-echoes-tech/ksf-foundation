@@ -20,6 +20,8 @@ import com.google.common.base.Charsets;
 import com.google.common.base.Optional;
 import com.google.common.io.Resources;
 import com.offbytwo.jenkins.JenkinsServer;
+import com.offbytwo.jenkins.client.JenkinsHttpClient;
+import com.offbytwo.jenkins.client.util.EncodingUtils;
 import com.offbytwo.jenkins.model.Build;
 import com.offbytwo.jenkins.model.BuildWithDetails;
 import com.offbytwo.jenkins.model.FolderJob;
@@ -57,7 +59,7 @@ public class JenkinsService implements IJenkinsService {
 
 			final String scmUrl = getProjectScmUrl(projectName);
 
-			if (this.configurationService.useFolders()) {
+			if (useFoder()) {
 				jenkins.createFolder(projectName);
 
 				final FolderJob projectFolder = getProjectParentFolder(jenkins, projectName);
@@ -135,17 +137,17 @@ public class JenkinsService implements IJenkinsService {
 	@Override
 	public List<JenkinsBuildInfo> getBuildInfo(String projectName)
 			throws JenkinsExtensionException {
-		JenkinsServer jenkins;
+		final JenkinsServer jenkins;
 		try {
 
 			jenkins = createJenkinsClient();
 
-			final boolean useFolder = this.configurationService.useFolders();
+			final boolean useFolder = useFoder();
 
 			final int builsdPerJobLimit = this.configurationService.getBuilsdPerJobLimit();
 
-			final List<Build> builds = getJobBuilds(projectName, jenkins, MASTER, useFolder, builsdPerJobLimit);
-			builds.addAll(getJobBuilds(projectName, jenkins, DEVELOP, useFolder, builsdPerJobLimit));
+			final List<Build> builds = getJobBuilds(jenkins, projectName, MASTER, useFolder, builsdPerJobLimit);
+			builds.addAll(getJobBuilds(jenkins, projectName, DEVELOP, useFolder, builsdPerJobLimit));
 
 			final List<JenkinsBuildInfo> buildsInfo = new ArrayList<JenkinsBuildInfo>(builds.size());
 			for (final Build build : builds) {
@@ -160,9 +162,22 @@ public class JenkinsService implements IJenkinsService {
 		}
 	}
 
-	private List<Build> getJobBuilds(String projectName, JenkinsServer jenkins, String branchName, boolean useFolder, int builsdPerJobLimit)
+	private List<Build> getJobBuilds(JenkinsServer jenkins, String projectName, String branchName, boolean useFolder, int builsdPerJobLimit)
 			throws IOException, JenkinsExtensionException {
 
+		final JobWithDetails root = getJobWithDetails(jenkins, projectName, branchName,
+				useFolder);
+
+		final List<Build> builds = root.getBuilds();
+		if (builds.size() > builsdPerJobLimit) {
+			return  new ArrayList<Build>(builds.subList(0, builsdPerJobLimit));
+		}
+		return builds;
+	}
+
+	private JobWithDetails getJobWithDetails(JenkinsServer jenkins, String projectName,
+			String branchName, boolean useFolder) throws IOException,
+			JenkinsExtensionException {
 		final JobWithDetails root;
 		if (useFolder) {
 			final FolderJob projectFolder = getProjectParentFolder(jenkins, projectName);
@@ -174,12 +189,7 @@ public class JenkinsService implements IJenkinsService {
 		if (root == null) {
 			throw new JenkinsExtensionException("The job \"" + projectName +"\" doesn't exist");
 		}
-
-		final List<Build> builds = root.getBuilds();
-		if (builds.size() > builsdPerJobLimit) {
-			return  new ArrayList<Build>(builds.subList(0, builsdPerJobLimit));
-		}
-		return builds;
+		return root;
 	}
 
 	private JenkinsBuildInfo createJenkinsBuildInfo(Build build, String jobName) throws IOException {
@@ -195,23 +205,25 @@ public class JenkinsService implements IJenkinsService {
 	@Override
 	public void createRelease(String projectName, String releaseVersion) throws JenkinsExtensionException {
 		final String branchName = getReleaseBranchName(projectName, releaseVersion);
-		createJob(projectName, branchName);
+		final String gitBranchName = getGitReleaseBranchName(projectName, releaseVersion);
+		createJob(projectName, branchName, gitBranchName);
 	}
 
 	@Override
 	public void createFeature(String projectName, String featureId, String featureSubject) throws JenkinsExtensionException {
 		final String branchName = getFeatureBranchName(projectName, featureId, featureSubject);
-		createJob(projectName, branchName);
+		final String gitBranchName = getGitFeatureBranchName(projectName, featureId, featureSubject);
+		createJob(projectName, branchName, gitBranchName);
 	}
 
-	private void createJob(String projectName, String branchName) throws JenkinsExtensionException {
+	private void createJob(String projectName, String branchName, String gitBranchName) throws JenkinsExtensionException {
 		final JenkinsServer jenkins;
 		try {
 			jenkins = createJenkinsClient();
 
 			final String scmUrl = getProjectScmUrl(projectName);
 
-			if (this.configurationService.useFolders()) {
+			if (useFoder()) {
 				final FolderJob projectFolder = getProjectParentFolder(jenkins, projectName);
 
 				final String resolvedXmlConfig = createConfigXml(projectName, scmUrl, branchName);
@@ -226,13 +238,40 @@ public class JenkinsService implements IJenkinsService {
 		}
 	}
 
+	private void deleteJob(String projectName, String branchName) throws JenkinsExtensionException {
+
+		String jobName = EncodingUtils.encode(getJobName(projectName, branchName));
+		try {
+			final JenkinsHttpClient jenkinsHttpClient = new JenkinsHttpClient(new URI(this.configurationService.getUrl()));
+			if (useFoder()) {
+				jobName = EncodingUtils.encode(projectName) + "/job/" + jobName;
+			}
+
+			jenkinsHttpClient.post("/job/" + jobName + "/doDelete");
+
+		} catch (final Exception e) {
+			throw new JenkinsExtensionException("Failed to delete Jenkins job", e);
+		}
+	}
+
+	private boolean useFoder() {
+		return this.configurationService.useFolders();
+	}
+
 	private String getReleaseBranchName(String projectName, String releaseVersion) {
-		return "release/" + releaseVersion;
+		final Map<String, String> variables = new HashMap<String, String>(2);
+		variables.put("projectName", projectName);
+		variables.put("releaseVersion", releaseVersion);
+		return replaceVariables(this.configurationService.getJobReleasePattern(), variables);
 	}
 
 	private String getFeatureBranchName(String projectName, String featureId,
 			String featureSubject) {
-		return "feature/" + featureId;
+		final Map<String, String> variables = new HashMap<String, String>(3);
+		variables.put("projectName", projectName);
+		variables.put("featureId", featureId);
+		variables.put("featureDescription", featureSubject);
+		return replaceVariables(this.configurationService.getJobFeaturePattern(), variables);
 	}
 
 	@Override
@@ -258,6 +297,19 @@ public class JenkinsService implements IJenkinsService {
 		return null;
 	}
 
+	private String getGitReleaseBranchName(String projectName, String releaseVersion) {
+		final Map<String, String> variables = new HashMap<String, String>(1);
+		variables.put("releaseVersion", releaseVersion);
+		return replaceVariables(this.configurationService.getGitReleaseBranchPattern(), variables);
+	}
+
+	private String getGitFeatureBranchName(String projectName, String featureId, String featureDescription) {
+		final Map<String, String> variables = new HashMap<String, String>(2);
+		variables.put("featureId", featureId);
+		variables.put("featureDescription", featureDescription);
+		return replaceVariables(this.configurationService.getGitFeatureBranchPattern(), variables);
+	}
+
 	private String getProjectScmUrl(String projectName) {
 		final Map<String, String> variables = new HashMap<String, String>(2);
 		variables.put("scmUrl", this.configurationService.getScmUrl());
@@ -269,6 +321,39 @@ public class JenkinsService implements IJenkinsService {
 		final StrSubstitutor sub = new StrSubstitutor(variables);
 		sub.setVariablePrefix("%{");
 		return sub.replace(str);
+	}
+
+	private JenkinsBuildInfo getBranchLastBuildInfo(String projectName, String branchName) throws JenkinsExtensionException {
+		try {
+
+			final JenkinsServer jenkins = createJenkinsClient();
+
+			final boolean useFolder = useFoder();
+
+			final JobWithDetails jobWithDetails = getJobWithDetails(jenkins, projectName, branchName, useFolder);
+			final Build lastBuild = jobWithDetails.getLastBuild();
+
+			return lastBuild == null ? null : createJenkinsBuildInfo(lastBuild, projectName);
+
+		} catch (final JenkinsExtensionException e) {
+			throw e;
+		} catch (final Exception e) {
+			throw new JenkinsExtensionException("Failed to retrieve build history", e);
+		}
+	}
+
+
+
+	@Override
+	public JenkinsBuildInfo getFeatureStatus(String projectName, String featureId) throws JenkinsExtensionException {
+		final String featureBranchName = getFeatureBranchName(projectName, featureId, null);
+		return getBranchLastBuildInfo(projectName, featureBranchName);
+	}
+
+	@Override
+	public JenkinsBuildInfo getReleaseStatus(String projectName, String releaseVersion) throws JenkinsExtensionException {
+		final String releaseBranchName = getFeatureBranchName(projectName, releaseVersion, null);
+		return getBranchLastBuildInfo(projectName, releaseBranchName);
 	}
 
 }

@@ -52,15 +52,35 @@ public interface IJenkinsService {
 	 * @param featureId the feature ID
 	 * @param featureSubject the feature subject
 	 * @throws JenkinsExtensionException
-	 */	
+	 */
 	public void createFeature(String projectName, String featureId, String featureSubject) throws JenkinsExtensionException;
-	
+
 	/**
 	 * Returns the Jenkins job ID.
-	 * 
+	 *
 	 * @param projectName the project name.
 	 * @return the job ID or {@code null} if the given project cannot be found.
 	 * @throws JenkinsExtensionException
 	 */
 	public String getJobId(String projectName) throws JenkinsExtensionException;
+
+	/**
+	 * Returns the feature job status.
+	 *
+	 * @param projectName the project name.
+	 * @param featureId the feature ID.
+	 * @return
+	 * @throws JenkinsExtensionException
+	 */
+	public JenkinsBuildInfo getFeatureStatus(String projectName, String featureId) throws JenkinsExtensionException;
+
+	/**
+	 * Returns the release job status.
+	 *
+	 * @param projectName the project name.
+	 * @param realeaseVersion the release version.
+	 * @return
+	 * @throws JenkinsExtensionException
+	 */
+	public JenkinsBuildInfo getReleaseStatus(String projectName, String realeaseVersion) throws JenkinsExtensionException;
 }

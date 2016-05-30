@@ -34,6 +34,18 @@ public class JenkinsConfigurationService {
 	@Value("${ksf.projectScmUrlPattern}")
 	private String projectScmUrlPattern;
 
+	@Value("${ksf.jenkins.job.releasePattern}")
+	private String jobReleasePattern;
+
+	@Value("${ksf.jenkins.job.featurePattern}")
+	private String jobFeaturePattern;
+
+	@Value("${ksf.git.branch.releasePattern}")
+	private String gitReleaseBranchPattern;
+
+	@Value("${ksf.git.branch.featurePattern}")
+	private String gitFeatureBranchPattern;
+
 	public String getUrl() {
         if ('/' == this.url.charAt(this.url.length() - 1)) {
             this.url = this.url.substring(0, this.url.length() - 1);
@@ -68,4 +80,33 @@ public class JenkinsConfigurationService {
 	public String getProjectScmUrlPattern() {
 		return this.projectScmUrlPattern;
 	}
+
+	/**
+	 * @return the jobReleasePattern
+	 */
+	public String getJobReleasePattern() {
+		return this.jobReleasePattern;
+	}
+
+	/**
+	 * @return the jobFeaturePattern
+	 */
+	public String getJobFeaturePattern() {
+		return this.jobFeaturePattern;
+	}
+
+	/**
+	 * @return the gitReleaseBranchPattern
+	 */
+	public String getGitReleaseBranchPattern() {
+		return this.gitReleaseBranchPattern;
+	}
+
+	/**
+	 * @return the gitFeatureBranchPattern
+	 */
+	public String getGitFeatureBranchPattern() {
+		return this.gitFeatureBranchPattern;
+	}
+
 }
