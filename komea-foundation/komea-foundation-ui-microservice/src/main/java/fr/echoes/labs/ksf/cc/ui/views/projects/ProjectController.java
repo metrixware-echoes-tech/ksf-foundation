@@ -252,6 +252,7 @@ public class ProjectController {
 			findOne = new User();
 			findOne.setFirstName("");
 			findOne.setLastName("");
+			findOne.setLogin(project.getOwnerId());
 		}
 
 		return new ProjectPagelistDTO(project, findOne);

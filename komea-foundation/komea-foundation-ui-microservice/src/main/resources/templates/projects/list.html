@@ -31,7 +31,7 @@
 								<td>
                                     <a th:text="${prod.project.name}" th:href="@{/ui/projects/}+${prod.project.key}"></a>
                                 </td>
-                                <td th:text="${prod.user.firstName}+' '+${prod.user.lastName}"></td>
+                                <td th:text="${#strings.isEmpty(prod.user.firstName) or #strings.isEmpty(prod.user.lastName) ? prod.user.login : prod.user.firstName +' '+ prod.user.lastName}"></td>
                       			<td class="project-list-tools">
                             		<a th:each="widget,it : ${@projectDashboardWidgets.getDashboardWidgets()}" th:href="@{/ui/projects/}+${prod.project.key}+${'#pluginTab'+it.index}"><img th:src="@{${widget.getIconUrl()}}" th:alt="@{${widget.getTitle()}}" data-toggle="tooltip" data-placement="bottom" th:title="@{${widget.getTitle()}}" /></a>
                             	</td>

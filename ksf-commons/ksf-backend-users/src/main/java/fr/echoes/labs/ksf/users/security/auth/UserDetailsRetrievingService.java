@@ -98,6 +98,8 @@ public class UserDetailsRetrievingService implements UserDetailsService, IReadon
 				final String password = userDetails.getPassword();
 
 				final UserDto userDto = new UserDto();
+				userDto.setId(username);
+
 				userDto.setLogin(username);
 				userDto.setFirstName(username);
 				userDto.setEmail(username + "@mail.com");

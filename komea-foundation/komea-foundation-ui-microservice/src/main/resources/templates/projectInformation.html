@@ -17,7 +17,7 @@
 				</li>
 				<li>
 					<strong>Owner:</strong>
-					<label th:text="${projectData.user.firstName+' '+projectData.user.lastName}">User</label>
+					<label th:text="${#strings.isEmpty(projectData.user.firstName) or #strings.isEmpty(projectData.user.lastName) ? projectData.user.login : projectData.user.firstName +' '+ projectData.user.lastName}">User</label>
 				</li>
 			</ul>
 
