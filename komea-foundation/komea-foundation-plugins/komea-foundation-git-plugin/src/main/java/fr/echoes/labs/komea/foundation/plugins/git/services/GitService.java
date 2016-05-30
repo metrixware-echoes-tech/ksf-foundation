@@ -287,10 +287,16 @@ public class GitService implements IGitService {
 		return replaceVariables(this.configuration.getBranchFeaturePattern(), variables);
 	}
 
+	@Override
+	public void closeRelease(String projectName, String releaseName)
+			throws GitExtensionException {
+
+
+	}
+
 	private String replaceVariables(String str, Map<String, String> variables) {
 		final StrSubstitutor sub = new StrSubstitutor(variables);
 		sub.setVariablePrefix("%{");
 		return sub.replace(str);
 	}
-
 }

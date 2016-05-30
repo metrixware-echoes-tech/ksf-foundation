@@ -37,7 +37,7 @@ public interface IGitService {
 
 	/**
 	 * Creates a new branch for the given feature.
-	 * 
+	 *
 	 * @param projectName the project name
 	 * @param featureId the feature ID
 	 * @param featureSubject the feature subject
@@ -46,12 +46,21 @@ public interface IGitService {
 
 	/**
 	 * Closes the feature branch.
-	 * 
+	 *
 	 * @param projectName the project name
 	 * @param featureId the feature ID
 	 * @param featureSubject the feature subject
 	 * @throws GitExtensionException
 	 */
 	public void closeFeature(String projectName, String featureId, String featureSubject) throws GitExtensionException;
+
+	/**
+	 * Closes the release branch.
+	 *
+	 * @param projectName the project name
+	 * @param releaseName the feature name
+	 * @throws GitExtensionException
+	 */
+	public void closeRelease(String projectName, String releaseName) throws GitExtensionException;
 
 }

@@ -108,7 +108,7 @@ public class GitProjectLifeCycleExtension implements IProjectLifecycleExtension 
 		} catch (final Exception ex) {
 			LOGGER.error("[Git] Failed to create feature for project {} ", project.getName(), ex);
 			this.errorHandler.registerError("Failed to create release.");
-		}		
+		}
 	}
 
 	@Override
@@ -119,13 +119,18 @@ public class GitProjectLifeCycleExtension implements IProjectLifecycleExtension 
 		} catch (final Exception ex) {
 			LOGGER.error("[Git] Failed to close feature for project {} ", project.getName(), ex);
 			this.errorHandler.registerError("Failed to create release.");
-		}		
+		}
 	}
 
 	@Override
 	public void notifyFinishedRelease(ProjectDto project, String releaseName) {
-		// TODO Auto-generated method stub
-		
+
+		try {
+			this.gitService.closeRelease(project.getName(), releaseName);
+		} catch (final Exception ex) {
+			LOGGER.error("[Git] Failed to close feature for project {} ", project.getName(), ex);
+			this.errorHandler.registerError("Failed to create release.");
+		}
 	}
 
 }

@@ -1,11 +1,14 @@
 package fr.echoes.labs.komea.foundation.plugins.git.extensions;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.text.StrSubstitutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,7 +72,7 @@ public class GitProjectDashboardWidget implements ProjectDashboardWidget {
 
 		final String projectName = project.getName();
 
-		ctx.setVariable("gitRepoUrl", this.configurationService.getScmUrl() + '/' + projectName + ".git");
+		ctx.setVariable("gitRepoUrl", getProjectScmUrl(projectName));
 
 		ctx.setVariable("gitError", this.errorHandler.retrieveError());
 
@@ -106,6 +109,19 @@ public class GitProjectDashboardWidget implements ProjectDashboardWidget {
 
 		return templateEngine;
 
+	}
+
+	private String getProjectScmUrl(String projectName) {
+		final Map<String, String> variables = new HashMap<String, String>(2);
+		variables.put("scmUrl", this.configurationService.getScmUrl());
+		variables.put("projectName", projectName);
+		return replaceVariables(this.configurationService.getProjectScmUrlPattern(), variables);
+	}
+
+	private String replaceVariables(String str, Map<String, String> variables) {
+		final StrSubstitutor sub = new StrSubstitutor(variables);
+		sub.setVariablePrefix("%{");
+		return sub.replace(str);
 	}
 
 }
