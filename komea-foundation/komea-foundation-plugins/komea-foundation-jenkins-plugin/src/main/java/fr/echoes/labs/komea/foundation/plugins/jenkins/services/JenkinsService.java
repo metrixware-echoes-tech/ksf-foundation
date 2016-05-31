@@ -345,8 +345,8 @@ public class JenkinsService implements IJenkinsService {
 
 
 	@Override
-	public JenkinsBuildInfo getFeatureStatus(String projectName, String featureId) throws JenkinsExtensionException {
-		final String featureBranchName = getFeatureBranchName(projectName, featureId, null);
+	public JenkinsBuildInfo getFeatureStatus(String projectName, String featureId, String description) throws JenkinsExtensionException {
+		final String featureBranchName = getFeatureBranchName(projectName, featureId, description);
 		return getBranchLastBuildInfo(projectName, featureBranchName);
 	}
 

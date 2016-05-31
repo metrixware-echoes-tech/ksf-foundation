@@ -72,7 +72,7 @@ public interface IJenkinsService {
 	 * @return
 	 * @throws JenkinsExtensionException
 	 */
-	public JenkinsBuildInfo getFeatureStatus(String projectName, String featureId) throws JenkinsExtensionException;
+	public JenkinsBuildInfo getFeatureStatus(String projectName, String featureId, String description) throws JenkinsExtensionException;
 
 	/**
 	 * Returns the release job status.

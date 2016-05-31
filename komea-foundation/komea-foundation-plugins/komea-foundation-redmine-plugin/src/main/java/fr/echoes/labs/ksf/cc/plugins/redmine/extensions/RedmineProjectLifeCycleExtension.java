@@ -71,7 +71,7 @@ public class RedmineProjectLifeCycleExtension implements IProjectLifecycleExtens
 		LOGGER.info("[Redmine] project {} creation detected [demanded by: {}]", project.getKey(), logginName);
 		try {
 
-			this.redmineService.createProject(project.getName());
+			this.redmineService.createProject(project.getName(), logginName);
 
 		} catch (final Exception ex) {
 			LOGGER.error("[Redmine] Failed to create project {} ", project.getName(), ex);

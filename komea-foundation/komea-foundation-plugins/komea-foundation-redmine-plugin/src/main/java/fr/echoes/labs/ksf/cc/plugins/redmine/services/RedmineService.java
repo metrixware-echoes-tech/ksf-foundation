@@ -15,10 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.taskadapter.redmineapi.IssueManager;
+import com.taskadapter.redmineapi.MembershipManager;
 import com.taskadapter.redmineapi.ProjectManager;
 import com.taskadapter.redmineapi.RedmineException;
 import com.taskadapter.redmineapi.RedmineManager;
 import com.taskadapter.redmineapi.RedmineManagerFactory;
+import com.taskadapter.redmineapi.UserManager;
 import com.taskadapter.redmineapi.bean.Issue;
 import com.taskadapter.redmineapi.bean.IssueCategory;
 import com.taskadapter.redmineapi.bean.Project;
@@ -52,13 +54,13 @@ public class RedmineService implements IRedmineService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(RedmineService.class);
 
 	@Autowired
-	private RedmineConfigurationService configurationService;
+	private RedmineConfigurationService configuration;
 
 	private RedmineManager createRedmineManager() {
 		RedmineManager mgr = null;
 		try {
-			final String apiAccessKey = this.configurationService.getApiAccessKey();
-			final String url = this.configurationService.getUrl();
+			final String apiAccessKey = this.configuration.getApiAccessKey();
+			final String url = this.configuration.getUrl();
 			mgr = RedmineManagerFactory.createWithApiKey(url, apiAccessKey);
 		} catch (final Exception e) {
 			LOGGER.error("Failed to create Redmine manager", e);
@@ -67,19 +69,45 @@ public class RedmineService implements IRedmineService {
 	}
 
 	@Override
-	public void createProject(String projectName) throws RedmineExtensionException {
+	public void createProject(String projectName, String username) throws RedmineExtensionException {
 		Objects.requireNonNull(projectName);
 
 		final RedmineManager mgr = createRedmineManager();
 		final ProjectManager projectManager = mgr.getProjectManager();
 		final Project project = ProjectFactory.create(projectName, createIdentifier(projectName));
 
+
 		try {
-			projectManager.createProject(project);
+
+			final Project redmineProject = projectManager.createProject(project);
+
+			addProjectMember(mgr, redmineProject, this.configuration.getAdminUserName());
+			addProjectMember(mgr, redmineProject, username);
 
 		} catch (final RedmineException e) {
 			throw new RedmineExtensionException("Failed to create projet " + projectName, e);
 		}
+	}
+
+	private void addProjectMember(final RedmineManager mgr, final Project redmineProject, String username) throws RedmineException {
+		final User adminUser = findUser(mgr, username);
+		if (adminUser != null) {
+			final UserManager userManager = mgr.getUserManager();
+			final MembershipManager membershipManager = mgr.getMembershipManager();
+			membershipManager.createMembershipForUser(redmineProject.getId(), adminUser.getId(), userManager.getRoles());
+		}
+	}
+
+	private User findUser(RedmineManager mgr, String username) throws RedmineException {
+		final UserManager userManager = mgr.getUserManager();
+		for (final User user : userManager.getUsers()) {
+			if (StringUtils.equals(user.getLogin(), username)) {
+				LOGGER.info("[redmine] user '{}' found", username);
+				return user;
+			}
+		}
+		LOGGER.info("[redmine] user '{}' not found", username);
+		return null;
 	}
 
 	private String createIdentifier(String projectName) {
@@ -114,6 +142,7 @@ public class RedmineService implements IRedmineService {
 		final List<RedmineIssue> redmineIssues;
 		final String projectName = query.getProjectName();
 		final int resultItemsLimit = query.getResultItemsLimit();
+		final String requestTargetVersion = query.getTargetVersion();
 		final int resultNumberOfItems;
 
 		try {
@@ -138,6 +167,14 @@ public class RedmineService implements IRedmineService {
 
 		for (int i = 0; i < resultNumberOfItems; i++) {
 			final Issue issue = issues.get(i);
+
+			if (requestTargetVersion != null) {
+				final Version issueTargetVersion = issue.getTargetVersion();
+				if (!StringUtils.equals(requestTargetVersion, issueTargetVersion.getName())) {
+					continue;
+				}
+			}
+
 			if (query.getStatusId() != -1 && query.getStatusId() != issue.getStatusId()) {
 				continue;
 			}
@@ -263,8 +300,8 @@ public class RedmineService implements IRedmineService {
 
 		final List<IProjectFeature> features = new ArrayList<IProjectFeature>();
 
-		features.addAll((buildFeaturesList(projectName, this.configurationService.getFeatureStatusNewId(), TicketStatus.NEW)));
-		features.addAll((buildFeaturesList(projectName, this.configurationService.getFeatureStatusNewId(), TicketStatus.CREATED)));
+		features.addAll((buildFeaturesList(projectName, this.configuration.getFeatureStatusNewId(), TicketStatus.NEW)));
+		features.addAll((buildFeaturesList(projectName, this.configuration.getFeatureStatusNewId(), TicketStatus.CREATED)));
 
 		return features;
 	}
@@ -273,7 +310,7 @@ public class RedmineService implements IRedmineService {
 		final Builder redmineQuerryBuilder = new RedmineQuery.Builder();
 
 		redmineQuerryBuilder.projectName(projectName)
-		                    .trackerId(this.configurationService.getFeatureTrackerId())
+		                    .trackerId(this.configuration.getFeatureTrackerId())
 		                    .statusId(satusId);
 
 

@@ -34,6 +34,8 @@ public class RedmineConfigurationService {
     @Value("${ksf.redmine.releaseTicketMessagePattern}")
     private String releaseTicketMessagePattern;
 
+    @Value("${ksf.redmine.adminUsername}")
+    private String adminUserName;
 
 	public String getUrl() {
         if ('/' == this.url.charAt(this.url.length() - 1)) {
@@ -89,5 +91,12 @@ public class RedmineConfigurationService {
 	 */
 	public String getReleaseTicketMessagePattern() {
 		return this.releaseTicketMessagePattern;
+	}
+
+	/**
+	 * @return the adminUserName
+	 */
+	public String getAdminUserName() {
+		return this.adminUserName;
 	}
 }

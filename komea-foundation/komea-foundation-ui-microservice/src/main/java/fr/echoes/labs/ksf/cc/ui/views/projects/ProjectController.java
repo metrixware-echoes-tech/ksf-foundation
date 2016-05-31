@@ -79,7 +79,7 @@ public class ProjectController {
 	Gate gate;
 
 	@Autowired(required = false)
-	private IValidator[] validator;
+	private IValidator[] validators;
 
 
 	@RequestMapping(value = "/ui/projects/new", method = RequestMethod.POST)
@@ -142,6 +142,10 @@ public class ProjectController {
 			throw new ProjectNotFoundException();
 		}
 
+		for (final IValidator validator : this.validators) {
+			validator.validateRelease(project.getName(), releaseVersion);
+		}
+
         this.gate.dispatch(new FinishReleaseCommand(project, releaseVersion));
 
 		return new ModelAndView("redirect:/ui/projects/" + project.getKey());
@@ -168,6 +172,10 @@ public class ProjectController {
 
 		if (project == null) {
 			throw new ProjectNotFoundException();
+		}
+
+		for (final IValidator validator : this.validators) {
+			validator.validateFeature(project.getName(), featureId, featureSubject);
 		}
 
         this.gate.dispatch(new FinishFeatureCommand(project, featureId, featureSubject));

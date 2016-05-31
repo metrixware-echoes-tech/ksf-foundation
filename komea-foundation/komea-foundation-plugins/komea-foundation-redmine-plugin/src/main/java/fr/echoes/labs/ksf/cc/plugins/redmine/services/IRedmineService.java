@@ -20,9 +20,10 @@ public interface IRedmineService {
 	 * Creates a new project.
 	 *
 	 * @param projectName the project name.
+	 * @param username the current username. This user will be add as a member of the new project.
 	 * @return
 	 */
-	public void createProject(String projectName) throws RedmineExtensionException;
+	public void createProject(String projectName, String username) throws RedmineExtensionException;
 
 	/**
 	 * Deletes the given project.
