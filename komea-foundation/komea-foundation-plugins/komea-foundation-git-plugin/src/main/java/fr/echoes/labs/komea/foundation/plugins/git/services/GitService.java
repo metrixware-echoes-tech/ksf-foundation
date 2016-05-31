@@ -14,6 +14,7 @@ import org.eclipse.jgit.api.CreateBranchCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.MergeCommand;
 import org.eclipse.jgit.api.MergeResult;
+import org.eclipse.jgit.api.TransportConfigCallback;
 import org.eclipse.jgit.api.errors.CannotDeleteCurrentBranchException;
 import org.eclipse.jgit.api.errors.CheckoutConflictException;
 import org.eclipse.jgit.api.errors.ConcurrentRefUpdateException;
@@ -28,11 +29,18 @@ import org.eclipse.jgit.api.errors.TransportException;
 import org.eclipse.jgit.api.errors.WrongRepositoryStateException;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.Ref;
+import org.eclipse.jgit.transport.JschConfigSessionFactory;
+import org.eclipse.jgit.transport.OpenSshConfig.Host;
+import org.eclipse.jgit.transport.SshSessionFactory;
+import org.eclipse.jgit.transport.SshTransport;
+import org.eclipse.jgit.transport.Transport;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.jcraft.jsch.Session;
 
 import fr.echoes.labs.komea.foundation.plugins.git.GitExtensionException;
 
@@ -200,7 +208,10 @@ public class GitService implements IGitService {
 	private Git callCloneCommand(final String gitProjectUri, File workingDirectory)
 			throws GitAPIException, InvalidRemoteException, TransportException {
 
+
 		final CloneCommand cloneCommand = Git.cloneRepository().setURI(gitProjectUri).setDirectory(workingDirectory);
+
+		configureHostKeyChecking(cloneCommand);
 
 		final String username = this.configuration.getUsername();
 		final String password = this.configuration.getPassword();
@@ -211,6 +222,33 @@ public class GitService implements IGitService {
 		}
 
 		return cloneCommand.call();
+	}
+
+	private void configureHostKeyChecking(final CloneCommand cloneCommand) {
+
+		LOGGER.info("[git] StrictHostKeyChecking is {}", this.configuration.isStrictHostKeyChecking());
+
+		if (this.configuration.isStrictHostKeyChecking()) {
+			return; // true/yes is the default value so we don't need to change the configuration
+		}
+
+		final SshSessionFactory sshSessionFactory = new JschConfigSessionFactory() {
+
+			@Override
+			protected void configure(Host hc, Session session) {
+				session.setConfig("StrictHostKeyChecking", "no");
+
+			}
+		};
+		cloneCommand.setTransportConfigCallback(new TransportConfigCallback() {
+
+			@Override
+			public void configure(Transport transport) {
+				final SshTransport sshTransport = ( SshTransport )transport;
+				sshTransport.setSshSessionFactory( sshSessionFactory );
+
+			}
+		});
 	}
 
 	private MergeResult mergeBranches(Git git, String originBranch, String destinationBranch) throws IOException, NoHeadException, ConcurrentRefUpdateException, CheckoutConflictException, InvalidMergeHeadsException, WrongRepositoryStateException, NoMessageException, GitAPIException  {

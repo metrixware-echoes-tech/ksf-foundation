@@ -37,6 +37,9 @@ public class GitConfigurationService {
 	@Value("${ksf.git.password:}")
 	private String password;
 
+	@Value("${ksf.git.strictHostKeyChecking:true}")
+	private boolean strictHostKeyChecking;
+
 	public String getScmUrl() {
 		return this.scmUrl;
 	}
@@ -77,6 +80,13 @@ public class GitConfigurationService {
 	 */
 	public String getUsername() {
 		return this.username;
+	}
+
+	/**
+	 * @return the strictHostKeyChecking
+	 */
+	public boolean isStrictHostKeyChecking() {
+		return this.strictHostKeyChecking;
 	}
 
 }
