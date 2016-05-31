@@ -64,9 +64,9 @@ public class JenkinsProjectDashboardWidget implements ProjectDashboardWidget {
 
 	@Autowired
 	private ServletContext servletContext;
-	
+
 	@Autowired
-	IProjectDAO projectDao;	
+	IProjectDAO projectDao;
 
 	@Override
 	public List<MenuAction> getDropdownActions() {
@@ -138,26 +138,31 @@ public class JenkinsProjectDashboardWidget implements ProjectDashboardWidget {
 
 					try {
 						url = URLDecoder.decode(buildUrl, "UTF-8");
-					} catch (UnsupportedEncodingException e) {
+					} catch (final UnsupportedEncodingException e) {
 						LOGGER.error("", e);
 						url = JenkinsProjectDashboardWidget.this.configurationService.getUrl();
 					}
 				} else {
 					try {
-						final Project project = projectDao.findByKey(projectKey);
-						final String jobId = jenkinsService.getJobId(project.getName());
+						final Project project = JenkinsProjectDashboardWidget.this.projectDao.findByKey(projectKey);
+						final String jobId = JenkinsProjectDashboardWidget.this.jenkinsService.getJobId(project.getName());
 						if (StringUtils.isNotEmpty(jobId)) {
 							url = url + "/job/" + jobId;
 						}
-					} catch (JenkinsExtensionException e) {
+					} catch (final JenkinsExtensionException e) {
 						LOGGER.error("[Jenkins] failed to construct Jenkins project URL", e);
-					}					
+					}
 				}
 
 
 				ctx.setVariable("jenkinsURL", url);
 
 				return templateEngine.process("jenkinsManagementPanel", ctx);
+			}
+
+			@Override
+			public String getIconUrl() {
+				return JenkinsProjectDashboardWidget.this.getIconUrl();
 			}
 		};
 

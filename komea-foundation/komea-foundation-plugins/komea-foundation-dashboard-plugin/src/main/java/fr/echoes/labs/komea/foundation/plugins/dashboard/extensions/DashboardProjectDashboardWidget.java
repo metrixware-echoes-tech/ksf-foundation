@@ -106,6 +106,11 @@ public class DashboardProjectDashboardWidget implements ProjectDashboardWidget {
 
 				return templateEngine.process("dashboardManagementPanel", ctx);
 			}
+
+			@Override
+			public String getIconUrl() {
+				return DashboardProjectDashboardWidget.this.getIconUrl();
+			}
 		};
 
 		return Lists.newArrayList(iframePanel);

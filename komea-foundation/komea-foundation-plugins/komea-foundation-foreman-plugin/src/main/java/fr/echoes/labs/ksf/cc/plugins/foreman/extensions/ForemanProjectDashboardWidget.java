@@ -139,13 +139,13 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
 
 				final Context ctx = new Context();
 
-				HttpServletRequest request =
+				final HttpServletRequest request =
 						((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
 						.getRequest();
 
 				String foremanURL = ForemanProjectDashboardWidget.this.configurationService.getForemanUrl();
 
-				String foremanHost = request.getParameter("foremanHost");
+				final String foremanHost = request.getParameter("foremanHost");
 
 				if (StringUtils.isNotEmpty(foremanHost)) {
 					foremanURL += "/hosts/"+foremanHost;
@@ -154,6 +154,11 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
 				ctx.setVariable("foremanURL", foremanURL);
 
 				return templateEngine.process("foremanManagementPanel", ctx);
+			}
+
+			@Override
+			public String getIconUrl() {
+				return ForemanProjectDashboardWidget.this.getIconUrl();
 			}
 		};
 

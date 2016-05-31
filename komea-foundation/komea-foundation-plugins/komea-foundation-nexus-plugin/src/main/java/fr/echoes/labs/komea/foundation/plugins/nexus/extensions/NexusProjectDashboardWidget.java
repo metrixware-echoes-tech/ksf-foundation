@@ -81,6 +81,11 @@ public class NexusProjectDashboardWidget implements ProjectDashboardWidget {
 
 				return templateEngine.process("nexusManagementPanel", ctx);
 			}
+
+			@Override
+			public String getIconUrl() {
+				return NexusProjectDashboardWidget.this.getIconUrl();
+			}
 		};
 
 		return Lists.newArrayList(iframePanel);

@@ -7,10 +7,10 @@ package fr.echoes.labs.ksf.cc.plugins.redmine;
 public class RedmineQuery {
 
 	private final String projectName;
-	private int resultItemsLimit;
-	private int trackerId;
-	private int statusId;
-	
+	private final int resultItemsLimit;
+	private final int trackerId;
+	private final int statusId;
+
 	public static class Builder {
 		private String projectName;
 		private int resultItemsLimit = -1;
@@ -21,21 +21,21 @@ public class RedmineQuery {
 			this.projectName = projectName;
 			return this;
 		}
-		
+
 		public Builder resultItemsLimit(int resultItemsLimit) {
 			this.resultItemsLimit = resultItemsLimit;
 			return this;
 		}
-		
+
 		public Builder trackerId(int trackerId) {
 			this.trackerId = trackerId;
-			return this;			
+			return this;
 		}
 
 		public Builder statusId(int statusId) {
 			this.statusId = statusId;
-			return this;			
-		}		
+			return this;
+		}
 
 		public RedmineQuery build() {
 			return new RedmineQuery(this);
@@ -60,20 +60,20 @@ public class RedmineQuery {
 	 * @return the resultItemsLimit
 	 */
 	public int getResultItemsLimit() {
-		return resultItemsLimit;
+		return this.resultItemsLimit;
 	}
 
 	/**
 	 * @return the trackerId
 	 */
 	public int getTrackerId() {
-		return trackerId;
+		return this.trackerId;
 	}
 
 	/**
 	 * @return the statusId
 	 */
 	public int getStatusId() {
-		return statusId;
+		return this.statusId;
 	}
 }

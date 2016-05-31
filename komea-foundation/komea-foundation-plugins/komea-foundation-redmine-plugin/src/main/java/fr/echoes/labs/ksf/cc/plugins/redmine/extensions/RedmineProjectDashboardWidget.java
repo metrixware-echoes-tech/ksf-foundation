@@ -66,8 +66,8 @@ public class RedmineProjectDashboardWidget implements ProjectDashboardWidget {
 	private IRedmineService redmineService;
 
 	@Autowired
-	IProjectDAO projectDao;	
-	
+	IProjectDAO projectDao;
+
 	@Override
 	public List<MenuAction> getDropdownActions() {
 
@@ -120,7 +120,7 @@ public class RedmineProjectDashboardWidget implements ProjectDashboardWidget {
 
 	@Override
 	public List<IProjectTabPanel> getTabPanels(final String projectKey) {
-		
+
 		final IProjectTabPanel iframePanel = new IProjectTabPanel() {
 
 			@Override
@@ -144,22 +144,27 @@ public class RedmineProjectDashboardWidget implements ProjectDashboardWidget {
 				if (StringUtils.isNotEmpty(redmineIssue)) {
 					url += "/issues/" + redmineIssue;
 				} else {
-					final Project project = projectDao.findByKey(projectKey);
+					final Project project = RedmineProjectDashboardWidget.this.projectDao.findByKey(projectKey);
 					if (project != null) {
 						try {
-							final String projectId = redmineService.getProjectId(project.getName());
+							final String projectId = RedmineProjectDashboardWidget.this.redmineService.getProjectId(project.getName());
 							if (StringUtils.isNotEmpty(projectId)) {
-								url += "/projects/" + projectId;			
+								url += "/projects/" + projectId;
 							}
-						} catch (RedmineExtensionException e) {
+						} catch (final RedmineExtensionException e) {
 							LOGGER.error("[Redmine] failed to construct Redmine project URL", e);
-						}											
+						}
 					}
 				}
 
 				ctx.setVariable("redmineURL", url);
 
 				return templateEngine.process("redmineManagementPanel", ctx);
+			}
+
+			@Override
+			public String getIconUrl() {
+				return RedmineProjectDashboardWidget.this.getIconUrl();
 			}
 		};
 

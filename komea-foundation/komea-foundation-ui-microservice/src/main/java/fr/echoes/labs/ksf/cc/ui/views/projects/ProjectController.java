@@ -43,6 +43,7 @@ import com.tocea.corolla.users.domain.User;
 
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.IProjectTabPanel;
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
+import fr.echoes.labs.ksf.cc.extensions.services.project.IValidator;
 import fr.echoes.labs.ksf.cc.extmanager.projects.ui.IProjectDashboardExtensionManager;
 import fr.echoes.labs.ksf.cc.releases.dao.IReleaseDAO;
 import fr.echoes.labs.ksf.cc.releases.model.Release;
@@ -76,6 +77,10 @@ public class ProjectController {
 
 	@Autowired
 	Gate gate;
+
+	@Autowired(required = false)
+	private IValidator[] validator;
+
 
 	@RequestMapping(value = "/ui/projects/new", method = RequestMethod.POST)
 	public ModelAndView createProject(@Valid @ModelAttribute("project") SFProjectDTO newProject, final BindingResult _result) {
@@ -157,7 +162,7 @@ public class ProjectController {
 	}
 
 	@RequestMapping(value = "/ui/projects/features/finish")
-	public ModelAndView closeFeature(@RequestParam("projectKey") final String projectKey, @RequestParam("featureId") final String featureId, @RequestParam("featureSubject") final String featureSubject) {
+	public ModelAndView finishFeature(@RequestParam("projectKey") final String projectKey, @RequestParam("featureId") final String featureId, @RequestParam("featureSubject") final String featureSubject) {
 
 		final Project project = this.projectDao.findByKey(projectKey);
 

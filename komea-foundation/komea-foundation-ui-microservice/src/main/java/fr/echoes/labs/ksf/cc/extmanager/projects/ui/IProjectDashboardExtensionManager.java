@@ -2,6 +2,7 @@ package fr.echoes.labs.ksf.cc.extmanager.projects.ui;
 
 import java.util.List;
 
+import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.IProjectTabPanel;
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
 
 /**
@@ -12,11 +13,18 @@ import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWi
  *
  */
 public interface IProjectDashboardExtensionManager {
-	
+
 	/**
 	 * Get the widget dashboards
 	 *
 	 * @return the list of widget dashboards.
 	 */
 	List<ProjectDashboardWidget> getDashboardWidgets();
+
+	/**
+	 * Get the modules panels.
+	 *
+	 * @return the list of panels.
+	 */
+	List<IProjectTabPanel> getDashboardPanels(String projectKey);
 }
