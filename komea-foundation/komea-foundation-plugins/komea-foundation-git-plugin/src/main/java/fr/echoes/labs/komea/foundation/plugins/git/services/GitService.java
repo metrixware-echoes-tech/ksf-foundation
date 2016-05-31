@@ -7,7 +7,9 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.StrSubstitutor;
+import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.CreateBranchCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.MergeCommand;
@@ -17,13 +19,16 @@ import org.eclipse.jgit.api.errors.CheckoutConflictException;
 import org.eclipse.jgit.api.errors.ConcurrentRefUpdateException;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.InvalidMergeHeadsException;
+import org.eclipse.jgit.api.errors.InvalidRemoteException;
 import org.eclipse.jgit.api.errors.NoFilepatternException;
 import org.eclipse.jgit.api.errors.NoHeadException;
 import org.eclipse.jgit.api.errors.NoMessageException;
 import org.eclipse.jgit.api.errors.NotMergedException;
+import org.eclipse.jgit.api.errors.TransportException;
 import org.eclipse.jgit.api.errors.WrongRepositoryStateException;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.Ref;
+import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +69,7 @@ public class GitService implements IGitService {
 			LOGGER.debug("Cloning the repository {} into {}", gitProjectUri, workingDirectory);
 
 			// Clone the repository
-			git = Git.cloneRepository().setURI(gitProjectUri).setDirectory(workingDirectory).call();
+			git = callCloneCommand(gitProjectUri, workingDirectory);
 
 			// Create the master and develop branches.
 			// Add the build and publish scripts and push the modification to origin
@@ -161,7 +166,7 @@ public class GitService implements IGitService {
 
 			// Clone project
 			LOGGER.debug("Cloning the repository {} into {}", gitProjectUri, workingDirectory);
-			git = Git.cloneRepository().setURI(gitProjectUri).setDirectory(workingDirectory).call();
+			git = callCloneCommand(gitProjectUri, workingDirectory);
 
 			git.checkout()
 			.setName(DEVELOP)
@@ -190,6 +195,22 @@ public class GitService implements IGitService {
 				LOGGER.warn("Failed to delete the directory " + workingDirectory.getName(), e);
 			}
 		}
+	}
+
+	private Git callCloneCommand(final String gitProjectUri, File workingDirectory)
+			throws GitAPIException, InvalidRemoteException, TransportException {
+
+		final CloneCommand cloneCommand = Git.cloneRepository().setURI(gitProjectUri).setDirectory(workingDirectory);
+
+		final String username = this.configuration.getUsername();
+		final String password = this.configuration.getPassword();
+
+		if (!StringUtils.isBlank(username) && !StringUtils.isBlank(password)) {
+			final UsernamePasswordCredentialsProvider credentialsProvider = new UsernamePasswordCredentialsProvider(username, password);
+			cloneCommand.setCredentialsProvider(credentialsProvider);
+		}
+
+		return cloneCommand.call();
 	}
 
 	private MergeResult mergeBranches(Git git, String originBranch, String destinationBranch) throws IOException, NoHeadException, ConcurrentRefUpdateException, CheckoutConflictException, InvalidMergeHeadsException, WrongRepositoryStateException, NoMessageException, GitAPIException  {
@@ -234,7 +255,7 @@ public class GitService implements IGitService {
 
 			// Clone project
 			LOGGER.debug("Cloning the repository {} into {}", gitProjectUri, workingDirectory);
-			git = Git.cloneRepository().setURI(gitProjectUri).setDirectory(workingDirectory).call();
+			git = callCloneCommand(gitProjectUri, workingDirectory);
 
 			git.checkout()
 			.setName(branchName)

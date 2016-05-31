@@ -31,6 +31,12 @@ public class GitConfigurationService {
 	@Value("${ksf.projectScmUrlPattern}")
 	private String projectScmUrlPattern;
 
+	@Value("${ksf.git.username:}")
+	private String username;
+
+	@Value("${ksf.git.password:}")
+	private String password;
+
 	public String getScmUrl() {
 		return this.scmUrl;
 	}
@@ -57,6 +63,20 @@ public class GitConfigurationService {
 
 	public String getProjectScmUrlPattern() {
 		return this.projectScmUrlPattern;
+	}
+
+	/**
+	 * @return the password
+	 */
+	public String getPassword() {
+		return this.password;
+	}
+
+	/**
+	 * @return the username
+	 */
+	public String getUsername() {
+		return this.username;
 	}
 
 }
