@@ -1,4 +1,4 @@
-ï»¿<div class="alert alert-danger" role="alert" th:if="${redmineError != null}">
+<div class="alert alert-danger" role="alert" th:if="${redmineError != null}">
 	<span class="sr-only">Error:</span>
 	<span th:text="${redmineError}" th:remove="tag"></span>
 </div>
@@ -10,16 +10,16 @@
 			<tr>
 				<th>#</th>
 				<th>Version cible</th>
-				<!--/* <th>CatÃ©gorie</th> */-->
+				<!--/* <th>Catégorie</th> */-->
 				<th>Status</th>
-				<th>PrioritÃ©</th>
+				<th>Priorité</th>
 				<th>Sujet</th>
-				<th>AssigÃ© Ã </th>
+				<th>Assigé à</th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr th:each="issue : ${issues}">
-				<td><a th:href="${issuesBase} + ${issue.getId()} + '#pluginTab0'" th:text="${issue.getId()}"></a></td>
+				<td><a th:href="@{issuesBase} + ${issue.getId()} + '#pluginTab0'" th:text="${issue.getId()}"></a></td>
 				<td th:text="${issue.getTargetVersion()}"></td>
 				<!--/* <td th:text="${issue.getCategory()}"></td> */-->
 				<td th:text="${issue.getStatus()}"></td>
