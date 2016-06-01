@@ -35,11 +35,14 @@ import org.eclipse.jgit.transport.SshSessionFactory;
 import org.eclipse.jgit.transport.SshTransport;
 import org.eclipse.jgit.transport.Transport;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
+import org.eclipse.jgit.util.FS;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.jcraft.jsch.JSch;
+import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 
 import fr.echoes.labs.komea.foundation.plugins.git.GitExtensionException;
@@ -211,7 +214,7 @@ public class GitService implements IGitService {
 
 		final CloneCommand cloneCommand = Git.cloneRepository().setURI(gitProjectUri).setDirectory(workingDirectory);
 
-		configureHostKeyChecking(cloneCommand);
+		configureSshConnection(cloneCommand);
 
 		final String username = this.configuration.getUsername();
 		final String password = this.configuration.getPassword();
@@ -224,19 +227,31 @@ public class GitService implements IGitService {
 		return cloneCommand.call();
 	}
 
-	private void configureHostKeyChecking(final CloneCommand cloneCommand) {
+	private void configureSshConnection(final CloneCommand cloneCommand) {
 
-		LOGGER.info("[git] StrictHostKeyChecking is {}", this.configuration.isStrictHostKeyChecking());
-
-		if (this.configuration.isStrictHostKeyChecking()) {
-			return; // true/yes is the default value so we don't need to change the configuration
-		}
+		LOGGER.info("[git] configure SSH connection");
 
 		final SshSessionFactory sshSessionFactory = new JschConfigSessionFactory() {
 
 			@Override
+			protected JSch createDefaultJSch(FS fs) throws JSchException {
+				final JSch defaultJSch = super.createDefaultJSch(fs);
+				final String sshPrivateKeyPath = GitService.this.configuration.getSshPrivateKeyPath();
+
+				if (!StringUtils.isBlank(sshPrivateKeyPath)) {
+					LOGGER.info("[git] Use SSH private key : {}", sshPrivateKeyPath);
+					defaultJSch.addIdentity(sshPrivateKeyPath);
+				}
+
+				return defaultJSch;
+			}
+
+			@Override
 			protected void configure(Host hc, Session session) {
-				session.setConfig("StrictHostKeyChecking", "no");
+				if (!GitService.this.configuration.isStrictHostKeyChecking()) { // true/yes is the default value so we don't need to change the configuration
+					LOGGER.info("[git] StrictHostKeyChecking : no");
+					session.setConfig("StrictHostKeyChecking", "no");
+				}
 
 			}
 		};
@@ -244,9 +259,10 @@ public class GitService implements IGitService {
 
 			@Override
 			public void configure(Transport transport) {
+
 				final SshTransport sshTransport = ( SshTransport )transport;
 				sshTransport.setSshSessionFactory( sshSessionFactory );
-
+				LOGGER.info("[git] cloneCommand.setTransportConfigCallback");
 			}
 		});
 	}

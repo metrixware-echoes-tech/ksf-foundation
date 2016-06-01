@@ -40,6 +40,9 @@ public class GitConfigurationService {
 	@Value("${ksf.git.strictHostKeyChecking:true}")
 	private boolean strictHostKeyChecking;
 
+	@Value("${ksf.git.sshPrivateKeyPath:}")
+	protected String sshPrivateKeyPath;
+
 	public String getScmUrl() {
 		return this.scmUrl;
 	}
@@ -87,6 +90,13 @@ public class GitConfigurationService {
 	 */
 	public boolean isStrictHostKeyChecking() {
 		return this.strictHostKeyChecking;
+	}
+
+	/**
+	 * @return the sshPrivateKeyPath
+	 */
+	public String getSshPrivateKeyPath() {
+		return this.sshPrivateKeyPath;
 	}
 
 }
