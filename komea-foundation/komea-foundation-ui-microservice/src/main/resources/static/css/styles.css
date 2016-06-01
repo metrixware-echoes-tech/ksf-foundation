@@ -63,7 +63,7 @@
  	display: inline;
 }
 
-.project-overview .tab-content {
+.project-overview .tab-content .tab-project-information {
 	padding-top: 20px;
 }
 
@@ -80,3 +80,9 @@ html, body, iframe {
 	width: 60px;
 	margin-right: 10px;
 }
+
+.tab-content {
+	padding-bottom: 0;
+}
+
+

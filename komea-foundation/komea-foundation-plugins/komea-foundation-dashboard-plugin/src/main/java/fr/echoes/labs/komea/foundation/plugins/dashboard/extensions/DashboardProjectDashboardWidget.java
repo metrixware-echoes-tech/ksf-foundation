@@ -102,6 +102,8 @@ public class DashboardProjectDashboardWidget implements ProjectDashboardWidget {
 					ctx.setVariable("dashboardCustomPeriod", customPeriod);
 				}
 
+				LOGGER.info("[dashboard] project URL : {}", url);
+
 				ctx.setVariable("dashboardURL", url);
 
 				return templateEngine.process("dashboardManagementPanel", ctx);

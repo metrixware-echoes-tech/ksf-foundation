@@ -48,7 +48,7 @@
 								<input name="projectKey" type="hidden" th:value="${projectData.project.key}" />
 								<input name="featureId" type="hidden" th:value="${feature.getId()}" />
 								<input name="featureSubject" type="hidden" th:value="${feature.getSubject()}" />
-								<button class="glyphicon glyphicon-play" type="submit" style="color:DarkGreen"></button>
+								<button onclick="return confirm('Start feature ?')" class="glyphicon glyphicon-play" type="submit" style="color:DarkGreen"></button>
 							</form>
 							</div>
 
@@ -61,7 +61,7 @@
 								<input name="projectKey" type="hidden" th:value="${projectData.project.key}" />
 								<input name="featureId" type="hidden" th:value="${feature.getId()}" />
 								<input name="featureSubject" type="hidden" th:value="${feature.getSubject()}" />
-								<button class="glyphicon glyphicon-stop" type="submit" style="color:DarkRed"></button>
+								<button onclick="return confirm('Finish feature ?')" class="glyphicon glyphicon-stop" type="submit" style="color:DarkRed"></button>
 								<button class="glyphicon glyphicon-info-sign" data-dismiss="modal" type="button" data-toggle="modal" data-target="#featureInformation"></button>
 							</form>
 							</div>							
@@ -93,7 +93,7 @@
 								<input name="projectKey" type="hidden" th:value="${projectData.project.key}" />
 								<input name="releaseId" type="hidden" th:value="${release.getId()}" />
 								<input name="releaseVersion" type="hidden" th:value="${release.getName()}" />
-								<button class="glyphicon glyphicon-play" type="submit" style="color:DarkGreen"></button>
+								<button onclick="return confirm('Start release ?')" class="glyphicon glyphicon-play" type="submit" style="color:DarkGreen"></button>
 							</form>
 							</div>
 
@@ -105,7 +105,7 @@
 								<input name="projectKey" type="hidden" th:value="${projectData.project.key}" />
 								<input name="releaseId" type="hidden" th:value="${release.getId()}" />
 								<input name="releaseVersion" type="hidden" th:value="${release.getName()}" />
-								<button class="glyphicon glyphicon-stop" type="submit" style="color:DarkRed"></button>
+								<button onclick="return confirm('Finish release ?')" class="glyphicon glyphicon-stop" type="submit" style="color:DarkRed"></button>
 								<button class="glyphicon glyphicon-info-sign" data-dismiss="modal" type="button" data-toggle="modal" data-target="#featureInformation"></button>
 							</form>
 							</div>							

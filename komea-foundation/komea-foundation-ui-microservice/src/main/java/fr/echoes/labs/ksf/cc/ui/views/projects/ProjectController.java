@@ -142,8 +142,10 @@ public class ProjectController {
 			throw new ProjectNotFoundException();
 		}
 
-		for (final IValidator validator : this.validators) {
-			validator.validateRelease(project.getName(), releaseVersion);
+		if (this.validators != null) {
+			for (final IValidator validator : this.validators) {
+				validator.validateRelease(project.getName(), releaseVersion);
+			}
 		}
 
         this.gate.dispatch(new FinishReleaseCommand(project, releaseVersion));
@@ -174,8 +176,10 @@ public class ProjectController {
 			throw new ProjectNotFoundException();
 		}
 
-		for (final IValidator validator : this.validators) {
-			validator.validateFeature(project.getName(), featureId, featureSubject);
+		if (this.validators != null) {
+			for (final IValidator validator : this.validators) {
+				validator.validateFeature(project.getName(), featureId, featureSubject);
+			}
 		}
 
         this.gate.dispatch(new FinishFeatureCommand(project, featureId, featureSubject));

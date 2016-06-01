@@ -301,7 +301,7 @@ public class RedmineService implements IRedmineService {
 		final List<IProjectFeature> features = new ArrayList<IProjectFeature>();
 
 		features.addAll((buildFeaturesList(projectName, this.configuration.getFeatureStatusNewId(), TicketStatus.NEW)));
-		features.addAll((buildFeaturesList(projectName, this.configuration.getFeatureStatusNewId(), TicketStatus.CREATED)));
+		features.addAll((buildFeaturesList(projectName, this.configuration.getFeatureStatusAssignedId(), TicketStatus.CREATED)));
 
 		return features;
 	}

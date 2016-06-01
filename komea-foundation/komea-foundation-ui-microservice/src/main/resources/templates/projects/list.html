@@ -22,8 +22,10 @@
                             <tr>
                                 <th>Name</th>
                                 <th>Owner</th>
-                                <th>Tools</th>
-                                <th>Actions</th>
+                                <!-- th>Tools</th>
+                                <th>Actions</th -->
+                                <th></th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -36,12 +38,15 @@
                             		<a th:each="widget,it : ${@projectDashboardWidgets.getDashboardPanels(prod.project.key)}" th:href="@{/ui/projects/}+${prod.project.key}+${'#pluginTab'+it.index}"><img th:src="@{${widget.getIconUrl()}}" th:alt="@{${widget.getTitle()}}" data-toggle="tooltip" data-placement="bottom" th:title="@{${widget.getTitle()}}" /></a>
                             	</td>
                             	<td>
-                            		<a th:href="@{/ui/projects/}+${prod.project.key}" class="btn btn-primary">
+                            		<!-- a th:href="@{/ui/projects/}+${prod.project.key}" class="btn btn-primary">
                             			<span class="glyphicon glyphicon-eye-open"></span> Display
-                            		</a>
-                                    <a onclick="return confirm('Are you sure you want to remove project ?')" th:href="@{/ui/projects/delete/}+${prod.project.key}" class="btn btn-danger">
+                            		</a -->
+                                    <!-- a onclick="return confirm('Are you sure you want to remove project ?')" th:href="@{/ui/projects/delete/}+${prod.project.key}" class="btn btn-danger">
                                         <span class="glyphicon glyphicon-trash"></span> Delete
-                                    </a>
+                                    </a -->
+                                    <a onclick="return confirm('Are you sure you want to remove project ?')" th:href="@{/ui/projects/delete/}+${prod.project.key}">
+                                        <span class="fa fa-trash"></span> Delete
+                                    </a>                                    
                             	</td>
                             </tr>
                         </tbody>

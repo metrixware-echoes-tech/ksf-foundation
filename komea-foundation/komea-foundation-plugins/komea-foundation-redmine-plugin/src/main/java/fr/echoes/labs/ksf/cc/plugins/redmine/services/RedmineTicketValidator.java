@@ -6,6 +6,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import fr.echoes.labs.ksf.cc.extensions.services.project.IValidator;
 import fr.echoes.labs.ksf.cc.extensions.services.project.IValidatorResult;
@@ -16,6 +17,11 @@ import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineIssue;
 import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineQuery;
 import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineQuery.Builder;
 
+/**
+ * @author dcollard
+ *
+ */
+@Service
 public class RedmineTicketValidator implements IValidator {
 
 	@Autowired
@@ -48,12 +54,12 @@ public class RedmineTicketValidator implements IValidator {
 			final List<RedmineIssue> assignedIssues = getIssues(releaseName, this.configurationService.getFeatureStatusAssignedId());
 
 			for (final RedmineIssue issue : newIssues) {
-				final IValidatorResult validatorResult = new ValidatorResult(ValidatorResultType.ERROR, '#' + issue.getId() + " " + issue.getSubject());
+				final IValidatorResult validatorResult = new ValidatorResult(ValidatorResultType.ERROR, "REDMINE - Le ticket '#" + issue.getId() + "' n'est pas clos.");
 				result.add(validatorResult);
 			}
 
 			for (final RedmineIssue issue : assignedIssues) {
-				final IValidatorResult validatorResult = new ValidatorResult(ValidatorResultType.ERROR, '#' + issue.getId() + " " + issue.getSubject());
+				final IValidatorResult validatorResult = new ValidatorResult(ValidatorResultType.ERROR, "REDMINE - Le ticket '#" + issue.getId() + "' n'est pas clos.");
 				result.add(validatorResult);
 			}
 

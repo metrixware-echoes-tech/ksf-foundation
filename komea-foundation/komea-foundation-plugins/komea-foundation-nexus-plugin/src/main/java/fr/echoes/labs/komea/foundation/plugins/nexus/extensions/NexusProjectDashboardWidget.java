@@ -77,6 +77,8 @@ public class NexusProjectDashboardWidget implements ProjectDashboardWidget {
 
 				final String url = NexusProjectDashboardWidget.this.configurationService.getUrl();
 
+				LOGGER.info("[nexus] project URL : {}", url);
+
 				ctx.setVariable("nexusURL", url);
 
 				return templateEngine.process("nexusManagementPanel", ctx);

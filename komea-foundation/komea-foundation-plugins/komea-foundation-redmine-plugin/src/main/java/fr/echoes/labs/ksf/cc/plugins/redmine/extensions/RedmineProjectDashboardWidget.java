@@ -142,6 +142,7 @@ public class RedmineProjectDashboardWidget implements ProjectDashboardWidget {
 				final String redmineIssue = request.getParameter("redmineIssue");
 
 				if (StringUtils.isNotEmpty(redmineIssue)) {
+					LOGGER.info("[redmine] paramater redmineIssue={} found in URL.", redmineIssue);
 					url += "/issues/" + redmineIssue;
 				} else {
 					final Project project = RedmineProjectDashboardWidget.this.projectDao.findByKey(projectKey);
@@ -156,6 +157,8 @@ public class RedmineProjectDashboardWidget implements ProjectDashboardWidget {
 						}
 					}
 				}
+
+				LOGGER.info("[redmine] project URL : {}", url);
 
 				ctx.setVariable("redmineURL", url);
 

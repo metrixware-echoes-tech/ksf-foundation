@@ -154,6 +154,7 @@ public class JenkinsProjectDashboardWidget implements ProjectDashboardWidget {
 					}
 				}
 
+				LOGGER.info("[jenkins] project URL : {}", url);
 
 				ctx.setVariable("jenkinsURL", url);
 

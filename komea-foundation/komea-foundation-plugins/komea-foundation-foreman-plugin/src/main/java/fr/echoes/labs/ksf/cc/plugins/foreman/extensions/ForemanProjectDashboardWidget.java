@@ -151,6 +151,8 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
 					foremanURL += "/hosts/"+foremanHost;
 				}
 
+				LOGGER.info("[redmine] project URL : {}", foremanURL);
+
 				ctx.setVariable("foremanURL", foremanURL);
 
 				return templateEngine.process("foremanManagementPanel", ctx);
