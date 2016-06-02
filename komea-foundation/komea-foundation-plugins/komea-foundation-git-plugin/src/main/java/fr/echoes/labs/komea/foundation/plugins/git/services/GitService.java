@@ -210,7 +210,7 @@ public class GitService implements IGitService {
 
 		final CloneCommand cloneCommand = Git.cloneRepository().setURI(gitProjectUri).setDirectory(workingDirectory);
 
-//		configureSshConnection(cloneCommand);
+		configureSshConnection(cloneCommand);
 //
 //		final String username = this.configuration.getUsername();
 //		final String password = this.configuration.getPassword();
@@ -226,6 +226,19 @@ public class GitService implements IGitService {
 	private void configureSshConnection(final CloneCommand cloneCommand) {
 
 		LOGGER.info("[git] configure SSH connection");
+
+		if (!GitService.this.configuration.isStrictHostKeyChecking()) { // true/yes is the default value so we don't need to change the configuration
+
+            SshSessionFactory. setInstance(new JschConfigSessionFactory() {
+
+
+            	@Override
+            	protected void configure(Host hc, Session session) {
+            		LOGGER.info("[git] set StrictHostKeyChecking to 'no'");
+            		session.setConfig("StrictHostKeyChecking" , "no");
+            	}
+            });
+		}
 
 //		final SshSessionFactory sshSessionFactory = new JschConfigSessionFactory() {
 //
@@ -251,32 +264,6 @@ public class GitService implements IGitService {
 //
 //			}
 //		};
-
-		if (!GitService.this.configuration.isStrictHostKeyChecking()) { // true/yes is the default value so we don't need to change the configuration
-
-            SshSessionFactory. setInstance(new JschConfigSessionFactory() {
-
-
-            	@Override
-            	protected void configure(Host hc, Session session) {
-            		LOGGER.info("[git] set StrictHostKeyChecking to 'no'");
-            		session.setConfig("StrictHostKeyChecking" , "no");
-            	}
-            });
-
-		}
-
-
-//		cloneCommand.setTransportConfigCallback(new TransportConfigCallback() {
-//
-//			@Override
-//			public void configure(Transport transport) {
-//
-//				final SshTransport sshTransport = ( SshTransport )transport;
-//				sshTransport.setSshSessionFactory( sshSessionFactory );
-//				LOGGER.info("[git] cloneCommand.setTransportConfigCallback");
-//			}
-//		});
 	}
 
 	private MergeResult mergeBranches(Git git, String branch, String destinationBranch) throws IOException, NoHeadException, ConcurrentRefUpdateException, CheckoutConflictException, InvalidMergeHeadsException, WrongRepositoryStateException, NoMessageException, GitAPIException  {
@@ -290,8 +277,6 @@ public class GitService implements IGitService {
 						.call();
 
 		final MergeCommand mergeCommand = git.merge();
-		//refs/remotes/origin/feat-448-Evo1
-		final Map<String, Ref> allRefs = git.getRepository().getAllRefs();
 		final Ref ref = git.getRepository().findRef(Constants.DEFAULT_REMOTE_NAME + "/" + branch);
 		mergeCommand.include(ref);
 		return mergeCommand.call();
@@ -300,11 +285,14 @@ public class GitService implements IGitService {
 
 
 	private void deleteBranche(Git git, String branchName) throws NotMergedException, CannotDeleteCurrentBranchException, GitAPIException {
+
+		// Delete local branch
 		final DeleteBranchCommand branchDelete = git.branchDelete().setBranchNames(Constants.DEFAULT_REMOTE_NAME + "/" + branchName);
 		branchDelete.call();
 
-		final RefSpec refSpec = new RefSpec().setSource(null).setDestination(Constants.DEFAULT_REMOTE_NAME + "/" + branchName);
-		git.push().setRefSpecs(refSpec).setRemote(Constants.DEFAULT_REMOTE_NAME).call();
+		// Delete remote branch
+        final RefSpec deleteSpec = new RefSpec().setSource(null).setDestination(Constants.R_HEADS + branchName);
+        git.push().setRemote(Constants.DEFAULT_REMOTE_NAME).setRefSpecs(deleteSpec).call();
 	}
 
 
@@ -395,4 +383,5 @@ public class GitService implements IGitService {
 		sub.setVariablePrefix("%{");
 		return sub.replace(str);
 	}
+
 }
