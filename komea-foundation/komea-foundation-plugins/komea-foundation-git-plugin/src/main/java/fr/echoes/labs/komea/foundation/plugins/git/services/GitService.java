@@ -2,12 +2,12 @@ package fr.echoes.labs.komea.foundation.plugins.git.services;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.Normalizer;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.StrSubstitutor;
 import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.CreateBranchCommand;
@@ -15,7 +15,6 @@ import org.eclipse.jgit.api.DeleteBranchCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.MergeCommand;
 import org.eclipse.jgit.api.MergeResult;
-import org.eclipse.jgit.api.TransportConfigCallback;
 import org.eclipse.jgit.api.errors.CannotDeleteCurrentBranchException;
 import org.eclipse.jgit.api.errors.CheckoutConflictException;
 import org.eclipse.jgit.api.errors.ConcurrentRefUpdateException;
@@ -34,17 +33,11 @@ import org.eclipse.jgit.transport.JschConfigSessionFactory;
 import org.eclipse.jgit.transport.OpenSshConfig.Host;
 import org.eclipse.jgit.transport.RefSpec;
 import org.eclipse.jgit.transport.SshSessionFactory;
-import org.eclipse.jgit.transport.SshTransport;
-import org.eclipse.jgit.transport.Transport;
-import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
-import org.eclipse.jgit.util.FS;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.jcraft.jsch.JSch;
-import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 
 import fr.echoes.labs.komea.foundation.plugins.git.GitExtensionException;
@@ -234,46 +227,56 @@ public class GitService implements IGitService {
 
 		LOGGER.info("[git] configure SSH connection");
 
-		final SshSessionFactory sshSessionFactory = new JschConfigSessionFactory() {
+//		final SshSessionFactory sshSessionFactory = new JschConfigSessionFactory() {
+//
+//			@Override
+//			protected JSch createDefaultJSch(FS fs) throws JSchException {
+//				final JSch defaultJSch = super.createDefaultJSch(fs);
+//				final String sshPrivateKeyPath = GitService.this.configuration.getSshPrivateKeyPath();
+//
+//				if (!StringUtils.isBlank(sshPrivateKeyPath)) {
+//					LOGGER.info("[git] Use SSH private key : {}", sshPrivateKeyPath);
+//					defaultJSch.addIdentity(sshPrivateKeyPath);
+//				}
+//
+//				return defaultJSch;
+//			}
+//
+//			@Override
+//			protected void configure(Host hc, Session session) {
+//				if (!GitService.this.configuration.isStrictHostKeyChecking()) { // true/yes is the default value so we don't need to change the configuration
+//					LOGGER.info("[git] StrictHostKeyChecking : no");
+//					session.setConfig("StrictHostKeyChecking", "no");
+//				}
+//
+//			}
+//		};
 
-			@Override
-			protected JSch createDefaultJSch(FS fs) throws JSchException {
-				final JSch defaultJSch = super.createDefaultJSch(fs);
-				final String sshPrivateKeyPath = GitService.this.configuration.getSshPrivateKeyPath();
-
-				if (!StringUtils.isBlank(sshPrivateKeyPath)) {
-					LOGGER.info("[git] Use SSH private key : {}", sshPrivateKeyPath);
-					defaultJSch.addIdentity(sshPrivateKeyPath);
-				}
-
-				return defaultJSch;
-			}
-
-			@Override
-			protected void configure(Host hc, Session session) {
-				if (!GitService.this.configuration.isStrictHostKeyChecking()) { // true/yes is the default value so we don't need to change the configuration
-					LOGGER.info("[git] StrictHostKeyChecking : no");
-					session.setConfig("StrictHostKeyChecking", "no");
-				}
-
-			}
-		};
-		
 		if (!GitService.this.configuration.isStrictHostKeyChecking()) { // true/yes is the default value so we don't need to change the configuration
-			
+
+            SshSessionFactory. setInstance(new JschConfigSessionFactory() {
+
+
+            	@Override
+            	protected void configure(Host hc, Session session) {
+            		LOGGER.info("[git] set StrictHostKeyChecking to 'no'");
+            		session.setConfig("StrictHostKeyChecking" , "no");
+            	}
+            });
+
 		}
-		
-		
-		cloneCommand.setTransportConfigCallback(new TransportConfigCallback() {
 
-			@Override
-			public void configure(Transport transport) {
 
-				final SshTransport sshTransport = ( SshTransport )transport;
-				sshTransport.setSshSessionFactory( sshSessionFactory );
-				LOGGER.info("[git] cloneCommand.setTransportConfigCallback");
-			}
-		});
+//		cloneCommand.setTransportConfigCallback(new TransportConfigCallback() {
+//
+//			@Override
+//			public void configure(Transport transport) {
+//
+//				final SshTransport sshTransport = ( SshTransport )transport;
+//				sshTransport.setSshSessionFactory( sshSessionFactory );
+//				LOGGER.info("[git] cloneCommand.setTransportConfigCallback");
+//			}
+//		});
 	}
 
 	private MergeResult mergeBranches(Git git, String branch, String destinationBranch) throws IOException, NoHeadException, ConcurrentRefUpdateException, CheckoutConflictException, InvalidMergeHeadsException, WrongRepositoryStateException, NoMessageException, GitAPIException  {
@@ -285,10 +288,10 @@ public class GitService implements IGitService {
 				.setStartPoint(
 						Constants.DEFAULT_REMOTE_NAME + "/" + destinationBranch)
 						.call();
-		
+
 		final MergeCommand mergeCommand = git.merge();
 		//refs/remotes/origin/feat-448-Evo1
-		Map<String, Ref> allRefs = git.getRepository().getAllRefs();
+		final Map<String, Ref> allRefs = git.getRepository().getAllRefs();
 		final Ref ref = git.getRepository().findRef(Constants.DEFAULT_REMOTE_NAME + "/" + branch);
 		mergeCommand.include(ref);
 		return mergeCommand.call();
@@ -297,10 +300,10 @@ public class GitService implements IGitService {
 
 
 	private void deleteBranche(Git git, String branchName) throws NotMergedException, CannotDeleteCurrentBranchException, GitAPIException {
-		DeleteBranchCommand branchDelete = git.branchDelete().setBranchNames(Constants.DEFAULT_REMOTE_NAME + "/" + branchName);
+		final DeleteBranchCommand branchDelete = git.branchDelete().setBranchNames(Constants.DEFAULT_REMOTE_NAME + "/" + branchName);
 		branchDelete.call();
-		
-		RefSpec refSpec = new RefSpec().setSource(null).setDestination(Constants.DEFAULT_REMOTE_NAME + "/" + branchName);
+
+		final RefSpec refSpec = new RefSpec().setSource(null).setDestination(Constants.DEFAULT_REMOTE_NAME + "/" + branchName);
 		git.push().setRefSpecs(refSpec).setRemote(Constants.DEFAULT_REMOTE_NAME).call();
 	}
 
@@ -366,14 +369,14 @@ public class GitService implements IGitService {
 	private String getReleaseBranchName(String projectName, String releaseVersion) {
 		final Map<String, String> variables = new HashMap<String, String>(1);
 		variables.put("releaseVersion", releaseVersion);
-		return replaceVariables(this.configuration.getBranchReleasePattern(), variables);
+		return createIdentifier(replaceVariables(this.configuration.getBranchReleasePattern(), variables));
 	}
 
 	private String getFeatureBranchName(String projectName, String featureId, String featureDescription) {
 		final Map<String, String> variables = new HashMap<String, String>(2);
 		variables.put("featureId", featureId);
 		variables.put("featureDescription", featureDescription);
-		return replaceVariables(this.configuration.getBranchFeaturePattern(), variables);
+		return createIdentifier(replaceVariables(this.configuration.getBranchFeaturePattern(), variables));
 	}
 
 	@Override
@@ -381,6 +384,10 @@ public class GitService implements IGitService {
 			throws GitExtensionException {
 
 
+	}
+
+	private String createIdentifier(String projectName) {
+		return  Normalizer.normalize(projectName, Normalizer.Form.NFD).replaceAll("[^\\dA-Za-z\\-]", "").replaceAll("\\s+","-" ).toLowerCase();
 	}
 
 	private String replaceVariables(String str, Map<String, String> variables) {

@@ -111,7 +111,7 @@ public class RedmineService implements IRedmineService {
 	}
 
 	private String createIdentifier(String projectName) {
-		return  Normalizer.normalize(projectName, Normalizer.Form.NFD).replaceAll("[^\\dA-Za-z ]", "").replaceAll("\\s+","-" ).toLowerCase();
+		return  Normalizer.normalize(projectName, Normalizer.Form.NFD).replaceAll("[^\\dA-Za-z\\-]", "").replaceAll("\\s+","-" ).toLowerCase();
 	}
 
 	@Override

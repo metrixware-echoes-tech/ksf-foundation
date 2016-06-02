@@ -36,8 +36,8 @@ public class DashboardProjectLifeCycleExtension implements IProjectLifecycleExte
 	private ApplicationContext applicationContext;
 
 	@Autowired
-	private DashboardConfigurationService configurationService;	
-	
+	private DashboardConfigurationService configurationService;
+
 	private ICurrentUserService currentUserService;
 
 	public void init() {
@@ -64,9 +64,9 @@ public class DashboardProjectLifeCycleExtension implements IProjectLifecycleExte
 
 		final String projectName = project.getName();
 		final String projectKey = createIdentifier(projectName);
-		
-		final String url = configurationService.getUrl() + "/organization";
-		
+
+		final String url = this.configurationService.getUrl() + "/organization";
+
 		final OrganizationStorageClient organizationStorageClient = new OrganizationStorageClient(url);
 		final EntityType projectEntity = new EntityType().setKey(projectKey).setName(projectName);
 		organizationStorageClient.createEntityTypesIfNotExist(projectEntity);
@@ -98,24 +98,24 @@ public class DashboardProjectLifeCycleExtension implements IProjectLifecycleExte
 	@Override
 	public void notifyCreatedFeature(ProjectDto project, String featureId,
 			String featureSubject) {
-	
+
 	}
 
 	private String createIdentifier(String projectName) {
-		return  Normalizer.normalize(projectName, Normalizer.Form.NFD).replaceAll("[^\\dA-Za-z ]", "").replaceAll("\\s+","-" ).toLowerCase();
+		return  Normalizer.normalize(projectName, Normalizer.Form.NFD).replaceAll("[^\\dA-Za-z\\-]", "").replaceAll("\\s+","-" ).toLowerCase();
 	}
 
 
 	@Override
 	public void notifyFinishedRelease(ProjectDto project, String releaseName) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void notifyFinishedFeature(ProjectDto projectDto, String featureId,
 			String featureSubject) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -300,14 +301,14 @@ public class JenkinsService implements IJenkinsService {
 	private String getGitReleaseBranchName(String projectName, String releaseVersion) {
 		final Map<String, String> variables = new HashMap<String, String>(1);
 		variables.put("releaseVersion", releaseVersion);
-		return replaceVariables(this.configurationService.getGitReleaseBranchPattern(), variables);
+		return createIdentifier(replaceVariables(this.configurationService.getGitReleaseBranchPattern(), variables));
 	}
 
 	private String getGitFeatureBranchName(String projectName, String featureId, String featureDescription) {
 		final Map<String, String> variables = new HashMap<String, String>(2);
 		variables.put("featureId", featureId);
 		variables.put("featureDescription", featureDescription);
-		return replaceVariables(this.configurationService.getGitFeatureBranchPattern(), variables);
+		return createIdentifier(replaceVariables(this.configurationService.getGitFeatureBranchPattern(), variables));
 	}
 
 	private String getProjectScmUrl(String projectName) {
@@ -354,6 +355,10 @@ public class JenkinsService implements IJenkinsService {
 	public JenkinsBuildInfo getReleaseStatus(String projectName, String releaseVersion) throws JenkinsExtensionException {
 		final String releaseJobName = getReleaseJobName(projectName, releaseVersion);
 		return getJobLastBuildInfo(projectName, releaseJobName);
+	}
+
+	private String createIdentifier(String projectName) {
+		return  Normalizer.normalize(projectName, Normalizer.Form.NFD).replaceAll("[^\\dA-Za-z\\-]", "").replaceAll("\\s+","-" ).toLowerCase();
 	}
 
 	@Override
