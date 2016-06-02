@@ -67,7 +67,7 @@ public class ProjectLifecycleExtensionManager {
 		}
 
 	}
-	
+
 	@Subscribe
 	public void notifyCreation(final EventReleaseFinished event) {
 		if (this.extensions == null) {
@@ -75,10 +75,10 @@ public class ProjectLifecycleExtensionManager {
 		}
 		final ProjectDto projectDto = newProjectDto(event.getProject());
 		for (final IProjectLifecycleExtension extension : this.extensions) {
-			extension.notifyCreatedRelease(projectDto, event.getReleaseVersion());
+			extension.notifyFinishedRelease(projectDto, event.getReleaseVersion());
 		}
 
-	}	
+	}
 
 	@Subscribe
 	public void notifyCreation(final EventFeatureCreated event) {
@@ -91,7 +91,7 @@ public class ProjectLifecycleExtensionManager {
 		}
 
 	}
-	
+
 	@Subscribe
 	public void notifyCreation(final EventFeatureFinished event) {
 		if (this.extensions == null) {
@@ -102,8 +102,8 @@ public class ProjectLifecycleExtensionManager {
 			extension.notifyFinishedFeature(projectDto, event.getFeatureId(), event.getFeatureSubject());
 		}
 
-	}		
-	
+	}
+
 
 	@Subscribe
 	public void notifyCreation(final EventProjectUpdated _event) {

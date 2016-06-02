@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import com.google.common.base.Charsets;
 import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.io.Resources;
 import com.offbytwo.jenkins.JenkinsServer;
 import com.offbytwo.jenkins.client.JenkinsHttpClient;
@@ -56,11 +57,15 @@ public class JenkinsService implements IJenkinsService {
 			throws JenkinsExtensionException {
 		final JenkinsServer jenkins;
 		try {
-			jenkins = createJenkinsClient();
+			final JenkinsHttpClient jenkinsHttpClient = new JenkinsHttpClient(getJenkinsUri());
+
+			jenkins = createJenkinsClient(jenkinsHttpClient);
 
 			final String scmUrl = getProjectScmUrl(projectName);
 
 			if (useFoder()) {
+
+				createFolder(jenkinsHttpClient, projectName);
 				jenkins.createFolder(projectName);
 
 				final FolderJob projectFolder = getProjectParentFolder(jenkins, projectName);
@@ -85,6 +90,20 @@ public class JenkinsService implements IJenkinsService {
 		}
 	}
 
+	private void createFolder(JenkinsHttpClient jenkinsHttpClient,
+			String projectName) throws IOException {
+        final ImmutableMap<String, String> params = ImmutableMap.of(
+                "mode", "com.cloudbees.hudson.plugins.folder.Folder",
+                "name", projectName,
+                "from", "",
+                "Submit", "OK");
+        jenkinsHttpClient.post_form( "/" + "createItem?" , params , false);
+	}
+
+	private URI getJenkinsUri() throws URISyntaxException {
+		return new URI("http://jenkins.demo-esf.echoes-tech.com/" );
+	}
+
 	private FolderJob getProjectParentFolder(final JenkinsServer jenkins, String projectName) throws IOException {
 		final JobWithDetails root = jenkins.getJob(projectName);
 		final Optional<FolderJob> projectFolder = jenkins.getFolderJob(root);
@@ -96,8 +115,8 @@ public class JenkinsService implements IJenkinsService {
 		return string.replace('/', ' ');
 	}
 
-	private JenkinsServer createJenkinsClient() throws URISyntaxException {
-		return new JenkinsServer(new URI(this.configurationService.getUrl()));
+	private JenkinsServer createJenkinsClient(JenkinsHttpClient jenkinsHttpClient) throws URISyntaxException {
+		return new JenkinsServer(jenkinsHttpClient);
 	}
 
 	private String createConfigXml(String projectName, String scmUrl, String branchName) throws IOException {
@@ -161,6 +180,11 @@ public class JenkinsService implements IJenkinsService {
 		} catch (final Exception e) {
 			throw new JenkinsExtensionException("Failed to retrieve build history", e);
 		}
+	}
+
+	private JenkinsServer createJenkinsClient() throws URISyntaxException {
+		final JenkinsHttpClient jenkinsHttpClient = new JenkinsHttpClient(getJenkinsUri());
+		return createJenkinsClient(jenkinsHttpClient);
 	}
 
 	private List<Build> getJobBuilds(JenkinsServer jenkins, String projectName, String branchName, boolean useFolder, int builsdPerJobLimit)
@@ -227,10 +251,10 @@ public class JenkinsService implements IJenkinsService {
 			if (useFoder()) {
 				final FolderJob projectFolder = getProjectParentFolder(jenkins, projectName);
 
-				final String resolvedXmlConfig = createConfigXml(projectName, scmUrl, jobName);
+				final String resolvedXmlConfig = createConfigXml(projectName, scmUrl, gitBranchName);
 				jenkins.createJob(projectFolder, jobName, resolvedXmlConfig, false);
 			} else {
-				final String resolvedXmlConfig = createConfigXml(projectName, scmUrl, jobName);
+				final String resolvedXmlConfig = createConfigXml(projectName, scmUrl, gitBranchName);
 				jenkins.createJob(jobName, resolvedXmlConfig, false);
 			}
 
@@ -367,5 +391,7 @@ public class JenkinsService implements IJenkinsService {
 		final String featureJobName = getFeatureJobName(projectName, featureId, featureSubject);
 		deleteJob(projectName, featureJobName);
 	}
+
+
 
 }
