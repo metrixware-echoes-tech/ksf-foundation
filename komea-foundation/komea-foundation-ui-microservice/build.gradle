@@ -21,7 +21,7 @@ apply plugin: 'spring-boot'
 apply plugin: 'com.craigburke.bower-installer'
 
 /* Install Bower dependencies during build */
-build.dependsOn bowerInstall
+processResources.dependsOn bowerInstall
 
 /* Clean Bower dependencies during a Gradle Clean task */
 clean.dependsOn bowerClean
