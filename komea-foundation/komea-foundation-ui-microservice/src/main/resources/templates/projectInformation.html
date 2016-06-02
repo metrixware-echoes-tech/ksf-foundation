@@ -21,12 +21,9 @@
 				</li>
 			</ul>
 
-
-
-			<table class="table table-striped tableRowEllipsis" th:if="${not #lists.isEmpty(features)}">
+			<table class="table table-striped table-hover tableRowEllipsis" th:if="${not #lists.isEmpty(features)}">
 				<thead>
 					<tr>
-						<th>#</th>
 						<th>Feature</th> 
 						<!-- th>Assigé à</th -->
 						<th></th>
@@ -34,12 +31,11 @@
 				</thead>
 				<tbody>
 					<tr th:each="feature : ${features}">
-						<td th:text="${feature.getId()}"></td>
-						<td th:text="${feature.getSubject()}"></td>
+						<td th:text="'#' + ${feature.getId()} + ' - ' + ${feature.getSubject()}"></td>
 						<!--  td th:text="${feature.getAssignee()}"></td -->
 						<td>
 
-							<div th:if="${feature.getStatus() == T(fr.echoes.labs.ksf.cc.extensions.services.project.TicketStatus).NEW}" th:remove="tag">
+							<div th:if="${feature.getStatus() == T(fr.echoes.labs.ksf.cc.extensions.services.project.TicketStatus).NEW}" class="pull-right">
 							<form th:attr="action=@{/ui/projects/features/new}"
 
 								class="form-horizontal" method="post"
@@ -52,7 +48,7 @@
 							</form>
 							</div>
 
-							<div th:if="${feature.getStatus() == T(fr.echoes.labs.ksf.cc.extensions.services.project.TicketStatus).CREATED}" th:remove="tag">
+							<div th:if="${feature.getStatus() == T(fr.echoes.labs.ksf.cc.extensions.services.project.TicketStatus).CREATED}" class="pull-right">
 							<form th:attr="action=@{/ui/projects/features/finish}"
 
 								class="form-horizontal" method="post"
@@ -62,7 +58,7 @@
 								<input name="featureId" type="hidden" th:value="${feature.getId()}" />
 								<input name="featureSubject" type="hidden" th:value="${feature.getSubject()}" />
 								<button onclick="return confirm('Finish feature ?')" class="glyphicon glyphicon-stop" type="submit" style="color:DarkRed"></button>
-								<button class="glyphicon glyphicon-info-sign" data-dismiss="modal" type="button" data-toggle="modal" data-target="#featureInformation"></button>
+								<button class="glyphicon glyphicon-info-sign" data-dismiss="modal" type="button" data-toggle="modal" data-target="#validationErrorsModal"></button>
 							</form>
 							</div>							
 						</td>
@@ -71,7 +67,7 @@
 			</table>
 
 			
-    		<table class="table table-striped tableRowEllipsis" th:if="${not #lists.isEmpty(releases)}">
+    		<table class="table table-striped table-hover tableRowEllipsis" th:if="${not #lists.isEmpty(releases)}">
 				<thead>
 					<tr>
 						<th>Release</th> 
@@ -85,7 +81,7 @@
 						<td th:text="${release.getName()}"></td>
 						<td>
 						
-							<div th:if="${release.getStatus() == T(fr.echoes.labs.ksf.cc.extensions.services.project.TicketStatus).NEW}" th:remove="tag">
+							<div th:if="${release.getStatus() == T(fr.echoes.labs.ksf.cc.extensions.services.project.TicketStatus).NEW}" class="pull-right">
 							<form th:attr="action=@{/ui/projects/releases/new}"
 								class="form-horizontal" method="post"
 								role="form" data-toggle="validator">
@@ -97,7 +93,7 @@
 							</form>
 							</div>
 
-							<div th:if="${release.getStatus() == T(fr.echoes.labs.ksf.cc.extensions.services.project.TicketStatus).CREATED}" th:remove="tag">
+							<div th:if="${release.getStatus() == T(fr.echoes.labs.ksf.cc.extensions.services.project.TicketStatus).CREATED}" class="pull-right">
 							<form th:attr="action=@{/ui/projects/releases/finish}"
 								class="form-horizontal" method="post"
 								role="form" data-toggle="validator">
@@ -113,7 +109,6 @@
 					</tr>
 				</tbody>
 			</table>			
-
 
 
 <div id="featureInformation" class="modal fade in" role="dialog">
@@ -135,54 +130,39 @@
 
   </div>
 </div>
+
+
+<div th:if="${validationErrors != null}" th:remove="tag">
+<div id="validationErrorsModal" class="modal fade in" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title"></h4>
+      </div>
+      <div class="modal-body">
+  		<ul class="list-group">
+  			<li class="list-group-item" th:each="validationError : ${validationErrors}" th:text="${validationError.getMessage()}"></li>
+  		</ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div> <!--/* End if validationErrors */-->
 	
-			<!--/* Button uses to open the Create Release modal */-->
-			<!-- button type="button" id="createReleaseButton" name="createReleaseButton" class="btn btn-primary" title="Create a new release" data-toggle="modal" data-target="#createReleaseModal" th:disabled="${@projectInformationManager.getVersions(projectData.project.name).isEmpty()}">Create Release</button -->
-			
+				
 		</div>
+
+
 </div>
 </div>
-		
-	</div>
+</div>
 </div>
 
 
-<!--/* Create Release modal */-->
-<!-- div th:fragment="projectInformationModal">
-	<div aria-hidden="true" aria-labelledby="myModalLabel" class="modal fade in" id="createReleaseModal" role="dialog" tabindex="-1" style="padding-left: 15px;">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button aria-hidden="true" class="close" data-dismiss="modal" type="button">&times;</button>
-					<h4 class="modal-title">Create Release</h4>
-				</div>
-				<div class="modal-body">
-					<form th:attr="action=@{/ui/projects/releases/new}"
-						class="form-horizontal" id="instantiate_host" method="post"
-						role="form" data-toggle="validator">
-						<div class="form-group">
-							<label class="control-label col-sm-2" for="hostName">Release
-								Version</label>
-							<div class="col-sm-10">
-							
-								<input name="projectKey" type="hidden" th:value="${projectData.project.key}" />
-	
-								<select class="form-control" id="releaseVersion" name="releaseVersion">
-									<option
-										th:each="release : ${@projectInformationManager.getVersions(projectData.project.name)}"
-										th:value="${release}" th:text="${release}">
-									</option>
-								</select>
-							</div>
-						</div>
-	
-						<div class="modal-footer">
-							<button class="btn btn-default" data-dismiss="modal" type="button">Cancel</button>
-							<button class="btn btn-primary" type="submit">Create</button>
-						</div>
-					</form>
-				</div>
-			</div>
-		</div>
-	</div>
-</div -->

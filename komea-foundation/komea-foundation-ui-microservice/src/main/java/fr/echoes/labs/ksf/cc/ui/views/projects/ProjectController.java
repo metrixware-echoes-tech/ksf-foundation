@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.google.common.collect.Lists;
 import com.tocea.corolla.cqrs.gate.CommandExecutionException;
@@ -143,7 +144,7 @@ public class ProjectController {
 			throw new ProjectNotFoundException();
 		}
 
-		final List<IValidatorResult> validateResults = new ArrayList<IValidatorResult>(); 
+		final List<IValidatorResult> validateResults = new ArrayList<IValidatorResult>();
 		if (this.validators != null) {
 			for (final IValidator validator : this.validators) {
 				final List<IValidatorResult> result = validator.validateRelease(project.getName(), releaseVersion);
@@ -175,7 +176,7 @@ public class ProjectController {
 	}
 
 	@RequestMapping(value = "/ui/projects/features/finish")
-	public ModelAndView finishFeature(@RequestParam("projectKey") final String projectKey, @RequestParam("featureId") final String featureId, @RequestParam("featureSubject") final String featureSubject) {
+	public ModelAndView finishFeature(@RequestParam("projectKey") final String projectKey, @RequestParam("featureId") final String featureId, @RequestParam("featureSubject") final String featureSubject, RedirectAttributes redirectAttributes ) {
 
 		final Project project = this.projectDao.findByKey(projectKey);
 
@@ -183,7 +184,7 @@ public class ProjectController {
 			throw new ProjectNotFoundException();
 		}
 
-		final List<IValidatorResult> validateResults = new ArrayList<IValidatorResult>(); 
+		final List<IValidatorResult> validateResults = new ArrayList<IValidatorResult>();
 		if (this.validators != null) {
 			for (final IValidator validator : this.validators) {
 				final List<IValidatorResult> result = validator.validateFeature(project.getName(), featureId, featureSubject);
@@ -195,6 +196,8 @@ public class ProjectController {
 
 		if (validateResults.isEmpty()) {
 			this.gate.dispatch(new FinishFeatureCommand(project, featureId, featureSubject));
+		} else {
+			redirectAttributes.addFlashAttribute("validationErrors", validateResults);
 		}
 
 		return new ModelAndView("redirect:/ui/projects/" + project.getKey());

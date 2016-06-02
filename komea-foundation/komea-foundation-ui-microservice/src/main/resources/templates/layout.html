@@ -97,6 +97,10 @@
                     expanderExpandedClass: 'glyphicon glyphicon-minus text-muted',
                     expanderCollapsedClass: 'glyphicon glyphicon-plus text-muted'
                 });
+            	
+                <div th:if="${validationErrors != null}" th:remove="tag">
+                	$('#validationErrorsModal').modal('show');
+                </div>
 
             });			
 
