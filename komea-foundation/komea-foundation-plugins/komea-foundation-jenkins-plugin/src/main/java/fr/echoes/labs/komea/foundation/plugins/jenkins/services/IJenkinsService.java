@@ -83,4 +83,14 @@ public interface IJenkinsService {
 	 * @throws JenkinsExtensionException
 	 */
 	public JenkinsBuildInfo getReleaseStatus(String projectName, String realeaseVersion) throws JenkinsExtensionException;
+
+	/**
+	 * Deletes the feature job
+	 * 
+	 * @param projectName the project name
+	 * @param featureId the feature ID
+	 * @param featureSubject the feature subject
+	 * @throws JenkinsExtensionException 
+	 */
+	public void deleteFeatureJob(String projectName, String featureId, String featureSubject) throws JenkinsExtensionException;
 }

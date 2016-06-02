@@ -44,6 +44,7 @@ import com.tocea.corolla.users.domain.User;
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.IProjectTabPanel;
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
 import fr.echoes.labs.ksf.cc.extensions.services.project.IValidator;
+import fr.echoes.labs.ksf.cc.extensions.services.project.IValidatorResult;
 import fr.echoes.labs.ksf.cc.extmanager.projects.ui.IProjectDashboardExtensionManager;
 import fr.echoes.labs.ksf.cc.releases.dao.IReleaseDAO;
 import fr.echoes.labs.ksf.cc.releases.model.Release;
@@ -142,13 +143,19 @@ public class ProjectController {
 			throw new ProjectNotFoundException();
 		}
 
+		final List<IValidatorResult> validateResults = new ArrayList<IValidatorResult>(); 
 		if (this.validators != null) {
 			for (final IValidator validator : this.validators) {
-				validator.validateRelease(project.getName(), releaseVersion);
+				final List<IValidatorResult> result = validator.validateRelease(project.getName(), releaseVersion);
+				if (result != null) {
+					validateResults.addAll(result);
+				}
 			}
 		}
 
-        this.gate.dispatch(new FinishReleaseCommand(project, releaseVersion));
+		if (validateResults.isEmpty()) {
+			this.gate.dispatch(new FinishReleaseCommand(project, releaseVersion));
+		}
 
 		return new ModelAndView("redirect:/ui/projects/" + project.getKey());
 	}
@@ -176,13 +183,19 @@ public class ProjectController {
 			throw new ProjectNotFoundException();
 		}
 
+		final List<IValidatorResult> validateResults = new ArrayList<IValidatorResult>(); 
 		if (this.validators != null) {
 			for (final IValidator validator : this.validators) {
-				validator.validateFeature(project.getName(), featureId, featureSubject);
+				final List<IValidatorResult> result = validator.validateFeature(project.getName(), featureId, featureSubject);
+				if (result != null) {
+					validateResults.addAll(result);
+				}
 			}
 		}
 
-        this.gate.dispatch(new FinishFeatureCommand(project, featureId, featureSubject));
+		if (validateResults.isEmpty()) {
+			this.gate.dispatch(new FinishFeatureCommand(project, featureId, featureSubject));
+		}
 
 		return new ModelAndView("redirect:/ui/projects/" + project.getKey());
 	}

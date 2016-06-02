@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.StrSubstitutor;
 import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.CreateBranchCommand;
+import org.eclipse.jgit.api.DeleteBranchCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.MergeCommand;
 import org.eclipse.jgit.api.MergeResult;
@@ -31,6 +32,7 @@ import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.transport.JschConfigSessionFactory;
 import org.eclipse.jgit.transport.OpenSshConfig.Host;
+import org.eclipse.jgit.transport.RefSpec;
 import org.eclipse.jgit.transport.SshSessionFactory;
 import org.eclipse.jgit.transport.SshTransport;
 import org.eclipse.jgit.transport.Transport;
@@ -46,6 +48,7 @@ import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 
 import fr.echoes.labs.komea.foundation.plugins.git.GitExtensionException;
+import fr.echoes.labs.komea.foundation.plugins.git.GitExtensionMergeException;
 
 
 
@@ -214,15 +217,15 @@ public class GitService implements IGitService {
 
 		final CloneCommand cloneCommand = Git.cloneRepository().setURI(gitProjectUri).setDirectory(workingDirectory);
 
-		configureSshConnection(cloneCommand);
-
-		final String username = this.configuration.getUsername();
-		final String password = this.configuration.getPassword();
-
-		if (!StringUtils.isBlank(username) && !StringUtils.isBlank(password)) {
-			final UsernamePasswordCredentialsProvider credentialsProvider = new UsernamePasswordCredentialsProvider(username, password);
-			cloneCommand.setCredentialsProvider(credentialsProvider);
-		}
+//		configureSshConnection(cloneCommand);
+//
+//		final String username = this.configuration.getUsername();
+//		final String password = this.configuration.getPassword();
+//
+//		if (!StringUtils.isBlank(username) && !StringUtils.isBlank(password)) {
+//			final UsernamePasswordCredentialsProvider credentialsProvider = new UsernamePasswordCredentialsProvider(username, password);
+//			cloneCommand.setCredentialsProvider(credentialsProvider);
+//		}
 
 		return cloneCommand.call();
 	}
@@ -255,6 +258,12 @@ public class GitService implements IGitService {
 
 			}
 		};
+		
+		if (!GitService.this.configuration.isStrictHostKeyChecking()) { // true/yes is the default value so we don't need to change the configuration
+			
+		}
+		
+		
 		cloneCommand.setTransportConfigCallback(new TransportConfigCallback() {
 
 			@Override
@@ -267,10 +276,20 @@ public class GitService implements IGitService {
 		});
 	}
 
-	private MergeResult mergeBranches(Git git, String originBranch, String destinationBranch) throws IOException, NoHeadException, ConcurrentRefUpdateException, CheckoutConflictException, InvalidMergeHeadsException, WrongRepositoryStateException, NoMessageException, GitAPIException  {
-
+	private MergeResult mergeBranches(Git git, String branch, String destinationBranch) throws IOException, NoHeadException, ConcurrentRefUpdateException, CheckoutConflictException, InvalidMergeHeadsException, WrongRepositoryStateException, NoMessageException, GitAPIException  {
+		git.checkout()
+		.setName(destinationBranch)
+		.setCreateBranch(true)
+		.setUpstreamMode(
+				CreateBranchCommand.SetupUpstreamMode.TRACK)
+				.setStartPoint(
+						Constants.DEFAULT_REMOTE_NAME + "/" + destinationBranch)
+						.call();
+		
 		final MergeCommand mergeCommand = git.merge();
-		final Ref ref = git.getRepository().exactRef(originBranch);
+		//refs/remotes/origin/feat-448-Evo1
+		Map<String, Ref> allRefs = git.getRepository().getAllRefs();
+		final Ref ref = git.getRepository().findRef(Constants.DEFAULT_REMOTE_NAME + "/" + branch);
 		mergeCommand.include(ref);
 		return mergeCommand.call();
 
@@ -278,7 +297,11 @@ public class GitService implements IGitService {
 
 
 	private void deleteBranche(Git git, String branchName) throws NotMergedException, CannotDeleteCurrentBranchException, GitAPIException {
-		git.branchDelete().setBranchNames(branchName).call();
+		DeleteBranchCommand branchDelete = git.branchDelete().setBranchNames(Constants.DEFAULT_REMOTE_NAME + "/" + branchName);
+		branchDelete.call();
+		
+		RefSpec refSpec = new RefSpec().setSource(null).setDestination(Constants.DEFAULT_REMOTE_NAME + "/" + branchName);
+		git.push().setRefSpecs(refSpec).setRemote(Constants.DEFAULT_REMOTE_NAME).call();
 	}
 
 
@@ -311,18 +334,9 @@ public class GitService implements IGitService {
 			LOGGER.debug("Cloning the repository {} into {}", gitProjectUri, workingDirectory);
 			git = callCloneCommand(gitProjectUri, workingDirectory);
 
-			git.checkout()
-			.setName(branchName)
-			.setCreateBranch(true)
-			.setUpstreamMode(
-					CreateBranchCommand.SetupUpstreamMode.TRACK)
-					.setStartPoint(
-							Constants.DEFAULT_REMOTE_NAME + "/" + branchName)
-							.call();
-
 			final MergeResult mergeResult = mergeBranches(git, branchName, DEVELOP);
 			if (mergeResult.getMergeStatus().equals(MergeResult.MergeStatus.CONFLICTING)) {
-
+				throw new GitExtensionMergeException("Cannot merge '"+ branchName +"' into " + DEVELOP);
 			} else {
 				deleteBranche(git, branchName);
 			}

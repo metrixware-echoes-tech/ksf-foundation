@@ -9,6 +9,7 @@ import org.springframework.core.annotation.Order;
 
 import com.tocea.corolla.products.dao.IProjectDAO;
 
+import fr.echoes.labs.komea.foundation.plugins.jenkins.JenkinsExtensionException;
 import fr.echoes.labs.komea.foundation.plugins.jenkins.services.IJenkinsService;
 import fr.echoes.labs.komea.foundation.plugins.jenkins.services.JenkinsErrorHandlingService;
 import fr.echoes.labs.ksf.extensions.annotations.Extension;
@@ -101,7 +102,7 @@ public class JenkinsProjectLifeCycleExtension implements IProjectLifecycleExtens
 
 			this.jenkinsService.createRelease(project.getName(), releaseVersion);
 		} catch (final Exception ex) {
-			LOGGER.error("[Git] Failed to create release for project {} ", project.getName(), ex);
+			LOGGER.error("[Jenkins] Failed to create release for project {} ", project.getName(), ex);
 			this.errorHandler.registerError("Failed to create release.");
 		}
 
@@ -113,7 +114,7 @@ public class JenkinsProjectLifeCycleExtension implements IProjectLifecycleExtens
 
 			this.jenkinsService.createFeature(project.getName(), featureId, featureSubject);
 		} catch (final Exception ex) {
-			LOGGER.error("[Git] Failed to create release for project {} ", project.getName(), ex);
+			LOGGER.error("[Jenkins] Failed to create release for project {} ", project.getName(), ex);
 			this.errorHandler.registerError("Failed to create release.");
 		}
 	}
@@ -127,7 +128,12 @@ public class JenkinsProjectLifeCycleExtension implements IProjectLifecycleExtens
 	@Override
 	public void notifyFinishedFeature(ProjectDto projectDto, String featureId,
 			String featureSubject) {
-		// TODO Auto-generated method stub
+		try {
+			this.jenkinsService.deleteFeatureJob(projectDto.getName(), featureId, featureSubject);
+		} catch (JenkinsExtensionException e) {
+			LOGGER.error("[Jenkins] Failed to delete the feature job", e);
+			this.errorHandler.registerError("Failed to delete the feature job.");
+		}
 		
 	}
 

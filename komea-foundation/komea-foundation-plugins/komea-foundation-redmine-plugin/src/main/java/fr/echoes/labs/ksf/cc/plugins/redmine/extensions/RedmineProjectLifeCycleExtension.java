@@ -139,10 +139,15 @@ public class RedmineProjectLifeCycleExtension implements IProjectLifecycleExtens
 	}
 
 	@Override
-	public void notifyFinishedFeature(ProjectDto projectDto, String featureId,
+	public void notifyFinishedFeature(ProjectDto projectDto, String ticketId,
 			String featureSubject) {
-		// TODO Auto-generated method stub
-
+//		try {
+//			this.redmineService.changeStatus(ticketId, this.configurationService.getFeatureStatusNewId());
+//
+//		} catch (final Exception ex) {
+//			LOGGER.error("[Redmine] Failed to change ticket #{} status", ticketId, ex);
+//			this.errorHandler.registerError("Failed to change Redmine ticket status. Please verify your Redmine configuration.");
+//		}
 	}
 
 	@Override
