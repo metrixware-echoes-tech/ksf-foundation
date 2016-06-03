@@ -19,6 +19,7 @@ import fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineConfigurationServic
 import fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineErrorHandlingService;
 import fr.echoes.labs.ksf.extensions.annotations.Extension;
 import fr.echoes.labs.ksf.extensions.projects.IProjectLifecycleExtension;
+import fr.echoes.labs.ksf.extensions.projects.NotifyResult;
 import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
 import fr.echoes.labs.ksf.users.security.api.ICurrentUserService;
 
@@ -57,7 +58,7 @@ public class RedmineProjectLifeCycleExtension implements IProjectLifecycleExtens
 	}
 
 	@Override
-	public void notifyCreatedProject(ProjectDto project) {
+	public NotifyResult notifyCreatedProject(ProjectDto project) {
 
 		init();
 
@@ -65,7 +66,7 @@ public class RedmineProjectLifeCycleExtension implements IProjectLifecycleExtens
 
 		if (StringUtils.isEmpty(logginName)) {
 			LOGGER.error("[Redmine] No user found. Aborting project creation in Redmine module");
-			return;
+			return NotifyResult.CONTINUE;
 		}
 
 		LOGGER.info("[Redmine] project {} creation detected [demanded by: {}]", project.getKey(), logginName);
@@ -75,12 +76,13 @@ public class RedmineProjectLifeCycleExtension implements IProjectLifecycleExtens
 
 		} catch (final Exception ex) {
 			LOGGER.error("[Redmine] Failed to create project {} ", project.getName(), ex);
-			this.errorHandler.registerError("Unable to create Redmine project. Please verify your Redmine configuration.");
+			this.errorHandler.registerError("Unable to create Redmine project.");
 		}
+		return NotifyResult.CONTINUE;
 	}
 
 	@Override
-	public void notifyDeletedProject(ProjectDto project) {
+	public NotifyResult notifyDeletedProject(ProjectDto project) {
 
 		try {
 
@@ -88,26 +90,24 @@ public class RedmineProjectLifeCycleExtension implements IProjectLifecycleExtens
 
 		} catch (final Exception ex) {
 			LOGGER.error("[Redmine] Failed to delete project {} ", project.getName(), ex);
-			this.errorHandler.registerError("Unable to delete Redmine project. Please verify your Redmine configuration.");
+			this.errorHandler.registerError("Unable to delete Redmine project.");
 		}
+		return NotifyResult.CONTINUE;
 	}
 
 	@Override
-	public void notifyDuplicatedProject(ProjectDto _project) {
-		// TODO Auto-generated method stub
-
+	public NotifyResult notifyDuplicatedProject(ProjectDto _project) {
+		return NotifyResult.CONTINUE;
 	}
 
 	@Override
-	public void notifyUpdatedProject(ProjectDto _project) {
-		// TODO Auto-generated method stub
-
+	public NotifyResult notifyUpdatedProject(ProjectDto _project) {
+		return NotifyResult.CONTINUE;
 	}
 
 	@Override
-	public void notifyCreatedRelease(ProjectDto project, String releaseVersion) {
+	public NotifyResult notifyCreatedRelease(ProjectDto project, String releaseVersion) {
 		try {
-
 
 			final String releaseTicketSubject = createReleaseTicketSubject(project, releaseVersion);
 
@@ -116,6 +116,7 @@ public class RedmineProjectLifeCycleExtension implements IProjectLifecycleExtens
 			LOGGER.error("[Redmine] Failed to create a ticket for the release {} of the project {}", releaseVersion, project.getName());
 			this.errorHandler.registerError("Failed to create a Redmine ticket for the release.");
 		}
+		return NotifyResult.CONTINUE;
 	}
 
 	private String createReleaseTicketSubject(ProjectDto project, String releaseVersion) {
@@ -126,7 +127,7 @@ public class RedmineProjectLifeCycleExtension implements IProjectLifecycleExtens
 	}
 
 	@Override
-	public void notifyCreatedFeature(ProjectDto project, String ticketId,
+	public NotifyResult notifyCreatedFeature(ProjectDto project, String ticketId,
 			String featureSubject) {
 
 		try {
@@ -134,26 +135,27 @@ public class RedmineProjectLifeCycleExtension implements IProjectLifecycleExtens
 
 		} catch (final Exception ex) {
 			LOGGER.error("[Redmine] Failed to change ticket #{} status", ticketId, ex);
-			this.errorHandler.registerError("Failed to change Redmine ticket status. Please verify your Redmine configuration.");
+			this.errorHandler.registerError("Failed to change Redmine ticket status.");
 		}
+		return NotifyResult.CONTINUE;
 	}
 
 	@Override
-	public void notifyFinishedFeature(ProjectDto projectDto, String ticketId,
+	public NotifyResult notifyFinishedFeature(ProjectDto projectDto, String ticketId,
 			String featureSubject) {
-//		try {
-//			this.redmineService.changeStatus(ticketId, this.configurationService.getFeatureStatusNewId());
-//
-//		} catch (final Exception ex) {
-//			LOGGER.error("[Redmine] Failed to change ticket #{} status", ticketId, ex);
-//			this.errorHandler.registerError("Failed to change Redmine ticket status. Please verify your Redmine configuration.");
-//		}
+		try {
+			this.redmineService.changeStatus(ticketId, this.configurationService.getFeatureStatusClosedId());
+
+		} catch (final Exception ex) {
+			LOGGER.error("[Redmine] Failed to change ticket #{} status", ticketId, ex);
+			this.errorHandler.registerError("Failed to change Redmine ticket status.");
+		}
+		return NotifyResult.CONTINUE;
 	}
 
 	@Override
-	public void notifyFinishedRelease(ProjectDto project, String releaseName) {
-		// TODO Auto-generated method stub
-
+	public NotifyResult notifyFinishedRelease(ProjectDto project, String releaseName) {
+		return NotifyResult.CONTINUE;
 	}
 
 	private String replaceVariables(String str, Map<String, String> variables) {

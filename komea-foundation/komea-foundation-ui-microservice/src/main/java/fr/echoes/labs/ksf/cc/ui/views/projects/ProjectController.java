@@ -6,6 +6,7 @@
 package fr.echoes.labs.ksf.cc.ui.views.projects;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -136,7 +137,7 @@ public class ProjectController {
 	}
 
 	@RequestMapping(value = "/ui/projects/releases/finish")
-	public ModelAndView finishRelease(@RequestParam("projectKey") final String projectKey,  @RequestParam("releaseVersion") final String releaseVersion) {
+	public ModelAndView finishRelease(@RequestParam("projectKey") final String projectKey,  @RequestParam("releaseVersion") final String releaseVersion, RedirectAttributes redirectAttributes) {
 
 		final Project project = this.projectDao.findByKey(projectKey);
 
@@ -156,9 +157,24 @@ public class ProjectController {
 
 		if (validateResults.isEmpty()) {
 			this.gate.dispatch(new FinishReleaseCommand(project, releaseVersion));
+			deleteReleaseDao(releaseVersion);
+
+		} else {
+			redirectAttributes.addFlashAttribute("validationErrors", validateResults);
 		}
 
 		return new ModelAndView("redirect:/ui/projects/" + project.getKey());
+	}
+
+	private void deleteReleaseDao(String releaseVersion) {
+		final List<Release> findAll = this.releaseDao.findAll();
+		final Iterator<Release> iterator = findAll.iterator();
+		while (iterator.hasNext()) {
+			final Release release = iterator.next();
+			if (release.getReleaseVersion().equals(releaseVersion)) {
+				this.releaseDao.delete(release);
+			}
+		}
 	}
 
 	@RequestMapping(value = "/ui/projects/features/new")
@@ -176,7 +192,7 @@ public class ProjectController {
 	}
 
 	@RequestMapping(value = "/ui/projects/features/finish")
-	public ModelAndView finishFeature(@RequestParam("projectKey") final String projectKey, @RequestParam("featureId") final String featureId, @RequestParam("featureSubject") final String featureSubject, RedirectAttributes redirectAttributes ) {
+	public ModelAndView finishFeature(@RequestParam("projectKey") final String projectKey, @RequestParam("featureId") final String featureId, @RequestParam("featureSubject") final String featureSubject, RedirectAttributes redirectAttributes) {
 
 		final Project project = this.projectDao.findByKey(projectKey);
 

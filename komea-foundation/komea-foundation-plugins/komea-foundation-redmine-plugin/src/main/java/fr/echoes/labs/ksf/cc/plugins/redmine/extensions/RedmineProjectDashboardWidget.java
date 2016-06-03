@@ -93,7 +93,12 @@ public class RedmineProjectDashboardWidget implements ProjectDashboardWidget {
 
 			final List<RedmineIssue> issues = this.redmineService.queryIssues(query);
 
-			ctx.setVariable("issuesBase", "/ui/projects/" + project.getKey() + "?redmineIssue=");
+			String contextPath = this.request.getContextPath();
+			if (!StringUtils.isBlank(contextPath)) {
+				contextPath = '/' + contextPath;
+			}
+
+			ctx.setVariable("issuesBase", contextPath + "/ui/projects/" + project.getKey() + "?redmineIssue=");
 
 			ctx.setVariable("issues", issues);
 

@@ -10,21 +10,21 @@ import fr.echoes.labs.ksf.extensions.api.IExtension;
  *
  */
 public interface IProjectLifecycleExtension extends IExtension{
-	void notifyCreatedProject(ProjectDto project);
+	NotifyResult notifyCreatedProject(ProjectDto project);
 
-	void notifyDeletedProject(ProjectDto project);
+	NotifyResult notifyDeletedProject(ProjectDto project);
 
-	void notifyDuplicatedProject(ProjectDto project);
+	NotifyResult notifyDuplicatedProject(ProjectDto project);
 
-	void notifyUpdatedProject(ProjectDto project);
+	NotifyResult notifyUpdatedProject(ProjectDto project);
 
-	void notifyCreatedRelease(ProjectDto project, String releaseName);
-	
-	void notifyFinishedRelease(ProjectDto project, String releaseName);
+	NotifyResult notifyCreatedRelease(ProjectDto project, String releaseName);
 
-	void notifyCreatedFeature(ProjectDto project, String featureId,
+	NotifyResult notifyFinishedRelease(ProjectDto project, String releaseName);
+
+	NotifyResult notifyCreatedFeature(ProjectDto project, String featureId,
 			String featureSubject);
 
-	void notifyFinishedFeature(ProjectDto projectDto, String featureId,
+	NotifyResult notifyFinishedFeature(ProjectDto projectDto, String featureId,
 			String featureSubject);
 }

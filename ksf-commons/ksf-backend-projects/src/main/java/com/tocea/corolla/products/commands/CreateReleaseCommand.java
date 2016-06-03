@@ -18,7 +18,7 @@ public class CreateReleaseCommand {
 	private Project project;
 
 	@NotEmpty
-	private String releaseVersion;
+	private final String releaseVersion;
 
 	public CreateReleaseCommand(Project project, String releaseVersion) {
 		this.project = project;

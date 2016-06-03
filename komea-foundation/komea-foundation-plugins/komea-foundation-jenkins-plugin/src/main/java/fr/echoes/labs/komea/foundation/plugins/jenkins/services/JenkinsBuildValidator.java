@@ -29,15 +29,28 @@ public class JenkinsBuildValidator implements IValidator {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(JenkinsBuildValidator.class);
 
+	/**
+	 * Validates that the latest build for this feature was successful .
+	 *
+	 * @param projectName the project name.
+	 * @param featureId the feature ID.
+	 * @param description the feature description.
+	 * @return
+	 */
 	@Override
 	public List<IValidatorResult> validateFeature(String projectName,
 			String featureId, String description) {
 		List<IValidatorResult>  results = null;
 		try {
 			final JenkinsBuildInfo buildInfo = this.jenkins.getFeatureStatus(projectName, featureId, description);
-			if (buildInfo != null && "FAILURE".equals(buildInfo.getResult())) {
+			if (buildInfo == null || !"SUCCESS".equals(buildInfo.getResult())) {
 				results = new ArrayList<IValidatorResult>(1);
-				final IValidatorResult result = new ValidatorResult(ValidatorResultType.ERROR, "JENKINS - Le dernier build du job '" + buildInfo.getJobName() + "' est en échec.");
+				final IValidatorResult result;
+				if (buildInfo == null) {
+					result = new ValidatorResult(ValidatorResultType.ERROR, "JENKINS - Échec de la récupération des informations de build de la feature '" + featureId + "'." );
+				} else {
+					result = new ValidatorResult(ValidatorResultType.ERROR, "JENKINS - Le dernier build du job '" + buildInfo.getJobName() + "' est en échec.");
+				}
 				results.add(result);
 			}
 
@@ -47,15 +60,27 @@ public class JenkinsBuildValidator implements IValidator {
 		return results;
 	}
 
+	/**
+	 * Validates that the latest build for this release was successful .
+	 *
+	 * @param projectName the project name.
+	 * @param releaseName the release name.
+	 * @return
+	 */
 	@Override
 	public List<IValidatorResult> validateRelease(String projectName,
 			String releaseName) {
 		List<IValidatorResult>  results = null;
 		try {
 			final JenkinsBuildInfo buildInfo = this.jenkins.getReleaseStatus(projectName, releaseName);
-			if (buildInfo != null && "FAILURE".equals(buildInfo.getResult())) {
+			if (buildInfo == null || !"SUCCESS".equals(buildInfo.getResult())) {
 				results = new ArrayList<IValidatorResult>(1);
-				final IValidatorResult result = new ValidatorResult(ValidatorResultType.ERROR, "JENKINS - Le dernier build du job '" + buildInfo.getJobName() + "' est en échec.");
+				final IValidatorResult result;
+				if (buildInfo == null) {
+					result = new ValidatorResult(ValidatorResultType.ERROR, "JENKINS - Échec de la récupération des informations de build de la release '" + releaseName + "'." );
+				} else {
+					result = new ValidatorResult(ValidatorResultType.ERROR, "JENKINS - Le dernier build du job '" + buildInfo.getJobName() + "' est en échec.");
+				}
 				results.add(result);
 			}
 

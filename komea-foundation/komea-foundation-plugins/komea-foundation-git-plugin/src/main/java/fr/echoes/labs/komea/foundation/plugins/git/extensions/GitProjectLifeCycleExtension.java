@@ -9,10 +9,12 @@ import org.springframework.core.annotation.Order;
 
 import com.tocea.corolla.products.dao.IProjectDAO;
 
+import fr.echoes.labs.komea.foundation.plugins.git.GitExtensionMergeException;
 import fr.echoes.labs.komea.foundation.plugins.git.services.GitErrorHandlingService;
 import fr.echoes.labs.komea.foundation.plugins.git.services.IGitService;
 import fr.echoes.labs.ksf.extensions.annotations.Extension;
 import fr.echoes.labs.ksf.extensions.projects.IProjectLifecycleExtension;
+import fr.echoes.labs.ksf.extensions.projects.NotifyResult;
 import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
 import fr.echoes.labs.ksf.users.security.api.ICurrentUserService;
 
@@ -48,7 +50,7 @@ public class GitProjectLifeCycleExtension implements IProjectLifecycleExtension 
 	}
 
 	@Override
-	public void notifyCreatedProject(ProjectDto project) {
+	public NotifyResult notifyCreatedProject(ProjectDto project) {
 
 		init();
 
@@ -56,7 +58,7 @@ public class GitProjectLifeCycleExtension implements IProjectLifecycleExtension 
 
 		if (StringUtils.isEmpty(logginName)) {
 			LOGGER.error("[Git] No user found. Aborting project creation in Git module");
-			return;
+			return NotifyResult.CONTINUE;
 		}
 
 		LOGGER.info("[Git] project {} creation detected [demanded by: {}]", project.getKey(), logginName);
@@ -68,28 +70,27 @@ public class GitProjectLifeCycleExtension implements IProjectLifecycleExtension 
 			LOGGER.error("[Git] Failed to create project {} ", project.getName(), ex);
 			this.errorHandler.registerError("Unable to create Git repository.");
 		}
+		return NotifyResult.CONTINUE;
 
 	}
 
 	@Override
-	public void notifyDeletedProject(ProjectDto project) {
-
+	public NotifyResult notifyDeletedProject(ProjectDto project) {
+		return NotifyResult.CONTINUE;
 	}
 
 	@Override
-	public void notifyDuplicatedProject(ProjectDto project) {
-		// TODO Auto-generated method stub
-
+	public NotifyResult notifyDuplicatedProject(ProjectDto project) {
+		return NotifyResult.CONTINUE;
 	}
 
 	@Override
-	public void notifyUpdatedProject(ProjectDto project) {
-		// TODO Auto-generated method stub
-
+	public NotifyResult notifyUpdatedProject(ProjectDto project) {
+		return NotifyResult.CONTINUE;
 	}
 
 	@Override
-	public void notifyCreatedRelease(ProjectDto project, String releaseVersion) {
+	public NotifyResult notifyCreatedRelease(ProjectDto project, String releaseVersion) {
 		try {
 
 			this.gitService.createRelease(project.getName(), releaseVersion);
@@ -97,40 +98,47 @@ public class GitProjectLifeCycleExtension implements IProjectLifecycleExtension 
 			LOGGER.error("[Git] Failed to create release for project {} ", project.getName(), ex);
 			this.errorHandler.registerError("Failed to create release.");
 		}
+		return NotifyResult.CONTINUE;
 	}
 
 	@Override
-	public void notifyCreatedFeature(ProjectDto project, String featureId,
+	public NotifyResult notifyCreatedFeature(ProjectDto project, String featureId,
 			String featureSubject) {
 		try {
 
 			this.gitService.createFeature(project.getName(), featureId, featureSubject);
 		} catch (final Exception ex) {
 			LOGGER.error("[Git] Failed to create feature for project {} ", project.getName(), ex);
-			this.errorHandler.registerError("Failed to create release.");
+			this.errorHandler.registerError("Failed to create Git feature branch.");
 		}
+		return NotifyResult.CONTINUE;
 	}
 
 	@Override
-	public void notifyFinishedFeature(ProjectDto project, String featureId,
+	public NotifyResult notifyFinishedFeature(ProjectDto project, String featureId,
 			String featureSubject) {
 		try {
 			this.gitService.closeFeature(project.getName(), featureId, featureSubject);
-		} catch (final Exception ex) {
-			LOGGER.error("[Git] Failed to close feature for project {} ", project.getName(), ex);
-			this.errorHandler.registerError("Failed to create release.");
+		} catch (final GitExtensionMergeException e) {
+			LOGGER.error("[Git] Failed to finish feature for project {} ", project.getName(), e);
+			this.errorHandler.registerError("Failed to finish feature: " + e.getMessage());
+			return NotifyResult.TERMINATE;
+		} catch (final Exception e) {
+			LOGGER.error("[Git] Failed to finish feature for project {} ", project.getName(), e);
+			this.errorHandler.registerError("Failed to finish feature.");
 		}
+		return NotifyResult.CONTINUE;
 	}
 
 	@Override
-	public void notifyFinishedRelease(ProjectDto project, String releaseName) {
-
+	public NotifyResult notifyFinishedRelease(ProjectDto project, String releaseName) {
 		try {
 			this.gitService.closeRelease(project.getName(), releaseName);
 		} catch (final Exception ex) {
 			LOGGER.error("[Git] Failed to close feature for project {} ", project.getName(), ex);
 			this.errorHandler.registerError("Failed to create release.");
 		}
+		return NotifyResult.CONTINUE;
 	}
 
 }
