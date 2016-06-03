@@ -66,7 +66,6 @@ public class JenkinsService implements IJenkinsService {
 			if (useFoder()) {
 
 				createFolder(jenkinsHttpClient, projectName);
-				jenkins.createFolder(projectName);
 
 				final FolderJob projectFolder = getProjectParentFolder(jenkins, projectName);
 
@@ -91,13 +90,15 @@ public class JenkinsService implements IJenkinsService {
 	}
 
 	private void createFolder(JenkinsHttpClient jenkinsHttpClient,
-			String projectName) throws IOException {
+			String folderName) throws IOException {
+		LOGGER.info("[jenkins] creating folder '{}'", folderName);
         final ImmutableMap<String, String> params = ImmutableMap.of(
                 "mode", "com.cloudbees.hudson.plugins.folder.Folder",
-                "name", projectName,
+                "name", folderName,
                 "from", "",
                 "Submit", "OK");
         jenkinsHttpClient.post_form( "/" + "createItem?" , params , false);
+        LOGGER.info("[jenkins] folder '{}' created", folderName);
 	}
 
 	private URI getJenkinsUri() throws URISyntaxException {
