@@ -13,11 +13,20 @@ public class DashboardConfigurationService {
     @Value("${ksf.dashboard.url}")
     private String url;
     
+    @Value("${ksf.dashboard.organization.url}")
+    private String organizationUrl;
+    
     @Value("${ksf.dashboard.customPeriod:30}")
     private int customPeriod;
     
     @Value("${ksf.dashboard.projectType}")
     private String projectType;
+    
+    @Value("${ksf.dashboard.username}")
+    private String username;
+    
+    @Value("${ksf.dashboard.password}")
+    private String password;
 
 	public String getUrl() {
         if ('/' == this.url.charAt(this.url.length() - 1)) {
@@ -35,6 +44,18 @@ public class DashboardConfigurationService {
 	
 	public String getProjectType() {
 		return projectType;
+	}
+	
+	public String getOrganizationUrl() {
+		return organizationUrl;
+	}
+	
+	public String getUsername() {
+		return username;
+	}
+	
+	public String getPassword() {
+		return password;
 	}
 
 }

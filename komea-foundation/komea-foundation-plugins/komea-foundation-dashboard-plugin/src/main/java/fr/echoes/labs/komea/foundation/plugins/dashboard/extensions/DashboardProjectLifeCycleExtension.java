@@ -13,6 +13,7 @@ import org.springframework.core.annotation.Order;
 
 import com.tocea.corolla.products.dao.IProjectDAO;
 
+import fr.echoes.labs.ksf.cc.plugins.dashboard.services.DashboardClientFactory;
 import fr.echoes.labs.ksf.cc.plugins.dashboard.services.DashboardConfigurationService;
 import fr.echoes.labs.ksf.extensions.annotations.Extension;
 import fr.echoes.labs.ksf.extensions.projects.IProjectLifecycleExtension;
@@ -37,6 +38,9 @@ public class DashboardProjectLifeCycleExtension implements IProjectLifecycleExte
 
 	@Autowired
 	private DashboardConfigurationService configurationService;
+	
+	@Autowired
+	private DashboardClientFactory clientFactory;
 
 	private ICurrentUserService currentUserService;
 
@@ -64,9 +68,7 @@ public class DashboardProjectLifeCycleExtension implements IProjectLifecycleExte
 		final String projectName = project.getName();
 		final String projectKey = createIdentifier(projectName);
 
-		final String url = this.configurationService.getUrl() + "/organization";
-
-		final OrganizationStorageClient organizationStorageClient = new OrganizationStorageClient(url);
+		final OrganizationStorageClient organizationStorageClient = clientFactory.organizationStorageClient();
 		
 		final Entity projectEntity = new Entity().setKey(projectKey).setName(projectName);
 		organizationStorageClient.addOrUpdatePartialEntities(projectEntity);
