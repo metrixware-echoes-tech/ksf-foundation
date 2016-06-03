@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.annotation.Order;
 
+import com.tocea.corolla.cqrs.gate.Gate;
+import com.tocea.corolla.products.commands.EditProjectBranchCommand;
 import com.tocea.corolla.products.dao.IProjectDAO;
 
 import fr.echoes.labs.komea.foundation.plugins.jenkins.JenkinsExtensionException;
@@ -63,7 +65,7 @@ public class JenkinsProjectLifeCycleExtension implements IProjectLifecycleExtens
 		LOGGER.info("[Jenkins] project {} creation detected [demanded by: {}]", project.getKey(), logginName);
 		try {
 
-			this.jenkinsService.createProject(project.getName());
+			this.jenkinsService.createProject(project);
 
 		} catch (final Exception ex) {
 			LOGGER.error("[Jenkins] Failed to create project {} ", project.getName(), ex);

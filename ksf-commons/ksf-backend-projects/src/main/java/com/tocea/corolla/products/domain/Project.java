@@ -22,6 +22,7 @@ package com.tocea.corolla.products.domain;
 import java.io.Serializable;
 import java.net.URL;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -32,6 +33,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.tocea.corolla.utils.domain.ObjectValidation;
 
 @Document
@@ -63,6 +65,8 @@ public class Project implements Serializable {
     private URL image;
 
     private List<String> tags = Lists.newArrayList();
+    
+    private Map<String, Object> otherAttributes = Maps.newHashMap();
 
     private String parentId;
 
@@ -145,8 +149,16 @@ public class Project implements Serializable {
     public void setParentId(final String parentId) {
         this.parentId = parentId;
     }
+    
+	public Map<String, Object> getOtherAttributes() {
+		return otherAttributes;
+	}
 
-    @Override
+	public void setOtherAttributes(Map<String, Object> otherAttributes) {
+		this.otherAttributes = otherAttributes;
+	}
+	
+	@Override
     public String toString() {
     	return "Project{" + "id=" + this.id +
     			", key=" + this.key +
@@ -159,4 +171,5 @@ public class Project implements Serializable {
     			", tags=" + this.tags +
     			", parentId=" + this.parentId + '}';
     }
+	
 }

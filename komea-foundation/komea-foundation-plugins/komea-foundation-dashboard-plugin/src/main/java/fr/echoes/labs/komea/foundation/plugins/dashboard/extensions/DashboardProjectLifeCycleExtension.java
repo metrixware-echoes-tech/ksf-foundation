@@ -1,6 +1,7 @@
 package fr.echoes.labs.komea.foundation.plugins.dashboard.extensions;
 
 import java.text.Normalizer;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.komea.organization.model.Entity;
@@ -11,8 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.annotation.Order;
 
+import com.google.common.collect.Lists;
 import com.tocea.corolla.products.dao.IProjectDAO;
 
+import fr.echoes.labs.ksf.cc.extensions.gui.ProjectExtensionConstants;
 import fr.echoes.labs.ksf.cc.plugins.dashboard.services.DashboardClientFactory;
 import fr.echoes.labs.ksf.cc.plugins.dashboard.services.DashboardConfigurationService;
 import fr.echoes.labs.ksf.extensions.annotations.Extension;
@@ -65,14 +68,44 @@ public class DashboardProjectLifeCycleExtension implements IProjectLifecycleExte
 
 		LOGGER.info("[Dashboard] project {} creation detected [demanded by: {}]", project.getKey(), logginName);
 
-		final String projectName = project.getName();
-		final String projectKey = createIdentifier(projectName);
+		final List<Entity> entities = getProjectEntities(project);
 
 		final OrganizationStorageClient organizationStorageClient = clientFactory.organizationStorageClient();
-		
-		final Entity projectEntity = new Entity().setKey(projectKey).setName(projectName);
-		organizationStorageClient.addOrUpdatePartialEntities(projectEntity);
+		organizationStorageClient.addOrUpdatePartialEntities(entities);
 
+	}
+	
+	public List<Entity> getProjectEntities(final ProjectDto project) {
+		
+		List<Entity> entities = Lists.newArrayList();
+		
+		final String projectType = configurationService.getProjectType();
+		final String projectName = project.getName();
+		final String projectKey = createIdentifier(projectName);
+		final String projectKeyTag = configurationService.getProjectKeyTag();
+		
+		final Entity projectEntity = new Entity()
+			.setKey(projectKey)
+			.setName(projectName)
+			.setType(projectType);
+		
+		entities.add(projectEntity);
+		
+		String jobType = configurationService.getJobType();
+		List<String> jobNames = (List<String>) project.getOtherAttributes().get(ProjectExtensionConstants.CI_JOBS_KEY);
+		
+		if (jobNames != null && !jobNames.isEmpty()) {
+			for (final String jobName : jobNames) {
+				final Entity jobEntity = new Entity()
+					.setKey(jobName)
+					.setName(jobName)
+					.setType(jobType)
+					.addAttribute(projectKeyTag, projectKey);
+				entities.add(jobEntity);
+			}
+		}
+		
+		return entities;
 	}
 
 	@Override

@@ -19,8 +19,11 @@ public class DashboardConfigurationService {
     @Value("${ksf.dashboard.customPeriod:30}")
     private int customPeriod;
     
-    @Value("${ksf.dashboard.projectType}")
+    @Value("${ksf.dashboard.projectType:project}")
     private String projectType;
+    
+    @Value("${ksf.dashboard.jobType:job}")
+    private String jobType;
     
     @Value("${ksf.dashboard.username}")
     private String username;
@@ -46,6 +49,10 @@ public class DashboardConfigurationService {
 		return projectType;
 	}
 	
+	public String getJobType() {
+		return jobType;
+	}
+	
 	public String getOrganizationUrl() {
 		return organizationUrl;
 	}
@@ -56,6 +63,10 @@ public class DashboardConfigurationService {
 	
 	public String getPassword() {
 		return password;
+	}
+	
+	public String getProjectKeyTag() {
+		return projectType+"_key";
 	}
 
 }
