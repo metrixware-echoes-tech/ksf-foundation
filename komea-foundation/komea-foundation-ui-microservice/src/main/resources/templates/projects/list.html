@@ -11,17 +11,17 @@
                 <div class="content">
                 	<div class="alert alert-info alert-dismissible" role="alert">
 					  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					  Welcome to <strong>Komea Foundation</strong>! From this panel, you will be able to see the list of all your projects managed by Komea Software Factory.
+					  <span th:text="#{foundation.projects.list.info.message.welcome}"></span>
 					</div>
-                    <h1>
-                        Projects
+                    <h1 th:text="#{foundation.projects.list.projects}">
+
                     </h1>
 
                     <table class="table table-striped project-list tree">
                         <thead>
                             <tr>
-                                <th>Name</th>
-                                <th>Owner</th>
+                                <th th:text="#{foundation.projects.list.column.name}">Name</th>
+                                <th th:text="#{foundation.projects.list.column.owner}">Owner</th>
                                 <!-- th>Tools</th>
                                 <th>Actions</th -->
                                 <th></th>
@@ -45,7 +45,7 @@
                                         <span class="glyphicon glyphicon-trash"></span> Delete
                                     </a -->
                                     <a onclick="return confirm('Are you sure you want to remove project ?')" th:href="@{/ui/projects/delete/}+${prod.project.key}">
-                                        <span class="fa fa-trash"></span> Delete
+                                        <span class="fa fa-trash"></span>&nbsp;<span th:text="#{foundation.projects.list.delete.text}"></span>
                                     </a>                                    
                             	</td>
                             </tr>

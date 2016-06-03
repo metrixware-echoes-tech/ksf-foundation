@@ -9,12 +9,12 @@
 		<thead>
 			<tr>
 				<th>#</th>
-				<th>Version cible</th>
+				<th th:text="${foundationRedmineWidgetTargetVersion}">Version cible</th>
 				<!--/* <th>Catégorie</th> */-->
-				<th>Status</th>
-				<th>Priorité</th>
-				<th>Sujet</th>
-				<th>Assigé à</th>
+				<th th:text="${foundationRedmineWidgetTargetStatus}">Status</th>
+				<th th:text="${foundationRedmineWidgetTargetPriority}">Priorité</th>
+				<th th:text="${foundationRedmineWidgetTargetSubject}">Sujet</th>
+				<th th:text="${foundationRedmineWidgetTargetAssignedTo}">Assigé à</th>
 			</tr>
 		</thead>
 		<tbody>

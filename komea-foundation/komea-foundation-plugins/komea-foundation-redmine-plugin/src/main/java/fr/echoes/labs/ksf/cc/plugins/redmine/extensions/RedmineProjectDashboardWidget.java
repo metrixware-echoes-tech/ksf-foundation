@@ -10,6 +10,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -68,6 +70,10 @@ public class RedmineProjectDashboardWidget implements ProjectDashboardWidget {
 	@Autowired
 	IProjectDAO projectDao;
 
+	@Autowired
+	private MessageSource messageResource;
+
+
 	@Override
 	public List<MenuAction> getDropdownActions() {
 
@@ -93,9 +99,20 @@ public class RedmineProjectDashboardWidget implements ProjectDashboardWidget {
 
 			final List<RedmineIssue> issues = this.redmineService.queryIssues(query);
 
+			final MessageSourceAccessor messageSourceAccessor = new MessageSourceAccessor(this.messageResource);
+
+
+			ctx.setVariable("foundationRedmineWidgetTargetVersion", messageSourceAccessor.getMessage("foundation.redmine.widget.target.version"));
+			ctx.setVariable("foundationRedmineWidgetTargetStatus", messageSourceAccessor.getMessage("foundation.redmine.widget.target.status"));
+			ctx.setVariable("foundationRedmineWidgetTargetPriority", messageSourceAccessor.getMessage("foundation.redmine.widget.target.priority"));
+			ctx.setVariable("foundationRedmineWidgetTargetSubject", messageSourceAccessor.getMessage("foundation.redmine.widget.target.subject"));
+			ctx.setVariable("foundationRedmineWidgetTargetAssignedTo", messageSourceAccessor.getMessage("foundation.redmine.widget.target.assigned.to"));
+
+
 			final String baseUrl = getBaseUrl(this.request);
 
-			ctx.setVariable("issuesBase", baseUrl + "ui/projects/" + project.getKey() + "?redmineIssue=");
+
+			ctx.setVariable("issuesBase", baseUrl + "/ui/projects/" + project.getKey() + "?redmineIssue=");
 
 			ctx.setVariable("issues", issues);
 
@@ -109,11 +126,9 @@ public class RedmineProjectDashboardWidget implements ProjectDashboardWidget {
 		return templateEngine.process("redminePanel", ctx);
 	}
 
+
 	private String getBaseUrl(HttpServletRequest  request) {
-		final StringBuffer url = request.getRequestURL();
-		final String uri = request.getRequestURI();
-		final String ctx = request.getContextPath();
-		return url.substring(0, url.length() - uri.length() + ctx.length()) + "/";
+		return this.configurationService.getUrl();
 	}
 
 	@Override
@@ -123,7 +138,7 @@ public class RedmineProjectDashboardWidget implements ProjectDashboardWidget {
 
 	@Override
 	public String getTitle() {
-		return "Redmine";
+		return new MessageSourceAccessor(this.messageResource).getMessage("foundation.redmine") ;
 	}
 
 
@@ -134,7 +149,8 @@ public class RedmineProjectDashboardWidget implements ProjectDashboardWidget {
 
 			@Override
 			public String getTitle() {
-				return "Forge (Redmine)";
+
+				return new MessageSourceAccessor(RedmineProjectDashboardWidget.this.messageResource).getMessage("foundation.redmine.tab.title");
 			}
 
 			@Override
