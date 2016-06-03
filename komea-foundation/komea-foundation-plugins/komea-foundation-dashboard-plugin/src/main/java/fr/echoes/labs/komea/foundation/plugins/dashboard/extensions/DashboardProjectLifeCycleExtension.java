@@ -3,7 +3,7 @@ package fr.echoes.labs.komea.foundation.plugins.dashboard.extensions;
 import java.text.Normalizer;
 
 import org.apache.commons.lang3.StringUtils;
-import org.komea.organization.model.EntityType;
+import org.komea.organization.model.Entity;
 import org.komea.organization.storage.client.OrganizationStorageClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +13,7 @@ import org.springframework.core.annotation.Order;
 
 import com.tocea.corolla.products.dao.IProjectDAO;
 
+import fr.echoes.labs.ksf.cc.plugins.dashboard.services.DashboardClientFactory;
 import fr.echoes.labs.ksf.cc.plugins.dashboard.services.DashboardConfigurationService;
 import fr.echoes.labs.ksf.extensions.annotations.Extension;
 import fr.echoes.labs.ksf.extensions.projects.IProjectLifecycleExtension;
@@ -39,6 +40,9 @@ public class DashboardProjectLifeCycleExtension implements IProjectLifecycleExte
 	@Autowired
 	private DashboardConfigurationService configurationService;
 
+	@Autowired
+	private DashboardClientFactory clientFactory;
+
 	private ICurrentUserService currentUserService;
 
 	public void init() {
@@ -62,15 +66,13 @@ public class DashboardProjectLifeCycleExtension implements IProjectLifecycleExte
 
 		LOGGER.info("[Dashboard] project {} creation detected [demanded by: {}]", project.getKey(), logginName);
 
-
 		final String projectName = project.getName();
 		final String projectKey = createIdentifier(projectName);
 
-		final String url = this.configurationService.getUrl() + "/organization";
+		final OrganizationStorageClient organizationStorageClient = this.clientFactory.organizationStorageClient();
 
-		final OrganizationStorageClient organizationStorageClient = new OrganizationStorageClient(url);
-		final EntityType projectEntity = new EntityType().setKey(projectKey).setName(projectName);
-		organizationStorageClient.createEntityTypesIfNotExist(projectEntity);
+		final Entity projectEntity = new Entity().setKey(projectKey).setName(projectName);
+		organizationStorageClient.addOrUpdatePartialEntities(projectEntity);
 
 		return NotifyResult.CONTINUE;
 	}
