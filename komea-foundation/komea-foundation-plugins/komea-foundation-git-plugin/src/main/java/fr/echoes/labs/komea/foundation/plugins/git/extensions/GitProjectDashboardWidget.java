@@ -12,6 +12,7 @@ import org.apache.commons.lang3.text.StrSubstitutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
@@ -26,6 +27,7 @@ import fr.echoes.labs.komea.foundation.plugins.git.services.GitErrorHandlingServ
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.IProjectTabPanel;
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.MenuAction;
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
+import fr.echoes.labs.ksf.users.security.api.ICurrentUserService;
 
 /**
  * @author dcollard
@@ -39,7 +41,7 @@ public class GitProjectDashboardWidget implements ProjectDashboardWidget {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GitProjectDashboardWidget.class);
 
 	@Autowired
-	private GitConfigurationService configurationService;
+	private GitConfigurationService config;
 
 	@Autowired
 	private IProjectDAO projectDAO;
@@ -61,6 +63,19 @@ public class GitProjectDashboardWidget implements ProjectDashboardWidget {
 
 		return null;
 	}
+
+	private ICurrentUserService currentUserService;
+
+	@Autowired
+	private ApplicationContext applicationContext;
+
+	public void init() {
+
+		if (this.currentUserService == null) {
+			this.currentUserService = this.applicationContext.getBean(ICurrentUserService.class);
+		}
+	}
+
 
 	@Override
 	public String getHtmlPanelBody(String projectId) {
@@ -112,10 +127,13 @@ public class GitProjectDashboardWidget implements ProjectDashboardWidget {
 	}
 
 	private String getProjectScmUrl(String projectName) {
+		init();
+		final String logginName = this.currentUserService.getCurrentUserLogin();
 		final Map<String, String> variables = new HashMap<String, String>(2);
-		variables.put("scmUrl", this.configurationService.getScmUrl());
+		variables.put("scmUrl", this.config.getScmUrl());
 		variables.put("projectName", projectName);
-		return replaceVariables(this.configurationService.getProjectScmUrlPattern(), variables);
+		variables.put("userLogin", logginName);
+		return replaceVariables(this.config.getDisplayedUri(), variables);
 	}
 
 	private String replaceVariables(String str, Map<String, String> variables) {

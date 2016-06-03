@@ -1,5 +1,6 @@
 package fr.echoes.labs.komea.foundation.plugins.git.services;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -42,6 +43,9 @@ public class GitConfigurationService {
 
 	@Value("${ksf.git.sshPrivateKeyPath:}")
 	protected String sshPrivateKeyPath;
+
+	@Value("${ksf.git.displayedUri:}")
+	private String displayedUri;
 
 	public String getScmUrl() {
 		return this.scmUrl;
@@ -98,5 +102,13 @@ public class GitConfigurationService {
 	public String getSshPrivateKeyPath() {
 		return this.sshPrivateKeyPath;
 	}
+
+	/**
+	 * @return the displayedUri
+	 */
+	public String getDisplayedUri() {
+		return StringUtils.isBlank(this.displayedUri) ? getScmUrl() : this.displayedUri;
+	}
+
 
 }

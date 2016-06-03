@@ -20,11 +20,14 @@ import org.eclipse.jgit.api.errors.CheckoutConflictException;
 import org.eclipse.jgit.api.errors.ConcurrentRefUpdateException;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.InvalidMergeHeadsException;
+import org.eclipse.jgit.api.errors.InvalidRefNameException;
 import org.eclipse.jgit.api.errors.InvalidRemoteException;
 import org.eclipse.jgit.api.errors.NoFilepatternException;
 import org.eclipse.jgit.api.errors.NoHeadException;
 import org.eclipse.jgit.api.errors.NoMessageException;
 import org.eclipse.jgit.api.errors.NotMergedException;
+import org.eclipse.jgit.api.errors.RefAlreadyExistsException;
+import org.eclipse.jgit.api.errors.RefNotFoundException;
 import org.eclipse.jgit.api.errors.TransportException;
 import org.eclipse.jgit.api.errors.WrongRepositoryStateException;
 import org.eclipse.jgit.lib.Constants;
@@ -371,6 +374,28 @@ public class GitService implements IGitService {
 	public void closeRelease(String projectName, String releaseName)
 			throws GitExtensionException {
 
+
+	}
+
+	private void checkout(Git git, String branchName) throws RefAlreadyExistsException, RefNotFoundException, InvalidRefNameException, CheckoutConflictException, GitAPIException {
+		git.checkout().
+        setCreateBranch(true).
+        setName(branchName).
+        setUpstreamMode(CreateBranchCommand.SetupUpstreamMode.TRACK).
+        setStartPoint("origin/" + branchName).
+        call();
+	}
+
+	private void tagBranch(Git git, String branchName, String tagName) throws RefAlreadyExistsException, RefNotFoundException, InvalidRefNameException, CheckoutConflictException, GitAPIException {
+       git.checkout().
+    	        setCreateBranch(true).
+    	        setName(branchName).
+    	        setUpstreamMode(CreateBranchCommand.SetupUpstreamMode.TRACK).
+    	        setStartPoint("origin/" + branchName).
+    	        call();
+
+       git.tag().setName(tagName).call();
+       git.push().setPushTags().call();
 
 	}
 
