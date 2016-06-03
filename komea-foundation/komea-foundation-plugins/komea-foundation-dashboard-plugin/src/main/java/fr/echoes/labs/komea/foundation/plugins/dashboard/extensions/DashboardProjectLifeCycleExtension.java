@@ -1,6 +1,5 @@
 package fr.echoes.labs.komea.foundation.plugins.dashboard.extensions;
 
-import java.text.Normalizer;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -16,6 +15,7 @@ import com.google.common.collect.Lists;
 import com.tocea.corolla.products.dao.IProjectDAO;
 
 import fr.echoes.labs.ksf.cc.extensions.gui.ProjectExtensionConstants;
+import fr.echoes.labs.ksf.cc.extensions.services.project.ProjectUtils;
 import fr.echoes.labs.ksf.cc.plugins.dashboard.services.DashboardClientFactory;
 import fr.echoes.labs.ksf.cc.plugins.dashboard.services.DashboardConfigurationService;
 import fr.echoes.labs.ksf.extensions.annotations.Extension;
@@ -71,31 +71,31 @@ public class DashboardProjectLifeCycleExtension implements IProjectLifecycleExte
 
 		final List<Entity> entities = getProjectEntities(project);
 
-		final OrganizationStorageClient organizationStorageClient = clientFactory.organizationStorageClient();
+		final OrganizationStorageClient organizationStorageClient = this.clientFactory.organizationStorageClient();
 		organizationStorageClient.addOrUpdatePartialEntities(entities);
 
 		return NotifyResult.CONTINUE;
 	}
-	
+
 	public List<Entity> getProjectEntities(final ProjectDto project) {
-		
-		List<Entity> entities = Lists.newArrayList();
-		
-		final String projectType = configurationService.getProjectType();
+
+		final List<Entity> entities = Lists.newArrayList();
+
+		final String projectType = this.configurationService.getProjectType();
 		final String projectName = project.getName();
-		final String projectKey = createIdentifier(projectName);
-		final String projectKeyTag = configurationService.getProjectKeyTag();
-		
+		final String projectKey = ProjectUtils.createIdentifier(projectName);
+		final String projectKeyTag = this.configurationService.getProjectKeyTag();
+
 		final Entity projectEntity = new Entity()
 			.setKey(projectKey)
 			.setName(projectName)
 			.setType(projectType);
-		
+
 		entities.add(projectEntity);
-		
-		String jobType = configurationService.getJobType();
-		List<String> jobNames = (List<String>) project.getOtherAttributes().get(ProjectExtensionConstants.CI_JOBS_KEY);
-		
+
+		final String jobType = this.configurationService.getJobType();
+		final List<String> jobNames = (List<String>) project.getOtherAttributes().get(ProjectExtensionConstants.CI_JOBS_KEY);
+
 		if (jobNames != null && !jobNames.isEmpty()) {
 			for (final String jobName : jobNames) {
 				final Entity jobEntity = new Entity()
@@ -106,7 +106,7 @@ public class DashboardProjectLifeCycleExtension implements IProjectLifecycleExte
 				entities.add(jobEntity);
 			}
 		}
-		
+
 		return entities;
 	}
 
@@ -135,10 +135,6 @@ public class DashboardProjectLifeCycleExtension implements IProjectLifecycleExte
 	public NotifyResult notifyCreatedFeature(ProjectDto project, String featureId,
 			String featureSubject) {
 		return NotifyResult.CONTINUE;
-	}
-
-	private String createIdentifier(String projectName) {
-		return  Normalizer.normalize(projectName, Normalizer.Form.NFD).replaceAll("[^\\dA-Za-z\\-]", "").replaceAll("\\s+","-" ).toLowerCase();
 	}
 
 

@@ -27,6 +27,7 @@ import fr.echoes.labs.komea.foundation.plugins.git.services.GitErrorHandlingServ
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.IProjectTabPanel;
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.MenuAction;
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
+import fr.echoes.labs.ksf.cc.extensions.services.project.ProjectUtils;
 import fr.echoes.labs.ksf.users.security.api.ICurrentUserService;
 
 /**
@@ -133,6 +134,7 @@ public class GitProjectDashboardWidget implements ProjectDashboardWidget {
 		variables.put("scmUrl", this.config.getScmUrl());
 		variables.put("projectName", projectName);
 		variables.put("userLogin", logginName);
+		variables.put("projectKey", ProjectUtils.createIdentifier(projectName));
 		return replaceVariables(this.config.getDisplayedUri(), variables);
 	}
 

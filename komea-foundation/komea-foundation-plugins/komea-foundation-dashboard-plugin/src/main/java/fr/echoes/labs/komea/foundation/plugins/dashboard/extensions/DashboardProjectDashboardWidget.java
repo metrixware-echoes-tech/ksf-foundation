@@ -1,6 +1,5 @@
 package fr.echoes.labs.komea.foundation.plugins.dashboard.extensions;
 
-import java.text.Normalizer;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,6 +22,7 @@ import com.tocea.corolla.products.domain.Project;
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.IProjectTabPanel;
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.MenuAction;
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
+import fr.echoes.labs.ksf.cc.extensions.services.project.ProjectUtils;
 import fr.echoes.labs.ksf.cc.plugins.dashboard.services.DashboardConfigurationService;
 
 
@@ -89,7 +89,7 @@ public class DashboardProjectDashboardWidget implements ProjectDashboardWidget {
 				String url = DashboardProjectDashboardWidget.this.configurationService.getUrl();
 
 				if (project != null) {
-					final String projectDashboardKey = createIdentifier(project.getName());
+					final String projectDashboardKey = ProjectUtils.createIdentifier(project.getName());
 					if (!url.endsWith("/")) {
 						url = url + '/';
 					}
@@ -140,7 +140,5 @@ public class DashboardProjectDashboardWidget implements ProjectDashboardWidget {
 
 	}
 
-	private String createIdentifier(String projectName) {
-		return  Normalizer.normalize(projectName, Normalizer.Form.NFD).replaceAll("[^\\dA-Za-z\\-]", "").replaceAll("\\s+","-" ).toLowerCase();
-	}
+
 }
