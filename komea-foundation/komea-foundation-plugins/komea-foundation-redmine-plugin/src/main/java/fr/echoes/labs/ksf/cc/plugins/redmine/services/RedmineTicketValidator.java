@@ -38,6 +38,13 @@ public class RedmineTicketValidator implements IValidator {
 		return null;
 	}
 
+	/**
+	 * Validates that all the the tickets for that release are closed.
+	 *
+	 * @param projectName the project name.
+	 * @param releaseName the release name.
+	 * @return
+	 */
 	@Override
 	public List<IValidatorResult> validateRelease(String projectName,
 			String releaseName) {

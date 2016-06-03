@@ -9,6 +9,7 @@ import org.springframework.core.annotation.Order;
 
 import com.tocea.corolla.products.dao.IProjectDAO;
 
+import fr.echoes.labs.komea.foundation.plugins.git.GitExtensionMergeException;
 import fr.echoes.labs.komea.foundation.plugins.git.services.GitErrorHandlingService;
 import fr.echoes.labs.komea.foundation.plugins.git.services.IGitService;
 import fr.echoes.labs.ksf.extensions.annotations.Extension;
@@ -118,9 +119,13 @@ public class GitProjectLifeCycleExtension implements IProjectLifecycleExtension 
 			String featureSubject) {
 		try {
 			this.gitService.closeFeature(project.getName(), featureId, featureSubject);
-		} catch (final Exception ex) {
-			LOGGER.error("[Git] Failed to close feature for project {} ", project.getName(), ex);
-			this.errorHandler.registerError("Failed to create release.");
+		} catch (final GitExtensionMergeException e) {
+			LOGGER.error("[Git] Failed to finish feature for project {} ", project.getName(), e);
+			this.errorHandler.registerError("Failed to finish feature: " + e.getMessage());
+			return NotifyResult.TERMINATE;
+		} catch (final Exception e) {
+			LOGGER.error("[Git] Failed to finish feature for project {} ", project.getName(), e);
+			this.errorHandler.registerError("Failed to finish feature.");
 		}
 		return NotifyResult.CONTINUE;
 	}

@@ -6,6 +6,7 @@
 package fr.echoes.labs.ksf.cc.ui.views.projects;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -156,11 +157,24 @@ public class ProjectController {
 
 		if (validateResults.isEmpty()) {
 			this.gate.dispatch(new FinishReleaseCommand(project, releaseVersion));
+			deleteReleaseDao(releaseVersion);
+
 		} else {
 			redirectAttributes.addFlashAttribute("validationErrors", validateResults);
 		}
 
 		return new ModelAndView("redirect:/ui/projects/" + project.getKey());
+	}
+
+	private void deleteReleaseDao(String releaseVersion) {
+		final List<Release> findAll = this.releaseDao.findAll();
+		final Iterator<Release> iterator = findAll.iterator();
+		while (iterator.hasNext()) {
+			final Release release = iterator.next();
+			if (release.getReleaseVersion().equals(releaseVersion)) {
+				this.releaseDao.delete(release);
+			}
+		}
 	}
 
 	@RequestMapping(value = "/ui/projects/features/new")

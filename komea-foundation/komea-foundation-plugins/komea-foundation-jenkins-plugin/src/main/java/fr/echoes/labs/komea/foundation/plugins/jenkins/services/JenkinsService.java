@@ -392,6 +392,11 @@ public class JenkinsService implements IJenkinsService {
 		deleteJob(projectName, featureJobName);
 	}
 
-
+	@Override
+	public void deleteReleaseJob(String projectName, String releaseName)
+			throws JenkinsExtensionException {
+		final String releaseJobName = getReleaseJobName(projectName, releaseName);
+		deleteJob(projectName, releaseJobName);
+	}
 
 }

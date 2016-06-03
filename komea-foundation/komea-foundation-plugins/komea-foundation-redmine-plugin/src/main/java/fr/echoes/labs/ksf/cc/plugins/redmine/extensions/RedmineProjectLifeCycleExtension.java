@@ -76,7 +76,7 @@ public class RedmineProjectLifeCycleExtension implements IProjectLifecycleExtens
 
 		} catch (final Exception ex) {
 			LOGGER.error("[Redmine] Failed to create project {} ", project.getName(), ex);
-			this.errorHandler.registerError("Unable to create Redmine project. Please verify your Redmine configuration.");
+			this.errorHandler.registerError("Unable to create Redmine project.");
 		}
 		return NotifyResult.CONTINUE;
 	}
@@ -90,7 +90,7 @@ public class RedmineProjectLifeCycleExtension implements IProjectLifecycleExtens
 
 		} catch (final Exception ex) {
 			LOGGER.error("[Redmine] Failed to delete project {} ", project.getName(), ex);
-			this.errorHandler.registerError("Unable to delete Redmine project. Please verify your Redmine configuration.");
+			this.errorHandler.registerError("Unable to delete Redmine project.");
 		}
 		return NotifyResult.CONTINUE;
 	}
@@ -135,7 +135,7 @@ public class RedmineProjectLifeCycleExtension implements IProjectLifecycleExtens
 
 		} catch (final Exception ex) {
 			LOGGER.error("[Redmine] Failed to change ticket #{} status", ticketId, ex);
-			this.errorHandler.registerError("Failed to change Redmine ticket status. Please verify your Redmine configuration.");
+			this.errorHandler.registerError("Failed to change Redmine ticket status.");
 		}
 		return NotifyResult.CONTINUE;
 	}
@@ -143,13 +143,13 @@ public class RedmineProjectLifeCycleExtension implements IProjectLifecycleExtens
 	@Override
 	public NotifyResult notifyFinishedFeature(ProjectDto projectDto, String ticketId,
 			String featureSubject) {
-//		try {
-//			this.redmineService.changeStatus(ticketId, this.configurationService.getFeatureStatusNewId());
-//
-//		} catch (final Exception ex) {
-//			LOGGER.error("[Redmine] Failed to change ticket #{} status", ticketId, ex);
-//			this.errorHandler.registerError("Failed to change Redmine ticket status. Please verify your Redmine configuration.");
-//		}
+		try {
+			this.redmineService.changeStatus(ticketId, this.configurationService.getFeatureStatusClosedId());
+
+		} catch (final Exception ex) {
+			LOGGER.error("[Redmine] Failed to change ticket #{} status", ticketId, ex);
+			this.errorHandler.registerError("Failed to change Redmine ticket status.");
+		}
 		return NotifyResult.CONTINUE;
 	}
 

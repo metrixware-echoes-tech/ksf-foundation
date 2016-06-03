@@ -68,7 +68,7 @@ public class JenkinsProjectLifeCycleExtension implements IProjectLifecycleExtens
 
 		} catch (final Exception ex) {
 			LOGGER.error("[Jenkins] Failed to create project {} ", project.getName(), ex);
-			this.errorHandler.registerError("Unable to create Jenkins project. Please verify your Jenkins configuration.");
+			this.errorHandler.registerError("Unable to create Jenkins project.");
 		}
 		return NotifyResult.CONTINUE;
 	}
@@ -82,7 +82,7 @@ public class JenkinsProjectLifeCycleExtension implements IProjectLifecycleExtens
 
 		} catch (final Exception ex) {
 			LOGGER.error("[Jenkins] Failed to delete project {} ", project.getName(), ex);
-			this.errorHandler.registerError("Unable to delete Jenkins project. Please verify your Jenkins configuration.");
+			this.errorHandler.registerError("Unable to delete Jenkins project.");
 		}
 		return NotifyResult.CONTINUE;
 	}
@@ -123,6 +123,13 @@ public class JenkinsProjectLifeCycleExtension implements IProjectLifecycleExtens
 
 	@Override
 	public NotifyResult notifyFinishedRelease(ProjectDto project, String releaseName) {
+		try {
+
+			this.jenkinsService.deleteReleaseJob(project.getName(), releaseName);
+		} catch (final Exception ex) {
+			LOGGER.error("[Jenkins] Failed to delete the release job", ex);
+			this.errorHandler.registerError("Failed to delete the release job.");
+		}
 		return NotifyResult.CONTINUE;
 	}
 

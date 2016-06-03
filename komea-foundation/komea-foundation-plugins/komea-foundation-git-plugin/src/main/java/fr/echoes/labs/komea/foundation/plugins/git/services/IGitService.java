@@ -45,7 +45,7 @@ public interface IGitService {
 	public void createFeature(String projectName, String featureId, String featureSubject) throws GitExtensionException;
 
 	/**
-	 * Closes the feature branch.
+	 * Closes the feature.
 	 *
 	 * @param projectName the project name
 	 * @param featureId the feature ID
@@ -55,7 +55,7 @@ public interface IGitService {
 	public void closeFeature(String projectName, String featureId, String featureSubject) throws GitExtensionException;
 
 	/**
-	 * Closes the release branch.
+	 * Closes the release.
 	 *
 	 * @param projectName the project name
 	 * @param releaseName the feature name

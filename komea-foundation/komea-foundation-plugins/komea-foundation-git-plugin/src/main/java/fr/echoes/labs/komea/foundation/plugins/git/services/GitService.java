@@ -58,6 +58,7 @@ import fr.echoes.labs.komea.foundation.plugins.git.GitExtensionMergeException;
 public class GitService implements IGitService {
 
 	private static final String DEVELOP = "develop";
+	private static final String MASTER = "master";
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(GitService.class);
 
@@ -373,7 +374,47 @@ public class GitService implements IGitService {
 	@Override
 	public void closeRelease(String projectName, String releaseName)
 			throws GitExtensionException {
+		final String gitProjectUri = getProjectScmUrl(projectName);
+		final String branchName = getReleaseBranchName(projectName, releaseName);
 
+		File workingDirectory = null;
+		Git git = null;
+
+		try {
+			workingDirectory = createCloneDestinationDirectory(projectName);
+
+			// Clone project
+			LOGGER.debug("Cloning the repository {} into {}", gitProjectUri, workingDirectory);
+			git = callCloneCommand(gitProjectUri, workingDirectory);
+
+			tagBranch(git, branchName, releaseName);
+
+			final MergeResult mergeIntoDevlopResult = mergeBranches(git, branchName, DEVELOP);
+			if (mergeIntoDevlopResult.getMergeStatus().equals(MergeResult.MergeStatus.CONFLICTING)) {
+				throw new GitExtensionMergeException("Cannot merge '"+ branchName +"' into " + DEVELOP);
+			}
+
+			final MergeResult mergeIntoMasterResult = mergeBranches(git, branchName, MASTER);
+			if (mergeIntoMasterResult.getMergeStatus().equals(MergeResult.MergeStatus.CONFLICTING)) {
+				throw new GitExtensionMergeException("Cannot merge '"+ branchName +"' into " + DEVELOP);
+			} else {
+				deleteBranche(git, branchName); // Both merges have succeeded we can delete the release branch
+			}
+
+
+		} catch (final Exception e) {
+			throw new GitExtensionException(e);
+		} finally {
+			if (git != null) {
+				git.close();
+			}
+			try {
+				// Delete Git local repository
+				FileUtils.deleteDirectory(workingDirectory);
+			} catch (final IOException e) {
+				LOGGER.warn("Failed to delete the directory " + workingDirectory.getName(), e);
+			}
+		}
 
 	}
 
@@ -387,16 +428,9 @@ public class GitService implements IGitService {
 	}
 
 	private void tagBranch(Git git, String branchName, String tagName) throws RefAlreadyExistsException, RefNotFoundException, InvalidRefNameException, CheckoutConflictException, GitAPIException {
-       git.checkout().
-    	        setCreateBranch(true).
-    	        setName(branchName).
-    	        setUpstreamMode(CreateBranchCommand.SetupUpstreamMode.TRACK).
-    	        setStartPoint("origin/" + branchName).
-    	        call();
-
+		checkout(git, branchName);
        git.tag().setName(tagName).call();
        git.push().setPushTags().call();
-
 	}
 
 	private String createIdentifier(String projectName) {

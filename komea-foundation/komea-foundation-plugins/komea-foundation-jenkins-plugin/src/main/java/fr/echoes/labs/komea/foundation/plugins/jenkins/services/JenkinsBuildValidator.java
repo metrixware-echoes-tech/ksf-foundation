@@ -29,6 +29,14 @@ public class JenkinsBuildValidator implements IValidator {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(JenkinsBuildValidator.class);
 
+	/**
+	 * Validates that the latest build for this feature was successful .
+	 *
+	 * @param projectName the project name.
+	 * @param featureId the feature ID.
+	 * @param description the feature description.
+	 * @return
+	 */
 	@Override
 	public List<IValidatorResult> validateFeature(String projectName,
 			String featureId, String description) {
@@ -52,6 +60,13 @@ public class JenkinsBuildValidator implements IValidator {
 		return results;
 	}
 
+	/**
+	 * Validates that the latest build for this release was successful .
+	 *
+	 * @param projectName the project name.
+	 * @param releaseName the release name.
+	 * @return
+	 */
 	@Override
 	public List<IValidatorResult> validateRelease(String projectName,
 			String releaseName) {

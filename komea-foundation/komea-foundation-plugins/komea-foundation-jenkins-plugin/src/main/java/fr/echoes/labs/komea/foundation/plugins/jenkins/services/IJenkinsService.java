@@ -86,11 +86,21 @@ public interface IJenkinsService {
 
 	/**
 	 * Deletes the feature job
-	 * 
+	 *
 	 * @param projectName the project name
 	 * @param featureId the feature ID
 	 * @param featureSubject the feature subject
-	 * @throws JenkinsExtensionException 
+	 * @throws JenkinsExtensionException
 	 */
 	public void deleteFeatureJob(String projectName, String featureId, String featureSubject) throws JenkinsExtensionException;
+
+	/**
+	 * Deletes the release job
+	 *
+	 * @param projectName the project name
+	 * @param featureId the feature ID
+	 * @param featureSubject the feature subject
+	 * @throws JenkinsExtensionException
+	 */
+	public void deleteReleaseJob(String projectName, String releaseName) throws JenkinsExtensionException;
 }
