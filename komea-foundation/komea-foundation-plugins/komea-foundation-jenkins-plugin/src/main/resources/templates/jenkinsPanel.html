@@ -6,7 +6,7 @@
 <div th:if="${jenkinsError == null}" th:remove="tag">
 	
 	<div class="list-group">
-  		<a th:href="@{buildBase} + ${buildInfo.getBuildUrl()} + '#pluginTab1'" class="list-group-item" th:each="buildInfo : ${jenkinsBuildHistory}">
+  		<a th:href="${buildBase} + ${buildInfo.getBuildUrl()} + '#pluginTab1'" class="list-group-item" th:each="buildInfo : ${jenkinsBuildHistory}">
     		<strong>
     			<span th:text="${buildInfo.getJobName()}"></span>
     			<span th:text="' [' + ${buildInfo.getResult()} + ']'" th:class="${buildInfo.getResult() == 'SUCCESS' ? 'text-success' : buildInfo.getResult() == 'FAILURE' ? 'text-danger' : ''}"></span>

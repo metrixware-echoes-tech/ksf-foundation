@@ -93,12 +93,9 @@ public class RedmineProjectDashboardWidget implements ProjectDashboardWidget {
 
 			final List<RedmineIssue> issues = this.redmineService.queryIssues(query);
 
-			String contextPath = this.request.getContextPath();
-			if (!StringUtils.isBlank(contextPath)) {
-				contextPath = '/' + contextPath;
-			}
+			final String baseUrl = getBaseUrl(this.request);
 
-			ctx.setVariable("issuesBase", contextPath + "/ui/projects/" + project.getKey() + "?redmineIssue=");
+			ctx.setVariable("issuesBase", baseUrl + "ui/projects/" + project.getKey() + "?redmineIssue=");
 
 			ctx.setVariable("issues", issues);
 
@@ -110,6 +107,13 @@ public class RedmineProjectDashboardWidget implements ProjectDashboardWidget {
 		ctx.setVariable("redmineError", this.errorHandler.retrieveError());
 
 		return templateEngine.process("redminePanel", ctx);
+	}
+
+	private String getBaseUrl(HttpServletRequest  request) {
+		final StringBuffer url = request.getRequestURL();
+		final String uri = request.getRequestURI();
+		final String ctx = request.getContextPath();
+		return url.substring(0, url.length() - uri.length() + ctx.length()) + "/";
 	}
 
 	@Override

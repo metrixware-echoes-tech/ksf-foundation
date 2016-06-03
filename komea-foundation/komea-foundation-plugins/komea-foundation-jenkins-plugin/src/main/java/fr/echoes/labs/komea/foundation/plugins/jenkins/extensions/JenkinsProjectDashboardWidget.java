@@ -87,7 +87,9 @@ public class JenkinsProjectDashboardWidget implements ProjectDashboardWidget {
 		try {
 			final List<JenkinsBuildInfo> buildInfo = this.jenkinsService.getBuildInfo(projectName);
 
-			ctx.setVariable("buildBase", "/ui/projects/" + project.getKey() + "?buildUrl=");
+			final String baseUrl = getBaseUrl(this.request);
+
+			ctx.setVariable("buildBase", baseUrl + "ui/projects/" + project.getKey() + "?buildUrl=");
 
 			ctx.setVariable("jenkinsBuildHistory", buildInfo);
 		} catch (final JenkinsExtensionException e) {
@@ -99,6 +101,14 @@ public class JenkinsProjectDashboardWidget implements ProjectDashboardWidget {
 
 		return templateEngine.process("jenkinsPanel", ctx);
 	}
+
+	private String getBaseUrl(HttpServletRequest  request) {
+		final StringBuffer url = request.getRequestURL();
+		final String uri = request.getRequestURI();
+		final String ctx = request.getContextPath();
+		return url.substring(0, url.length() - uri.length() + ctx.length()) + "/";
+	}
+
 
 	@Override
 	public String getIconUrl() {

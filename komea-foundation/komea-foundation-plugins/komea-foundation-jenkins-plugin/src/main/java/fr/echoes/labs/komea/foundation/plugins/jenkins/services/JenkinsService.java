@@ -102,7 +102,7 @@ public class JenkinsService implements IJenkinsService {
 	}
 
 	private URI getJenkinsUri() throws URISyntaxException {
-		return new URI("http://jenkins.demo-esf.echoes-tech.com/" );
+		return new URI(this.configurationService.getUrl());
 	}
 
 	private FolderJob getProjectParentFolder(final JenkinsServer jenkins, String projectName) throws IOException {
@@ -399,5 +399,6 @@ public class JenkinsService implements IJenkinsService {
 		final String releaseJobName = getReleaseJobName(projectName, releaseName);
 		deleteJob(projectName, releaseJobName);
 	}
+
 
 }
