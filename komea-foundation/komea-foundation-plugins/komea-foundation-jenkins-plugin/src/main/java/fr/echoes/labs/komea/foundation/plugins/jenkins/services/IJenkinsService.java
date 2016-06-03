@@ -3,6 +3,7 @@ package fr.echoes.labs.komea.foundation.plugins.jenkins.services;
 import java.util.List;
 
 import fr.echoes.labs.komea.foundation.plugins.jenkins.JenkinsExtensionException;
+import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
 
 
 /**
@@ -17,7 +18,7 @@ public interface IJenkinsService {
 	 * @param projectName the project name.
 	 * @return
 	 */
-	public void createProject(String projectName) throws JenkinsExtensionException;
+	public void createProject(ProjectDto project) throws JenkinsExtensionException;
 
 	/**
 	 * Deletes the given project.

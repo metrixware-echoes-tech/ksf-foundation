@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.google.common.eventbus.Subscribe;
 import com.tocea.corolla.cqrs.annotations.EventHandler;
+import com.tocea.corolla.cqrs.gate.Gate;
+import com.tocea.corolla.products.commands.EditProjectCommand;
 import com.tocea.corolla.products.domain.Project;
 import com.tocea.corolla.products.events.EventFeatureCreated;
 import com.tocea.corolla.products.events.EventFeatureFinished;
@@ -31,6 +33,9 @@ public class ProjectLifecycleExtensionManager {
 
 	@Autowired(required = false)
 	private IProjectLifecycleExtension[] extensions;
+	
+	@Autowired
+	private Gate gate;
 
 	@Subscribe
 	public void notifyCreation(final EventNewProjectCreated _event) {
@@ -42,7 +47,9 @@ public class ProjectLifecycleExtensionManager {
 
 			extension.notifyCreatedProject(projectDto);
 		}
-
+		
+		_event.getCreatedProject().setOtherAttributes(projectDto.getOtherAttributes());
+		this.gate.dispatch(new EditProjectCommand(_event.getCreatedProject()));
 	}
 
 	@Subscribe

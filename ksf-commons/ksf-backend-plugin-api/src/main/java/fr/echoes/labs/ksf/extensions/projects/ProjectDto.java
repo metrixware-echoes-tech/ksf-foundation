@@ -2,8 +2,10 @@ package fr.echoes.labs.ksf.extensions.projects;
 
 import java.net.URL;
 import java.util.List;
+import java.util.Map;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 public class ProjectDto {
 	private String id;
@@ -22,6 +24,16 @@ public class ProjectDto {
 	private URL image;
 
 	private List<String> tags = Lists.newArrayList();
+	
+	private Map<String, Object> otherAttributes = Maps.newHashMap();
+
+	public Map<String, Object> getOtherAttributes() {
+		return otherAttributes;
+	}
+
+	public void setOtherAttributes(Map<String, Object> otherAttributes) {
+		this.otherAttributes = otherAttributes;
+	}
 
 	public String getCategoryId() {
 		return categoryId;

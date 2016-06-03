@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import com.google.common.base.Charsets;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import com.google.common.io.Resources;
 import com.offbytwo.jenkins.JenkinsServer;
 import com.offbytwo.jenkins.client.JenkinsHttpClient;
@@ -31,6 +32,8 @@ import com.offbytwo.jenkins.model.Job;
 import com.offbytwo.jenkins.model.JobWithDetails;
 
 import fr.echoes.labs.komea.foundation.plugins.jenkins.JenkinsExtensionException;
+import fr.echoes.labs.ksf.cc.extensions.gui.ProjectExtensionConstants;
+import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
 
 
 
@@ -53,9 +56,14 @@ public class JenkinsService implements IJenkinsService {
 	private JenkinsConfigurationService configurationService;
 
 	@Override
-	public void createProject(String projectName)
+	public void createProject(ProjectDto projectDTO)
 			throws JenkinsExtensionException {
+		
 		final JenkinsServer jenkins;
+		final String projectName = projectDTO.getName();
+		String masterJob = getJobName(projectName, MASTER);
+		String developJob = getJobName(projectName, DEVELOP);
+		
 		try {
 			final JenkinsHttpClient jenkinsHttpClient = new JenkinsHttpClient(getJenkinsUri());
 
@@ -63,26 +71,29 @@ public class JenkinsService implements IJenkinsService {
 
 			final String scmUrl = getProjectScmUrl(projectName);
 
-			if (useFoder()) {
+			if (useFolder()) {
 
 				createFolder(jenkinsHttpClient, projectName);
 
 				final FolderJob projectFolder = getProjectParentFolder(jenkins, projectName);
 
-				String resolvedXmlConfig = createConfigXml(projectName, scmUrl, MASTER);
-				jenkins.createJob(projectFolder, getJobName(projectName, MASTER), resolvedXmlConfig, false);
+				String resolvedXmlConfig = createConfigXml(projectName, scmUrl, MASTER);				
+				jenkins.createJob(projectFolder, masterJob, resolvedXmlConfig, false);
 
-				resolvedXmlConfig = createConfigXml(projectName, scmUrl, DEVELOP);
-				jenkins.createJob(projectFolder, getJobName(projectName, DEVELOP), resolvedXmlConfig, false);
+				resolvedXmlConfig = createConfigXml(projectName, scmUrl, DEVELOP);				
+				jenkins.createJob(projectFolder, developJob, resolvedXmlConfig, false);
 
 			} else {
+				
 				String resolvedXmlConfig = createConfigXml(projectName, scmUrl, MASTER);
-				jenkins.createJob(getJobName(projectName, MASTER), resolvedXmlConfig, false);
+				jenkins.createJob(masterJob, resolvedXmlConfig, false);
 
 				resolvedXmlConfig = createConfigXml(projectName, scmUrl, DEVELOP);
-				jenkins.createJob(getJobName(projectName, DEVELOP), resolvedXmlConfig, false);
+				jenkins.createJob(developJob, resolvedXmlConfig, false);
 			}
-
+			
+			List<String> jobs = Lists.newArrayList(projectName, masterJob, developJob);
+			projectDTO.getOtherAttributes().put(ProjectExtensionConstants.CI_JOBS_KEY, jobs);
 
 		} catch (final Exception e) {
 			throw new JenkinsExtensionException("Failed to create Jenkins job", e);
@@ -163,7 +174,7 @@ public class JenkinsService implements IJenkinsService {
 
 			jenkins = createJenkinsClient();
 
-			final boolean useFolder = useFoder();
+			final boolean useFolder = useFolder();
 
 			final int builsdPerJobLimit = this.configurationService.getBuilsdPerJobLimit();
 
@@ -249,7 +260,7 @@ public class JenkinsService implements IJenkinsService {
 
 			final String scmUrl = getProjectScmUrl(projectName);
 
-			if (useFoder()) {
+			if (useFolder()) {
 				final FolderJob projectFolder = getProjectParentFolder(jenkins, projectName);
 
 				final String resolvedXmlConfig = createConfigXml(projectName, scmUrl, gitBranchName);
@@ -269,7 +280,7 @@ public class JenkinsService implements IJenkinsService {
 		String jobName = EncodingUtils.encode(getJobName(projectName, branchName));
 		try {
 			final JenkinsHttpClient jenkinsHttpClient = new JenkinsHttpClient(new URI(this.configurationService.getUrl()));
-			if (useFoder()) {
+			if (useFolder()) {
 				jobName = EncodingUtils.encode(projectName) + "/job/" + jobName;
 			}
 
@@ -280,7 +291,7 @@ public class JenkinsService implements IJenkinsService {
 		}
 	}
 
-	private boolean useFoder() {
+	private boolean useFolder() {
 		return this.configurationService.useFolders();
 	}
 
@@ -354,7 +365,7 @@ public class JenkinsService implements IJenkinsService {
 
 			final JenkinsServer jenkins = createJenkinsClient();
 
-			final boolean useFolder = useFoder();
+			final boolean useFolder = useFolder();
 
 			final JobWithDetails jobWithDetails = getJobWithDetails(jenkins, projectName, jobName, useFolder);
 			final Build lastBuild = jobWithDetails.getLastBuild();
