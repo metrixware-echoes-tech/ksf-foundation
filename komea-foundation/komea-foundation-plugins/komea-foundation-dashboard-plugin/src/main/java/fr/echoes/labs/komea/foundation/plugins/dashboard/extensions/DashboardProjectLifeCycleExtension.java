@@ -3,7 +3,7 @@ package fr.echoes.labs.komea.foundation.plugins.dashboard.extensions;
 import java.text.Normalizer;
 
 import org.apache.commons.lang3.StringUtils;
-import org.komea.organization.model.EntityType;
+import org.komea.organization.model.Entity;
 import org.komea.organization.storage.client.OrganizationStorageClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,15 +61,16 @@ public class DashboardProjectLifeCycleExtension implements IProjectLifecycleExte
 
 		LOGGER.info("[Dashboard] project {} creation detected [demanded by: {}]", project.getKey(), logginName);
 
-
 		final String projectName = project.getName();
 		final String projectKey = createIdentifier(projectName);
 
 		final String url = this.configurationService.getUrl() + "/organization";
 
 		final OrganizationStorageClient organizationStorageClient = new OrganizationStorageClient(url);
-		final EntityType projectEntity = new EntityType().setKey(projectKey).setName(projectName);
-		organizationStorageClient.createEntityTypesIfNotExist(projectEntity);
+		
+		final Entity projectEntity = new Entity().setKey(projectKey).setName(projectName);
+		organizationStorageClient.addOrUpdatePartialEntities(projectEntity);
+
 	}
 
 	@Override

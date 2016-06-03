@@ -15,6 +15,9 @@ public class DashboardConfigurationService {
     
     @Value("${ksf.dashboard.customPeriod:30}")
     private int customPeriod;
+    
+    @Value("${ksf.dashboard.projectType}")
+    private String projectType;
 
 	public String getUrl() {
         if ('/' == this.url.charAt(this.url.length() - 1)) {
@@ -28,6 +31,10 @@ public class DashboardConfigurationService {
 	 */
 	public int getCustomPeriod() {
 		return customPeriod;
+	}
+	
+	public String getProjectType() {
+		return projectType;
 	}
 
 }
