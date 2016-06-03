@@ -9,8 +9,20 @@
 <div th:with="features=${@projectInformationManager.getFeatures(projectData.project)}" th:remove="tag">
 <div th:with="releases=${@projectInformationManager.getVersions(projectData.project)}" th:remove="tag">
 		<div class="panel-body">
+				
+			<div class="project-properties" >
+				<p>
+					<strong>Name:</strong> 
+					<label th:text="${projectData.project.name}">test</label>
+				</p>
+				<p>
+					<strong>Owner:</strong>
+					<label th:text="${#strings.isEmpty(projectData.user.firstName) or #strings.isEmpty(projectData.user.lastName) ? projectData.user.login : projectData.user.firstName +' '+ projectData.user.lastName}">User</label>
+				</p>
+			</div>
 
-			<ul class="project-properties" style="list-style-type: none">
+
+			<!-- ul class="project-properties" style="list-style-type: none">
 				<li>
 					<strong>Name:</strong> 
 					<label th:text="${projectData.project.name}">test</label>
@@ -19,7 +31,7 @@
 					<strong>Owner:</strong>
 					<label th:text="${#strings.isEmpty(projectData.user.firstName) or #strings.isEmpty(projectData.user.lastName) ? projectData.user.login : projectData.user.firstName +' '+ projectData.user.lastName}">User</label>
 				</li>
-			</ul>
+			</ul -->
 
 			<table class="table table-striped table-hover tableRowEllipsis" th:if="${not #lists.isEmpty(features)}">
 				<thead>

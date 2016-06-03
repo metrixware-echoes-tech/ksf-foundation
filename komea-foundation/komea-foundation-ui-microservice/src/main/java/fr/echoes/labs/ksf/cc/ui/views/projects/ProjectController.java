@@ -136,7 +136,7 @@ public class ProjectController {
 	}
 
 	@RequestMapping(value = "/ui/projects/releases/finish")
-	public ModelAndView finishRelease(@RequestParam("projectKey") final String projectKey,  @RequestParam("releaseVersion") final String releaseVersion) {
+	public ModelAndView finishRelease(@RequestParam("projectKey") final String projectKey,  @RequestParam("releaseVersion") final String releaseVersion, RedirectAttributes redirectAttributes) {
 
 		final Project project = this.projectDao.findByKey(projectKey);
 
@@ -156,6 +156,8 @@ public class ProjectController {
 
 		if (validateResults.isEmpty()) {
 			this.gate.dispatch(new FinishReleaseCommand(project, releaseVersion));
+		} else {
+			redirectAttributes.addFlashAttribute("validationErrors", validateResults);
 		}
 
 		return new ModelAndView("redirect:/ui/projects/" + project.getKey());
@@ -176,7 +178,7 @@ public class ProjectController {
 	}
 
 	@RequestMapping(value = "/ui/projects/features/finish")
-	public ModelAndView finishFeature(@RequestParam("projectKey") final String projectKey, @RequestParam("featureId") final String featureId, @RequestParam("featureSubject") final String featureSubject, RedirectAttributes redirectAttributes ) {
+	public ModelAndView finishFeature(@RequestParam("projectKey") final String projectKey, @RequestParam("featureId") final String featureId, @RequestParam("featureSubject") final String featureSubject, RedirectAttributes redirectAttributes) {
 
 		final Project project = this.projectDao.findByKey(projectKey);
 

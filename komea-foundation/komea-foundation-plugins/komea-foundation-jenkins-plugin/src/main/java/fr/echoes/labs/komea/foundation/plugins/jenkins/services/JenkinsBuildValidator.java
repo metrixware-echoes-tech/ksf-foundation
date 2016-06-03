@@ -35,9 +35,14 @@ public class JenkinsBuildValidator implements IValidator {
 		List<IValidatorResult>  results = null;
 		try {
 			final JenkinsBuildInfo buildInfo = this.jenkins.getFeatureStatus(projectName, featureId, description);
-			if (buildInfo != null && "FAILURE".equals(buildInfo.getResult())) {
+			if (buildInfo == null || !"SUCCESS".equals(buildInfo.getResult())) {
 				results = new ArrayList<IValidatorResult>(1);
-				final IValidatorResult result = new ValidatorResult(ValidatorResultType.ERROR, "JENKINS - Le dernier build du job '" + buildInfo.getJobName() + "' est en échec.");
+				final IValidatorResult result;
+				if (buildInfo == null) {
+					result = new ValidatorResult(ValidatorResultType.ERROR, "JENKINS - Échec de la récupération des informations de build de la feature '" + featureId + "'." );
+				} else {
+					result = new ValidatorResult(ValidatorResultType.ERROR, "JENKINS - Le dernier build du job '" + buildInfo.getJobName() + "' est en échec.");
+				}
 				results.add(result);
 			}
 
@@ -53,9 +58,14 @@ public class JenkinsBuildValidator implements IValidator {
 		List<IValidatorResult>  results = null;
 		try {
 			final JenkinsBuildInfo buildInfo = this.jenkins.getReleaseStatus(projectName, releaseName);
-			if (buildInfo != null && "FAILURE".equals(buildInfo.getResult())) {
+			if (buildInfo == null || !"SUCCESS".equals(buildInfo.getResult())) {
 				results = new ArrayList<IValidatorResult>(1);
-				final IValidatorResult result = new ValidatorResult(ValidatorResultType.ERROR, "JENKINS - Le dernier build du job '" + buildInfo.getJobName() + "' est en échec.");
+				final IValidatorResult result;
+				if (buildInfo == null) {
+					result = new ValidatorResult(ValidatorResultType.ERROR, "JENKINS - Échec de la récupération des informations de build de la release '" + releaseName + "'." );
+				} else {
+					result = new ValidatorResult(ValidatorResultType.ERROR, "JENKINS - Le dernier build du job '" + buildInfo.getJobName() + "' est en échec.");
+				}
 				results.add(result);
 			}
 

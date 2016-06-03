@@ -17,6 +17,7 @@ import com.tocea.corolla.products.events.EventReleaseCreated;
 import com.tocea.corolla.products.events.EventReleaseFinished;
 
 import fr.echoes.labs.ksf.extensions.projects.IProjectLifecycleExtension;
+import fr.echoes.labs.ksf.extensions.projects.NotifyResult;
 import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
 
 /**
@@ -87,7 +88,10 @@ public class ProjectLifecycleExtensionManager {
 		}
 		final ProjectDto projectDto = newProjectDto(event.getProject());
 		for (final IProjectLifecycleExtension extension : this.extensions) {
-			extension.notifyCreatedFeature(projectDto, event.getFeatureId(), event.getFeatureSubject());
+			final NotifyResult result = extension.notifyCreatedFeature(projectDto, event.getFeatureId(), event.getFeatureSubject());
+			if (result != NotifyResult.CONTINUE) {
+				break;
+			}
 		}
 
 	}
@@ -99,7 +103,10 @@ public class ProjectLifecycleExtensionManager {
 		}
 		final ProjectDto projectDto = newProjectDto(event.getProject());
 		for (final IProjectLifecycleExtension extension : this.extensions) {
-			extension.notifyFinishedFeature(projectDto, event.getFeatureId(), event.getFeatureSubject());
+			final NotifyResult result = extension.notifyFinishedFeature(projectDto, event.getFeatureId(), event.getFeatureSubject());
+			if (result != NotifyResult.CONTINUE) {
+				break;
+			}
 		}
 
 	}

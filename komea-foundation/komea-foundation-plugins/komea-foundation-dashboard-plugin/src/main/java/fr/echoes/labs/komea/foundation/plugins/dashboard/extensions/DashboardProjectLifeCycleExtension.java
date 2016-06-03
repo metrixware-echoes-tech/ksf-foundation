@@ -16,6 +16,7 @@ import com.tocea.corolla.products.dao.IProjectDAO;
 import fr.echoes.labs.ksf.cc.plugins.dashboard.services.DashboardConfigurationService;
 import fr.echoes.labs.ksf.extensions.annotations.Extension;
 import fr.echoes.labs.ksf.extensions.projects.IProjectLifecycleExtension;
+import fr.echoes.labs.ksf.extensions.projects.NotifyResult;
 import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
 import fr.echoes.labs.ksf.users.security.api.ICurrentUserService;
 
@@ -48,7 +49,7 @@ public class DashboardProjectLifeCycleExtension implements IProjectLifecycleExte
 	}
 
 	@Override
-	public void notifyCreatedProject(ProjectDto project) {
+	public NotifyResult notifyCreatedProject(ProjectDto project) {
 
 		init();
 
@@ -56,7 +57,7 @@ public class DashboardProjectLifeCycleExtension implements IProjectLifecycleExte
 
 		if (StringUtils.isEmpty(logginName)) {
 			LOGGER.error("[Dashboard] No user found. Aborting project creation in Git module");
-			return;
+			return NotifyResult.CONTINUE;
 		}
 
 		LOGGER.info("[Dashboard] project {} creation detected [demanded by: {}]", project.getKey(), logginName);
@@ -70,35 +71,35 @@ public class DashboardProjectLifeCycleExtension implements IProjectLifecycleExte
 		final OrganizationStorageClient organizationStorageClient = new OrganizationStorageClient(url);
 		final EntityType projectEntity = new EntityType().setKey(projectKey).setName(projectName);
 		organizationStorageClient.createEntityTypesIfNotExist(projectEntity);
+
+		return NotifyResult.CONTINUE;
 	}
 
 	@Override
-	public void notifyDeletedProject(ProjectDto project) {
-
-	}
-
-	@Override
-	public void notifyDuplicatedProject(ProjectDto project) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void notifyUpdatedProject(ProjectDto project) {
-		// TODO Auto-generated method stub
+	public NotifyResult notifyDeletedProject(ProjectDto project) {
+		return NotifyResult.CONTINUE;
 
 	}
 
 	@Override
-	public void notifyCreatedRelease(ProjectDto project, String releaseVersion) {
-
-
+	public NotifyResult notifyDuplicatedProject(ProjectDto project) {
+		return NotifyResult.CONTINUE;
 	}
 
 	@Override
-	public void notifyCreatedFeature(ProjectDto project, String featureId,
+	public NotifyResult notifyUpdatedProject(ProjectDto project) {
+		return NotifyResult.CONTINUE;
+	}
+
+	@Override
+	public NotifyResult notifyCreatedRelease(ProjectDto project, String releaseVersion) {
+		return NotifyResult.CONTINUE;
+	}
+
+	@Override
+	public NotifyResult notifyCreatedFeature(ProjectDto project, String featureId,
 			String featureSubject) {
-
+		return NotifyResult.CONTINUE;
 	}
 
 	private String createIdentifier(String projectName) {
@@ -107,15 +108,13 @@ public class DashboardProjectLifeCycleExtension implements IProjectLifecycleExte
 
 
 	@Override
-	public void notifyFinishedRelease(ProjectDto project, String releaseName) {
-		// TODO Auto-generated method stub
-
+	public NotifyResult notifyFinishedRelease(ProjectDto project, String releaseName) {
+		return NotifyResult.CONTINUE;
 	}
 
 	@Override
-	public void notifyFinishedFeature(ProjectDto projectDto, String featureId,
+	public NotifyResult notifyFinishedFeature(ProjectDto projectDto, String featureId,
 			String featureSubject) {
-		// TODO Auto-generated method stub
-
+		 return NotifyResult.CONTINUE;
 	}
 }

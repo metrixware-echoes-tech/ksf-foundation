@@ -18,6 +18,7 @@ import fr.echoes.labs.ksf.cc.plugins.foreman.services.ForemanClientFactory;
 import fr.echoes.labs.ksf.cc.plugins.foreman.services.ForemanErrorHandlingService;
 import fr.echoes.labs.ksf.extensions.annotations.Extension;
 import fr.echoes.labs.ksf.extensions.projects.IProjectLifecycleExtension;
+import fr.echoes.labs.ksf.extensions.projects.NotifyResult;
 import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
 import fr.echoes.labs.ksf.users.security.api.ICurrentUserService;
 
@@ -53,7 +54,7 @@ public class ForemanProjectLifeCycleExtension implements IProjectLifecycleExtens
 	}
 
 	@Override
-	public void notifyCreatedProject(ProjectDto _project) {
+	public NotifyResult notifyCreatedProject(ProjectDto _project) {
 
 		init();
 
@@ -62,7 +63,7 @@ public class ForemanProjectLifeCycleExtension implements IProjectLifecycleExtens
 
 		if (StringUtils.isEmpty(logginName)) {
 			LOGGER.error("[Foreman] No user found. Aborting project creation in Foreman module");
-			return;
+			return NotifyResult.CONTINUE;
 		}
 
 		LOGGER.info("[Foreman] project {} creation detected [demanded by: {}]", _project.getKey(), logginName);
@@ -77,10 +78,11 @@ public class ForemanProjectLifeCycleExtension implements IProjectLifecycleExtens
 			LOGGER.error("[Foreman] project creation failed", e);
 			this.errorHandler.registerError("Unable to create Foreman project. Please verify your Foreman configuration.");
 		}
+		return NotifyResult.CONTINUE;
 	}
 
 	@Override
-	public void notifyDeletedProject(ProjectDto _project) {
+	public NotifyResult notifyDeletedProject(ProjectDto _project) {
 
         try {
 
@@ -96,40 +98,46 @@ public class ForemanProjectLifeCycleExtension implements IProjectLifecycleExtens
             LOGGER.error("[foreman] project delete failed", ex);
             this.errorHandler.registerError("Unable to delete Foreman project. Please verify your Foreman configuration.");
         }
+        return NotifyResult.CONTINUE;
 	}
 
 	@Override
-	public void notifyDuplicatedProject(ProjectDto _project) {
+	public NotifyResult notifyDuplicatedProject(ProjectDto _project) {
 		// Do nothing
+		return NotifyResult.CONTINUE;
 	}
 
 	@Override
-	public void notifyUpdatedProject(ProjectDto _project) {
+	public NotifyResult notifyUpdatedProject(ProjectDto _project) {
 		// Do nothing
+		return NotifyResult.CONTINUE;
 	}
 
 	@Override
-	public void notifyCreatedRelease(ProjectDto project, String releaseVersion) {
+	public NotifyResult notifyCreatedRelease(ProjectDto project, String releaseVersion) {
 		// Do nothing
+		return NotifyResult.CONTINUE;
 	}
 
 	@Override
-	public void notifyCreatedFeature(ProjectDto project, String featureId,
+	public NotifyResult notifyCreatedFeature(ProjectDto project, String featureId,
 			String featureSubject) {
 		// Do nothing
+		return NotifyResult.CONTINUE;
 	}
 
 	@Override
-	public void notifyFinishedRelease(ProjectDto project, String releaseName) {
-		// TODO Auto-generated method stub
-		
+	public NotifyResult notifyFinishedRelease(ProjectDto project, String releaseName) {
+		// Do nothing
+		return NotifyResult.CONTINUE;
 	}
 
 	@Override
-	public void notifyFinishedFeature(ProjectDto projectDto, String featureId,
+	public NotifyResult notifyFinishedFeature(ProjectDto projectDto, String featureId,
 			String featureSubject) {
-		// TODO Auto-generated method stub
-		
+		// Do nothing
+		return NotifyResult.CONTINUE;
+
 	}
 
 }

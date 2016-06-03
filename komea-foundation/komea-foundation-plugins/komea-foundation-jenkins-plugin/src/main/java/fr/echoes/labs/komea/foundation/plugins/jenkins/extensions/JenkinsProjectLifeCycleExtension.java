@@ -14,6 +14,7 @@ import fr.echoes.labs.komea.foundation.plugins.jenkins.services.IJenkinsService;
 import fr.echoes.labs.komea.foundation.plugins.jenkins.services.JenkinsErrorHandlingService;
 import fr.echoes.labs.ksf.extensions.annotations.Extension;
 import fr.echoes.labs.ksf.extensions.projects.IProjectLifecycleExtension;
+import fr.echoes.labs.ksf.extensions.projects.NotifyResult;
 import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
 import fr.echoes.labs.ksf.users.security.api.ICurrentUserService;
 
@@ -49,7 +50,7 @@ public class JenkinsProjectLifeCycleExtension implements IProjectLifecycleExtens
 	}
 
 	@Override
-	public void notifyCreatedProject(ProjectDto project) {
+	public NotifyResult notifyCreatedProject(ProjectDto project) {
 
 		init();
 
@@ -57,7 +58,7 @@ public class JenkinsProjectLifeCycleExtension implements IProjectLifecycleExtens
 
 		if (StringUtils.isEmpty(logginName)) {
 			LOGGER.error("[Jenkins] No user found. Aborting project creation in Jenkins module");
-			return;
+			return NotifyResult.CONTINUE;
 		}
 
 		LOGGER.info("[Jenkins] project {} creation detected [demanded by: {}]", project.getKey(), logginName);
@@ -69,10 +70,11 @@ public class JenkinsProjectLifeCycleExtension implements IProjectLifecycleExtens
 			LOGGER.error("[Jenkins] Failed to create project {} ", project.getName(), ex);
 			this.errorHandler.registerError("Unable to create Jenkins project. Please verify your Jenkins configuration.");
 		}
+		return NotifyResult.CONTINUE;
 	}
 
 	@Override
-	public void notifyDeletedProject(ProjectDto project) {
+	public NotifyResult notifyDeletedProject(ProjectDto project) {
 
 		try {
 
@@ -82,22 +84,21 @@ public class JenkinsProjectLifeCycleExtension implements IProjectLifecycleExtens
 			LOGGER.error("[Jenkins] Failed to delete project {} ", project.getName(), ex);
 			this.errorHandler.registerError("Unable to delete Jenkins project. Please verify your Jenkins configuration.");
 		}
+		return NotifyResult.CONTINUE;
 	}
 
 	@Override
-	public void notifyDuplicatedProject(ProjectDto _project) {
-		// TODO Auto-generated method stub
-
+	public NotifyResult notifyDuplicatedProject(ProjectDto _project) {
+		return NotifyResult.CONTINUE;
 	}
 
 	@Override
-	public void notifyUpdatedProject(ProjectDto _project) {
-		// TODO Auto-generated method stub
-
+	public NotifyResult notifyUpdatedProject(ProjectDto _project) {
+		return NotifyResult.CONTINUE;
 	}
 
 	@Override
-	public void notifyCreatedRelease(ProjectDto project, String releaseVersion) {
+	public NotifyResult notifyCreatedRelease(ProjectDto project, String releaseVersion) {
 		try {
 
 			this.jenkinsService.createRelease(project.getName(), releaseVersion);
@@ -105,11 +106,11 @@ public class JenkinsProjectLifeCycleExtension implements IProjectLifecycleExtens
 			LOGGER.error("[Jenkins] Failed to create release for project {} ", project.getName(), ex);
 			this.errorHandler.registerError("Failed to create release.");
 		}
-
+		return NotifyResult.CONTINUE;
 	}
 
 	@Override
-	public void notifyCreatedFeature(ProjectDto project, String featureId, String featureSubject) {
+	public NotifyResult notifyCreatedFeature(ProjectDto project, String featureId, String featureSubject) {
 		try {
 
 			this.jenkinsService.createFeature(project.getName(), featureId, featureSubject);
@@ -117,24 +118,25 @@ public class JenkinsProjectLifeCycleExtension implements IProjectLifecycleExtens
 			LOGGER.error("[Jenkins] Failed to create release for project {} ", project.getName(), ex);
 			this.errorHandler.registerError("Failed to create release.");
 		}
+		return NotifyResult.CONTINUE;
 	}
 
 	@Override
-	public void notifyFinishedRelease(ProjectDto project, String releaseName) {
-		// TODO Auto-generated method stub
-		
+	public NotifyResult notifyFinishedRelease(ProjectDto project, String releaseName) {
+		return NotifyResult.CONTINUE;
 	}
 
 	@Override
-	public void notifyFinishedFeature(ProjectDto projectDto, String featureId,
+	public NotifyResult notifyFinishedFeature(ProjectDto projectDto, String featureId,
 			String featureSubject) {
 		try {
 			this.jenkinsService.deleteFeatureJob(projectDto.getName(), featureId, featureSubject);
-		} catch (JenkinsExtensionException e) {
+		} catch (final JenkinsExtensionException e) {
 			LOGGER.error("[Jenkins] Failed to delete the feature job", e);
 			this.errorHandler.registerError("Failed to delete the feature job.");
 		}
-		
+		return NotifyResult.CONTINUE;
+
 	}
 
 }
