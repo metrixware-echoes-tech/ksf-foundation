@@ -45,6 +45,14 @@
   color: inherit;
 }
 
+.project-properties {
+	padding: 10px 0 15px 8px;
+}
+
+.project-properties p {
+	margin-bottom: 2px;
+}
+
 .project-properties label {
 	font-weight: normal;
 }

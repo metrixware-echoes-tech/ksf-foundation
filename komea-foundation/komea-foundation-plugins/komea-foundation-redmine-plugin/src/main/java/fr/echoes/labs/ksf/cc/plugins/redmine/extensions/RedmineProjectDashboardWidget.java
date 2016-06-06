@@ -102,11 +102,11 @@ public class RedmineProjectDashboardWidget implements ProjectDashboardWidget {
 			final MessageSourceAccessor messageSourceAccessor = new MessageSourceAccessor(this.messageResource);
 
 
-			ctx.setVariable("foundationRedmineWidgetTargetVersion", messageSourceAccessor.getMessage("foundation.redmine.widget.target.version"));
-			ctx.setVariable("foundationRedmineWidgetTargetStatus", messageSourceAccessor.getMessage("foundation.redmine.widget.target.status"));
-			ctx.setVariable("foundationRedmineWidgetTargetPriority", messageSourceAccessor.getMessage("foundation.redmine.widget.target.priority"));
-			ctx.setVariable("foundationRedmineWidgetTargetSubject", messageSourceAccessor.getMessage("foundation.redmine.widget.target.subject"));
-			ctx.setVariable("foundationRedmineWidgetTargetAssignedTo", messageSourceAccessor.getMessage("foundation.redmine.widget.target.assigned.to"));
+			ctx.setVariable("foundationRedmineWidgetTargetVersion", messageSourceAccessor.getMessage("foundation.redmine.widget.targetVersion"));
+			ctx.setVariable("foundationRedmineWidgetStatus", messageSourceAccessor.getMessage("foundation.redmine.widget.status"));
+			ctx.setVariable("foundationRedmineWidgetPriority", messageSourceAccessor.getMessage("foundation.redmine.widget.priority"));
+			ctx.setVariable("foundationRedmineWidgetSubject", messageSourceAccessor.getMessage("foundation.redmine.widget.subject"));
+			ctx.setVariable("foundationRedmineWidgetAssignedTo", messageSourceAccessor.getMessage("foundation.redmine.widget.assignedTo"));
 
 
 			final String baseUrl = getBaseUrl(this.request);

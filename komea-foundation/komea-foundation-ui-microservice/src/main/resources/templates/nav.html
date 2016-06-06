@@ -6,12 +6,12 @@
 					class="logo" th:src="@{/pictures/KSF-logo.png}" alt="KSF" />
 				</a> <a class="navbar-brand" th:href="@{/ui/projects}"
 					data-toggle="tooltip" data-placement="bottom"
-					title="View project list" th:text="#{foundation.projects.navbar.projects}"></a>
+					th:title="#{foundation.projects.navbar.projects.toolTip}" th:text="#{foundation.projects.navbar.projects}"></a>
 			</div>
 			<div class='navbar-form navbar-left' role='form'>
 				<a style="margin-top: 3px; margin-left: -10px"
 					class="btn-primary btn-sm glyphicon glyphicon-plus"
-					data-toggle="tooltip" title="Create a new project"
+					data-toggle="tooltip" th:title="#{foundation.projects.navbar.newProjectButton.toolTip}"
 					data-placement="bottom" th:href="@{/ui/projects/new}"></a>
 			</div>
 			<!-- User links -->
