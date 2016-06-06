@@ -12,6 +12,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -68,6 +70,9 @@ public class JenkinsProjectDashboardWidget implements ProjectDashboardWidget {
 	@Autowired
 	IProjectDAO projectDao;
 
+	@Autowired
+	private MessageSource messageResource;
+
 	@Override
 	public List<MenuAction> getDropdownActions() {
 
@@ -87,7 +92,9 @@ public class JenkinsProjectDashboardWidget implements ProjectDashboardWidget {
 		try {
 			final List<JenkinsBuildInfo> buildInfo = this.jenkinsService.getBuildInfo(projectName);
 
-			ctx.setVariable("buildBase", "/ui/projects/" + project.getKey() + "?buildUrl=");
+			final String baseUrl = getBaseUrl();
+
+			ctx.setVariable("buildBase", baseUrl + "/ui/projects/" + project.getKey() + "?buildUrl=");
 
 			ctx.setVariable("jenkinsBuildHistory", buildInfo);
 		} catch (final JenkinsExtensionException e) {
@@ -100,6 +107,11 @@ public class JenkinsProjectDashboardWidget implements ProjectDashboardWidget {
 		return templateEngine.process("jenkinsPanel", ctx);
 	}
 
+	private String getBaseUrl() {
+		return this.configurationService.getUrl();
+	}
+
+
 	@Override
 	public String getIconUrl() {
 		return "/pictures/jenkins.png";
@@ -107,7 +119,7 @@ public class JenkinsProjectDashboardWidget implements ProjectDashboardWidget {
 
 	@Override
 	public String getTitle() {
-		return "Jenkins";
+		return new MessageSourceAccessor(JenkinsProjectDashboardWidget.this.messageResource).getMessage("foundation.jenkins") ;
 	}
 
 
@@ -118,7 +130,7 @@ public class JenkinsProjectDashboardWidget implements ProjectDashboardWidget {
 
 			@Override
 			public String getTitle() {
-				return "Continuous Integration (Jenkins)";
+				return new MessageSourceAccessor(JenkinsProjectDashboardWidget.this.messageResource).getMessage("foundation.jenkins.tab.title") ;
 			}
 
 			@Override

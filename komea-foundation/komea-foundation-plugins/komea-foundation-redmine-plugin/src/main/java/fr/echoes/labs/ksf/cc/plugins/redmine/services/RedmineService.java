@@ -1,6 +1,5 @@
 package fr.echoes.labs.ksf.cc.plugins.redmine.services;
 
-import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -29,6 +28,7 @@ import com.taskadapter.redmineapi.bean.Tracker;
 import com.taskadapter.redmineapi.bean.User;
 import com.taskadapter.redmineapi.bean.Version;
 
+import fr.echoes.labs.ksf.cc.extensions.services.project.ProjectUtils;
 import fr.echoes.labs.ksf.cc.extensions.services.project.TicketStatus;
 import fr.echoes.labs.ksf.cc.extensions.services.project.features.IProjectFeature;
 import fr.echoes.labs.ksf.cc.extensions.services.project.features.ProjectFeature;
@@ -74,7 +74,7 @@ public class RedmineService implements IRedmineService {
 
 		final RedmineManager mgr = createRedmineManager();
 		final ProjectManager projectManager = mgr.getProjectManager();
-		final Project project = ProjectFactory.create(projectName, createIdentifier(projectName));
+		final Project project = ProjectFactory.create(projectName, ProjectUtils.createIdentifier(projectName));
 
 
 		try {
@@ -110,9 +110,6 @@ public class RedmineService implements IRedmineService {
 		return null;
 	}
 
-	private String createIdentifier(String projectName) {
-		return  Normalizer.normalize(projectName, Normalizer.Form.NFD).replaceAll("[^\\dA-Za-z\\-]", "").replaceAll("\\s+","-" ).toLowerCase();
-	}
 
 	@Override
 	public void deleteProject(String projectName) throws RedmineExtensionException {
@@ -237,7 +234,7 @@ public class RedmineService implements IRedmineService {
 		final List<IProjectVersion> result;
 		final RedmineManager mgr = createRedmineManager();
 		final ProjectManager projectManager = mgr.getProjectManager();
-		final String projectKey =  createIdentifier(projectName);
+		final String projectKey =  ProjectUtils.createIdentifier(projectName);
 		try {
 			final Project project = projectManager.getProjectByKey(projectKey);
 			final List<Version> versions = projectManager.getVersions(project.getId());

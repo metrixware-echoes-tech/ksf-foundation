@@ -2,7 +2,6 @@ package fr.echoes.labs.komea.foundation.plugins.git.services;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.Normalizer;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -48,7 +47,7 @@ import fr.echoes.labs.komea.foundation.plugins.git.GitExtensionException;
 import fr.echoes.labs.komea.foundation.plugins.git.GitExtensionMergeException;
 import fr.echoes.labs.ksf.cc.extensions.gui.ProjectExtensionConstants;
 import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
-
+import fr.echoes.labs.ksf.cc.extensions.services.project.ProjectUtils;
 
 
 /**
@@ -367,19 +366,20 @@ public class GitService implements IGitService {
 		final Map<String, String> variables = new HashMap<String, String>(2);
 		variables.put("scmUrl", this.configuration.getScmUrl());
 		variables.put("projectName", projectName);
+		variables.put("projectKey", ProjectUtils.createIdentifier(projectName));
 		return replaceVariables(this.configuration.getProjectScmUrlPattern(), variables);
 	}
 	private String getReleaseBranchName(String projectName, String releaseVersion) {
 		final Map<String, String> variables = new HashMap<String, String>(1);
 		variables.put("releaseVersion", releaseVersion);
-		return createIdentifier(replaceVariables(this.configuration.getBranchReleasePattern(), variables));
+		return ProjectUtils.createIdentifier(replaceVariables(this.configuration.getBranchReleasePattern(), variables));
 	}
 
 	private String getFeatureBranchName(String projectName, String featureId, String featureDescription) {
 		final Map<String, String> variables = new HashMap<String, String>(2);
 		variables.put("featureId", featureId);
 		variables.put("featureDescription", featureDescription);
-		return createIdentifier(replaceVariables(this.configuration.getBranchFeaturePattern(), variables));
+		return ProjectUtils.createIdentifier(replaceVariables(this.configuration.getBranchFeaturePattern(), variables));
 	}
 
 	@Override
@@ -442,10 +442,6 @@ public class GitService implements IGitService {
 		checkout(git, branchName);
        git.tag().setName(tagName).call();
        git.push().setPushTags().call();
-	}
-
-	private String createIdentifier(String projectName) {
-		return  Normalizer.normalize(projectName, Normalizer.Form.NFD).replaceAll("[^\\dA-Za-z\\-]", "").replaceAll("\\s+","-" ).toLowerCase();
 	}
 
 	private String replaceVariables(String str, Map<String, String> variables) {

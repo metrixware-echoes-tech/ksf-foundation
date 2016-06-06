@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import com.google.common.collect.Lists;
 
 import fr.echoes.labs.ksf.cc.extensions.gui.ProjectExtensionConstants;
+import fr.echoes.labs.ksf.cc.extensions.services.project.ProjectUtils;
 import fr.echoes.labs.ksf.cc.plugins.dashboard.entities.GitRepository;
 import fr.echoes.labs.ksf.cc.plugins.dashboard.utils.DashboardUtils;
 import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
@@ -64,7 +65,7 @@ public class DashboardService {
 		
 		final String projectType = configurationService.getProjectType();
 		final String projectName = project.getName();
-		final String projectKey = DashboardUtils.createIdentifier(projectName);
+		final String projectKey = ProjectUtils.createIdentifier(projectName);
 				
 		final Entity projectEntity = new Entity()
 			.setKey(projectKey)
@@ -150,7 +151,8 @@ public class DashboardService {
 				List<Object> repositories = (List<Object>) property.getValue();
 				repositories.add(repository);
 			}else{
-				List<Object> repositories = Lists.newArrayList(repository);
+				List<Object> repositories = Lists.newArrayList();
+				repositories.add(repository);
 				property = new ConnectorProperty(DashboardConfigurationService.GIT_REPOSITORIES_PROPERTY, repositories);
 			}
 			

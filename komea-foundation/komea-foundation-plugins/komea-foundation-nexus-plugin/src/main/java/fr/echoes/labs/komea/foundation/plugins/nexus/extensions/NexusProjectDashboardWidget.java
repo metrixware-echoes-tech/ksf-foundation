@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -36,6 +38,9 @@ public class NexusProjectDashboardWidget implements ProjectDashboardWidget {
 	@Autowired
 	private NexusConfigurationService configurationService;
 
+	@Autowired
+	private MessageSource messageResource;
+
 	@Override
 	public List<MenuAction> getDropdownActions() {
 		return null;
@@ -53,7 +58,7 @@ public class NexusProjectDashboardWidget implements ProjectDashboardWidget {
 
 	@Override
 	public String getTitle() {
-		return "Nexus";
+		return new MessageSourceAccessor(NexusProjectDashboardWidget.this.messageResource).getMessage("foundation.nexus") ;
 	}
 
 
@@ -63,7 +68,7 @@ public class NexusProjectDashboardWidget implements ProjectDashboardWidget {
 
 			@Override
 			public String getTitle() {
-				return "Repository Manager (" + NexusProjectDashboardWidget.this.getTitle() + ")";
+				return new MessageSourceAccessor(NexusProjectDashboardWidget.this.messageResource).getMessage("foundation.nexus.tab.title");
 			}
 
 			@Override

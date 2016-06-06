@@ -18,7 +18,7 @@
 					<ul class="nav nav-tabs tabSelect" id="toolsTab" role="tablist">
 						<li class="active" role="presentation"><a
 							aria-controls="overview" data-toggle="tab" href="#overview"
-							role="tab"> Project Overview </a></li>
+							role="tab" th:text="#{foundation.projects.overview.tab.overview}"> Project Overview </a></li>
 						<li role="presentation" th:each="panel,it : ${panels}"><a
 							th:attr="aria-controls=${'#pluginTab'+it.index}"
 							th:href="${'#pluginTab'+it.index}" data-toggle="tab" role="tab"

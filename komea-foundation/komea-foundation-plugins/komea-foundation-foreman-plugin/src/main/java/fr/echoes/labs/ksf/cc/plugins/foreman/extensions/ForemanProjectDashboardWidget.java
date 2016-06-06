@@ -10,6 +10,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -66,6 +68,9 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
 	@Autowired
 	private ServletContext servletContext;
 
+	@Autowired
+	private MessageSource messageResource;
+
 	@Override
 	public List<MenuAction> getDropdownActions() {
 
@@ -120,7 +125,7 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
 
 	@Override
 	public String getTitle() {
-		return "Foreman";
+		return new MessageSourceAccessor(ForemanProjectDashboardWidget.this.messageResource).getMessage("foundation.foreman");
 	}
 
 
@@ -131,7 +136,7 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
 
 			@Override
 			public String getTitle() {
-				return "Systems Management (Foreman)";
+				return new MessageSourceAccessor(ForemanProjectDashboardWidget.this.messageResource).getMessage("foundation.foreman.tab.title");
 			}
 
 			@Override

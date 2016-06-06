@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,6 +32,7 @@ import com.offbytwo.jenkins.model.JobWithDetails;
 
 import fr.echoes.labs.komea.foundation.plugins.jenkins.JenkinsExtensionException;
 import fr.echoes.labs.ksf.cc.extensions.gui.ProjectExtensionConstants;
+import fr.echoes.labs.ksf.cc.extensions.services.project.ProjectUtils;
 import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
 
 
@@ -58,12 +58,12 @@ public class JenkinsService implements IJenkinsService {
 	@Override
 	public void createProject(ProjectDto projectDTO)
 			throws JenkinsExtensionException {
-		
+
 		final JenkinsServer jenkins;
 		final String projectName = projectDTO.getName();
-		String masterJob = getJobName(projectName, MASTER);
-		String developJob = getJobName(projectName, DEVELOP);
-		
+		final String masterJob = getJobName(projectName, MASTER);
+		final String developJob = getJobName(projectName, DEVELOP);
+
 		try {
 			final JenkinsHttpClient jenkinsHttpClient = new JenkinsHttpClient(getJenkinsUri());
 
@@ -77,22 +77,22 @@ public class JenkinsService implements IJenkinsService {
 
 				final FolderJob projectFolder = getProjectParentFolder(jenkins, projectName);
 
-				String resolvedXmlConfig = createConfigXml(projectName, scmUrl, MASTER);				
+				String resolvedXmlConfig = createConfigXml(projectName, scmUrl, MASTER);
 				jenkins.createJob(projectFolder, masterJob, resolvedXmlConfig, false);
 
-				resolvedXmlConfig = createConfigXml(projectName, scmUrl, DEVELOP);				
+				resolvedXmlConfig = createConfigXml(projectName, scmUrl, DEVELOP);
 				jenkins.createJob(projectFolder, developJob, resolvedXmlConfig, false);
 
 			} else {
-				
+
 				String resolvedXmlConfig = createConfigXml(projectName, scmUrl, MASTER);
 				jenkins.createJob(masterJob, resolvedXmlConfig, false);
 
 				resolvedXmlConfig = createConfigXml(projectName, scmUrl, DEVELOP);
 				jenkins.createJob(developJob, resolvedXmlConfig, false);
 			}
-			
-			List<String> jobs = Lists.newArrayList(projectName, masterJob, developJob);
+
+			final List<String> jobs = Lists.newArrayList(projectName, masterJob, developJob);
 			projectDTO.getOtherAttributes().put(ProjectExtensionConstants.CI_JOBS_KEY, jobs);
 
 		} catch (final Exception e) {
@@ -113,7 +113,7 @@ public class JenkinsService implements IJenkinsService {
 	}
 
 	private URI getJenkinsUri() throws URISyntaxException {
-		return new URI("http://jenkins.demo-esf.echoes-tech.com/" );
+		return new URI(this.configurationService.getUrl());
 	}
 
 	private FolderJob getProjectParentFolder(final JenkinsServer jenkins, String projectName) throws IOException {
@@ -337,20 +337,21 @@ public class JenkinsService implements IJenkinsService {
 	private String getGitReleaseBranchName(String projectName, String releaseVersion) {
 		final Map<String, String> variables = new HashMap<String, String>(1);
 		variables.put("releaseVersion", releaseVersion);
-		return createIdentifier(replaceVariables(this.configurationService.getGitReleaseBranchPattern(), variables));
+		return ProjectUtils.createIdentifier(replaceVariables(this.configurationService.getGitReleaseBranchPattern(), variables));
 	}
 
 	private String getGitFeatureBranchName(String projectName, String featureId, String featureDescription) {
 		final Map<String, String> variables = new HashMap<String, String>(2);
 		variables.put("featureId", featureId);
 		variables.put("featureDescription", featureDescription);
-		return createIdentifier(replaceVariables(this.configurationService.getGitFeatureBranchPattern(), variables));
+		return ProjectUtils.createIdentifier(replaceVariables(this.configurationService.getGitFeatureBranchPattern(), variables));
 	}
 
 	private String getProjectScmUrl(String projectName) {
 		final Map<String, String> variables = new HashMap<String, String>(2);
 		variables.put("scmUrl", this.configurationService.getScmUrl());
 		variables.put("projectName", projectName);
+		variables.put("projectKey", ProjectUtils.createIdentifier(projectName));
 		return replaceVariables(this.configurationService.getProjectScmUrlPattern(), variables);
 	}
 
@@ -393,9 +394,6 @@ public class JenkinsService implements IJenkinsService {
 		return getJobLastBuildInfo(projectName, releaseJobName);
 	}
 
-	private String createIdentifier(String projectName) {
-		return  Normalizer.normalize(projectName, Normalizer.Form.NFD).replaceAll("[^\\dA-Za-z\\-]", "").replaceAll("\\s+","-" ).toLowerCase();
-	}
 
 	@Override
 	public void deleteFeatureJob(String projectName, String featureId,
@@ -410,5 +408,6 @@ public class JenkinsService implements IJenkinsService {
 		final String releaseJobName = getReleaseJobName(projectName, releaseName);
 		deleteJob(projectName, releaseJobName);
 	}
+
 
 }

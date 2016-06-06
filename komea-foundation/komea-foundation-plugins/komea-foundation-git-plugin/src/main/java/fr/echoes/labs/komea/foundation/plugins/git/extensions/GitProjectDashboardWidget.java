@@ -13,6 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.MessageSource;
+import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
@@ -27,6 +29,7 @@ import fr.echoes.labs.komea.foundation.plugins.git.services.GitErrorHandlingServ
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.IProjectTabPanel;
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.MenuAction;
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
+import fr.echoes.labs.ksf.cc.extensions.services.project.ProjectUtils;
 import fr.echoes.labs.ksf.users.security.api.ICurrentUserService;
 
 /**
@@ -57,6 +60,9 @@ public class GitProjectDashboardWidget implements ProjectDashboardWidget {
 
 	@Autowired
 	private ServletContext servletContext;
+
+	@Autowired
+	private MessageSource messageResource;
 
 	@Override
 	public List<MenuAction> getDropdownActions() {
@@ -101,7 +107,7 @@ public class GitProjectDashboardWidget implements ProjectDashboardWidget {
 
 	@Override
 	public String getTitle() {
-		return "Git";
+		return new MessageSourceAccessor(this.messageResource).getMessage("foundation.git");
 	}
 
 
@@ -133,6 +139,7 @@ public class GitProjectDashboardWidget implements ProjectDashboardWidget {
 		variables.put("scmUrl", this.config.getScmUrl());
 		variables.put("projectName", projectName);
 		variables.put("userLogin", logginName);
+		variables.put("projectKey", ProjectUtils.createIdentifier(projectName));
 		return replaceVariables(this.config.getDisplayedUri(), variables);
 	}
 

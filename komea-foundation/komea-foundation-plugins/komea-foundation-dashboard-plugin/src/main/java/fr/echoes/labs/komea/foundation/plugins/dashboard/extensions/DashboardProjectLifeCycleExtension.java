@@ -63,7 +63,6 @@ public class DashboardProjectLifeCycleExtension implements IProjectLifecycleExte
 
 		return NotifyResult.CONTINUE;
 	}
-	
 
 	@Override
 	public NotifyResult notifyDeletedProject(ProjectDto project) {
