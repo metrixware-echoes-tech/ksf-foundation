@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout"
@@ -83,9 +83,10 @@
 	</div>
 	<div layout:fragment="footer">	
 		<script type="text/javascript" th:inline="javascript">
+
 			$(document).ready(function() {
 				$('#formCreateProject').submit(function() {
-					displayLoadingScreen('Creating project...');
+					displayLoadingScreen(/*[[#{foundation.projects.newProjectForm.creatingProjectMessage}]]*/, [[#{foundation.projects.newProjectForm.creatingProjectDetailMessage}]]);
 				});
 			});
 /* 			$(document).ready(function() {
