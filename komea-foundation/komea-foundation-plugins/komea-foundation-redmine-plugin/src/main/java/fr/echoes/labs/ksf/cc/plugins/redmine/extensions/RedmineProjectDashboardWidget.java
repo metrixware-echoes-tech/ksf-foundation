@@ -128,7 +128,10 @@ public class RedmineProjectDashboardWidget implements ProjectDashboardWidget {
 
 
 	private String getBaseUrl(HttpServletRequest  request) {
-		return this.configurationService.getUrl();
+		final StringBuffer url = request.getRequestURL();
+		final String uri = request.getRequestURI();
+		final String ctx = request.getContextPath();
+		return url.substring(0, url.length() - uri.length() + ctx.length());
 	}
 
 	@Override
