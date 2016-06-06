@@ -12,7 +12,9 @@ dependencies {
 	compile 'com.google.inject:guice:4.0'
 	compile 'com.google.inject.extensions:guice-multibindings:4.0'
   
-  compile "org.komea.dashboard:client-timeseries-storage:$CLIENT_TIMESERIES_STORAGE"
-  compile "org.komea.dashboard:client-organization-storage:$CLIENT_ORGANIZATION_STORAGE"
+	compile "org.komea.dashboard:client-timeseries-storage:$CLIENT_TIMESERIES_STORAGE"
+	compile "org.komea.dashboard:client-organization-storage:$CLIENT_ORGANIZATION_STORAGE"
+	compile "org.komea.dashboard:client-connectors-configuration:$CLIENT_ORGANIZATION_STORAGE"
+	
 }
 

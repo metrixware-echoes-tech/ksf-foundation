@@ -12,6 +12,7 @@ import com.tocea.corolla.products.dao.IProjectDAO;
 import fr.echoes.labs.komea.foundation.plugins.git.GitExtensionMergeException;
 import fr.echoes.labs.komea.foundation.plugins.git.services.GitErrorHandlingService;
 import fr.echoes.labs.komea.foundation.plugins.git.services.IGitService;
+import fr.echoes.labs.ksf.cc.extensions.gui.ProjectExtensionConstants;
 import fr.echoes.labs.ksf.extensions.annotations.Extension;
 import fr.echoes.labs.ksf.extensions.projects.IProjectLifecycleExtension;
 import fr.echoes.labs.ksf.extensions.projects.NotifyResult;
@@ -65,11 +66,13 @@ public class GitProjectLifeCycleExtension implements IProjectLifecycleExtension 
 
 		try {
 
-			this.gitService.createProject(project.getName());
+			this.gitService.createProject(project);
+			
 		} catch (final Exception ex) {
 			LOGGER.error("[Git] Failed to create project {} ", project.getName(), ex);
 			this.errorHandler.registerError("Unable to create Git repository.");
 		}
+		
 		return NotifyResult.CONTINUE;
 
 	}

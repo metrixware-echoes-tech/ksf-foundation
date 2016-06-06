@@ -41,10 +41,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.common.collect.Lists;
 import com.jcraft.jsch.Session;
 
 import fr.echoes.labs.komea.foundation.plugins.git.GitExtensionException;
 import fr.echoes.labs.komea.foundation.plugins.git.GitExtensionMergeException;
+import fr.echoes.labs.ksf.cc.extensions.gui.ProjectExtensionConstants;
+import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
 
 
 
@@ -66,7 +69,10 @@ public class GitService implements IGitService {
 	private GitConfigurationService configuration;
 
 	@Override
-	public void createProject(String projectName) throws GitExtensionException {
+	public void createProject(ProjectDto project) throws GitExtensionException {
+		
+		String projectName = project.getName();
+		
 		Objects.requireNonNull(projectName);
 
 		final String gitProjectUri = getProjectScmUrl(projectName);
@@ -89,6 +95,10 @@ public class GitService implements IGitService {
 
 			// Delete the working directory
 			LOGGER.debug("Deleting the working directory: {}", workingDirectory);
+			
+			// Insert Git data in the Project object
+			project.getOtherAttributes().put(ProjectExtensionConstants.GIT_URL, gitProjectUri);
+			project.getOtherAttributes().put(ProjectExtensionConstants.ANALYZED_BRANCHES, Lists.newArrayList(DEVELOP));
 
 		} catch (final Exception e) {
 			throw new GitExtensionException(e);
@@ -102,6 +112,7 @@ public class GitService implements IGitService {
 				LOGGER.warn("Failed to delete the directory " + workingDirectory.getName(), e);
 			}
 		}
+		
 	}
 
 	private File createCloneDestinationDirectory(final String projectName)
