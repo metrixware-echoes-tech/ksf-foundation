@@ -6,6 +6,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.stereotype.Service;
 
 import fr.echoes.labs.komea.foundation.plugins.jenkins.JenkinsExtensionException;
@@ -29,6 +31,9 @@ public class JenkinsBuildValidator implements IValidator {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(JenkinsBuildValidator.class);
 
+	@Autowired
+	private MessageSource messageResource;
+
 	/**
 	 * Validates that the latest build for this feature was successful .
 	 *
@@ -45,12 +50,14 @@ public class JenkinsBuildValidator implements IValidator {
 			final JenkinsBuildInfo buildInfo = this.jenkins.getFeatureStatus(projectName, featureId, description);
 			if (buildInfo == null || !"SUCCESS".equals(buildInfo.getResult())) {
 				results = new ArrayList<IValidatorResult>(1);
-				final IValidatorResult result;
+				final MessageSourceAccessor messageSourceAccessor = new MessageSourceAccessor(this.messageResource);
+				final String message;
 				if (buildInfo == null) {
-					result = new ValidatorResult(ValidatorResultType.ERROR, "JENKINS - Échec de la récupération des informations de build de la feature '" + featureId + "'." );
+					message = messageSourceAccessor.getMessage("foundation.jenkins.validator.feature.failedToRetrieveLastBuildInformation", new Object[]{featureId});
 				} else {
-					result = new ValidatorResult(ValidatorResultType.ERROR, "JENKINS - Le dernier build du job '" + buildInfo.getJobName() + "' est en échec.");
+					message = messageSourceAccessor.getMessage("foundation.jenkins.validator.feature.LastBuildFailed", new Object[]{buildInfo.getJobName()});
 				}
+				final IValidatorResult result = new ValidatorResult(ValidatorResultType.ERROR, message);
 				results.add(result);
 			}
 
@@ -75,12 +82,14 @@ public class JenkinsBuildValidator implements IValidator {
 			final JenkinsBuildInfo buildInfo = this.jenkins.getReleaseStatus(projectName, releaseName);
 			if (buildInfo == null || !"SUCCESS".equals(buildInfo.getResult())) {
 				results = new ArrayList<IValidatorResult>(1);
-				final IValidatorResult result;
+				final MessageSourceAccessor messageSourceAccessor = new MessageSourceAccessor(this.messageResource);
+				final String message;
 				if (buildInfo == null) {
-					result = new ValidatorResult(ValidatorResultType.ERROR, "JENKINS - Échec de la récupération des informations de build de la release '" + releaseName + "'." );
+					message = messageSourceAccessor.getMessage("foundation.jenkins.validator.feature.failedToRetrieveLastBuildInformation", new Object[]{releaseName});
 				} else {
-					result = new ValidatorResult(ValidatorResultType.ERROR, "JENKINS - Le dernier build du job '" + buildInfo.getJobName() + "' est en échec.");
+					message = messageSourceAccessor.getMessage("foundation.jenkins.validator.feature.LastBuildFailed", new Object[]{buildInfo.getJobName()});
 				}
+				final IValidatorResult result = new ValidatorResult(ValidatorResultType.ERROR, message);
 				results.add(result);
 			}
 
