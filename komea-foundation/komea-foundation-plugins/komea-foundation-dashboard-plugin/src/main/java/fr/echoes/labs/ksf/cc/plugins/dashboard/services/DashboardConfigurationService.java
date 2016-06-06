@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
  */
 @Service("dashboardConfiguration")
 public class DashboardConfigurationService {
+	
+	public final static String GIT_REPOSITORIES_PROPERTY = "gitRepositories";
 
     @Value("${ksf.dashboard.url}")
     private String url;
@@ -24,6 +26,9 @@ public class DashboardConfigurationService {
     
     @Value("${ksf.dashboard.jobType:job}")
     private String jobType;
+    
+    @Value("${ksf.dashboard.repositoryType:repository")
+    private String repositoryType;
     
     @Value("${ksf.dashboard.username}")
     private String username;
@@ -67,6 +72,10 @@ public class DashboardConfigurationService {
 	
 	public String getProjectKeyTag() {
 		return projectType+"_key";
+	}
+	
+	public String getRepositoryType() {
+		return repositoryType;
 	}
 
 }

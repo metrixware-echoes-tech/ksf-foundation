@@ -1,23 +1,15 @@
 package fr.echoes.labs.komea.foundation.plugins.dashboard.extensions;
 
-import java.util.List;
-
 import org.apache.commons.lang3.StringUtils;
-import org.komea.organization.model.Entity;
-import org.komea.organization.storage.client.OrganizationStorageClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.annotation.Order;
 
-import com.google.common.collect.Lists;
 import com.tocea.corolla.products.dao.IProjectDAO;
 
-import fr.echoes.labs.ksf.cc.extensions.gui.ProjectExtensionConstants;
-import fr.echoes.labs.ksf.cc.extensions.services.project.ProjectUtils;
-import fr.echoes.labs.ksf.cc.plugins.dashboard.services.DashboardClientFactory;
-import fr.echoes.labs.ksf.cc.plugins.dashboard.services.DashboardConfigurationService;
+import fr.echoes.labs.ksf.cc.plugins.dashboard.services.DashboardService;
 import fr.echoes.labs.ksf.extensions.annotations.Extension;
 import fr.echoes.labs.ksf.extensions.projects.IProjectLifecycleExtension;
 import fr.echoes.labs.ksf.extensions.projects.NotifyResult;
@@ -39,12 +31,9 @@ public class DashboardProjectLifeCycleExtension implements IProjectLifecycleExte
 
 	@Autowired
 	private ApplicationContext applicationContext;
-
+	
 	@Autowired
-	private DashboardConfigurationService configurationService;
-
-	@Autowired
-	private DashboardClientFactory clientFactory;
+	private DashboardService dashboardService;
 
 	private ICurrentUserService currentUserService;
 
@@ -69,45 +58,10 @@ public class DashboardProjectLifeCycleExtension implements IProjectLifecycleExte
 
 		LOGGER.info("[Dashboard] project {} creation detected [demanded by: {}]", project.getKey(), logginName);
 
-		final List<Entity> entities = getProjectEntities(project);
-
-		final OrganizationStorageClient organizationStorageClient = this.clientFactory.organizationStorageClient();
-		organizationStorageClient.addOrUpdatePartialEntities(entities);
+		dashboardService.updateProjectEntities(project);
+		dashboardService.updateConnectorProperties(project);
 
 		return NotifyResult.CONTINUE;
-	}
-
-	public List<Entity> getProjectEntities(final ProjectDto project) {
-
-		final List<Entity> entities = Lists.newArrayList();
-
-		final String projectType = this.configurationService.getProjectType();
-		final String projectName = project.getName();
-		final String projectKey = ProjectUtils.createIdentifier(projectName);
-		final String projectKeyTag = this.configurationService.getProjectKeyTag();
-
-		final Entity projectEntity = new Entity()
-			.setKey(projectKey)
-			.setName(projectName)
-			.setType(projectType);
-
-		entities.add(projectEntity);
-
-		final String jobType = this.configurationService.getJobType();
-		final List<String> jobNames = (List<String>) project.getOtherAttributes().get(ProjectExtensionConstants.CI_JOBS_KEY);
-
-		if (jobNames != null && !jobNames.isEmpty()) {
-			for (final String jobName : jobNames) {
-				final Entity jobEntity = new Entity()
-					.setKey(jobName)
-					.setName(jobName)
-					.setType(jobType)
-					.addAttribute(projectKeyTag, projectKey);
-				entities.add(jobEntity);
-			}
-		}
-
-		return entities;
 	}
 
 	@Override
@@ -136,7 +90,6 @@ public class DashboardProjectLifeCycleExtension implements IProjectLifecycleExte
 			String featureSubject) {
 		return NotifyResult.CONTINUE;
 	}
-
 
 	@Override
 	public NotifyResult notifyFinishedRelease(ProjectDto project, String releaseName) {

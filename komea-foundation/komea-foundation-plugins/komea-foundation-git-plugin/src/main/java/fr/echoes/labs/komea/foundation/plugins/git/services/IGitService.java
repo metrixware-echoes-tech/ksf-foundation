@@ -1,6 +1,7 @@
 package fr.echoes.labs.komea.foundation.plugins.git.services;
 
 import fr.echoes.labs.komea.foundation.plugins.git.GitExtensionException;
+import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
 
 
 /**
@@ -16,7 +17,7 @@ public interface IGitService {
 	 * @param projectName the project name.
 	 * @return
 	 */
-	public void createProject(String projectName) throws GitExtensionException;
+	public void createProject(ProjectDto project) throws GitExtensionException;
 
 	/**
 	 * Deletes the given project.
