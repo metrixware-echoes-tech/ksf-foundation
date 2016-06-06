@@ -123,8 +123,11 @@ public class JenkinsService implements IJenkinsService {
 	}
 
 	private String getJobName(String projectName, String branchName) {
-		final String string = projectName + " - " + branchName;
-		return string.replace('/', ' ');
+		final Map<String, String> variables = new HashMap<String, String>(2);
+		variables.put("projectName", projectName);
+		variables.put("branchName", branchName);
+		return replaceVariables(this.configurationService.getJobNamePattern(), variables);
+
 	}
 
 	private JenkinsServer createJenkinsClient(JenkinsHttpClient jenkinsHttpClient) throws URISyntaxException {
@@ -277,14 +280,13 @@ public class JenkinsService implements IJenkinsService {
 
 	private void deleteJob(String projectName, String branchName) throws JenkinsExtensionException {
 
-		String jobName = EncodingUtils.encode(getJobName(projectName, branchName));
 		try {
 			final JenkinsHttpClient jenkinsHttpClient = new JenkinsHttpClient(new URI(this.configurationService.getUrl()));
-			if (useFolder()) {
-				jobName = EncodingUtils.encode(projectName) + "/job/" + jobName;
-			}
 
-			jenkinsHttpClient.post("/job/" + jobName + "/doDelete");
+			final String path = "/job/" + EncodingUtils.encode(projectName) + "/job/" + EncodingUtils.encode(branchName) + "/doDelete";
+
+			jenkinsHttpClient.post(path, false); // crumbFlag is set to false to avoid "org.apache.http.client.HttpResponseException: Not Found",
+			                                     // see https://github.com/jenkinsci/java-client-api/issues/56
 
 		} catch (final Exception e) {
 			throw new JenkinsExtensionException("Failed to delete Jenkins job", e);

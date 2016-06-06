@@ -34,6 +34,9 @@ public class JenkinsConfigurationService {
 	@Value("${ksf.projectScmUrlPattern}")
 	private String projectScmUrlPattern;
 
+	@Value("${ksf.jenkins.job.namePattern}")
+	private String jobNamePattern;
+
 	@Value("${ksf.jenkins.job.releasePattern}")
 	private String jobReleasePattern;
 
@@ -109,4 +112,10 @@ public class JenkinsConfigurationService {
 		return this.gitFeatureBranchPattern;
 	}
 
+	/**
+	 * @return the jobNamePattern
+	 */
+	public String getJobNamePattern() {
+		return this.jobNamePattern;
+	}
 }
