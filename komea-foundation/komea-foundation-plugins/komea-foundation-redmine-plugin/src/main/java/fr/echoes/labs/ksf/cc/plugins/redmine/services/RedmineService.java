@@ -174,7 +174,7 @@ public class RedmineService implements IRedmineService {
 
 			if (requestTargetVersion != null) {
 				final Version issueTargetVersion = issue.getTargetVersion();
-				if (!StringUtils.equals(requestTargetVersion, issueTargetVersion.getName())) {
+				if (issueTargetVersion != null && !StringUtils.equals(requestTargetVersion, issueTargetVersion.getName())) {
 					continue;
 				}
 			}

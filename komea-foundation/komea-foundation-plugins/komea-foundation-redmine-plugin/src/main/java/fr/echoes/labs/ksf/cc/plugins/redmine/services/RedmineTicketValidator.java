@@ -57,8 +57,8 @@ public class RedmineTicketValidator implements IValidator {
 
 		try {
 
-			final List<RedmineIssue> newIssues = getIssues(releaseName, this.configurationService.getFeatureStatusNewId());
-			final List<RedmineIssue> assignedIssues = getIssues(releaseName, this.configurationService.getFeatureStatusAssignedId());
+			final List<RedmineIssue> newIssues = getIssues(projectName, releaseName, this.configurationService.getFeatureStatusNewId());
+			final List<RedmineIssue> assignedIssues = getIssues(projectName, releaseName, this.configurationService.getFeatureStatusAssignedId());
 
 			for (final RedmineIssue issue : newIssues) {
 				final IValidatorResult validatorResult = new ValidatorResult(ValidatorResultType.ERROR, "REDMINE - Le ticket '#" + issue.getId() + "' n'est pas clos.");
@@ -78,14 +78,14 @@ public class RedmineTicketValidator implements IValidator {
 		return result;
 	}
 
-	private List<RedmineIssue> getIssues(String releaseName, int issueStatusId) throws RedmineExtensionException {
+	private List<RedmineIssue> getIssues(String projectName, String releaseName, int issueStatusId) throws RedmineExtensionException {
 		final Builder requestBuilder = new RedmineQuery.Builder();
 		requestBuilder
 			.trackerId(this.configurationService.getFeatureTrackerId())
 			.statusId(issueStatusId)
 			.setTargetVersion(releaseName);
 
-		final RedmineQuery query = requestBuilder.build();
+		final RedmineQuery query = requestBuilder.projectName(projectName).build();
 		final List<RedmineIssue> issues = this.redmine.queryIssues(query);
 		LOGGER.info("Validating release : {} tickets with status ID '{}'", issues.size());
 		return issues;
