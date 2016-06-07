@@ -1,12 +1,20 @@
 package fr.echoes.labs.ksf.cc.plugins.dashboard.utils;
 
+import java.util.Map;
+import java.util.Map.Entry;
+
 import org.apache.commons.lang3.StringUtils;
+
+import com.google.common.collect.Maps;
 
 public class DashboardUrlBuilder {
 
 	private static final String PARAM_ENTITIES = "list_entities";
+	private static final String PARAM_METRICS = "list_metrics";
 	private static final String PARAM_PERIOD = "custom_period";
-	
+	private static final String PARAM_OPEN = "boolean_open";
+	private static final String PARAM_IN_MENU = "boolean_in_menu_bar";
+
 	private String baseUrl;
 	private String displayPage;
 	private String projectKey;
@@ -59,15 +67,34 @@ public class DashboardUrlBuilder {
 		}
 		
 		if (!StringUtils.isEmpty(this.projectKey)) {
-			url.append("#").append(PARAM_ENTITIES).append("=");
-			url.append(projectType).append('_').append(projectKey);
-		}
 			
-		if (!StringUtils.isEmpty(this.customPeriod)) {
-			url.append(";").append(PARAM_PERIOD).append("=").append(this.customPeriod);
+			Map<String, String> urlParams = buildParams();
+			
+			url.append("#");
+			
+			for (Entry<String, String> param : urlParams.entrySet()) {				
+				url
+					.append(param.getKey())
+					.append("=")
+					.append(param.getValue())
+					.append(";");				
+			}
+			
 		}
 		
 		return url.toString();
+	}
+	
+	private Map<String, String> buildParams() {
+		
+		Map<String, String> urlParams = Maps.newHashMap();
+		urlParams.put(PARAM_ENTITIES, projectType+"_"+projectKey);
+		urlParams.put(PARAM_METRICS, "");
+		urlParams.put(PARAM_PERIOD, customPeriod);
+		urlParams.put(PARAM_OPEN, "true");
+		urlParams.put(PARAM_IN_MENU, "true");
+		
+		return urlParams;
 	}
 	
 }

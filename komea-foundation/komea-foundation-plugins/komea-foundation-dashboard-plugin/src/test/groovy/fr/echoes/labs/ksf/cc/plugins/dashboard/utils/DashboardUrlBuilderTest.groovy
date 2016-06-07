@@ -20,11 +20,23 @@ class DashboardUrlBuilderTest extends Specification {
 				.setProjectType(projectType)
 				.setProjectKey(projectKey)
 				.setCustomPeriod(customPeriod)
-				.build();
+				.build();	
 				
 		then:
-			url == baseUrl + displayPage + "#list_entities=project_komea;custom_period=LAST_X_DAYS,1433282400000,1464818400000,365"
-
+			url.startsWith(baseUrl + displayPage)
+			url.contains('#')
+			
+		then:
+			def params = url.substring(url.indexOf('#')+1)
+			params != null
+			
+		then:
+			params.contains("list_entities=project_komea;")
+			params.contains("list_metrics=;")
+			params.contains("custom_period=LAST_X_DAYS,1433282400000,1464818400000,365")
+			params.contains("boolean_open=true;");
+			params.contains("boolean_in_menu_bar=true;")
+	
 	}
 	
 }
