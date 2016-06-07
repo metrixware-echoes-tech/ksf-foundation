@@ -30,6 +30,8 @@ public class Release implements Serializable {
 	@NotBlank
 	private String releaseVersion;
 
+	private ReleaseState state;
+
 	public String getId() {
 		return this.id;
 	}
@@ -85,5 +87,19 @@ public class Release implements Serializable {
 		this.releaseVersion = releaseVersion;
 	}
 
+	/**
+	 * @param state the state
+	 */
+	public void setState(ReleaseState state) {
+		this.state = state;
+	}
+
+
+	/**
+	 * @return the state
+	 */
+	public ReleaseState getState() {
+		return this.state;
+	}
 
 }

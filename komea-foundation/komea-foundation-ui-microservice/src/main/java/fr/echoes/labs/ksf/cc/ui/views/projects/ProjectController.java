@@ -6,7 +6,6 @@
 package fr.echoes.labs.ksf.cc.ui.views.projects;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -50,6 +49,7 @@ import fr.echoes.labs.ksf.cc.extensions.services.project.IValidatorResult;
 import fr.echoes.labs.ksf.cc.extmanager.projects.ui.IProjectDashboardExtensionManager;
 import fr.echoes.labs.ksf.cc.releases.dao.IReleaseDAO;
 import fr.echoes.labs.ksf.cc.releases.model.Release;
+import fr.echoes.labs.ksf.cc.releases.model.ReleaseState;
 import fr.echoes.labs.ksf.cc.sf.commands.CreateProjectAndProductionLineCommand;
 import fr.echoes.labs.ksf.cc.sf.dto.SFProjectDTO;
 
@@ -128,6 +128,7 @@ public class ProjectController {
 		release.setProjectId(project.getId());
 		release.setReleaseVersion(releaseVersion);
 		release.setReleaseId(releaseId);
+		release.setState(ReleaseState.STARTED);
 
     	this.gate.dispatch(new CreateReleaseCommand(project, releaseVersion));
 
@@ -157,7 +158,8 @@ public class ProjectController {
 
 		if (validateResults.isEmpty()) {
 			this.gate.dispatch(new FinishReleaseCommand(project, releaseVersion));
-			deleteReleaseDao(releaseVersion);
+
+			setReleaseState(releaseVersion, ReleaseState.FINISHED);
 
 		} else {
 			redirectAttributes.addFlashAttribute("validationErrors", validateResults);
@@ -166,13 +168,12 @@ public class ProjectController {
 		return new ModelAndView("redirect:/ui/projects/" + project.getKey());
 	}
 
-	private void deleteReleaseDao(String releaseVersion) {
-		final List<Release> findAll = this.releaseDao.findAll();
-		final Iterator<Release> iterator = findAll.iterator();
-		while (iterator.hasNext()) {
-			final Release release = iterator.next();
-			if (release.getReleaseVersion().equals(releaseVersion)) {
-				this.releaseDao.delete(release);
+	private void setReleaseState(String releaseVersion, ReleaseState state) {
+		for (final Release release : this.releaseDao.findAll()) {
+			if (StringUtils.equals(release.getReleaseVersion(), releaseVersion)) {
+				release.setState(state);
+				this.releaseDao.save(release);
+				break;
 			}
 		}
 	}

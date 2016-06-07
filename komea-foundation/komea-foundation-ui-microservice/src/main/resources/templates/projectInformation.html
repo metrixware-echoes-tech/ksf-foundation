@@ -103,7 +103,10 @@
 								<button onclick="return confirm('Finish release ?')" class="glyphicon glyphicon-stop" type="submit" style="color:DarkRed"></button>
 								<button class="glyphicon glyphicon-info-sign" data-dismiss="modal" type="button" data-toggle="modal" data-target="#featureInformation"></button>
 							</form>
-							</div>							
+							</div>
+							<!-- div th:if="${release.getStatus() == T(fr.echoes.labs.ksf.cc.extensions.services.project.TicketStatus).FINISHED}" class="pull-right">
+								<button class="glyphicon glyphicon-info-sign disabled" data-dismiss="modal" type="button" data-toggle="modal" data-target="#featureInformation"></button>
+							</div -->					
 						</td>
 					</tr>
 				</tbody>
@@ -139,15 +142,16 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title"></h4>
+        <h4 class="modal-title" th:text="#{foundation.feature.validator.popup.title}"></h4>
       </div>
       <div class="modal-body">
-  		<ul class="list-group">
-  			<li class="list-group-item" th:each="validationError : ${validationErrors}" th:text="${validationError.getMessage()}"></li>
+      	<p th:text="#{foundation.feature.validator.popup.message}"></p>
+  		<ul class="validation-message-list">
+  			<li th:each="validationError : ${validationErrors}" th:text="${validationError.getMessage()}"></li>
   		</ul>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal" th:text="#{foundation.feature.validator.popup.close}">Close</button>
       </div>
     </div>
 

@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout"
@@ -15,11 +15,11 @@
 			method="post" id="formCreateProject" action="">
 			
 			<div class="text-center">
-	            <h1 style="font-size:25px">New project</h1>
+	            <h1 style="font-size:25px" th:text="#{foundation.projects.newProjectForm.title}">New project</h1>
 	        </div>	
 	        <div class="alert alert-info alert-dismissible" role="alert">
 			  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			  To create a new project in <strong>Komea Foundation</strong> you will need to provide <strong>a project's name</strong> and select all the <strong>tools</strong> that will be used in the project <i>(Foreman, Puppet, Redmine...)</i>.
+			  <span th:text="#{foundation.projects.newProjectForm.infoMessage}">To create a new project in Komea Foundation you will need to provide a project's name and select all the tools that will be used in the project (Foreman, Puppet, Redmine...)</span>
 			</div>
 	        <ul class="bg-danger" th:if="${#fields.hasErrors('global')}">
           		<li th:each="err : ${#fields.errors('global')}" class="text-danger" th:text="${err}">Input is incorrect</li>
@@ -37,15 +37,15 @@
 				<!-- Name input-->
 				
 				<div class="form-group">
-					<label class="col-md-3 control-label" for="name">Name*</label>
+					<label class="col-md-3 control-label" for="name" th:text="#{foundation.projects.newProjectForm.name}">Name*</label>
 					<div class="col-md-7">
-						<input id="name" name="name" placeholder="Project Name" class="form-control input-md" required="required"
+						<input id="name" name="name" th:placeholder="#{foundation.projects.newProjectForm.name.placeHolder}" class="form-control input-md" required="required"
 							data-parsley-trigger="focusin focusout change" data-parsley-range="[3, 30]" type="text" th:field="*{name}" />
 						<span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="col-md-3 control-label" for="parentProject">Parent project</label>
+					<label class="col-md-3 control-label" for="parentProject" th:text="#{foundation.projects.newProjectForm.parentProject}">Parent project</label>
                		<div class="col-md-7">
 						<select class="form-control" id="parentId" name="parentId">
 							<option value=""></option>
@@ -54,7 +54,7 @@
 					</div>
 				</div>				
 				<div class="form-group">		
-					<label class="col-md-3 control-label" style="padding-top: 30px;">Select the tool(s) that will be used for this project :</label>
+					<label class="col-md-3 control-label" style="padding-top: 30px;" th:text="#{foundation.projects.newProjectForm.selectTool.infoMessage}">Select the tool(s) that will be used for this project:</label>
 	              <div class="col-sm-7">	              
 	              	<ul class="app-list">
 	              		<li th:each="widget : ${@projectDashboardWidgets.getDashboardWidgets()}" th:attr="data-item=@{${widget.getTitle()}}" class="active">
@@ -72,8 +72,8 @@
 					<label class="col-md-3 control-label" for="saveButton" />										
 					<div class="col-md-7">
 						<div class="pull-right">
-							<button id="saveButton" name="saveButton" class="btn btn-primary">Create project</button>
-							<a th:href="@{/ui/projects/}" id="cancelButton" name="cancelButton" class="btn btn-default">Cancel</a>
+							<button id="saveButton" name="saveButton" class="btn btn-primary" th:text="#{foundation.projects.newProjectForm.createButton}">Create project</button>
+							<a th:href="@{/ui/projects/}" id="cancelButton" name="cancelButton" class="btn btn-default" th:text="#{foundation.projects.newProjectForm.cancelButton}">Cancel</a>
 						</div>
 					</div>
 				</div>
@@ -82,10 +82,11 @@
 		</div>
 	</div>
 	<div layout:fragment="footer">	
-		<script type="text/javascript">
+		<script type="text/javascript" th:inline="javascript">
+
 			$(document).ready(function() {
 				$('#formCreateProject').submit(function() {
-					displayLoadingScreen('Creating project...');
+					displayLoadingScreen(/*[[#{foundation.projects.newProjectForm.creatingProjectMessage}]]*/, [[#{foundation.projects.newProjectForm.creatingProjectDetailMessage}]]);
 				});
 			});
 /* 			$(document).ready(function() {

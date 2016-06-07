@@ -8,6 +8,7 @@ import java.util.Objects;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.text.StrSubstitutor;
+import org.eclipse.jgit.api.CheckoutCommand;
 import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.CreateBranchCommand;
 import org.eclipse.jgit.api.DeleteBranchCommand;
@@ -46,8 +47,8 @@ import com.jcraft.jsch.Session;
 import fr.echoes.labs.komea.foundation.plugins.git.GitExtensionException;
 import fr.echoes.labs.komea.foundation.plugins.git.GitExtensionMergeException;
 import fr.echoes.labs.ksf.cc.extensions.gui.ProjectExtensionConstants;
-import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
 import fr.echoes.labs.ksf.cc.extensions.services.project.ProjectUtils;
+import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
 
 
 /**
@@ -69,9 +70,9 @@ public class GitService implements IGitService {
 
 	@Override
 	public void createProject(ProjectDto project) throws GitExtensionException {
-		
-		String projectName = project.getName();
-		
+
+		final String projectName = project.getName();
+
 		Objects.requireNonNull(projectName);
 
 		final String gitProjectUri = getProjectScmUrl(projectName);
@@ -94,7 +95,7 @@ public class GitService implements IGitService {
 
 			// Delete the working directory
 			LOGGER.debug("Deleting the working directory: {}", workingDirectory);
-			
+
 			// Insert Git data in the Project object
 			project.getOtherAttributes().put(ProjectExtensionConstants.GIT_URL, gitProjectUri);
 			project.getOtherAttributes().put(ProjectExtensionConstants.ANALYZED_BRANCHES, Lists.newArrayList(DEVELOP));
@@ -111,7 +112,7 @@ public class GitService implements IGitService {
 				LOGGER.warn("Failed to delete the directory " + workingDirectory.getName(), e);
 			}
 		}
-		
+
 	}
 
 	private File createCloneDestinationDirectory(final String projectName)
@@ -280,15 +281,19 @@ public class GitService implements IGitService {
 //		};
 	}
 
-	private MergeResult mergeBranches(Git git, String branch, String destinationBranch) throws IOException, NoHeadException, ConcurrentRefUpdateException, CheckoutConflictException, InvalidMergeHeadsException, WrongRepositoryStateException, NoMessageException, GitAPIException  {
-		git.checkout()
+	private MergeResult mergeBranches(Git git, String branch, String destinationBranch, boolean createBranch) throws IOException, NoHeadException, ConcurrentRefUpdateException, CheckoutConflictException, InvalidMergeHeadsException, WrongRepositoryStateException, NoMessageException, GitAPIException  {
+		final CheckoutCommand checkoutCommand = git.checkout()
 		.setName(destinationBranch)
-		.setCreateBranch(true)
 		.setUpstreamMode(
 				CreateBranchCommand.SetupUpstreamMode.TRACK)
 				.setStartPoint(
-						Constants.DEFAULT_REMOTE_NAME + "/" + destinationBranch)
-						.call();
+						Constants.DEFAULT_REMOTE_NAME + "/" + destinationBranch);
+		if (createBranch) {
+			checkoutCommand.setCreateBranch(true);
+		}
+
+		checkoutCommand.call();
+
 
 		final MergeCommand mergeCommand = git.merge();
 		final Ref ref = git.getRepository().findRef(Constants.DEFAULT_REMOTE_NAME + "/" + branch);
@@ -339,7 +344,7 @@ public class GitService implements IGitService {
 			LOGGER.debug("Cloning the repository {} into {}", gitProjectUri, workingDirectory);
 			git = callCloneCommand(gitProjectUri, workingDirectory);
 
-			final MergeResult mergeResult = mergeBranches(git, branchName, DEVELOP);
+			final MergeResult mergeResult = mergeBranches(git, branchName, DEVELOP, true);
 			if (mergeResult.getMergeStatus().equals(MergeResult.MergeStatus.CONFLICTING)) {
 				throw new GitExtensionMergeException("Cannot merge '"+ branchName +"' into " + DEVELOP);
 			} else {
@@ -400,12 +405,12 @@ public class GitService implements IGitService {
 
 			tagBranch(git, branchName, releaseName);
 
-			final MergeResult mergeIntoDevlopResult = mergeBranches(git, branchName, DEVELOP);
+			final MergeResult mergeIntoDevlopResult = mergeBranches(git, branchName, DEVELOP, true);
 			if (mergeIntoDevlopResult.getMergeStatus().equals(MergeResult.MergeStatus.CONFLICTING)) {
 				throw new GitExtensionMergeException("Cannot merge '"+ branchName +"' into " + DEVELOP);
 			}
 
-			final MergeResult mergeIntoMasterResult = mergeBranches(git, branchName, MASTER);
+			final MergeResult mergeIntoMasterResult = mergeBranches(git, branchName, MASTER, false);
 			if (mergeIntoMasterResult.getMergeStatus().equals(MergeResult.MergeStatus.CONFLICTING)) {
 				throw new GitExtensionMergeException("Cannot merge '"+ branchName +"' into " + DEVELOP);
 			} else {
@@ -440,7 +445,7 @@ public class GitService implements IGitService {
 
 	private void tagBranch(Git git, String branchName, String tagName) throws RefAlreadyExistsException, RefNotFoundException, InvalidRefNameException, CheckoutConflictException, GitAPIException {
 		checkout(git, branchName);
-       git.tag().setName(tagName).call();
+       git.tag().setName(ProjectUtils.createIdentifier(tagName)).call();
        git.push().setPushTags().call();
 	}
 

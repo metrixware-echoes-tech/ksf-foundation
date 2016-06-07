@@ -74,12 +74,14 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
 	@Override
 	public List<MenuAction> getDropdownActions() {
 
+		final MessageSourceAccessor messageSourceAccessor = new MessageSourceAccessor(this.messageResource);
+		
 		final MenuAction actionCreateEnv = new MenuAction();
-		actionCreateEnv.setActionName("Create Environment");
+		actionCreateEnv.setActionName(messageSourceAccessor.getMessage("foundation.foreman.widget.createEnvironment"));
 		actionCreateEnv.setUrl("javascript:displayCreateEnvModal()");
 
 		final MenuAction actionCreateTarget = new MenuAction();
-		actionCreateTarget.setActionName("Create Target");
+		actionCreateTarget.setActionName(messageSourceAccessor.getMessage("foundation.foreman.widget.createTarget"));
 		actionCreateTarget.setUrl("javascript:displayCreateTargetModal()");
 
 		return Lists.newArrayList(actionCreateEnv, actionCreateTarget);
@@ -100,6 +102,12 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
 		final Iterable<ForemanTarget> projectTargets = this.targetDAO.findByProject(project);
 		ctx.setVariable("targets", projectTargets);
 
+		final MessageSourceAccessor messageSourceAccessor = new MessageSourceAccessor(this.messageResource);
+
+		ctx.setVariable("foundationForemanWidgetName", messageSourceAccessor.getMessage("foundation.foreman.widget.name"));
+		ctx.setVariable("foundationForemanWigetOs", messageSourceAccessor.getMessage("foundation.foreman.widget.os"));
+		
+		
 		try {
 
 			final IForemanApi foremanApi = ForemanClient.createApi(this.configurationService.getForemanUrl(), this.configurationService.getForemanUsername(), this.configurationService.getForemanPassword());

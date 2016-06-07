@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
@@ -45,7 +45,7 @@
 						</h1>
 					</hgroup>
 				</div>
-				<p class="loading-status text-info" style="text-align:center">
+				<p class="loading-status text-info loading-screen-detail-message" style="text-align:center">
 					Page is loading, please wait. This may take up to several minutes.
 				</p>
 			</div>
@@ -78,11 +78,14 @@
 			  $('[data-toggle="tooltip"]').tooltip();
 			});
 
-			function displayLoadingScreen(message) {
+			function displayLoadingScreen(message, detailMessage) {
 				$('.content').addClass('hidden');
 				$('footer').addClass('hidden');
 				if (message) {
 					$('.loading-screen-message').text(message);
+				}
+				if (detailMessage) {
+					$('.loading-screen-detail-message').text(detailMessage);
 				}
 				$('.loading-screen').removeClass('hidden');
 			}
@@ -100,7 +103,7 @@
                     expanderExpandedClass: 'glyphicon glyphicon-minus text-muted',
                     expanderCollapsedClass: 'glyphicon glyphicon-plus text-muted'
                 });
-            	
+
                 <div th:if="${validationErrors != null}" th:remove="tag">
                 	$('#validationErrorsModal').modal('show');
                 </div>

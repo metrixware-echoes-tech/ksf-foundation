@@ -20,6 +20,7 @@ import fr.echoes.labs.ksf.cc.extensions.services.project.versions.IProjectVersio
 import fr.echoes.labs.ksf.cc.extensions.services.project.versions.ProjectVersion;
 import fr.echoes.labs.ksf.cc.releases.dao.IReleaseDAO;
 import fr.echoes.labs.ksf.cc.releases.model.Release;
+import fr.echoes.labs.ksf.cc.releases.model.ReleaseState;
 
 /**
  * This service allows to obtain project information returned by the plug-ins.
@@ -64,8 +65,15 @@ public class ProjectInformationManager {
 			final List<IProjectVersion> releases = projectRelease.getVersions(projectName);
 			if (releases != null) {
 				for (final IProjectVersion r : releases) {
-					if (isStartedRelease(r, startedReleases)) {
-						((ProjectVersion) r).setStatus(TicketStatus.CREATED);
+					for (final Release startedRelease : startedReleases) {
+						if (StringUtils.equals(startedRelease.getReleaseId(), r.getId())) {
+							if (startedRelease.getState() == ReleaseState.FINISHED) {
+								((ProjectVersion) r).setStatus(TicketStatus.FINISHED);
+							} else if (startedRelease.getState() == ReleaseState.STARTED) {
+								((ProjectVersion) r).setStatus(TicketStatus.CREATED);
+							}
+							break;
+						}
 					}
 				}
 				result.addAll(releases);
@@ -78,7 +86,7 @@ public class ProjectInformationManager {
 	private boolean isStartedRelease(IProjectVersion release, List<Release> startedReleases) {
 		for (final Release startedRelease : startedReleases) {
 			if (StringUtils.equals(startedRelease.getReleaseId(), release.getId())) {
-				return true;
+				return startedRelease.getState() != ReleaseState.FINISHED;
 			}
 		}
 		return false;
