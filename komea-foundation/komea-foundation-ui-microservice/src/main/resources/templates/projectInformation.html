@@ -103,7 +103,10 @@
 								<button onclick="return confirm('Finish release ?')" class="glyphicon glyphicon-stop" type="submit" style="color:DarkRed"></button>
 								<button class="glyphicon glyphicon-info-sign" data-dismiss="modal" type="button" data-toggle="modal" data-target="#featureInformation"></button>
 							</form>
-							</div>							
+							</div>
+							<!-- div th:if="${release.getStatus() == T(fr.echoes.labs.ksf.cc.extensions.services.project.TicketStatus).FINISHED}" class="pull-right">
+								<button class="glyphicon glyphicon-info-sign disabled" data-dismiss="modal" type="button" data-toggle="modal" data-target="#featureInformation"></button>
+							</div -->					
 						</td>
 					</tr>
 				</tbody>
