@@ -1,6 +1,7 @@
 package fr.echoes.labs.ksf.cc.plugins.redmine.services;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -73,13 +74,19 @@ public class RedmineService implements IRedmineService {
 		Objects.requireNonNull(projectName);
 
 		final RedmineManager mgr = createRedmineManager();
+
 		final ProjectManager projectManager = mgr.getProjectManager();
 		final Project project = ProjectFactory.create(projectName, ProjectUtils.createIdentifier(projectName));
-
 
 		try {
 
 			final Project redmineProject = projectManager.createProject(project);
+
+			final Collection<Tracker> trackers = redmineProject.getTrackers();
+			for (final Tracker t : trackers) {
+				System.out.println(t.getId() + " name: " + t.getName());
+			}
+
 
 			addProjectMember(mgr, redmineProject, this.configuration.getAdminUserName());
 			addProjectMember(mgr, redmineProject, username);
@@ -297,19 +304,22 @@ public class RedmineService implements IRedmineService {
 
 		final List<IProjectFeature> features = new ArrayList<IProjectFeature>();
 
-		features.addAll((buildFeaturesList(projectName, this.configuration.getFeatureStatusNewId(), TicketStatus.NEW)));
-		features.addAll((buildFeaturesList(projectName, this.configuration.getFeatureStatusAssignedId(), TicketStatus.CREATED)));
+		features.addAll((buildFeaturesList(projectName, this.configuration.getFeatureTrackerId(), this.configuration.getFeatureStatusNewId(), TicketStatus.NEW)));
+		features.addAll((buildFeaturesList(projectName, this.configuration.getFeatureTrackerId(), this.configuration.getFeatureStatusAssignedId(), TicketStatus.CREATED)));
+
+		features.addAll((buildFeaturesList(projectName, this.configuration.getBugTrackerId(), this.configuration.getFeatureStatusNewId(), TicketStatus.NEW)));
+		features.addAll((buildFeaturesList(projectName, this.configuration.getBugTrackerId(), this.configuration.getFeatureStatusAssignedId(), TicketStatus.CREATED)));
 
 		return features;
 	}
 
-	private List<IProjectFeature> buildFeaturesList(String projectName, int satusId, TicketStatus status) throws RedmineExtensionException {
+
+	private List<IProjectFeature> buildFeaturesList(String projectName, int trackerId, int satusId, TicketStatus status) throws RedmineExtensionException {
 		final Builder redmineQuerryBuilder = new RedmineQuery.Builder();
 
 		redmineQuerryBuilder.projectName(projectName)
-		                    .trackerId(this.configuration.getFeatureTrackerId())
+		                    .trackerId(trackerId)
 		                    .statusId(satusId);
-
 
 		final RedmineQuery query = redmineQuerryBuilder.build();
 		final List<RedmineIssue> issues = queryIssues(query);
@@ -325,7 +335,6 @@ public class RedmineService implements IRedmineService {
 		}
 		return features;
 	}
-
 	@Override
 	public void changeStatus(String ticketId, int statusId) throws RedmineExtensionException {
 

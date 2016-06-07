@@ -19,7 +19,10 @@ public class RedmineConfigurationService {
     @Value("${ksf.redmine.resultItemsLimit}")
     private int resultItemsLimit;
 
-    @Value("${ksf.redmine.featureTrackerId}")
+    @Value("${ksf.redmine.bugTrackerId:1}")
+    private int bugTrackerId;
+
+    @Value("${ksf.redmine.featureTrackerId:2}")
     private int featureTrackerId;
 
     @Value("${ksf.redmine.featureStatusNewId}")
@@ -99,4 +102,12 @@ public class RedmineConfigurationService {
 	public String getAdminUserName() {
 		return this.adminUserName;
 	}
+
+	/**
+	 * @return the bugTrackerId
+	 */
+	public int getBugTrackerId() {
+		return this.bugTrackerId;
+	}
+
 }
