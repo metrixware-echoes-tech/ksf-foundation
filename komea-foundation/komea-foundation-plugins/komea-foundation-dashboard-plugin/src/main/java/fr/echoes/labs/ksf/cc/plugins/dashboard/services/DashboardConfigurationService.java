@@ -15,6 +15,9 @@ public class DashboardConfigurationService {
     @Value("${ksf.dashboard.url}")
     private String url;
     
+    @Value("${ksf.dashboard.displayPage:}")
+    private String displayPage;
+    
     @Value("${ksf.dashboard.organization.url}")
     private String organizationUrl;
     
@@ -76,6 +79,10 @@ public class DashboardConfigurationService {
 	
 	public String getRepositoryType() {
 		return repositoryType;
+	}
+	
+	public String getDisplayPage() {
+		return displayPage;
 	}
 
 }

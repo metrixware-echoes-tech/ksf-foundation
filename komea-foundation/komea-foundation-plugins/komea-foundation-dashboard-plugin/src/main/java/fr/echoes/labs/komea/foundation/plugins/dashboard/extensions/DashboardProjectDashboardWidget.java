@@ -26,6 +26,7 @@ import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.MenuAction;
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
 import fr.echoes.labs.ksf.cc.extensions.services.project.ProjectUtils;
 import fr.echoes.labs.ksf.cc.plugins.dashboard.services.DashboardConfigurationService;
+import fr.echoes.labs.ksf.cc.plugins.dashboard.utils.DashboardUrlBuilder;
 
 
 /**
@@ -94,21 +95,23 @@ public class DashboardProjectDashboardWidget implements ProjectDashboardWidget {
 				String url = DashboardProjectDashboardWidget.this.configurationService.getUrl();
 
 				if (project != null) {
+					
 					final String projectDashboardKey = ProjectUtils.createIdentifier(project.getName());
-					if (!url.endsWith("/")) {
-						url = url + '/';
-					}
-
 					final String customPeriod = customPeriod();
 
-					url = url + "/web/guest/standard-dashboard#list_entities=" + projectDashboardKey + ";custom_period=" + customPeriod;
+					url = new DashboardUrlBuilder()
+						.setBaseUrl(configurationService.getUrl())
+						.setDisplayPage(configurationService.getDisplayPage())
+						.setProjectType(configurationService.getProjectType())
+						.setProjectKey(projectDashboardKey)
+						.setCustomPeriod(customPeriod)
+						.build();
 
 					ctx.setVariable("projectDashboardKey", projectDashboardKey);
 					ctx.setVariable("dashboardCustomPeriod", customPeriod);
 				}
 
 				LOGGER.info("[dashboard] project URL : {}", url);
-
 				ctx.setVariable("dashboardURL", url);
 
 				return templateEngine.process("dashboardManagementPanel", ctx);
