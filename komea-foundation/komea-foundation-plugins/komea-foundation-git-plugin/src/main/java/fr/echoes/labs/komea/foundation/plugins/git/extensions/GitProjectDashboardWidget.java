@@ -97,6 +97,8 @@ public class GitProjectDashboardWidget implements ProjectDashboardWidget {
 
 		ctx.setVariable("gitError", this.errorHandler.retrieveError());
 
+		ctx.setVariable("copyToClipboard", new MessageSourceAccessor(this.messageResource).getMessage("foundation.git.copyToClipboard"));
+
 		return templateEngine.process("gitPanel", ctx);
 	}
 

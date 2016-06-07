@@ -181,7 +181,7 @@ public class JenkinsService implements IJenkinsService {
 
 			final int builsdPerJobLimit = this.configurationService.getBuilsdPerJobLimit();
 
-			final List<Build> builds = getJobBuilds(jenkins, projectName, getJobName(projectName, MASTER), useFolder, builsdPerJobLimit);
+			final List<Build> builds = getJobBuilds(jenkins, projectName, getJobName(projectName, DEVELOP), useFolder, builsdPerJobLimit);
 			builds.addAll(getJobBuilds(jenkins, projectName, getJobName(projectName, MASTER), useFolder, builsdPerJobLimit));
 
 			final List<JenkinsBuildInfo> buildsInfo = new ArrayList<JenkinsBuildInfo>(builds.size());

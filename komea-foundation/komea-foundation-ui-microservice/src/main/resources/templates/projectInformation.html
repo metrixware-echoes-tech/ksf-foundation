@@ -2,7 +2,7 @@
 <div  th:fragment="projectInformationPanel">
 	<div class="panel panel-default">
 		<div class="panel-heading">
-			<h3 class="panel-title">Project Information</h3>
+			<h3 class="panel-title" th:text="#{foundation.projects.overview.widget.title}">Project Information</h3>
 		</div>
 
 
@@ -43,7 +43,7 @@
 								<input name="projectKey" type="hidden" th:value="${projectData.project.key}" />
 								<input name="featureId" type="hidden" th:value="${feature.getId()}" />
 								<input name="featureSubject" type="hidden" th:value="${feature.getSubject()}" />
-								<button onclick="return confirm('Start feature ?')" class="glyphicon glyphicon-play" type="submit" style="color:DarkGreen"></button>
+								<button onclick="return confirm('Start feature ?')" class="fa fa-play" type="submit" style="color:Black" data-toggle="tooltip" th:title="#{foundation.projects.overview.widget.overview.project.features.startFeature} + ' #' + ${feature.getId()}"></button>
 							</form>
 							</div>
 
@@ -56,8 +56,8 @@
 								<input name="projectKey" type="hidden" th:value="${projectData.project.key}" />
 								<input name="featureId" type="hidden" th:value="${feature.getId()}" />
 								<input name="featureSubject" type="hidden" th:value="${feature.getSubject()}" />
-								<button onclick="return confirm('Finish feature ?')" class="glyphicon glyphicon-stop" type="submit" style="color:DarkRed"></button>
-								<button class="glyphicon glyphicon-info-sign" data-dismiss="modal" type="button" data-toggle="modal" data-target="#validationErrorsModal"></button>
+								<!--  button class="fa fa-info" data-dismiss="modal" type="button" data-toggle="modal" data-target="#validationErrorsModal"></button -->
+								<button onclick="return confirm('Finish feature ?')" class="fa fa-check" type="submit" style="color:Green" data-toggle="tooltip" th:title="#{foundation.projects.overview.widget.overview.project.features.finishFeature} + ' #' + ${feature.getId()}"></button>
 							</form>
 							</div>							
 						</td>
@@ -88,7 +88,7 @@
 								<input name="projectKey" type="hidden" th:value="${projectData.project.key}" />
 								<input name="releaseId" type="hidden" th:value="${release.getId()}" />
 								<input name="releaseVersion" type="hidden" th:value="${release.getName()}" />
-								<button onclick="return confirm('Start release ?')" class="glyphicon glyphicon-play" type="submit" style="color:DarkGreen"></button>
+								<button onclick="return confirm('Start release ?')" class="fa fa-play" type="submit" style="color:Black" data-toggle="tooltip" th:title="#{foundation.projects.overview.widget.overview.project.features.startRelease} + ' ' + ${release.getName()}"></button>
 							</form>
 							</div>
 
@@ -100,8 +100,8 @@
 								<input name="projectKey" type="hidden" th:value="${projectData.project.key}" />
 								<input name="releaseId" type="hidden" th:value="${release.getId()}" />
 								<input name="releaseVersion" type="hidden" th:value="${release.getName()}" />
-								<button onclick="return confirm('Finish release ?')" class="glyphicon glyphicon-stop" type="submit" style="color:DarkRed"></button>
-								<button class="glyphicon glyphicon-info-sign" data-dismiss="modal" type="button" data-toggle="modal" data-target="#featureInformation"></button>
+								<!--  button class="fa fa-info" data-dismiss="modal" type="button" data-toggle="modal" data-target="#featureInformation"></button -->
+								<button onclick="return confirm('Finish release ?')" class="fa fa-check" type="submit" style="color:Green" data-toggle="tooltip" th:title="#{foundation.projects.overview.widget.overview.project.features.finishRelease} + ' ' + ${release.getName()}"></button>
 							</form>
 							</div>
 							<!-- div th:if="${release.getStatus() == T(fr.echoes.labs.ksf.cc.extensions.services.project.TicketStatus).FINISHED}" class="pull-right">

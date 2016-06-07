@@ -109,5 +109,7 @@ html, body, iframe {
     color: #CCCCCC;
 }
 
-
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+  background-color: #e7eeee;
+}
 
