@@ -1,4 +1,5 @@
 package fr.echoes.labs.foremanclient
+import spock.lang.Ignore
 import spock.lang.Specification
 import fr.echoes.labs.foremanapi.IForemanApi
 import fr.echoes.labs.foremanapi.model.Filter
@@ -22,6 +23,7 @@ class ForemanServiceTest extends Specification {
 		foremanApi = Mock()
 	}
 
+	@Ignore
 	def "it should create a host"() {
 
 		given:
