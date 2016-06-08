@@ -31,7 +31,7 @@ public class DashboardProjectLifeCycleExtension implements IProjectLifecycleExte
 
 	@Autowired
 	private ApplicationContext applicationContext;
-	
+
 	@Autowired
 	private DashboardService dashboardService;
 
@@ -58,8 +58,12 @@ public class DashboardProjectLifeCycleExtension implements IProjectLifecycleExte
 
 		LOGGER.info("[Dashboard] project {} creation detected [demanded by: {}]", project.getKey(), logginName);
 
-		dashboardService.updateProjectEntities(project);
-		dashboardService.updateConnectorProperties(project);
+		try {
+			this.dashboardService.updateProjectEntities(project);
+			this.dashboardService.updateConnectorProperties(project);
+		} catch (final Exception e) {
+			LOGGER.error("[Dashboard] failed to create projet " + project.getName(), e);
+		}
 
 		return NotifyResult.CONTINUE;
 	}
