@@ -19,6 +19,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.ObjectWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import fr.echoes.labs.foremanapi.IForemanApi;
@@ -50,6 +51,7 @@ import fr.echoes.labs.foremanclient.model.NetworkInterface;
 import fr.echoes.labs.foremanclient.model.PowerAction;
 import fr.echoes.labs.ksf.cc.plugins.foreman.exceptions.ForemanHostAlreadyExistException;
 import fr.echoes.labs.ksf.cc.plugins.foreman.model.ForemanHostDescriptor;
+import fr.echoes.labs.ksf.cc.plugins.foreman.services.ForemanConfigurationService;
 
 /**
 * Spring Service for working with the foreman API.
@@ -64,6 +66,9 @@ public class ForemanService implements IForemanService {
      private static final Logger LOGGER = LoggerFactory.getLogger(ForemanService.class);
 
      public static final String PER_PAGE_RESULT = String.valueOf(Integer.MAX_VALUE);
+
+     @Autowired
+     private ForemanConfigurationService config;
 
      /**
      * Find the role with the given name.
@@ -165,11 +170,11 @@ public class ForemanService implements IForemanService {
 	public void deleteProject(IForemanApi api, String projectName) throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
 
     	// Delete the hosts associated to the project
-    	List<Host> hosts = findHostsByProject(api, projectName);
-    	for (Host host : hosts) {
+    	final List<Host> hosts = findHostsByProject(api, projectName);
+    	for (final Host host : hosts) {
     		api.deleteHost(host.id);
     	}
-    	
+
     	// Delete the host groups
         final Hostgroups hostGroups = api.getHostGroups(null, null, null, PER_PAGE_RESULT);
         for (final HostGroup hostGroup : hostGroups.results) {
@@ -178,7 +183,7 @@ public class ForemanService implements IForemanService {
                 break;
             }
         }
-        
+
         // Delete the role
         final Role findRole = findRole(api, projectName);
         final Users users = api.getUsers(PER_PAGE_RESULT);
@@ -196,25 +201,33 @@ public class ForemanService implements IForemanService {
 
             api.deleteRoles(findRole.id);
         }
-        
+
     }
 
      private void createHostGroup(IForemanApi api, String projectName) {
+
           final HostGroupWrapper hostGroupWrapper = new HostGroupWrapper();
           final HostGroup hostGroup = new HostGroup();
           hostGroup.name = projectName;
-          hostGroup.subnet_id = DEFAULT_ENVIRONMENT_ID;
-          hostGroup.realm_id = "";
-          hostGroup.architecture_id = DEFAULT_ENVIRONMENT_ID;
-          hostGroup.operatingsystem_id = DEFAULT_ENVIRONMENT_ID;
-          hostGroup.ptable_id = "54";
-          hostGroup.medium_id = "2";
-          hostGroup.domain_id = "2";
+          hostGroup.subnet_id = this.config.getHostgroupSubnetId();
+          hostGroup.realm_id = this.config.getHostgroupRealmId();
+          hostGroup.architecture_id = this.config.getArchitectureId();
+          hostGroup.operatingsystem_id = this.config.getHostgroupOperatingsystemId();
+          hostGroup.ptable_id = this.config.getHostgroupPtableId();
+          hostGroup.medium_id = this.config.getHostgroupMediumId();
+          hostGroup.domain_id = this.config.getDomainId();
+
+          LOGGER.info("[foreman] Creating hostgroup: {}", projectName);
+          LOGGER.info("[foreman] Creating hostgroup details: {}", hostGroup);
+
           hostGroupWrapper.setHostGroup(hostGroup);
           api.createHostGroups(hostGroupWrapper);
      }
 
      private Role duplicateRole(final IForemanApi api, String projectName, String roleName) {
+
+    	 LOGGER.info("[foreman] Duplicating role:{}", roleName);
+
           final List<Filter> defaultUserFilters = findFilters(api, roleName);
 
           final NewRole newRole = new NewRole();
@@ -241,7 +254,12 @@ public class ForemanService implements IForemanService {
      }
 
      private void updateRoleTOuser(final IForemanApi api, String userId, String roleId, boolean add) {
+    	 LOGGER.info("[foreman] adding role to user roleId={}, userId={}", roleId, userId);
          final User user = api.getUser(userId);
+
+         if (user == null) {
+        	 LOGGER.error("[foreman] cannot find user with userId=" + userId);
+         }
 
          final List<String> roleIds = new ArrayList<String>();
 
@@ -292,12 +310,12 @@ public class ForemanService implements IForemanService {
 	   	  if (hostExists(api, parameterObject.getHostName())) {
 			  throw new ForemanHostAlreadyExistException(parameterObject.getHostName());
 		  }
-	
+
 		 final NewHost newHost = new NewHost();
-	
+
 		 final HostWrapper hostWrapper = new HostWrapper();
 		 hostWrapper.setHost(newHost);
-	
+
 		 newHost.name = parameterObject.getHostName();
 		 newHost.compute_resource_id = parameterObject.getComputeResourceId();
 		 newHost.compute_profile_id = parameterObject.getComputeProfileId();
@@ -308,7 +326,7 @@ public class ForemanService implements IForemanService {
 		 newHost.domain_id = parameterObject.getDomainId();
 		 newHost.root_pass = parameterObject.getRootPassword();
 		 newHost.interfaces_attributes.put("0", new NetworkInterface() );
-	
+
 		 Modules modules = null;
 		 boolean configureModules = true;
 		 try {
@@ -319,17 +337,17 @@ public class ForemanService implements IForemanService {
 			 configureModules = false;
 			 newHost.puppetclass_ids = findPuppetClassesId(api, parameterObject.getEnvironmentName());
 		 }
-	
+
 		 final Host host = api.createHost(hostWrapper);
-	
+
 		 if (configureModules) {
 			 configurePuppet(api, modules,host);
 		 }
-	
+
 		 final PowerAction powerAction = new PowerAction();
 		 powerAction.power_action = "start";
 		 api.hostPower(host.id, powerAction);
-	
+
 	     return host;
      }
 
@@ -399,7 +417,7 @@ public class ForemanService implements IForemanService {
   		}
 
        }
-  	
+
      private String findEnvironmentId(IForemanApi api, String environmentName) {
           final Environments environments = api.getEnvironments(null, null, null, PER_PAGE_RESULT);
           for (final Environment hostGroup : environments.results) {
@@ -564,11 +582,11 @@ public class ForemanService implements IForemanService {
 
 	@Override
 	public List<Host> findHostsByProject(IForemanApi api, String projectName) {
-		
-		Hosts hosts = api.getHostsByHostGroup(projectName, null, null, null, PER_PAGE_RESULT);
-		
+
+		final Hosts hosts = api.getHostsByHostGroup(projectName, null, null, null, PER_PAGE_RESULT);
+
 		return hosts != null ? hosts.results : null;
-		
+
 	}
 
 

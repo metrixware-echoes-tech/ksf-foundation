@@ -14,7 +14,7 @@ public class ForemanConfigurationService {
 
     @Value("${ksf.foreman.password}")
     private String password;
-    
+
     @Value("${ksf.foreman.host.smartProxyId}")
     private String smartProxyId;
 
@@ -27,25 +27,42 @@ public class ForemanConfigurationService {
     @Value("${ksf.puppet.modulepath}")
     private String puppetModulePath;
 
-    @Value("${ksf.foreman.host.domainId}")
-    private String domainId;	
+    @Value("${ksf.foreman.host.domainId:1}")
+    private String domainId;
 
 	@Value("${ksf.foreman.host.rootPassword}")
     private String rootPassword;
 
-    @Value("${ksf.foreman.host.architectureId}")
+    @Value("${ksf.foreman.host.architectureId:1}")
     private String architectureId;
-    
+
     @Value("${ksf.foreman.puppet.configuration.create.parameters.enabled}")
     private Boolean createParametersEnabled;
 
+    @Value("${ksf.foreman.hostgroup.subnetId:1}")
+    private String hostgroupSubnetId;
+
+    @Value("${ksf.foreman.hostgroup.realmId:}")
+    private String hostgroupRealmId;
+
+    @Value("${ksf.foreman.hostgroup.operatingsystemId :1}")
+    private String hostgroupOperatingsystemId;
+
+    @Value("${ksf.foreman.hostgroup.ptableId :1}")
+    private String hostgroupPtableId;
+
+    @Value("${ksf.foreman.hostgroup.mediumId :1}")
+    private String hostgroupMediumId;
+
+
+
     public Boolean getCreateParametersEnabled() {
-		return createParametersEnabled;
+		return this.createParametersEnabled;
 	}
-	
+
 	public String getForemanUrl() {
-        if ('/' == url.charAt(url.length() - 1)) {
-            url = url.substring(0, url.length() - 1);
+        if ('/' == this.url.charAt(this.url.length() - 1)) {
+            this.url = this.url.substring(0, this.url.length() - 1);
         }
         return this.url;
     }
@@ -57,39 +74,74 @@ public class ForemanConfigurationService {
     public String getForemanPassword() {
         return this.password;
     }
-    
+
     public String getSmartProxyId() {
-		return smartProxyId;
+		return this.smartProxyId;
 	}
-	
+
 
 	public String getComputeResourceId() {
-		return computeResourceId;
+		return this.computeResourceId;
 	}
-	
+
 
 	public String getComputeProfileId() {
-		return computeProfileId;
+		return this.computeProfileId;
 	}
-	
+
 
 	public String getPuppetModulePath() {
-		return puppetModulePath;
+		return this.puppetModulePath;
 	}
-	
+
 
 	public String getDomainId() {
-		return domainId;
+		return this.domainId;
 	}
-	
+
 
 	public String getRootPassword() {
-		return rootPassword;
+		return this.rootPassword;
 	}
-	
+
 
 	public String getArchitectureId() {
-		return architectureId;
+		return this.architectureId;
+	}
+
+	/**
+	 * @return the hostgroupSubnetId
+	 */
+	public String getHostgroupSubnetId() {
+		return this.hostgroupSubnetId;
+	}
+
+	/**
+	 * @return the hostgroupOperatingsystemId
+	 */
+	public String getHostgroupOperatingsystemId() {
+		return this.hostgroupOperatingsystemId;
+	}
+
+	/**
+	 * @return the hostgroupPtableId
+	 */
+	public String getHostgroupPtableId() {
+		return this.hostgroupPtableId;
+	}
+
+	/**
+	 * @return the hostgroupMediumId
+	 */
+	public String getHostgroupMediumId() {
+		return this.hostgroupMediumId;
+	}
+
+	/**
+	 * @return the hostgroupRealmId
+	 */
+	public String getHostgroupRealmId() {
+		return this.hostgroupRealmId;
 	}
 
 }
