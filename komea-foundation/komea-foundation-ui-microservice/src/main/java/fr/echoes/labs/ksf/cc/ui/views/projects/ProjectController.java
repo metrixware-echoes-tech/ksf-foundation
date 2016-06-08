@@ -268,14 +268,30 @@ public class ProjectController {
 			panels.addAll(widget.getTabPanels(projectKey));
 		}
 
+		final List<Project> parentProjects = getParentProjects(project);
+
 		model.addObject("widgets", widgets);
 		model.addObject("panels", panels);
+		model.addObject("parentProjects", parentProjects);
 
 		return model;
 	}
 
 
-    @RequestMapping(value = "/ui/projects/delete/{projectKey}")
+    private List<Project> getParentProjects(Project project) {
+    	final List<Project> parents = new ArrayList<Project>();
+    	String parentId;
+    	Project currentProject = project;
+    	while ((parentId = currentProject.getParentId()) != null) {
+    		final Project parent = this.projectDao.findOne(parentId);
+    		parents.add(parent);
+    		currentProject = parent;
+    	}
+
+		return Lists.reverse(parents);
+	}
+
+	@RequestMapping(value = "/ui/projects/delete/{projectKey}")
     public ModelAndView DeleteProjectPage(@PathVariable final String projectKey) {
     	final Project findByKey = this.projectDao.findByKey(projectKey);
     	this.gate.dispatch(new DeleteProjectCommand(findByKey.getId()));

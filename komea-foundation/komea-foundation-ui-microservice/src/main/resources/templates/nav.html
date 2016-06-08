@@ -4,9 +4,9 @@
 			<div class='navbar-header'>
 				<a class="pull-left" th:href="@{/ui/projects}"> <img
 					class="logo" th:src="@{/pictures/KSF-logo.png}" alt="KSF" />
-				</a> <a class="navbar-brand" th:href="@{/ui/projects}"
+				</a> <a class="navbar-brand" th:href="@{/}"
 					data-toggle="tooltip" data-placement="bottom"
-					th:title="#{foundation.projects.navbar.projects.toolTip}" th:text="#{foundation.projects.navbar.projects}"></a>
+					th:title="#{foundation.projects.navbar.projects.toolTip}" th:text="#{foundation.appName}"></a>
 			</div>
 			<div class='navbar-form navbar-left' role='form'>
 				<a style="margin-top: 3px; margin-left: -10px"
@@ -40,6 +40,20 @@
 		</div>
 	</nav>
 </div>
+
+<div th:fragment="breadcrumb">
+	<ol class="breadcrumb">
+	  <li><a th:href="@{/ui/projects}" th:text="#{foundation.projects.navbar.projects}">Projects</a></li>
+	  
+	  <div th:if="${parentProjects != null}" th:remove="tag">
+	  <li th:each="parentProject : ${parentProjects}"><a th:href="@{/ui/projects/} + ${parentProject.key}" th:text="${parentProject.name}">Library</a></li>
+	  </div>
+	  <div th:if="${projectData != null}" th:remove="tag">
+	  <li class="active" th:text="${projectData.project.name}"></li>
+	  </div>
+	</ol>
+</div>
+
 
 
 <div th:fragment="aboutModal">

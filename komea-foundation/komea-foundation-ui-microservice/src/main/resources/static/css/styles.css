@@ -113,3 +113,42 @@ html, body, iframe {
   background-color: #e7eeee;
 }
 
+.navbar {
+	margin-bottom: 0;
+}
+
+
+.breadcrumb {
+	background: rgba(242, 242, 242, 1);
+	border: 0px solid rgba(245, 245, 245, 1);
+	border-radius: 0px;
+	display: block;
+	margin-bottom: 8px;
+	border-bottom: 1px solid rgba(220,220,220, 1);
+}
+
+.breadcrumb li {
+	font-size: 14px;
+}
+
+.breadcrumb a {
+	color: rgba(66, 139, 202, 1);
+}
+
+.breadcrumb a:hover {
+	color: rgba(42, 100, 150, 1);
+}
+
+.breadcrumb>.active {
+	color: rgba(153, 153, 153, 1);
+}
+
+.breadcrumb>li+li:before {
+	color: rgba(204, 204, 204, 1);
+	content: "\002F\00a0";
+}
+.breadcrumb {
+	padding: 4px 0px 2px 5px;
+}
+
+
