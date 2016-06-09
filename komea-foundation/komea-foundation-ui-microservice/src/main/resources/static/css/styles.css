@@ -100,7 +100,7 @@ html, body, iframe {
 .validation-message-list li:before
 {
     /*Using a Bootstrap glyphicon as the bullet point*/
-    content: "\e080";
+    content: "\e014";
     font-family: 'Glyphicons Halflings';
     font-size: 9px;
     float: left;

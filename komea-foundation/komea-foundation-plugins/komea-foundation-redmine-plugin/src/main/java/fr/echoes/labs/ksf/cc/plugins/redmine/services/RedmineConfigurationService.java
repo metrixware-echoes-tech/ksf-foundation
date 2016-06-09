@@ -1,5 +1,7 @@
 package fr.echoes.labs.ksf.cc.plugins.redmine.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +41,9 @@ public class RedmineConfigurationService {
 
     @Value("${ksf.redmine.adminUsername}")
     private String adminUserName;
+
+    @Value("#{'${ksf.redmine.featureIds}'.split(',')}")
+    private List<Integer> featureIds;
 
 	public String getUrl() {
         if ('/' == this.url.charAt(this.url.length() - 1)) {
@@ -108,6 +113,13 @@ public class RedmineConfigurationService {
 	 */
 	public int getBugTrackerId() {
 		return this.bugTrackerId;
+	}
+
+	/**
+	 * @return the featureIds
+	 */
+	public List<Integer> getFeatureIds() {
+		return this.featureIds;
 	}
 
 }

@@ -152,7 +152,8 @@
         <h4 class="modal-title" th:text="#{foundation.feature.validator.popup.title}"></h4>
       </div>
       <div class="modal-body">
-      	<p th:text="#{foundation.feature.validator.popup.message}"></p>
+      	<p th:text="#{foundation.feature.validator.popup.message1}"></p>
+      	<p th:text="#{foundation.feature.validator.popup.message2}"></p>
   		<ul class="validation-message-list">
   			<li th:each="validationError : ${validationErrors}" th:text="${validationError.getMessage()}"></li>
   		</ul>
