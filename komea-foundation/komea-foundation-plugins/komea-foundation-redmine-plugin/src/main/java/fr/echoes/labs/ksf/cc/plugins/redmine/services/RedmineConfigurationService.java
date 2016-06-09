@@ -45,6 +45,11 @@ public class RedmineConfigurationService {
     @Value("#{'${ksf.redmine.featureIds}'.split(',')}")
     private List<Integer> featureIds;
 
+    @Value("${ksf.redmine.hackBugApi}")
+    private boolean hackBugApi;
+    
+    
+
 	public String getUrl() {
         if ('/' == this.url.charAt(this.url.length() - 1)) {
             this.url = this.url.substring(0, this.url.length() - 1);
@@ -121,5 +126,13 @@ public class RedmineConfigurationService {
 	public List<Integer> getFeatureIds() {
 		return this.featureIds;
 	}
+
+	/**
+	 * @return {@code true} to avoid the server error when calling the Redmine API to get a issue with its ID.
+	 */
+	public boolean isHackBugApi() {
+		return hackBugApi;
+	}
+
 
 }

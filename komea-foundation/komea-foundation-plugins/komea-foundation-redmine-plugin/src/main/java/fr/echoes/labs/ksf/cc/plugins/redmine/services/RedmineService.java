@@ -345,12 +345,29 @@ public class RedmineService implements IRedmineService {
 
 		final IssueManager issueManager = redmineManager.getIssueManager();
 		try {
-			final Issue issue = issueManager.getIssueById(Integer.valueOf(ticketId));
+			final Issue issue;
+			if (configuration.isHackBugApi()) {
+				issue = getIssueById(issueManager, Integer.valueOf(ticketId));
+			} else {
+				issue = issueManager.getIssueById(Integer.valueOf(ticketId));
+			}
 			issue.setStatusId(statusId);
 			issueManager.update(issue);
 		} catch (final Exception e) {
 			throw new RedmineExtensionException("Failed to change ticket status.", e);
 		}
+	}
+
+	private Issue getIssueById(IssueManager issueManager, Integer issueId) throws RedmineException {
+		final List<Issue> issues = issueManager.getIssues(null, null);
+		if (issues != null) {
+			for (Issue issue : issues) {
+				if (issue.getId().equals(issueId)) {
+					return issue;
+				}
+			}
+		}
+		return null;
 	}
 
 	@Override
