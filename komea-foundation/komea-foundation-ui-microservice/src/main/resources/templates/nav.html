@@ -43,13 +43,8 @@
 <div th:fragment="breadcrumb">
 	<ol class="breadcrumb">
 	  <li><a th:href="@{/ui/projects}" data-toggle="tooltip" th:title="#{foundation.projects.navbar.projects.toolTip}" th:text="#{foundation.projects.navbar.projects}">Projects</a></li>
-	  
-	  <div th:if="${parentProjects != null}" th:remove="tag">
-	  <li th:each="parentProject : ${parentProjects}"><a th:href="@{/ui/projects/} + ${parentProject.key}" th:text="${parentProject.name}">Library</a></li>
-	  </div>
-	  <div th:if="${projectData != null}" th:remove="tag">
-	  <li class="active" th:text="${projectData.project.name}"></li>
-	  </div>
+	  <li th:if="${parentProjects != null}" th:each="parentProject : ${parentProjects}"><a th:href="@{/ui/projects/} + ${parentProject.key}" th:text="${parentProject.name}">Library</a></li>
+	  <li th:if="${projectData != null}" class="active" th:text="${projectData.project.name}"></li>
 	</ol>
 </div>
 

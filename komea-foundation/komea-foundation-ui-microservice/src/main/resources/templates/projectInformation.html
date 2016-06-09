@@ -63,7 +63,7 @@
 								<input name="projectKey" type="hidden" th:value="${projectData.project.key}" />
 								<input name="featureId" type="hidden" th:value="${feature.getId()}" />
 								<input name="featureSubject" type="hidden" th:value="${feature.getSubject()}" />
-								<!--  button class="fa fa-info" data-dismiss="modal" type="button" data-toggle="modal" data-target="#validationErrorsModal"></button -->
+								<button class="fa fa-info featureInfoButton" type="button" th:attr="data-id=${feature.getId()}, data-subject=${feature.getSubject()}, data-gitbranch=${@projectInformationService.getGitFeatureBranchName(feature.getId(), feature.getSubject())}, data-jenkinsjob=${@projectInformationService.getFeatureJobName(projectData.project.name, feature.getId(), feature.getSubject())}"></button>
 								<button onclick="return confirm(finishFeatureMessage)" class="fa fa-check" type="submit" style="color:Green" data-toggle="tooltip" th:title="#{foundation.projects.overview.widget.overview.project.features.finishFeature} + ' #' + ${feature.getId()}"></button>
 							</form>
 							</div>							
@@ -107,7 +107,7 @@
 								<input name="projectKey" type="hidden" th:value="${projectData.project.key}" />
 								<input name="releaseId" type="hidden" th:value="${release.getId()}" />
 								<input name="releaseVersion" type="hidden" th:value="${release.getName()}" />
-								<!--  button class="fa fa-info" data-dismiss="modal" type="button" data-toggle="modal" data-target="#featureInformation"></button -->
+								<button class="fa fa-info releaseInfoButton" type="button" th:attr="data-name=${release.getName()}, data-gitbranch=${@projectInformationService.getGitReleaseBranchName(release.getName())}, data-jenkinsjob=${@projectInformationService.getReleaseJobName(projectData.project.name, release.getName())}"></button>
 								<button onclick="return confirm(finishReleaseMessage)" class="fa fa-check" type="submit" style="color:Green" data-toggle="tooltip" th:title="#{foundation.projects.overview.widget.overview.project.features.finishRelease} + ' ' + ${release.getName()}"></button>
 							</form>
 							</div>
@@ -120,17 +120,45 @@
 			</table>			
 
 
+
+
 <div id="featureInformation" class="modal fade in" role="dialog">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-lg">
 
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title" th:text="#{foundation.projects.overview.widget.overview.project.information.popup.title}">Informations</h4>
+        <h4 class="modal-title" th:text="#{foundation.projects.overview.widget.overview.project.featureInformation.popup.title}">Feature Information</h4>
       </div>
       <div class="modal-body">
-        <p></p>
+      
+ <form class="form-horizontal" role="form">
+  <div class="form-group">
+  
+    <label class="control-label col-md-3" th:text="#{foundation.projects.overview.widget.overview.project.featureInformation.popup.ticketId}">Ticket:</label>
+    <div class="col-md-9">
+      <p class="form-control-static" id="infFeatureId">ID</p>
+    </div>
+
+    <label class="control-label col-md-3" th:text="#{foundation.projects.overview.widget.overview.project.featureInformation.popup.subject}">Subject:</label>
+    <div class="col-md-9">
+      <p class="form-control-static" id="infFeatureSubject">Subject</p>
+    </div>
+
+    <label class="control-label col-md-3" th:text="#{foundation.projects.overview.widget.overview.project.featureInformation.popup.jenkinsJobName}">Jenkins job name:</label>
+    <div class="col-md-9">
+      <p class="form-control-static" id="infFeatureJenkinsJob">jenkins job name</p>
+    </div>
+
+    <label class="control-label col-md-3" th:text="#{foundation.projects.overview.widget.overview.project.featureInformation.popup.gitBranchName}">Git branch name:</label>
+    <div class="col-md-9">
+      <p class="form-control-static" id="infFeatureGitbranch">git branch name</p>
+    </div>
+    
+  </div>
+</form>
+ 
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -139,6 +167,64 @@
 
   </div>
 </div>
+
+
+
+
+
+
+
+
+<div id="releaseInformation" class="modal fade in" role="dialog">
+  <div class="modal-dialog modal-lg">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title" th:text="#{foundation.projects.overview.widget.overview.project.releaseInformation.popup.title}">Release Information</h4>
+      </div>
+      <div class="modal-body">
+      
+ <form class="form-horizontal" role="form">
+  <div class="form-group">
+  
+    <label class="control-label col-md-3">Release Name</label>
+    <div class="col-md-9">
+      <p class="form-control-static" id="infReleaseName">release name</p>
+    </div>
+
+    <label class="control-label col-md-3" th:text="#{foundation.projects.overview.widget.overview.project.featureInformation.popup.jenkinsJobName}">Jenkins job name:</label>
+    <div class="col-md-9">
+      <p class="form-control-static" id="infReleaseJenkinsJob">jenkins job name</p>
+    </div>
+
+    <label class="control-label col-md-3" th:text="#{foundation.projects.overview.widget.overview.project.featureInformation.popup.gitBranchName}">Git branch name:</label>
+    <div class="col-md-9">
+      <p class="form-control-static" id="infReleaseGitbranch">git branch name</p>
+    </div>
+    
+  </div>
+</form>
+ 
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
 
 
 <div th:if="${validationErrors != null}" th:remove="tag">
@@ -168,7 +254,7 @@
 </div> <!--/* End if validationErrors */-->
 	
 				
-		</div>
+</div>
 
 
 </div>
