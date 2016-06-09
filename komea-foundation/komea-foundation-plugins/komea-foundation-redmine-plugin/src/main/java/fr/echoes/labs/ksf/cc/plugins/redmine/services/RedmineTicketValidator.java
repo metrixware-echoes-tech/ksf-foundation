@@ -6,6 +6,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.stereotype.Service;
 
 import fr.echoes.labs.ksf.cc.extensions.services.project.IValidator;
@@ -32,6 +34,9 @@ public class RedmineTicketValidator implements IValidator {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RedmineTicketValidator.class);
 
+	@Autowired
+	private MessageSource messageResource;
+
 	@Override
 	public List<IValidatorResult> validateFeature(String projectName,
 			String featureId, String description) {
@@ -57,16 +62,15 @@ public class RedmineTicketValidator implements IValidator {
 
 		try {
 
-			final List<RedmineIssue> newIssues = getIssues(projectName, releaseName, this.configurationService.getFeatureStatusNewId());
-			final List<RedmineIssue> assignedIssues = getIssues(projectName, releaseName, this.configurationService.getFeatureStatusAssignedId());
+			final List<RedmineIssue> issues = new ArrayList<RedmineIssue>();
 
-			for (final RedmineIssue issue : newIssues) {
-				final IValidatorResult validatorResult = new ValidatorResult(ValidatorResultType.ERROR, "REDMINE - Le ticket '#" + issue.getId() + "' n'est pas clos.");
-				result.add(validatorResult);
-			}
+			addIssuesToList(projectName, releaseName, issues, this.configurationService.getFeatureStatusNewId());
+			addIssuesToList(projectName, releaseName, issues, this.configurationService.getFeatureStatusAssignedId());
 
-			for (final RedmineIssue issue : assignedIssues) {
-				final IValidatorResult validatorResult = new ValidatorResult(ValidatorResultType.ERROR, "REDMINE - Le ticket '#" + issue.getId() + "' n'est pas clos.");
+			final MessageSourceAccessor messageSourceAccessor = new MessageSourceAccessor(this.messageResource);
+			for (final RedmineIssue issue : issues) {
+				final String message = messageSourceAccessor.getMessage("foundation.redmine.validator.issueNotClosed", new Object[]{issue.getId()});
+				final IValidatorResult validatorResult = new ValidatorResult(ValidatorResultType.ERROR, message);
 				result.add(validatorResult);
 			}
 
@@ -76,6 +80,13 @@ public class RedmineTicketValidator implements IValidator {
 
 
 		return result;
+	}
+
+	private void addIssuesToList(String projectName, String releaseName, final List<RedmineIssue> issues, int issueStatusId) throws RedmineExtensionException {
+		final List<RedmineIssue> newIssues = getIssues(projectName, releaseName, issueStatusId);
+		if (newIssues != null ) {
+			issues.addAll(newIssues);
+		}
 	}
 
 	private List<RedmineIssue> getIssues(String projectName, String releaseName, int issueStatusId) throws RedmineExtensionException {

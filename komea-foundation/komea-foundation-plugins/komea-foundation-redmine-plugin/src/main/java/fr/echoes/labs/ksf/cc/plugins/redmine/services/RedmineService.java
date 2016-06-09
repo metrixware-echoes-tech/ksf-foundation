@@ -304,11 +304,10 @@ public class RedmineService implements IRedmineService {
 
 		final List<IProjectFeature> features = new ArrayList<IProjectFeature>();
 
-		features.addAll((buildFeaturesList(projectName, this.configuration.getFeatureTrackerId(), this.configuration.getFeatureStatusNewId(), TicketStatus.NEW)));
-		features.addAll((buildFeaturesList(projectName, this.configuration.getFeatureTrackerId(), this.configuration.getFeatureStatusAssignedId(), TicketStatus.CREATED)));
-
-		features.addAll((buildFeaturesList(projectName, this.configuration.getBugTrackerId(), this.configuration.getFeatureStatusNewId(), TicketStatus.NEW)));
-		features.addAll((buildFeaturesList(projectName, this.configuration.getBugTrackerId(), this.configuration.getFeatureStatusAssignedId(), TicketStatus.CREATED)));
+		for (final Integer featureId : this.configuration.getFeatureIds()) {
+			features.addAll((buildFeaturesList(projectName, featureId, this.configuration.getFeatureStatusNewId(), TicketStatus.NEW)));
+			features.addAll((buildFeaturesList(projectName, featureId, this.configuration.getFeatureStatusAssignedId(), TicketStatus.CREATED)));
+		}
 
 		return features;
 	}
@@ -413,4 +412,6 @@ public class RedmineService implements IRedmineService {
 		}
 		return null;
 	}
+
+
 }
