@@ -119,12 +119,12 @@ html, body, iframe {
 
 
 .breadcrumb {
-	background: rgba(242, 242, 242, 1);
+	background: rgba(248, 248, 242, 1);
 	border: 0px solid rgba(245, 245, 245, 1);
 	border-radius: 0px;
 	display: block;
 	margin-bottom: 8px;
-	border-bottom: 1px solid rgba(220,220,220, 1);
+	border-bottom: 1px solid rgba(225,225,225, 1);
 }
 
 .breadcrumb li {
@@ -145,10 +145,10 @@ html, body, iframe {
 
 .breadcrumb>li+li:before {
 	color: rgba(204, 204, 204, 1);
-	content: "\002F\00a0";
+	content: "\276F\00a0";
 }
 .breadcrumb {
-	padding: 4px 0px 2px 5px;
+	padding: 4px 0px 4px 5px;
 }
 
 
