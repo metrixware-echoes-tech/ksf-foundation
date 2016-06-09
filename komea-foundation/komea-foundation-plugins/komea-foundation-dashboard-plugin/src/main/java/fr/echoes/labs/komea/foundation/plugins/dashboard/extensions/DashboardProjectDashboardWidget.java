@@ -97,18 +97,14 @@ public class DashboardProjectDashboardWidget implements ProjectDashboardWidget {
 				if (project != null) {
 					
 					final String projectDashboardKey = ProjectUtils.createIdentifier(project.getName());
-					final String customPeriod = customPeriod();
 
 					url = new DashboardUrlBuilder()
 						.setBaseUrl(configurationService.getUrl())
-						.setDisplayPage(configurationService.getDisplayPage())
-						.setProjectType(configurationService.getProjectType())
 						.setProjectKey(projectDashboardKey)
-						.setCustomPeriod(customPeriod)
 						.build();
 
 					ctx.setVariable("projectDashboardKey", projectDashboardKey);
-					ctx.setVariable("dashboardCustomPeriod", customPeriod);
+
 				}
 
 				LOGGER.info("[dashboard] project URL : {}", url);
@@ -124,14 +120,6 @@ public class DashboardProjectDashboardWidget implements ProjectDashboardWidget {
 		};
 
 		return Lists.newArrayList(iframePanel);
-	}
-
-	private String customPeriod() {
-		final int periodInDays = DashboardProjectDashboardWidget.this.configurationService.getCustomPeriod();
-		final DateTime dateTime = new DateTime();
-		final long endPeriod = dateTime.getMillis();
-		final long startPeriod = dateTime.minusDays(periodInDays).getMillis();
-		return "LAST_X_DAYS," + startPeriod + ',' +  endPeriod + ',' + periodInDays;
 	}
 
 	private static TemplateEngine createTemplateEngine() {

@@ -15,14 +15,8 @@ public class DashboardConfigurationService {
     @Value("${ksf.dashboard.url}")
     private String url;
     
-    @Value("${ksf.dashboard.displayPage:}")
-    private String displayPage;
-    
     @Value("${ksf.dashboard.organization.url}")
     private String organizationUrl;
-    
-    @Value("${ksf.dashboard.customPeriod:30}")
-    private int customPeriod;
     
     @Value("${ksf.dashboard.projectType:project}")
     private String projectType;
@@ -38,19 +32,27 @@ public class DashboardConfigurationService {
     
     @Value("${ksf.dashboard.password}")
     private String password;
+    
+    @Value("${ksf.dashboard.liferay.protocol}")
+    private String liferayProtocol;
+    
+    @Value("${ksf.dashboard.liferay.host}")
+    private String liferayHost;
+    
+    @Value("${ksf.dashboard.liferay.defaultTemplateName}")
+    private String liferayDefaultTemplateName;
+    
+    @Value("${ksf.dashboard.liferay.defaultCompanyWebId}")
+    private String liferayDefaultCompanyWebId;
+    
+    @Value("${ksf.dashboard.liferay.defaultUserGroupName}")
+    private String liferayDefaultUserGroupName;
 
 	public String getUrl() {
         if ('/' == this.url.charAt(this.url.length() - 1)) {
             this.url = this.url.substring(0, this.url.length() - 1);
         }
         return this.url;
-	}
-	
-	/**
-	 * @return the dashboard time period in days (default value is 30 days). 
-	 */
-	public int getCustomPeriod() {
-		return customPeriod;
 	}
 	
 	public String getProjectType() {
@@ -81,8 +83,24 @@ public class DashboardConfigurationService {
 		return repositoryType;
 	}
 	
-	public String getDisplayPage() {
-		return displayPage;
+	public String getLiferayProtocol() {
+		return liferayProtocol;
+	}
+	
+	public String getLiferayHost() {
+		return liferayHost;
 	}
 
+	public String getLiferayDefaultTemplateName() {
+		return liferayDefaultTemplateName;
+	}
+	
+	public String getLiferayDefaultCompanyWebId() {
+		return liferayDefaultCompanyWebId;
+	}
+	
+	public String getLiferayDefaultUserGroupName() {
+		return liferayDefaultUserGroupName;
+	}
+	
 }
