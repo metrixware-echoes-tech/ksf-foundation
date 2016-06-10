@@ -65,9 +65,9 @@ public class DashboardProjectLifeCycleExtension implements IProjectLifecycleExte
 		LOGGER.info("[Dashboard] project {} creation detected [demanded by: {}]", project.getKey(), logginName);
 
 		try {
-			this.liferayService.createSite(projectKey);
 			this.dashboardService.updateProjectEntities(project);
 			this.dashboardService.updateConnectorProperties(project);
+			this.liferayService.createSite(projectKey);
 		} catch (final Exception e) {
 			LOGGER.error("[Dashboard] failed to initialize project {} in Komea Dashboard",project.getName(), e);
 		}
