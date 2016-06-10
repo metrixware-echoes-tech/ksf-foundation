@@ -108,10 +108,7 @@ public class JenkinsProjectDashboardWidget implements ProjectDashboardWidget {
 	}
 
 	private String getBaseUrl() {
-		final StringBuffer url = this.request.getRequestURL();
-		final String uri = this.request.getRequestURI();
-		final String ctx = this.request.getContextPath();
-		return url.substring(0, url.length() - uri.length() + ctx.length());
+		return this.request.getContextPath();
 	}
 
 
