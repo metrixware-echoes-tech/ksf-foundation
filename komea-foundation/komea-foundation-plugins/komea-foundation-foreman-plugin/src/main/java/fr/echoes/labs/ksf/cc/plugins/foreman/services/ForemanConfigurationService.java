@@ -24,8 +24,6 @@ public class ForemanConfigurationService {
     @Value("${ksf.foreman.host.computeProfileId}")
     private String computeProfileId;
 
-    @Value("${ksf.puppet.modulepath}")
-    private String puppetModulePath;
 
     @Value("${ksf.foreman.host.domainId:1}")
     private String domainId;
@@ -54,7 +52,8 @@ public class ForemanConfigurationService {
     @Value("${ksf.foreman.hostgroup.mediumId :1}")
     private String hostgroupMediumId;
 
-
+    @Value("ksf.foreman.puppetModuleInstallScript:")
+    private String puppetModuleInstallScript;
 
     public Boolean getCreateParametersEnabled() {
 		return this.createParametersEnabled;
@@ -87,11 +86,6 @@ public class ForemanConfigurationService {
 
 	public String getComputeProfileId() {
 		return this.computeProfileId;
-	}
-
-
-	public String getPuppetModulePath() {
-		return this.puppetModulePath;
 	}
 
 
@@ -142,6 +136,13 @@ public class ForemanConfigurationService {
 	 */
 	public String getHostgroupRealmId() {
 		return this.hostgroupRealmId;
+	}
+
+	/**
+	 * @return the puppetModuleInstallScript
+	 */
+	public String getPuppetModuleInstallScript() {
+		return this.puppetModuleInstallScript;
 	}
 
 }
