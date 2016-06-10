@@ -9,6 +9,8 @@ import org.springframework.core.annotation.Order;
 
 import com.tocea.corolla.products.dao.IProjectDAO;
 
+import fr.echoes.labs.ksf.cc.extensions.services.project.ProjectUtils;
+import fr.echoes.labs.ksf.cc.plugins.dashboard.services.DashboardLiferayService;
 import fr.echoes.labs.ksf.cc.plugins.dashboard.services.DashboardService;
 import fr.echoes.labs.ksf.extensions.annotations.Extension;
 import fr.echoes.labs.ksf.extensions.projects.IProjectLifecycleExtension;
@@ -34,6 +36,9 @@ public class DashboardProjectLifeCycleExtension implements IProjectLifecycleExte
 
 	@Autowired
 	private DashboardService dashboardService;
+	
+	@Autowired
+	private DashboardLiferayService liferayService;
 
 	private ICurrentUserService currentUserService;
 
@@ -50,6 +55,7 @@ public class DashboardProjectLifeCycleExtension implements IProjectLifecycleExte
 		init();
 
 		final String logginName = this.currentUserService.getCurrentUserLogin();
+		final String projectKey = ProjectUtils.createIdentifier(project.getKey());
 
 		if (StringUtils.isEmpty(logginName)) {
 			LOGGER.error("[Dashboard] No user found. Aborting project creation in Git module");
@@ -59,10 +65,11 @@ public class DashboardProjectLifeCycleExtension implements IProjectLifecycleExte
 		LOGGER.info("[Dashboard] project {} creation detected [demanded by: {}]", project.getKey(), logginName);
 
 		try {
+			this.liferayService.createSite(projectKey);
 			this.dashboardService.updateProjectEntities(project);
 			this.dashboardService.updateConnectorProperties(project);
 		} catch (final Exception e) {
-			LOGGER.error("[Dashboard] failed to create projet " + project.getName(), e);
+			LOGGER.error("[Dashboard] failed to initialize project {} in Komea Dashboard",project.getName(), e);
 		}
 
 		return NotifyResult.CONTINUE;
