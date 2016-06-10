@@ -105,6 +105,34 @@
                     expanderCollapsedClass: 'glyphicon glyphicon-plus text-muted'
                 });
 
+                $(".featureInfoButton").click(function(){
+                	var id = $(this).data("id");
+                	var subject = $(this).data("subject");
+                	var gitBranch = $(this).data("gitbranch");
+                	var jenkinsJob = $(this).data("jenkinsjob");
+                	
+                	$('#infFeatureId').text(id);
+                	$('#infFeatureSubject').text(subject);
+                	$('#infFeatureGitbranch').text(gitBranch);
+                	$('#infFeatureJenkinsJob').text(jenkinsJob);
+                	
+                	$('#featureInformation').modal('show');
+                }); 
+
+                
+                $(".releaseInfoButton").click(function(){
+                	var name = $(this).data("name");
+                	var gitBranch = $(this).data("gitbranch");
+                	var jenkinsJob = $(this).data("jenkinsjob");
+                	
+                	$('#infReleaseName').text(name);
+                	$('#infReleaseJenkinsJob').text(jenkinsJob);
+                	$('#infReleaseGitbranch').text(gitBranch);
+                	
+                	$('#releaseInformation').modal('show');
+                }); 
+                
+
                 <div th:if="${validationErrors != null}" th:remove="tag">
                 	$('#validationErrorsModal').modal('show');
                 </div>
