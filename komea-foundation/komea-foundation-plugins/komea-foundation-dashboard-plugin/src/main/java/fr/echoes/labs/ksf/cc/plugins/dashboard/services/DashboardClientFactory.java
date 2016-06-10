@@ -3,11 +3,15 @@ package fr.echoes.labs.ksf.cc.plugins.dashboard.services;
 import org.komea.connectors.configuration.client.ConnectorsConfigurationClient;
 import org.komea.liferay.client.LiferaySoapClient;
 import org.komea.organization.storage.client.OrganizationStorageClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class DashboardClientFactory {
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(DashboardClientFactory.class);
 	
 	@Autowired
 	private DashboardConfigurationService configurationService;
@@ -23,7 +27,7 @@ public class DashboardClientFactory {
 	
 	public ConnectorsConfigurationClient connectorsConfigurationClient() {
 		
-		final String url = this.configurationService.getOrganizationUrl();
+		final String url = this.configurationService.getMetricsURL();
 		final String username = this.configurationService.getUsername();
 		final String password = this.configurationService.getPassword();
 		

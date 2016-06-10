@@ -18,6 +18,9 @@ public class DashboardConfigurationService {
     @Value("${ksf.dashboard.organization.url}")
     private String organizationUrl;
     
+    @Value("${ksf.dashboard.metrics.url}")
+    private String metricsURL;
+    
     @Value("${ksf.dashboard.projectType:project}")
     private String projectType;
     
@@ -65,6 +68,10 @@ public class DashboardConfigurationService {
 	
 	public String getOrganizationUrl() {
 		return organizationUrl;
+	}
+	
+	public String getMetricsURL() {
+		return metricsURL;
 	}
 	
 	public String getUsername() {
