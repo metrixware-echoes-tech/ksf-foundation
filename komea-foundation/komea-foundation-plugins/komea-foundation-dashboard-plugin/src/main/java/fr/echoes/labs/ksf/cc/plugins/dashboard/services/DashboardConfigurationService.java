@@ -24,7 +24,7 @@ public class DashboardConfigurationService {
     @Value("${ksf.dashboard.jobType:job}")
     private String jobType;
     
-    @Value("${ksf.dashboard.repositoryType:repository")
+    @Value("${ksf.dashboard.repositoryType:repository}")
     private String repositoryType;
     
     @Value("${ksf.dashboard.username}")
