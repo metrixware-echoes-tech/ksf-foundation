@@ -11,8 +11,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import fr.echoes.labs.puppet.PuppetClient;
 import fr.echoes.labs.puppet.PuppetException;
-import fr.echoes.labs.util.ExternalProcessLauncher;
-import fr.echoes.labs.util.ProcessLaunchResult;
 
 
 @RunWith(PowerMockRunner.class)
@@ -25,13 +23,13 @@ public class PuppetClientTest {
 	@Before
     public void setUp() throws Exception {
     	this.result = new ProcessLaunchResult();
-    	
-    	ExternalProcessLauncher dr = mock(ExternalProcessLauncher.class);
+
+    	final ExternalProcessLauncher dr = mock(ExternalProcessLauncher.class);
         PowerMockito.whenNew(ExternalProcessLauncher.class).withAnyArguments().thenReturn(dr);
         PowerMockito.when(dr.launchSync(true)).thenReturn(this.result);
     }
-	
-    
+
+
     @Test
     public void successfulInstallation() throws Exception {
     	this.result.setExitValue(0);
@@ -45,8 +43,8 @@ public class PuppetClientTest {
     }
 
 	private void installModule() throws PuppetException {
-		final PuppetClient puppetClient = new PuppetClient();		
-		puppetClient.installModule("moduleName", "moduleVersion", "environment", "modulePath");
+		final PuppetClient puppetClient = new PuppetClient();
+		puppetClient.installModule("moduleName", "moduleVersion", "environment");
 	}
 
 }

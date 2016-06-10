@@ -42,7 +42,7 @@ import fr.echoes.labs.puppet.PuppetException;
 public class ForemanActionsController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ForemanActionsController.class);
-    
+
     @Autowired
     private ForemanConfigurationService configurationService;
 
@@ -57,13 +57,13 @@ public class ForemanActionsController {
 
     @Autowired
     private ForemanErrorHandlingService errorHandler;
-    
+
     @Autowired
     private IForemanService foremanService;
-    
+
     @Autowired
     private ForemanClientFactory foremanClientFactory;
-    
+
     @Autowired
     private ForemanHostDescriptorFactory hostDescriptorFactory;
 
@@ -96,7 +96,7 @@ public class ForemanActionsController {
     }
 
     private boolean createEnvironment(String envName, String configuration) {
-    	
+
         final ObjectMapper mapper = new ObjectMapper();
         boolean success = true;
         try {
@@ -114,8 +114,7 @@ public class ForemanActionsController {
                     }
                     final String moduleVersion = moduleNode.path("version").asText(); // version is optional
                     try {
-                    	LOGGER.info("[foreman] puppetModulePath : {}", configurationService.getPuppetModulePath());
-                        puppetClient.installModule(moduleName, moduleVersion, envName, configurationService.getPuppetModulePath());
+                        puppetClient.installModule(moduleName, moduleVersion, envName);
                     } catch (final PuppetException e) {
                         success = false;
                         LOGGER.error("Failed to create environment {} : {}", envName, e);
@@ -130,9 +129,9 @@ public class ForemanActionsController {
         }
         try {
 
-        	final IForemanApi foremanApi = foremanClientFactory.createForemanClient();
-            foremanService.importPuppetClasses(foremanApi, configurationService.getSmartProxyId());
-            
+        	final IForemanApi foremanApi = this.foremanClientFactory.createForemanClient();
+            this.foremanService.importPuppetClasses(foremanApi, this.configurationService.getSmartProxyId());
+
         } catch (final Exception e) {
             //success = false;
             LOGGER.error("[foreman] Failed to import puppet classes.", e);
@@ -180,19 +179,19 @@ public class ForemanActionsController {
         final Project project = this.projectDAO.findOne(projectId);
 
         final ForemanTarget target = this.targetDAO.findOne(targetId);
-        
+
         final ForemanEnvironnment environment = target.getEnvironment();
 
 		String redirectURL = "/ui/projects/"+project.getKey();
 
 		try {
-			
+
 			// Create a host descriptor using the provided data and the data from the configuration file
-			ForemanHostDescriptor hostDescriptor = hostDescriptorFactory.createHostDescriptor(project, target, hostName, hostPass);
-        	
+			final ForemanHostDescriptor hostDescriptor = this.hostDescriptorFactory.createHostDescriptor(project, target, hostName, hostPass);
+
 			// Call Foreman to create the VM
-			final IForemanApi foremanApi = foremanClientFactory.createForemanClient();
-			final Host host = foremanService.createHost(foremanApi, hostDescriptor);
+			final IForemanApi foremanApi = this.foremanClientFactory.createForemanClient();
+			final Host host = this.foremanService.createHost(foremanApi, hostDescriptor);
 
             //TODO find a way to generate the plugin tab ID dynamically
             redirectURL += "?foremanHost=" + host.name + "#pluginTab3";
@@ -204,7 +203,7 @@ public class ForemanActionsController {
 			LOGGER.error("[foreman] Failed to create host {} : {}.", hostName, e);
             this.errorHandler.registerError("Failed to instantiate target. Please verify your Foreman configuration.");
         }
-		
+
         return "redirect:" + redirectURL;
     }
 }
