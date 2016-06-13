@@ -133,7 +133,7 @@ public class RedmineProjectDashboardWidget implements ProjectDashboardWidget {
 
 	@Override
 	public String getIconUrl() {
-		return "/pictures/redmine.png";
+		return "/pictures/komea-activity.png";
 	}
 
 	@Override
