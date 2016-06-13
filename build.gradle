@@ -30,7 +30,7 @@ ext.GIT = "git"
 ext.nexusURL = "http://zeus.tocea.local:8081"
 
 if (project.hasProperty('remote')) {
-    ext.nexusURL = "http://scm.tocea.com:90"
+    ext.nexusURL = "http://labs.echoes.fr:90"
     println ("WARNING : Utilisation de Nexus en remote $nexusURL")
 } else {
     println ("WARNING : Utilisation de Nexus en local (Echoes/Lab) $nexusURL")
@@ -113,8 +113,8 @@ allprojects {
                 username mavenUser
                 password mavenPassword
             }
-            // Release EchoesLabs (remote)
-            url nexusURL + "/nexus/content/groups/echoes-lab-release"
+            // Snapshots EchoesLabs 
+            url nexusURL + "/nexus/content/groups/echoes-lab-snapshot"
 
         }
         maven {
