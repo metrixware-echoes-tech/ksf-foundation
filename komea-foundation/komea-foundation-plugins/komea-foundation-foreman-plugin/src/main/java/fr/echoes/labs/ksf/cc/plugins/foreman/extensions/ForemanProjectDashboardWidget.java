@@ -75,7 +75,7 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
 	public List<MenuAction> getDropdownActions() {
 
 		final MessageSourceAccessor messageSourceAccessor = new MessageSourceAccessor(this.messageResource);
-		
+
 		final MenuAction actionCreateEnv = new MenuAction();
 		actionCreateEnv.setActionName(messageSourceAccessor.getMessage("foundation.foreman.widget.createEnvironment"));
 		actionCreateEnv.setUrl("javascript:displayCreateEnvModal()");
@@ -106,8 +106,8 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
 
 		ctx.setVariable("foundationForemanWidgetName", messageSourceAccessor.getMessage("foundation.foreman.widget.name"));
 		ctx.setVariable("foundationForemanWigetOs", messageSourceAccessor.getMessage("foundation.foreman.widget.os"));
-		
-		
+
+
 		try {
 
 			final IForemanApi foremanApi = ForemanClient.createApi(this.configurationService.getForemanUrl(), this.configurationService.getForemanUsername(), this.configurationService.getForemanPassword());
@@ -164,7 +164,7 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
 					foremanURL += "/hosts/"+foremanHost;
 				}
 
-				LOGGER.info("[redmine] project URL : {}", foremanURL);
+				LOGGER.info("[foreman] project URL : {}", foremanURL);
 
 				ctx.setVariable("foremanURL", foremanURL);
 

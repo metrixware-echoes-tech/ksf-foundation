@@ -31,12 +31,10 @@
 	<concurrentBuild>false</concurrentBuild>
 	<builders>
 		<hudson.tasks.Shell>
-			<command>
-			export JAVA_HOME="/usr/lib/jvm/java-8-oracle/jre/"
-			cd ${WORKSPACE}
-			chmod +x ./${buildScript}
-			./${buildScript}			
-			</command>
+			<command>export JAVA_HOME="/usr/lib/jvm/java-8-oracle/jre/"
+cd "${WORKSPACE}"
+chmod +x ./${buildScript}
+./${buildScript}</command>
 		</hudson.tasks.Shell>
 	</builders>
 	<publishers>
