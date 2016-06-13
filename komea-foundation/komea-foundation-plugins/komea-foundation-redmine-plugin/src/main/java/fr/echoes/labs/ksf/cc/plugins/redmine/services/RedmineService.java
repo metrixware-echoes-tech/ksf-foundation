@@ -255,7 +255,7 @@ public class RedmineService implements IRedmineService {
 			for (final Version version : versions) {
 
 				if (!Version.STATUS_OPEN.equals(version.getStatus())) {
-					LOGGER.info("[Redmine] The {} version \"{}\" was ignored.", version.getStatus(), version.getName());
+					LOGGER.info("[redmine] The {} version \"{}\" was ignored.", version.getStatus(), version.getName());
 					continue;
 				}
 
@@ -337,6 +337,8 @@ public class RedmineService implements IRedmineService {
 	@Override
 	public void changeStatus(String ticketId, int statusId) throws RedmineExtensionException {
 
+		LOGGER.info("[redmine] Changing redmine issue '{}' status to status ID '{}'", ticketId, statusId);
+
 		final RedmineManager redmineManager = createRedmineManager();
 
 		if (redmineManager == null) {
@@ -346,14 +348,17 @@ public class RedmineService implements IRedmineService {
 		final IssueManager issueManager = redmineManager.getIssueManager();
 		try {
 			final Issue issue;
-			if (configuration.isHackBugApi()) {
+			LOGGER.info("[redmine] Changing redmine issue - property bug API is {}", this.configuration.isHackBugApi());
+			if (this.configuration.isHackBugApi()) {
 				issue = getIssueById(issueManager, Integer.valueOf(ticketId));
 			} else {
 				issue = issueManager.getIssueById(Integer.valueOf(ticketId));
 			}
 			issue.setStatusId(statusId);
 			issueManager.update(issue);
+			LOGGER.info("[redmine] Changing redmine issue status - status updated");
 		} catch (final Exception e) {
+			LOGGER.error("[redmine] Failed to change issue '" + ticketId + "' status", e);
 			throw new RedmineExtensionException("Failed to change ticket status.", e);
 		}
 	}
@@ -361,7 +366,7 @@ public class RedmineService implements IRedmineService {
 	private Issue getIssueById(IssueManager issueManager, Integer issueId) throws RedmineException {
 		final List<Issue> issues = issueManager.getIssues(null, null);
 		if (issues != null) {
-			for (Issue issue : issues) {
+			for (final Issue issue : issues) {
 				if (issue.getId().equals(issueId)) {
 					return issue;
 				}
