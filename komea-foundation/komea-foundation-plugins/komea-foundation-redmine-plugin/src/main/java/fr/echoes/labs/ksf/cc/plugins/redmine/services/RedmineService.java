@@ -179,11 +179,11 @@ public class RedmineService implements IRedmineService {
 				}
 			}
 
-			if (query.getStatusId() != -1 && query.getStatusId() != issue.getStatusId()) {
+			if (!query.getStatusIds().isEmpty()  && !query.getStatusIds().contains(issue.getStatusId())) {
 				continue;
 			}
 
-			if (query.getTrackerId() != -1 && issue.getTracker() != null && query.getTrackerId() != issue.getTracker().getId()) {
+			if (!query.getTrackerIds().isEmpty() && issue.getTracker() != null && !query.getTrackerIds().contains(issue.getTracker().getId())) {
 				continue;
 			}
 
@@ -210,6 +210,7 @@ public class RedmineService implements IRedmineService {
 
 		redmiIssue.setPriority(StringUtils.defaultString(issue.getPriorityText()));
 		redmiIssue.setStatus(StringUtils.defaultString(issue.getStatusName()));
+		redmiIssue.setStatusId(issue.getStatusId());
 
 		final Version targetVersion = issue.getTargetVersion();
 		final String targetVersionName = targetVersion == null ? StringUtils.EMPTY : StringUtils.defaultString(targetVersion.getName());
@@ -255,7 +256,7 @@ public class RedmineService implements IRedmineService {
 			for (final Version version : versions) {
 
 				if (!Version.STATUS_OPEN.equals(version.getStatus())) {
-					LOGGER.info("[Redmine] The {} version \"{}\" was ignored.", version.getStatus(), version.getName());
+					LOGGER.info("[redmine] The {} version \"{}\" was ignored.", version.getStatus(), version.getName());
 					continue;
 				}
 
@@ -302,23 +303,25 @@ public class RedmineService implements IRedmineService {
 			throws RedmineExtensionException {
 		Objects.requireNonNull(projectName);
 
-		final List<IProjectFeature> features = new ArrayList<IProjectFeature>();
-
-		for (final Integer featureId : this.configuration.getFeatureIds()) {
-			features.addAll((buildFeaturesList(projectName, featureId, this.configuration.getFeatureStatusNewId(), TicketStatus.NEW)));
-			features.addAll((buildFeaturesList(projectName, featureId, this.configuration.getFeatureStatusAssignedId(), TicketStatus.CREATED)));
-		}
+		final List<IProjectFeature> features = buildFeaturesList(projectName, this.configuration.getFeatureIds());
 
 		return features;
 	}
 
 
-	private List<IProjectFeature> buildFeaturesList(String projectName, int trackerId, int satusId, TicketStatus status) throws RedmineExtensionException {
+	private List<IProjectFeature> buildFeaturesList(String projectName, List<Integer> trackerIds) throws RedmineExtensionException {
 		final Builder redmineQuerryBuilder = new RedmineQuery.Builder();
 
-		redmineQuerryBuilder.projectName(projectName)
-		                    .trackerId(trackerId)
-		                    .statusId(satusId);
+		final Builder builder = redmineQuerryBuilder.projectName(projectName);
+
+		for (final Integer trackerId : trackerIds) {
+			builder.addTrackerId(trackerId);
+		}
+
+
+		builder.addStatusId(this.configuration.getFeatureStatusNewId());
+		builder.addStatusId(this.configuration.getFeatureStatusAssignedId());
+
 
 		final RedmineQuery query = redmineQuerryBuilder.build();
 		final List<RedmineIssue> issues = queryIssues(query);
@@ -329,13 +332,21 @@ public class RedmineService implements IRedmineService {
 			feature.setId(String.valueOf(issue.getId()));
 			feature.setSubject(issue.getSubject());
 			feature.setAssignee(issue.getAssignee());
-			feature.setStatus(status);
+			if (issue.getStatusId() != null) {
+				if (issue.getStatusId().equals(this.configuration.getFeatureStatusNewId())) {
+					feature.setStatus(TicketStatus.NEW);
+				} else if (issue.getStatusId().equals(this.configuration.getFeatureStatusAssignedId())) {
+					feature.setStatus(TicketStatus.CREATED);
+				}
+			}
 			features.add(feature);
 		}
 		return features;
 	}
 	@Override
 	public void changeStatus(String ticketId, int statusId) throws RedmineExtensionException {
+
+		LOGGER.info("[redmine] Changing redmine issue '{}' status to status ID '{}'", ticketId, statusId);
 
 		final RedmineManager redmineManager = createRedmineManager();
 
@@ -346,14 +357,17 @@ public class RedmineService implements IRedmineService {
 		final IssueManager issueManager = redmineManager.getIssueManager();
 		try {
 			final Issue issue;
-			if (configuration.isHackBugApi()) {
+			LOGGER.info("[redmine] Changing redmine issue - property bug API is {}", this.configuration.isHackBugApi());
+			if (this.configuration.isHackBugApi()) {
 				issue = getIssueById(issueManager, Integer.valueOf(ticketId));
 			} else {
 				issue = issueManager.getIssueById(Integer.valueOf(ticketId));
 			}
 			issue.setStatusId(statusId);
 			issueManager.update(issue);
+			LOGGER.info("[redmine] Changing redmine issue status - status updated");
 		} catch (final Exception e) {
+			LOGGER.error("[redmine] Failed to change issue '" + ticketId + "' status", e);
 			throw new RedmineExtensionException("Failed to change ticket status.", e);
 		}
 	}
@@ -361,7 +375,7 @@ public class RedmineService implements IRedmineService {
 	private Issue getIssueById(IssueManager issueManager, Integer issueId) throws RedmineException {
 		final List<Issue> issues = issueManager.getIssues(null, null);
 		if (issues != null) {
-			for (Issue issue : issues) {
+			for (final Issue issue : issues) {
 				if (issue.getId().equals(issueId)) {
 					return issue;
 				}

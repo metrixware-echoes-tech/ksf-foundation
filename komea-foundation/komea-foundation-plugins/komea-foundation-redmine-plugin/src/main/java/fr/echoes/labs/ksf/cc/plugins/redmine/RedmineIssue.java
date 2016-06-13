@@ -16,6 +16,8 @@ public class RedmineIssue {
     private String priority;
     private String assignee;
 
+	private Integer statusId;
+
 
     public RedmineIssue(Integer id) {
     	this.id = id;
@@ -74,10 +76,18 @@ public class RedmineIssue {
 	}
 
 	public String getSubject() {
-		return subject;
+		return this.subject;
+	}
+
+	public Integer getStatusId() {
+		return this.statusId;
 	}
 
 	public void setSubject(String subject) {
 		this.subject = subject;
+	}
+
+	public void setStatusId(Integer statusId) {
+		this.statusId = statusId;
 	}
 }
