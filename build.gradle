@@ -113,8 +113,8 @@ allprojects {
                 username mavenUser
                 password mavenPassword
             }
-            // Release EchoesLabs (remote)
-            url nexusURL + "/nexus/content/groups/echoes-lab-release"
+            // Snapshots EchoesLabs 
+            url nexusURL + "/nexus/content/groups/echoes-lab-snapshot"
 
         }
         maven {
