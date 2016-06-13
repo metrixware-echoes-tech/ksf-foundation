@@ -31,6 +31,7 @@ import com.offbytwo.jenkins.model.Job;
 import com.offbytwo.jenkins.model.JobWithDetails;
 
 import fr.echoes.labs.komea.foundation.plugins.jenkins.JenkinsExtensionException;
+import fr.echoes.labs.komea.foundation.plugins.jenkins.utils.DashboardJobNameFormatter;
 import fr.echoes.labs.ksf.cc.extensions.gui.ProjectExtensionConstants;
 import fr.echoes.labs.ksf.cc.extensions.services.project.ProjectUtils;
 import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
@@ -92,7 +93,12 @@ public class JenkinsService implements IJenkinsService {
 				jenkins.createJob(developJob, resolvedXmlConfig, false);
 			}
 
-			final List<String> jobs = Lists.newArrayList(projectName, masterJob, developJob);
+			final DashboardJobNameFormatter dashboardNameFormatter = new DashboardJobNameFormatter();			
+			final List<String> jobs = Lists.newArrayList(
+					projectName, 
+					dashboardNameFormatter.format(masterJob, projectName),
+					dashboardNameFormatter.format(developJob, projectName)
+			);
 			projectDTO.getOtherAttributes().put(ProjectExtensionConstants.CI_JOBS_KEY, jobs);
 
 		} catch (final Exception e) {
