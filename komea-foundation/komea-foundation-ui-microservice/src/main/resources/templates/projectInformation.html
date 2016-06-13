@@ -20,11 +20,11 @@
 			<div class="project-properties" >
 				<p>
 					<strong th:text="#{foundation.projects.overview.widget.overview.project.name}">Name:</strong> 
-					<label th:text="${projectData.project.name}">test</label>
+					<label th:text="${projectData.project.name}"></label>
 				</p>
 				<p>
 					<strong th:text="#{foundation.projects.overview.widget.overview.project.owner}">Owner:</strong>
-					<label th:text="${#strings.isEmpty(projectData.user.firstName) or #strings.isEmpty(projectData.user.lastName) ? projectData.user.login : projectData.user.firstName +' '+ projectData.user.lastName}">User</label>
+					<label th:text="${#strings.isEmpty(projectData.user.firstName) or #strings.isEmpty(projectData.user.lastName) ? projectData.user.login : projectData.user.firstName +' '+ projectData.user.lastName}"></label>
 				</p>
 			</div>
 

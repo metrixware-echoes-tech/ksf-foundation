@@ -151,4 +151,7 @@ html, body, iframe {
 	padding: 4px 0px 4px 5px;
 }
 
+.tooltip-inner {
+  max-width: 500px;
+}
 
