@@ -56,7 +56,7 @@ public class RedmineTicketValidator implements IValidator {
 		final Builder redmineQuerryBuilder = new RedmineQuery.Builder();
 
 		redmineQuerryBuilder.projectName(projectName)
-		                    .trackerId(this.configurationService.getFeatureTrackerId());
+		                    .addTrackerId(this.configurationService.getFeatureTrackerId());
 
 		final List<IValidatorResult> result = new ArrayList<IValidatorResult>();
 
@@ -91,10 +91,13 @@ public class RedmineTicketValidator implements IValidator {
 
 	private List<RedmineIssue> getIssues(String projectName, String releaseName, int issueStatusId) throws RedmineExtensionException {
 		final Builder requestBuilder = new RedmineQuery.Builder();
-		requestBuilder
-			.trackerId(this.configurationService.getFeatureTrackerId())
-			.statusId(issueStatusId)
+		final Builder builder = requestBuilder
+			.addStatusId(issueStatusId)
 			.setTargetVersion(releaseName);
+
+			for (final Integer trackerId : this.configurationService.getFeatureIds()) {
+				builder.addTrackerId(trackerId);
+			}
 
 		final RedmineQuery query = requestBuilder.projectName(projectName).build();
 		final List<RedmineIssue> issues = this.redmine.queryIssues(query);
