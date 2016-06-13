@@ -69,7 +69,7 @@ public class RedmineTicketValidator implements IValidator {
 
 			final MessageSourceAccessor messageSourceAccessor = new MessageSourceAccessor(this.messageResource);
 			for (final RedmineIssue issue : issues) {
-				final String message = messageSourceAccessor.getMessage("foundation.redmine.validator.issueNotClosed", new Object[]{issue.getId()});
+				final String message = messageSourceAccessor.getMessage("foundation.redmine.validator.issueNotClosed", new String[]{String.valueOf(issue.getId())});
 				final IValidatorResult validatorResult = new ValidatorResult(ValidatorResultType.ERROR, message);
 				result.add(validatorResult);
 			}
