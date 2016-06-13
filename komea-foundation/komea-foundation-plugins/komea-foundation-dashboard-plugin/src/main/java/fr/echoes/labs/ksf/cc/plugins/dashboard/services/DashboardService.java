@@ -141,9 +141,9 @@ public class DashboardService {
 		List<ConnectorProperty> properties = Lists.newArrayList();
 		ConnectorsConfigurationClient configurationClient = clientFactory.connectorsConfigurationClient();
 		
-		GitRepository repository = new GitRepository();
+		GitRepository repository = getGitRepository(project);
 			
-		if (repository != null) {
+		if (repository != null && !StringUtils.isEmpty(repository.getRemoteURL())) {
 			
 			ConnectorProperty property = configurationClient.getProperty(DashboardConfigurationService.GIT_REPOSITORIES_PROPERTY);
 			
