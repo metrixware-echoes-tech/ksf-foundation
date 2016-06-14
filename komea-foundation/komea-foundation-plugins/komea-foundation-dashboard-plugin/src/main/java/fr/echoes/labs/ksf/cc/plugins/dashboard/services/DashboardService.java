@@ -1,6 +1,9 @@
 package fr.echoes.labs.ksf.cc.plugins.dashboard.services;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.komea.connectors.configuration.client.ConnectorsConfigurationClient;
@@ -39,6 +42,20 @@ public class DashboardService {
 
 		final OrganizationStorageClient organizationStorageClient = clientFactory.organizationStorageClient();
 		organizationStorageClient.addOrUpdatePartialEntities(entities);
+		
+	}
+	
+	public void disableProjectEntities(final ProjectDto project) {
+		
+		final List<Entity> entities = getAllEntities(project);
+		Map<String, Set<String>> entitiesKeysByType = DashboardUtils.splitEntitiesByType(entities);
+		
+		final OrganizationStorageClient organizationStorageClient = clientFactory.organizationStorageClient();
+		
+		for (Entry<String, Set<String>> entry : entitiesKeysByType.entrySet()) {
+			LOGGER.info("Disabling {} entities of type {} in Komea Dashboard", entry.getValue().size(), entry.getKey());
+			organizationStorageClient.disableEntities(entry.getKey(), Lists.newArrayList(entry.getValue()));
+		}
 		
 	}
 	
@@ -163,6 +180,32 @@ public class DashboardService {
 		if (!properties.isEmpty()) {
 			LOGGER.info("Saving {} connector properties in Komea Dashboard", properties.size());
 			configurationClient.saveProperties(properties);
+		}
+		
+	}
+	
+	public void removeConnectorProperties(final ProjectDto project) {
+		
+		ConnectorsConfigurationClient configurationClient = clientFactory.connectorsConfigurationClient();		
+		GitRepository repository = getGitRepository(project);
+		
+		if (repository != null && !StringUtils.isEmpty(repository.getRemoteURL())) {
+			
+			ConnectorProperty property = configurationClient.getProperty(DashboardConfigurationService.GIT_REPOSITORIES_PROPERTY);
+			
+			if (property != null) {
+				List<GitRepository> repositories = DashboardUtils.extractGitRepositories(property);
+				List<GitRepository> matched = DashboardUtils.findRepositoriesByRemoteURL(repositories, repository.getRemoteURL());
+				if (!matched.isEmpty()) {
+					for (GitRepository match : matched) {
+						repositories.remove(match);
+					}
+					property.setValue(repositories);
+					LOGGER.info("Removing git connector properties in Komea Dashboard for project {}", project.getKey());
+					configurationClient.saveProperty(property);
+				}
+			}
+			
 		}
 		
 	}

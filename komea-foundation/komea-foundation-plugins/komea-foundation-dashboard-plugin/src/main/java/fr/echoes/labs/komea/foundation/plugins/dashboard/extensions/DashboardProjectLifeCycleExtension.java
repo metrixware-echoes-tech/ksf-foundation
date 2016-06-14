@@ -58,7 +58,7 @@ public class DashboardProjectLifeCycleExtension implements IProjectLifecycleExte
 		final String projectKey = ProjectUtils.createIdentifier(project.getKey());
 
 		if (StringUtils.isEmpty(logginName)) {
-			LOGGER.error("[Dashboard] No user found. Aborting project creation in Git module");
+			LOGGER.error("[Dashboard] No user found. Aborting project creation in Dashboard module");
 			return NotifyResult.CONTINUE;
 		}
 
@@ -77,6 +77,26 @@ public class DashboardProjectLifeCycleExtension implements IProjectLifecycleExte
 
 	@Override
 	public NotifyResult notifyDeletedProject(ProjectDto project) {
+		
+		init();
+		
+		final String logginName = this.currentUserService.getCurrentUserLogin();
+		final String projectKey = ProjectUtils.createIdentifier(project.getKey());
+		
+		if (StringUtils.isEmpty(logginName)) {
+			LOGGER.error("[Dashboard] No user found. Aborting project deletion in Dashboard module");
+			return NotifyResult.CONTINUE;
+		}
+
+		LOGGER.info("[Dashboard] project {} deletion detected [demanded by: {}]", projectKey, logginName);
+		
+		try {
+			this.dashboardService.disableProjectEntities(project);
+			this.dashboardService.removeConnectorProperties(project);
+		} catch(final Exception ex) {
+			LOGGER.error("[Dashboard] failed to delete project {} in Komea Dashboard", projectKey, ex);
+		}
+		
 		return NotifyResult.CONTINUE;
 
 	}
