@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.StrSubstitutor;
 import org.eclipse.jgit.api.CheckoutCommand;
 import org.eclipse.jgit.api.CloneCommand;
@@ -148,6 +149,8 @@ public class GitService implements IGitService {
 
 		final CommitCommand commitCommand = git.commit().setMessage("Initial commit");
 
+		setAuthor(commitCommand);
+
 		commitCommand.call();
 
 		LOGGER.debug("Pushing to master");
@@ -157,6 +160,14 @@ public class GitService implements IGitService {
 		LOGGER.debug("Creating the develop branch");
 		git.branchCreate().setName(DEVELOP).call();
 		git.push().add(DEVELOP).call();
+	}
+
+	private void setAuthor(final CommitCommand commitCommand) {
+		final String username = this.configuration.getUsername();
+
+		if (!StringUtils.isBlank( this.configuration .getUsername())) {
+			commitCommand.setAuthor(username , "" );
+		}
 	}
 
 	/**
