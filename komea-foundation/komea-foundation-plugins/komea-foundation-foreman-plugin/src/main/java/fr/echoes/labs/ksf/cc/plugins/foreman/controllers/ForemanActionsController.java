@@ -106,7 +106,7 @@ public class ForemanActionsController {
                 return true;
             }
             if (modulesNode.isArray()) {
-                final PuppetClient puppetClient = new PuppetClient();
+                final PuppetClient puppetClient = new PuppetClient(this.configurationService.getPuppetModuleInstallScript());
                 for (final JsonNode moduleNode : modulesNode) {
                     final String moduleName = moduleNode.path("name").asText(); // name is required
                     if (moduleName == null) {

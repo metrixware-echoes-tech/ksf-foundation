@@ -7,9 +7,11 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.StrSubstitutor;
 import org.eclipse.jgit.api.CheckoutCommand;
 import org.eclipse.jgit.api.CloneCommand;
+import org.eclipse.jgit.api.CommitCommand;
 import org.eclipse.jgit.api.CreateBranchCommand;
 import org.eclipse.jgit.api.DeleteBranchCommand;
 import org.eclipse.jgit.api.Git;
@@ -144,7 +146,12 @@ public class GitService implements IGitService {
 		addScriptToRepo(workingDirectory, git, this.configuration.getPublishScript());
 
 		LOGGER.debug("Committing the files {} and {}", this.configuration.getBuildScript(), this.configuration.getPublishScript());
-		git.commit().setMessage("Initial commit").call();
+
+		final CommitCommand commitCommand = git.commit().setMessage("Initial commit");
+
+		setAuthor(commitCommand);
+
+		commitCommand.call();
 
 		LOGGER.debug("Pushing to master");
 		git.push().call();
@@ -153,6 +160,14 @@ public class GitService implements IGitService {
 		LOGGER.debug("Creating the develop branch");
 		git.branchCreate().setName(DEVELOP).call();
 		git.push().add(DEVELOP).call();
+	}
+
+	private void setAuthor(final CommitCommand commitCommand) {
+		final String username = this.configuration.getUsername();
+
+		if (!StringUtils.isBlank( this.configuration .getUsername())) {
+			commitCommand.setAuthor(username , "" );
+		}
 	}
 
 	/**
@@ -298,7 +313,9 @@ public class GitService implements IGitService {
 		final MergeCommand mergeCommand = git.merge();
 		final Ref ref = git.getRepository().findRef(Constants.DEFAULT_REMOTE_NAME + "/" + branch);
 		mergeCommand.include(ref);
-		return mergeCommand.call();
+		final MergeResult mergeResult =  mergeCommand.call();
+		git.push().call();
+		return mergeResult;
 
 	}
 

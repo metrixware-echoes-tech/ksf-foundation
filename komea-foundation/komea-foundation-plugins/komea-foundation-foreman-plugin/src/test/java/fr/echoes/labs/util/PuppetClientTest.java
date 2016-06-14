@@ -43,7 +43,7 @@ public class PuppetClientTest {
     }
 
 	private void installModule() throws PuppetException {
-		final PuppetClient puppetClient = new PuppetClient();
+		final PuppetClient puppetClient = new PuppetClient("");
 		puppetClient.installModule("moduleName", "moduleVersion", "environment");
 	}
 
