@@ -52,7 +52,7 @@ public class ForemanConfigurationService {
     @Value("${ksf.foreman.hostgroup.mediumId :1}")
     private String hostgroupMediumId;
 
-    @Value("ksf.foreman.puppetModuleInstallScript:")
+    @Value("${ksf.foreman.puppetModuleInstallScript:}")
     private String puppetModuleInstallScript;
 
     public Boolean getCreateParametersEnabled() {
