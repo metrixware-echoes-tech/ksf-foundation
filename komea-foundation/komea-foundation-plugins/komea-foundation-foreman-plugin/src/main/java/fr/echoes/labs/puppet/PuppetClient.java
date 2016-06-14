@@ -6,9 +6,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import fr.echoes.labs.ksf.cc.plugins.foreman.services.ForemanConfigurationService;
 import fr.echoes.labs.util.ExternalProcessLauncher;
 import fr.echoes.labs.util.ExternalProcessLauncherException;
 import fr.echoes.labs.util.IProcessLaunchResult;
@@ -20,11 +18,11 @@ public class PuppetClient {
 	final static Logger LOGGER = LoggerFactory
 			.getLogger(PuppetClient.class);
 
-	@Autowired
-	private ForemanConfigurationService config;
+	private final String scriptPath;
 
-	public PuppetClient() {
-
+	public PuppetClient(String scriptPath) {
+		LOGGER.debug("[puppet] install script path : '{}'", scriptPath);
+		this.scriptPath = scriptPath;
 	}
 
 	/**
@@ -44,16 +42,11 @@ public class PuppetClient {
 		LOGGER.info("[puppet] Installing Puppet module. Name: {} Version: {} Environment: {}", name, version, environment);
 
 		final List<String> commandLine = new ArrayList<>(4);
-		if (this.config != null) {
-			commandLine.add(this.config.getPuppetModuleInstallScript());
-		}
+
+		commandLine.add(this.scriptPath);
 		commandLine.add(name);
 		commandLine.add(version);
 		commandLine.add(environment);
-
-		if (this.config != null) {
-			LOGGER.info("[puppet] puppetModuleInstallScript:" + this.config.getPuppetModuleInstallScript());
-		}
 
 		LOGGER.info("[puppet] commandLine:" + StringUtils.join(commandLine, ' '));
 
