@@ -194,7 +194,7 @@ public class DashboardService {
 			ConnectorProperty property = configurationClient.getProperty(DashboardConfigurationService.GIT_REPOSITORIES_PROPERTY);
 			
 			if (property != null) {
-				List<GitRepository> repositories = (List<GitRepository>) property.getValue();
+				List<GitRepository> repositories = DashboardUtils.extractGitRepositories(property);
 				List<GitRepository> matched = DashboardUtils.findRepositoriesByRemoteURL(repositories, repository.getRemoteURL());
 				if (!matched.isEmpty()) {
 					for (GitRepository match : matched) {

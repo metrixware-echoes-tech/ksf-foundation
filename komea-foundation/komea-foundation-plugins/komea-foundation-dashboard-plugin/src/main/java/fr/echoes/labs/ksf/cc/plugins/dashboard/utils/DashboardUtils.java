@@ -7,8 +7,10 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
+import org.komea.connectors.configuration.model.ConnectorProperty;
 import org.komea.organization.model.Entity;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
@@ -57,6 +59,19 @@ public class DashboardUtils {
 		});
 		
 		return Lists.newArrayList(matched);
+	}
+	
+	public static List<GitRepository> extractGitRepositories(final ConnectorProperty property) {
+		
+		List<GitRepository> repositories = Lists.newArrayList();
+		ObjectMapper mapper = new ObjectMapper();
+		
+		for (Object object : (List<Object>) property.getValue()) {	
+			GitRepository repository = mapper.convertValue(object, GitRepository.class);
+			repositories.add(repository);
+		}
+		
+		return repositories;
 	}
 	
 }
