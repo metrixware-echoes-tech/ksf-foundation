@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.annotation.Order;
 
+import com.taskadapter.redmineapi.bean.Version;
 import com.tocea.corolla.products.dao.IProjectDAO;
 
 import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineExtensionException;
@@ -155,6 +156,15 @@ public class RedmineProjectLifeCycleExtension implements IProjectLifecycleExtens
 
 	@Override
 	public NotifyResult notifyFinishedRelease(ProjectDto project, String releaseName) {
+
+		try {
+			this.redmineService.changeVersionStatus(project, releaseName, Version.STATUS_CLOSED);
+
+		} catch (final Exception ex) {
+			LOGGER.error("[Redmine] Failed to change version '{}' state status", releaseName, ex);
+			this.errorHandler.registerError("Failed to change Redmine version state.");
+		}
+
 		return NotifyResult.CONTINUE;
 	}
 
