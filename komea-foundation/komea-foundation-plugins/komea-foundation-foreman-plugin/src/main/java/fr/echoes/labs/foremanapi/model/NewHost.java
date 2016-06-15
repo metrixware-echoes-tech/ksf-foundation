@@ -28,10 +28,10 @@ public class NewHost {
 	public String environment_id;
 
 	@JsonProperty("puppet_ca_proxy_id")
-	public String puppet_ca_proxy_id = "1";
+	public String puppet_ca_proxy_id = "2";
 
 	@JsonProperty("puppet_proxy_id")
-	public String puppet_proxy_id = "1";
+	public String puppet_proxy_id = "2";
 
 	@JsonProperty("managed")
 	public Boolean managed = true;

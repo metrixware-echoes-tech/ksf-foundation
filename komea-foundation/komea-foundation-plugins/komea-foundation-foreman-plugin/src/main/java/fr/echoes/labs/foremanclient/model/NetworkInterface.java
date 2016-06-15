@@ -22,7 +22,7 @@ public class NetworkInterface {
 	public String domain_id = "2";
 
 	@JsonProperty("subnet_id")
-	public String subnet_id = "1";
+	public String subnet_id = "2";
 
 	@JsonProperty("ip")
 	public String ip;
