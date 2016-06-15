@@ -126,8 +126,9 @@ public class NexusProjectLifeCycleExtension implements IProjectLifecycleExtensio
 			final Repository repository = new Repository();
 			repository.setData(data);
 			final Response response = invocationBuilder.post(Entity.entity(repository, MediaType.APPLICATION_XML));
-			if (response.getStatus() != HttpStatus.SC_OK) {
-				LOGGER.error("[nexus] failed to create Nexus repositories status : " + response.getStatus());
+			final int status = response.getStatus();
+			if (status != HttpStatus.SC_CREATED) {
+				LOGGER.error("[nexus] failed to create Nexus repositories status : " + status);
 			}
 
 		} catch (final Exception e) {
