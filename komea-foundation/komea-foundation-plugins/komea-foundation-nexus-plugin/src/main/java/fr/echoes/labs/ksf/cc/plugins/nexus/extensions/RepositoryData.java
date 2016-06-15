@@ -11,6 +11,7 @@ public class RepositoryData {
     public static final String PROVIDER_MAVEN2 = "maven2";
     public static final String FORMAT_MAVEN2 = "maven2";
     public static final String WRITE_POLICY_ALLOW_WRITE_ONCE = "ALLOW_WRITE_ONCE";
+    public static final String WRITE_POLICY_ALLOW_WRITE = "ALLOW_WRITE";
     public static final String REPO_TYPE_HOSTED = "hosted";
     public static final String REPO_POLICY_RELEASE = "RELEASE";
     public static final String PROVIDER_ROLE_REPOSITORY = "org.sonatype.nexus.proxy.repository.Repository";

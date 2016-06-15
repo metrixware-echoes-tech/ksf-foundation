@@ -78,7 +78,7 @@ public class NexusProjectLifeCycleExtension implements IProjectLifecycleExtensio
                     .setFormat(RepositoryData.FORMAT_MAVEN2)
                     .setRepoType(RepositoryData.REPO_TYPE_HOSTED)
                     .setExposed(true)
-                    .setWritePolicy(RepositoryData.WRITE_POLICY_ALLOW_WRITE_ONCE)
+                    .setWritePolicy(RepositoryData.WRITE_POLICY_ALLOW_WRITE)
                     .setBrowseable(true)
                     .setIndexable(true)
                     .setNotFoundCacheTTL(1440)
