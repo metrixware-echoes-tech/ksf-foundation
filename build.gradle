@@ -189,6 +189,11 @@ allprojects {
         compile "org.javers:javers-spring:$JAVERS"
         compile "org.javers:javers-persistence-mongo:$JAVERS"
 
+        compile "org.jboss.resteasy:resteasy-client:3.0.9.Final"
+        compile "org.jboss.resteasy:resteasy-jaxrs:3.0.13.Final"
+        compile "org.jboss.resteasy:resteasy-jackson-provider:3.0.13.Final"
+        compile "org.jboss.resteasy:resteasy-jaxb-provider:3.0.13.Final"
+        
         compile "org.mongodb:mongo-java-driver:$MONGO_DRIVER"
         compile "com.github.fakemongo:fongo:$FONGO"
         testCompile "com.lordofthejars:nosqlunit-mongodb:$TEST_NOSQLUNIT"

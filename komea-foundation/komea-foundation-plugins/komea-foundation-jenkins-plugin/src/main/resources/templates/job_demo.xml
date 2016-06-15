@@ -45,7 +45,7 @@ chmod +x ./${buildScript}
 			<artifactId>loc</artifactId>
 			<version>${branchName}</version>
 			<packaging>war</packaging>
-			<repository>kimcar</repository>
+			<repository>${projectKey}</repository>
 			<file>build/libs/kimcar-loc.war</file>
 			<credentialsId/>
 		</sp.sd.nexusartifactuploader.NexusArtifactUploader>		
