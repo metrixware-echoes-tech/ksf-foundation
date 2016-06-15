@@ -32,6 +32,7 @@ import com.offbytwo.jenkins.model.JobWithDetails;
 
 import fr.echoes.labs.komea.foundation.plugins.jenkins.JenkinsExtensionException;
 import fr.echoes.labs.komea.foundation.plugins.jenkins.utils.DashboardJobNameFormatter;
+import fr.echoes.labs.komea.foundation.plugins.jenkins.utils.JenkinsUtils;
 import fr.echoes.labs.ksf.cc.extensions.gui.ProjectExtensionConstants;
 import fr.echoes.labs.ksf.cc.extensions.services.project.ProjectUtils;
 import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
@@ -250,17 +251,21 @@ public class JenkinsService implements IJenkinsService {
 	}
 
 	@Override
-	public void createRelease(String projectName, String releaseVersion) throws JenkinsExtensionException {
+	public void createRelease(final ProjectDto project, String releaseVersion) throws JenkinsExtensionException {
+		final String projectName = project.getName();
 		final String jobName = getReleaseJobName(projectName, releaseVersion);
 		final String gitBranchName = getGitReleaseBranchName(projectName, releaseVersion);
 		createJob(projectName, jobName, gitBranchName);
+		JenkinsUtils.registerJob(project, jobName);
 	}
 
 	@Override
-	public void createFeature(String projectName, String featureId, String featureSubject) throws JenkinsExtensionException {
+	public void createFeature(final ProjectDto project, String featureId, String featureSubject) throws JenkinsExtensionException {
+		final String projectName = project.getName();
 		final String jobName = getFeatureJobName(projectName, featureId, featureSubject);
 		final String gitBranchName = getGitFeatureBranchName(projectName, featureId, featureSubject);
 		createJob(projectName, jobName, gitBranchName);
+		JenkinsUtils.registerJob(project, jobName);
 	}
 
 	private void createJob(String projectName, String jobName, String gitBranchName) throws JenkinsExtensionException {

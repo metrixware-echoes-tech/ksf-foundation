@@ -1,11 +1,6 @@
 package fr.echoes.labs.ksf.cc.plugins.dashboard.utils;
 
-import java.util.Map;
-import java.util.Map.Entry;
-
 import org.apache.commons.lang3.StringUtils;
-
-import com.google.common.collect.Maps;
 
 public class DashboardUrlBuilder {
 
