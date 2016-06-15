@@ -236,7 +236,7 @@ public class ProjectController {
 		final ModelAndView model = new ModelAndView(FORM_PROJECT);
 		model.addObject("project", project);
 
-		final List<Project> projects = this.projectDao.findAll();
+		final List<Project> projects = this.projectDao.findAllByOrderByNameAsc();
 
 		model.addObject("projects", projects);
 
@@ -247,14 +247,14 @@ public class ProjectController {
 	@RequestMapping(value = "/ui/projects")
 	public ModelAndView getListPage() {
 		final ModelAndView model = new ModelAndView(LIST_PAGE);
-		final List<Project> findAll = this.projectDao.findAll();
-		final List<ProjectPagelistDTO> projectsList = new ArrayList<>();
+		final List<Project> findAllProjectsOrderedByName = this.projectDao.findAllByOrderByNameAsc();
+		final List<ProjectPagelistDTO> dtoProjectPageList = new ArrayList<>();
 
-		for (final Project pr : findAll) {
-			projectsList.add(createProjectPageListDTO(pr));
+		for (final Project pr : findAllProjectsOrderedByName) {
+			dtoProjectPageList.add(this.createProjectPageListDTO(pr));
 		}
 
-		model.addObject("projects", projectsList);
+		model.addObject("projects", dtoProjectPageList);
 		return model;
 	}
 
