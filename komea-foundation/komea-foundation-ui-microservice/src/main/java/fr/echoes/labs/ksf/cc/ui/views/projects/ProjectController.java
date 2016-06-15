@@ -41,6 +41,7 @@ import com.tocea.corolla.products.domain.Project;
 import com.tocea.corolla.products.exceptions.ProjectNotFoundException;
 import com.tocea.corolla.users.dao.IUserDAO;
 import com.tocea.corolla.users.domain.User;
+import com.tocea.corolla.users.dto.UserDto;
 
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.IProjectTabPanel;
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
@@ -52,6 +53,7 @@ import fr.echoes.labs.ksf.cc.releases.model.Release;
 import fr.echoes.labs.ksf.cc.releases.model.ReleaseState;
 import fr.echoes.labs.ksf.cc.sf.commands.CreateProjectAndProductionLineCommand;
 import fr.echoes.labs.ksf.cc.sf.dto.SFProjectDTO;
+import fr.echoes.labs.ksf.users.security.auth.UserDetailsRetrievingService;
 
 /**
  *
@@ -78,6 +80,9 @@ public class ProjectController {
 	@Autowired
 	IReleaseDAO releaseDao;
 
+	@Autowired
+	private UserDetailsRetrievingService userDetailsRetrievingService;
+	
 	@Autowired
 	Gate gate;
 
@@ -130,7 +135,9 @@ public class ProjectController {
 		release.setReleaseId(releaseId);
 		release.setState(ReleaseState.STARTED);
 
-    	this.gate.dispatch(new CreateReleaseCommand(project, releaseVersion));
+		final String currentUserName = userDetailsRetrievingService.getCurrentUserLogin();
+		
+    	this.gate.dispatch(new CreateReleaseCommand(project, currentUserName, releaseVersion));
 
     	this.releaseDao.save(release);
 
@@ -187,7 +194,9 @@ public class ProjectController {
 			throw new ProjectNotFoundException();
 		}
 
-        this.gate.dispatch(new CreateFeatureCommand(project, featureId, featureSubject));
+		final String currentUserName = userDetailsRetrievingService.getCurrentUserLogin();
+		
+        this.gate.dispatch(new CreateFeatureCommand(project, currentUserName, featureId, featureSubject));
 
 		return new ModelAndView("redirect:/ui/projects/" + project.getKey());
 	}

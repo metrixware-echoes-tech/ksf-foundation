@@ -71,7 +71,7 @@ public class ProjectLifecycleExtensionManager {
 		}
 		final ProjectDto projectDto = newProjectDto(event.getProject());
 		for (final IProjectLifecycleExtension extension : this.extensions) {
-			final NotifyResult result = extension.notifyCreatedRelease(projectDto, event.getReleaseVersion());
+			final NotifyResult result = extension.notifyCreatedRelease(projectDto, event.getReleaseVersion(), event.getUsername());
 			if (result != NotifyResult.CONTINUE) {
 				break;
 			}
@@ -101,7 +101,7 @@ public class ProjectLifecycleExtensionManager {
 		}
 		final ProjectDto projectDto = newProjectDto(event.getProject());
 		for (final IProjectLifecycleExtension extension : this.extensions) {
-			final NotifyResult result = extension.notifyCreatedFeature(projectDto, event.getFeatureId(), event.getFeatureSubject());
+			final NotifyResult result = extension.notifyCreatedFeature(projectDto, event.getFeatureId(), event.getFeatureSubject(), event.getUsername());
 			if (result != NotifyResult.CONTINUE) {
 				break;
 			}

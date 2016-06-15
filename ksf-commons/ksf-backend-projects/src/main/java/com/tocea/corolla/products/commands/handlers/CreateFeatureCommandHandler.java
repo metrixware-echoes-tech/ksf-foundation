@@ -47,6 +47,7 @@ public class CreateFeatureCommandHandler implements ICommandHandler<CreateFeatur
 	public Project handle(@Valid final CreateFeatureCommand command) {
 
 		final Project project = command.getProject();
+		final String username = command.getUsername();
 		final String featureId = command.getFeatureId();
 		final String featureSubject = command.getFeatureSubject();
 
@@ -54,7 +55,7 @@ public class CreateFeatureCommandHandler implements ICommandHandler<CreateFeatur
 			throw new ProjectNotFoundException();
 		}
 
-		this.gate.dispatchEvent(new EventFeatureCreated(project, featureId, featureSubject));
+		this.gate.dispatchEvent(new EventFeatureCreated(project, username, featureId, featureSubject));
 
 
 		return project;

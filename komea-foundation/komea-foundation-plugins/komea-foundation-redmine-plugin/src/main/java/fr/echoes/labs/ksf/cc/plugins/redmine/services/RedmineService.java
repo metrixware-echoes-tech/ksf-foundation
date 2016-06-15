@@ -106,13 +106,21 @@ public class RedmineService implements IRedmineService {
 	}
 
 	private User findUser(RedmineManager mgr, String username) throws RedmineException {
+		User cachedUser = RedmineUserCache.INSTANCE.get(username);
+		if (cachedUser != null) {
+			LOGGER.info("[redmine] cached user '{}' found", username);
+			return cachedUser;
+		}		
+
 		final UserManager userManager = mgr.getUserManager();
 		for (final User user : userManager.getUsers()) {
-			if (StringUtils.equals(user.getLogin(), username)) {
+			if (StringUtils.equalsIgnoreCase(user.getLogin(), username)) {
 				LOGGER.info("[redmine] user '{}' found", username);
+				RedmineUserCache.INSTANCE.put(username, user);
 				return user;
 			}
 		}
+
 		LOGGER.info("[redmine] user '{}' not found", username);
 		return null;
 	}
@@ -344,7 +352,7 @@ public class RedmineService implements IRedmineService {
 		return features;
 	}
 	@Override
-	public void changeStatus(String ticketId, int statusId) throws RedmineExtensionException {
+	public void changeStatus(String ticketId, int statusId, String username) throws RedmineExtensionException {
 
 		LOGGER.info("[redmine] Changing redmine issue '{}' status to status ID '{}'", ticketId, statusId);
 
@@ -363,12 +371,27 @@ public class RedmineService implements IRedmineService {
 			} else {
 				issue = issueManager.getIssueById(Integer.valueOf(ticketId));
 			}
+
 			issue.setStatusId(statusId);
+			
+			changeIssueAssignee(redmineManager, issue, username);
+			
 			issueManager.update(issue);
 			LOGGER.info("[redmine] Changing redmine issue status - status updated");
 		} catch (final Exception e) {
 			LOGGER.error("[redmine] Failed to change issue '" + ticketId + "' status", e);
 			throw new RedmineExtensionException("Failed to change ticket status.", e);
+		}
+	}
+
+	private void changeIssueAssignee(RedmineManager redmineManager, Issue issue, String username)
+			throws RedmineException {
+		if (username != null) {		
+			final User user = findUser(redmineManager, username);
+			if (user != null) {
+				LOGGER.info("[redmine] Changing issue assignee to '{}'", username);
+				issue.setAssignee(user);
+			}
 		}
 	}
 
@@ -405,7 +428,7 @@ public class RedmineService implements IRedmineService {
 	}
 
 	@Override
-	public void createTicket(ProjectDto foundationProject, String releaseVersion, String subject) throws RedmineExtensionException {
+	public void createTicket(ProjectDto foundationProject, String releaseVersion, String subject, String username) throws RedmineExtensionException {
 
 		Objects.requireNonNull(foundationProject);
 		Objects.requireNonNull(releaseVersion);
@@ -427,6 +450,8 @@ public class RedmineService implements IRedmineService {
 			issue.setProject(redmineProject);
 			issue.setTargetVersion(version);
 			issue.setSubject(subject);
+			changeIssueAssignee(redmineManager, issue, username);
+			
 			issueManager.createIssue(issue);
 
 		} catch (final RedmineException e) {

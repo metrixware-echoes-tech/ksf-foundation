@@ -112,13 +112,13 @@ public class DashboardProjectLifeCycleExtension implements IProjectLifecycleExte
 	}
 
 	@Override
-	public NotifyResult notifyCreatedRelease(ProjectDto project, String releaseVersion) {
+	public NotifyResult notifyCreatedRelease(ProjectDto project, String releaseVersion, String username) {
 		return NotifyResult.CONTINUE;
 	}
 
 	@Override
 	public NotifyResult notifyCreatedFeature(ProjectDto project, String featureId,
-			String featureSubject) {
+			String featureSubject, String username) {
 		return NotifyResult.CONTINUE;
 	}
 

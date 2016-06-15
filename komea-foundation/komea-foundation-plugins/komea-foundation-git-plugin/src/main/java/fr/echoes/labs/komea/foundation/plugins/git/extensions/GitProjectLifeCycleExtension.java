@@ -93,7 +93,7 @@ public class GitProjectLifeCycleExtension implements IProjectLifecycleExtension 
 	}
 
 	@Override
-	public NotifyResult notifyCreatedRelease(ProjectDto project, String releaseVersion) {
+	public NotifyResult notifyCreatedRelease(ProjectDto project, String releaseVersion, String username) {
 		try {
 
 			this.gitService.createRelease(project.getName(), releaseVersion);
@@ -106,7 +106,7 @@ public class GitProjectLifeCycleExtension implements IProjectLifecycleExtension 
 
 	@Override
 	public NotifyResult notifyCreatedFeature(ProjectDto project, String featureId,
-			String featureSubject) {
+			String featureSubject, String username) {
 		try {
 
 			this.gitService.createFeature(project.getName(), featureId, featureSubject);

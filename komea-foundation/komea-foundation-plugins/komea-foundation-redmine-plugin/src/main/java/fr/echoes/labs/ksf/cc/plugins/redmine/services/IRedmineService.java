@@ -75,18 +75,20 @@ public interface IRedmineService {
 	 *
 	 * @param ticketId the ticket ID.
 	 * @param statusId the new status.
+	 * @param username the assignee username. Can be {@code null}.
 	 * @throws RedmineExtensionException
 	 */
-	public void changeStatus(String ticketId, int statusId) throws RedmineExtensionException;
+	public void changeStatus(String ticketId, int statusId, String username) throws RedmineExtensionException;
 
 	/**
 	 * Creates a Redmine ticket.
 	 *
 	 * @param project the project
 	 * @param releaseVersion the release version
+	 * @param username the assignee username. Can be {@code null}. 
 	 * @param string the ticket title
 	 * @throws RedmineExtensionException
 	 */
-	public void createTicket(ProjectDto project, String releaseVersion, String title) throws RedmineExtensionException;
+	public void createTicket(ProjectDto project, String releaseVersion, String title, String username) throws RedmineExtensionException;
 
 }

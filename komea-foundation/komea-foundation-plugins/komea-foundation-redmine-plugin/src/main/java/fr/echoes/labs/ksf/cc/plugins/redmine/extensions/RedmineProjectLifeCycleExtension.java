@@ -106,12 +106,12 @@ public class RedmineProjectLifeCycleExtension implements IProjectLifecycleExtens
 	}
 
 	@Override
-	public NotifyResult notifyCreatedRelease(ProjectDto project, String releaseVersion) {
+	public NotifyResult notifyCreatedRelease(ProjectDto project, String releaseVersion, String username) {
 		try {
 
 			final String releaseTicketSubject = createReleaseTicketSubject(project, releaseVersion);
 
-			this.redmineService.createTicket(project, releaseVersion, releaseTicketSubject);
+			this.redmineService.createTicket(project, releaseVersion, releaseTicketSubject, username);
 		} catch (final RedmineExtensionException e) {
 			LOGGER.error("[Redmine] Failed to create a ticket for the release {} of the project {}", releaseVersion, project.getName());
 			this.errorHandler.registerError("Failed to create a Redmine ticket for the release.");
@@ -128,10 +128,10 @@ public class RedmineProjectLifeCycleExtension implements IProjectLifecycleExtens
 
 	@Override
 	public NotifyResult notifyCreatedFeature(ProjectDto project, String ticketId,
-			String featureSubject) {
+			String featureSubject, String username) {
 
 		try {
-			this.redmineService.changeStatus(ticketId, this.configurationService.getFeatureStatusAssignedId());
+			this.redmineService.changeStatus(ticketId, this.configurationService.getFeatureStatusAssignedId(), username);
 
 		} catch (final Exception ex) {
 			LOGGER.error("[Redmine] Failed to change ticket #{} status", ticketId, ex);
@@ -144,7 +144,7 @@ public class RedmineProjectLifeCycleExtension implements IProjectLifecycleExtens
 	public NotifyResult notifyFinishedFeature(ProjectDto projectDto, String ticketId,
 			String featureSubject) {
 		try {
-			this.redmineService.changeStatus(ticketId, this.configurationService.getFeatureStatusClosedId());
+			this.redmineService.changeStatus(ticketId, this.configurationService.getFeatureStatusClosedId(), null);
 
 		} catch (final Exception ex) {
 			LOGGER.error("[Redmine] Failed to change ticket #{} status", ticketId, ex);
