@@ -48,8 +48,7 @@ public class ProjectLifecycleExtensionManager {
 			extension.notifyCreatedProject(projectDto);
 		}
 		
-		_event.getCreatedProject().setOtherAttributes(projectDto.getOtherAttributes());
-		this.gate.dispatch(new EditProjectCommand(_event.getCreatedProject()));
+		saveAttributes(_event.getCreatedProject(), projectDto);
 	}
 
 	@Subscribe
@@ -76,7 +75,8 @@ public class ProjectLifecycleExtensionManager {
 				break;
 			}
 		}
-
+		
+		saveAttributes(event.getProject(), projectDto);
 	}
 
 	@Subscribe
@@ -107,6 +107,7 @@ public class ProjectLifecycleExtensionManager {
 			}
 		}
 
+		saveAttributes(event.getProject(), projectDto);
 	}
 
 	@Subscribe
@@ -150,6 +151,13 @@ public class ProjectLifecycleExtensionManager {
 
 		}
 		return null;
+	}
+	
+	private void saveAttributes(Project project, ProjectDto projectDto) {
+		
+		project.setOtherAttributes(projectDto.getOtherAttributes());
+		this.gate.dispatch(new EditProjectCommand(project));
+		
 	}
 
 	// TODO:/Duplicated projects

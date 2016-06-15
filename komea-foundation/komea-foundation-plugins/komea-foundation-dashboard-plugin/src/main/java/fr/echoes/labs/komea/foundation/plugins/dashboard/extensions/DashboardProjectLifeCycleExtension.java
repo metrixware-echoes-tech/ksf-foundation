@@ -113,12 +113,36 @@ public class DashboardProjectLifeCycleExtension implements IProjectLifecycleExte
 
 	@Override
 	public NotifyResult notifyCreatedRelease(ProjectDto project, String releaseVersion) {
+		
+		init();
+		
+		final String projectKey = ProjectUtils.createIdentifier(project.getKey());
+		
+		LOGGER.info("[Dashboard] release creation detected for project", projectKey);
+		
+		try {
+			this.dashboardService.updateProjectEntities(project);
+		} catch(final Exception ex) {
+			LOGGER.error("[Dashboard] failed to initialize release for project {} in Komea Dashboard", projectKey, ex);
+		}
+		
 		return NotifyResult.CONTINUE;
 	}
 
 	@Override
 	public NotifyResult notifyCreatedFeature(ProjectDto project, String featureId,
 			String featureSubject) {
+		
+		final String projectKey = ProjectUtils.createIdentifier(project.getKey());
+		
+		LOGGER.info("[Dashboard] feature creation detected for project", projectKey);
+		
+		try {
+			this.dashboardService.updateProjectEntities(project);
+		} catch(final Exception ex) {
+			LOGGER.error("[Dashboard] failed to initialize feature for project {} in Komea Dashboard", projectKey, ex);
+		}
+		
 		return NotifyResult.CONTINUE;
 	}
 

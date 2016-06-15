@@ -44,7 +44,7 @@ public interface IJenkinsService {
 	 * @param releaseVersion the release version
 	 * @throws JenkinsExtensionException
 	 */
-	public void createRelease(String name, String releaseVersion) throws JenkinsExtensionException;
+	public void createRelease(ProjectDto project, String releaseVersion) throws JenkinsExtensionException;
 
 	/**
 	 * Creates a new Jenkins job for the given feature.
@@ -54,7 +54,7 @@ public interface IJenkinsService {
 	 * @param featureSubject the feature subject
 	 * @throws JenkinsExtensionException
 	 */
-	public void createFeature(String projectName, String featureId, String featureSubject) throws JenkinsExtensionException;
+	public void createFeature(ProjectDto project, String featureId, String featureSubject) throws JenkinsExtensionException;
 
 	/**
 	 * Returns the Jenkins job ID.

@@ -102,8 +102,7 @@ public class JenkinsProjectLifeCycleExtension implements IProjectLifecycleExtens
 	@Override
 	public NotifyResult notifyCreatedRelease(ProjectDto project, String releaseVersion) {
 		try {
-
-			this.jenkinsService.createRelease(project.getName(), releaseVersion);
+			this.jenkinsService.createRelease(project, releaseVersion);
 		} catch (final Exception ex) {
 			LOGGER.error("[Jenkins] Failed to create release for project {} ", project.getName(), ex);
 			this.errorHandler.registerError("Failed to create release.");
@@ -114,8 +113,7 @@ public class JenkinsProjectLifeCycleExtension implements IProjectLifecycleExtens
 	@Override
 	public NotifyResult notifyCreatedFeature(ProjectDto project, String featureId, String featureSubject) {
 		try {
-
-			this.jenkinsService.createFeature(project.getName(), featureId, featureSubject);
+			this.jenkinsService.createFeature(project, featureId, featureSubject);
 		} catch (final Exception ex) {
 			LOGGER.error("[Jenkins] Failed to create release for project {} ", project.getName(), ex);
 			this.errorHandler.registerError("Failed to create release.");
