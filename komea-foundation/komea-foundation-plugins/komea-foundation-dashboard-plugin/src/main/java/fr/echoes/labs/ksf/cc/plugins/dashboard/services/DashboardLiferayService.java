@@ -33,4 +33,12 @@ public class DashboardLiferayService {
 		
 	}
 	
+	public void deleteSite(final String projectKey) throws Exception {
+		
+		LiferaySoapClient liferay = clientFactory.liferaySoapClient();
+		
+		liferay.deleteSite(projectKey, configuration.getLiferayDefaultCompanyWebId());
+		
+	}
+	
 }

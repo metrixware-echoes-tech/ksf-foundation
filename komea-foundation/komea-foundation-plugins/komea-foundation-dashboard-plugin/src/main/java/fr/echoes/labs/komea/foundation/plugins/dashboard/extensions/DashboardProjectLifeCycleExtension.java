@@ -93,6 +93,7 @@ public class DashboardProjectLifeCycleExtension implements IProjectLifecycleExte
 		try {
 			this.dashboardService.disableProjectEntities(project);
 			this.dashboardService.removeConnectorProperties(project);
+			this.liferayService.deleteSite(projectKey);
 		} catch(final Exception ex) {
 			LOGGER.error("[Dashboard] failed to delete project {} in Komea Dashboard", projectKey, ex);
 		}
