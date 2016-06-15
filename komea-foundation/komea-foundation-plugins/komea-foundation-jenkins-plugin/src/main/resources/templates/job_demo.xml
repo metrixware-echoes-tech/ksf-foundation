@@ -36,6 +36,19 @@ cd "${WORKSPACE}"
 chmod +x ./${buildScript}
 ./${buildScript}</command>
 		</hudson.tasks.Shell>
+		<sp.sd.nexusartifactuploader.NexusArtifactUploader plugin="nexus-artifact-uploader">
+			<protocol>https</protocol>
+			<nexusUrl>ksf-demo.metrixware.local/nexus</nexusUrl>
+			<nexusUser>ksfuser</nexusUser>
+			<nexusPassword>490ebc83a2b4dc242a957551e082a1a6024259ef9676058e72fc8851ac1bf22b</nexusPassword>
+			<groupId>kimcar</groupId>
+			<artifactId>loc</artifactId>
+			<version>${branchName}</version>
+			<packaging>war</packaging>
+			<repository>${projectKey}</repository>
+			<file>build/libs/kimcar-loc.war</file>
+			<credentialsId/>
+		</sp.sd.nexusartifactuploader.NexusArtifactUploader>		
 	</builders>
 	<publishers>
 		<org.jenkinsci.plugins.postbuildscript.PostBuildScript

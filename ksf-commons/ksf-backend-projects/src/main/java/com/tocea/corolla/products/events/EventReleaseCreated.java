@@ -10,9 +10,11 @@ public class EventReleaseCreated {
 
 	private final Project project;
 	private final String releaseVersion;
+	private String username;
 
-	public EventReleaseCreated(final Project project, String releaseVersion) {
+	public EventReleaseCreated(final Project project, String username, String releaseVersion) {
 		this.project = project;
+		this.username = username;
 		this.releaseVersion = releaseVersion;
 	}
 
@@ -26,6 +28,11 @@ public class EventReleaseCreated {
 
 	@Override
 	public String toString() {
-		return EventReleaseCreated.class.getName() + " [project=" + this.project + ", releaseVersion=" + this.releaseVersion + "]";
+		return EventReleaseCreated.class.getName() + " [project=" + this.project + ", username=" + this.username + ", releaseVersion=" + this.releaseVersion + "]";
 	}
+
+	public String getUsername() {
+		return username;
+	}
+
 }

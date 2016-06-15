@@ -100,7 +100,7 @@ public class JenkinsProjectLifeCycleExtension implements IProjectLifecycleExtens
 	}
 
 	@Override
-	public NotifyResult notifyCreatedRelease(ProjectDto project, String releaseVersion) {
+	public NotifyResult notifyCreatedRelease(ProjectDto project, String releaseVersion, String username) {
 		try {
 			this.jenkinsService.createRelease(project, releaseVersion);
 		} catch (final Exception ex) {
@@ -111,7 +111,7 @@ public class JenkinsProjectLifeCycleExtension implements IProjectLifecycleExtens
 	}
 
 	@Override
-	public NotifyResult notifyCreatedFeature(ProjectDto project, String featureId, String featureSubject) {
+	public NotifyResult notifyCreatedFeature(ProjectDto project, String featureId, String featureSubject, String username) {
 		try {
 			this.jenkinsService.createFeature(project, featureId, featureSubject);
 		} catch (final Exception ex) {

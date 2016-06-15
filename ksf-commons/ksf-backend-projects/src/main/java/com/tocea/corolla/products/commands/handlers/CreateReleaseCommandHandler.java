@@ -47,13 +47,14 @@ public class CreateReleaseCommandHandler implements ICommandHandler<CreateReleas
 	public Project handle(@Valid final CreateReleaseCommand command) {
 
 		final Project project = command.getProject();
+		final String username = command.getUsername();
 		final String releaseVersion = command.getReleaseVersion();
 
 		if (project == null) {
 			throw new ProjectNotFoundException();
 		}
 
-		this.gate.dispatchEvent(new EventReleaseCreated(project, releaseVersion));
+		this.gate.dispatchEvent(new EventReleaseCreated(project, username, releaseVersion));
 
 
 		return project;

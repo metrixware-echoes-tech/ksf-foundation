@@ -153,8 +153,13 @@
 
     <label class="control-label col-md-3" th:text="#{foundation.projects.overview.widget.overview.project.featureInformation.popup.gitBranchName}">Git branch name:</label>
     <div class="col-md-9">
-      <p class="form-control-static" id="infFeatureGitbranch">git branch name</p>
+    	<p>
+      		<span class="form-control-static" id="infFeatureGitbranch">git branch name</span>
+      		<button class="btn btn-default btn-xs" type="button" id="infFeatureCopyBtn"  data-toggle="tooltip" th:title="#{foundation.git.copyToClipboard}"><span class="fa fa-clipboard"></span></button>
+      	</p>
     </div>
+
+
     
   </div>
 </form>
@@ -201,9 +206,11 @@
 
     <label class="control-label col-md-3" th:text="#{foundation.projects.overview.widget.overview.project.featureInformation.popup.gitBranchName}">Git branch name:</label>
     <div class="col-md-9">
-      <p class="form-control-static" id="infReleaseGitbranch">git branch name</p>
+    	<p>
+      		<span class="form-control-static" id="infReleaseGitbranch">git branch name</span>
+      		<button class="btn btn-default btn-xs" type="button" id="infReleaseCopyBtn" data-toggle="tooltip" th:title="#{foundation.git.copyToClipboard}"><span class="fa fa-clipboard"></span></button>
+      	</p>
     </div>
-    
   </div>
 </form>
  

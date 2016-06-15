@@ -21,10 +21,13 @@ public class CreateFeatureCommand {
 	private String featureId;
 	
 	@NotEmpty
-	private String featureSubject;	
+	private String featureSubject;
+
+	private String username;	
 	
-	public CreateFeatureCommand(Project project, String featureId, String featureSubject) {
+	public CreateFeatureCommand(Project project, String username, String featureId, String featureSubject) {
 		this.project = project;
+		this.username = username;
 		this.featureId = featureId;
 		this.featureSubject = featureSubject;
 	}
@@ -48,6 +51,13 @@ public class CreateFeatureCommand {
 	 */
 	public String getFeatureSubject() {
 		return featureSubject;
+	}
+
+	/**
+	 * @return the username
+	 */
+	public String getUsername() {
+		return username;
 	}
 
 }

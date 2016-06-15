@@ -94,9 +94,9 @@ public class JenkinsService implements IJenkinsService {
 				jenkins.createJob(developJob, resolvedXmlConfig, false);
 			}
 
-			final DashboardJobNameFormatter dashboardNameFormatter = new DashboardJobNameFormatter();			
+			final DashboardJobNameFormatter dashboardNameFormatter = new DashboardJobNameFormatter();
 			final List<String> jobs = Lists.newArrayList(
-					projectName, 
+					projectName,
 					dashboardNameFormatter.format(masterJob, projectName),
 					dashboardNameFormatter.format(developJob, projectName)
 			);
@@ -149,6 +149,7 @@ public class JenkinsService implements IJenkinsService {
 		variables.put("branchName", branchName);
 		variables.put("buildScript", this.configurationService.getBuildScript());
 		variables.put("publishScript", this.configurationService.getPublishScript());
+		variables.put("projectKey", ProjectUtils.createIdentifier(projectName));
 
 		final URL url = com.google.common.io.Resources.getResource(this.configurationService.getTemplateName());
 		return substituteText(url, variables);

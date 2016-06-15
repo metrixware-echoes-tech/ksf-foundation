@@ -113,8 +113,11 @@
                 	
                 	$('#infFeatureId').text(id);
                 	$('#infFeatureSubject').text(subject);
-                	$('#infFeatureGitbranch').text(gitBranch);
                 	$('#infFeatureJenkinsJob').text(jenkinsJob);
+                	$('#infFeatureGitbranch').text(gitBranch);
+                	$('#infFeatureCopyBtn').attr('data-clipboard-text', gitBranch);
+                	
+                	new ZeroClipboard( document.getElementById("infFeatureCopyBtn") );
                 	
                 	$('#featureInformation').modal('show');
                 }); 
@@ -128,11 +131,15 @@
                 	$('#infReleaseName').text(name);
                 	$('#infReleaseJenkinsJob').text(jenkinsJob);
                 	$('#infReleaseGitbranch').text(gitBranch);
+                	$('#infReleaseCopyBtn').attr('data-clipboard-text', gitBranch);
+                	
+                	new ZeroClipboard( document.getElementById("infReleaseCopyBtn") );
                 	
                 	$('#releaseInformation').modal('show');
                 }); 
                 
 
+                
                 <div th:if="${validationErrors != null}" th:remove="tag">
                 	$('#validationErrorsModal').modal('show');
                 </div>

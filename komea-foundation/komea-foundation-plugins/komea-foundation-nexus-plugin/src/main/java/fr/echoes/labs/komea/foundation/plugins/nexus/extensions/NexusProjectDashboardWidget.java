@@ -17,10 +17,13 @@ import org.thymeleaf.context.Context;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
 import com.google.common.collect.Lists;
+import com.tocea.corolla.products.dao.IProjectDAO;
+import com.tocea.corolla.products.domain.Project;
 
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.IProjectTabPanel;
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.MenuAction;
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
+import fr.echoes.labs.ksf.cc.extensions.services.project.ProjectUtils;
 import fr.echoes.labs.ksf.cc.plugins.nexus.services.NexusConfigurationService;
 
 /**
@@ -40,6 +43,9 @@ public class NexusProjectDashboardWidget implements ProjectDashboardWidget {
 
 	@Autowired
 	private MessageSource messageResource;
+
+	@Autowired
+	private IProjectDAO projectDao;
 
 	@Override
 	public List<MenuAction> getDropdownActions() {
@@ -64,6 +70,8 @@ public class NexusProjectDashboardWidget implements ProjectDashboardWidget {
 
 	@Override
 	public List<IProjectTabPanel> getTabPanels(final String projectKey) {
+		final Project project = this.projectDao.findByKey(projectKey);
+
 		final IProjectTabPanel iframePanel = new IProjectTabPanel() {
 
 			@Override
@@ -80,7 +88,11 @@ public class NexusProjectDashboardWidget implements ProjectDashboardWidget {
 						((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
 						.getRequest();
 
-				final String url = NexusProjectDashboardWidget.this.configurationService.getUrl();
+				String url = NexusProjectDashboardWidget.this.configurationService.getUrl();
+
+				final String projectName = project.getName();
+
+				url += "/#view-repositories;" + ProjectUtils.createIdentifier(projectName)+ "~browsestorage";
 
 				LOGGER.info("[nexus] project URL : {}", url);
 

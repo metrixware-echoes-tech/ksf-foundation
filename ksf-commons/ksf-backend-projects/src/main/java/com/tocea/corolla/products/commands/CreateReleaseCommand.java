@@ -20,8 +20,11 @@ public class CreateReleaseCommand {
 	@NotEmpty
 	private final String releaseVersion;
 
-	public CreateReleaseCommand(Project project, String releaseVersion) {
+	private String username;
+
+	public CreateReleaseCommand(Project project, String username, String releaseVersion) {
 		this.project = project;
+		this.username = username;
 		this.releaseVersion = releaseVersion;
 	}
 
@@ -35,6 +38,10 @@ public class CreateReleaseCommand {
 
 	public String getReleaseVersion() {
 		return this.releaseVersion;
+	}
+
+	public String getUsername() {
+		return username;
 	}
 
 }
