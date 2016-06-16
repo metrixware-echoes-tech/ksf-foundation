@@ -332,9 +332,11 @@ public class ForemanService implements IForemanService {
 		 eth0.managed = "0";
 		 eth0.primary = "0";
 		 eth0.provision = "0";
+		 eth0.identifier = "eth0";
 		 newHost.interfaces_attributes.put("0", eth0 );
 
 		 final NetworkInterface eth1 = new NetworkInterface();
+		 eth1.identifier = "eth1";
 		 newHost.interfaces_attributes.put("1", eth1 );
 
 		 Modules modules = null;
