@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 import com.google.common.collect.Lists;
 
 import fr.echoes.labs.ksf.cc.extensions.gui.ProjectExtensionConstants;
-import fr.echoes.labs.ksf.cc.extensions.services.project.ProjectUtils;
 import fr.echoes.labs.ksf.cc.plugins.dashboard.entities.GitRepository;
 import fr.echoes.labs.ksf.cc.plugins.dashboard.utils.DashboardUtils;
 import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
@@ -33,6 +32,9 @@ public class DashboardService {
 	
 	@Autowired
 	private DashboardConfigurationService configurationService;
+	
+	@Autowired
+	private DashboardEntityFactory entityFactory;
 	
 	public void updateProjectEntities(final ProjectDto project) {
 		
@@ -63,74 +65,20 @@ public class DashboardService {
 		
 		List<Entity> entities = Lists.newArrayList();
 		
-		entities.add(getProjectEntity(project));
+		entities.add(entityFactory.createProjectEntity(project));
 		
-		List<Entity> jobEntities = getJobEntities(project);
+		List<Entity> jobEntities = entityFactory.createJobEntities(project);
 		if (!jobEntities.isEmpty()) {
 			entities.addAll(jobEntities);
 		}
 		
-		Entity gitEntity = getGitEntity(project);
+		GitRepository repository = getGitRepository(project);
+		Entity gitEntity = entityFactory.createGitEntity(project, repository);
 		if (gitEntity != null) {
 			entities.add(gitEntity);
 		}
 		
 		return entities;
-	}
-	
-	public Entity getProjectEntity(final ProjectDto project) {
-		
-		final String projectType = configurationService.getProjectType();
-		final String projectName = project.getName();
-		final String projectKey = ProjectUtils.createIdentifier(project.getKey());
-				
-		final Entity projectEntity = new Entity()
-			.setKey(projectKey)
-			.setName(projectName)
-			.setType(projectType);
-		
-		return projectEntity;
-	}
-	
-	public List<Entity> getJobEntities(final ProjectDto project) {
-		
-		List<Entity> entities = Lists.newArrayList();
-		
-		final String projectKeyTag = configurationService.getProjectKeyTag();
-		final String jobType = configurationService.getJobType();
-		final String projectKey = DashboardUtils.createIdentifier(project.getName());
-		
-		List<String> jobNames = (List<String>) project.getOtherAttributes().get(ProjectExtensionConstants.CI_JOBS_KEY);
-		
-		if (jobNames != null && !jobNames.isEmpty()) {
-			for (final String jobName : jobNames) {
-				final Entity jobEntity = new Entity()
-					.setKey(jobName)
-					.setName(jobName)
-					.setType(jobType)
-					.addAttribute(projectKeyTag, projectKey);
-				entities.add(jobEntity);
-			}
-		}
-		
-		return entities;		
-	}
-	
-	public Entity getGitEntity(final ProjectDto project) {
-		
-		final GitRepository repository = getGitRepository(project);
-		
-		if (repository != null) {
-			Entity entity = new Entity();
-			entity.setKey(repository.getName());
-			entity.setName(repository.getName());
-			entity.setType(configurationService.getRepositoryType());
-			entity.addAttribute("url", repository.getUsername());
-			entity.addAttribute(configurationService.getProjectKeyTag(), project.getKey());
-			return entity;
-		}
-		
-		return null;
 	}
 	
 	private GitRepository getGitRepository(final ProjectDto project) {
@@ -141,7 +89,7 @@ public class DashboardService {
 		if (!StringUtils.isEmpty(gitURL)) {
 		
 			GitRepository repository = new GitRepository();
-			repository.setName(project.getKey());
+			repository.setName(project.getName());
 			repository.setRemoteURL(gitURL);
 			repository.setIncludedBranches(gitIncludedBranches);
 			repository.setUsername(configurationService.getUsername());
