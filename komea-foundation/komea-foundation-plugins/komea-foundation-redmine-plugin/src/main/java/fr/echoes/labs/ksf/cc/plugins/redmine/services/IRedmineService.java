@@ -85,10 +85,12 @@ public interface IRedmineService {
 	 *
 	 * @param project the project
 	 * @param releaseVersion the release version
-	 * @param username the assignee username. Can be {@code null}. 
+	 * @param username the assignee username. Can be {@code null}.
 	 * @param string the ticket title
 	 * @throws RedmineExtensionException
 	 */
 	public void createTicket(ProjectDto project, String releaseVersion, String title, String username) throws RedmineExtensionException;
+
+	public void changeVersionStatus(ProjectDto foundationProject, String releaseName, String status) throws RedmineExtensionException;
 
 }

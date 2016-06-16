@@ -106,11 +106,11 @@ public class RedmineService implements IRedmineService {
 	}
 
 	private User findUser(RedmineManager mgr, String username) throws RedmineException {
-		User cachedUser = RedmineUserCache.INSTANCE.get(username);
+		final User cachedUser = RedmineUserCache.INSTANCE.get(username);
 		if (cachedUser != null) {
 			LOGGER.info("[redmine] cached user '{}' found", username);
 			return cachedUser;
-		}		
+		}
 
 		final UserManager userManager = mgr.getUserManager();
 		for (final User user : userManager.getUsers()) {
@@ -373,9 +373,9 @@ public class RedmineService implements IRedmineService {
 			}
 
 			issue.setStatusId(statusId);
-			
+
 			changeIssueAssignee(redmineManager, issue, username);
-			
+
 			issueManager.update(issue);
 			LOGGER.info("[redmine] Changing redmine issue status - status updated");
 		} catch (final Exception e) {
@@ -386,7 +386,7 @@ public class RedmineService implements IRedmineService {
 
 	private void changeIssueAssignee(RedmineManager redmineManager, Issue issue, String username)
 			throws RedmineException {
-		if (username != null) {		
+		if (username != null) {
 			final User user = findUser(redmineManager, username);
 			if (user != null) {
 				LOGGER.info("[redmine] Changing issue assignee to '{}'", username);
@@ -451,7 +451,7 @@ public class RedmineService implements IRedmineService {
 			issue.setTargetVersion(version);
 			issue.setSubject(subject);
 			changeIssueAssignee(redmineManager, issue, username);
-			
+
 			issueManager.createIssue(issue);
 
 		} catch (final RedmineException e) {
@@ -467,6 +467,31 @@ public class RedmineService implements IRedmineService {
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public void changeVersionStatus(ProjectDto foundationProject, String releaseVersion, String status) throws RedmineExtensionException {
+		Objects.requireNonNull(foundationProject);
+		Objects.requireNonNull(releaseVersion);
+
+		final RedmineManager redmineManager = createRedmineManager();
+		if (redmineManager == null) {
+			return;
+		}
+
+		try {
+			final String projectIdentifier = findProjectIdentifier(redmineManager, foundationProject.getName());
+			final ProjectManager projectManager = redmineManager.getProjectManager();
+
+			final Project redmineProject = projectManager.getProjectByKey(projectIdentifier);
+			final Version version = findVersion(projectManager, redmineProject, releaseVersion);
+			version.setStatus(status);
+			projectManager.update(version);
+
+		} catch (final RedmineException e) {
+			throw new RedmineExtensionException("Failed to change version state", e);
+		}
+
 	}
 
 

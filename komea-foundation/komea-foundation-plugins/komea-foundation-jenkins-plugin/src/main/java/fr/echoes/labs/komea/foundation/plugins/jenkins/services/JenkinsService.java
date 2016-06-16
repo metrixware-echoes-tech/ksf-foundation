@@ -124,9 +124,17 @@ public class JenkinsService implements IJenkinsService {
 	}
 
 	private FolderJob getProjectParentFolder(final JenkinsServer jenkins, String projectName) throws IOException {
-		final JobWithDetails root = jenkins.getJob(projectName);
-		final Optional<FolderJob> projectFolder = jenkins.getFolderJob(root);
-		return projectFolder.get();
+		LOGGER.info("[jenkins] getting job folder: {}", projectName);
+		FolderJob folderJob = JenkinsFolderCache.INSTANCE.get(projectName);
+		if (folderJob == null) {
+			final JobWithDetails root = jenkins.getJob(projectName);
+			final Optional<FolderJob> projectFolder = jenkins.getFolderJob(root);
+			folderJob = projectFolder.get();
+			JenkinsFolderCache.INSTANCE.put(projectName, folderJob);
+		} else {
+			LOGGER.info("[jenkins] using cached job folder: {}", projectName);
+		}
+		return folderJob;
 	}
 
 	private String getJobName(String projectName, String branchName) {
@@ -189,8 +197,14 @@ public class JenkinsService implements IJenkinsService {
 
 			final int builsdPerJobLimit = this.configurationService.getBuilsdPerJobLimit();
 
-			final List<Build> builds = getJobBuilds(jenkins, projectName, getJobName(projectName, DEVELOP), useFolder, builsdPerJobLimit);
-			builds.addAll(getJobBuilds(jenkins, projectName, getJobName(projectName, MASTER), useFolder, builsdPerJobLimit));
+			final List<Build> builds;
+			if (useFolder) {
+				builds = getFolderBuilds(jenkins, projectName, builsdPerJobLimit);
+			} else {
+				builds = new ArrayList<Build>();
+				builds.addAll(getJobBuilds(jenkins, projectName, getJobName(projectName, DEVELOP), useFolder, builsdPerJobLimit));
+				builds.addAll(getJobBuilds(jenkins, projectName, getJobName(projectName, MASTER), useFolder, builsdPerJobLimit));
+			}
 
 			final List<JenkinsBuildInfo> buildsInfo = new ArrayList<JenkinsBuildInfo>(builds.size());
 			for (final Build build : builds) {
@@ -219,6 +233,25 @@ public class JenkinsService implements IJenkinsService {
 		final List<Build> builds = root.getBuilds();
 		if (builds.size() > builsdPerJobLimit) {
 			return  new ArrayList<Build>(builds.subList(0, builsdPerJobLimit));
+		}
+		return builds;
+	}
+
+	private List<Build> getFolderBuilds(JenkinsServer jenkins, String projectName, int builsdPerJobLimit)
+			throws IOException, JenkinsExtensionException {
+
+		final List<Build> builds = new ArrayList<Build>();
+		final FolderJob projectFolder = getProjectParentFolder(jenkins, projectName);
+		final Map<String, Job> jobs = projectFolder.getJobs();
+		for (final Map.Entry<String, Job> entry : jobs.entrySet()) {
+			final Job job = entry.getValue();
+			final JobWithDetails details = job.details();
+			final List<Build> jobBuilds = details.getBuilds();
+			if (jobBuilds.size() > builsdPerJobLimit) {
+				builds.addAll(new ArrayList<Build>(jobBuilds.subList(0, builsdPerJobLimit)));
+			} else {
+				builds.addAll(jobBuilds);
+			}
 		}
 		return builds;
 	}
