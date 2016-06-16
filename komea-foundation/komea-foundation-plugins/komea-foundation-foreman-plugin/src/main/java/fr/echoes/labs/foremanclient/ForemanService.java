@@ -325,7 +325,17 @@ public class ForemanService implements IForemanService {
 		 newHost.architecture_id = parameterObject.getArchitectureId();
 		 newHost.domain_id = parameterObject.getDomainId();
 		 newHost.root_pass = parameterObject.getRootPassword();
-		 newHost.interfaces_attributes.put("0", new NetworkInterface() );
+
+		 final NetworkInterface eth0 = new NetworkInterface();
+		 eth0.subnet_id = null;
+		 eth0.domain_id = null;
+		 eth0.managed = "0";
+		 eth0.primary = "0";
+		 eth0.provision = "0";
+		 newHost.interfaces_attributes.put("0", eth0 );
+
+		 final NetworkInterface eth1 = new NetworkInterface();
+		 newHost.interfaces_attributes.put("1", eth1 );
 
 		 Modules modules = null;
 		 boolean configureModules = true;
