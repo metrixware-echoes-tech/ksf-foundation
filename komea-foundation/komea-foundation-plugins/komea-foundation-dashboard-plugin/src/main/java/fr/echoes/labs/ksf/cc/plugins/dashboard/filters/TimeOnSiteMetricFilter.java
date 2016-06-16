@@ -114,7 +114,7 @@ public class TimeOnSiteMetricFilter extends OncePerRequestFilter {
 		
 		String url = request.getRequestURI();
 		
-		if (url.startsWith("/ui") && configurationService.calculateAverageTimeOnSite()) {
+		if (url.contains("/ui/") && configurationService.calculateAverageTimeOnSite()) {
 		
 			LOGGER.info("Intercepting request {}...", url);
 			
