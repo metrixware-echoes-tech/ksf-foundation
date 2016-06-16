@@ -43,13 +43,13 @@ public class ForemanConfigurationService {
     @Value("${ksf.foreman.hostgroup.realmId:}")
     private String hostgroupRealmId;
 
-    @Value("${ksf.foreman.hostgroup.operatingsystemId :1}")
+    @Value("${ksf.foreman.hostgroup.operatingsystemId:1}")
     private String hostgroupOperatingsystemId;
 
-    @Value("${ksf.foreman.hostgroup.ptableId :1}")
+    @Value("${ksf.foreman.hostgroup.ptableId:1}")
     private String hostgroupPtableId;
 
-    @Value("${ksf.foreman.hostgroup.mediumId :1}")
+    @Value("${ksf.foreman.hostgroup.mediumId:1}")
     private String hostgroupMediumId;
 
     @Value("${ksf.foreman.puppetModuleInstallScript:}")
