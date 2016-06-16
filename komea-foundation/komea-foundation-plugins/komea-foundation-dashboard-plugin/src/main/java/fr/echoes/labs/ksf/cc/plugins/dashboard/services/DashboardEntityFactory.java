@@ -18,7 +18,7 @@ public class DashboardEntityFactory {
 	@Autowired
 	private DashboardConfigurationService configurationService;
 
-	private String getProjectEntityKey(final ProjectDto project) {
+	public String getProjectEntityKey(final ProjectDto project) {
 		return project.getName();
 		//return ProjectUtils.createIdentifier(project.getKey());
 	}

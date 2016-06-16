@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.tocea.corolla.products.domain.Project;
 
-import fr.echoes.labs.ksf.cc.extensions.services.project.ProjectUtils;
 import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
 
 @Service
@@ -19,6 +18,9 @@ public class DashboardLiferayService {
 	@Autowired
 	private DashboardClientFactory clientFactory;
 	
+	@Autowired
+	private DashboardEntityFactory entityFactory;
+	
 	public String getLiferaySiteName(final ProjectDto project) {
 		return project.getName();
 	}
@@ -27,14 +29,10 @@ public class DashboardLiferayService {
 		return project.getName();
 	}
 	
-	private String getEntityKey(final ProjectDto project) {
-		return ProjectUtils.createIdentifier(project.getKey());
-	}
-	
 	public void createSite(final ProjectDto project) throws Exception {
 		
 		LiferaySoapClient liferay = clientFactory.liferaySoapClient();
-		final String projectKey = getEntityKey(project);
+		final String projectKey = entityFactory.getProjectEntityKey(project);
 		final String siteName = getLiferaySiteName(project);
 		
 		KomeaLiferaySite site = new KomeaLiferaySite();
