@@ -21,6 +21,9 @@ public class DashboardConfigurationService {
     @Value("${ksf.dashboard.metrics.url}")
     private String metricsURL;
     
+    @Value("${ksf.dashboard.timeseries.url}")
+    private String timeSerieURL;
+    
     @Value("${ksf.dashboard.projectType:project}")
     private String projectType;
     
@@ -50,6 +53,9 @@ public class DashboardConfigurationService {
     
     @Value("${ksf.dashboard.liferay.defaultUserGroupName}")
     private String liferayDefaultUserGroupName;
+    
+    @Value("${ksf.dashboard.metrics.averageTimeOnSite:false}")
+    private boolean calculateAverageTimeOnSite;
 
 	public String getUrl() {
         if ('/' == this.url.charAt(this.url.length() - 1)) {
@@ -108,6 +114,14 @@ public class DashboardConfigurationService {
 	
 	public String getLiferayDefaultUserGroupName() {
 		return liferayDefaultUserGroupName;
+	}
+	
+	public String getTimeSerieURL() {
+		return timeSerieURL;
+	}
+	
+	public boolean calculateAverageTimeOnSite() {
+		return calculateAverageTimeOnSite;
 	}
 	
 }
