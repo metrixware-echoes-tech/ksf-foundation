@@ -55,7 +55,6 @@ public class DashboardProjectLifeCycleExtension implements IProjectLifecycleExte
 		init();
 
 		final String logginName = this.currentUserService.getCurrentUserLogin();
-		final String projectKey = ProjectUtils.createIdentifier(project.getKey());
 
 		if (StringUtils.isEmpty(logginName)) {
 			LOGGER.error("[Dashboard] No user found. Aborting project creation in Dashboard module");
@@ -67,9 +66,9 @@ public class DashboardProjectLifeCycleExtension implements IProjectLifecycleExte
 		try {
 			this.dashboardService.updateProjectEntities(project);
 			this.dashboardService.updateConnectorProperties(project);
-			this.liferayService.createSite(projectKey);
+			this.liferayService.createSite(project);
 		} catch (final Exception e) {
-			LOGGER.error("[Dashboard] failed to initialize project {} in Komea Dashboard",project.getName(), e);
+			LOGGER.error("[Dashboard] failed to initialize project {} in Komea Dashboard",project.getKey(), e);
 		}
 
 		return NotifyResult.CONTINUE;
@@ -81,21 +80,20 @@ public class DashboardProjectLifeCycleExtension implements IProjectLifecycleExte
 		init();
 		
 		final String logginName = this.currentUserService.getCurrentUserLogin();
-		final String projectKey = ProjectUtils.createIdentifier(project.getKey());
 		
 		if (StringUtils.isEmpty(logginName)) {
 			LOGGER.error("[Dashboard] No user found. Aborting project deletion in Dashboard module");
 			return NotifyResult.CONTINUE;
 		}
 
-		LOGGER.info("[Dashboard] project {} deletion detected [demanded by: {}]", projectKey, logginName);
+		LOGGER.info("[Dashboard] project {} deletion detected [demanded by: {}]", project.getKey(), logginName);
 		
 		try {
 			this.dashboardService.disableProjectEntities(project);
 			this.dashboardService.removeConnectorProperties(project);
-			this.liferayService.deleteSite(projectKey);
+			this.liferayService.deleteSite(project);
 		} catch(final Exception ex) {
-			LOGGER.error("[Dashboard] failed to delete project {} in Komea Dashboard", projectKey, ex);
+			LOGGER.error("[Dashboard] failed to delete project {} in Komea Dashboard", project.getKey(), ex);
 		}
 		
 		return NotifyResult.CONTINUE;
