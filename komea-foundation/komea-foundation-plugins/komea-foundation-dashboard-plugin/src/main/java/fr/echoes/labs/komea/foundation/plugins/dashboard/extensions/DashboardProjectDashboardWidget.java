@@ -96,7 +96,7 @@ public class DashboardProjectDashboardWidget implements ProjectDashboardWidget {
 
 				if (project != null) {
 					
-					final String projectDashboardKey = ProjectUtils.createIdentifier(project.getName());
+					final String projectDashboardKey = project.getName();
 
 					url = new DashboardUrlBuilder()
 						.setBaseUrl(configurationService.getUrl())

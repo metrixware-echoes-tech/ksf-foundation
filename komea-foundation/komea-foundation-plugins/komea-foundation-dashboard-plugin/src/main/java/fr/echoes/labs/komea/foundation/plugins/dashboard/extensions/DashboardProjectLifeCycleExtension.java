@@ -67,7 +67,7 @@ public class DashboardProjectLifeCycleExtension implements IProjectLifecycleExte
 		try {
 			this.dashboardService.updateProjectEntities(project);
 			this.dashboardService.updateConnectorProperties(project);
-			this.liferayService.createSite(projectKey);
+			this.liferayService.createSite(project.getName());
 		} catch (final Exception e) {
 			LOGGER.error("[Dashboard] failed to initialize project {} in Komea Dashboard",project.getName(), e);
 		}
@@ -93,7 +93,7 @@ public class DashboardProjectLifeCycleExtension implements IProjectLifecycleExte
 		try {
 			this.dashboardService.disableProjectEntities(project);
 			this.dashboardService.removeConnectorProperties(project);
-			this.liferayService.deleteSite(projectKey);
+			this.liferayService.deleteSite(project.getName());
 		} catch(final Exception ex) {
 			LOGGER.error("[Dashboard] failed to delete project {} in Komea Dashboard", projectKey, ex);
 		}
