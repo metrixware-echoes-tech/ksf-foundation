@@ -47,6 +47,7 @@ import fr.echoes.labs.foremanapi.model.Roles;
 import fr.echoes.labs.foremanapi.model.User;
 import fr.echoes.labs.foremanapi.model.UserWrapper;
 import fr.echoes.labs.foremanapi.model.Users;
+import fr.echoes.labs.foremanclient.model.ComputeAttributesBridge;
 import fr.echoes.labs.foremanclient.model.NetworkInterface;
 import fr.echoes.labs.foremanclient.model.PowerAction;
 import fr.echoes.labs.ksf.cc.plugins.foreman.exceptions.ForemanHostAlreadyExistException;
@@ -333,6 +334,7 @@ public class ForemanService implements IForemanService {
 		 eth0.primary = "0";
 		 eth0.provision = "0";
 		 eth0.identifier = "eth0";
+		 eth0.compute_attributes = new ComputeAttributesBridge();
 		 newHost.interfaces_attributes.put("0", eth0 );
 
 		 final NetworkInterface eth1 = new NetworkInterface();
