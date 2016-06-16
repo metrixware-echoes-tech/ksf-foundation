@@ -90,3 +90,12 @@ bower {
         source 'css/**'
     }
 }
+
+processResources {
+    filesMatching("application.properties") {
+        expand(
+        "build_version": project.version, 
+        "build_timestamp": new Date().format('yyyyMMddHHmmss')
+        ) 
+    }
+}
