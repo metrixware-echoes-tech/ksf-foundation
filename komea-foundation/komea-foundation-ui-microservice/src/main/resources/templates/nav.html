@@ -68,6 +68,8 @@
 					<div class="information">
 						<div class="container-wrapper">
 							<div class="information-section">
+								<br/>
+								<p class="information-text" th:text="${'Build Version ' + @versionService.getBuildVersion() + ' ' + @versionService.getBuildTimestamp()}">Build Version</p>
 								<h1 class="information-title">A propos de nous</h1>
 								<p class="information-text">Echoes Technologies, Echoes Labs
 									(ex Tocea) et Metrixware s’unissent autour de la marque Echoes
