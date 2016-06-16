@@ -68,7 +68,7 @@ public class DashboardEntityFactory {
 			entity.setKey(repository.getName());
 			entity.setName(repository.getName());
 			entity.setType(configurationService.getRepositoryType());
-			entity.addAttribute("url", repository.getUsername());
+			entity.addAttribute("url", repository.getRemoteURL());
 			entity.addAttribute(configurationService.getProjectKeyTag(), getProjectEntityKey(project));
 			return entity;
 		}
