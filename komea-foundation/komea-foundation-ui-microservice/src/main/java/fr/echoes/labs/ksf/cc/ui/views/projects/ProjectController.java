@@ -135,8 +135,8 @@ public class ProjectController {
 		release.setReleaseId(releaseId);
 		release.setState(ReleaseState.STARTED);
 
-		final String currentUserName = userDetailsRetrievingService.getCurrentUserLogin();
-		
+		final String currentUserName = this.userDetailsRetrievingService.getCurrentUserLogin();
+
     	this.gate.dispatch(new CreateReleaseCommand(project, currentUserName, releaseVersion));
 
     	this.releaseDao.save(release);
@@ -165,8 +165,7 @@ public class ProjectController {
 
 		if (validateResults.isEmpty()) {
 			this.gate.dispatch(new FinishReleaseCommand(project, releaseVersion));
-
-			setReleaseState(releaseVersion, ReleaseState.FINISHED);
+			deleteFromStartedRelease(releaseVersion);
 
 		} else {
 			redirectAttributes.addFlashAttribute("validationErrors", validateResults);
@@ -175,15 +174,14 @@ public class ProjectController {
 		return new ModelAndView("redirect:/ui/projects/" + project.getKey());
 	}
 
-	private void setReleaseState(String releaseVersion, ReleaseState state) {
+	private void deleteFromStartedRelease(String releaseVersion) {
 		for (final Release release : this.releaseDao.findAll()) {
 			if (StringUtils.equals(release.getReleaseVersion(), releaseVersion)) {
-				release.setState(state);
-				this.releaseDao.save(release);
-				break;
+				this.releaseDao.delete(release);;
 			}
 		}
 	}
+
 
 	@RequestMapping(value = "/ui/projects/features/new")
 	public ModelAndView createFeature(@RequestParam("projectKey") final String projectKey, @RequestParam("featureId") final String featureId, @RequestParam("featureSubject") final String featureSubject) {
@@ -194,8 +192,8 @@ public class ProjectController {
 			throw new ProjectNotFoundException();
 		}
 
-		final String currentUserName = userDetailsRetrievingService.getCurrentUserLogin();
-		
+		final String currentUserName = this.userDetailsRetrievingService.getCurrentUserLogin();
+
         this.gate.dispatch(new CreateFeatureCommand(project, currentUserName, featureId, featureSubject));
 
 		return new ModelAndView("redirect:/ui/projects/" + project.getKey());

@@ -263,9 +263,6 @@ public class RedmineService implements IRedmineService {
 			// of versions as values. The version with another status than "open" are ignored.
 			for (final Version version : versions) {
 
-				System.out.println(version.getStatus());
-				version.setStatus( Version.STATUS_CLOSED);
-
 				if (!Version.STATUS_OPEN.equals(version.getStatus())) {
 					LOGGER.info("[redmine] The {} version \"{}\" was ignored.", version.getStatus(), version.getName());
 					continue;
