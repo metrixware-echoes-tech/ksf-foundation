@@ -2,7 +2,7 @@ package fr.echoes.labs.foremanclient.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class ComputeAttributesBridge extends ComputeAttributes {
+public class ComputeAttributesBridge {
 
 	@JsonProperty("type")
 	public String type = "bridge";
