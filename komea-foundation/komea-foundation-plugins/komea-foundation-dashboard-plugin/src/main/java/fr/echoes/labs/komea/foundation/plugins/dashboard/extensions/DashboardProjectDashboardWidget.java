@@ -26,6 +26,7 @@ import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.MenuAction;
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
 import fr.echoes.labs.ksf.cc.extensions.services.project.ProjectUtils;
 import fr.echoes.labs.ksf.cc.plugins.dashboard.services.DashboardConfigurationService;
+import fr.echoes.labs.ksf.cc.plugins.dashboard.services.DashboardLiferayService;
 import fr.echoes.labs.ksf.cc.plugins.dashboard.utils.DashboardUrlBuilder;
 
 
@@ -42,6 +43,9 @@ public class DashboardProjectDashboardWidget implements ProjectDashboardWidget {
 
 	@Autowired
 	private DashboardConfigurationService configurationService;
+	
+	@Autowired
+	private DashboardLiferayService liferayService;
 
 	@Autowired
 	IProjectDAO projectDao;
@@ -96,7 +100,7 @@ public class DashboardProjectDashboardWidget implements ProjectDashboardWidget {
 
 				if (project != null) {
 					
-					final String projectDashboardKey = project.getName();
+					final String projectDashboardKey = liferayService.getLiferaySiteName(project);
 
 					url = new DashboardUrlBuilder()
 						.setBaseUrl(configurationService.getUrl())

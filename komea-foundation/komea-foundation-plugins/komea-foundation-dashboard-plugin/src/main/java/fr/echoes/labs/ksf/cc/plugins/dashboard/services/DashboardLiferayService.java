@@ -5,6 +5,11 @@ import org.komea.liferay.client.model.KomeaLiferaySite;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.tocea.corolla.products.domain.Project;
+
+import fr.echoes.labs.ksf.cc.extensions.services.project.ProjectUtils;
+import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
+
 @Service
 public class DashboardLiferayService {
 	
@@ -14,14 +19,28 @@ public class DashboardLiferayService {
 	@Autowired
 	private DashboardClientFactory clientFactory;
 	
-	public void createSite(final String projectKey) throws Exception {
+	public String getLiferaySiteName(final ProjectDto project) {
+		return project.getName();
+	}
+	
+	public String getLiferaySiteName(final Project project) {
+		return project.getName();
+	}
+	
+	private String getEntityKey(final ProjectDto project) {
+		return ProjectUtils.createIdentifier(project.getKey());
+	}
+	
+	public void createSite(final ProjectDto project) throws Exception {
 		
 		LiferaySoapClient liferay = clientFactory.liferaySoapClient();
+		final String projectKey = getEntityKey(project);
+		final String siteName = getLiferaySiteName(project);
 		
 		KomeaLiferaySite site = new KomeaLiferaySite();
-		site.setSiteName(projectKey);
-		site.setSiteURL("/"+projectKey);
-		site.setSiteDescription(projectKey);
+		site.setSiteName(siteName);
+		site.setSiteURL("/"+siteName);
+		site.setSiteDescription(siteName);
 		site.setTemplateName(configuration.getLiferayDefaultTemplateName());
 		site.setUserGroupName(configuration.getLiferayDefaultUserGroupName());
 		site.setCompanyWebId(configuration.getLiferayDefaultCompanyWebId());
@@ -33,11 +52,12 @@ public class DashboardLiferayService {
 		
 	}
 	
-	public void deleteSite(final String projectKey) throws Exception {
+	public void deleteSite(final ProjectDto project) throws Exception {
 		
+		final String siteName = getLiferaySiteName(project);
 		LiferaySoapClient liferay = clientFactory.liferaySoapClient();
 		
-		liferay.deleteSite(projectKey, configuration.getLiferayDefaultCompanyWebId());
+		liferay.deleteSite(siteName, configuration.getLiferayDefaultCompanyWebId());
 		
 	}
 	
