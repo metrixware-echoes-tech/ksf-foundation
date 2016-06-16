@@ -82,7 +82,7 @@ public class DashboardService {
 		
 		final String projectType = configurationService.getProjectType();
 		final String projectName = project.getName();
-		final String projectKey = ProjectUtils.createIdentifier(projectName);
+		final String projectKey = ProjectUtils.createIdentifier(project.getKey());
 				
 		final Entity projectEntity = new Entity()
 			.setKey(projectKey)
