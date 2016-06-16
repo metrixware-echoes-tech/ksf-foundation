@@ -328,18 +328,19 @@ public class ForemanService implements IForemanService {
 		 newHost.root_pass = parameterObject.getRootPassword();
 
 		 final NetworkInterface eth0 = new NetworkInterface();
-		 eth0.subnet_id = null;
-		 eth0.domain_id = null;
-		 eth0.managed = "0";
-		 eth0.primary = "0";
-		 eth0.provision = "0";
 		 eth0.identifier = "eth0";
-		 eth0.compute_attributes = new ComputeAttributesBridge();
 		 newHost.interfaces_attributes.put("0", eth0 );
 
 		 final NetworkInterface eth1 = new NetworkInterface();
+		 eth1.subnet_id = null;
+		 eth1.domain_id = null;
+		 eth1.managed = "0";
+		 eth1.primary = "0";
+		 eth1.provision = "0";
 		 eth1.identifier = "eth1";
+		 eth1.compute_attributes = new ComputeAttributesBridge();
 		 newHost.interfaces_attributes.put("1", eth1 );
+
 
 		 Modules modules = null;
 		 boolean configureModules = true;
