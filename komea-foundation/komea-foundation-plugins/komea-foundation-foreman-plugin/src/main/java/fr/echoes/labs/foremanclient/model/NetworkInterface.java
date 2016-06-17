@@ -46,7 +46,7 @@ public class NetworkInterface {
 	public String attached_to = "";
 
 	@JsonProperty("compute_attributes")
-	public ComputeAttributes compute_attributes = new ComputeAttributes();
+	public Object compute_attributes = new ComputeAttributes();
 
 
 }
