@@ -54,6 +54,9 @@ public class DashboardConfigurationService {
     @Value("${ksf.dashboard.liferay.defaultUserGroupName}")
     private String liferayDefaultUserGroupName;
     
+    @Value("${ksf.dashboard.redmineProjectTag}")
+    private String redmineProjectTag;
+    
     @Value("${ksf.dashboard.metrics.averageTimeOnSite:false}")
     private boolean calculateAverageTimeOnSite;
 
@@ -118,6 +121,10 @@ public class DashboardConfigurationService {
 	
 	public String getTimeSerieURL() {
 		return timeSerieURL;
+	}
+	
+	public String getRedmineProjectTag() {
+		return redmineProjectTag;
 	}
 	
 	public boolean calculateAverageTimeOnSite() {

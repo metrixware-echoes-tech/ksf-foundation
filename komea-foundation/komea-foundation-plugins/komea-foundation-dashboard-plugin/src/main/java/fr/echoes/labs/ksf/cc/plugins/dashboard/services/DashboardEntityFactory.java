@@ -2,6 +2,7 @@ package fr.echoes.labs.ksf.cc.plugins.dashboard.services;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.komea.organization.model.Entity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.google.common.collect.Lists;
 
 import fr.echoes.labs.ksf.cc.extensions.gui.ProjectExtensionConstants;
+import fr.echoes.labs.ksf.cc.extensions.services.project.ProjectUtils;
 import fr.echoes.labs.ksf.cc.plugins.dashboard.entities.GitRepository;
 import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
 
@@ -20,7 +22,6 @@ public class DashboardEntityFactory {
 
 	public String getProjectEntityKey(final ProjectDto project) {
 		return project.getName();
-		//return ProjectUtils.createIdentifier(project.getKey());
 	}
 	
 	public Entity createProjectEntity(final ProjectDto project) {
@@ -33,6 +34,13 @@ public class DashboardEntityFactory {
 			.setKey(projectKey)
 			.setName(projectName)
 			.setType(projectType);
+		
+		final String redmineProjectTag = configurationService.getRedmineProjectTag();
+		
+		if (!StringUtils.isEmpty(redmineProjectTag)) {
+			final String redmineProjectKey = ProjectUtils.createIdentifier(project.getKey());			
+			projectEntity.addAttribute(redmineProjectTag, redmineProjectKey);
+		}
 		
 		return projectEntity;
 	}
