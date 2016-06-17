@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +23,9 @@ import com.tocea.corolla.products.domain.Project;
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.IProjectTabPanel;
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.MenuAction;
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
-import fr.echoes.labs.ksf.cc.extensions.services.project.ProjectUtils;
 import fr.echoes.labs.ksf.cc.plugins.dashboard.services.DashboardConfigurationService;
 import fr.echoes.labs.ksf.cc.plugins.dashboard.services.DashboardLiferayService;
 import fr.echoes.labs.ksf.cc.plugins.dashboard.utils.DashboardUrlBuilder;
-
 
 /**
  * @author dcollard
@@ -37,108 +34,110 @@ import fr.echoes.labs.ksf.cc.plugins.dashboard.utils.DashboardUrlBuilder;
 @Component
 public class DashboardProjectDashboardWidget implements ProjectDashboardWidget {
 
-	private static TemplateEngine templateEngine = createTemplateEngine();
+    private static TemplateEngine templateEngine = createTemplateEngine();
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(DashboardProjectDashboardWidget.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DashboardProjectDashboardWidget.class);
 
-	@Autowired
-	private DashboardConfigurationService configurationService;
-	
-	@Autowired
-	private DashboardLiferayService liferayService;
+    @Autowired
+    private DashboardConfigurationService configurationService;
 
-	@Autowired
-	IProjectDAO projectDao;
+    @Autowired
+    private DashboardLiferayService liferayService;
 
-	@Autowired
-	private MessageSource messageResource;
+    @Autowired
+    IProjectDAO projectDao;
 
-	@Override
-	public List<MenuAction> getDropdownActions() {
-		return null;
-	}
+    @Autowired
+    private MessageSource messageResource;
 
-	@Override
-	public String getHtmlPanelBody(String projectId) {;
-		return null;
-	}
+    @Override
+    public List<MenuAction> getDropdownActions() {
+        return null;
+    }
 
-	@Override
-	public String getIconUrl() {
-		return "/pictures/dashboard.png";
-	}
+    @Override
+    public String getHtmlPanelBody(String projectId) {;
+        return null;
+    }
 
-	@Override
-	public String getTitle() {
-		return new MessageSourceAccessor(this.messageResource).getMessage("foundation.dashboard");
-	}
+    @Override
+    public String getIconUrl() {
+        return "/pictures/dashboard.png";
+    }
 
+    @Override
+    public String getTitle() {
+        return new MessageSourceAccessor(this.messageResource).getMessage("foundation.dashboard");
+    }
 
-	@Override
-	public List<IProjectTabPanel> getTabPanels(final String projectKey) {
+    @Override
+    public List<IProjectTabPanel> getTabPanels(final String projectKey) {
 
-		final Project project = this.projectDao.findByKey(projectKey);
+        final Project project = this.projectDao.findByKey(projectKey);
 
+        final IProjectTabPanel iframePanel = new IProjectTabPanel() {
 
-		final IProjectTabPanel iframePanel = new IProjectTabPanel() {
+            @Override
+            public String getTitle() {
+                return new MessageSourceAccessor(DashboardProjectDashboardWidget.this.messageResource).getMessage("foundation.dashboard.tab.title");
+            }
 
-			@Override
-			public String getTitle() {
-				return new MessageSourceAccessor(DashboardProjectDashboardWidget.this.messageResource).getMessage("foundation.dashboard.tab.title");
-			}
+            @Override
+            public String getContent() {
 
-			@Override
-			public String getContent() {
+                final Context ctx = new Context();
 
-				final Context ctx = new Context();
+                final HttpServletRequest request
+                        = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
+                        .getRequest();
 
-				final HttpServletRequest request =
-						((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
-						.getRequest();
+                String url = DashboardProjectDashboardWidget.this.configurationService.getUrl();
 
-				String url = DashboardProjectDashboardWidget.this.configurationService.getUrl();
+                if (project != null) {
 
-				if (project != null) {
-					
-					final String projectDashboardKey = liferayService.getLiferaySiteName(project);
+                    final String projectDashboardKey = liferayService.getLiferaySiteName(project);
 
-					url = new DashboardUrlBuilder()
-						.setBaseUrl(configurationService.getUrl())
-						.setProjectKey(projectDashboardKey)
-						.build();
+                    url = new DashboardUrlBuilder()
+                            .setBaseUrl(configurationService.getUrl())
+                            .setProjectKey(projectDashboardKey)
+                            .build();
 
-					ctx.setVariable("projectDashboardKey", projectDashboardKey);
+                    ctx.setVariable("projectDashboardKey", projectDashboardKey);
 
-				}
+                }
 
-				LOGGER.info("[dashboard] project URL : {}", url);
-				ctx.setVariable("dashboardURL", url);
+                LOGGER.info("[dashboard] project URL : {}", url);
+                ctx.setVariable("dashboardURL", url);
 
-				return templateEngine.process("dashboardManagementPanel", ctx);
-			}
+                return templateEngine.process("dashboardManagementPanel", ctx);
+            }
 
-			@Override
-			public String getIconUrl() {
-				return DashboardProjectDashboardWidget.this.getIconUrl();
-			}
-		};
+            @Override
+            public String getIconUrl() {
+                return DashboardProjectDashboardWidget.this.getIconUrl();
+            }
+        };
 
-		return Lists.newArrayList(iframePanel);
-	}
+        return Lists.newArrayList(iframePanel);
+    }
 
-	private static TemplateEngine createTemplateEngine() {
+    private static TemplateEngine createTemplateEngine() {
 
-		final ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
-		templateResolver.setTemplateMode("XHTML");
-		templateResolver.setPrefix("templates/");
-		templateResolver.setSuffix(".html");
+        final ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
+        templateResolver.setTemplateMode("XHTML");
+        templateResolver.setPrefix("templates/");
+        templateResolver.setSuffix(".html");
 
-		final TemplateEngine templateEngine = new TemplateEngine();
-		templateEngine.setTemplateResolver(templateResolver);
+        final TemplateEngine templateEngine = new TemplateEngine();
+        templateEngine.setTemplateResolver(templateResolver);
 
-		return templateEngine;
+        return templateEngine;
 
-	}
+    }
 
+    @Override
+    public boolean hasHtmlPanelBody() {
+        return false;
+    }
 
 }

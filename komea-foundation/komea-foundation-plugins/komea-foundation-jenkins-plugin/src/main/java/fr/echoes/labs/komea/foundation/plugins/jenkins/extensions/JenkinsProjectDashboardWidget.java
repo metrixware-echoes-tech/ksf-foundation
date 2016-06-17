@@ -1,13 +1,22 @@
 package fr.echoes.labs.komea.foundation.plugins.jenkins.extensions;
 
+import com.google.common.collect.Lists;
+import com.tocea.corolla.products.dao.IProjectDAO;
+import com.tocea.corolla.products.domain.Project;
+import fr.echoes.labs.komea.foundation.plugins.jenkins.JenkinsExtensionException;
+import fr.echoes.labs.komea.foundation.plugins.jenkins.services.IJenkinsService;
+import fr.echoes.labs.komea.foundation.plugins.jenkins.services.JenkinsBuildInfo;
+import fr.echoes.labs.komea.foundation.plugins.jenkins.services.JenkinsConfigurationService;
+import fr.echoes.labs.komea.foundation.plugins.jenkins.services.JenkinsErrorHandlingService;
+import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.IProjectTabPanel;
+import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.MenuAction;
+import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.List;
-
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,19 +31,6 @@ import org.thymeleaf.context.Context;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
-import com.google.common.collect.Lists;
-import com.tocea.corolla.products.dao.IProjectDAO;
-import com.tocea.corolla.products.domain.Project;
-
-import fr.echoes.labs.komea.foundation.plugins.jenkins.JenkinsExtensionException;
-import fr.echoes.labs.komea.foundation.plugins.jenkins.services.IJenkinsService;
-import fr.echoes.labs.komea.foundation.plugins.jenkins.services.JenkinsBuildInfo;
-import fr.echoes.labs.komea.foundation.plugins.jenkins.services.JenkinsConfigurationService;
-import fr.echoes.labs.komea.foundation.plugins.jenkins.services.JenkinsErrorHandlingService;
-import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.IProjectTabPanel;
-import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.MenuAction;
-import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
-
 /**
  * @author dcollard
  *
@@ -42,159 +38,161 @@ import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWi
 @Component
 public class JenkinsProjectDashboardWidget implements ProjectDashboardWidget {
 
-	private static TemplateEngine templateEngine = createTemplateEngine();
+    private static TemplateEngine templateEngine = createTemplateEngine();
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(JenkinsProjectDashboardWidget.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(JenkinsProjectDashboardWidget.class);
 
-	@Autowired
-	private JenkinsConfigurationService configurationService;
+    @Autowired
+    private JenkinsConfigurationService configurationService;
 
-	@Autowired
-	private IJenkinsService jenkinsService;
+    @Autowired
+    private IJenkinsService jenkinsService;
 
-	@Autowired
-	private IProjectDAO projectDAO;
+    @Autowired
+    private IProjectDAO projectDAO;
 
-	@Autowired
-	private JenkinsErrorHandlingService errorHandler;
+    @Autowired
+    private JenkinsErrorHandlingService errorHandler;
 
-	@Autowired
-	private HttpServletRequest request;
+    @Autowired
+    private HttpServletRequest request;
 
-	@Autowired
-	private HttpServletResponse response;
+    @Autowired
+    private HttpServletResponse response;
 
-	@Autowired
-	private ServletContext servletContext;
+    @Autowired
+    private ServletContext servletContext;
 
-	@Autowired
-	IProjectDAO projectDao;
+    @Autowired
+    IProjectDAO projectDao;
 
-	@Autowired
-	private MessageSource messageResource;
+    @Autowired
+    private MessageSource messageResource;
 
-	@Override
-	public List<MenuAction> getDropdownActions() {
+    @Override
+    public List<MenuAction> getDropdownActions() {
 
-		return null;
-	}
+        return null;
+    }
 
-	@Override
-	public String getHtmlPanelBody(String projectId) {
+    @Override
+    public String getHtmlPanelBody(String projectId) {
 
-		final Project project = this.projectDAO.findOne(projectId);
+        final Project project = this.projectDAO.findOne(projectId);
 
-		final WebContext ctx = new WebContext(this.request, this.response, this.servletContext);
-		ctx.setVariable("projectId", projectId);
+        final WebContext ctx = new WebContext(this.request, this.response, this.servletContext);
+        ctx.setVariable("projectId", projectId);
 
-		final String projectName = project.getName();
+        final String projectName = project.getName();
 
-		try {
-			final List<JenkinsBuildInfo> buildInfo = this.jenkinsService.getBuildInfo(projectName);
+        try {
+            final List<JenkinsBuildInfo> buildInfo = this.jenkinsService.getBuildInfo(projectName);
 
-			final String baseUrl = getBaseUrl();
+            final String baseUrl = getBaseUrl();
 
-			ctx.setVariable("buildBase", baseUrl + "/ui/projects/" + project.getKey() + "?buildUrl=");
+            ctx.setVariable("buildBase", baseUrl + "/ui/projects/" + project.getKey() + "?buildUrl=");
 
-			ctx.setVariable("jenkinsBuildHistory", buildInfo);
-		} catch (final JenkinsExtensionException e) {
-			LOGGER.error("[Jenkins] Failed to retrieve build history", e);
-			this.errorHandler.registerError(e);
-		}
+            ctx.setVariable("jenkinsBuildHistory", buildInfo);
+        } catch (final JenkinsExtensionException e) {
+            LOGGER.error("[Jenkins] Failed to retrieve build history", e);
+            this.errorHandler.registerError(e);
+        }
 
-		ctx.setVariable("jenkinsError", this.errorHandler.retrieveError());
+        ctx.setVariable("jenkinsError", this.errorHandler.retrieveError());
 
-		return templateEngine.process("jenkinsPanel", ctx);
-	}
+        return templateEngine.process("jenkinsPanel", ctx);
+    }
 
-	private String getBaseUrl() {
-		return this.request.getContextPath();
-	}
+    private String getBaseUrl() {
+        return this.request.getContextPath();
+    }
 
+    @Override
+    public String getIconUrl() {
+        return "/pictures/jenkins.png";
+    }
 
-	@Override
-	public String getIconUrl() {
-		return "/pictures/jenkins.png";
-	}
+    @Override
+    public String getTitle() {
+        return new MessageSourceAccessor(JenkinsProjectDashboardWidget.this.messageResource).getMessage("foundation.jenkins");
+    }
 
-	@Override
-	public String getTitle() {
-		return new MessageSourceAccessor(JenkinsProjectDashboardWidget.this.messageResource).getMessage("foundation.jenkins") ;
-	}
+    @Override
+    public List<IProjectTabPanel> getTabPanels(final String projectKey) {
 
+        final IProjectTabPanel iframePanel = new IProjectTabPanel() {
 
-	@Override
-	public List<IProjectTabPanel> getTabPanels(final String projectKey) {
+            @Override
+            public String getTitle() {
+                return new MessageSourceAccessor(JenkinsProjectDashboardWidget.this.messageResource).getMessage("foundation.jenkins.tab.title");
+            }
 
-		final IProjectTabPanel iframePanel = new IProjectTabPanel() {
+            @Override
+            public String getContent() {
 
-			@Override
-			public String getTitle() {
-				return new MessageSourceAccessor(JenkinsProjectDashboardWidget.this.messageResource).getMessage("foundation.jenkins.tab.title") ;
-			}
+                final Context ctx = new Context();
 
-			@Override
-			public String getContent() {
+                final HttpServletRequest request
+                        = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
+                        .getRequest();
 
-				final Context ctx = new Context();
+                String url = JenkinsProjectDashboardWidget.this.configurationService.getUrl();
 
-				final HttpServletRequest request =
-						((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
-						.getRequest();
+                final String buildUrl = request.getParameter("buildUrl");
 
-				String url = JenkinsProjectDashboardWidget.this.configurationService.getUrl();
+                if (StringUtils.isNotEmpty(buildUrl)) {
 
-				final String buildUrl = request.getParameter("buildUrl");
+                    try {
+                        url = URLDecoder.decode(buildUrl, "UTF-8");
+                    } catch (final UnsupportedEncodingException e) {
+                        LOGGER.error("", e);
+                        url = JenkinsProjectDashboardWidget.this.configurationService.getUrl();
+                    }
+                } else {
+                    try {
+                        final Project project = JenkinsProjectDashboardWidget.this.projectDao.findByKey(projectKey);
+                        final String jobId = JenkinsProjectDashboardWidget.this.jenkinsService.getJobId(project.getName());
+                        if (StringUtils.isNotEmpty(jobId)) {
+                            url = url + "/job/" + jobId;
+                        }
+                    } catch (final JenkinsExtensionException e) {
+                        LOGGER.error("[Jenkins] failed to construct Jenkins project URL", e);
+                    }
+                }
 
-				if (StringUtils.isNotEmpty(buildUrl)) {
+                LOGGER.info("[jenkins] project URL : {}", url);
 
-					try {
-						url = URLDecoder.decode(buildUrl, "UTF-8");
-					} catch (final UnsupportedEncodingException e) {
-						LOGGER.error("", e);
-						url = JenkinsProjectDashboardWidget.this.configurationService.getUrl();
-					}
-				} else {
-					try {
-						final Project project = JenkinsProjectDashboardWidget.this.projectDao.findByKey(projectKey);
-						final String jobId = JenkinsProjectDashboardWidget.this.jenkinsService.getJobId(project.getName());
-						if (StringUtils.isNotEmpty(jobId)) {
-							url = url + "/job/" + jobId;
-						}
-					} catch (final JenkinsExtensionException e) {
-						LOGGER.error("[Jenkins] failed to construct Jenkins project URL", e);
-					}
-				}
+                ctx.setVariable("jenkinsURL", url);
 
-				LOGGER.info("[jenkins] project URL : {}", url);
+                return templateEngine.process("jenkinsManagementPanel", ctx);
+            }
 
-				ctx.setVariable("jenkinsURL", url);
+            @Override
+            public String getIconUrl() {
+                return JenkinsProjectDashboardWidget.this.getIconUrl();
+            }
+        };
 
-				return templateEngine.process("jenkinsManagementPanel", ctx);
-			}
+        return Lists.newArrayList(iframePanel);
+    }
 
-			@Override
-			public String getIconUrl() {
-				return JenkinsProjectDashboardWidget.this.getIconUrl();
-			}
-		};
+    private static TemplateEngine createTemplateEngine() {
 
-		return Lists.newArrayList(iframePanel);
-	}
+        final ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
+        templateResolver.setTemplateMode("XHTML");
+        templateResolver.setPrefix("templates/");
+        templateResolver.setSuffix(".html");
 
+        final TemplateEngine templateEngine = new TemplateEngine();
+        templateEngine.setTemplateResolver(templateResolver);
 
-	private static TemplateEngine createTemplateEngine() {
+        return templateEngine;
 
-		final ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
-		templateResolver.setTemplateMode("XHTML");
-		templateResolver.setPrefix("templates/");
-		templateResolver.setSuffix(".html");
+    }
 
-		final TemplateEngine templateEngine = new TemplateEngine();
-		templateEngine.setTemplateResolver(templateResolver);
-
-		return templateEngine;
-
-	}
+    @Override
+    public boolean hasHtmlPanelBody() {
+        return true;
+    }
 
 }

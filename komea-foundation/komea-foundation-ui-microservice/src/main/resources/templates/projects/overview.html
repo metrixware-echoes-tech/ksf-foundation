@@ -38,7 +38,7 @@
 
 									<div class="widget"
 										th:each="widget : ${@projectDashboardWidgets.getDashboardWidgets()}"
-										th:if="${widget.getHtmlPanelBody(projectData.project.id) != null}">
+										th:if="${widget.hasHtmlPanelBody()}">
 										<div class="panel panel-warning project-widget-panel">
 											<div class="panel-heading">
 												<img th:src="@{${widget.getIconUrl()}}" />
