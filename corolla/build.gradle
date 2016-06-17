@@ -1,8 +1,7 @@
 
 
 subprojects {
-        dependencies {
-	       version="0.3-SNAPSHOT"
+        dependencies {	       
 	       group = "fr.echoes.labs.ksf.corolla"
        
                compile("org.springframework.boot:spring-boot-starter-thymeleaf:${springBootVersion}")
