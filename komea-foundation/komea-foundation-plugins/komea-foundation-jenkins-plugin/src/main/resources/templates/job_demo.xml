@@ -1,0 +1,78 @@
+<project>
+	<actions />
+	<description />
+	<keepDependencies>false</keepDependencies>
+	<properties />
+	<scm class="hudson.plugins.git.GitSCM">
+		<configVersion>2</configVersion>
+		<userRemoteConfigs>
+			<hudson.plugins.git.UserRemoteConfig>
+				<url>${scmUrl}</url>
+			</hudson.plugins.git.UserRemoteConfig>
+		</userRemoteConfigs>
+		<branches>
+			<hudson.plugins.git.BranchSpec>
+				<name>${branchName}</name>
+			</hudson.plugins.git.BranchSpec>
+		</branches>
+		<doGenerateSubmoduleConfigurations>false
+		</doGenerateSubmoduleConfigurations>
+		<submoduleCfg class="list" />
+		<extensions>
+			<hudson.plugins.git.extensions.impl.PerBuildTag />
+		</extensions>
+	</scm>
+	<canRoam>true</canRoam>
+	<disabled>false</disabled>
+	<blockBuildWhenDownstreamBuilding>false
+	</blockBuildWhenDownstreamBuilding>
+	<blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+	<triggers />
+	<concurrentBuild>false</concurrentBuild>
+	<builders>
+		<hudson.tasks.Shell>
+			<command>export JAVA_HOME="/usr/lib/jvm/java-8-oracle/jre/"
+cd "${WORKSPACE}"
+chmod +x ./${buildScript}
+./${buildScript}</command>
+		</hudson.tasks.Shell>
+		<sp.sd.nexusartifactuploader.NexusArtifactUploader plugin="nexus-artifact-uploader">
+			<protocol>https</protocol>
+			<nexusUrl>ksf-demo.metrixware.local/nexus</nexusUrl>
+			<nexusUser>ksfuser</nexusUser>
+			<nexusPassword>490ebc83a2b4dc242a957551e082a1a6024259ef9676058e72fc8851ac1bf22b</nexusPassword>
+			<groupId>kimcar</groupId>
+			<artifactId>loc</artifactId>
+			<version>${branchName}</version>
+			<packaging>war</packaging>
+			<repository>${projectKey}</repository>
+			<file>build/libs/kimcar-loc.war</file>
+			<credentialsId/>
+		</sp.sd.nexusartifactuploader.NexusArtifactUploader>		
+	</builders>
+	<publishers>
+		<org.jenkinsci.plugins.postbuildscript.PostBuildScript
+			plugin="postbuildscript">
+			<genericScriptFileList>
+				<org.jenkinsci.plugins.postbuildscript.GenericScript>
+					<filePath>${publishScript}</filePath>
+				</org.jenkinsci.plugins.postbuildscript.GenericScript>
+			</genericScriptFileList>
+			<scriptOnlyIfSuccess>true</scriptOnlyIfSuccess>
+			<scriptOnlyIfFailure>false</scriptOnlyIfFailure>
+			<markBuildUnstable>false</markBuildUnstable>
+		</org.jenkinsci.plugins.postbuildscript.PostBuildScript>
+	    <com.kiuwan.plugins.kiuwanJenkinsPlugin.KiuwanRecorder plugin="kiuwanJenkinsPlugin@1.3.5">
+	      <applicationName>Test</applicationName>
+	      <label></label>
+	      <encoding>UTF-8</encoding>
+	      <includes>**/src/**</includes>
+	      <excludes></excludes>
+	      <timeout>60</timeout>
+	      <unstableThreshold>20.0</unstableThreshold>
+	      <failureThreshold>30.0</failureThreshold>
+	      <measure>RISK_INDEX</measure>
+	    </com.kiuwan.plugins.kiuwanJenkinsPlugin.KiuwanRecorder>		
+	</publishers>
+	<buildWrappers />
+</project>

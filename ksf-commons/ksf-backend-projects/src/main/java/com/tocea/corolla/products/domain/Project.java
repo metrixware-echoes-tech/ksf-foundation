@@ -19,22 +19,29 @@
  */
 package com.tocea.corolla.products.domain;
 
-import com.google.common.collect.Lists;
-import com.tocea.corolla.utils.domain.ObjectValidation;
 import java.io.Serializable;
 import java.net.URL;
 import java.util.List;
+import java.util.Map;
+
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.tocea.corolla.utils.domain.ObjectValidation;
+
 @Document
 public class Project implements Serializable {
 
-    @Id
+	private static final long serialVersionUID = -6535458310998167446L;
+
+	@Id
     @Field("_id")
     private String id;
 
@@ -58,46 +65,49 @@ public class Project implements Serializable {
     private URL image;
 
     private List<String> tags = Lists.newArrayList();
+    
+    private Map<String, Object> otherAttributes = Maps.newHashMap();
+
+    private String parentId;
 
     public String getCategoryId() {
-        return categoryId;
+        return this.categoryId;
     }
 
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
     public String getId() {
-        return id;
+        return this.id;
     }
 
     public URL getImage() {
-        return image;
+        return this.image;
     }
 
     public String getKey() {
-        return key;
+        return this.key;
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public String getOwnerId() {
-        return ownerId;
+        return this.ownerId;
     }
 
     public String getStatusId() {
-        return statusId;
+        return this.statusId;
     }
 
     public List<String> getTags() {
-        return tags;
+        return this.tags;
     }
 
-    @Override
-    public String toString() {
-        return "Project{" + "id=" + id + ", key=" + key + ", name=" + name + ", statusId=" + statusId + ", categoryId=" + categoryId + ", ownerId=" + ownerId + ", description=" + description + ", image=" + image + ", tags=" + tags + '}';
+    public String getParentId() {
+    	return this.parentId;
     }
 
     public void setCategoryId(final String categoryId) {
@@ -136,4 +146,30 @@ public class Project implements Serializable {
         this.tags = tags;
     }
 
+    public void setParentId(final String parentId) {
+        this.parentId = parentId;
+    }
+    
+	public Map<String, Object> getOtherAttributes() {
+		return otherAttributes;
+	}
+
+	public void setOtherAttributes(Map<String, Object> otherAttributes) {
+		this.otherAttributes = otherAttributes;
+	}
+	
+	@Override
+    public String toString() {
+    	return "Project{" + "id=" + this.id +
+    			", key=" + this.key +
+    			", name=" + this.name +
+    			", statusId=" + this.statusId +
+    			", categoryId=" + this.categoryId +
+    			", ownerId=" + this.ownerId +
+    			", description=" + this.description +
+    			", image=" + this.image +
+    			", tags=" + this.tags +
+    			", parentId=" + this.parentId + '}';
+    }
+	
 }

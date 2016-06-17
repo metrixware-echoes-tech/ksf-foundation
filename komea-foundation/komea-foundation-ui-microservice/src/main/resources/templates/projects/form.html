@@ -1,0 +1,125 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout"
+        >
+    <head>
+        <title>New Project</title>
+    </head>
+<body>
+	
+	<div layout:fragment="content">	
+		<div class="content">
+		<form class="form-horizontal project-form" th:object="${project}"
+			th:attr="action=@{${#strings.isEmpty(project.id)} ? '/ui/projects/new' : '/ui/projects/edit/'}"
+			method="post" id="formCreateProject" action="">
+			
+			<div class="text-center">
+	            <h1 style="font-size:25px" th:text="#{foundation.projects.newProjectForm.title}">New project</h1>
+	        </div>	
+	        <div class="alert alert-info alert-dismissible" role="alert">
+			  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			  <span th:text="#{foundation.projects.newProjectForm.infoMessage}">To create a new project in Komea Foundation you will need to provide a project's name and select all the tools that will be used in the project (Foreman, Puppet, Redmine...)</span>
+			</div>
+	        <ul class="bg-danger" th:if="${#fields.hasErrors('global')}">
+          		<li th:each="err : ${#fields.errors('global')}" class="text-danger" th:text="${err}">Input is incorrect</li>
+         	</ul>
+			<fieldset>
+				<input type="hidden" name="id" id="id" th:value="${project.id}" />
+<!-- 				<div class="form-group"> -->
+<!-- 					<label class="col-md-3 control-label" for="key">Key</label> -->
+<!-- 					<div class="col-md-7"> -->
+<!-- 						<input id="name" name="name" placeholder="Project Key" class="form-control input-md" required="required" -->
+<!-- 							data-parsley-trigger="focusin focusout change" data-parsley-range="[3, 30]" type="text" th:field="*{key}" /> -->
+<!-- 						<span th:if="${#fields.hasErrors('key')}" th:errors="*{key}"></span> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+				<!-- Name input-->
+				
+				<div class="form-group">
+					<label class="col-md-3 control-label" for="name" th:text="#{foundation.projects.newProjectForm.name}">Name*</label>
+					<div class="col-md-7">
+						<input id="name" name="name" th:placeholder="#{foundation.projects.newProjectForm.name.placeHolder}" class="form-control input-md" required="required"
+							data-parsley-trigger="focusin focusout change" data-parsley-range="[3, 30]" type="text" th:field="*{name}" />
+						<span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-md-3 control-label" for="parentProject" th:text="#{foundation.projects.newProjectForm.parentProject}">Parent project</label>
+               		<div class="col-md-7">
+						<select class="form-control" id="parentId" name="parentId">
+							<option value=""></option>
+							<option value="" th:each="project : ${projects}"  th:value="${project.id}" th:text="${project.name}"></option>
+						</select>
+					</div>
+				</div>				
+				<div class="form-group">		
+					<label class="col-md-3 control-label" style="padding-top: 30px;" th:text="#{foundation.projects.newProjectForm.selectTool.infoMessage}">Select the tool(s) that will be used for this project:</label>
+	              <div class="col-sm-7">	              
+	              	<ul class="app-list">
+	              		<li th:each="widget : ${@projectDashboardWidgets.getDashboardWidgets()}" th:attr="data-item=@{${widget.getTitle()}}" class="active">
+	              			<img th:src="@{${widget.getIconUrl()}}"/>
+	              			<label th:text="@{${widget.getTitle()}}"></label>
+	              		</li>	              	
+	              	</ul>
+	              	<div class="hidden">
+	              		<input name="applications[]" id="applications_" type="checkbox" th:each="widget : ${@projectDashboardWidgets.getDashboardWidgets()}" th:value="@{${widget.getTitle()}}"/>
+	              	</div>
+	              </div>
+	            </div>																									
+				<!-- Button (Double) -->
+				<div class="form-group">
+					<label class="col-md-3 control-label" for="saveButton" />										
+					<div class="col-md-7">
+						<div class="pull-right">
+							<button id="saveButton" name="saveButton" class="btn btn-primary" th:text="#{foundation.projects.newProjectForm.createButton}">Create project</button>
+							<a th:href="@{/ui/projects/}" id="cancelButton" name="cancelButton" class="btn btn-default" th:text="#{foundation.projects.newProjectForm.cancelButton}">Cancel</a>
+						</div>
+					</div>
+				</div>
+			</fieldset>
+		</form>
+		</div>
+	</div>
+	<div layout:fragment="footer">	
+		<script type="text/javascript" th:inline="javascript">
+
+			$(document).ready(function() {
+				$('#formCreateProject').submit(function() {
+					displayLoadingScreen(/*[[#{foundation.projects.newProjectForm.creatingProjectMessage}]]*/, [[#{foundation.projects.newProjectForm.creatingProjectDetailMessage}]]);
+				});
+			});
+/* 			$(document).ready(function() {
+				$('.app-list li').click(function() {
+					if ($(this).hasClass('disabled')) {
+						return false;
+					}
+					selectItem(this);
+					var item = $(this).data('item');
+					if (item == "Foreman") {
+						selectItem($('.app-list li[data-item=Puppet]'));
+					}
+					if (item == "Puppet") {
+						selectItem($('.app-list li[data-item=Foreman]'));
+					}
+					return true;
+				});
+			});
+			function selectItem(obj) {
+				if ($(obj).hasClass('active')) {
+					$(obj).removeClass('active');
+				}else{
+					$(obj).addClass('active');	
+				}
+				var item = $(obj).data('item');
+				$('[name="extension_ids[]"]').each(function(i, input) {
+					if ($(input).val() == item) {
+						var checked = ($(input).prop('checked'));
+						$(input).prop('checked', !checked);
+					}
+				});
+			} */
+		</script>
+	</div>
+</body>
+</html>

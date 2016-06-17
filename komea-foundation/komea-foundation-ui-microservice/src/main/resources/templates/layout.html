@@ -1,0 +1,159 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      th:with="lang=${#locale.language}"
+      th:lang="${lang}">
+    <head>
+        <title>KSF</title>
+        <meta charset="UTF-8" />
+		<link rel="icon" type="image/png" th:href="@{/pictures/KSF-favicon.png}" href="../static/pictures/KSF-favicon.png" />
+        <!-- Bootstrap -->
+		<link th:href="@{/assets/bootstrap/css/bootstrap.min.css}" href="../static/assets/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+		<link th:href="@{/assets/bootstrap/css/bootstrap-theme.min.css}" href="../static/assets/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet" />
+		<!-- FontAwesome -->
+		<link th:href="@{/assets/components-font-awesome/css/font-awesome.css}" href="../static/assets/components-font-awesome/css/font-awesome.css" rel="stylesheet" type="text/css" />
+		<!-- Ionicons -->
+		<link th:href="@{/assets/ionicons/ionicons.css}" href="../static/assets/ionicons/ionicons.css" rel="stylesheet" type="text/css" />
+		<!-- jQuery TreeGrid -->
+		<link th:href="@{/assets/jquery-treegrid/jquery.treegrid.css}" href="../static/assets/jquery-treegrid/jquery.treegrid.css" rel="stylesheet" type="text/css" />
+		<!-- Custom Style -->
+		<link th:href="@{/css/styles.css}" href="../static/css/styles.css" rel="stylesheet" type="text/css" />
+		<link th:href="@{/css/local/komea-foundation.css}" href="../static/css/local/komea-foundation.css" rel="stylesheet" type="text/css"/>
+		<!-- Salvattore -->
+		<link th:href="@{/css/salvattore.css}" href="../static/css/salvattore.css" rel="stylesheet" type="text/css"/>		
+    </head>
+    <body th:with="currentUser=${@authService.getCurrentUser()}">
+
+    	<header>
+    	   <!--/*  The navbar */-->
+    	  <div th:include="nav :: navbar" />
+    	  <div th:include="nav :: breadcrumb" />
+    	</header>
+
+        <!-- Main content -->
+        <div layout:fragment="content" />
+
+		<!-- Loading Splash Screen -->
+		<aside class="loading-screen hidden" style="position:fixed; top:0; right:0; bottom:0; left:0; z-index:9999">
+			<div class="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4" style="position:absolute; top:50%; margin-top:-7em">
+				<div class="page-header">
+					<i class="text-primary fa fa-spin fa-fw pull-left fa-5x fa-spinner" style="text-shadow: 0px 0px 0.2ex;"></i>
+					<hgroup class="" style="text-shadow: 0px 0px 0.1ex;">
+						<h1 class="">
+							<span class="loading-screen-message">Loading...</span><br/>
+							<small></small>
+						</h1>
+					</hgroup>
+				</div>
+				<p class="loading-status text-info loading-screen-detail-message" style="text-align:center">
+					Page is loading, please wait. This may take up to several minutes.
+				</p>
+			</div>
+		</aside>
+
+        <!-- Footer -->
+		<footer th:include="footer :: footer" />
+
+        <!-- jQuery -->
+		<script th:src="@{/assets/jquery/jquery.js}" src="../static/assets/jquery/jquery.js" type="text/javascript" />
+		<script th:src="@{/assets/jquery-ui/jquery-ui.js}" src="../static/assets/jquery-ui/jquery-ui.js" type="text/javascript" />
+		<script th:src="@{/assets/jquery-resize/detect-element-resize.js}" src="../static/assets/detect-element-resize.js" type="text/javascript" />
+		
+		<!-- BootStrap -->
+		<script th:src="@{/assets/bootstrap/js/bootstrap.min.js}" src="../static/assets/boostrap/bootstrap.js" type="text/javascript" />
+
+		<!--  ZeroClipboard -->
+		<script th:src="@{/assets/zeroclipboard/ZeroClipboard.js}" src="../static/assets/ZeroClipboard.js" type="text/javascript" />
+
+		<!-- jQuery TreeGrid -->
+		<script th:src="@{/assets/jquery-treegrid/jquery.treegrid.js}" src="../static/assets/jquery-treegrid/jquery.treegrid.js" type="text/javascript" />
+		<script th:src="@{/assets/jquery-treegrid/jquery.treegrid.bootstrap3.js}" src="../static/assets/jquery-treegrid/jquery.treegrid.bootstrap3.js" type="text/javascript" />
+
+		<!--  Salvattore -->
+		<script th:src="@{/assets/salvattore/salvattore.js}" src="../static/assets/salvattore.js" type="text/javascript" />
+
+		<script type="text/javascript">
+			
+		    $(function () {
+			  $('[data-toggle="tooltip"]').tooltip();
+			});
+
+			function displayLoadingScreen(message, detailMessage) {
+				$('.content').addClass('hidden');
+				$('footer').addClass('hidden');
+				if (message) {
+					$('.loading-screen-message').text(message);
+				}
+				if (detailMessage) {
+					$('.loading-screen-detail-message').text(detailMessage);
+				}
+				$('.loading-screen').removeClass('hidden');
+			}
+
+			function hideLoadingScreen() {
+				$('.loading-screen').addClass('hidden');
+				$('.content').removeClass('hidden');
+				$('footer').removeClass('hidden');
+			}
+
+            $(document).ready(function() {
+            	
+            	// jQuery TreeGrid
+                $('.tree').treegrid({
+                    expanderExpandedClass: 'glyphicon glyphicon-minus text-muted',
+                    expanderCollapsedClass: 'glyphicon glyphicon-plus text-muted'
+                });
+
+                $(".featureInfoButton").click(function(){
+                	var id = $(this).data("id");
+                	var subject = $(this).data("subject");
+                	var gitBranch = $(this).data("gitbranch");
+                	var jenkinsJob = $(this).data("jenkinsjob");
+                	
+                	$('#infFeatureId').text(id);
+                	$('#infFeatureSubject').text(subject);
+                	$('#infFeatureJenkinsJob').text(jenkinsJob);
+                	$('#infFeatureGitbranch').text(gitBranch);
+                	$('#infFeatureCopyBtn').attr('data-clipboard-text', gitBranch);
+                	
+                	new ZeroClipboard( document.getElementById("infFeatureCopyBtn") );
+                	
+                	$('#featureInformation').modal('show');
+                }); 
+
+                
+                $(".releaseInfoButton").click(function(){
+                	var name = $(this).data("name");
+                	var gitBranch = $(this).data("gitbranch");
+                	var jenkinsJob = $(this).data("jenkinsjob");
+                	
+                	$('#infReleaseName').text(name);
+                	$('#infReleaseJenkinsJob').text(jenkinsJob);
+                	$('#infReleaseGitbranch').text(gitBranch);
+                	$('#infReleaseCopyBtn').attr('data-clipboard-text', gitBranch);
+                	
+                	new ZeroClipboard( document.getElementById("infReleaseCopyBtn") );
+                	
+                	$('#releaseInformation').modal('show');
+                }); 
+                
+
+                
+                <div th:if="${validationErrors != null}" th:remove="tag">
+                	$('#validationErrorsModal').modal('show');
+                </div>
+
+            });			
+
+		</script>
+		
+
+		<div layout:fragment="footer" />
+
+		<!--/* About modal. This modal is opened by using the "About" button in the header navbar */-->
+		<div th:include="nav :: aboutModal" />
+
+
+	</body>
+</html>

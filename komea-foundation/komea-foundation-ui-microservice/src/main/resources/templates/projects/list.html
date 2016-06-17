@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout"
+      >
+    <body>
+
+        <div layout:fragment="content">	
+            <main class="container-fluid" role="main">
+
+                <div class="content">
+                	<div class="alert alert-info alert-dismissible" role="alert">
+					  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					  <span th:text="#{foundation.projects.list.info.message.welcome}"></span>
+					</div>
+                    <h1 th:text="#{foundation.projects.list.projects}"></h1>
+
+                    <table class="table table-striped project-list tree">
+                        <thead>
+                            <tr>
+                                <th th:text="#{foundation.projects.list.column.name}">Name</th>
+                                <th th:text="#{foundation.projects.list.column.owner}">Owner</th>
+                                <!-- th>Tools</th>
+                                <th>Actions</th -->
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="prod : ${projects}" th:class="'treegrid-' + ${prod.getProject().getId()}" th:classappend="${prod.getProject().getParentId() != null ? 'treegrid-parent-' + prod.getProject().getParentId() : '' }">
+								<td>
+                                    <a th:text="${prod.project.name}" th:href="@{/ui/projects/}+${prod.project.key}"></a>
+                                </td>
+                                <td th:text="${#strings.isEmpty(prod.user.firstName) or #strings.isEmpty(prod.user.lastName) ? prod.user.login : prod.user.firstName +' '+ prod.user.lastName}"></td>
+                      			<td class="project-list-tools">
+                            		<a th:each="widget,it : ${@projectDashboardWidgets.getDashboardPanels(prod.project.key)}" th:href="@{/ui/projects/}+${prod.project.key}+${'#pluginTab'+it.index}"><img th:src="@{${widget.getIconUrl()}}" th:alt="@{${widget.getTitle()}}" data-toggle="tooltip" data-placement="bottom" th:title="@{${widget.getTitle()}}" /></a>
+                            	</td>
+                            	<td>
+                            		<!-- a th:href="@{/ui/projects/}+${prod.project.key}" class="btn btn-primary">
+                            			<span class="glyphicon glyphicon-eye-open"></span> Display
+                            		</a -->
+                                    <!-- a onclick="return confirm('Are you sure you want to remove project ?')" th:href="@{/ui/projects/delete/}+${prod.project.key}" class="btn btn-danger">
+                                        <span class="glyphicon glyphicon-trash"></span> Delete
+                                    </a -->
+                                    <a onclick="return confirm('Are you sure you want to remove project ?')" th:href="@{/ui/projects/delete/}+${prod.project.key}">
+                                        <span class="fa fa-trash"></span>&nbsp;<span th:text="#{foundation.projects.list.delete.text}"></span>
+                                    </a>                                    
+                            	</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </main>
+        </div>
+        <div layout:fragment="footer" >
+<!--            <script type="text/javascript" th:inline="text">
+                return confirm("Are you sure you want to remove project ?");
+               
+       
+            </script>-->
+        </div>
+    </body>
+</html>

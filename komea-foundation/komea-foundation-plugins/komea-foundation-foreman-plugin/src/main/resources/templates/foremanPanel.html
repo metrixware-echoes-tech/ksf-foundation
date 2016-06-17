@@ -1,0 +1,239 @@
+<div class="alert alert-danger" role="alert" th:text="${foremanError}" th:if="${foremanError != null}">
+</div>
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th th:text="${foundationForemanWidgetName}">Name</th>
+			<th th:text="${foundationForemanWigetOs}">Operating System</th>
+			<th>
+				<div class="text-right"></div>
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr th:each="target, row: ${targets}">
+			<td th:text="${target.getName()}"></td>
+			<td th:text="${target.getOperatingSystemName()}"></td>
+			<td class="text-right">
+				<a class="btn btn-default glyphicon glyphicon-pencil" disabled="disabled">&nbsp;Edit</a>				
+				<button type="button" class="btn btn-default glyphicon glyphicon-play btn-instantiate" role="button" th:attr="data-targetId=${target.getId()}" data-toggle="modal" data-target="#instantiateHostModal">&nbsp;Instantiate</button>				
+			</td>
+		</tr>
+	</tbody>
+</table>
+<div aria-hidden="true" aria-labelledby="myModalLabel" class="modal fade in" id="createTargetModal" role="dialog" tabindex="-1">
+   <div class="modal-dialog">
+     <div class="modal-content">
+       <div class="modal-header">
+         <button aria-hidden="true" class="close" data-dismiss="modal" type="button">&times;</button>
+         <h4 class="modal-title">Create Target</h4>
+       </div>
+       <form th:attr="action=@{/ui/foreman/targets/new}" class="form-horizontal" id="new_target" method="post" role="form" data-toggle="validator">
+       	<div class="modal-body">   	 
+           <div class="alert alert-info alert-dismissible" role="alert">
+			  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			  This widget allows to create a <strong>Target</strong>. A Target is a configuration that will be used afterward to create new VMs instantly. <br/>
+			  To create a target, you will need to specify :
+			  <ul>
+			  	<li><strong>a Name</strong> : This is how you want to call the Target.</li>
+			  	<li><strong>an Environment</strong> : This is the set of Puppet modules you want to apply on the Target.</li>
+			  	<li><strong>an Operating System</strong> : This is the Operating System you want for the future VM.</li>
+			  	<li><strong>a Compute Profile</strong> : This is the kind of VM you want to create.</li>
+			  	<li><strong>the parameters</strong> for the specific environment you choosed. The field is prefilled with the default values from the Puppet modules embedded in the selected Environment.</li>
+			  </ul>
+			</div>
+           <div class="form-group">
+             <label class="control-label col-sm-2" for="name" required="true">Name:</label>
+             <div class="col-sm-10">
+               <input class="form-control" id="name" name="name" placeholder="Target name" type="text" required="required" minlength="3" maxlength="100" pattern="^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$" title="Target name cannot contain special characters and must be between 3 and 100 characters in length."/>
+             </div>
+           </div>
+           <div class="form-group">
+             <label class="control-label col-sm-2" for="source">Environment</label>
+             <div class="col-sm-10">
+               <select class="form-control" id="environment" name ="environment" onchange="selectTargetEnvironment()">
+               		<option value=""></option>
+					<option th:each="env : ${environments}" th:value="${env.id}" th:text="${env.name}"></option>
+               </select>
+             </div>
+           </div>
+           <div class="form-group">
+             <label class="control-label col-sm-2" for="operatingsystem">Operating System</label>
+             <div class="col-sm-10">
+               <select class="form-control" id="operatingsystem" name="operatingsystem">
+                 <option th:each="operatingSystem : ${operatingSystems}"
+                        th:value="${operatingSystem.id} + '-' + ${operatingSystem.title}" th:text="${operatingSystem.title}"></option>
+
+               </select>
+             </div>
+           </div>
+           <div class="form-group">
+             <label class="control-label col-sm-2" for="computeprofiles" name="computeprofiles">Compute Profiles</label>
+             <div class="col-sm-10">
+               <select class="form-control" id="computeprofiles" name="computeprofiles">
+                 <option th:each="computeProfile : ${computeProfiles}"
+                        th:value="${computeProfile.id}" th:text="${computeProfile.name}"></option>
+               </select>
+             </div>
+           </div>
+           <div class="form-group">
+             <div class="col-sm-12">
+               <textarea class="form-control" id="puppetConfiguration" name="puppetConfiguration" rows="15" placeholder="In this text field, you can set the parameters for the specific environment you choosed. The field is prefilled with the default values from the Puppet modules embedded in the selected Environment.">
+               </textarea>
+             </div>
+           </div>           
+           <input name="projectId" type="hidden" th:value="${projectId}"/>        
+       	</div>
+       	<div class="modal-footer">
+         	<button class="btn btn-default" data-dismiss="modal" type="button">Cancel</button>
+			<button class="btn btn-primary" type="submit">Create</button>
+       	</div>
+       </form>
+     </div>
+   </div>
+ </div>
+ <div aria-hidden="true" aria-labelledby="myModalLabel" class="modal fade in" id="createEnvModal" role="dialog" tabindex="-1" style="padding-left: 15px;">
+   <div class="modal-dialog">
+     <div class="modal-content">
+       <div class="modal-header">
+         <button aria-hidden="true" class="close" data-dismiss="modal" type="button">&times;</button>
+         <h4 class="modal-title">Create Environment</h4>
+       </div>
+       <form th:attr="action=@{/ui/foreman/environment/new}" class="form-horizontal" id="new_env" method="post" role="form" data-toggle="validator">
+	       <div class="modal-body">	         
+	           <div class="alert alert-info alert-dismissible" role="alert">
+				  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				  This widget allows to create an <strong>Environment</strong>. This Environment is a list of Puppet modules with their version. It can be used to chose the available modules when a Target is created. <br/>
+				  To create an environment, you can choose an already existing Environment <strong>(Source Environment)</strong> to create a new one. It is faster than creating a new one from scratch. <br/>
+				  An environment must have :
+				  <ul>
+				  	<li><strong>a Name</strong> : This is how you want to call the Environment.</li>
+				  	<li><strong>a Description</strong> : You can describe the Environment you want. An example is already in the field. You can choose among already existing environment to prefill this field.</li>
+				  </ul>
+				</div>
+	           <div class="form-group">
+	             <label class="control-label col-sm-2" for="source">Source Environment</label>
+	             <div class="col-sm-10">
+	               <select class="form-control" id="env_source" onchange="selectSource()">
+	               	<option value=""></option>
+	               	<option th:each="env : ${environments}" th:value="${env.id}" th:text="${env.name}"></option>
+	               </select>
+	             </div>
+	           </div>
+	           <div class="form-group">
+	           	<label class="control-label col-sm-2" for="source">Name</label>
+	            <div class="col-sm-10">
+	               <input class="form-control" id="envName" name="name" placeholder="Environment Name" type="text" required="required" minlength="3" maxlength="100" pattern="^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9])\\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\\-]*[A-Za-z0-9])$" title="Environment name cannot contain special characters and must be between 3 and 100 characters in length."/>
+	            </div>
+	           </div>
+	           <div class="form-group">
+	             <div class="col-sm-12">
+	               <textarea class="form-control" id="env_configuration" name="configuration" rows="15" required="required">{
+  "modules": [
+    {
+      "name": "",
+      "version": ""
+    }
+  ]
+}
+	               </textarea>
+	             </div>
+	           </div>
+	           <input name="projectId" type="hidden" th:value="${projectId}"/>	        
+	       </div>
+	       <div class="modal-footer">
+	         <button class="btn btn-default" data-dismiss="modal" type="button">Cancel</button>
+	         <button class="btn btn-primary" type="submit">Create</button>
+	       </div>
+     </form>
+    </div>
+  </div>
+</div>
+
+
+ <div aria-hidden="true" aria-labelledby="myModalLabel" class="modal fade in" id="instantiateHostModal" role="dialog" tabindex="-1" style="padding-left: 15px;">
+   <div class="modal-dialog">
+     <div class="modal-content">
+       <div class="modal-header">
+         <button aria-hidden="true" class="close" data-dismiss="modal" type="button">&times;</button>
+         <h4 class="modal-title">Instantiate Host</h4>
+       </div>
+       <div class="modal-body">
+         <form th:attr="action=@{/ui/foreman/targets/instantiate}" class="form-horizontal" id="instantiate_host" method="post" role="form"  data-toggle="validator">
+           <div class="form-group">
+           		<label class="control-label col-sm-2" for="hostName">Name</label>
+            		<div class="col-sm-10">
+            			<input class="form-control" id="hostName" name="hostName" placeholder="Host Name" type="text" required="required"/>
+            	</div>
+           </div>
+           <div class="form-group">
+              	<label class="control-label col-sm-2" for="hostName">Password</label>
+              	<div class="col-sm-10">
+                	<input class="form-control" id="hostPass" name="hostPass" placeholder="rootroot" type="password" />
+              	</div>
+            	<input name="projectId" type="hidden" th:value="${projectId}"/>
+            	<input name="targetId" id="targetId" type="hidden" value="" />
+           </div>
+	       <div class="modal-footer">
+    	     <button class="btn btn-default" data-dismiss="modal" type="button">Cancel</button>
+        	 <button class="btn btn-primary" type="submit">Instantiate</button>
+       		</div>
+         </form>
+       </div>
+     </div>
+   </div>
+ </div>
+ 
+<script type="text/javascript" th:inline="text">
+
+	var restAPI = {
+        'puppetClassParameters': '[[@{/rest/foreman/puppet_class_parameters/}]]',
+        'environments': '[[@{/rest/foreman/environments/}]]'
+    }
+
+	document.addEventListener("DOMContentLoaded", function(event) { 
+	
+		$(".btn-instantiate").click(function() {
+			 var targetId = $(this).attr("data-targetId");
+			 alert
+			 $("#targetId").attr("value", targetId);
+		});	
+
+	});	
+
+	function displayCreateTargetModal() {
+		$('#createTargetModal').modal('show');
+	}
+	
+	function displayCreateEnvModal() {
+		$('#createEnvModal').modal('show');
+	}
+	
+	function selectTargetEnvironment() {
+		var sourceId = $('#environment').val();
+		if (sourceId != "") {
+		
+			$.get(restAPI.puppetClassParameters+sourceId, function(data) {
+				if (data) {
+					$('#puppetConfiguration').val(data);
+				}
+			});
+		}else{
+			$('#env_configuration').val("");
+		}
+	}	
+	
+	function selectSource() {
+		var sourceId = $('#env_source').val();
+		if (sourceId != "") {
+			$.get(restAPI.environments+sourceId, function(data) {
+				if (data) {
+					$('#env_configuration').val(data.configuration);
+				}
+			});
+		}else{
+			$('#env_configuration').val("");
+		}
+	}
+	
+</script>

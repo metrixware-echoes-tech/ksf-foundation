@@ -1,0 +1,18 @@
+
+apply plugin: 'java'
+apply plugin: 'groovy'
+
+dependencies {
+
+  // KSF modules
+  compile project(":ksf-commons:ksf-backend-utils")
+
+  // test frameworks
+  testCompile("org.seleniumhq.selenium:selenium-java:${TEST_SELENIUM}")
+  testCompile("net.anthavio:phanbedder-${TEST_PHANTOMJS}:${TEST_PHANBEDDER}")
+  testCompile("com.codeborne:phantomjsdriver:${TEST_PHANTOMJS_DRIVER}")
+  
+  // other libraries
+  testCompile("com.pholser:property-binder:4.0")
+
+}

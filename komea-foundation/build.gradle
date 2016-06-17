@@ -1,0 +1,22 @@
+
+subprojects {
+
+ group = "com.echoeslab.ksf.commandAndControl"
+
+
+ dependencies {
+  
+       
+
+
+ }
+}
+
+
+
+
+
+
+
+
+

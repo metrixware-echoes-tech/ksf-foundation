@@ -1,0 +1,101 @@
+
+project.description = "Komea Software Factory : Komea Foundation"
+
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }        
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath("gradle.plugin.com.craigburke.gradle:bower-installer-gradle:2.5.1")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'groovy'
+apply plugin: 'spring-boot'
+apply plugin: 'com.craigburke.bower-installer'
+
+/* Install Bower dependencies during build */
+processResources.dependsOn bowerInstall
+
+/* Clean Bower dependencies during a Gradle Clean task */
+clean.dependsOn bowerClean
+
+configurations { providedRuntime }
+
+if (!hasProperty('mainClass')) {
+    ext.mainClass = 'fr.echoes.labs.ksf.cc.KomeaFoundationGuiApplication'
+}
+
+bootRepackage {
+    mainClass = 'fr.echoes.labs.ksf.cc.KomeaFoundationGuiApplication'
+}
+build.dependsOn bootRepackage
+
+dependencies {
+
+    compile project(":ksf-commons:ksf-backend-microservice")
+    compile project(":komea-foundation:komea-foundation-softwarefactory")
+    compile project(":komea-foundation:komea-foundation-plugin-api")
+
+    // Plugins preloaded
+    compile project(":komea-foundation:komea-foundation-plugins:komea-foundation-foreman-plugin")
+    compile project(":komea-foundation:komea-foundation-plugins:komea-foundation-puppet-plugin")
+    compile project(":komea-foundation:komea-foundation-plugins:komea-foundation-jenkins-plugin")
+    compile project(":komea-foundation:komea-foundation-plugins:komea-foundation-redmine-plugin")
+    compile project(":komea-foundation:komea-foundation-plugins:komea-foundation-git-plugin")
+    compile project(":komea-foundation:komea-foundation-plugins:komea-foundation-nexus-plugin")
+    compile project(":komea-foundation:komea-foundation-plugins:komea-foundation-dashboard-plugin")
+
+    compile("org.springframework.boot:spring-boot-starter-thymeleaf:${springBootVersion}")
+    providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
+
+    // Test Frameworks
+    testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
+
+}
+
+configurations.all { exclude group: 'com.google.gwt' }
+
+bower {
+
+    installBase = 'src/main/resources/static/assets/'
+
+  'bootstrap'('3.3.2') {
+        source 'dist/**'
+    }
+
+  'jquery'('2.0.2')
+  
+  'jquery-ui'('1.11.3')
+  
+  'jquery-resize'('https://github.com/sdecima/javascript-detect-element-resize.git')
+  'components-font-awesome'('4.6.3') {
+        source 'css/**' >> 'css/'
+        source 'fonts/**' >> 'fonts/'
+    }
+
+  'ionicons'('2.0.1')
+  'zeroclipboard'('2.2.0')
+
+  'salvattore'('1.0.9')
+  
+  'jquery-treegrid'('0.3.0') {
+        source 'js/**'
+        source 'css/**'
+    }
+}
+
+processResources {
+    filesMatching("application.properties") {
+        expand(
+        "build_version": project.version, 
+        "build_timestamp": new Date().format('yyyyMMddHHmmss')
+        ) 
+    }
+}
