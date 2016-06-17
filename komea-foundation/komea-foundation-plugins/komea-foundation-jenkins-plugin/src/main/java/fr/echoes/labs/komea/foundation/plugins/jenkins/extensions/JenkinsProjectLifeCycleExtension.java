@@ -14,18 +14,18 @@ import com.tocea.corolla.products.dao.IProjectDAO;
 import fr.echoes.labs.komea.foundation.plugins.jenkins.JenkinsExtensionException;
 import fr.echoes.labs.komea.foundation.plugins.jenkins.services.IJenkinsService;
 import fr.echoes.labs.komea.foundation.plugins.jenkins.services.JenkinsErrorHandlingService;
-import fr.echoes.labs.ksf.extensions.annotations.Extension;
 import fr.echoes.labs.ksf.extensions.projects.IProjectLifecycleExtension;
 import fr.echoes.labs.ksf.extensions.projects.NotifyResult;
 import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
 import fr.echoes.labs.ksf.users.security.api.ICurrentUserService;
+import fr.echoes.labs.pluginfwk.api.plugin.Plugin;
 
 /**
  * @author dcollard
  *
  */
 @Order(value=3)
-@Extension
+@Plugin
 public class JenkinsProjectLifeCycleExtension implements IProjectLifecycleExtension {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(JenkinsProjectLifeCycleExtension.class);

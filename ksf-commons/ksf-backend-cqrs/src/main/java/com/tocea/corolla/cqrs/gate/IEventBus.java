@@ -6,6 +6,14 @@ package com.tocea.corolla.cqrs.gate;
 public interface IEventBus {
 
 	/**
+	 * Dispatch an error event to warn of an exception.
+	 *
+	 * @param exception
+	 *            the e
+	 */
+	void dispatchErrorEvent(Exception exception);
+
+	/**
 	 * Dispatches an event into the bus.
 	 *
 	 * @param _event

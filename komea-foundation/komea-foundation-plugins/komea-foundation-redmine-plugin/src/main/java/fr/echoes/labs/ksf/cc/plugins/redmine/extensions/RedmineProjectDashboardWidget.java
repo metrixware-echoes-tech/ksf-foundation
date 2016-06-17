@@ -27,7 +27,6 @@ import com.tocea.corolla.products.domain.Project;
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.IProjectTabPanel;
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.MenuAction;
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
-import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineExtensionException;
 import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineIssue;
 import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineQuery;
 import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineQuery.Builder;
@@ -42,37 +41,50 @@ import fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineErrorHandlingServic
 @Component
 public class RedmineProjectDashboardWidget implements ProjectDashboardWidget {
 
-	private static TemplateEngine templateEngine = createTemplateEngine();
+	private static TemplateEngine	templateEngine	= createTemplateEngine();
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(RedmineProjectDashboardWidget.class);
+	private static final Logger		LOGGER			= LoggerFactory.getLogger(RedmineProjectDashboardWidget.class);
 
-	@Autowired
-	private RedmineConfigurationService configurationService;
+	private static TemplateEngine createTemplateEngine() {
 
-	@Autowired
-	private IProjectDAO projectDAO;
+		final ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
+		templateResolver.setTemplateMode("XHTML");
+		templateResolver.setPrefix("templates/");
+		templateResolver.setSuffix(".html");
 
-	@Autowired
-	private RedmineErrorHandlingService errorHandler;
+		final TemplateEngine templateEngine = new TemplateEngine();
+		templateEngine.setTemplateResolver(templateResolver);
 
-	@Autowired
-	private HttpServletRequest request;
+		return templateEngine;
 
-	@Autowired
-	private HttpServletResponse response;
-
-	@Autowired
-	private ServletContext servletContext;
+	}
 
 	@Autowired
-	private IRedmineService redmineService;
+	private RedmineConfigurationService	configurationService;
 
 	@Autowired
-	IProjectDAO projectDao;
+	private IProjectDAO					projectDAO;
 
 	@Autowired
-	private MessageSource messageResource;
+	private RedmineErrorHandlingService	errorHandler;
 
+	@Autowired
+	private HttpServletRequest			request;
+
+	@Autowired
+	private HttpServletResponse			response;
+
+	@Autowired
+	private ServletContext				servletContext;
+
+	@Autowired
+	private IRedmineService				redmineService;
+
+	@Autowired
+	IProjectDAO							projectDao;
+
+	@Autowired
+	private MessageSource				messageResource;
 
 	@Override
 	public List<MenuAction> getDropdownActions() {
@@ -81,7 +93,7 @@ public class RedmineProjectDashboardWidget implements ProjectDashboardWidget {
 	}
 
 	@Override
-	public String getHtmlPanelBody(String projectId) {
+	public String getHtmlPanelBody(final String projectId) {
 
 		final Project project = this.projectDAO.findOne(projectId);
 		final WebContext ctx = new WebContext(this.request, this.response, this.servletContext);
@@ -101,16 +113,13 @@ public class RedmineProjectDashboardWidget implements ProjectDashboardWidget {
 
 			final MessageSourceAccessor messageSourceAccessor = new MessageSourceAccessor(this.messageResource);
 
-
 			ctx.setVariable("foundationRedmineWidgetTargetVersion", messageSourceAccessor.getMessage("foundation.redmine.widget.targetVersion"));
 			ctx.setVariable("foundationRedmineWidgetStatus", messageSourceAccessor.getMessage("foundation.redmine.widget.status"));
 			ctx.setVariable("foundationRedmineWidgetPriority", messageSourceAccessor.getMessage("foundation.redmine.widget.priority"));
 			ctx.setVariable("foundationRedmineWidgetSubject", messageSourceAccessor.getMessage("foundation.redmine.widget.subject"));
 			ctx.setVariable("foundationRedmineWidgetAssignedTo", messageSourceAccessor.getMessage("foundation.redmine.widget.assignedTo"));
 
-
-			final String baseUrl = getBaseUrl(this.request);
-
+			final String baseUrl = this.getBaseUrl(this.request);
 
 			ctx.setVariable("issuesBase", baseUrl + "/ui/projects/" + project.getKey() + "?redmineIssue=");
 
@@ -118,17 +127,12 @@ public class RedmineProjectDashboardWidget implements ProjectDashboardWidget {
 
 		} catch (final Exception e) {
 			LOGGER.error("[Redmine] Failed to list issues for project: " + projectName, e);
-			this.errorHandler.registerError(e.getMessage());
+			this.errorHandler.registerErrorMessage(e.getMessage());
 		}
 
 		ctx.setVariable("redmineError", this.errorHandler.retrieveError());
 
 		return templateEngine.process("redminePanel", ctx);
-	}
-
-
-	private String getBaseUrl(HttpServletRequest  request) {
-		return request.getContextPath();
 	}
 
 	@Override
@@ -137,30 +141,16 @@ public class RedmineProjectDashboardWidget implements ProjectDashboardWidget {
 	}
 
 	@Override
-	public String getTitle() {
-		return new MessageSourceAccessor(this.messageResource).getMessage("foundation.redmine") ;
-	}
-
-
-	@Override
 	public List<IProjectTabPanel> getTabPanels(final String projectKey) {
 
 		final IProjectTabPanel iframePanel = new IProjectTabPanel() {
-
-			@Override
-			public String getTitle() {
-
-				return new MessageSourceAccessor(RedmineProjectDashboardWidget.this.messageResource).getMessage("foundation.redmine.tab.title");
-			}
 
 			@Override
 			public String getContent() {
 
 				final Context ctx = new Context();
 
-				final HttpServletRequest request =
-						((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
-						.getRequest();
+				final HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
 
 				String url = RedmineProjectDashboardWidget.this.configurationService.getUrl();
 
@@ -177,7 +167,7 @@ public class RedmineProjectDashboardWidget implements ProjectDashboardWidget {
 							if (StringUtils.isNotEmpty(projectId)) {
 								url += "/projects/" + projectId;
 							}
-						} catch (final RedmineExtensionException e) {
+						} catch (final Exception e) {
 							LOGGER.error("[Redmine] failed to construct Redmine project URL", e);
 						}
 					}
@@ -194,24 +184,29 @@ public class RedmineProjectDashboardWidget implements ProjectDashboardWidget {
 			public String getIconUrl() {
 				return RedmineProjectDashboardWidget.this.getIconUrl();
 			}
+
+			@Override
+			public String getTitle() {
+
+				return new MessageSourceAccessor(RedmineProjectDashboardWidget.this.messageResource).getMessage("foundation.redmine.tab.title");
+			}
 		};
 
 		return Lists.newArrayList(iframePanel);
 	}
 
+	@Override
+	public String getTitle() {
+		return new MessageSourceAccessor(this.messageResource).getMessage("foundation.redmine");
+	}
 
-	private static TemplateEngine createTemplateEngine() {
+	@Override
+	public String getWidgetId() {
+		return "redmine";
+	}
 
-		final ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
-		templateResolver.setTemplateMode("XHTML");
-		templateResolver.setPrefix("templates/");
-		templateResolver.setSuffix(".html");
-
-		final TemplateEngine templateEngine = new TemplateEngine();
-		templateEngine.setTemplateResolver(templateResolver);
-
-		return templateEngine;
-
+	private String getBaseUrl(final HttpServletRequest request) {
+		return request.getContextPath();
 	}
 
 }

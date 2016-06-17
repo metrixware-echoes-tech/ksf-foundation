@@ -5,14 +5,14 @@ import org.springframework.core.annotation.Order;
 
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.IProjectDashboardExtension;
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.IProjectDashboardWidgets;
-import fr.echoes.labs.ksf.extensions.annotations.Extension;
+import fr.echoes.labs.pluginfwk.api.plugin.Plugin;
 
 /**
  * @author dcollard
  *
  */
 @Order(value=1)
-@Extension
+@Plugin
 public class RedmineProjectDashboardExtension implements IProjectDashboardExtension {
 
 	@Autowired

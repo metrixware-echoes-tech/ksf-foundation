@@ -5,6 +5,8 @@ import java.io.Serializable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 
+import fr.echoes.labs.pluginfwk.api.plugin.propertystorage.ICustomDataDao;
+
 public class CustomDataDao<D, K extends Serializable> implements ICustomDataDao<D, K> {
 
 	private final MongoTemplate	mongoTemplate;

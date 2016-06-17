@@ -5,10 +5,10 @@ import org.springframework.core.annotation.Order;
 
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.IProjectDashboardExtension;
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.IProjectDashboardWidgets;
-import fr.echoes.labs.ksf.extensions.annotations.Extension;
+import fr.echoes.labs.pluginfwk.api.plugin.Plugin;
 
 @Order(value=3)
-@Extension
+@Plugin
 public class JenkinsProjectDashboardExtension implements IProjectDashboardExtension {
 
 	@Autowired

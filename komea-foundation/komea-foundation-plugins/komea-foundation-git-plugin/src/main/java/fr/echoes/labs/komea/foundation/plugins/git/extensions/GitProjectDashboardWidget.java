@@ -39,86 +39,9 @@ import fr.echoes.labs.ksf.users.security.api.ICurrentUserService;
 @Component
 public class GitProjectDashboardWidget implements ProjectDashboardWidget {
 
-	private static TemplateEngine templateEngine = createTemplateEngine();
+	private static TemplateEngine	templateEngine	= createTemplateEngine();
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(GitProjectDashboardWidget.class);
-
-	@Autowired
-	private GitConfigurationService config;
-
-	@Autowired
-	private IProjectDAO projectDAO;
-
-	@Autowired
-	private GitErrorHandlingService errorHandler;
-
-	@Autowired
-	private HttpServletRequest request;
-
-	@Autowired
-	private HttpServletResponse response;
-
-	@Autowired
-	private ServletContext servletContext;
-
-	@Autowired
-	private MessageSource messageResource;
-
-	@Override
-	public List<MenuAction> getDropdownActions() {
-
-		return null;
-	}
-
-	private ICurrentUserService currentUserService;
-
-	@Autowired
-	private ApplicationContext applicationContext;
-
-	public void init() {
-
-		if (this.currentUserService == null) {
-			this.currentUserService = this.applicationContext.getBean(ICurrentUserService.class);
-		}
-	}
-
-
-	@Override
-	public String getHtmlPanelBody(String projectId) {
-
-		final Project project = this.projectDAO.findOne(projectId);
-
-		final WebContext ctx = new WebContext(this.request, this.response, this.servletContext);
-		ctx.setVariable("projectId", projectId);
-
-		final String projectName = project.getName();
-
-		ctx.setVariable("gitRepoUrl", getProjectScmUrl(projectName));
-
-		ctx.setVariable("gitError", this.errorHandler.retrieveError());
-
-		ctx.setVariable("copyToClipboard", new MessageSourceAccessor(this.messageResource).getMessage("foundation.git.copyToClipboard"));
-
-		return templateEngine.process("gitPanel", ctx);
-	}
-
-	@Override
-	public String getIconUrl() {
-		return "/pictures/git.png";
-	}
-
-	@Override
-	public String getTitle() {
-		return new MessageSourceAccessor(this.messageResource).getMessage("foundation.git");
-	}
-
-
-	@Override
-	public List<IProjectTabPanel> getTabPanels(final String projectKey) {
-
-		return Lists.newArrayList();
-	}
-
+	private static final Logger		LOGGER			= LoggerFactory.getLogger(GitProjectDashboardWidget.class);
 
 	private static TemplateEngine createTemplateEngine() {
 
@@ -134,18 +57,97 @@ public class GitProjectDashboardWidget implements ProjectDashboardWidget {
 
 	}
 
-	private String getProjectScmUrl(String projectName) {
-		init();
+	@Autowired
+	private GitConfigurationService	config;
+
+	@Autowired
+	private IProjectDAO				projectDAO;
+
+	@Autowired
+	private GitErrorHandlingService	errorHandler;
+
+	@Autowired
+	private HttpServletRequest		request;
+
+	@Autowired
+	private HttpServletResponse		response;
+
+	@Autowired
+	private ServletContext			servletContext;
+
+	@Autowired
+	private MessageSource			messageResource;
+
+	private ICurrentUserService		currentUserService;
+
+	@Autowired
+	private ApplicationContext		applicationContext;
+
+	@Override
+	public List<MenuAction> getDropdownActions() {
+
+		return null;
+	}
+
+	@Override
+	public String getHtmlPanelBody(final String projectId) {
+
+		final Project project = this.projectDAO.findOne(projectId);
+
+		final WebContext ctx = new WebContext(this.request, this.response, this.servletContext);
+		ctx.setVariable("projectId", projectId);
+
+		final String projectName = project.getName();
+
+		ctx.setVariable("gitRepoUrl", this.getProjectScmUrl(projectName));
+
+		ctx.setVariable("gitError", this.errorHandler.retrieveError());
+
+		ctx.setVariable("copyToClipboard", new MessageSourceAccessor(this.messageResource).getMessage("foundation.git.copyToClipboard"));
+
+		return templateEngine.process("gitPanel", ctx);
+	}
+
+	@Override
+	public String getIconUrl() {
+		return "/pictures/git.png";
+	}
+
+	private String getProjectScmUrl(final String projectName) {
+		this.init();
 		final String logginName = this.currentUserService.getCurrentUserLogin();
-		final Map<String, String> variables = new HashMap<String, String>(2);
+		final Map<String, String> variables = new HashMap<>(2);
 		variables.put("scmUrl", this.config.getScmUrl());
 		variables.put("projectName", projectName);
 		variables.put("userLogin", logginName);
 		variables.put("projectKey", ProjectUtils.createIdentifier(projectName));
-		return replaceVariables(this.config.getDisplayedUri(), variables);
+		return this.replaceVariables(this.config.getDisplayedUri(), variables);
 	}
 
-	private String replaceVariables(String str, Map<String, String> variables) {
+	@Override
+	public List<IProjectTabPanel> getTabPanels(final String projectKey) {
+
+		return Lists.newArrayList();
+	}
+
+	@Override
+	public String getTitle() {
+		return new MessageSourceAccessor(this.messageResource).getMessage("foundation.git");
+	}
+
+	@Override
+	public String getWidgetId() {
+		return "git";
+	}
+
+	public void init() {
+
+		if (this.currentUserService == null) {
+			this.currentUserService = this.applicationContext.getBean(ICurrentUserService.class);
+		}
+	}
+
+	private String replaceVariables(final String str, final Map<String, String> variables) {
 		final StrSubstitutor sub = new StrSubstitutor(variables);
 		sub.setVariablePrefix("%{");
 		return sub.replace(str);

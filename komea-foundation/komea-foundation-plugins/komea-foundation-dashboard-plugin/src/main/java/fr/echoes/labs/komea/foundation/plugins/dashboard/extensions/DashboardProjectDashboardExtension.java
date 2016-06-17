@@ -5,13 +5,13 @@ import org.springframework.core.annotation.Order;
 
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.IProjectDashboardExtension;
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.IProjectDashboardWidgets;
-import fr.echoes.labs.ksf.extensions.annotations.Extension;
+import fr.echoes.labs.pluginfwk.api.plugin.Extension;
 
 /**
  * @author dcollard
  *
  */
-@Order(value=10)
+@Order(value = 10)
 @Extension
 public class DashboardProjectDashboardExtension implements IProjectDashboardExtension {
 

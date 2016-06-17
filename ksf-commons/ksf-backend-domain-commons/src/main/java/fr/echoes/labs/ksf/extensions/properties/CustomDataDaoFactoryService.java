@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
+import fr.echoes.labs.pluginfwk.api.plugin.propertystorage.ICustomDataDAOFactory;
+import fr.echoes.labs.pluginfwk.api.plugin.propertystorage.ICustomDataDao;
+
 @Service
 public class CustomDataDaoFactoryService implements ICustomDataDAOFactory {
 	

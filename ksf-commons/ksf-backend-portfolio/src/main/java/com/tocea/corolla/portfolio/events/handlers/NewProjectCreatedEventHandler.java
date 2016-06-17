@@ -1,8 +1,8 @@
 package com.tocea.corolla.portfolio.events.handlers;
 
-import com.google.common.eventbus.Subscribe;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.google.common.eventbus.Subscribe;
 import com.tocea.corolla.cqrs.annotations.EventHandler;
 import com.tocea.corolla.cqrs.gate.Gate;
 import com.tocea.corolla.portfolio.commands.CreateProjectNodeCommand;
@@ -23,12 +23,12 @@ public class NewProjectCreatedEventHandler {
 	 *            the event
 	 *
 	 */
-        @Subscribe
+	@Subscribe
 	public void suscribe(final EventNewProjectCreated _projectCreated) {
 		final Project createdProject = _projectCreated.getCreatedProject();
 		final Integer parentNodeID = _projectCreated.getParentNodeID();
 
-		gate.dispatch(new CreateProjectNodeCommand(createdProject.getId(), parentNodeID));
+		this.gate.dispatch(new CreateProjectNodeCommand(createdProject.getId(), parentNodeID));
 
 	}
 }

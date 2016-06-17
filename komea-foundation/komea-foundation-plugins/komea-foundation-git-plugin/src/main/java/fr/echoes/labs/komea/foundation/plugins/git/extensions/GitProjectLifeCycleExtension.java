@@ -12,12 +12,11 @@ import com.tocea.corolla.products.dao.IProjectDAO;
 import fr.echoes.labs.komea.foundation.plugins.git.GitExtensionMergeException;
 import fr.echoes.labs.komea.foundation.plugins.git.services.GitErrorHandlingService;
 import fr.echoes.labs.komea.foundation.plugins.git.services.IGitService;
-import fr.echoes.labs.ksf.cc.extensions.gui.ProjectExtensionConstants;
-import fr.echoes.labs.ksf.extensions.annotations.Extension;
 import fr.echoes.labs.ksf.extensions.projects.IProjectLifecycleExtension;
 import fr.echoes.labs.ksf.extensions.projects.NotifyResult;
 import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
 import fr.echoes.labs.ksf.users.security.api.ICurrentUserService;
+import fr.echoes.labs.pluginfwk.api.plugin.Extension;
 
 /**
  * @author dcollard

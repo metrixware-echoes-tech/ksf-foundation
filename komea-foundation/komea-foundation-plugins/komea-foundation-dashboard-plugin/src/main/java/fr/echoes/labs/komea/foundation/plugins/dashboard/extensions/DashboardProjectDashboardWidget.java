@@ -2,9 +2,6 @@ package fr.echoes.labs.komea.foundation.plugins.dashboard.extensions;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +26,6 @@ import fr.echoes.labs.ksf.cc.plugins.dashboard.services.DashboardConfigurationSe
 import fr.echoes.labs.ksf.cc.plugins.dashboard.services.DashboardLiferayService;
 import fr.echoes.labs.ksf.cc.plugins.dashboard.utils.DashboardUrlBuilder;
 
-
 /**
  * @author dcollard
  *
@@ -37,94 +33,9 @@ import fr.echoes.labs.ksf.cc.plugins.dashboard.utils.DashboardUrlBuilder;
 @Component
 public class DashboardProjectDashboardWidget implements ProjectDashboardWidget {
 
-	private static TemplateEngine templateEngine = createTemplateEngine();
+	private static TemplateEngine	templateEngine	= createTemplateEngine();
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(DashboardProjectDashboardWidget.class);
-
-	@Autowired
-	private DashboardConfigurationService configurationService;
-	
-	@Autowired
-	private DashboardLiferayService liferayService;
-
-	@Autowired
-	IProjectDAO projectDao;
-
-	@Autowired
-	private MessageSource messageResource;
-
-	@Override
-	public List<MenuAction> getDropdownActions() {
-		return null;
-	}
-
-	@Override
-	public String getHtmlPanelBody(String projectId) {;
-		return null;
-	}
-
-	@Override
-	public String getIconUrl() {
-		return "/pictures/dashboard.png";
-	}
-
-	@Override
-	public String getTitle() {
-		return new MessageSourceAccessor(this.messageResource).getMessage("foundation.dashboard");
-	}
-
-
-	@Override
-	public List<IProjectTabPanel> getTabPanels(final String projectKey) {
-
-		final Project project = this.projectDao.findByKey(projectKey);
-
-
-		final IProjectTabPanel iframePanel = new IProjectTabPanel() {
-
-			@Override
-			public String getTitle() {
-				return new MessageSourceAccessor(DashboardProjectDashboardWidget.this.messageResource).getMessage("foundation.dashboard.tab.title");
-			}
-
-			@Override
-			public String getContent() {
-
-				final Context ctx = new Context();
-
-				final HttpServletRequest request =
-						((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
-						.getRequest();
-
-				String url = DashboardProjectDashboardWidget.this.configurationService.getUrl();
-
-				if (project != null) {
-					
-					final String projectDashboardKey = liferayService.getLiferaySiteName(project);
-
-					url = new DashboardUrlBuilder()
-						.setBaseUrl(configurationService.getUrl())
-						.setProjectKey(projectDashboardKey)
-						.build();
-
-					ctx.setVariable("projectDashboardKey", projectDashboardKey);
-
-				}
-
-				LOGGER.info("[dashboard] project URL : {}", url);
-				ctx.setVariable("dashboardURL", url);
-
-				return templateEngine.process("dashboardManagementPanel", ctx);
-			}
-
-			@Override
-			public String getIconUrl() {
-				return DashboardProjectDashboardWidget.this.getIconUrl();
-			}
-		};
-
-		return Lists.newArrayList(iframePanel);
-	}
+	private static final Logger		LOGGER			= LoggerFactory.getLogger(DashboardProjectDashboardWidget.class);
 
 	private static TemplateEngine createTemplateEngine() {
 
@@ -140,5 +51,89 @@ public class DashboardProjectDashboardWidget implements ProjectDashboardWidget {
 
 	}
 
+	@Autowired
+	private DashboardConfigurationService	configurationService;
+	
+	@Autowired
+	private DashboardLiferayService liferayService;
+
+	@Autowired
+	IProjectDAO								projectDao;
+
+	@Autowired
+	private MessageSource					messageResource;
+
+	@Override
+	public List<MenuAction> getDropdownActions() {
+		return null;
+	}
+
+	@Override
+	public String getHtmlPanelBody(final String projectId) {
+		;
+		return null;
+	}
+
+	@Override
+	public String getIconUrl() {
+		return "/pictures/dashboard.png";
+	}
+
+	@Override
+	public List<IProjectTabPanel> getTabPanels(final String projectKey) {
+
+		final Project project = this.projectDao.findByKey(projectKey);
+
+		final IProjectTabPanel iframePanel = new IProjectTabPanel() {
+
+			@Override
+			public String getContent() {
+
+				final Context ctx = new Context();
+
+				((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+
+				String url = DashboardProjectDashboardWidget.this.configurationService.getUrl();
+
+				if (project != null) {
+
+					final String projectDashboardKey = liferayService.getLiferaySiteName(project);
+
+					url = new DashboardUrlBuilder().setBaseUrl(DashboardProjectDashboardWidget.this.configurationService.getUrl()).setProjectKey(
+							projectDashboardKey).build();
+
+					ctx.setVariable("projectDashboardKey", projectDashboardKey);
+
+				}
+
+				LOGGER.info("[dashboard] project URL : {}", url);
+				ctx.setVariable("dashboardURL", url);
+
+				return templateEngine.process("dashboardManagementPanel", ctx);
+			}
+
+			@Override
+			public String getIconUrl() {
+				return DashboardProjectDashboardWidget.this.getIconUrl();
+			}
+
+			@Override
+			public String getTitle() {
+				return new MessageSourceAccessor(DashboardProjectDashboardWidget.this.messageResource).getMessage("foundation.dashboard.tab.title");
+			}
+		};
+
+		return Lists.newArrayList(iframePanel);
+	}
+
+	@Override
+	public String getTitle() {
+		return new MessageSourceAccessor(this.messageResource).getMessage("foundation.dashboard");
+	}
+
+	@Override
+	public String getWidgetId() {
+		return "komeadashboard";
+	}
 
 }

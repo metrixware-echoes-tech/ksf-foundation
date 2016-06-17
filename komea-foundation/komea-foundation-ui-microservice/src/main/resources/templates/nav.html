@@ -4,13 +4,14 @@
 			<div class='navbar-header'>
 				<a class="pull-left" th:href="@{/ui/projects}"> <img
 					class="logo" th:src="@{/pictures/KSF-logo.png}" alt="KSF" />
-				</a> <a class="navbar-brand" th:href="@{/}"
-					 data-placement="bottom" th:text="#{foundation.appName}"></a>
+				</a> <a class="navbar-brand" th:href="@{/}" data-placement="bottom"
+					th:text="#{foundation.appName}"></a>
 			</div>
 			<div class='navbar-form navbar-left' role='form'>
 				<a style="margin-top: 3px; margin-left: -10px"
 					class="btn-primary btn-sm glyphicon glyphicon-plus"
-					data-toggle="tooltip" th:title="#{foundation.projects.navbar.newProjectButton.toolTip}"
+					data-toggle="tooltip"
+					th:title="#{foundation.projects.navbar.newProjectButton.toolTip}"
 					data-placement="bottom" th:href="@{/ui/projects/new}"></a>
 			</div>
 			<!-- User links -->
@@ -25,16 +26,23 @@
 						</span> <span class='glyphicon glyphicon-user'></span>
 					</a>
 						<ul class='dropdown-menu'>
-							<li><a th:href='@{/logout}'> <span class='glyphicon glyphicon-log-out'></span>&nbsp;<span th:text="#{foundation.projects.navbar.logout}"></span>
+							<li><a th:href='@{/logout}'> <span
+									class='glyphicon glyphicon-log-out'></span>&nbsp;<span
+									th:text="#{foundation.projects.navbar.logout}"></span>
 							</a></li>
 						</ul></li>
 				</ul>
-				<a class="navbar-brand" th:href="@{/documentation/index.html}"
+				<a class="navbar-brand" th:href="@{/ui/plugins}" href="#"
+					title="Show loaded plugins" style="float: right"
+					th:text="#{foundation.projects.navbar.plugins}">Plugins</a> <a
+					class="navbar-brand" th:href="@{/documentation/index.html}"
 					target="_blank" data-toggle="tooltip" data-placement="bottom"
-					title="View documentation" style="float: right" th:text="#{foundation.projects.navbar.help}">Help</a> <a
+					title="View documentation" style="float: right"
+					th:text="#{foundation.projects.navbar.help}">Help</a> <a
 					class="navbar-brand" href="#" data-toggle="modal"
 					data-target="#aboutModal" data-placement="bottom"
-					title="View about" style="float: right" th:text="#{foundation.projects.navbar.about}">About</a>
+					title="View about" style="float: right"
+					th:text="#{foundation.projects.navbar.about}">About</a>
 			</div>
 		</div>
 	</nav>
@@ -42,9 +50,15 @@
 
 <div th:fragment="breadcrumb">
 	<ol class="breadcrumb">
-	  <li><a th:href="@{/ui/projects}" data-toggle="tooltip" th:title="#{foundation.projects.navbar.projects.toolTip}" th:text="#{foundation.projects.navbar.projects}">Projects</a></li>
-	  <li th:if="${parentProjects != null}" th:each="parentProject : ${parentProjects}"><a th:href="@{/ui/projects/} + ${parentProject.key}" th:text="${parentProject.name}">Library</a></li>
-	  <li th:if="${projectData != null}" class="active" th:text="${projectData.project.name}"></li>
+		<li><a th:href="@{/ui/projects}" data-toggle="tooltip"
+			th:title="#{foundation.projects.navbar.projects.toolTip}"
+			th:text="#{foundation.projects.navbar.projects}">Projects</a></li>
+		<li th:if="${parentProjects != null}"
+			th:each="parentProject : ${parentProjects}"><a
+			th:href="@{/ui/projects/} + ${parentProject.key}"
+			th:text="${parentProject.name}">Library</a></li>
+		<li th:if="${projectData != null}" class="active"
+			th:text="${projectData.project.name}"></li>
 	</ol>
 </div>
 
@@ -59,7 +73,8 @@
 				<div class="modal-header">
 					<button aria-hidden="true" class="close" data-dismiss="modal"
 						type="button">&times;</button>
-					<h4 class="modal-title" th:text="#{foundation.projects.navbar.about}">About</h4>
+					<h4 class="modal-title"
+						th:text="#{foundation.projects.navbar.about}">About</h4>
 				</div>
 				<div class="modal-body">
 					<img th:src="@{/pictures/logo_echoes.png}" alt="Echoes" height="50" />

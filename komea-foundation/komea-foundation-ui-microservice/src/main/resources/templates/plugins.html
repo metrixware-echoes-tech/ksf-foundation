@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout">
+<body>
+
+	<div layout:fragment="content">
+		<main class="container-fluid" role="main">
+
+		<div class="content">
+			<div class="alert alert-info alert-dismissible" role="alert">
+				<button type="button" class="close" data-dismiss="alert"
+					aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<span th:text="#{foundation.plugins.help}"></span>
+			</div>
+
+			<h1 th:text="#{foundation.plugins.title}"></h1>
+
+			<div class="col-sm-offset-1 col-sm-6">
+				<div class="row" th:each="plugin : ${plugins}">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h3 class="panel-title" th:text="${'Plugin ' + plugin.name}"></h3>
+						</div>
+						<div class="panel-body" th:utext="${plugin.description}">Panel
+							content</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- 			<table class="table table-striped project-list tree"> -->
+			<!-- 				<thead> -->
+			<!-- 					<tr> -->
+			<!-- 						<th th:text="#{foundation.projects.list.column.name}">ID</th> -->
+			<!-- 						<th th:text="#{foundation.projects.list.column.owner}">Nom</th> -->
+			<!-- 						<th th:text="#{foundation.projects.list.column.owner}">Description</th> -->
+			<!-- 					</tr> -->
+			<!-- 				</thead> -->
+			<!-- 				<tbody> -->
+			<!-- 					<tr th:each="plugin : ${plugins}"> -->
+			<!-- 						<td><a th:text="${prod.project.name}" -->
+			<!-- 							th:href="@{/ui/projects/}+${prod.project.key}"></a></td> -->
+			<!-- 						<td -->
+			<!-- 							th:text="${#strings.isEmpty(prod.user.firstName) or #strings.isEmpty(prod.user.lastName) ? prod.user.login : prod.user.firstName +' '+ prod.user.lastName}"></td> -->
+			<!-- 						<td class="project-list-tools"><a -->
+			<!-- 							th:each="widget,it : ${@projectDashboardWidgets.getDashboardPanels(prod.project.key)}" -->
+			<!-- 							th:href="@{/ui/projects/}+${prod.project.key}+${'#pluginTab'+it.index}"><img -->
+			<!-- 								th:src="@{${widget.getIconUrl()}}" -->
+			<!-- 								th:alt="@{${widget.getTitle()}}" data-toggle="tooltip" -->
+			<!-- 								data-placement="bottom" th:title="@{${widget.getTitle()}}" /></a></td> -->
+			<!-- 						<td> -->
+			<!-- 							onclick="return confirm('Are you sure you want to remove project ?')" -->
+			<!-- 							th:href="@{/ui/projects/delete/}+${prod.project.key}"> <span -->
+			<!-- 								class="fa fa-trash"></span>&nbsp;<span -->
+			<!-- 								th:text="#{foundation.projects.list.delete.text}"></span> -->
+			<!-- 						</a> -->
+			<!-- 						</td> -->
+			<!-- 					</tr> -->
+			<!-- 				</tbody> -->
+			<!-- 			</table> -->
+		</div>
+		</main>
+	</div>
+</body>
+</html>

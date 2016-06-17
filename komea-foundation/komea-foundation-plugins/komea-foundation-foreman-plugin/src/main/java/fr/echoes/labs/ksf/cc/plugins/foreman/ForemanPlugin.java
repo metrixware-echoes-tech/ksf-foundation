@@ -1,65 +1,73 @@
 package fr.echoes.labs.ksf.cc.plugins.foreman;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.stereotype.Component;
+import fr.echoes.labs.ksf.cc.plugins.foreman.extensions.ForemanDAOExtension;
+import fr.echoes.labs.ksf.cc.plugins.foreman.extensions.ForemanProjectDashboardExtension;
+import fr.echoes.labs.ksf.cc.plugins.foreman.extensions.ForemanProjectLifeCycleExtension;
+import fr.echoes.labs.ksf.plugins.api.PluginPropertiesImpl;
+import fr.echoes.labs.pluginfwk.api.extension.IExtension;
+import fr.echoes.labs.pluginfwk.api.plugin.Plugin;
+import fr.echoes.labs.pluginfwk.api.plugin.PluginDefinition;
+import fr.echoes.labs.pluginfwk.api.plugin.PluginProperties;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
+@Plugin
+public class ForemanPlugin implements PluginDefinition {
 
-import fr.echoes.labs.ksf.extensions.api.IExtension;
-import fr.echoes.labs.ksf.plugins.api.IPlugin;
-import fr.echoes.labs.ksf.plugins.api.IPluginPropertiesDefinition;
+	private final ForemanDAOExtension				foremanDAOExtension;
 
-@Component
-public class ForemanPlugin implements IPlugin {
-	
-	private Injector injector;
-	
-	@Override
-	public void close() throws IOException {
-		injector = null;
+	private final ForemanProjectDashboardExtension	foremanProjectDashboardExtension;
+
+	private final ForemanProjectLifeCycleExtension	foremanProjectLifeCycleExtension;
+
+	@Autowired
+	public ForemanPlugin(final ForemanDAOExtension foremanDAOExtension, final ForemanProjectDashboardExtension foremanProjectDashboardExtension,
+			final ForemanProjectLifeCycleExtension foremanProjectLifeCycleExtension) {
+		super();
+		this.foremanDAOExtension = foremanDAOExtension;
+		this.foremanProjectDashboardExtension = foremanProjectDashboardExtension;
+		this.foremanProjectLifeCycleExtension = foremanProjectLifeCycleExtension;
 	}
-	
+
+	@Override
+	public void destroy() {
+		//
+	}
+
 	@Override
 	public String getDescription() {
-		return "Foreman plugin for KSF";
+		return "Foreman plugin for <b>KSF</b>";
 	}
-	
+
 	/**
 	 * Cette méthode sera utilisée dans la 1.1 , pour définir les extensions
 	 * fournies par le plugin. Actuellement dans la 1.0 , les extensions sont
 	 * scannées dans le classpath.
 	 */
 	@Override
-	public List<IExtension> getExtensions() {
-		final ForemanExtensions instance = new ForemanExtensions();
-		injector.injectMembers(instance);
-		return new ArrayList<>(instance.getExtensions());
+	public IExtension[] getExtensions() {
+
+		return new IExtension[] { this.foremanDAOExtension, this.foremanProjectDashboardExtension, this.foremanProjectLifeCycleExtension };
 	}
-	
+
 	@Override
 	public String getId() {
 		return "foreman-plugin";
 	}
-	
+
 	@Override
-	public IPluginPropertiesDefinition getPluginProperties() {
-		return new PluginPropertiesDefinition();
+	public String getName() {
+		return "Foreman Plugin";
 	}
-	
+
 	@Override
-	public String getSummary() {
-		return "Foreman plugin bla bla bla";
+	public PluginProperties getPluginProperties() {
+		return new PluginPropertiesImpl();
 	}
-	
+
 	@Override
 	public void init() {
-		// TODO:: Code qui sera utilisé dans la 1.1
-		injector = Guice.createInjector(new ForemanExtensionGuiceModule());
-		
+
 	}
-	
+
 }

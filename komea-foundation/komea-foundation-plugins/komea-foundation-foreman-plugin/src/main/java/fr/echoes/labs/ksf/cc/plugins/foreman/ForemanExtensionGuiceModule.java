@@ -5,7 +5,7 @@ import com.google.inject.multibindings.Multibinder;
 
 import fr.echoes.labs.ksf.cc.plugins.foreman.extensions.ForemanDAOExtension;
 import fr.echoes.labs.ksf.cc.plugins.foreman.extensions.ForemanProjectDashboardExtension;
-import fr.echoes.labs.ksf.extensions.api.IExtension;
+import fr.echoes.labs.pluginfwk.api.extension.IExtension;
 
 public class ForemanExtensionGuiceModule extends AbstractModule{
 

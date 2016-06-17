@@ -16,13 +16,13 @@ import fr.echoes.labs.ksf.cc.plugins.foreman.dao.IForemanTargetDAO;
 import fr.echoes.labs.ksf.cc.plugins.foreman.model.ForemanTarget;
 import fr.echoes.labs.ksf.cc.plugins.foreman.services.ForemanClientFactory;
 import fr.echoes.labs.ksf.cc.plugins.foreman.services.ForemanErrorHandlingService;
-import fr.echoes.labs.ksf.extensions.annotations.Extension;
 import fr.echoes.labs.ksf.extensions.projects.IProjectLifecycleExtension;
 import fr.echoes.labs.ksf.extensions.projects.NotifyResult;
 import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
 import fr.echoes.labs.ksf.users.security.api.ICurrentUserService;
+import fr.echoes.labs.pluginfwk.api.plugin.Plugin;
 
-@Extension
+@Plugin
 public class ForemanProjectLifeCycleExtension implements IProjectLifecycleExtension {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ForemanProjectLifeCycleExtension.class);

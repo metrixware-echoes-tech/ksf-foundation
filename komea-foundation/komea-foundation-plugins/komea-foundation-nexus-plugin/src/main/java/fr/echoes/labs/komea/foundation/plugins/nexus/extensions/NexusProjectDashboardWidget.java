@@ -2,8 +2,6 @@ package fr.echoes.labs.komea.foundation.plugins.nexus.extensions;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,16 +31,29 @@ import fr.echoes.labs.ksf.cc.plugins.nexus.services.NexusConfigurationService;
 @Component
 public class NexusProjectDashboardWidget implements ProjectDashboardWidget {
 
-	private static TemplateEngine templateEngine = createTemplateEngine();
+	private static TemplateEngine	templateEngine	= createTemplateEngine();
 
+	private static final Logger		LOGGER			= LoggerFactory.getLogger(NexusProjectDashboardWidget.class);
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(NexusProjectDashboardWidget.class);
+	private static TemplateEngine createTemplateEngine() {
+
+		final ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
+		templateResolver.setTemplateMode("XHTML");
+		templateResolver.setPrefix("templates/");
+		templateResolver.setSuffix(".html");
+
+		final TemplateEngine templateEngine = new TemplateEngine();
+		templateEngine.setTemplateResolver(templateResolver);
+
+		return templateEngine;
+
+	}
 
 	@Autowired
-	private NexusConfigurationService configurationService;
+	private NexusConfigurationService	configurationService;
 
 	@Autowired
-	private MessageSource messageResource;
+	private MessageSource				messageResource;
 
 	@Autowired
 	private IProjectDAO projectDao;
@@ -53,7 +64,8 @@ public class NexusProjectDashboardWidget implements ProjectDashboardWidget {
 	}
 
 	@Override
-	public String getHtmlPanelBody(String projectId) {;
+	public String getHtmlPanelBody(final String projectId) {
+		;
 		return null;
 	}
 
@@ -63,30 +75,17 @@ public class NexusProjectDashboardWidget implements ProjectDashboardWidget {
 	}
 
 	@Override
-	public String getTitle() {
-		return new MessageSourceAccessor(NexusProjectDashboardWidget.this.messageResource).getMessage("foundation.nexus") ;
-	}
-
-
-	@Override
 	public List<IProjectTabPanel> getTabPanels(final String projectKey) {
 		final Project project = this.projectDao.findByKey(projectKey);
 
 		final IProjectTabPanel iframePanel = new IProjectTabPanel() {
 
 			@Override
-			public String getTitle() {
-				return new MessageSourceAccessor(NexusProjectDashboardWidget.this.messageResource).getMessage("foundation.nexus.tab.title");
-			}
-
-			@Override
 			public String getContent() {
 
 				final Context ctx = new Context();
 
-				final HttpServletRequest request =
-						((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
-						.getRequest();
+				((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
 
 				String url = NexusProjectDashboardWidget.this.configurationService.getUrl();
 
@@ -105,23 +104,24 @@ public class NexusProjectDashboardWidget implements ProjectDashboardWidget {
 			public String getIconUrl() {
 				return NexusProjectDashboardWidget.this.getIconUrl();
 			}
+
+			@Override
+			public String getTitle() {
+				return new MessageSourceAccessor(NexusProjectDashboardWidget.this.messageResource).getMessage("foundation.nexus.tab.title");
+			}
 		};
 
 		return Lists.newArrayList(iframePanel);
 	}
 
-	private static TemplateEngine createTemplateEngine() {
+	@Override
+	public String getTitle() {
+		return new MessageSourceAccessor(NexusProjectDashboardWidget.this.messageResource).getMessage("foundation.nexus");
+	}
 
-		final ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
-		templateResolver.setTemplateMode("XHTML");
-		templateResolver.setPrefix("templates/");
-		templateResolver.setSuffix(".html");
-
-		final TemplateEngine templateEngine = new TemplateEngine();
-		templateEngine.setTemplateResolver(templateResolver);
-
-		return templateEngine;
-
+	@Override
+	public String getWidgetId() {
+		return "nexus";
 	}
 
 }

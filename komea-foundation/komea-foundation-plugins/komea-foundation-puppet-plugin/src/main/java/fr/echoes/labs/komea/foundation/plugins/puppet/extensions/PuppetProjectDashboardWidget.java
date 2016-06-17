@@ -28,7 +28,8 @@ public class PuppetProjectDashboardWidget implements ProjectDashboardWidget {
 	}
 
 	@Override
-	public String getHtmlPanelBody(String projectId) {;
+	public String getHtmlPanelBody(final String projectId) {
+		;
 		return null;
 	}
 
@@ -38,15 +39,19 @@ public class PuppetProjectDashboardWidget implements ProjectDashboardWidget {
 	}
 
 	@Override
+	public List<IProjectTabPanel> getTabPanels(final String projectKey) {
+
+		return Lists.newArrayList();
+	}
+
+	@Override
 	public String getTitle() {
 		return "Puppet";
 	}
 
-
 	@Override
-	public List<IProjectTabPanel> getTabPanels(final String projectKey) {
-
-		return Lists.newArrayList();
+	public String getWidgetId() {
+		return "puppet";
 	}
 
 }

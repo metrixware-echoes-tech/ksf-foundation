@@ -40,6 +40,7 @@ build.dependsOn bootRepackage
 dependencies {
 
     compile project(":ksf-commons:ksf-backend-microservice")
+	
     compile project(":komea-foundation:komea-foundation-softwarefactory")
     compile project(":komea-foundation:komea-foundation-plugin-api")
 

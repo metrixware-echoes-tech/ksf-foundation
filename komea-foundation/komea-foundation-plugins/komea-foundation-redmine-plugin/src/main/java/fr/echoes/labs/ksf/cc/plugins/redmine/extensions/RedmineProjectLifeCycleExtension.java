@@ -18,18 +18,18 @@ import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineExtensionException;
 import fr.echoes.labs.ksf.cc.plugins.redmine.services.IRedmineService;
 import fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineConfigurationService;
 import fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineErrorHandlingService;
-import fr.echoes.labs.ksf.extensions.annotations.Extension;
 import fr.echoes.labs.ksf.extensions.projects.IProjectLifecycleExtension;
 import fr.echoes.labs.ksf.extensions.projects.NotifyResult;
 import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
 import fr.echoes.labs.ksf.users.security.api.ICurrentUserService;
+import fr.echoes.labs.pluginfwk.api.plugin.Plugin;
 
 /**
  * @author dcollard
  *
  */
 @Order(value=1)
-@Extension
+@Plugin
 public class RedmineProjectLifeCycleExtension implements IProjectLifecycleExtension {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RedmineProjectLifeCycleExtension.class);
@@ -77,7 +77,7 @@ public class RedmineProjectLifeCycleExtension implements IProjectLifecycleExtens
 
 		} catch (final Exception ex) {
 			LOGGER.error("[Redmine] Failed to create project {} ", project.getName(), ex);
-			this.errorHandler.registerError("Unable to create Redmine project.");
+			this.errorHandler.registerErrorMessage("Unable to create Redmine project.");
 		}
 		return NotifyResult.CONTINUE;
 	}
@@ -91,7 +91,7 @@ public class RedmineProjectLifeCycleExtension implements IProjectLifecycleExtens
 
 		} catch (final Exception ex) {
 			LOGGER.error("[Redmine] Failed to delete project {} ", project.getName(), ex);
-			this.errorHandler.registerError("Unable to delete Redmine project.");
+			this.errorHandler.registerErrorMessage("Unable to delete Redmine project.");
 		}
 		return NotifyResult.CONTINUE;
 	}
@@ -115,7 +115,7 @@ public class RedmineProjectLifeCycleExtension implements IProjectLifecycleExtens
 			this.redmineService.createTicket(project, releaseVersion, releaseTicketSubject, username);
 		} catch (final RedmineExtensionException e) {
 			LOGGER.error("[Redmine] Failed to create a ticket for the release {} of the project {}", releaseVersion, project.getName());
-			this.errorHandler.registerError("Failed to create a Redmine ticket for the release.");
+			this.errorHandler.registerErrorMessage("Failed to create a Redmine ticket for the release.");
 		}
 		return NotifyResult.CONTINUE;
 	}
@@ -136,7 +136,7 @@ public class RedmineProjectLifeCycleExtension implements IProjectLifecycleExtens
 
 		} catch (final Exception ex) {
 			LOGGER.error("[Redmine] Failed to change ticket #{} status", ticketId, ex);
-			this.errorHandler.registerError("Failed to change Redmine ticket status.");
+			this.errorHandler.registerErrorMessage("Failed to change Redmine ticket status.");
 		}
 		return NotifyResult.CONTINUE;
 	}
@@ -149,7 +149,7 @@ public class RedmineProjectLifeCycleExtension implements IProjectLifecycleExtens
 
 		} catch (final Exception ex) {
 			LOGGER.error("[Redmine] Failed to change ticket #{} status", ticketId, ex);
-			this.errorHandler.registerError("Failed to change Redmine ticket status.");
+			this.errorHandler.registerErrorMessage("Failed to change Redmine ticket status.");
 		}
 		return NotifyResult.CONTINUE;
 	}

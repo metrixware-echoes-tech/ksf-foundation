@@ -42,36 +42,54 @@ import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWi
 @Component
 public class JenkinsProjectDashboardWidget implements ProjectDashboardWidget {
 
-	private static TemplateEngine templateEngine = createTemplateEngine();
+	private static TemplateEngine	templateEngine	= createTemplateEngine();
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(JenkinsProjectDashboardWidget.class);
+	private static final Logger		LOGGER			= LoggerFactory.getLogger(JenkinsProjectDashboardWidget.class);
 
-	@Autowired
-	private JenkinsConfigurationService configurationService;
+	private static TemplateEngine createTemplateEngine() {
 
-	@Autowired
-	private IJenkinsService jenkinsService;
+		final ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
+		templateResolver.setTemplateMode("XHTML");
+		templateResolver.setPrefix("templates/");
+		templateResolver.setSuffix(".html");
 
-	@Autowired
-	private IProjectDAO projectDAO;
+		final TemplateEngine templateEngine = new TemplateEngine();
+		templateEngine.setTemplateResolver(templateResolver);
 
-	@Autowired
-	private JenkinsErrorHandlingService errorHandler;
+		return templateEngine;
 
-	@Autowired
-	private HttpServletRequest request;
-
-	@Autowired
-	private HttpServletResponse response;
+	}
 
 	@Autowired
-	private ServletContext servletContext;
+	private JenkinsConfigurationService	configurationService;
 
 	@Autowired
-	IProjectDAO projectDao;
+	private IJenkinsService				jenkinsService;
 
 	@Autowired
-	private MessageSource messageResource;
+	private IProjectDAO					projectDAO;
+
+	@Autowired
+	private JenkinsErrorHandlingService	errorHandler;
+
+	@Autowired
+	private HttpServletRequest			request;
+
+	@Autowired
+	private HttpServletResponse			response;
+
+	@Autowired
+	private ServletContext				servletContext;
+
+	@Autowired
+	IProjectDAO							projectDao;
+
+	@Autowired
+	private MessageSource				messageResource;
+
+	private String getBaseUrl() {
+		return this.request.getContextPath();
+	}
 
 	@Override
 	public List<MenuAction> getDropdownActions() {
@@ -80,7 +98,7 @@ public class JenkinsProjectDashboardWidget implements ProjectDashboardWidget {
 	}
 
 	@Override
-	public String getHtmlPanelBody(String projectId) {
+	public String getHtmlPanelBody(final String projectId) {
 
 		final Project project = this.projectDAO.findOne(projectId);
 
@@ -92,7 +110,7 @@ public class JenkinsProjectDashboardWidget implements ProjectDashboardWidget {
 		try {
 			final List<JenkinsBuildInfo> buildInfo = this.jenkinsService.getBuildInfo(projectName);
 
-			final String baseUrl = getBaseUrl();
+			final String baseUrl = this.getBaseUrl();
 
 			ctx.setVariable("buildBase", baseUrl + "/ui/projects/" + project.getKey() + "?buildUrl=");
 
@@ -107,21 +125,10 @@ public class JenkinsProjectDashboardWidget implements ProjectDashboardWidget {
 		return templateEngine.process("jenkinsPanel", ctx);
 	}
 
-	private String getBaseUrl() {
-		return this.request.getContextPath();
-	}
-
-
 	@Override
 	public String getIconUrl() {
 		return "/pictures/jenkins.png";
 	}
-
-	@Override
-	public String getTitle() {
-		return new MessageSourceAccessor(JenkinsProjectDashboardWidget.this.messageResource).getMessage("foundation.jenkins") ;
-	}
-
 
 	@Override
 	public List<IProjectTabPanel> getTabPanels(final String projectKey) {
@@ -129,18 +136,11 @@ public class JenkinsProjectDashboardWidget implements ProjectDashboardWidget {
 		final IProjectTabPanel iframePanel = new IProjectTabPanel() {
 
 			@Override
-			public String getTitle() {
-				return new MessageSourceAccessor(JenkinsProjectDashboardWidget.this.messageResource).getMessage("foundation.jenkins.tab.title") ;
-			}
-
-			@Override
 			public String getContent() {
 
 				final Context ctx = new Context();
 
-				final HttpServletRequest request =
-						((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
-						.getRequest();
+				final HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
 
 				String url = JenkinsProjectDashboardWidget.this.configurationService.getUrl();
 
@@ -177,24 +177,24 @@ public class JenkinsProjectDashboardWidget implements ProjectDashboardWidget {
 			public String getIconUrl() {
 				return JenkinsProjectDashboardWidget.this.getIconUrl();
 			}
+
+			@Override
+			public String getTitle() {
+				return new MessageSourceAccessor(JenkinsProjectDashboardWidget.this.messageResource).getMessage("foundation.jenkins.tab.title");
+			}
 		};
 
 		return Lists.newArrayList(iframePanel);
 	}
 
+	@Override
+	public String getTitle() {
+		return new MessageSourceAccessor(JenkinsProjectDashboardWidget.this.messageResource).getMessage("foundation.jenkins");
+	}
 
-	private static TemplateEngine createTemplateEngine() {
-
-		final ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
-		templateResolver.setTemplateMode("XHTML");
-		templateResolver.setPrefix("templates/");
-		templateResolver.setSuffix(".html");
-
-		final TemplateEngine templateEngine = new TemplateEngine();
-		templateEngine.setTemplateResolver(templateResolver);
-
-		return templateEngine;
-
+	@Override
+	public String getWidgetId() {
+		return "jenkins";
 	}
 
 }

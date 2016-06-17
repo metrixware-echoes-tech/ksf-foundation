@@ -7,6 +7,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import fr.echoes.labs.pluginfwk.api.plugin.propertystorage.ICustomDataDAOFactory;
+import fr.echoes.labs.pluginfwk.api.plugin.propertystorage.IPluginCustomDataExtension;
+
 /**
  * This interface allows a plugin to store custom data into the backend.
  *
