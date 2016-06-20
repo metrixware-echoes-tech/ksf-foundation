@@ -40,36 +40,36 @@ import fr.echoes.labs.ksf.cc.plugins.foreman.utils.ThymeleafTemplateEngineUtils;
 @Component
 public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
 
-	private static TemplateEngine templateEngine = ThymeleafTemplateEngineUtils.createTemplateEngine();
+	private static TemplateEngine		templateEngine	= ThymeleafTemplateEngineUtils.createTemplateEngine();
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ForemanProjectDashboardWidget.class);
-
-	@Autowired
-	private ForemanConfigurationService configurationService;
+	private static final Logger			LOGGER			= LoggerFactory.getLogger(ForemanProjectDashboardWidget.class);
 
 	@Autowired
-	private IForemanEnvironmentDAO environmentDAO;
+	private ForemanConfigurationService	configurationService;
 
 	@Autowired
-	private IForemanTargetDAO targetDAO;
+	private IForemanEnvironmentDAO		environmentDAO;
 
 	@Autowired
-	private IProjectDAO projectDAO;
+	private IForemanTargetDAO			targetDAO;
 
 	@Autowired
-	private ForemanErrorHandlingService errorHandler;
+	private IProjectDAO					projectDAO;
 
 	@Autowired
-	private HttpServletRequest request;
+	private ForemanErrorHandlingService	errorHandler;
 
 	@Autowired
-	private HttpServletResponse response;
+	private HttpServletRequest			request;
 
 	@Autowired
-	private ServletContext servletContext;
+	private HttpServletResponse			response;
 
 	@Autowired
-	private MessageSource messageResource;
+	private ServletContext				servletContext;
+
+	@Autowired
+	private MessageSource				messageResource;
 
 	@Override
 	public List<MenuAction> getDropdownActions() {
@@ -89,7 +89,7 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
 	}
 
 	@Override
-	public String getHtmlPanelBody(String projectId) {
+	public String getHtmlPanelBody(final String projectId) {
 
 		final Project project = this.projectDAO.findOne(projectId);
 
@@ -107,10 +107,10 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
 		ctx.setVariable("foundationForemanWidgetName", messageSourceAccessor.getMessage("foundation.foreman.widget.name"));
 		ctx.setVariable("foundationForemanWigetOs", messageSourceAccessor.getMessage("foundation.foreman.widget.os"));
 
-
 		try {
 
-			final IForemanApi foremanApi = ForemanClient.createApi(this.configurationService.getForemanUrl(), this.configurationService.getForemanUsername(), this.configurationService.getForemanPassword());
+			final IForemanApi foremanApi = ForemanClient.createApi(this.configurationService.getForemanUrl(), this.configurationService.getForemanUsername(),
+					this.configurationService.getForemanPassword());
 
 			ctx.setVariable("operatingSystems", Lists.newArrayList(foremanApi.getOperatingSystems(null, null, null, ForemanService.PER_PAGE_RESULT).results));
 
@@ -132,36 +132,23 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
 	}
 
 	@Override
-	public String getTitle() {
-		return new MessageSourceAccessor(ForemanProjectDashboardWidget.this.messageResource).getMessage("foundation.foreman");
-	}
-
-
-	@Override
 	public List<IProjectTabPanel> getTabPanels(final String projectKey) {
 
 		final IProjectTabPanel iframePanel = new IProjectTabPanel() {
-
-			@Override
-			public String getTitle() {
-				return new MessageSourceAccessor(ForemanProjectDashboardWidget.this.messageResource).getMessage("foundation.foreman.tab.title");
-			}
 
 			@Override
 			public String getContent() {
 
 				final Context ctx = new Context();
 
-				final HttpServletRequest request =
-						((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
-						.getRequest();
+				final HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
 
 				String foremanURL = ForemanProjectDashboardWidget.this.configurationService.getForemanUrl();
 
 				final String foremanHost = request.getParameter("foremanHost");
 
 				if (StringUtils.isNotEmpty(foremanHost)) {
-					foremanURL += "/hosts/"+foremanHost;
+					foremanURL += "/hosts/" + foremanHost;
 				}
 
 				LOGGER.info("[foreman] project URL : {}", foremanURL);
@@ -175,9 +162,23 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
 			public String getIconUrl() {
 				return ForemanProjectDashboardWidget.this.getIconUrl();
 			}
+
+			@Override
+			public String getTitle() {
+				return new MessageSourceAccessor(ForemanProjectDashboardWidget.this.messageResource).getMessage("foundation.foreman.tab.title");
+			}
 		};
 
 		return Lists.newArrayList(iframePanel);
 	}
 
+	@Override
+	public String getTitle() {
+		return new MessageSourceAccessor(ForemanProjectDashboardWidget.this.messageResource).getMessage("foundation.foreman");
+	}
+
+	@Override
+	public String getWidgetId() {
+		return "foreman";
+	}
 }

@@ -1,0 +1,4 @@
+dependencies {
+	compile JUNIT
+	compile "org.slf4j:slf4j-api:$LOG_SLF4J"
+}

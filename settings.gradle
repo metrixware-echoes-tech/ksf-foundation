@@ -1,5 +1,12 @@
 rootProject.name = 'ksf-parent'
 
+// KSF-Plugins
+
+
+include "ksf-plugins:ksf-plugin-api"
+include "ksf-plugins:ksf-plugin-framework"
+
+
 // KSF-Commons
 
 include "ksf-commons:ksf-backend-cqrs"
@@ -9,10 +16,9 @@ include "ksf-commons:ksf-backend-portfolio"
 
 include "ksf-commons:ksf-backend-projects"
 include "ksf-commons:ksf-backend-utils"
+include "ksf-commons:ksf-backend-testutils"
 include "ksf-commons:ksf-backend-microservice"
-include "ksf-commons:ksf-backend-plugin"
 include "ksf-commons:ksf-backend-support"
-include "ksf-commons:ksf-backend-plugin-api"
 
 // Corolla
 

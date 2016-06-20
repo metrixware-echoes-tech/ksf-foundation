@@ -59,6 +59,10 @@ dependencies {
     // Test Frameworks
     testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
 
+	compile "org.slf4j:jcl-over-slf4j:$LOG_SLF4J"
+	compile "org.slf4j:log4j-over-slf4j:$LOG_SLF4J"
+
+
 }
 
 configurations.all { exclude group: 'com.google.gwt' }

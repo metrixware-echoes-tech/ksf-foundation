@@ -41,14 +41,14 @@ gradle.allprojects {
 			return ""
 		}
 
-		println("Branch $rBranch")
+		//println("Branch $rBranch")
 		return rBranch
 	}
 
 	/**
 	 * Version rule management.
 	 */
-	println "version $version"
+	//logger.info "version $version"
 	project.version = getGitBranch().isEmpty() ? version : (version + '.' + getGitBranch())
 	ext.branch = getGitBranch()
 }

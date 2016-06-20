@@ -1,6 +1,8 @@
 dependencies {
-	compile project(":ksf-commons:ksf-backend-plugin-api")
-	compile project(":ksf-commons:ksf-backend-plugin")
+	compile project(":ksf-plugins:ksf-plugin-api")
+	compile project(":ksf-plugins:ksf-plugin-framework")
+	compile project(":ksf-commons:ksf-backend-utils")
+
 	compile "commons-io:commons-io:$APACHE_COMMONIO"
 	//compile 'javax.servlet:javax.servlet-api:3.0.1'
 

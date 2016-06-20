@@ -1,10 +1,20 @@
 
 subprojects {
 
-	group = "com.echoeslab.ksf.commandAndControl"
+	group = "fr.echoes.labs.ksf.commandAndControl"
 
 
 	dependencies {
+
+
+		compile "org.slf4j:slf4j-api:$LOG_SLF4J"
+
+
+		compile "org.jboss.resteasy:resteasy-client:3.0.9.Final"
+		compile "org.jboss.resteasy:resteasy-jaxrs:3.0.13.Final"
+		compile "org.jboss.resteasy:resteasy-jackson-provider:3.0.13.Final"
+		compile "org.jboss.resteasy:resteasy-jaxb-provider:3.0.13.Final"
+        
 	}
 }
 

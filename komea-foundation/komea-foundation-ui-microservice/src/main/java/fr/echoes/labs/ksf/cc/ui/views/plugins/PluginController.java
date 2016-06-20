@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import fr.echoes.labs.ksf.cc.plugins.PluginServiceLoader;
 import fr.echoes.labs.pluginfwk.api.plugin.PluginManager;
 
 /**
@@ -27,6 +28,9 @@ public class PluginController {
 	@Autowired
 	private PluginManager		pluginManager;
 
+	@Autowired
+	private PluginServiceLoader	pluginServiceLoader;
+
 	/**
 	 * Une direction est produite pour être capturée par Spring Security et afficher la page de login
 	 *
@@ -37,6 +41,17 @@ public class PluginController {
 		final ModelAndView modelAndView = new ModelAndView("plugins");
 		modelAndView.addObject("plugins", this.pluginManager.getPluginInformations());
 		return modelAndView;
+	}
+
+	/**
+	 * Une direction est produite pour être capturée par Spring Security et afficher la page de login
+	 *
+	 * @return
+	 */
+	@RequestMapping(value = { "/ui/plugins/reload" })
+	public ModelAndView reloadPlugins() {
+		this.pluginServiceLoader.reloadPlugins();
+		return this.pluginPage();
 	}
 
 	//

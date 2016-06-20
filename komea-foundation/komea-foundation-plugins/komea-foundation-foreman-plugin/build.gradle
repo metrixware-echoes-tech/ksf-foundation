@@ -2,20 +2,13 @@
 dependencies {
 
 
-	compile 'commons-lang:commons-lang:2.6'
 
 	compile project(":komea-foundation:komea-foundation-plugin-api")
 	compile project(":ksf-commons:ksf-backend-domain-commons") // TO REMOVE IN 1.1
 	compile project(":ksf-commons:ksf-backend-projects") // TO REMOVE IN 1.1
 	compile("org.springframework.boot:spring-boot-starter-thymeleaf:${springBootVersion}") //TO REMOVE IN 1.1
 
-		// FOR LATER (1.1)
-	compile 'com.google.inject:guice:4.0'
-	compile 'com.google.inject.extensions:guice-multibindings:4.0'
 
-    compile "com.fasterxml.jackson.core:jackson-core:2.6.3"
-    compile "com.fasterxml.jackson.core:jackson-annotations:2.6.3"
-    compile "com.fasterxml.jackson.core:jackson-databind:2.6.3"		
 }
 
 

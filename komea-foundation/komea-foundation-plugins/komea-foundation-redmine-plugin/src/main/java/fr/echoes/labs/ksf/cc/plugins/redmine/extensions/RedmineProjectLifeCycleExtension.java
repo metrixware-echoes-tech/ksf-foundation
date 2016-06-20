@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.annotation.Order;
 
+import com.taskadapter.redmineapi.RedmineException;
 import com.taskadapter.redmineapi.bean.Version;
 import com.tocea.corolla.products.dao.IProjectDAO;
 
@@ -28,28 +29,28 @@ import fr.echoes.labs.pluginfwk.api.plugin.Plugin;
  * @author dcollard
  *
  */
-@Order(value=1)
+@Order(value = 1)
 @Plugin
 public class RedmineProjectLifeCycleExtension implements IProjectLifecycleExtension {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(RedmineProjectLifeCycleExtension.class);
+	private static final Logger			LOGGER	= LoggerFactory.getLogger(RedmineProjectLifeCycleExtension.class);
 
 	@Autowired
-	private RedmineErrorHandlingService errorHandler;
+	private RedmineErrorHandlingService	errorHandler;
 
 	@Autowired
-	private IRedmineService redmineService;
+	private IRedmineService				redmineService;
 
 	@Autowired
-	private IProjectDAO projectDAO;
+	private IProjectDAO					projectDAO;
 
 	@Autowired
-	private ApplicationContext applicationContext;
+	private ApplicationContext			applicationContext;
 
 	@Autowired
-	private RedmineConfigurationService configurationService;
+	private RedmineConfigurationService	configurationService;
 
-	private ICurrentUserService currentUserService;
+	private ICurrentUserService			currentUserService;
 
 	public void init() {
 
@@ -59,9 +60,22 @@ public class RedmineProjectLifeCycleExtension implements IProjectLifecycleExtens
 	}
 
 	@Override
-	public NotifyResult notifyCreatedProject(ProjectDto project) {
+	public NotifyResult notifyCreatedFeature(final ProjectDto project, final String ticketId, final String featureSubject, final String username) {
 
-		init();
+		try {
+			this.redmineService.changeStatus(ticketId, this.configurationService.getFeatureStatusAssignedId(), username);
+
+		} catch (final Exception ex) {
+			LOGGER.error("[Redmine] Failed to change ticket #{} status", ticketId, ex);
+			this.errorHandler.registerErrorMessage("Failed to change Redmine ticket status.");
+		}
+		return NotifyResult.CONTINUE;
+	}
+
+	@Override
+	public NotifyResult notifyCreatedProject(final ProjectDto project) {
+
+		this.init();
 
 		final String logginName = this.currentUserService.getCurrentUserLogin();
 
@@ -83,7 +97,21 @@ public class RedmineProjectLifeCycleExtension implements IProjectLifecycleExtens
 	}
 
 	@Override
-	public NotifyResult notifyDeletedProject(ProjectDto project) {
+	public NotifyResult notifyCreatedRelease(final ProjectDto project, final String releaseVersion, final String username) {
+		try {
+
+			final String releaseTicketSubject = this.createReleaseTicketSubject(project, releaseVersion);
+
+			this.redmineService.createTicket(project, releaseVersion, releaseTicketSubject, username);
+		} catch (final RedmineExtensionException e) {
+			LOGGER.error("[Redmine] Failed to create a ticket for the release {} of the project {}", releaseVersion, project.getName());
+			this.errorHandler.registerErrorMessage("Failed to create a Redmine ticket for the release.");
+		}
+		return NotifyResult.CONTINUE;
+	}
+
+	@Override
+	public NotifyResult notifyDeletedProject(final ProjectDto project) {
 
 		try {
 
@@ -97,53 +125,12 @@ public class RedmineProjectLifeCycleExtension implements IProjectLifecycleExtens
 	}
 
 	@Override
-	public NotifyResult notifyDuplicatedProject(ProjectDto _project) {
+	public NotifyResult notifyDuplicatedProject(final ProjectDto _project) {
 		return NotifyResult.CONTINUE;
 	}
 
 	@Override
-	public NotifyResult notifyUpdatedProject(ProjectDto _project) {
-		return NotifyResult.CONTINUE;
-	}
-
-	@Override
-	public NotifyResult notifyCreatedRelease(ProjectDto project, String releaseVersion, String username) {
-		try {
-
-			final String releaseTicketSubject = createReleaseTicketSubject(project, releaseVersion);
-
-			this.redmineService.createTicket(project, releaseVersion, releaseTicketSubject, username);
-		} catch (final RedmineExtensionException e) {
-			LOGGER.error("[Redmine] Failed to create a ticket for the release {} of the project {}", releaseVersion, project.getName());
-			this.errorHandler.registerErrorMessage("Failed to create a Redmine ticket for the release.");
-		}
-		return NotifyResult.CONTINUE;
-	}
-
-	private String createReleaseTicketSubject(ProjectDto project, String releaseVersion) {
-		final Map<String, String> variables = new HashMap<String, String>(2);
-		variables.put("projectName", project.getName());
-		variables.put("releaseVersion", releaseVersion);
-		return replaceVariables(this.configurationService.getReleaseTicketMessagePattern(), variables);
-	}
-
-	@Override
-	public NotifyResult notifyCreatedFeature(ProjectDto project, String ticketId,
-			String featureSubject, String username) {
-
-		try {
-			this.redmineService.changeStatus(ticketId, this.configurationService.getFeatureStatusAssignedId(), username);
-
-		} catch (final Exception ex) {
-			LOGGER.error("[Redmine] Failed to change ticket #{} status", ticketId, ex);
-			this.errorHandler.registerErrorMessage("Failed to change Redmine ticket status.");
-		}
-		return NotifyResult.CONTINUE;
-	}
-
-	@Override
-	public NotifyResult notifyFinishedFeature(ProjectDto projectDto, String ticketId,
-			String featureSubject) {
+	public NotifyResult notifyFinishedFeature(final ProjectDto projectDto, final String ticketId, final String featureSubject) {
 		try {
 			this.redmineService.changeStatus(ticketId, this.configurationService.getFeatureStatusClosedId(), null);
 
@@ -155,20 +142,32 @@ public class RedmineProjectLifeCycleExtension implements IProjectLifecycleExtens
 	}
 
 	@Override
-	public NotifyResult notifyFinishedRelease(ProjectDto project, String releaseName) {
+	public NotifyResult notifyFinishedRelease(final ProjectDto project, final String releaseName) {
 
 		try {
 			this.redmineService.changeVersionStatus(project, releaseName, Version.STATUS_CLOSED);
 
 		} catch (final Exception ex) {
 			LOGGER.error("[Redmine] Failed to change version '{}' state status", releaseName, ex);
-			this.errorHandler.registerError("Failed to change Redmine version state.");
+			this.errorHandler.registerError(new RedmineException("Failed to change Redmine version state."));
 		}
 
 		return NotifyResult.CONTINUE;
 	}
 
-	private String replaceVariables(String str, Map<String, String> variables) {
+	@Override
+	public NotifyResult notifyUpdatedProject(final ProjectDto _project) {
+		return NotifyResult.CONTINUE;
+	}
+
+	private String createReleaseTicketSubject(final ProjectDto project, final String releaseVersion) {
+		final Map<String, String> variables = new HashMap<>(2);
+		variables.put("projectName", project.getName());
+		variables.put("releaseVersion", releaseVersion);
+		return this.replaceVariables(this.configurationService.getReleaseTicketMessagePattern(), variables);
+	}
+
+	private String replaceVariables(final String str, final Map<String, String> variables) {
 		final StrSubstitutor sub = new StrSubstitutor(variables);
 		sub.setVariablePrefix("%{");
 		return sub.replace(str);

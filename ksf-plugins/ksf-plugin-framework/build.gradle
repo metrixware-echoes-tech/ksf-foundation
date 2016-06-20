@@ -1,0 +1,15 @@
+dependencies {
+
+	compile project(":ksf-plugins:ksf-plugin-api")
+
+	compile "commons-io:commons-io:$APACHE_COMMONIO"
+	compile "commons-validator:commons-validator:$APACHE_COMMONVALID"
+	compile "joda-time:joda-time:$JODA_TIME"
+	compile "org.apache.commons:commons-lang3:$APACHE_COMMONLANG3"
+	compile "org.codehaus.groovy:groovy-all:$GROOVY_VERSION"
+	compile "org.slf4j:slf4j-api:$LOG_SLF4J"
+	compile "com.google.code.findbugs:jsr305:$FINDBUGS"
+	compile "com.google.guava:guava:$GUAVA"
+
+	testCompile JUNIT
+}

@@ -2,6 +2,7 @@ package fr.echoes.labs.ksf.cc.plugins.foreman;
 
 import static org.junit.Assert.assertEquals;
 
+import org.easymock.Mock;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -14,21 +15,24 @@ import fr.echoes.labs.pluginfwk.api.extension.IExtension;
 @RunWith(MockitoJUnitRunner.class)
 public class ForemanPluginTest {
 
-	private final ForemanDAOExtension				foremanDAOExtension;
-	private final ForemanProjectDashboardExtension	foremanProjectDashboardExtension;
-	private final ForemanProjectLifeCycleExtension	foremanProjectLifeCycleExtension;
-	private final ForemanPlugin						foremanPlugin	= new ForemanPlugin();
+	@Mock
+	private ForemanDAOExtension					foremanDAOExtension;
+	@Mock
+	private ForemanProjectDashboardExtension	foremanProjectDashboardExtension;
+	@Mock
+	private ForemanProjectLifeCycleExtension	foremanProjectLifeCycleExtension;
 
 	@Test
 	public void testGetExtensions() throws Exception {
-
+		final ForemanPlugin foremanPlugin = new ForemanPlugin(this.foremanDAOExtension, this.foremanProjectDashboardExtension,
+				this.foremanProjectLifeCycleExtension);
 		try {
-			this.foremanPlugin.init();
-			final IExtension[] extensions = this.foremanPlugin.getExtensions();
+			foremanPlugin.init();
+			final IExtension[] extensions = foremanPlugin.getExtensions();
 			System.out.println(extensions);
 			assertEquals(2, extensions.length);
 		} finally {
-			this.foremanPlugin.destroy();
+			foremanPlugin.destroy();
 		}
 	}
 

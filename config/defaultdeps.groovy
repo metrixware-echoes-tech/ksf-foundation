@@ -2,20 +2,6 @@ gradle.allprojects {
 	/** DEPENDENCIES */
 	dependencies {
 
-		compile "org.slf4j:slf4j-api:$LOG_SLF4J"
-		compile "org.slf4j:jcl-over-slf4j:$LOG_SLF4J"
-		compile "org.slf4j:log4j-over-slf4j:$LOG_SLF4J"
-
-		compile "com.google.code.findbugs:jsr305:$FINDBUGS"
-		compile "com.google.guava:guava:$GUAVA"
-		compile "org.codehaus.groovy:groovy-all:${GROOVY_VERSION}"
-		compile	"org.springframework.data:spring-data-mongodb:$SPRING_MONGO"
-
-		compile "org.javers:javers-spring:$JAVERS"
-		compile "org.javers:javers-persistence-mongo:$JAVERS"
-
-		compile "org.mongodb:mongo-java-driver:$MONGO_DRIVER"
-		compile "com.github.fakemongo:fongo:$FONGO"
 		testCompile "com.lordofthejars:nosqlunit-mongodb:$TEST_NOSQLUNIT"
 
 		testCompile LOGGING

@@ -2,19 +2,20 @@ dependencies {
 
 
 
+
+	compile "com.google.code.findbugs:jsr305:$FINDBUGS"
+	compile "com.google.guava:guava:$GUAVA"
+
 	compile "commons-io:commons-io:$APACHE_COMMONIO"
 	compile "commons-validator:commons-validator:$APACHE_COMMONVALID"
+
 	compile "javax.mail:javax.mail-api:$JAVAMAIL"
 	compile "joda-time:joda-time:$JODA_TIME"
-
 	compile "org.apache.commons:commons-lang3:$APACHE_COMMONLANG3"
 	compile "org.codehaus.groovy:groovy-all:$GROOVY_VERSION"
 	compile "org.ocpsoft.prettytime:prettytime:$PRETTY_TIME"
-	compile "org.slf4j:jcl-over-slf4j:$LOG_SLF4J"
-	compile "org.slf4j:log4j-over-slf4j:$LOG_SLF4J"
-	compile "org.slf4j:slf4j-api:$LOG_SLF4J"
 
-	compile JUNIT
+	compile "org.slf4j:slf4j-api:$LOG_SLF4J"
 
 	compile("org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}")
 	compile("org.springframework.boot:spring-boot-starter-data-mongodb:${springBootVersion}")
@@ -24,7 +25,7 @@ dependencies {
 	compile("org.springframework.security:spring-security-cas:${SPRING_SECU_CAS}")
 	compile("org.springframework.security:spring-security-ldap:${SPRING_LDAP}")
 
-	// LDAP
 	testCompile   ("org.apache.directory.server:apacheds-server-jndi:${LDAP_SERVER}")
+	testCompile JUNIT
 
 }

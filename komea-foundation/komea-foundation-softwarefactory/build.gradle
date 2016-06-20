@@ -3,4 +3,6 @@ dependencies {
 	compile project(":ksf-commons:ksf-backend-domain-commons")
 	compile project(":ksf-commons:ksf-backend-projects")
 	compile project(":ksf-commons:ksf-backend-users")
+
+	testCompile project(":ksf-commons:ksf-backend-testutils")
 }

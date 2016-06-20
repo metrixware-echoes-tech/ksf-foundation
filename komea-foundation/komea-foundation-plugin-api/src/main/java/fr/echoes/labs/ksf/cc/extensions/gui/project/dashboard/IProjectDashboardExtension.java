@@ -9,7 +9,7 @@ import fr.echoes.labs.pluginfwk.api.extension.IExtension;
  * @author sleroy
  *
  */
-public interface IProjectDashboardExtension  extends IExtension{
+public interface IProjectDashboardExtension extends IExtension {
 
 	void reclaimProjectDashboardWidget(IProjectDashboardWidgets _widgets);
 }

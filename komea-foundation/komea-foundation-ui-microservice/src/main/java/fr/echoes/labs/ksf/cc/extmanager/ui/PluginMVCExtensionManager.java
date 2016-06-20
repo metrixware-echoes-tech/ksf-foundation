@@ -12,8 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import fr.echoes.labs.ksf.cc.extensions.gui.IPluginGuiControllerExtension;
-import fr.echoes.labs.ksf.extensions.pluginloader.ExtensionManagerImpl;
 import fr.echoes.labs.pluginfwk.api.extension.ExtensionManager;
+import fr.echoes.labs.pluginfwk.pluginloader.ExtensionManagerImpl;
 
 @Service
 public class PluginMVCExtensionManager implements IPluginMVCExtensionManager {

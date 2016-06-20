@@ -58,7 +58,7 @@ public class ProjectLifecycleExtensionManager {
 				break;
 			}
 		}
-		
+
 		saveAttributes(_event.getCreatedProject(), projectDto);
 		this.gate.dispatch(new EditProjectCommand(_event.getCreatedProject()));
 	}
