@@ -8,24 +8,25 @@ import org.mockito.InjectMocks;
 import org.mockito.Spy;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import fr.echoes.labs.pluginfwk.api.plugin.PluginFramework;
 import fr.echoes.labs.pluginfwk.extensions.java.JavaClasspathPluginScanner;
-import fr.echoes.labs.pluginfwk.pluginloader.PluginFramework;
+import fr.echoes.labs.pluginfwk.pluginloader.PluginFrameworkImpl;
 import fr.echoes.labs.pluginfwk.pluginloader.PluginFrameworkConfiguration;
 
 @RunWith(MockitoJUnitRunner.class)
-public class PluginFrameworkTest {
+public class PluginFrameworkImplTest {
 
 	@Spy
 	private PluginFrameworkConfiguration	pluginFrameworkConfiguration;
 	@InjectMocks
-	private PluginFramework					pluginFramework;
+	private PluginFramework					pluginFrameworkImpl;
 
 	@Test
 	public void testDeclarePluginScanner() throws Exception {
 		this.pluginFrameworkConfiguration.setExtraLibsFolder(new File("src/test/resources/extraLibs"));
-		try (final PluginFramework pluginFramework = new PluginFramework(this.pluginFrameworkConfiguration)) {
-			pluginFramework.declarePluginScanner(new JavaClasspathPluginScanner());
-			pluginFramework.reloadPlugins();
+		try (final PluginFramework pluginFrameworkImpl = new PluginFrameworkImpl(this.pluginFrameworkConfiguration)) {
+			pluginFrameworkImpl.declarePluginScanner(new JavaClasspathPluginScanner());
+			pluginFrameworkImpl.reloadPlugins();
 		} finally {
 
 		}
