@@ -53,14 +53,13 @@ public class ProjectLifecycleExtensionManager {
 		}
 		final ProjectDto projectDto = this.newProjectDto(event.getProject());
 		for (final IProjectLifecycleExtension extension : extensions) {
-			final NotifyResult result = extension.notifyCreatedFeature(projectDto, event.getFeatureId(), event.getFeatureSubject());
+			final NotifyResult result = extension.notifyCreatedFeature(projectDto, event.getFeatureId(), event.getFeatureSubject(), event.getUsername());
 			if (result != NotifyResult.CONTINUE) {
 				break;
 			}
 		}
 
-		saveAttributes(_event.getCreatedProject(), projectDto);
-		this.gate.dispatch(new EditProjectCommand(_event.getCreatedProject()));
+		this.saveAttributes(event.getProject(), projectDto);
 	}
 
 	@Subscribe
@@ -88,13 +87,10 @@ public class ProjectLifecycleExtensionManager {
 		final ProjectDto projectDto = this.newProjectDto(_event.getCreatedProject());
 		for (final IProjectLifecycleExtension extension : extensions) {
 
-			if (result != NotifyResult.CONTINUE) {
-				break;
-			}
+			extension.notifyCreatedProject(projectDto);
 		}
 
-		_event.getCreatedProject().setOtherAttributes(projectDto.getOtherAttributes());
-		this.gate.dispatch(new EditProjectCommand(_event.getCreatedProject()));
+		this.saveAttributes(_event.getCreatedProject(), projectDto);
 	}
 
 	@Subscribe
@@ -131,12 +127,13 @@ public class ProjectLifecycleExtensionManager {
 		}
 		final ProjectDto projectDto = this.newProjectDto(event.getProject());
 		for (final IProjectLifecycleExtension extension : extensions) {
-			final NotifyResult result = extension.notifyCreatedRelease(projectDto, event.getReleaseVersion());
+			final NotifyResult result = extension.notifyCreatedRelease(projectDto, event.getReleaseVersion(), event.getUsername());
 			if (result != NotifyResult.CONTINUE) {
 				break;
 			}
 		}
 
+		this.saveAttributes(event.getProject(), projectDto);
 	}
 
 	@Subscribe
@@ -170,6 +167,11 @@ public class ProjectLifecycleExtensionManager {
 		return null;
 	}
 
-	// TODO:/Duplicated projects
+	private void saveAttributes(final Project project, final ProjectDto projectDto) {
+
+		project.setOtherAttributes(projectDto.getOtherAttributes());
+		this.gate.dispatch(new EditProjectCommand(project));
+
+	}
 
 }
