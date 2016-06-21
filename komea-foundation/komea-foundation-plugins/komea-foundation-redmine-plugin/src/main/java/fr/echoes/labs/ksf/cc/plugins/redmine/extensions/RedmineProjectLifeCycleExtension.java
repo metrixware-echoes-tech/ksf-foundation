@@ -112,7 +112,7 @@ public class RedmineProjectLifeCycleExtension implements IProjectLifecycleExtens
 
 			final String releaseTicketSubject = createReleaseTicketSubject(project, releaseVersion);
 
-			this.redmineService.createTicket(project, releaseVersion, releaseTicketSubject, username);
+			this.redmineService.createTicket(project, releaseVersion, releaseTicketSubject, username, this.configurationService.getTaskTrackerId());
 		} catch (final RedmineExtensionException e) {
 			LOGGER.error("[Redmine] Failed to create a ticket for the release {} of the project {}", releaseVersion, project.getName());
 			this.errorHandler.registerError("Failed to create a Redmine ticket for the release.");

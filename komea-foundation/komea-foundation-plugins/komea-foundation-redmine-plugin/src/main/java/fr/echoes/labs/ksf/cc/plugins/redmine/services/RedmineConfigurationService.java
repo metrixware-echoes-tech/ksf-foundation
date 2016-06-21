@@ -47,8 +47,9 @@ public class RedmineConfigurationService {
 
     @Value("${ksf.redmine.hackBugApi}")
     private boolean hackBugApi;
-    
-    
+
+    @Value("${ksf.redmine.taskTrackerId}")
+    private Integer taskTrackerId;
 
 	public String getUrl() {
         if ('/' == this.url.charAt(this.url.length() - 1)) {
@@ -131,8 +132,14 @@ public class RedmineConfigurationService {
 	 * @return {@code true} to avoid the server error when calling the Redmine API to get a issue with its ID.
 	 */
 	public boolean isHackBugApi() {
-		return hackBugApi;
+		return this.hackBugApi;
 	}
 
+	/**
+	 * @return the taskTrackerId
+	 */
+	public Integer getTaskTrackerId() {
+		return this.taskTrackerId;
+	}
 
 }

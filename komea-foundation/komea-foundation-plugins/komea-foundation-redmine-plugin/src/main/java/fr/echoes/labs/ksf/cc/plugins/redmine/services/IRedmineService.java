@@ -87,9 +87,10 @@ public interface IRedmineService {
 	 * @param releaseVersion the release version
 	 * @param username the assignee username. Can be {@code null}.
 	 * @param string the ticket title
+	 * @param trackerId the tracker to use for this issue. Can be {@code null}.
 	 * @throws RedmineExtensionException
 	 */
-	public void createTicket(ProjectDto project, String releaseVersion, String title, String username) throws RedmineExtensionException;
+	public void createTicket(ProjectDto project, String releaseVersion, String title, String username, Integer trackerId) throws RedmineExtensionException;
 
 	public void changeVersionStatus(ProjectDto foundationProject, String releaseName, String status) throws RedmineExtensionException;
 

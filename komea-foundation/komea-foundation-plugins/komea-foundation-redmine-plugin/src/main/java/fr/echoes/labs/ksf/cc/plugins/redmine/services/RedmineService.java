@@ -1,5 +1,19 @@
 package fr.echoes.labs.ksf.cc.plugins.redmine.services;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.taskadapter.redmineapi.IssueManager;
 import com.taskadapter.redmineapi.MembershipManager;
 import com.taskadapter.redmineapi.ProjectManager;
@@ -14,6 +28,7 @@ import com.taskadapter.redmineapi.bean.ProjectFactory;
 import com.taskadapter.redmineapi.bean.Tracker;
 import com.taskadapter.redmineapi.bean.User;
 import com.taskadapter.redmineapi.bean.Version;
+
 import fr.echoes.labs.ksf.cc.extensions.services.project.ProjectUtils;
 import fr.echoes.labs.ksf.cc.extensions.services.project.TicketStatus;
 import fr.echoes.labs.ksf.cc.extensions.services.project.features.IProjectFeature;
@@ -25,18 +40,6 @@ import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineIssue;
 import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineQuery;
 import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineQuery.Builder;
 import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 /**
  * Spring Service for working with the foreman API.
@@ -384,7 +387,7 @@ public class RedmineService implements IRedmineService {
     }
 
     @Override
-    public void createTicket(ProjectDto foundationProject, String releaseVersion, String subject, String username) throws RedmineExtensionException {
+    public void createTicket(ProjectDto foundationProject, String releaseVersion, String subject, String username, Integer trackerId) throws RedmineExtensionException {
 
         Objects.requireNonNull(foundationProject);
         Objects.requireNonNull(releaseVersion);
@@ -401,6 +404,12 @@ public class RedmineService implements IRedmineService {
             issue.setProject(redmineProject);
             issue.setTargetVersion(version);
             issue.setSubject(subject);
+
+			if (trackerId != null) {
+				final Tracker tracker = findTracker(issueManager, trackerId);
+				issue.setTracker(tracker);
+			}
+
             this.changeIssueAssignee(issue, username);
 
             issueManager.createIssue(issue);
@@ -409,6 +418,23 @@ public class RedmineService implements IRedmineService {
             throw new RedmineExtensionException("Failed to create ticket", e);
         }
     }
+
+	private Tracker findTracker(IssueManager issueManager, Integer trackerId) throws RedmineException {
+
+		if (issueManager == null || trackerId == null) {
+			return null;
+		}
+
+		final List<Tracker> trackers = issueManager.getTrackers();
+
+		for (final Tracker tracker : trackers) {
+			if (trackerId.equals(tracker.getId())) {
+				return tracker;
+			}
+		}
+
+		return null;
+	}
 
     private Version findVersion(Project redmineProject, String releaseVersion) throws RedmineException {
         final List<Version> versions = this.redmineManager.getProjectManager().getVersions(redmineProject.getId());
@@ -427,7 +453,7 @@ public class RedmineService implements IRedmineService {
 
         try {
             final String projectIdentifier = findProjectIdentifier(foundationProject.getName());
-            final ProjectManager projectManager = redmineManager.getProjectManager();
+            final ProjectManager projectManager = this.redmineManager.getProjectManager();
 
             final Project redmineProject = projectManager.getProjectByKey(projectIdentifier);
             final Version version = findVersion(redmineProject, releaseVersion);
