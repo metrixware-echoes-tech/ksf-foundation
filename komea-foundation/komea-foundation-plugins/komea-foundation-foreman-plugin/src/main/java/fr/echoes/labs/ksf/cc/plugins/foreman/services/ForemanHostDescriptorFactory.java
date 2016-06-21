@@ -14,12 +14,12 @@ import fr.echoes.labs.ksf.cc.plugins.foreman.model.ForemanTarget;
 
 @Service
 public class ForemanHostDescriptorFactory {
-	
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(ForemanHostDescriptorFactory.class);
-	
+
 	@Autowired
 	private ForemanConfigurationService configurationService;
-	
+
 	/**
 	 * Create a HostDescriptor object that can be used to instantiate a Host in Foreman
 	 * @param project the KSF project associated to the host
@@ -29,46 +29,49 @@ public class ForemanHostDescriptorFactory {
 	 * @return a HostDescriptor instance
 	 */
 	public ForemanHostDescriptor createHostDescriptor(Project project, ForemanTarget target, String hostName, String hostPass) {
-		
+
 		final ForemanEnvironnment environment = target.getEnvironment();
-		
+
 		final String hostGroupName = project.getName();
 		final String environmentName = environment.getName();
 		final String operatingSystemId = target.getOperationSystemId();
 		final String puppetConfiguration = target.getPuppetConfiguration();
 		String computeProfileId = target.getComputeProfile();
-		
+
 		if (StringUtils.isEmpty(computeProfileId)) {
-			computeProfileId = configurationService.getComputeProfileId();
+			computeProfileId = this.configurationService.getComputeProfileId();
 		}
-		
-		String passwordVm = configurationService.getRootPassword();
+
+		String passwordVm = this.configurationService.getRootPassword();
 	    if (StringUtils.isNotEmpty(hostPass)) {
 	    	passwordVm = hostPass;
 	    }
 
 		LOGGER.info("[foreman] hostName: {}", hostName);
-		LOGGER.info("[foreman] computeResourceId: {}", configurationService.getComputeResourceId());
+		LOGGER.info("[foreman] computeResourceId: {}", this.configurationService.getComputeResourceId());
 		LOGGER.info("[foreman] computeProfileId: {}", computeProfileId);
 		LOGGER.info("[foreman] hostGroupName: {}", hostGroupName);
 		LOGGER.info("[foreman] environmentName: {}", environmentName);
 		LOGGER.info("[foreman] operatingSystemId: {}", operatingSystemId);
-		LOGGER.info("[foreman] architectureId: {}", configurationService.getArchitectureId());
+		LOGGER.info("[foreman] architectureId: {}", this.configurationService.getArchitectureId());
 		LOGGER.info("[foreman] puppetConfiguration: {}", puppetConfiguration);
-		LOGGER.info("[foreman] domainId: {}", configurationService.getDomainId());
+		LOGGER.info("[foreman] domainId: {}", this.configurationService.getDomainId());
 
     	final ForemanHostDescriptor hostDescriptor = new ForemanHostDescriptor();
     	hostDescriptor.setHostName(hostName);
-    	hostDescriptor.setComputeResourceId(configurationService.getComputeResourceId());
+    	hostDescriptor.setComputeResourceId(this.configurationService.getComputeResourceId());
     	hostDescriptor.setComputeProfileId(computeProfileId);
     	hostDescriptor.setHostGroupName(hostGroupName);
     	hostDescriptor.setEnvironmentName(environmentName);
     	hostDescriptor.setOperatingSystemId(operatingSystemId);
-    	hostDescriptor.setArchitectureId(configurationService.getArchitectureId());
+    	hostDescriptor.setArchitectureId(this.configurationService.getArchitectureId());
     	hostDescriptor.setPuppetConfiguration(puppetConfiguration);
-    	hostDescriptor.setDomainId(configurationService.getDomainId());
+    	hostDescriptor.setDomainId(this.configurationService.getDomainId());
     	hostDescriptor.setRootPassword(passwordVm);
-    	
+    	hostDescriptor.setProvisionMethod(this.configurationService.getProvisionMethod());
+    	hostDescriptor.setImageId(this.configurationService.getImageId());
+
+
     	return hostDescriptor;
 	}
 

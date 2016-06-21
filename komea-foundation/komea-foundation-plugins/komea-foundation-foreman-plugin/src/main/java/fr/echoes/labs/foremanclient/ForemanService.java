@@ -283,23 +283,6 @@ public class ForemanService implements IForemanService {
 
      private void addRoleToUser(final IForemanApi api, String userId, String roleId) {
     	 updateRoleTOuser(api, userId, roleId, true);
-//          final User user = api.getUser(userId);
-//
-//          final List<String> roleIds = new ArrayList<String>();
-//
-//          for (final Role role : user.roles) {
-//               roleIds.add(role.id);
-//          }
-//
-//          roleIds.add(roleId);
-//
-//          final NewUser newUser = new NewUser();
-//
-//          final UserWrapper userWrapper = new UserWrapper();
-//          newUser.role_ids = roleIds;
-//          userWrapper.setUser(newUser);
-//
-//          api.updateUser(user.id, userWrapper);
      }
 
      /* (non-Javadoc)
@@ -324,12 +307,23 @@ public class ForemanService implements IForemanService {
 		 newHost.environment_id = findEnvironmentId(api, parameterObject.getEnvironmentName());
 		 newHost.operatingsystem_id = parameterObject.getOperatingSystemId();
 		 newHost.architecture_id = parameterObject.getArchitectureId();
-		 newHost.domain_id = parameterObject.getDomainId();
+		// newHost.domain_id = parameterObject.getDomainId();
+		 newHost.domain_id = "2";
 		 newHost.root_pass = parameterObject.getRootPassword();
+		 newHost.subnet_id = "2";
+
+		 newHost.provision_method = parameterObject.getProvisionMethod();
+		 newHost.medium_id = "2";
+		 newHost.ptable_id = "54";
+
+		 final String imageId = parameterObject.getImageId();
+		 if (!org.apache.commons.lang3.StringUtils.isBlank(imageId)) {
+			 newHost.compute_attributes.image_id = imageId;
+		 }
 
 		 final NetworkInterface eth0 = new NetworkInterface();
 		 eth0.subnet_id = null;
-		 eth0.domain_id = null;
+		 eth0.domain_id = "3";
 		 eth0.managed = "0";
 		 eth0.primary = "0";
 		 eth0.provision = "0";
@@ -339,6 +333,7 @@ public class ForemanService implements IForemanService {
 
 		 final NetworkInterface eth1 = new NetworkInterface();
 		 eth1.identifier = "eth1";
+		 eth1.ip = getUnusedIp();
 		 newHost.interfaces_attributes.put("1", eth1 );
 
 
@@ -366,7 +361,18 @@ public class ForemanService implements IForemanService {
 	     return host;
      }
 
-     private List<String> findPuppetClassesId(IForemanApi api, String environmentName) {
+     private String getUnusedIp() {
+    	final String unusedIpScriptPath = this.config.getUnusedIpScript();
+    	final UnusedIpGetter unusedIp = new UnusedIpGetter(unusedIpScriptPath);
+		try {
+			return unusedIp.get();
+		} catch (final Exception e) {
+			LOGGER.error("[foreman] failed to get unused IP", e);
+			return "";
+		}
+	}
+
+	private List<String> findPuppetClassesId(IForemanApi api, String environmentName) {
     	 final List<String> result = new ArrayList<String>();
 
     	 final String environmentId = findEnvironmentId(api, environmentName);
@@ -603,6 +609,7 @@ public class ForemanService implements IForemanService {
 		return hosts != null ? hosts.results : null;
 
 	}
+
 
 
 }

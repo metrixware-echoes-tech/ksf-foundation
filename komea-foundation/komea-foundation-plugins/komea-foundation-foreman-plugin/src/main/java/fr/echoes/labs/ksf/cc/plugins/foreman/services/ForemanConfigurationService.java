@@ -55,6 +55,15 @@ public class ForemanConfigurationService {
     @Value("${ksf.foreman.puppetModuleInstallScript:}")
     private String puppetModuleInstallScript;
 
+    @Value("${ksf.foreman.provisioMethod:build}")
+    private String provisionMethod;
+
+    @Value("${ksf.foreman.imageId:}")
+	private String imageId;
+
+    @Value("${ksf.foreman.unusedIpScript:}")
+	private String unusedIpScript;
+
     public Boolean getCreateParametersEnabled() {
 		return this.createParametersEnabled;
 	}
@@ -145,4 +154,24 @@ public class ForemanConfigurationService {
 		return this.puppetModuleInstallScript;
 	}
 
+	/**
+	 * @return the provisionMethod
+	 */
+	public String getProvisionMethod() {
+		return this.provisionMethod;
+	}
+
+	/**
+	 * @return the imageId
+	 */
+	public String getImageId() {
+		return this.imageId;
+	}
+
+	/**
+	 * @return the unusedIpScript
+	 */
+	public String getUnusedIpScript() {
+		return this.unusedIpScript;
+	}
 }
