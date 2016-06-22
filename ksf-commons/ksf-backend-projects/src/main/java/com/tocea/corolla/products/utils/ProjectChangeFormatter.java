@@ -33,24 +33,24 @@ import com.tocea.corolla.revisions.services.IChangeFormatter;
 @Component
 public class ProjectChangeFormatter implements IChangeFormatter {
 
-	@Autowired
-	private IProjectStatusDAO statusDAO;
-	
-	@Override
-	public String format(IChange change, String target) {
-		
-		Object value = target.equals("R") ? change.getRightValue() : change.getLeftValue();
-		
-		if (change.getPropertyType().equals(List.class)) {
-			return Joiner.on(',').join((Iterable<?>) value);
-		}
+    @Autowired
+    private IProjectStatusDAO statusDAO;
 
-		if (change.getPropertyName().equals("statusId")) {
-			ProjectStatus status = statusDAO.findOne((String) value);
-			return status.getName();
-		}
-		
-		return value != null ? value.toString() : "";
-	}
-	
+    @Override
+    public String format(IChange change, String target) {
+
+        Object value = target.equals("R") ? change.getRightValue() : change.getLeftValue();
+
+        if (value != null && List.class.isAssignableFrom(value.getClass())) {
+            return Joiner.on(',').join((Iterable<?>) value);
+        }
+
+        if (change.getPropertyName().equals("statusId")) {
+            ProjectStatus status = statusDAO.findOne((String) value);
+            return status.getName();
+        }
+
+        return value != null ? value.toString() : "";
+    }
+
 }

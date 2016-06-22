@@ -32,7 +32,7 @@ public interface IRevisionService {
 	 * Creates a new version of an object
 	 * @param obj
 	 */
-	public void commit(Object obj);
+	public String commit(Object obj);
 	
 	/**
 	 * Retrieves the history of an object

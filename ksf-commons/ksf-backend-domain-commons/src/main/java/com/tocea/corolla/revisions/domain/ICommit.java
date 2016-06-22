@@ -30,5 +30,9 @@ public interface ICommit {
 	public Date getDate();
 	
 	public String getType();
+        
+        public String getObjectID();
+        
+        public Class<?> getObjectClass();
 	
 }

@@ -2,4 +2,6 @@ dependencies {
 	compile project(":ksf-commons:ksf-backend-cqrs")
 	compile project(":ksf-commons:ksf-backend-domain-commons")
 	testCompile ("org.apache.directory.server:apacheds-server-jndi:1.5.5") // For Test : Embedded ldap server
+
+	testCompile project(":ksf-commons:ksf-backend-testutils")
 }

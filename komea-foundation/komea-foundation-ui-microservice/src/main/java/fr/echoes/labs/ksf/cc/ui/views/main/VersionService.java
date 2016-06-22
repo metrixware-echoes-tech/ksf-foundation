@@ -1,23 +1,37 @@
 package fr.echoes.labs.ksf.cc.ui.views.main;
 
-import org.springframework.beans.factory.annotation.Value;
+import java.io.IOException;
+import java.util.Properties;
+
+import javax.annotation.PostConstruct;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service(value = "versionService")
 public class VersionService {
 
-    @Value("${buildVersion}")
-    private String buildVersion;
+	private static final Logger	LOGGER	= LoggerFactory.getLogger(VersionService.class);
 
-    @Value("${buildTimestamp}")
-    private String buildTimestamp;
+	private Properties			properties;
 
-    public String getBuildVersion() {
-        return this.buildVersion;
-    }
+	public String getBuildTimestamp() {
+		return this.properties.getProperty("buildTimestamp");
+	}
 
-    public String getBuildTimestamp() {
-        return this.buildTimestamp;
-    }
+	public String getBuildVersion() {
+		return this.properties.getProperty("this.buildVersion");
+	}
+
+	@PostConstruct
+	public void loadVersionProperties() {
+		this.properties = new Properties();
+		try {
+			this.properties.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("version.properties"));
+		} catch (final IOException e) {
+			LOGGER.error("Could not load the version of Komea FOundation.");
+		}
+	}
 
 }

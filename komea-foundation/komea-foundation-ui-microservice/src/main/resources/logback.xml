@@ -7,7 +7,7 @@
 		</encoder>
 	</appender>
 
-	<logger name="com.github.fakemongo" level="WARN"></logger>
+	<logger name="com.github.fakemongo" level="INFO"></logger>
 
 	<root level="INFO">
 		<appender-ref ref="STDOUT" />

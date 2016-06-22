@@ -1,4 +1,7 @@
 dependencies {
 	compile "commons-io:commons-io:${APACHE_COMMONIO}"
 	compile project(":ksf-commons:ksf-backend-utils")
+
+
+	testCompile project(":ksf-commons:ksf-backend-testutils")
 }

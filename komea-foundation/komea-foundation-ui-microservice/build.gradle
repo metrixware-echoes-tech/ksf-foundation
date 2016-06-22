@@ -7,7 +7,7 @@ buildscript {
         mavenCentral()
         maven {
             url "https://plugins.gradle.org/m2/"
-        }        
+        }
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
@@ -40,7 +40,7 @@ build.dependsOn bootRepackage
 dependencies {
 
     compile project(":ksf-commons:ksf-backend-microservice")
-	
+
     compile project(":komea-foundation:komea-foundation-softwarefactory")
     compile project(":komea-foundation:komea-foundation-plugin-api")
 
@@ -53,7 +53,11 @@ dependencies {
     compile project(":komea-foundation:komea-foundation-plugins:komea-foundation-nexus-plugin")
     compile project(":komea-foundation:komea-foundation-plugins:komea-foundation-dashboard-plugin")
 
+
+
+
     compile("org.springframework.boot:spring-boot-starter-thymeleaf:${springBootVersion}")
+
     providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
 
     // Test Frameworks
@@ -76,9 +80,9 @@ bower {
     }
 
   'jquery'('2.0.2')
-  
+
   'jquery-ui'('1.11.3')
-  
+
   'jquery-resize'('https://github.com/sdecima/javascript-detect-element-resize.git')
   'components-font-awesome'('4.6.3') {
         source 'css/**' >> 'css/'
@@ -89,7 +93,7 @@ bower {
   'zeroclipboard'('2.2.0')
 
   'salvattore'('1.0.9')
-  
+
   'jquery-treegrid'('0.3.0') {
         source 'js/**'
         source 'css/**'
@@ -99,8 +103,8 @@ bower {
 processResources {
     filesMatching("application.properties") {
         expand(
-        "build_version": project.version, 
+        "build_version": project.version,
         "build_timestamp": new Date().format('yyyyMMddHHmmss')
-        ) 
+        )
     }
 }
