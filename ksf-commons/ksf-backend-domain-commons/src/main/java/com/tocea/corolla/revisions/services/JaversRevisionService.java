@@ -59,9 +59,9 @@ public class JaversRevisionService implements IRevisionService {
 
         final String username = this.currentUserService.getCurrentUserLogin();
         LOGGER.info("new commit transaction for user " + username);
-        final CommitId commitID = this.javers.commit(username, obj).getId();
+        final org.javers.core.commit.Commit commitID = this.javers.commit(username, obj);
 
-        return commitID == null ? null : commitID.value();
+        return commitID == null ? null : commitID.getId().value();
     }
 
     @Override
