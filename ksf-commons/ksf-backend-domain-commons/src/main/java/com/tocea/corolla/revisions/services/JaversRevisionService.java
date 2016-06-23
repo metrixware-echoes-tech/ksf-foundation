@@ -41,6 +41,7 @@ import com.tocea.corolla.revisions.exceptions.InvalidCommitInformationException;
 import com.tocea.corolla.revisions.exceptions.SnapshotBuildFailureException;
 
 import fr.echoes.labs.ksf.users.security.api.ICurrentUserService;
+import org.javers.core.commit.CommitId;
 
 @Service
 public class JaversRevisionService implements IRevisionService {
@@ -58,8 +59,9 @@ public class JaversRevisionService implements IRevisionService {
 
         final String username = this.currentUserService.getCurrentUserLogin();
         LOGGER.info("new commit transaction for user " + username);
+        final CommitId commitID = this.javers.commit(username, obj).getId();
 
-        return this.javers.commit(username, obj).getId().value();
+        return commitID == null ? null : commitID.value();
     }
 
     @Override

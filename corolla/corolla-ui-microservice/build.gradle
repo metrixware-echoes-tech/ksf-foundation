@@ -17,8 +17,9 @@ dependencies {
 	compile project(":ksf-commons:ksf-backend-microservice")
 	compile project(":corolla:corolla-ui-widgets")
 	compile project(":corolla:corolla-backend-requirements")
-	
-	
+
+	compile "com.github.fakemongo:fongo:$FONGO"
+	compile "org.mongodb:mongo-java-driver:$MONGO_DRIVER" // We force the driver.
 	
 	
 	providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
