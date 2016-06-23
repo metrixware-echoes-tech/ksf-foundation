@@ -5,9 +5,7 @@ buildscript {
     repositories {
         mavenLocal()
         mavenCentral()
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
+        maven { url "https://plugins.gradle.org/m2/" }
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
@@ -32,9 +30,7 @@ if (!hasProperty('mainClass')) {
     ext.mainClass = 'fr.echoes.labs.ksf.cc.KomeaFoundationGuiApplication'
 }
 
-bootRepackage {
-    mainClass = 'fr.echoes.labs.ksf.cc.KomeaFoundationGuiApplication'
-}
+bootRepackage { mainClass = 'fr.echoes.labs.ksf.cc.KomeaFoundationGuiApplication' }
 build.dependsOn bootRepackage
 
 dependencies {
@@ -63,8 +59,10 @@ dependencies {
     // Test Frameworks
     testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
 
-	compile "org.slf4j:jcl-over-slf4j:$LOG_SLF4J"
-	compile "org.slf4j:log4j-over-slf4j:$LOG_SLF4J"
+    compile "org.slf4j:jcl-over-slf4j:$LOG_SLF4J"
+    compile "org.slf4j:log4j-over-slf4j:$LOG_SLF4J"
+    compile "com.github.fakemongo:fongo:$FONGO"
+    compile "org.mongodb:mongo-java-driver:$MONGO_DRIVER" // We force the driver.
 
 
 }
@@ -75,26 +73,24 @@ bower {
 
     installBase = 'src/main/resources/static/assets/'
 
-  'bootstrap'('3.3.2') {
-        source 'dist/**'
-    }
+	'bootstrap'('3.3.2') { source 'dist/**' }
 
-  'jquery'('2.0.2')
+	'jquery'('2.0.2')
 
-  'jquery-ui'('1.11.3')
+	'jquery-ui'('1.11.3')
 
-  'jquery-resize'('https://github.com/sdecima/javascript-detect-element-resize.git')
-  'components-font-awesome'('4.6.3') {
+	'jquery-resize'('https://github.com/sdecima/javascript-detect-element-resize.git')
+	'components-font-awesome'('4.6.3') {
         source 'css/**' >> 'css/'
         source 'fonts/**' >> 'fonts/'
     }
 
-  'ionicons'('2.0.1')
-  'zeroclipboard'('2.2.0')
+	'ionicons'('2.0.1')
+	'zeroclipboard'('2.2.0')
 
-  'salvattore'('1.0.9')
+	'salvattore'('1.0.9')
 
-  'jquery-treegrid'('0.3.0') {
+	'jquery-treegrid'('0.3.0') {
         source 'js/**'
         source 'css/**'
     }
@@ -103,8 +99,8 @@ bower {
 processResources {
     filesMatching("application.properties") {
         expand(
-        "build_version": project.version,
-        "build_timestamp": new Date().format('yyyyMMddHHmmss')
+				"build_version": project.version,
+				"build_timestamp": new Date().format('yyyyMMddHHmmss')
         )
     }
 }

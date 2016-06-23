@@ -18,7 +18,9 @@ dependencies {
 	compile "org.slf4j:slf4j-api:$LOG_SLF4J"
 
 	compile("org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}")
-	compile("org.springframework.boot:spring-boot-starter-data-mongodb:${springBootVersion}")
+	compile("org.springframework.boot:spring-boot-starter-data-mongodb:${springBootVersion}") {
+		exclude group: "org.mongodb"
+	}
 	compile("org.springframework.boot:spring-boot-starter-logging:${springBootVersion}")
 	compile("org.springframework.boot:spring-boot-starter-security:${springBootVersion}")
 	compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")

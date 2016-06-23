@@ -30,5 +30,7 @@ activemq-data
 .pmd
 node_modules/
 bower_components/
-**/src/main/resources/static/assets/
+.factorypath
 
+**/src/main/resources/static/assets/
+nbproject

@@ -1,7 +1,9 @@
 subprojects {
-	dependencies {
-  		compile "org.springframework.boot:spring-boot-configuration-processor:$springBootVersion"
-
-	}
-	compileJava.dependsOn(processResources)
+    dependencies {
+        compile "org.springframework.boot:spring-boot-configuration-processor:$springBootVersion"
+		
+        compile "com.github.fakemongo:fongo:$FONGO"
+        compile "org.mongodb:mongo-java-driver:$MONGO_DRIVER" // We force the driver.
+    }
+    compileJava.dependsOn(processResources)
 }

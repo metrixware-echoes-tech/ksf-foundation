@@ -6,9 +6,6 @@ dependencies {
 	compile "org.javers:javers-spring:$JAVERS"
 	compile "org.javers:javers-persistence-mongo:$JAVERS"
 
-	compile "org.mongodb:mongo-java-driver:$MONGO_DRIVER"
-
-	compile("com.github.fakemongo:fongo:$FONGO") { exclude group: 'org.mongodb' }
 
 	testCompile project(":ksf-commons:ksf-backend-testutils")
 }
