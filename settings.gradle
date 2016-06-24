@@ -1,4 +1,5 @@
 rootProject.name = 'ksf-parent'
+group='fr.echoes.labs.ksf'
 
 // KSF-Plugins
 
@@ -29,13 +30,6 @@ include "corolla:corolla-ui-microservice"
 // Komea Foundation
 
 include "komea-foundation:komea-foundation-ui-microservice"
-include "komea-foundation:komea-foundation-plugins:komea-foundation-foreman-plugin"
-include "komea-foundation:komea-foundation-plugins:komea-foundation-puppet-plugin"
-include "komea-foundation:komea-foundation-plugins:komea-foundation-redmine-plugin"
-include "komea-foundation:komea-foundation-plugins:komea-foundation-jenkins-plugin"
-include "komea-foundation:komea-foundation-plugins:komea-foundation-git-plugin"
-include "komea-foundation:komea-foundation-plugins:komea-foundation-nexus-plugin"
-include "komea-foundation:komea-foundation-plugins:komea-foundation-dashboard-plugin"
 include "komea-foundation:komea-foundation-plugin-api"
 include "komea-foundation:komea-foundation-softwarefactory"
 include "komea-foundation:komea-foundation-tests"

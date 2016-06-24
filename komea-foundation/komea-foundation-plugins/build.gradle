@@ -1,7 +1,0 @@
-subprojects {
-
-	dependencies {
-		compile project(":komea-foundation:komea-foundation-plugin-api")
-	
-	}
-}

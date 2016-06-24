@@ -10,8 +10,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import fr.echoes.labs.pluginfwk.api.plugin.PluginFramework;
 import fr.echoes.labs.pluginfwk.extensions.java.JavaClasspathPluginScanner;
-import fr.echoes.labs.pluginfwk.pluginloader.PluginFrameworkImpl;
-import fr.echoes.labs.pluginfwk.pluginloader.PluginFrameworkConfiguration;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PluginFrameworkImplTest {
@@ -19,7 +17,7 @@ public class PluginFrameworkImplTest {
 	@Spy
 	private PluginFrameworkConfiguration	pluginFrameworkConfiguration;
 	@InjectMocks
-	private PluginFramework					pluginFrameworkImpl;
+	private PluginFrameworkImpl				pluginFrameworkImpl;
 
 	@Test
 	public void testDeclarePluginScanner() throws Exception {
