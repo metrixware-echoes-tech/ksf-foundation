@@ -3,6 +3,7 @@ package fr.echoes.labs.pluginfwk.api.plugin;
 import java.io.Closeable;
 
 import fr.echoes.labs.pluginfwk.api.extension.ExtensionManager;
+import fr.echoes.labs.pluginfwk.api.scanner.PluginScanner;
 
 public interface PluginFramework extends Closeable {
 

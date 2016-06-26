@@ -9,7 +9,8 @@ import org.slf4j.LoggerFactory;
 import fr.echoes.labs.pluginfwk.api.extension.ExtensionManager;
 import fr.echoes.labs.pluginfwk.api.plugin.PluginFramework;
 import fr.echoes.labs.pluginfwk.api.plugin.PluginManager;
-import fr.echoes.labs.pluginfwk.api.plugin.PluginScanner;
+import fr.echoes.labs.pluginfwk.api.propertystorage.PluginPropertyStorage;
+import fr.echoes.labs.pluginfwk.api.scanner.PluginScanner;
 
 /**
  * The Class PluginFrameworkImpl is the main class to initialize and manipulate the KSF Framework.
@@ -35,6 +36,10 @@ public class PluginFrameworkImpl implements PluginFramework {
 
 	private final PluginClassLoaderImpl				pluginClassLoader;
 
+	private final PluginPropertyStorage				pluginPropertyStorage;
+
+	private final PluginFrameworkConfiguration		pluginFrameworkConfiguration;
+
 	/**
 	 * Instantiates a new plugin framework.
 	 * e pe
@@ -42,13 +47,16 @@ public class PluginFrameworkImpl implements PluginFramework {
 	 * @param _pluginFrameworkConfiguration
 	 *            the _plugin framework configuration
 	 */
-	public PluginFrameworkImpl(final PluginFrameworkConfiguration _pluginFrameworkConfiguration) {
+	public PluginFrameworkImpl(final PluginFrameworkConfiguration _pluginFrameworkConfiguration, final PluginPropertyStorage _pluginPropertyStorage) {
 		Validate.notNull(_pluginFrameworkConfiguration);
+		Validate.notNull(_pluginPropertyStorage);
+		this.pluginFrameworkConfiguration = _pluginFrameworkConfiguration;
+		this.pluginPropertyStorage = _pluginPropertyStorage;
 		this.extensionSearchResultsCache = new ExtensionSearchResultsCacheImpl();
 		this.extensionEndPoints = new ExtensionEndPoints();
 		this.extensionManager = new ExtensionManagerImpl(this.extensionEndPoints, this.extensionSearchResultsCache);
-		this.pluginClassLoader = new PluginClassLoaderImpl(_pluginFrameworkConfiguration);
-		this.pluginManager = new PluginManagerImpl(this.extensionManager, _pluginFrameworkConfiguration);
+		this.pluginClassLoader = new PluginClassLoaderImpl(this.pluginFrameworkConfiguration);
+		this.pluginManager = new PluginManagerImpl(this.extensionManager, this.pluginFrameworkConfiguration, this.pluginPropertyStorage);
 		this.pluginScanners = new PluginScannerRegistry(this.pluginManager, this.pluginClassLoader);
 
 	}

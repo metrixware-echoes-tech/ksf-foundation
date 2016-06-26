@@ -12,6 +12,9 @@ dependencies {
 	compile "org.slf4j:slf4j-api:$LOG_SLF4J"
 	compile "com.google.code.findbugs:jsr305:$FINDBUGS"
 	compile "com.google.guava:guava:$GUAVA"
+	// https://mvnrepository.com/artifact/net.lingala.zip4j/zip4j
+	compile group: 'net.lingala.zip4j', name: 'zip4j', version: "$ZIP4J"
+
 
 	testCompile JUNIT
 }

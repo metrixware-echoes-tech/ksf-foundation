@@ -1,7 +1,6 @@
 package fr.echoes.labs.pluginfwk.extensions.java;
 
 import java.util.Iterator;
-import java.util.ServiceLoader;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,8 +8,8 @@ import org.slf4j.LoggerFactory;
 import fr.echoes.labs.pluginfwk.api.plugin.PluginDefinition;
 import fr.echoes.labs.pluginfwk.api.plugin.PluginException;
 import fr.echoes.labs.pluginfwk.api.plugin.PluginManager;
-import fr.echoes.labs.pluginfwk.api.plugin.PluginScanner;
-import fr.echoes.labs.pluginfwk.api.plugin.PluginScannerException;
+import fr.echoes.labs.pluginfwk.api.scanner.PluginScanner;
+import fr.echoes.labs.pluginfwk.api.scanner.PluginScannerException;
 
 public class JavaClasspathPluginScanner implements PluginScanner {
 
@@ -28,14 +27,15 @@ public class JavaClasspathPluginScanner implements PluginScanner {
 	@Override
 	public void reloadPlugins(final PluginManager _manager, final ClassLoader _parentClassLoader) throws PluginException {
 		try {
-			final ServiceLoader<PluginDefinition> serviceLoader = ServiceLoader.load(PluginDefinition.class, _parentClassLoader);
-			final Iterator<PluginDefinition> iterator = serviceLoader.iterator();
-			while (iterator.hasNext()) {
-				final PluginDefinition pluginDefinition = iterator.next();
+			final PluginDefinitionServiceLoader pluginDefinitionServiceLoader = new PluginDefinitionServiceLoader(_parentClassLoader);
+			final Iterator<PluginDefinition> pluginDefinitions = pluginDefinitionServiceLoader.getPluginDefinitions();
+			while (pluginDefinitions.hasNext()) {
+				final PluginDefinition pluginDefinition = pluginDefinitions.next();
 				try {
 					_manager.registerPlugin(pluginDefinition);
 				} catch (final Exception e) {
 					LOGGER.error("Could not load the plugin with definition {}", pluginDefinition.getName());
+					_manager.reportPluginFailure(new PluginException("Could not obntain plugin from " + pluginDefinition.getId(), e));
 				}
 
 			}

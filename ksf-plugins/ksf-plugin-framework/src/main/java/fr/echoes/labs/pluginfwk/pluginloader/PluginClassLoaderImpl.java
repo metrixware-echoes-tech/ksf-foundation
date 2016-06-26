@@ -9,6 +9,8 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fr.echoes.labs.pluginfwk.extensions.java.KSFURLClassLoader;
+
 public class PluginClassLoaderImpl implements Closeable {
 
 	private static final Logger					LOGGER	= LoggerFactory.getLogger(PluginClassLoaderImpl.class);
@@ -67,7 +69,7 @@ public class PluginClassLoaderImpl implements Closeable {
 		if (extraLibsFolder != null && extraLibsFolder.exists() && extraLibsFolder.isDirectory()) {
 			LOGGER.info("Scanning a folder to load extra libraries");
 			final Collection<File> jarFiles = this.listJarFiles(extraLibsFolder); // $NON-NLS-1$
-			this.ksfURLClassloader = new KSFURLClassLoader(Thread.currentThread().getContextClassLoader(), jarFiles);
+			this.ksfURLClassloader = KSFURLClassLoader.newPluginClassLoader(Thread.currentThread().getContextClassLoader(), jarFiles);
 		} else {
 			LOGGER.warn("No custom library folder defined");
 			this.ksfURLClassloader = Thread.currentThread().getContextClassLoader();

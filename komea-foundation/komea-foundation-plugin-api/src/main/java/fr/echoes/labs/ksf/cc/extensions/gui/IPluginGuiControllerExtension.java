@@ -11,7 +11,7 @@ import fr.echoes.labs.pluginfwk.api.extension.IExtension;
 public interface IPluginGuiControllerExtension extends IExtension {
 
 	/**
-	 * Returns the domain handled by this extension ex "foreman" /plugins/foreman/*
+	 * Returns the domain handled by this extension ex "foreman" /springplugins/foreman/*
 	 */
 	String getUrlFragment();
 

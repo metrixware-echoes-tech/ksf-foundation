@@ -18,7 +18,7 @@ import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWi
 import fr.echoes.labs.pluginfwk.api.extension.ExtensionManager;
 
 /**
- * This service manages the plugins that alter the poject dashboard page;
+ * This service manages the springplugins that alter the poject dashboard page;
  *
  * @author sleroy
  *

@@ -1,3 +1,6 @@
+/*
+ *
+ */
 package fr.echoes.labs.pluginfwk.api.plugin;
 
 import java.util.Collection;
@@ -35,11 +38,20 @@ public interface PluginManager {
 	void registerPlugin(PluginDefinition pluginDefinition);
 
 	/**
+	 * Warn that plugin had a failure (for example at the loading).
+	 *
+	 * @param failure
+	 *            the e
+	 */
+	void reportPluginFailure(PluginException failure);
+
+	/**
 	 * Unregister plugin.
 	 *
 	 * @param pluginID
 	 *            the plugin id
+	 * @throws Exception
 	 */
-	void unregisterPlugin(String pluginID);
+	void unregisterPlugin(String pluginID) throws Exception;
 
 }

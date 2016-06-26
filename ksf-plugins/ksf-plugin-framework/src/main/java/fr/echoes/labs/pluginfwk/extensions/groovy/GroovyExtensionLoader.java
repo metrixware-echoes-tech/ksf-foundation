@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import fr.echoes.labs.pluginfwk.api.plugin.PluginDefinition;
 import fr.echoes.labs.pluginfwk.api.plugin.PluginManager;
-import fr.echoes.labs.pluginfwk.api.plugin.PluginScanner;
+import fr.echoes.labs.pluginfwk.api.scanner.PluginScanner;
 
 /**
  * The Class GroovyExtensionLoader.

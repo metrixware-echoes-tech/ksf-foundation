@@ -2,7 +2,7 @@ package fr.echoes.labs.pluginfwk.pluginloader;
 
 import java.util.ArrayList;
 
-import fr.echoes.labs.pluginfwk.api.plugin.PluginScanner;
+import fr.echoes.labs.pluginfwk.api.scanner.PluginScanner;
 
 /**
  * The Class PluginScanners defines a list of plugin scanner.

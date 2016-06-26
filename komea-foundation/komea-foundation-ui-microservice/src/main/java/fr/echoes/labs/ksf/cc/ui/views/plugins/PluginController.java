@@ -16,7 +16,7 @@ import fr.echoes.labs.ksf.cc.plugins.PluginServiceLoader;
 import fr.echoes.labs.pluginfwk.api.plugin.PluginManager;
 
 /**
- * This service delegates the render to plugins.
+ * This service delegates the render to springplugins.
  *
  * @author sleroy
  */
@@ -36,10 +36,10 @@ public class PluginController {
 	 *
 	 * @return
 	 */
-	@RequestMapping(value = { "/ui/plugins" })
+	@RequestMapping(value = { "/ui/springplugins" })
 	public ModelAndView pluginPage() {
-		final ModelAndView modelAndView = new ModelAndView("plugins");
-		modelAndView.addObject("plugins", this.pluginManager.getPluginInformations());
+		final ModelAndView modelAndView = new ModelAndView("springplugins");
+		modelAndView.addObject("springplugins", this.pluginManager.getPluginInformations());
 		return modelAndView;
 	}
 
@@ -48,7 +48,7 @@ public class PluginController {
 	 *
 	 * @return
 	 */
-	@RequestMapping(value = { "/ui/plugins/reload" })
+	@RequestMapping(value = { "/ui/springplugins/reload" })
 	public ModelAndView reloadPlugins() {
 		this.pluginServiceLoader.reloadPlugins();
 		return this.pluginPage();

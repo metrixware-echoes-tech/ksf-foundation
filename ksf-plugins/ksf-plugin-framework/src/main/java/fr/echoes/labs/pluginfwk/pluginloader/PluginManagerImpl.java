@@ -11,8 +11,10 @@ import org.slf4j.LoggerFactory;
 import fr.echoes.labs.pluginfwk.api.extension.ExtensionManager;
 import fr.echoes.labs.pluginfwk.api.plugin.PluginAlreadyLoadedException;
 import fr.echoes.labs.pluginfwk.api.plugin.PluginDefinition;
+import fr.echoes.labs.pluginfwk.api.plugin.PluginException;
 import fr.echoes.labs.pluginfwk.api.plugin.PluginInformations;
 import fr.echoes.labs.pluginfwk.api.plugin.PluginManager;
+import fr.echoes.labs.pluginfwk.api.propertystorage.PluginPropertyStorage;
 
 public class PluginManagerImpl implements PluginManager {
 
@@ -25,15 +27,20 @@ public class PluginManagerImpl implements PluginManager {
 
 	private final PluginFrameworkConfiguration	pluginFrameworkConfiguration;
 
-	public PluginManagerImpl(final ExtensionManager extensionManager, final PluginFrameworkConfiguration _pluginFrameworkConfiguration) {
+	private final PluginPropertyStorage			pluginPropertyStorage;
+
+	public PluginManagerImpl(final ExtensionManager extensionManager, final PluginFrameworkConfiguration _pluginFrameworkConfiguration,
+			final PluginPropertyStorage _pluginPropertyStorage) {
 		super();
 		this.extensionManager = extensionManager;
 		this.pluginFrameworkConfiguration = _pluginFrameworkConfiguration;
+		this.pluginPropertyStorage = _pluginPropertyStorage;
 	}
 
 	/**
 	 * Cleanup.
 	 */
+	@Override
 	public void cleanup() {
 		LOGGER.debug("Closing the loaded plugins");
 		this.closingLoadedPlugins();
@@ -66,8 +73,15 @@ public class PluginManagerImpl implements PluginManager {
 			return;
 		}
 		LOGGER.info("Registration of the plugin {} with ===> id {}", pluginDefinition.getName(), pluginDefinition.getId());
+		pluginDefinition.init(this.pluginPropertyStorage);
 		this.addPluginToIndex(pluginDefinition);
 		this.registerPluginExtensions(pluginDefinition);
+
+	}
+
+	@Override
+	public void reportPluginFailure(final PluginException failure) {
+		LOGGER.error("Plugin could not be loaded {}", failure);
 
 	}
 
@@ -76,14 +90,16 @@ public class PluginManagerImpl implements PluginManager {
 	 * @see fr.echoes.labs.ksf.extensions.pluginloader.PluginManager#unregisterPlugin(java.lang.String)
 	 */
 	@Override
-	public void unregisterPlugin(final String pluginID) {
+	public void unregisterPlugin(final String pluginID) throws Exception {
 		if (pluginID == null) {
 			return;
 		}
 
 		LOGGER.info("Unloading the plugin {}", pluginID);
+		this.loadedPlugins.get(pluginID).destroy();
 		this.loadedPlugins.remove(pluginID);
 		this.extensionManager.removeExtensions(pluginID);
+
 	}
 
 	/**

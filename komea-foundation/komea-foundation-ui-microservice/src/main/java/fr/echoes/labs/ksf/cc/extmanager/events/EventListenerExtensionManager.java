@@ -22,7 +22,7 @@ public class EventListenerExtensionManager {
 	}
 
 	/**
-	 * Listen to any event and dispatch them to the interested plugins.
+	 * Listen to any event and dispatch them to the interested springplugins.
 	 *
 	 * @param _object
 	 *            the event object

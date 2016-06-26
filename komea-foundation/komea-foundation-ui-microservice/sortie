@@ -1,0 +1,751 @@
+To honour the JVM settings for this build a new JVM will be forked. Please consider using the daemon: https://docs.gradle.org/2.12/userguide/gradle_daemon.html.
+---------------------------------------------------------------------------------------
+How to use Komea build script :                                                        
+HINT : To print unit tests logs uses -PlogTest
+HINT : To compile outside Echoes/Lab building, use -Premote
+HINT : To upload to bintray , set the properties         -Dbintray_net_user= -Dbintray_net_key=
+---------------------------------------------------------------------------------------
+The 'sonar-runner' plugin has been deprecated and is scheduled to be removed in Gradle 3.0. please use the official plugin from SonarQube (http://docs.sonarqube.org/display/SONAR/Analyzing+with+Gradle).
+WARNING : Utilisation de Nexus en local (Echoes/Lab) http://zeus.tocea.local:8081
+WARNING : Utilisation de Nexus en local (Echoes/Lab) http://zeus.tocea.local:8081
+WARNING : Utilisation de Nexus en local (Echoes/Lab) http://zeus.tocea.local:8081
+WARNING : Utilisation de Nexus en local (Echoes/Lab) http://zeus.tocea.local:8081
+WARNING : Utilisation de Nexus en local (Echoes/Lab) http://zeus.tocea.local:8081
+WARNING : Utilisation de Nexus en local (Echoes/Lab) http://zeus.tocea.local:8081
+WARNING : Utilisation de Nexus en local (Echoes/Lab) http://zeus.tocea.local:8081
+WARNING : Utilisation de Nexus en local (Echoes/Lab) http://zeus.tocea.local:8081
+WARNING : Utilisation de Nexus en local (Echoes/Lab) http://zeus.tocea.local:8081
+WARNING : Utilisation de Nexus en local (Echoes/Lab) http://zeus.tocea.local:8081
+WARNING : Utilisation de Nexus en local (Echoes/Lab) http://zeus.tocea.local:8081
+WARNING : Utilisation de Nexus en local (Echoes/Lab) http://zeus.tocea.local:8081
+WARNING : Utilisation de Nexus en local (Echoes/Lab) http://zeus.tocea.local:8081
+WARNING : Utilisation de Nexus en local (Echoes/Lab) http://zeus.tocea.local:8081
+WARNING : Utilisation de Nexus en local (Echoes/Lab) http://zeus.tocea.local:8081
+WARNING : Utilisation de Nexus en local (Echoes/Lab) http://zeus.tocea.local:8081
+WARNING : Utilisation de Nexus en local (Echoes/Lab) http://zeus.tocea.local:8081
+WARNING : Utilisation de Nexus en local (Echoes/Lab) http://zeus.tocea.local:8081
+WARNING : Utilisation de Nexus en local (Echoes/Lab) http://zeus.tocea.local:8081
+WARNING : Utilisation de Nexus en local (Echoes/Lab) http://zeus.tocea.local:8081
+WARNING : Utilisation de Nexus en local (Echoes/Lab) http://zeus.tocea.local:8081
+WARNING : Utilisation de Nexus en local (Echoes/Lab) http://zeus.tocea.local:8081
+WARNING : Utilisation de Nexus en local (Echoes/Lab) http://zeus.tocea.local:8081
+Incremental java compilation is an incubating feature.
+:ksf-commons:ksf-backend-utils:processResources UP-TO-DATE
+:ksf-commons:ksf-backend-utils:compileJava UP-TO-DATE
+:ksf-commons:ksf-backend-utils:compileGroovy UP-TO-DATE
+:ksf-commons:ksf-backend-utils:classes UP-TO-DATE
+:ksf-commons:ksf-backend-utils:jar UP-TO-DATE
+:ksf-plugins:ksf-plugin-api:compileJava UP-TO-DATE
+:ksf-plugins:ksf-plugin-api:compileGroovy UP-TO-DATE
+:ksf-plugins:ksf-plugin-api:processResources UP-TO-DATE
+:ksf-plugins:ksf-plugin-api:classes UP-TO-DATE
+:ksf-plugins:ksf-plugin-api:jar UP-TO-DATE
+:ksf-plugins:ksf-plugin-framework:compileJava UP-TO-DATE
+:ksf-plugins:ksf-plugin-framework:compileGroovy UP-TO-DATE
+:ksf-plugins:ksf-plugin-framework:processResources UP-TO-DATE
+:ksf-plugins:ksf-plugin-framework:classes UP-TO-DATE
+:ksf-plugins:ksf-plugin-framework:jar UP-TO-DATE
+:komea-foundation:komea-foundation-plugin-api:compileJava UP-TO-DATE
+:komea-foundation:komea-foundation-plugin-api:compileGroovy UP-TO-DATE
+:komea-foundation:komea-foundation-plugin-api:processResources UP-TO-DATE
+:komea-foundation:komea-foundation-plugin-api:classes UP-TO-DATE
+:komea-foundation:komea-foundation-plugin-api:jar UP-TO-DATE
+:ksf-commons:ksf-backend-cqrs:processResources UP-TO-DATE
+:ksf-commons:ksf-backend-cqrs:compileJava UP-TO-DATE
+:ksf-commons:ksf-backend-cqrs:compileGroovy UP-TO-DATE
+:ksf-commons:ksf-backend-cqrs:classes UP-TO-DATE
+:ksf-commons:ksf-backend-cqrs:jar UP-TO-DATE
+:ksf-commons:ksf-backend-domain-commons:processResources UP-TO-DATE
+:ksf-commons:ksf-backend-domain-commons:compileJava UP-TO-DATE
+:ksf-commons:ksf-backend-domain-commons:compileGroovy UP-TO-DATE
+:ksf-commons:ksf-backend-domain-commons:classes UP-TO-DATE
+:ksf-commons:ksf-backend-domain-commons:jar UP-TO-DATE
+:ksf-commons:ksf-backend-projects:processResources UP-TO-DATE
+:ksf-commons:ksf-backend-projects:compileJava UP-TO-DATE
+:ksf-commons:ksf-backend-projects:compileGroovy UP-TO-DATE
+:ksf-commons:ksf-backend-projects:classes UP-TO-DATE
+:ksf-commons:ksf-backend-projects:jar UP-TO-DATE
+:ksf-commons:ksf-backend-users:processResources UP-TO-DATE
+:ksf-commons:ksf-backend-users:compileJava UP-TO-DATE
+:ksf-commons:ksf-backend-users:compileGroovy UP-TO-DATE
+:ksf-commons:ksf-backend-users:classes UP-TO-DATE
+:ksf-commons:ksf-backend-users:jar UP-TO-DATE
+:komea-foundation:komea-foundation-softwarefactory:compileJava UP-TO-DATE
+:komea-foundation:komea-foundation-softwarefactory:compileGroovy UP-TO-DATE
+:komea-foundation:komea-foundation-softwarefactory:processResources UP-TO-DATE
+:komea-foundation:komea-foundation-softwarefactory:classes UP-TO-DATE
+:komea-foundation:komea-foundation-softwarefactory:jar UP-TO-DATE
+:komea-foundation:komea-foundation-ui-microservice:bowerInit UP-TO-DATE
+:komea-foundation:komea-foundation-ui-microservice:nodeSetup UP-TO-DATE
+:komea-foundation:komea-foundation-ui-microservice:bowerDependencies UP-TO-DATE
+:komea-foundation:komea-foundation-ui-microservice:bowerConfig
+:komea-foundation:komea-foundation-ui-microservice:bowerComponents UP-TO-DATE
+:komea-foundation:komea-foundation-ui-microservice:bowerInstall UP-TO-DATE
+:ksf-commons:ksf-backend-microservice:processResources UP-TO-DATE
+:ksf-commons:ksf-backend-portfolio:processResources UP-TO-DATE
+:ksf-commons:ksf-backend-portfolio:compileJava UP-TO-DATE
+:ksf-commons:ksf-backend-portfolio:compileGroovy UP-TO-DATE
+:ksf-commons:ksf-backend-portfolio:classes UP-TO-DATE
+:ksf-commons:ksf-backend-portfolio:jar UP-TO-DATE
+:ksf-commons:ksf-backend-microservice:compileJava UP-TO-DATE
+:ksf-commons:ksf-backend-microservice:compileGroovy UP-TO-DATE
+:ksf-commons:ksf-backend-microservice:classes UP-TO-DATE
+:ksf-commons:ksf-backend-microservice:jar UP-TO-DATE
+:komea-foundation:komea-foundation-ui-microservice:compileJava
+:komea-foundation:komea-foundation-ui-microservice:compileJava - is not incremental (e.g. outputs have changed, no previous execution, etc.).
+warning: [options] bootstrap class path not set in conjunction with -source 1.7
+:komea-foundation:komea-foundation-ui-microservice:compileGroovy
+:komea-foundation:komea-foundation-ui-microservice:processResources UP-TO-DATE
+:komea-foundation:komea-foundation-ui-microservice:classes
+:komea-foundation:komea-foundation-ui-microservice:findMainClass
+:komea-foundation:komea-foundation-ui-microservice:bootRun
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::        (v1.3.5.RELEASE)
+
+[main][I] KomeaFoundationGuiApplication - Starting KomeaFoundationGuiApplication on sly-laptop with PID 8079 (/home/sleroy/git/komea-softwarefactory/komea-foundation/komea-foundation-ui-microservice/build/classes/main started by sleroy in /home/sleroy/git/komea-softwarefactory/komea-foundation/komea-foundation-ui-microservice)
+[main][I] KomeaFoundationGuiApplication - The following profiles are active: test,demo,internalAuth
+[main][I] AnnotationConfigEmbeddedWebApplicationContext - Refreshing org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@243c4f91: startup date [Fri Jun 24 17:12:30 CEST 2016]; root of context hierarchy
+[main][I] PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'org.springframework.security.config.annotation.configuration.ObjectPostProcessorConfiguration' of type [class org.springframework.security.config.annotation.configuration.ObjectPostProcessorConfiguration$$EnhancerBySpringCGLIB$$84bce0e8] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[main][I] PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'objectPostProcessor' of type [class org.springframework.security.config.annotation.configuration.AutowireBeanFactoryObjectPostProcessor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[main][I] PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@63e5b8aa' of type [class org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[main][I] PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'org.springframework.security.config.annotation.method.configuration.Jsr250MetadataSourceConfiguration' of type [class org.springframework.security.config.annotation.method.configuration.Jsr250MetadataSourceConfiguration$$EnhancerBySpringCGLIB$$cee69bb0] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[main][I] PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'jsr250MethodSecurityMetadataSource' of type [class org.springframework.security.access.annotation.Jsr250MethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[main][I] PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration' of type [class org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration$$EnhancerBySpringCGLIB$$a991839a] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[main][I] PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'methodSecurityMetadataSource' of type [class org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[main][I] PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'pluginFrameworkConfigurationBean' of type [class fr.echoes.labs.ksf.cc.pluginmanager.PluginFrameworkConfigurationBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[main][I] PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'pluginManagerFactoryBean' of type [class fr.echoes.labs.ksf.cc.pluginmanager.PluginManagerFactoryBean] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[main][I] PluginManagerFactoryBean - Initialization PluginFramework
+[main][I] PluginScannerRegistry - Registering the plugin scanner Java plugin Scanner
+[main][I] PluginScannerRegistry - Registering the plugin scanner Spring Plugin Loader
+[main][I] PluginScannerRegistry - Registering the plugin scanner Classpath ServiceLoader PluginScanner
+[main][I] PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'pluginFrameworkImpl' of type [class fr.echoes.labs.pluginfwk.pluginloader.PluginFrameworkImpl] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[main][I] PluginManagerFactoryBean - Initialization PluginManager
+[main][I] PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'pluginManager' of type [class fr.echoes.labs.pluginfwk.pluginloader.PluginManagerImpl] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+[main][I] TomcatEmbeddedServletContainer - Tomcat initialized with port(s): 8888 (http)
+[main][I] StandardService - Starting service Tomcat
+[main][I] StandardEngine - Starting Servlet Engine: Apache Tomcat/8.0.33
+[localhost-startStop-1][I] [/] - Initializing Spring embedded WebApplicationContext
+[localhost-startStop-1][I] ContextLoader - Root WebApplicationContext: initialization completed in 3757 ms
+[localhost-startStop-1][I] LDAP - Ldap Context source on creation : ldap://ares
+[localhost-startStop-1][I] DefaultSpringSecurityContextSource -  URL 'ldap://ares:389/dc=tocea,dc=com', root DN is 'dc=tocea,dc=com'
+[localhost-startStop-1][I] LDAP - LDAP Connection informations : LdapSecurityConfiguration [url=ldap://ares, field_cn=cn, managerDn=, managerPassword=, root=dc=tocea,dc=com, port=389, userDnPattern=, userSearchFilter=(uid={0}), userSearchBase=ou=people, groupSearchBase=ou=groups, groupRoleAttribute=, groupSearchFilter=, pooled=true, field_sn=sn, field_uid=uid, field_givenname=givenname, field_mail=mail]
+[localhost-startStop-1][I] LDAP - LDAP Authentication use anonymous read-only mode
+[localhost-startStop-1][I] AbstractContextSource - Property 'userDn' not set - anonymous context will be used for read-write operations
+[localhost-startStop-1][I] LDAP - Creating Ldap Template: ldap://ares
+[localhost-startStop-1][I] AsynchronousTaskPoolService - Initializing the Asynchronous Task Pool
+[localhost-startStop-1][I] AsynchronousTaskPoolService - AsynchronousEngine cores : 4
+[localhost-startStop-1][I] AsynchronousTaskPoolService - AsynchronousEngine keepAlive : 60
+[localhost-startStop-1][I] AsynchronousTaskPoolService - AsynchronousEngine pool size : UNLIMITED
+[localhost-startStop-1][I] AsynchronousTaskPoolService - AsynchronousEngine queue capacity : UNLIMITED
+[localhost-startStop-1][I] ThreadPoolTaskExecutor - Initializing ExecutorService 
+[localhost-startStop-1][I] GuavaEventBusService - Registering the event handlers...
+[localhost-startStop-1][I] PluginManagerFactoryBean - Initialization ExtensionManager
+[localhost-startStop-1][I] GuavaEventBusService - Event handler ---> projectLifecycleExtensionManager
+[localhost-startStop-1][I] GuavaEventBusService - Event handler ---> newProjectCreatedEventHandler
+[localhost-startStop-1][I] GuavaEventBusService - Event handler ---> errorEventHandler
+[localhost-startStop-1][I] GuavaEventBusService - Event handler ---> jsonEventListenerExtensionManager
+[localhost-startStop-1][I] GuavaEventBusService - Event handler ---> eventListenerExtensionManager
+[localhost-startStop-1][I] InternalAuthGuiSecurityConfig - Initializing KSF Security
+[localhost-startStop-1][I] InternalUserAuthenticationManager - Initialization of LDAP Authentication provider
+[localhost-startStop-1][I] LDAP - Enabling LDAP Authentication on server ldap://ares
+[localhost-startStop-1][I] LDAP - Ldap Security base on UserDN pattern
+[localhost-startStop-1][I] LDAP - Setting groupSearchBase=ou=groups
+[localhost-startStop-1][I] InternalUserAuthenticationManager - Initialization of DAO Authentication provider
+[localhost-startStop-1][I] InternalAuthGuiSecurityConfig - Web-- Defining Web Security
+[localhost-startStop-1][I] DefaultSecurityFilterChain - Creating filter chain: OrRequestMatcher [requestMatchers=[Ant [pattern='/css/**'], Ant [pattern='/js/**'], Ant [pattern='/images/**'], Ant [pattern='/**/favicon.ico'], Ant [pattern='/error']]], []
+[localhost-startStop-1][I] DefaultSecurityFilterChain - Creating filter chain: org.springframework.security.web.util.matcher.AnyRequestMatcher@1, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@7d673e74, org.springframework.security.web.context.SecurityContextPersistenceFilter@1dbb3f9a, org.springframework.security.web.header.HeaderWriterFilter@53e4c87c, org.springframework.security.web.authentication.logout.LogoutFilter@23f65c3f, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@59feffdf, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@379e0702, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2738d9dc, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@68e3e159, org.springframework.security.web.session.SessionManagementFilter@371a1bc8, org.springframework.security.web.access.ExceptionTranslationFilter@30852868, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@4dc2d81d]
+[localhost-startStop-1][I] DefaultSecurityFilterChain - Creating filter chain: org.springframework.boot.actuate.autoconfigure.ManagementWebSecurityAutoConfiguration$LazyEndpointPathRequestMatcher@17a03ba0, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@59f3effa, org.springframework.security.web.context.SecurityContextPersistenceFilter@2ad578ab, org.springframework.security.web.header.HeaderWriterFilter@22c4fa82, org.springframework.security.web.authentication.logout.LogoutFilter@33e8fa42, org.springframework.security.web.authentication.www.BasicAuthenticationFilter@685592ac, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@50ccc74b, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@55d9373a, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@1d77d69a, org.springframework.security.web.session.SessionManagementFilter@6a9188d3, org.springframework.security.web.access.ExceptionTranslationFilter@1c6cd1f3, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@5902f3f5]
+[localhost-startStop-1][I] WebInitializer - >---Web.xml Spring Security configuration..
+[localhost-startStop-1][I] WebInitializer - <----Web.xml Spring Security configuration..
+[localhost-startStop-1][I] FilterRegistrationBean - Mapping filter: 'metricFilter' to: [/*]
+[localhost-startStop-1][I] FilterRegistrationBean - Mapping filter: 'characterEncodingFilter' to: [/*]
+[localhost-startStop-1][I] FilterRegistrationBean - Mapping filter: 'hiddenHttpMethodFilter' to: [/*]
+[localhost-startStop-1][I] FilterRegistrationBean - Mapping filter: 'httpPutFormContentFilter' to: [/*]
+[localhost-startStop-1][I] FilterRegistrationBean - Mapping filter: 'requestContextFilter' to: [/*]
+[localhost-startStop-1][I] DelegatingFilterProxyRegistrationBean - Mapping filter: 'springSecurityFilterChain' to: [/*]
+[localhost-startStop-1][I] FilterRegistrationBean - Filter springSecurityFilterChain was not registered (possibly already registered?)
+[localhost-startStop-1][I] FilterRegistrationBean - Mapping filter: 'webRequestLoggingFilter' to: [/*]
+[localhost-startStop-1][I] FilterRegistrationBean - Mapping filter: 'applicationContextIdFilter' to: [/*]
+[localhost-startStop-1][I] ServletRegistrationBean - Mapping servlet: 'dispatcherServlet' to [/]
+[main][I] Java8AddOns - loading Java8 add-ons ...
+[main][I] GroovyAddOns - loading Groovy add-ons ...
+[main][I] ScannerModule - using FIELD mappingStyle
+[main][I] JaversBuilder - JaVers instance is up & ready
+[main][I] MongoPersistentEntityIndexResolver - Found cycle for field 'nodes' in type 'TreeNode' for path 'nodes'
+org.springframework.data.mongodb.core.index.MongoPersistentEntityIndexResolver$CyclicPropertyReferenceException: Found cycle for field 'nodes' in type 'TreeNode' for path 'nodes'
+	at org.springframework.data.mongodb.core.index.MongoPersistentEntityIndexResolver$CycleGuard.protect(MongoPersistentEntityIndexResolver.java:512)
+	at org.springframework.data.mongodb.core.index.MongoPersistentEntityIndexResolver$3.doWithPersistentProperty(MongoPersistentEntityIndexResolver.java:239)
+	at org.springframework.data.mongodb.core.index.MongoPersistentEntityIndexResolver$3.doWithPersistentProperty(MongoPersistentEntityIndexResolver.java:234)
+	at org.springframework.data.mapping.model.BasicPersistentEntity.doWithProperties(BasicPersistentEntity.java:309)
+	at org.springframework.data.mongodb.core.index.MongoPersistentEntityIndexResolver.appendTextIndexInformation(MongoPersistentEntityIndexResolver.java:234)
+	at org.springframework.data.mongodb.core.index.MongoPersistentEntityIndexResolver.access$400(MongoPersistentEntityIndexResolver.java:61)
+	at org.springframework.data.mongodb.core.index.MongoPersistentEntityIndexResolver$3.doWithPersistentProperty(MongoPersistentEntityIndexResolver.java:264)
+	at org.springframework.data.mongodb.core.index.MongoPersistentEntityIndexResolver$3.doWithPersistentProperty(MongoPersistentEntityIndexResolver.java:234)
+	at org.springframework.data.mapping.model.BasicPersistentEntity.doWithProperties(BasicPersistentEntity.java:309)
+	at org.springframework.data.mongodb.core.index.MongoPersistentEntityIndexResolver.appendTextIndexInformation(MongoPersistentEntityIndexResolver.java:234)
+	at org.springframework.data.mongodb.core.index.MongoPersistentEntityIndexResolver.access$400(MongoPersistentEntityIndexResolver.java:61)
+	at org.springframework.data.mongodb.core.index.MongoPersistentEntityIndexResolver$3.doWithPersistentProperty(MongoPersistentEntityIndexResolver.java:264)
+	at org.springframework.data.mongodb.core.index.MongoPersistentEntityIndexResolver$3.doWithPersistentProperty(MongoPersistentEntityIndexResolver.java:234)
+	at org.springframework.data.mapping.model.BasicPersistentEntity.doWithProperties(BasicPersistentEntity.java:309)
+	at org.springframework.data.mongodb.core.index.MongoPersistentEntityIndexResolver.appendTextIndexInformation(MongoPersistentEntityIndexResolver.java:234)
+	at org.springframework.data.mongodb.core.index.MongoPersistentEntityIndexResolver.potentiallyCreateTextIndexDefinition(MongoPersistentEntityIndexResolver.java:214)
+	at org.springframework.data.mongodb.core.index.MongoPersistentEntityIndexResolver.resolveIndexForEntity(MongoPersistentEntityIndexResolver.java:103)
+	at org.springframework.data.mongodb.core.index.MongoPersistentEntityIndexResolver.resolveIndexFor(MongoPersistentEntityIndexResolver.java:83)
+	at org.springframework.data.mongodb.core.index.MongoPersistentEntityIndexCreator.checkForAndCreateIndexes(MongoPersistentEntityIndexCreator.java:132)
+	at org.springframework.data.mongodb.core.index.MongoPersistentEntityIndexCreator.checkForIndexes(MongoPersistentEntityIndexCreator.java:125)
+	at org.springframework.data.mongodb.core.index.MongoPersistentEntityIndexCreator.onApplicationEvent(MongoPersistentEntityIndexCreator.java:109)
+	at org.springframework.data.mongodb.core.index.MongoPersistentEntityIndexCreator.onApplicationEvent(MongoPersistentEntityIndexCreator.java:51)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.invokeListener(SimpleApplicationEventMulticaster.java:166)
+	at org.springframework.context.event.SimpleApplicationEventMulticaster.multicastEvent(SimpleApplicationEventMulticaster.java:138)
+	at org.springframework.context.support.AbstractApplicationContext.publishEvent(AbstractApplicationContext.java:381)
+	at org.springframework.context.support.AbstractApplicationContext.publishEvent(AbstractApplicationContext.java:335)
+	at org.springframework.data.mapping.context.AbstractMappingContext.addPersistentEntity(AbstractMappingContext.java:326)
+	at org.springframework.data.mapping.context.AbstractMappingContext.getPersistentEntity(AbstractMappingContext.java:179)
+	at org.springframework.data.mapping.context.AbstractMappingContext.getPersistentEntity(AbstractMappingContext.java:139)
+	at org.springframework.data.mapping.context.AbstractMappingContext.getPersistentEntity(AbstractMappingContext.java:66)
+	at org.springframework.data.mongodb.repository.support.MongoRepositoryFactory.getEntityInformation(MongoRepositoryFactory.java:118)
+	at org.springframework.data.mongodb.repository.support.MongoRepositoryFactory.getTargetRepository(MongoRepositoryFactory.java:92)
+	at org.springframework.data.repository.core.support.RepositoryFactorySupport.getRepository(RepositoryFactorySupport.java:185)
+	at org.springframework.data.repository.core.support.RepositoryFactoryBeanSupport.initAndReturn(RepositoryFactoryBeanSupport.java:251)
+	at org.springframework.data.repository.core.support.RepositoryFactoryBeanSupport.afterPropertiesSet(RepositoryFactoryBeanSupport.java:237)
+	at org.springframework.data.mongodb.repository.support.MongoRepositoryFactoryBean.afterPropertiesSet(MongoRepositoryFactoryBean.java:108)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1637)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1574)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:545)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:482)
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:197)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.findAutowireCandidates(DefaultListableBeanFactory.java:1192)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1116)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1014)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:545)
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:88)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessPropertyValues(AutowiredAnnotationBeanPostProcessor.java:331)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1214)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:543)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:482)
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:197)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:772)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:839)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:538)
+	at org.springframework.boot.context.embedded.EmbeddedWebApplicationContext.refresh(EmbeddedWebApplicationContext.java:118)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:766)
+	at org.springframework.boot.SpringApplication.createAndRefreshContext(SpringApplication.java:361)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:307)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1191)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1180)
+	at fr.echoes.labs.ksf.cc.KomeaFoundationGuiApplication.main(KomeaFoundationGuiApplication.java:33)
+[main][I] MongoPersistentEntityIndexResolver - Found cycle for field 'nodes' in type 'TreeNode' for path 'nodes'
+[main][I] PluginMVCExtensionManager - Connecting Plugin MVC Controllers , found=0
+[main][I] PluginFrameworkImpl - Reloads all the plugins
+[main][W] PluginClassLoaderImpl - No custom library folder defined
+[main][I] PluginScannerRegistry - Requesting to the plugin scanners to reload the plugins
+[main][I] PluginScannerRegistry - Triggering the plugin scanner Java plugin Scanner
+[main][I] JavaPluginScanner - Plugins found 0
+[main][I] PluginScannerRegistry - Triggering the plugin scanner Spring Plugin Loader
+[main][I] SpringPluginScanner - Plugins found 1
+[main][I] SpringPluginScanner - Found [temp/plugins/java/spring/PLUGIN_komea-foundation-redmine-plugin-0.4.1-SNAPSHOT.develop/komea-foundation-redmine-plugin-0.4.1-SNAPSHOT.develop.jar, temp/plugins/java/spring/PLUGIN_komea-foundation-redmine-plugin-0.4.1-SNAPSHOT.develop/commons-logging-1.2.jar, temp/plugins/java/spring/PLUGIN_komea-foundation-redmine-plugin-0.4.1-SNAPSHOT.develop/httpclient-4.5.1.jar, temp/plugins/java/spring/PLUGIN_komea-foundation-redmine-plugin-0.4.1-SNAPSHOT.develop/commons-codec-1.9.jar, temp/plugins/java/spring/PLUGIN_komea-foundation-redmine-plugin-0.4.1-SNAPSHOT.develop/json-20090211.jar, temp/plugins/java/spring/PLUGIN_komea-foundation-redmine-plugin-0.4.1-SNAPSHOT.develop/redmine-java-api-2.6.0.jar, temp/plugins/java/spring/PLUGIN_komea-foundation-redmine-plugin-0.4.1-SNAPSHOT.develop/slf4j-api-1.7.1.jar, temp/plugins/java/spring/PLUGIN_komea-foundation-redmine-plugin-0.4.1-SNAPSHOT.develop/httpcore-4.4.3.jar] jars
+[main][I] KSFURLClassLoader - Creates classloader with 8 extra libraries
+[main][I] KSFURLClassLoader - > Library temp/plugins/java/spring/PLUGIN_komea-foundation-redmine-plugin-0.4.1-SNAPSHOT.develop/komea-foundation-redmine-plugin-0.4.1-SNAPSHOT.develop.jar
+[main][I] KSFURLClassLoader - > Library temp/plugins/java/spring/PLUGIN_komea-foundation-redmine-plugin-0.4.1-SNAPSHOT.develop/commons-logging-1.2.jar
+[main][I] KSFURLClassLoader - > Library temp/plugins/java/spring/PLUGIN_komea-foundation-redmine-plugin-0.4.1-SNAPSHOT.develop/httpclient-4.5.1.jar
+[main][I] KSFURLClassLoader - > Library temp/plugins/java/spring/PLUGIN_komea-foundation-redmine-plugin-0.4.1-SNAPSHOT.develop/commons-codec-1.9.jar
+[main][I] KSFURLClassLoader - > Library temp/plugins/java/spring/PLUGIN_komea-foundation-redmine-plugin-0.4.1-SNAPSHOT.develop/json-20090211.jar
+[main][I] KSFURLClassLoader - > Library temp/plugins/java/spring/PLUGIN_komea-foundation-redmine-plugin-0.4.1-SNAPSHOT.develop/redmine-java-api-2.6.0.jar
+[main][I] KSFURLClassLoader - > Library temp/plugins/java/spring/PLUGIN_komea-foundation-redmine-plugin-0.4.1-SNAPSHOT.develop/slf4j-api-1.7.1.jar
+[main][I] KSFURLClassLoader - > Library temp/plugins/java/spring/PLUGIN_komea-foundation-redmine-plugin-0.4.1-SNAPSHOT.develop/httpcore-4.4.3.jar
+[main][W] SpringPluginScanner - Scanning package fr.echoes.labs.ksf.cc.plugins.redmine
+[main][I] AnnotationConfigApplicationContext - Refreshing org.springframework.context.annotation.AnnotationConfigApplicationContext@2673487b: startup date [Fri Jun 24 17:12:37 CEST 2016]; parent: org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@243c4f91
+[main][W] AnnotationConfigApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'redmineProjectLifeCycleExtension': Injection of autowired dependencies failed; nested exception is org.springframework.beans.factory.BeanCreationException: Could not autowire field: private fr.echoes.labs.ksf.cc.plugins.redmine.services.IRedmineService fr.echoes.labs.ksf.cc.plugins.redmine.extensions.RedmineProjectLifeCycleExtension.redmineService; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'redmineService': Injection of autowired dependencies failed; nested exception is org.springframework.beans.factory.BeanCreationException: Could not autowire field: private fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineConfigurationService fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineService.configuration; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'redmineConfiguration': Injection of autowired dependencies failed; nested exception is org.springframework.beans.factory.BeanCreationException: Could not autowire field: private int fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineConfigurationService.resultItemsLimit; nested exception is org.springframework.beans.TypeMismatchException: Failed to convert value of type [java.lang.String] to required type [int]; nested exception is java.lang.NumberFormatException: For input string: "${ksf.redmine.resultItemsLimit}"
+[main][E] SpringPluginScanner - Could not load the plugin
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'redmineProjectLifeCycleExtension': Injection of autowired dependencies failed; nested exception is org.springframework.beans.factory.BeanCreationException: Could not autowire field: private fr.echoes.labs.ksf.cc.plugins.redmine.services.IRedmineService fr.echoes.labs.ksf.cc.plugins.redmine.extensions.RedmineProjectLifeCycleExtension.redmineService; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'redmineService': Injection of autowired dependencies failed; nested exception is org.springframework.beans.factory.BeanCreationException: Could not autowire field: private fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineConfigurationService fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineService.configuration; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'redmineConfiguration': Injection of autowired dependencies failed; nested exception is org.springframework.beans.factory.BeanCreationException: Could not autowire field: private int fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineConfigurationService.resultItemsLimit; nested exception is org.springframework.beans.TypeMismatchException: Failed to convert value of type [java.lang.String] to required type [int]; nested exception is java.lang.NumberFormatException: For input string: "${ksf.redmine.resultItemsLimit}"
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessPropertyValues(AutowiredAnnotationBeanPostProcessor.java:334)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1214)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:543)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:482)
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:197)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:772)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:839)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:538)
+	at fr.echoes.labs.ksf.cc.pluginmanager.SpringPluginScanner.initPluginDefinition(SpringPluginScanner.java:69)
+	at fr.echoes.labs.pluginfwk.extensions.java.JavaPluginScanner.loadPluginDefinition(JavaPluginScanner.java:152)
+	at fr.echoes.labs.pluginfwk.extensions.java.JavaPluginScanner.reloadPlugins(JavaPluginScanner.java:86)
+	at fr.echoes.labs.pluginfwk.pluginloader.PluginScannerRegistry.scanForPlugins(PluginScannerRegistry.java:61)
+	at fr.echoes.labs.pluginfwk.pluginloader.PluginFrameworkImpl.reloadPlugins(PluginFrameworkImpl.java:111)
+	at fr.echoes.labs.ksf.cc.pluginmanager.PluginFrameworkInitialisationBean.init(PluginFrameworkInitialisationBean.java:26)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.springframework.beans.factory.annotation.InitDestroyAnnotationBeanPostProcessor$LifecycleElement.invoke(InitDestroyAnnotationBeanPostProcessor.java:354)
+	at org.springframework.beans.factory.annotation.InitDestroyAnnotationBeanPostProcessor$LifecycleMetadata.invokeInitMethods(InitDestroyAnnotationBeanPostProcessor.java:305)
+	at org.springframework.beans.factory.annotation.InitDestroyAnnotationBeanPostProcessor.postProcessBeforeInitialization(InitDestroyAnnotationBeanPostProcessor.java:133)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.applyBeanPostProcessorsBeforeInitialization(AbstractAutowireCapableBeanFactory.java:408)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1570)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:545)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:482)
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:197)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:772)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:839)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:538)
+	at org.springframework.boot.context.embedded.EmbeddedWebApplicationContext.refresh(EmbeddedWebApplicationContext.java:118)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:766)
+	at org.springframework.boot.SpringApplication.createAndRefreshContext(SpringApplication.java:361)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:307)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1191)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1180)
+	at fr.echoes.labs.ksf.cc.KomeaFoundationGuiApplication.main(KomeaFoundationGuiApplication.java:33)
+Caused by: org.springframework.beans.factory.BeanCreationException: Could not autowire field: private fr.echoes.labs.ksf.cc.plugins.redmine.services.IRedmineService fr.echoes.labs.ksf.cc.plugins.redmine.extensions.RedmineProjectLifeCycleExtension.redmineService; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'redmineService': Injection of autowired dependencies failed; nested exception is org.springframework.beans.factory.BeanCreationException: Could not autowire field: private fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineConfigurationService fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineService.configuration; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'redmineConfiguration': Injection of autowired dependencies failed; nested exception is org.springframework.beans.factory.BeanCreationException: Could not autowire field: private int fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineConfigurationService.resultItemsLimit; nested exception is org.springframework.beans.TypeMismatchException: Failed to convert value of type [java.lang.String] to required type [int]; nested exception is java.lang.NumberFormatException: For input string: "${ksf.redmine.resultItemsLimit}"
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:573)
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:88)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessPropertyValues(AutowiredAnnotationBeanPostProcessor.java:331)
+	... 41 common frames omitted
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'redmineService': Injection of autowired dependencies failed; nested exception is org.springframework.beans.factory.BeanCreationException: Could not autowire field: private fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineConfigurationService fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineService.configuration; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'redmineConfiguration': Injection of autowired dependencies failed; nested exception is org.springframework.beans.factory.BeanCreationException: Could not autowire field: private int fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineConfigurationService.resultItemsLimit; nested exception is org.springframework.beans.TypeMismatchException: Failed to convert value of type [java.lang.String] to required type [int]; nested exception is java.lang.NumberFormatException: For input string: "${ksf.redmine.resultItemsLimit}"
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessPropertyValues(AutowiredAnnotationBeanPostProcessor.java:334)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1214)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:543)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:482)
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:197)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.findAutowireCandidates(DefaultListableBeanFactory.java:1192)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1116)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1014)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:545)
+	... 43 common frames omitted
+Caused by: org.springframework.beans.factory.BeanCreationException: Could not autowire field: private fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineConfigurationService fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineService.configuration; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'redmineConfiguration': Injection of autowired dependencies failed; nested exception is org.springframework.beans.factory.BeanCreationException: Could not autowire field: private int fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineConfigurationService.resultItemsLimit; nested exception is org.springframework.beans.TypeMismatchException: Failed to convert value of type [java.lang.String] to required type [int]; nested exception is java.lang.NumberFormatException: For input string: "${ksf.redmine.resultItemsLimit}"
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:573)
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:88)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessPropertyValues(AutowiredAnnotationBeanPostProcessor.java:331)
+	... 54 common frames omitted
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'redmineConfiguration': Injection of autowired dependencies failed; nested exception is org.springframework.beans.factory.BeanCreationException: Could not autowire field: private int fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineConfigurationService.resultItemsLimit; nested exception is org.springframework.beans.TypeMismatchException: Failed to convert value of type [java.lang.String] to required type [int]; nested exception is java.lang.NumberFormatException: For input string: "${ksf.redmine.resultItemsLimit}"
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessPropertyValues(AutowiredAnnotationBeanPostProcessor.java:334)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1214)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:543)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:482)
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:197)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.findAutowireCandidates(DefaultListableBeanFactory.java:1192)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1116)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1014)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:545)
+	... 56 common frames omitted
+Caused by: org.springframework.beans.factory.BeanCreationException: Could not autowire field: private int fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineConfigurationService.resultItemsLimit; nested exception is org.springframework.beans.TypeMismatchException: Failed to convert value of type [java.lang.String] to required type [int]; nested exception is java.lang.NumberFormatException: For input string: "${ksf.redmine.resultItemsLimit}"
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:573)
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:88)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessPropertyValues(AutowiredAnnotationBeanPostProcessor.java:331)
+	... 67 common frames omitted
+Caused by: org.springframework.beans.TypeMismatchException: Failed to convert value of type [java.lang.String] to required type [int]; nested exception is java.lang.NumberFormatException: For input string: "${ksf.redmine.resultItemsLimit}"
+	at org.springframework.beans.TypeConverterSupport.doConvert(TypeConverterSupport.java:77)
+	at org.springframework.beans.TypeConverterSupport.convertIfNecessary(TypeConverterSupport.java:54)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1033)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1014)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:545)
+	... 69 common frames omitted
+Caused by: java.lang.NumberFormatException: For input string: "${ksf.redmine.resultItemsLimit}"
+	at java.lang.NumberFormatException.forInputString(NumberFormatException.java:65)
+	at java.lang.Integer.parseInt(Integer.java:569)
+	at java.lang.Integer.valueOf(Integer.java:766)
+	at org.springframework.util.NumberUtils.parseNumber(NumberUtils.java:194)
+	at org.springframework.beans.propertyeditors.CustomNumberEditor.setAsText(CustomNumberEditor.java:113)
+	at org.springframework.beans.TypeConverterDelegate.doConvertTextValue(TypeConverterDelegate.java:464)
+	at org.springframework.beans.TypeConverterDelegate.doConvertValue(TypeConverterDelegate.java:437)
+	at org.springframework.beans.TypeConverterDelegate.convertIfNecessary(TypeConverterDelegate.java:195)
+	at org.springframework.beans.TypeConverterDelegate.convertIfNecessary(TypeConverterDelegate.java:125)
+	at org.springframework.beans.TypeConverterSupport.doConvert(TypeConverterSupport.java:61)
+	... 73 common frames omitted
+[main][E] SpringPluginScanner - Could not obtain a plugin definition
+fr.echoes.labs.pluginfwk.api.plugin.PluginException: Could not load the plugin
+	at fr.echoes.labs.ksf.cc.pluginmanager.SpringPluginScanner.initPluginDefinition(SpringPluginScanner.java:76)
+	at fr.echoes.labs.pluginfwk.extensions.java.JavaPluginScanner.loadPluginDefinition(JavaPluginScanner.java:152)
+	at fr.echoes.labs.pluginfwk.extensions.java.JavaPluginScanner.reloadPlugins(JavaPluginScanner.java:86)
+	at fr.echoes.labs.pluginfwk.pluginloader.PluginScannerRegistry.scanForPlugins(PluginScannerRegistry.java:61)
+	at fr.echoes.labs.pluginfwk.pluginloader.PluginFrameworkImpl.reloadPlugins(PluginFrameworkImpl.java:111)
+	at fr.echoes.labs.ksf.cc.pluginmanager.PluginFrameworkInitialisationBean.init(PluginFrameworkInitialisationBean.java:26)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.springframework.beans.factory.annotation.InitDestroyAnnotationBeanPostProcessor$LifecycleElement.invoke(InitDestroyAnnotationBeanPostProcessor.java:354)
+	at org.springframework.beans.factory.annotation.InitDestroyAnnotationBeanPostProcessor$LifecycleMetadata.invokeInitMethods(InitDestroyAnnotationBeanPostProcessor.java:305)
+	at org.springframework.beans.factory.annotation.InitDestroyAnnotationBeanPostProcessor.postProcessBeforeInitialization(InitDestroyAnnotationBeanPostProcessor.java:133)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.applyBeanPostProcessorsBeforeInitialization(AbstractAutowireCapableBeanFactory.java:408)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1570)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:545)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:482)
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:197)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:772)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:839)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:538)
+	at org.springframework.boot.context.embedded.EmbeddedWebApplicationContext.refresh(EmbeddedWebApplicationContext.java:118)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:766)
+	at org.springframework.boot.SpringApplication.createAndRefreshContext(SpringApplication.java:361)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:307)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1191)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1180)
+	at fr.echoes.labs.ksf.cc.KomeaFoundationGuiApplication.main(KomeaFoundationGuiApplication.java:33)
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'redmineProjectLifeCycleExtension': Injection of autowired dependencies failed; nested exception is org.springframework.beans.factory.BeanCreationException: Could not autowire field: private fr.echoes.labs.ksf.cc.plugins.redmine.services.IRedmineService fr.echoes.labs.ksf.cc.plugins.redmine.extensions.RedmineProjectLifeCycleExtension.redmineService; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'redmineService': Injection of autowired dependencies failed; nested exception is org.springframework.beans.factory.BeanCreationException: Could not autowire field: private fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineConfigurationService fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineService.configuration; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'redmineConfiguration': Injection of autowired dependencies failed; nested exception is org.springframework.beans.factory.BeanCreationException: Could not autowire field: private int fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineConfigurationService.resultItemsLimit; nested exception is org.springframework.beans.TypeMismatchException: Failed to convert value of type [java.lang.String] to required type [int]; nested exception is java.lang.NumberFormatException: For input string: "${ksf.redmine.resultItemsLimit}"
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessPropertyValues(AutowiredAnnotationBeanPostProcessor.java:334)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1214)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:543)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:482)
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:197)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:772)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:839)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:538)
+	at fr.echoes.labs.ksf.cc.pluginmanager.SpringPluginScanner.initPluginDefinition(SpringPluginScanner.java:69)
+	... 30 common frames omitted
+Caused by: org.springframework.beans.factory.BeanCreationException: Could not autowire field: private fr.echoes.labs.ksf.cc.plugins.redmine.services.IRedmineService fr.echoes.labs.ksf.cc.plugins.redmine.extensions.RedmineProjectLifeCycleExtension.redmineService; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'redmineService': Injection of autowired dependencies failed; nested exception is org.springframework.beans.factory.BeanCreationException: Could not autowire field: private fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineConfigurationService fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineService.configuration; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'redmineConfiguration': Injection of autowired dependencies failed; nested exception is org.springframework.beans.factory.BeanCreationException: Could not autowire field: private int fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineConfigurationService.resultItemsLimit; nested exception is org.springframework.beans.TypeMismatchException: Failed to convert value of type [java.lang.String] to required type [int]; nested exception is java.lang.NumberFormatException: For input string: "${ksf.redmine.resultItemsLimit}"
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:573)
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:88)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessPropertyValues(AutowiredAnnotationBeanPostProcessor.java:331)
+	... 41 common frames omitted
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'redmineService': Injection of autowired dependencies failed; nested exception is org.springframework.beans.factory.BeanCreationException: Could not autowire field: private fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineConfigurationService fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineService.configuration; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'redmineConfiguration': Injection of autowired dependencies failed; nested exception is org.springframework.beans.factory.BeanCreationException: Could not autowire field: private int fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineConfigurationService.resultItemsLimit; nested exception is org.springframework.beans.TypeMismatchException: Failed to convert value of type [java.lang.String] to required type [int]; nested exception is java.lang.NumberFormatException: For input string: "${ksf.redmine.resultItemsLimit}"
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessPropertyValues(AutowiredAnnotationBeanPostProcessor.java:334)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1214)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:543)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:482)
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:197)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.findAutowireCandidates(DefaultListableBeanFactory.java:1192)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1116)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1014)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:545)
+	... 43 common frames omitted
+Caused by: org.springframework.beans.factory.BeanCreationException: Could not autowire field: private fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineConfigurationService fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineService.configuration; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'redmineConfiguration': Injection of autowired dependencies failed; nested exception is org.springframework.beans.factory.BeanCreationException: Could not autowire field: private int fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineConfigurationService.resultItemsLimit; nested exception is org.springframework.beans.TypeMismatchException: Failed to convert value of type [java.lang.String] to required type [int]; nested exception is java.lang.NumberFormatException: For input string: "${ksf.redmine.resultItemsLimit}"
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:573)
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:88)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessPropertyValues(AutowiredAnnotationBeanPostProcessor.java:331)
+	... 54 common frames omitted
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'redmineConfiguration': Injection of autowired dependencies failed; nested exception is org.springframework.beans.factory.BeanCreationException: Could not autowire field: private int fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineConfigurationService.resultItemsLimit; nested exception is org.springframework.beans.TypeMismatchException: Failed to convert value of type [java.lang.String] to required type [int]; nested exception is java.lang.NumberFormatException: For input string: "${ksf.redmine.resultItemsLimit}"
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessPropertyValues(AutowiredAnnotationBeanPostProcessor.java:334)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1214)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:543)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:482)
+	at org.springframework.beans.factory.support.AbstractBeanFactory$1.getObject(AbstractBeanFactory.java:306)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:230)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:302)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:197)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.findAutowireCandidates(DefaultListableBeanFactory.java:1192)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1116)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1014)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:545)
+	... 56 common frames omitted
+Caused by: org.springframework.beans.factory.BeanCreationException: Could not autowire field: private int fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineConfigurationService.resultItemsLimit; nested exception is org.springframework.beans.TypeMismatchException: Failed to convert value of type [java.lang.String] to required type [int]; nested exception is java.lang.NumberFormatException: For input string: "${ksf.redmine.resultItemsLimit}"
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:573)
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:88)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessPropertyValues(AutowiredAnnotationBeanPostProcessor.java:331)
+	... 67 common frames omitted
+Caused by: org.springframework.beans.TypeMismatchException: Failed to convert value of type [java.lang.String] to required type [int]; nested exception is java.lang.NumberFormatException: For input string: "${ksf.redmine.resultItemsLimit}"
+	at org.springframework.beans.TypeConverterSupport.doConvert(TypeConverterSupport.java:77)
+	at org.springframework.beans.TypeConverterSupport.convertIfNecessary(TypeConverterSupport.java:54)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1033)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1014)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:545)
+	... 69 common frames omitted
+Caused by: java.lang.NumberFormatException: For input string: "${ksf.redmine.resultItemsLimit}"
+	at java.lang.NumberFormatException.forInputString(NumberFormatException.java:65)
+	at java.lang.Integer.parseInt(Integer.java:569)
+	at java.lang.Integer.valueOf(Integer.java:766)
+	at org.springframework.util.NumberUtils.parseNumber(NumberUtils.java:194)
+	at org.springframework.beans.propertyeditors.CustomNumberEditor.setAsText(CustomNumberEditor.java:113)
+	at org.springframework.beans.TypeConverterDelegate.doConvertTextValue(TypeConverterDelegate.java:464)
+	at org.springframework.beans.TypeConverterDelegate.doConvertValue(TypeConverterDelegate.java:437)
+	at org.springframework.beans.TypeConverterDelegate.convertIfNecessary(TypeConverterDelegate.java:195)
+	at org.springframework.beans.TypeConverterDelegate.convertIfNecessary(TypeConverterDelegate.java:125)
+	at org.springframework.beans.TypeConverterSupport.doConvert(TypeConverterSupport.java:61)
+	... 73 common frames omitted
+[main][I] PluginScannerRegistry - Triggering the plugin scanner Classpath ServiceLoader PluginScanner
+[main][I] CommandProfilingService - [PROFILING][CreateRoleCommand [role=Role [id=576d4de51f3c971f8fd5bbb6, name=Administrator, note=Administrator role, permissions=ROLE_REST, ROLE_REQUIREMENT, ROLE_APPLICATION, ROLE_TESTSUITE, ROLE_TESTCAMP, ROLE_ADMIN, ROLE_ADMIN_USERS, ROLE_ADMIN_USER_GROUPS, ROLE_ADMIN_ROLES, ROLE_ADMIN_CONFIG, ROLE_PROJECT_WRITE, ROLE_PROJECT_READ, ROLE_PROJECT_MANAGEMENT, ROLE_PORTFOLIO_MANAGEMENT, defaultRole=false, roleProtected=false]]]=52 ms
+[main][I] CommandLoggingService - Command  has been executed with success CreateRoleCommand [role=Role [id=576d4de51f3c971f8fd5bbb6, name=Administrator, note=Administrator role, permissions=ROLE_REST, ROLE_REQUIREMENT, ROLE_APPLICATION, ROLE_TESTSUITE, ROLE_TESTCAMP, ROLE_ADMIN, ROLE_ADMIN_USERS, ROLE_ADMIN_USER_GROUPS, ROLE_ADMIN_ROLES, ROLE_ADMIN_CONFIG, ROLE_PROJECT_WRITE, ROLE_PROJECT_READ, ROLE_PROJECT_MANAGEMENT, ROLE_PORTFOLIO_MANAGEMENT, defaultRole=false, roleProtected=false]] with the result Role [id=576d4de51f3c971f8fd5bbb6, name=Administrator, note=Administrator role, permissions=ROLE_REST, ROLE_REQUIREMENT, ROLE_APPLICATION, ROLE_TESTSUITE, ROLE_TESTCAMP, ROLE_ADMIN, ROLE_ADMIN_USERS, ROLE_ADMIN_USER_GROUPS, ROLE_ADMIN_ROLES, ROLE_ADMIN_CONFIG, ROLE_PROJECT_WRITE, ROLE_PROJECT_READ, ROLE_PROJECT_MANAGEMENT, ROLE_PORTFOLIO_MANAGEMENT, defaultRole=false, roleProtected=false]
+[main][I] DemoDataBean - new role created [_id:576d4de51f3c971f8fd5bbb6]
+[main][I] CommandProfilingService - [PROFILING][EditRoleCommand [role=Role [id=576d4de51f3c971f8fd5bbb6, name=Administrator, note=Administrator role, permissions=ROLE_REST, ROLE_REQUIREMENT, ROLE_APPLICATION, ROLE_TESTSUITE, ROLE_TESTCAMP, ROLE_ADMIN, ROLE_ADMIN_USERS, ROLE_ADMIN_USER_GROUPS, ROLE_ADMIN_ROLES, ROLE_ADMIN_CONFIG, ROLE_PROJECT_WRITE, ROLE_PROJECT_READ, ROLE_PROJECT_MANAGEMENT, ROLE_PORTFOLIO_MANAGEMENT, defaultRole=false, roleProtected=true]]]=22 ms
+[main][I] CommandLoggingService - Command  has been executed with success EditRoleCommand [role=Role [id=576d4de51f3c971f8fd5bbb6, name=Administrator, note=Administrator role, permissions=ROLE_REST, ROLE_REQUIREMENT, ROLE_APPLICATION, ROLE_TESTSUITE, ROLE_TESTCAMP, ROLE_ADMIN, ROLE_ADMIN_USERS, ROLE_ADMIN_USER_GROUPS, ROLE_ADMIN_ROLES, ROLE_ADMIN_CONFIG, ROLE_PROJECT_WRITE, ROLE_PROJECT_READ, ROLE_PROJECT_MANAGEMENT, ROLE_PORTFOLIO_MANAGEMENT, defaultRole=false, roleProtected=true]] with the result Role [id=576d4de51f3c971f8fd5bbb6, name=Administrator, note=Administrator role, permissions=ROLE_REST, ROLE_REQUIREMENT, ROLE_APPLICATION, ROLE_TESTSUITE, ROLE_TESTCAMP, ROLE_ADMIN, ROLE_ADMIN_USERS, ROLE_ADMIN_USER_GROUPS, ROLE_ADMIN_ROLES, ROLE_ADMIN_CONFIG, ROLE_PROJECT_WRITE, ROLE_PROJECT_READ, ROLE_PROJECT_MANAGEMENT, ROLE_PORTFOLIO_MANAGEMENT, defaultRole=false, roleProtected=true]
+[main][I] CommandProfilingService - [PROFILING][CreateRoleCommand [role=Role [id=576d4de51f3c971f8fd5bbbd, name=Guest, note=Guest, permissions=, defaultRole=true, roleProtected=false]]]=1 ms
+[main][I] CommandLoggingService - Command  has been executed with success CreateRoleCommand [role=Role [id=576d4de51f3c971f8fd5bbbd, name=Guest, note=Guest, permissions=, defaultRole=true, roleProtected=false]] with the result Role [id=576d4de51f3c971f8fd5bbbd, name=Guest, note=Guest, permissions=, defaultRole=true, roleProtected=false]
+[main][I] DemoDataBean - new role created [_id:576d4de51f3c971f8fd5bbbd]
+[main][I] CommandProfilingService - [PROFILING][CreateRoleCommand [role=Role [id=576d4de51f3c971f8fd5bbc0, name=Tester, note=Tester, permissions=ROLE_REST, defaultRole=false, roleProtected=false]]]=1 ms
+[main][I] CommandLoggingService - Command  has been executed with success CreateRoleCommand [role=Role [id=576d4de51f3c971f8fd5bbc0, name=Tester, note=Tester, permissions=ROLE_REST, defaultRole=false, roleProtected=false]] with the result Role [id=576d4de51f3c971f8fd5bbc0, name=Tester, note=Tester, permissions=ROLE_REST, defaultRole=false, roleProtected=false]
+[main][I] DemoDataBean - new role created [_id:576d4de51f3c971f8fd5bbc0]
+[main][I] CommandProfilingService - [PROFILING][CreateRoleCommand [role=Role [id=576d4de51f3c971f8fd5bbc3, name=Test manager, note=Test Manager, permissions=ROLE_REST, defaultRole=false, roleProtected=false]]]=2 ms
+[main][I] CommandLoggingService - Command  has been executed with success CreateRoleCommand [role=Role [id=576d4de51f3c971f8fd5bbc3, name=Test manager, note=Test Manager, permissions=ROLE_REST, defaultRole=false, roleProtected=false]] with the result Role [id=576d4de51f3c971f8fd5bbc3, name=Test manager, note=Test Manager, permissions=ROLE_REST, defaultRole=false, roleProtected=false]
+[main][I] DemoDataBean - new role created [_id:576d4de51f3c971f8fd5bbc3]
+[main][I] CommandProfilingService - [PROFILING][CreateRoleCommand [role=Role [id=576d4de51f3c971f8fd5bbc6, name=Application manager, note=Application manager, permissions=ROLE_REST, defaultRole=false, roleProtected=false]]]=1 ms
+[main][I] CommandLoggingService - Command  has been executed with success CreateRoleCommand [role=Role [id=576d4de51f3c971f8fd5bbc6, name=Application manager, note=Application manager, permissions=ROLE_REST, defaultRole=false, roleProtected=false]] with the result Role [id=576d4de51f3c971f8fd5bbc6, name=Application manager, note=Application manager, permissions=ROLE_REST, defaultRole=false, roleProtected=false]
+[main][I] DemoDataBean - new role created [_id:576d4de51f3c971f8fd5bbc6]
+[main][I] CommandProfilingService - [PROFILING][CreateUserCommand [user=User{id=576d4de51f3c971f8fd5bbcc, login=jsnow, firstName=John, lastName=Snow, email=john.snow@email.com, roleId=576d4de51f3c971f8fd5bbb6, locale=en_GB, activationToken=, createdTime=Fri Jun 24 17:12:37 CEST 2016, active=true}]]=99 ms
+[main][I] CommandLoggingService - Command  has been executed with success CreateUserCommand [user=User{id=576d4de51f3c971f8fd5bbcc, login=jsnow, firstName=John, lastName=Snow, email=john.snow@email.com, roleId=576d4de51f3c971f8fd5bbb6, locale=en_GB, activationToken=, createdTime=Fri Jun 24 17:12:37 CEST 2016, active=true}] with the result User{id=576d4de51f3c971f8fd5bbcc, login=jsnow, firstName=John, lastName=Snow, email=john.snow@email.com, roleId=576d4de51f3c971f8fd5bbb6, locale=en_GB, activationToken=, createdTime=Fri Jun 24 17:12:37 CEST 2016, active=true}
+[main][I] CommandProfilingService - [PROFILING][EditUserCommand [user=User{id=576d4de51f3c971f8fd5bbcc, login=jsnow, firstName=John, lastName=Snow, email=john.snow@email.com, roleId=576d4de51f3c971f8fd5bbb6, locale=en_GB, activationToken=, createdTime=Fri Jun 24 17:12:37 CEST 2016, active=true}]]=2 ms
+[main][I] CommandLoggingService - Command  has been executed with success EditUserCommand [user=User{id=576d4de51f3c971f8fd5bbcc, login=jsnow, firstName=John, lastName=Snow, email=john.snow@email.com, roleId=576d4de51f3c971f8fd5bbb6, locale=en_GB, activationToken=, createdTime=Fri Jun 24 17:12:37 CEST 2016, active=true}] with the result User{id=576d4de51f3c971f8fd5bbcc, login=jsnow, firstName=John, lastName=Snow, email=john.snow@email.com, roleId=576d4de51f3c971f8fd5bbb6, locale=en_GB, activationToken=, createdTime=Fri Jun 24 17:12:37 CEST 2016, active=true}
+[main][I] DemoDataBean - new user created [_id:576d4de51f3c971f8fd5bbcc]
+[main][I] CommandProfilingService - [PROFILING][CreateUserCommand [user=User{id=576d4de51f3c971f8fd5bbd1, login=scarreau, firstName=Sébastien, lastName=Carreau, email=sebastien.carreau@tocea.com, roleId=576d4de51f3c971f8fd5bbb6, locale=en_GB, activationToken=, createdTime=Fri Jun 24 17:12:37 CEST 2016, active=true}]]=86 ms
+[main][I] CommandLoggingService - Command  has been executed with success CreateUserCommand [user=User{id=576d4de51f3c971f8fd5bbd1, login=scarreau, firstName=Sébastien, lastName=Carreau, email=sebastien.carreau@tocea.com, roleId=576d4de51f3c971f8fd5bbb6, locale=en_GB, activationToken=, createdTime=Fri Jun 24 17:12:37 CEST 2016, active=true}] with the result User{id=576d4de51f3c971f8fd5bbd1, login=scarreau, firstName=Sébastien, lastName=Carreau, email=sebastien.carreau@tocea.com, roleId=576d4de51f3c971f8fd5bbb6, locale=en_GB, activationToken=, createdTime=Fri Jun 24 17:12:37 CEST 2016, active=true}
+[main][I] CommandProfilingService - [PROFILING][EditUserCommand [user=User{id=576d4de51f3c971f8fd5bbd1, login=scarreau, firstName=Sébastien, lastName=Carreau, email=sebastien.carreau@tocea.com, roleId=576d4de51f3c971f8fd5bbb6, locale=en_GB, activationToken=, createdTime=Fri Jun 24 17:12:37 CEST 2016, active=true}]]=2 ms
+[main][I] CommandLoggingService - Command  has been executed with success EditUserCommand [user=User{id=576d4de51f3c971f8fd5bbd1, login=scarreau, firstName=Sébastien, lastName=Carreau, email=sebastien.carreau@tocea.com, roleId=576d4de51f3c971f8fd5bbb6, locale=en_GB, activationToken=, createdTime=Fri Jun 24 17:12:37 CEST 2016, active=true}] with the result User{id=576d4de51f3c971f8fd5bbd1, login=scarreau, firstName=Sébastien, lastName=Carreau, email=sebastien.carreau@tocea.com, roleId=576d4de51f3c971f8fd5bbb6, locale=en_GB, activationToken=, createdTime=Fri Jun 24 17:12:37 CEST 2016, active=true}
+[main][I] DemoDataBean - new user created [_id:576d4de51f3c971f8fd5bbd1]
+[main][I] CommandProfilingService - [PROFILING][CreateUserCommand [user=User{id=576d4de51f3c971f8fd5bbd5, login=jpirate, firstName=Jack, lastName=Pirate, email=jack.pirate@email.com, roleId=576d4de51f3c971f8fd5bbbd, locale=en_GB, activationToken=, createdTime=Fri Jun 24 17:12:37 CEST 2016, active=true}]]=86 ms
+[main][I] CommandLoggingService - Command  has been executed with success CreateUserCommand [user=User{id=576d4de51f3c971f8fd5bbd5, login=jpirate, firstName=Jack, lastName=Pirate, email=jack.pirate@email.com, roleId=576d4de51f3c971f8fd5bbbd, locale=en_GB, activationToken=, createdTime=Fri Jun 24 17:12:37 CEST 2016, active=true}] with the result User{id=576d4de51f3c971f8fd5bbd5, login=jpirate, firstName=Jack, lastName=Pirate, email=jack.pirate@email.com, roleId=576d4de51f3c971f8fd5bbbd, locale=en_GB, activationToken=, createdTime=Fri Jun 24 17:12:37 CEST 2016, active=true}
+[main][I] CommandProfilingService - [PROFILING][EditUserCommand [user=User{id=576d4de51f3c971f8fd5bbd5, login=jpirate, firstName=Jack, lastName=Pirate, email=jack.pirate@email.com, roleId=576d4de51f3c971f8fd5bbbd, locale=en_GB, activationToken=, createdTime=Fri Jun 24 17:12:37 CEST 2016, active=true}]]=2 ms
+[main][I] CommandLoggingService - Command  has been executed with success EditUserCommand [user=User{id=576d4de51f3c971f8fd5bbd5, login=jpirate, firstName=Jack, lastName=Pirate, email=jack.pirate@email.com, roleId=576d4de51f3c971f8fd5bbbd, locale=en_GB, activationToken=, createdTime=Fri Jun 24 17:12:37 CEST 2016, active=true}] with the result User{id=576d4de51f3c971f8fd5bbd5, login=jpirate, firstName=Jack, lastName=Pirate, email=jack.pirate@email.com, roleId=576d4de51f3c971f8fd5bbbd, locale=en_GB, activationToken=, createdTime=Fri Jun 24 17:12:37 CEST 2016, active=true}
+[main][I] DemoDataBean - new user created [_id:576d4de51f3c971f8fd5bbd5]
+[main][I] CommandProfilingService - [PROFILING][CreateUserCommand [user=User{id=576d4de51f3c971f8fd5bbd9, login=ikurosaki, firstName=Ichigo, lastName=Kurosaki, email=ichigo.kurosaki@email.com, roleId=576d4de51f3c971f8fd5bbc0, locale=en_GB, activationToken=, createdTime=Fri Jun 24 17:12:37 CEST 2016, active=true}]]=81 ms
+[main][I] CommandLoggingService - Command  has been executed with success CreateUserCommand [user=User{id=576d4de51f3c971f8fd5bbd9, login=ikurosaki, firstName=Ichigo, lastName=Kurosaki, email=ichigo.kurosaki@email.com, roleId=576d4de51f3c971f8fd5bbc0, locale=en_GB, activationToken=, createdTime=Fri Jun 24 17:12:37 CEST 2016, active=true}] with the result User{id=576d4de51f3c971f8fd5bbd9, login=ikurosaki, firstName=Ichigo, lastName=Kurosaki, email=ichigo.kurosaki@email.com, roleId=576d4de51f3c971f8fd5bbc0, locale=en_GB, activationToken=, createdTime=Fri Jun 24 17:12:37 CEST 2016, active=true}
+[main][I] CommandProfilingService - [PROFILING][EditUserCommand [user=User{id=576d4de51f3c971f8fd5bbd9, login=ikurosaki, firstName=Ichigo, lastName=Kurosaki, email=ichigo.kurosaki@email.com, roleId=576d4de51f3c971f8fd5bbc0, locale=en_GB, activationToken=, createdTime=Fri Jun 24 17:12:37 CEST 2016, active=true}]]=1 ms
+[main][I] CommandLoggingService - Command  has been executed with success EditUserCommand [user=User{id=576d4de51f3c971f8fd5bbd9, login=ikurosaki, firstName=Ichigo, lastName=Kurosaki, email=ichigo.kurosaki@email.com, roleId=576d4de51f3c971f8fd5bbc0, locale=en_GB, activationToken=, createdTime=Fri Jun 24 17:12:37 CEST 2016, active=true}] with the result User{id=576d4de51f3c971f8fd5bbd9, login=ikurosaki, firstName=Ichigo, lastName=Kurosaki, email=ichigo.kurosaki@email.com, roleId=576d4de51f3c971f8fd5bbc0, locale=en_GB, activationToken=, createdTime=Fri Jun 24 17:12:37 CEST 2016, active=true}
+[main][I] DemoDataBean - new user created [_id:576d4de51f3c971f8fd5bbd9]
+[main][I] CommandProfilingService - [PROFILING][CreateUserCommand [user=User{id=576d4de51f3c971f8fd5bbdd, login=jbond, firstName=James, lastName=Bond, email=james.bond@mi6.com, roleId=576d4de51f3c971f8fd5bbc3, locale=en_GB, activationToken=, createdTime=Fri Jun 24 17:12:37 CEST 2016, active=true}]]=83 ms
+[main][I] CommandLoggingService - Command  has been executed with success CreateUserCommand [user=User{id=576d4de51f3c971f8fd5bbdd, login=jbond, firstName=James, lastName=Bond, email=james.bond@mi6.com, roleId=576d4de51f3c971f8fd5bbc3, locale=en_GB, activationToken=, createdTime=Fri Jun 24 17:12:37 CEST 2016, active=true}] with the result User{id=576d4de51f3c971f8fd5bbdd, login=jbond, firstName=James, lastName=Bond, email=james.bond@mi6.com, roleId=576d4de51f3c971f8fd5bbc3, locale=en_GB, activationToken=, createdTime=Fri Jun 24 17:12:37 CEST 2016, active=true}
+[main][I] CommandProfilingService - [PROFILING][EditUserCommand [user=User{id=576d4de51f3c971f8fd5bbdd, login=jbond, firstName=James, lastName=Bond, email=james.bond@mi6.com, roleId=576d4de51f3c971f8fd5bbc3, locale=en_GB, activationToken=, createdTime=Fri Jun 24 17:12:37 CEST 2016, active=true}]]=2 ms
+[main][I] CommandLoggingService - Command  has been executed with success EditUserCommand [user=User{id=576d4de51f3c971f8fd5bbdd, login=jbond, firstName=James, lastName=Bond, email=james.bond@mi6.com, roleId=576d4de51f3c971f8fd5bbc3, locale=en_GB, activationToken=, createdTime=Fri Jun 24 17:12:37 CEST 2016, active=true}] with the result User{id=576d4de51f3c971f8fd5bbdd, login=jbond, firstName=James, lastName=Bond, email=james.bond@mi6.com, roleId=576d4de51f3c971f8fd5bbc3, locale=en_GB, activationToken=, createdTime=Fri Jun 24 17:12:37 CEST 2016, active=true}
+[main][I] DemoDataBean - new user created [_id:576d4de51f3c971f8fd5bbdd]
+[main][I] CommandProfilingService - [PROFILING][CreateUserCommand [user=User{id=576d4de61f3c971f8fd5bbe1, login=gandalf, firstName=Gandalf, lastName=LeGris, email=gandalf.legris@lotr.com, roleId=576d4de51f3c971f8fd5bbc6, locale=en_GB, activationToken=, createdTime=Fri Jun 24 17:12:37 CEST 2016, active=true}]]=80 ms
+[main][I] CommandLoggingService - Command  has been executed with success CreateUserCommand [user=User{id=576d4de61f3c971f8fd5bbe1, login=gandalf, firstName=Gandalf, lastName=LeGris, email=gandalf.legris@lotr.com, roleId=576d4de51f3c971f8fd5bbc6, locale=en_GB, activationToken=, createdTime=Fri Jun 24 17:12:37 CEST 2016, active=true}] with the result User{id=576d4de61f3c971f8fd5bbe1, login=gandalf, firstName=Gandalf, lastName=LeGris, email=gandalf.legris@lotr.com, roleId=576d4de51f3c971f8fd5bbc6, locale=en_GB, activationToken=, createdTime=Fri Jun 24 17:12:37 CEST 2016, active=true}
+[main][I] CommandProfilingService - [PROFILING][EditUserCommand [user=User{id=576d4de61f3c971f8fd5bbe1, login=gandalf, firstName=Gandalf, lastName=LeGris, email=gandalf.legris@lotr.com, roleId=576d4de51f3c971f8fd5bbc6, locale=en_GB, activationToken=, createdTime=Fri Jun 24 17:12:37 CEST 2016, active=true}]]=1 ms
+[main][I] CommandLoggingService - Command  has been executed with success EditUserCommand [user=User{id=576d4de61f3c971f8fd5bbe1, login=gandalf, firstName=Gandalf, lastName=LeGris, email=gandalf.legris@lotr.com, roleId=576d4de51f3c971f8fd5bbc6, locale=en_GB, activationToken=, createdTime=Fri Jun 24 17:12:37 CEST 2016, active=true}] with the result User{id=576d4de61f3c971f8fd5bbe1, login=gandalf, firstName=Gandalf, lastName=LeGris, email=gandalf.legris@lotr.com, roleId=576d4de51f3c971f8fd5bbc6, locale=en_GB, activationToken=, createdTime=Fri Jun 24 17:12:37 CEST 2016, active=true}
+[main][I] DemoDataBean - new user created [_id:576d4de61f3c971f8fd5bbe1]
+[main][I] CommandProfilingService - [PROFILING][CreateUserCommand [user=User{id=576d4de61f3c971f8fd5bbe5, login=saroumane, firstName=Saroumane, lastName=LeBlanch, email=saroumane.leblanc@lotr.com, roleId=576d4de51f3c971f8fd5bbb6, locale=en_GB, activationToken=, createdTime=Fri Jun 24 17:12:38 CEST 2016, active=true}]]=81 ms
+[main][I] CommandLoggingService - Command  has been executed with success CreateUserCommand [user=User{id=576d4de61f3c971f8fd5bbe5, login=saroumane, firstName=Saroumane, lastName=LeBlanch, email=saroumane.leblanc@lotr.com, roleId=576d4de51f3c971f8fd5bbb6, locale=en_GB, activationToken=, createdTime=Fri Jun 24 17:12:38 CEST 2016, active=true}] with the result User{id=576d4de61f3c971f8fd5bbe5, login=saroumane, firstName=Saroumane, lastName=LeBlanch, email=saroumane.leblanc@lotr.com, roleId=576d4de51f3c971f8fd5bbb6, locale=en_GB, activationToken=, createdTime=Fri Jun 24 17:12:38 CEST 2016, active=true}
+[main][I] CommandProfilingService - [PROFILING][EditUserCommand [user=User{id=576d4de61f3c971f8fd5bbe5, login=saroumane, firstName=Saroumane, lastName=LeBlanch, email=saroumane.leblanc@lotr.com, roleId=576d4de51f3c971f8fd5bbb6, locale=en_GB, activationToken=, createdTime=Fri Jun 24 17:12:38 CEST 2016, active=true}]]=1 ms
+[main][I] CommandLoggingService - Command  has been executed with success EditUserCommand [user=User{id=576d4de61f3c971f8fd5bbe5, login=saroumane, firstName=Saroumane, lastName=LeBlanch, email=saroumane.leblanc@lotr.com, roleId=576d4de51f3c971f8fd5bbb6, locale=en_GB, activationToken=, createdTime=Fri Jun 24 17:12:38 CEST 2016, active=true}] with the result User{id=576d4de61f3c971f8fd5bbe5, login=saroumane, firstName=Saroumane, lastName=LeBlanch, email=saroumane.leblanc@lotr.com, roleId=576d4de51f3c971f8fd5bbb6, locale=en_GB, activationToken=, createdTime=Fri Jun 24 17:12:38 CEST 2016, active=true}
+[main][I] DemoDataBean - new user created [_id:576d4de61f3c971f8fd5bbe5]
+[main][W] SECURITY - No authentication returned by Spring.
+[main][I] JaversRevisionService - new commit transaction for user 
+[main][I] Javers - Commit(id:1.0, snapshots:1, author:, changes - NewObject:1)
+[main][I] CreateProjectBranchCommandHandler - branch Master created for project 576d4de61f3c971f8fd5bbef
+[main][I] CommandProfilingService - [PROFILING][com.tocea.corolla.products.commands.CreateProjectBranchCommand@4583b617]=10 ms
+[main][I] CommandLoggingService - Command  has been executed with success com.tocea.corolla.products.commands.CreateProjectBranchCommand@4583b617 with the result com.tocea.corolla.products.domain.ProjectBranch@22a63740
+[main][W] SECURITY - No authentication returned by Spring.
+[main][I] JaversRevisionService - new commit transaction for user 
+[main][I] Javers - Commit(id:2.0, snapshots:0, author:, changes -)
+[main][I] CommandProfilingService - [PROFILING][com.tocea.corolla.products.commands.EditProjectCommand@3c3cd13a]=26 ms
+[main][I] CommandLoggingService - Command  has been executed with success com.tocea.corolla.products.commands.EditProjectCommand@3c3cd13a with the result Project{id=576d4de61f3c971f8fd5bbef, key=keyTest, name=test, statusId=null, categoryId=null, ownerId=576d4de51f3c971f8fd5bbcc, description=null, image=null, tags=[], parentId=null}
+[main][I] CommandProfilingService - [PROFILING][com.tocea.corolla.portfolio.commands.CreatePortfolioCommand@75add13c]=2 ms
+[main][I] CommandLoggingService - Command  has been executed with success com.tocea.corolla.portfolio.commands.CreatePortfolioCommand@75add13c with the result com.tocea.corolla.portfolio.domain.Portfolio@224d537d
+[main][I] CommandProfilingService - [PROFILING][com.tocea.corolla.portfolio.commands.CreateProjectNodeCommand@1dd443c1]=15 ms
+[main][I] CommandLoggingService - Command  has been executed with success com.tocea.corolla.portfolio.commands.CreateProjectNodeCommand@1dd443c1 with the result com.tocea.corolla.portfolio.domain.Portfolio@224d537d
+[main][I] CommandProfilingService - [PROFILING][com.tocea.corolla.products.commands.CreateProjectCommand@13cf5f8a]=179 ms
+[main][I] CommandLoggingService - Command  has been executed with success com.tocea.corolla.products.commands.CreateProjectCommand@13cf5f8a with the result Project{id=576d4de61f3c971f8fd5bbef, key=keyTest, name=test, statusId=null, categoryId=null, ownerId=576d4de51f3c971f8fd5bbcc, description=null, image=null, tags=[], parentId=null}
+[main][W] SECURITY - No authentication returned by Spring.
+[main][I] JaversRevisionService - new commit transaction for user 
+[main][I] Javers - Commit(id:3.0, snapshots:1, author:, changes - NewObject:1)
+[main][I] CreateProjectBranchCommandHandler - branch Master created for project 576d4de61f3c971f8fd5bc13
+[main][I] CommandProfilingService - [PROFILING][com.tocea.corolla.products.commands.CreateProjectBranchCommand@783dc0e7]=3 ms
+[main][I] CommandLoggingService - Command  has been executed with success com.tocea.corolla.products.commands.CreateProjectBranchCommand@783dc0e7 with the result com.tocea.corolla.products.domain.ProjectBranch@361f26b4
+[main][W] SECURITY - No authentication returned by Spring.
+[main][I] JaversRevisionService - new commit transaction for user 
+[main][I] Javers - Commit(id:4.0, snapshots:0, author:, changes -)
+[main][I] CommandProfilingService - [PROFILING][com.tocea.corolla.products.commands.EditProjectCommand@2bc59ab7]=8 ms
+[main][I] CommandLoggingService - Command  has been executed with success com.tocea.corolla.products.commands.EditProjectCommand@2bc59ab7 with the result Project{id=576d4de61f3c971f8fd5bc13, key=keyTest1, name=test1, statusId=null, categoryId=null, ownerId=576d4de51f3c971f8fd5bbcc, description=null, image=null, tags=[], parentId=null}
+[main][I] CommandProfilingService - [PROFILING][com.tocea.corolla.portfolio.commands.CreateProjectNodeCommand@5615f82d]=5 ms
+[main][I] CommandLoggingService - Command  has been executed with success com.tocea.corolla.portfolio.commands.CreateProjectNodeCommand@5615f82d with the result com.tocea.corolla.portfolio.domain.Portfolio@21698e5a
+[main][I] CommandProfilingService - [PROFILING][com.tocea.corolla.products.commands.CreateProjectCommand@77d54a41]=78 ms
+[main][I] CommandLoggingService - Command  has been executed with success com.tocea.corolla.products.commands.CreateProjectCommand@77d54a41 with the result Project{id=576d4de61f3c971f8fd5bc13, key=keyTest1, name=test1, statusId=null, categoryId=null, ownerId=576d4de51f3c971f8fd5bbcc, description=null, image=null, tags=[], parentId=null}
+[main][W] SECURITY - No authentication returned by Spring.
+[main][I] JaversRevisionService - new commit transaction for user 
+[main][I] Javers - Commit(id:5.0, snapshots:1, author:, changes - NewObject:1)
+[main][I] CreateProjectBranchCommandHandler - branch Master created for project 576d4de61f3c971f8fd5bc27
+[main][I] CommandProfilingService - [PROFILING][com.tocea.corolla.products.commands.CreateProjectBranchCommand@7252bdb]=2 ms
+[main][I] CommandLoggingService - Command  has been executed with success com.tocea.corolla.products.commands.CreateProjectBranchCommand@7252bdb with the result com.tocea.corolla.products.domain.ProjectBranch@25ea068e
+[main][W] SECURITY - No authentication returned by Spring.
+[main][I] JaversRevisionService - new commit transaction for user 
+[main][I] Javers - Commit(id:6.0, snapshots:0, author:, changes -)
+[main][I] CommandProfilingService - [PROFILING][com.tocea.corolla.products.commands.EditProjectCommand@45d46254]=7 ms
+[main][I] CommandLoggingService - Command  has been executed with success com.tocea.corolla.products.commands.EditProjectCommand@45d46254 with the result Project{id=576d4de61f3c971f8fd5bc27, key=test1Subproject1, name=test1 subproject 1, statusId=null, categoryId=null, ownerId=576d4de51f3c971f8fd5bbcc, description=null, image=null, tags=[], parentId=576d4de61f3c971f8fd5bc13}
+[main][I] CommandProfilingService - [PROFILING][com.tocea.corolla.portfolio.commands.CreateProjectNodeCommand@69d58731]=2 ms
+[main][I] CommandLoggingService - Command  has been executed with success com.tocea.corolla.portfolio.commands.CreateProjectNodeCommand@69d58731 with the result com.tocea.corolla.portfolio.domain.Portfolio@3275a47f
+[main][I] CommandProfilingService - [PROFILING][com.tocea.corolla.products.commands.CreateProjectCommand@14b48f39]=35 ms
+[main][I] CommandLoggingService - Command  has been executed with success com.tocea.corolla.products.commands.CreateProjectCommand@14b48f39 with the result Project{id=576d4de61f3c971f8fd5bc27, key=test1Subproject1, name=test1 subproject 1, statusId=null, categoryId=null, ownerId=576d4de51f3c971f8fd5bbcc, description=null, image=null, tags=[], parentId=576d4de61f3c971f8fd5bc13}
+[main][W] SECURITY - No authentication returned by Spring.
+[main][I] JaversRevisionService - new commit transaction for user 
+[main][I] Javers - Commit(id:7.0, snapshots:1, author:, changes - NewObject:1)
+[main][I] CreateProjectBranchCommandHandler - branch Master created for project 576d4de61f3c971f8fd5bc3b
+[main][I] CommandProfilingService - [PROFILING][com.tocea.corolla.products.commands.CreateProjectBranchCommand@540212be]=1 ms
+[main][I] CommandLoggingService - Command  has been executed with success com.tocea.corolla.products.commands.CreateProjectBranchCommand@540212be with the result com.tocea.corolla.products.domain.ProjectBranch@2579d8a
+[main][W] SECURITY - No authentication returned by Spring.
+[main][I] JaversRevisionService - new commit transaction for user 
+[main][I] Javers - Commit(id:8.0, snapshots:0, author:, changes -)
+[main][I] CommandProfilingService - [PROFILING][com.tocea.corolla.products.commands.EditProjectCommand@72c704f1]=5 ms
+[main][I] CommandLoggingService - Command  has been executed with success com.tocea.corolla.products.commands.EditProjectCommand@72c704f1 with the result Project{id=576d4de61f3c971f8fd5bc3b, key=test1Subproject2, name=test1 subproject 2, statusId=null, categoryId=null, ownerId=576d4de51f3c971f8fd5bbcc, description=null, image=null, tags=[], parentId=576d4de61f3c971f8fd5bc13}
+[main][I] CommandProfilingService - [PROFILING][com.tocea.corolla.portfolio.commands.CreateProjectNodeCommand@79273a4f]=1 ms
+[main][I] CommandLoggingService - Command  has been executed with success com.tocea.corolla.portfolio.commands.CreateProjectNodeCommand@79273a4f with the result com.tocea.corolla.portfolio.domain.Portfolio@4e26987b
+[main][I] CommandProfilingService - [PROFILING][com.tocea.corolla.products.commands.CreateProjectCommand@12723c5d]=31 ms
+[main][I] CommandLoggingService - Command  has been executed with success com.tocea.corolla.products.commands.CreateProjectCommand@12723c5d with the result Project{id=576d4de61f3c971f8fd5bc3b, key=test1Subproject2, name=test1 subproject 2, statusId=null, categoryId=null, ownerId=576d4de51f3c971f8fd5bbcc, description=null, image=null, tags=[], parentId=576d4de61f3c971f8fd5bc13}
+[main][W] SECURITY - No authentication returned by Spring.
+[main][I] JaversRevisionService - new commit transaction for user 
+[main][I] Javers - Commit(id:9.0, snapshots:1, author:, changes - NewObject:1)
+[main][I] CreateProjectBranchCommandHandler - branch Master created for project 576d4de61f3c971f8fd5bc4f
+[main][I] CommandProfilingService - [PROFILING][com.tocea.corolla.products.commands.CreateProjectBranchCommand@5c3007d]=1 ms
+[main][I] CommandLoggingService - Command  has been executed with success com.tocea.corolla.products.commands.CreateProjectBranchCommand@5c3007d with the result com.tocea.corolla.products.domain.ProjectBranch@66b40dd3
+[main][W] SECURITY - No authentication returned by Spring.
+[main][I] JaversRevisionService - new commit transaction for user 
+[main][I] Javers - Commit(id:10.0, snapshots:0, author:, changes -)
+[main][I] CommandProfilingService - [PROFILING][com.tocea.corolla.products.commands.EditProjectCommand@55f6f965]=5 ms
+[main][I] CommandLoggingService - Command  has been executed with success com.tocea.corolla.products.commands.EditProjectCommand@55f6f965 with the result Project{id=576d4de61f3c971f8fd5bc4f, key=test1Subproject2 subproject 1, name=test1 subproject 2 subproject 1, statusId=null, categoryId=null, ownerId=576d4de51f3c971f8fd5bbcc, description=null, image=null, tags=[], parentId=576d4de61f3c971f8fd5bc3b}
+[main][I] CommandProfilingService - [PROFILING][com.tocea.corolla.portfolio.commands.CreateProjectNodeCommand@517bdce0]=1 ms
+[main][I] CommandLoggingService - Command  has been executed with success com.tocea.corolla.portfolio.commands.CreateProjectNodeCommand@517bdce0 with the result com.tocea.corolla.portfolio.domain.Portfolio@7c0b0bd9
+[main][I] CommandProfilingService - [PROFILING][com.tocea.corolla.products.commands.CreateProjectCommand@173cfb01]=27 ms
+[main][I] CommandLoggingService - Command  has been executed with success com.tocea.corolla.products.commands.CreateProjectCommand@173cfb01 with the result Project{id=576d4de61f3c971f8fd5bc4f, key=test1Subproject2 subproject 1, name=test1 subproject 2 subproject 1, statusId=null, categoryId=null, ownerId=576d4de51f3c971f8fd5bbcc, description=null, image=null, tags=[], parentId=576d4de61f3c971f8fd5bc3b}
+[main][W] SECURITY - No authentication returned by Spring.
+[main][I] JaversRevisionService - new commit transaction for user 
+[main][I] Javers - Commit(id:11.0, snapshots:1, author:, changes - NewObject:1)
+[main][I] CreateProjectBranchCommandHandler - branch Master created for project 576d4de61f3c971f8fd5bc63
+[main][I] CommandProfilingService - [PROFILING][com.tocea.corolla.products.commands.CreateProjectBranchCommand@924f3f1]=2 ms
+[main][I] CommandLoggingService - Command  has been executed with success com.tocea.corolla.products.commands.CreateProjectBranchCommand@924f3f1 with the result com.tocea.corolla.products.domain.ProjectBranch@19e2db7c
+[main][W] SECURITY - No authentication returned by Spring.
+[main][I] JaversRevisionService - new commit transaction for user 
+[main][I] Javers - Commit(id:12.0, snapshots:0, author:, changes -)
+[main][I] CommandProfilingService - [PROFILING][com.tocea.corolla.products.commands.EditProjectCommand@1cab19e2]=5 ms
+[main][I] CommandLoggingService - Command  has been executed with success com.tocea.corolla.products.commands.EditProjectCommand@1cab19e2 with the result Project{id=576d4de61f3c971f8fd5bc63, key=test1Subproject3, name=test1 subproject 3, statusId=null, categoryId=null, ownerId=576d4de51f3c971f8fd5bbcc, description=null, image=null, tags=[], parentId=576d4de61f3c971f8fd5bc13}
+[main][I] CommandProfilingService - [PROFILING][com.tocea.corolla.portfolio.commands.CreateProjectNodeCommand@15ad5acb]=2 ms
+[main][I] CommandLoggingService - Command  has been executed with success com.tocea.corolla.portfolio.commands.CreateProjectNodeCommand@15ad5acb with the result com.tocea.corolla.portfolio.domain.Portfolio@59c862af
+[main][I] CommandProfilingService - [PROFILING][com.tocea.corolla.products.commands.CreateProjectCommand@11c999da]=27 ms
+[main][I] CommandLoggingService - Command  has been executed with success com.tocea.corolla.products.commands.CreateProjectCommand@11c999da with the result Project{id=576d4de61f3c971f8fd5bc63, key=test1Subproject3, name=test1 subproject 3, statusId=null, categoryId=null, ownerId=576d4de51f3c971f8fd5bbcc, description=null, image=null, tags=[], parentId=576d4de61f3c971f8fd5bc13}
+[main][W] SECURITY - No authentication returned by Spring.
+[main][I] JaversRevisionService - new commit transaction for user 
+[main][I] Javers - Commit(id:13.0, snapshots:1, author:, changes - NewObject:1)
+[main][I] CreateProjectBranchCommandHandler - branch Master created for project 576d4de61f3c971f8fd5bc77
+[main][I] CommandProfilingService - [PROFILING][com.tocea.corolla.products.commands.CreateProjectBranchCommand@737ff5c4]=2 ms
+[main][I] CommandLoggingService - Command  has been executed with success com.tocea.corolla.products.commands.CreateProjectBranchCommand@737ff5c4 with the result com.tocea.corolla.products.domain.ProjectBranch@7e9a836
+[main][W] SECURITY - No authentication returned by Spring.
+[main][I] JaversRevisionService - new commit transaction for user 
+[main][I] Javers - Commit(id:14.0, snapshots:0, author:, changes -)
+[main][I] CommandProfilingService - [PROFILING][com.tocea.corolla.products.commands.EditProjectCommand@35d4035f]=5 ms
+[main][I] CommandLoggingService - Command  has been executed with success com.tocea.corolla.products.commands.EditProjectCommand@35d4035f with the result Project{id=576d4de61f3c971f8fd5bc77, key=probe, name=Probe, statusId=null, categoryId=null, ownerId=576d4de51f3c971f8fd5bbcc, description=null, image=null, tags=[], parentId=null}
+[main][I] CommandProfilingService - [PROFILING][com.tocea.corolla.portfolio.commands.CreateProjectNodeCommand@4efe014f]=3 ms
+[main][I] CommandLoggingService - Command  has been executed with success com.tocea.corolla.portfolio.commands.CreateProjectNodeCommand@4efe014f with the result com.tocea.corolla.portfolio.domain.Portfolio@22ff11ef
+[main][I] CommandProfilingService - [PROFILING][com.tocea.corolla.products.commands.CreateProjectCommand@2d2a8819]=30 ms
+[main][I] CommandLoggingService - Command  has been executed with success com.tocea.corolla.products.commands.CreateProjectCommand@2d2a8819 with the result Project{id=576d4de61f3c971f8fd5bc77, key=probe, name=Probe, statusId=null, categoryId=null, ownerId=576d4de51f3c971f8fd5bbcc, description=null, image=null, tags=[], parentId=null}
+[main][I] CommandProfilingService - [PROFILING][com.tocea.corolla.users.commands.CreateUserGroupCommand@278cb145]=3 ms
+[main][I] CommandLoggingService - Command  has been executed with success com.tocea.corolla.users.commands.CreateUserGroupCommand@278cb145 with the result com.tocea.corolla.users.domain.UserGroup@729d6ee2
+[main][I] DemoDataBean - new user group created [_id: 576d4de61f3c971f8fd5bc8e
+[main][I] RequestMappingHandlerAdapter - Looking for @ControllerAdvice: org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@243c4f91: startup date [Fri Jun 24 17:12:30 CEST 2016]; root of context hierarchy
+[main][I] RequestMappingHandlerMapping - Mapped "{[/rest/trees/folders/types/all]}" onto public java.util.Collection<com.tocea.corolla.trees.domain.FolderNodeType> com.tocea.corolla.trees.rest.FolderNodeTypeRestController.findAll()
+[main][I] RequestMappingHandlerMapping - Mapped "{[/rest/trees/folders/types/delete/{typeID}]}" onto public com.tocea.corolla.trees.domain.FolderNodeType com.tocea.corolla.trees.rest.FolderNodeTypeRestController.delete(java.lang.String)
+[main][I] RequestMappingHandlerMapping - Mapped "{[/rest/projects/all]}" onto public java.util.Collection<com.tocea.corolla.products.domain.Project> com.tocea.corolla.products.rest.ProjectRestController.findAll()
+[main][I] RequestMappingHandlerMapping - Mapped "{[/rest/projects/all],methods=[POST]}" onto public java.util.Collection<com.tocea.corolla.products.domain.Project> com.tocea.corolla.products.rest.ProjectRestController.findAll(java.util.List<java.lang.String>)
+[main][I] RequestMappingHandlerMapping - Mapped "{[/rest/projects/{projectKey}/branches/{branchName}/delete]}" onto public void com.tocea.corolla.products.rest.ProjectRestController.deleteBranch(java.lang.String,java.lang.String) throws java.lang.Throwable
+[main][I] RequestMappingHandlerMapping - Mapped "{[/rest/projects/filter],methods=[POST]}" onto public java.util.Collection<com.tocea.corolla.products.domain.Project> com.tocea.corolla.products.rest.ProjectRestController.filterProjects(com.tocea.corolla.products.dto.ProjectFilterDTO)
+[main][I] RequestMappingHandlerMapping - Mapped "{[/rest/projects/filter/keys],methods=[POST]}" onto public java.util.Collection<java.lang.String> com.tocea.corolla.products.rest.ProjectRestController.filterProjectsAndRetrieveOnlyIDs(com.tocea.corolla.products.dto.ProjectFilterDTO)
+[main][I] RequestMappingHandlerMapping - Mapped "{[/rest/projects/tags]}" onto public java.util.Collection<java.lang.String> com.tocea.corolla.products.rest.ProjectRestController.findAllTags()
+[main][I] RequestMappingHandlerMapping - Mapped "{[/rest/projects/{projectKey}/tags]}" onto public java.util.Collection<java.lang.String> com.tocea.corolla.products.rest.ProjectRestController.findTags(java.lang.String)
+[main][I] RequestMappingHandlerMapping - Mapped "{[/rest/projects/{projectKey}/tags/push],methods=[POST]}" onto public java.util.Collection<java.lang.String> com.tocea.corolla.products.rest.ProjectRestController.pushTags(java.lang.String,java.lang.String) throws java.io.UnsupportedEncodingException
+[main][I] RequestMappingHandlerMapping - Mapped "{[/rest/projects/status/all]}" onto public java.util.Collection<com.tocea.corolla.products.domain.ProjectStatus> com.tocea.corolla.products.rest.ProjectStatusRestController.findAll()
+[main][I] RequestMappingHandlerMapping - Mapped "{[/rest/projects/categories/all]}" onto public java.util.Collection<com.tocea.corolla.products.domain.ProjectCategory> com.tocea.corolla.products.rest.ProjectCategoryRestController.findAll()
+[main][I] RequestMappingHandlerMapping - Mapped "{[/rest/users/allwithrole]}" onto public com.tocea.corolla.utils.datatable.DataTableList<com.tocea.corolla.users.dto.UserWithRoleDto> com.tocea.corolla.users.rest.UserRestController.getAllUsersWithRole()
+[main][I] RequestMappingHandlerMapping - Mapped "{[/rest/users/delete/{login}],methods=[GET]}" onto public void com.tocea.corolla.users.rest.UserRestController.deleteUser(java.lang.String,java.security.Principal)
+[main][I] RequestMappingHandlerMapping - Mapped "{[/rest/users/disable/{login}],methods=[GET]}" onto public void com.tocea.corolla.users.rest.UserRestController.disableUser(java.lang.String,java.security.Principal)
+[main][I] RequestMappingHandlerMapping - Mapped "{[/rest/users/enable/{login}],methods=[GET]}" onto public void com.tocea.corolla.users.rest.UserRestController.enableUser(java.lang.String,java.security.Principal)
+[main][I] RequestMappingHandlerMapping - Mapped "{[/rest/users/all]}" onto public com.tocea.corolla.utils.datatable.DataTableList<com.tocea.corolla.users.dto.UserDto> com.tocea.corolla.users.rest.UserRestController.getAllUsers()
+[main][I] RequestMappingHandlerMapping - Mapped "{[/rest/roles/delete/{id}],methods=[GET]}" onto public void com.tocea.corolla.users.rest.RoleRestController.deleteUser(java.lang.String)
+[main][I] RequestMappingHandlerMapping - Mapped "{[/rest/groups/delete/{id}],methods=[GET]}" onto public void com.tocea.corolla.users.rest.UserGroupRestController.deleteUserGroup(java.lang.String)
+[main][I] RequestMappingHandlerMapping - Mapped "{[/rest/portfolio/move/{fromID}/{toID}]}" onto public com.tocea.corolla.portfolio.domain.Portfolio com.tocea.corolla.portfolio.rest.PortfolioRestController.moveNode(java.lang.Integer,java.lang.Integer)
+[main][I] RequestMappingHandlerMapping - Mapped "{[/rest/portfolio/folders/add/{parentID}/{folderNodeTypeID}],methods=[POST],consumes=[text/plain]}" onto public com.tocea.corolla.trees.domain.FolderNode com.tocea.corolla.portfolio.rest.PortfolioRestController.addTextNode(java.lang.Integer,java.lang.String,java.lang.String)
+[main][I] RequestMappingHandlerMapping - Mapped "{[/rest/portfolio/folders/add/{folderNodeTypeID}],methods=[POST],consumes=[text/plain]}" onto public com.tocea.corolla.trees.domain.FolderNode com.tocea.corolla.portfolio.rest.PortfolioRestController.addTextNode(java.lang.String,java.lang.String)
+[main][I] RequestMappingHandlerMapping - Mapped "{[/rest/portfolio/folders/edit/type/{nodeID}/{typeID}]}" onto public com.tocea.corolla.trees.domain.FolderNode com.tocea.corolla.portfolio.rest.PortfolioRestController.changeFolderNodeType(java.lang.Integer,java.lang.String)
+[main][I] RequestMappingHandlerMapping - Mapped "{[/rest/portfolio/folders/edit/{nodeID}],methods=[POST],consumes=[text/plain]}" onto public com.tocea.corolla.portfolio.domain.Portfolio com.tocea.corolla.portfolio.rest.PortfolioRestController.editTextNode(java.lang.Integer,java.lang.String)
+[main][I] RequestMappingHandlerMapping - Mapped "{[/rest/portfolio/jstree]}" onto public java.util.Collection<com.tocea.corolla.trees.dto.JsTreeNodeDTO> com.tocea.corolla.portfolio.rest.PortfolioRestController.getJsTree()
+[main][I] RequestMappingHandlerMapping - Mapped "{[/rest/portfolio/jstree/{projectKey}]}" onto public java.util.Collection<com.tocea.corolla.trees.dto.JsTreeNodeDTO> com.tocea.corolla.portfolio.rest.PortfolioRestController.getJsTreeSubtree(java.lang.String)
+[main][I] RequestMappingHandlerMapping - Mapped "{[/rest/portfolio/remove/{nodeID}]}" onto public com.tocea.corolla.portfolio.domain.Portfolio com.tocea.corolla.portfolio.rest.PortfolioRestController.removeNode(java.lang.Integer)
+[main][I] RequestMappingHandlerMapping - Mapped "{[/rest/portfolio/]}" onto public java.util.Collection<com.tocea.corolla.trees.domain.TreeNode> com.tocea.corolla.portfolio.rest.PortfolioRestController.getTree()
+[main][I] RequestMappingHandlerMapping - Mapped "{[/ui/springplugins/reload]}" onto public org.springframework.web.servlet.ModelAndView fr.echoes.labs.ksf.cc.ui.views.plugins.PluginController.reloadPlugins()
+[main][I] RequestMappingHandlerMapping - Mapped "{[/ui/springplugins]}" onto public org.springframework.web.servlet.ModelAndView fr.echoes.labs.ksf.cc.ui.views.plugins.PluginController.pluginPage()
+[main][I] RequestMappingHandlerMapping - Mapped "{[/ui/ || / || /ui]}" onto public java.lang.String fr.echoes.labs.ksf.cc.ui.views.main.HomeController.redirectSlashAndBasicUrl()
+[main][I] RequestMappingHandlerMapping - Mapped "{[/ui/projects/new],methods=[POST]}" onto public org.springframework.web.servlet.ModelAndView fr.echoes.labs.ksf.cc.ui.views.projects.ProjectController.createProject(fr.echoes.labs.ksf.cc.sf.dto.SFProjectDTO,org.springframework.validation.BindingResult)
+[main][I] RequestMappingHandlerMapping - Mapped "{[/ui/projects/releases/new]}" onto public org.springframework.web.servlet.ModelAndView fr.echoes.labs.ksf.cc.ui.views.projects.ProjectController.createRelease(java.lang.String,java.lang.String,java.lang.String)
+[main][I] RequestMappingHandlerMapping - Mapped "{[/ui/projects/releases/finish]}" onto public org.springframework.web.servlet.ModelAndView fr.echoes.labs.ksf.cc.ui.views.projects.ProjectController.finishRelease(java.lang.String,java.lang.String,org.springframework.web.servlet.mvc.support.RedirectAttributes)
+[main][I] RequestMappingHandlerMapping - Mapped "{[/ui/projects/features/new]}" onto public org.springframework.web.servlet.ModelAndView fr.echoes.labs.ksf.cc.ui.views.projects.ProjectController.createFeature(java.lang.String,java.lang.String,java.lang.String)
+[main][I] RequestMappingHandlerMapping - Mapped "{[/ui/projects/features/finish]}" onto public org.springframework.web.servlet.ModelAndView fr.echoes.labs.ksf.cc.ui.views.projects.ProjectController.finishFeature(java.lang.String,java.lang.String,java.lang.String,org.springframework.web.servlet.mvc.support.RedirectAttributes)
+[main][I] RequestMappingHandlerMapping - Mapped "{[/ui/projects/new]}" onto public org.springframework.web.servlet.ModelAndView fr.echoes.labs.ksf.cc.ui.views.projects.ProjectController.getCreatePage()
+[main][I] RequestMappingHandlerMapping - Mapped "{[/ui/projects]}" onto public org.springframework.web.servlet.ModelAndView fr.echoes.labs.ksf.cc.ui.views.projects.ProjectController.getListPage()
+[main][I] RequestMappingHandlerMapping - Mapped "{[/ui/projects/{projectKey}]}" onto public org.springframework.web.servlet.ModelAndView fr.echoes.labs.ksf.cc.ui.views.projects.ProjectController.getProjectPage(java.lang.String)
+[main][I] RequestMappingHandlerMapping - Mapped "{[/ui/projects/delete/{projectKey}]}" onto public org.springframework.web.servlet.ModelAndView fr.echoes.labs.ksf.cc.ui.views.projects.ProjectController.DeleteProjectPage(java.lang.String)
+[main][I] RequestMappingHandlerMapping - Mapped "{[/error],produces=[text/html]}" onto public org.springframework.web.servlet.ModelAndView org.springframework.boot.autoconfigure.web.BasicErrorController.errorHtml(javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpServletResponse)
+[main][I] RequestMappingHandlerMapping - Mapped "{[/error]}" onto public org.springframework.http.ResponseEntity<java.util.Map<java.lang.String, java.lang.Object>> org.springframework.boot.autoconfigure.web.BasicErrorController.error(javax.servlet.http.HttpServletRequest)
+[main][I] SimpleUrlHandlerMapping - Mapped URL path [/login] onto handler of type [class org.springframework.web.servlet.mvc.ParameterizableViewController]
+[main][I] SimpleUrlHandlerMapping - Mapped URL path [/logout] onto handler of type [class org.springframework.web.servlet.mvc.ParameterizableViewController]
+[main][I] SimpleUrlHandlerMapping - Mapped URL path [/ui/404.html] onto handler of type [class org.springframework.web.servlet.mvc.ParameterizableViewController]
+[main][I] SimpleUrlHandlerMapping - Mapped URL path [/ui/401.html] onto handler of type [class org.springframework.web.servlet.mvc.ParameterizableViewController]
+[main][I] SimpleUrlHandlerMapping - Mapped URL path [/ui/500.html] onto handler of type [class org.springframework.web.servlet.mvc.ParameterizableViewController]
+[main][I] SimpleUrlHandlerMapping - Mapped URL path [/webjars/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+[main][I] SimpleUrlHandlerMapping - Mapped URL path [/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+[main][I] AnnotationMBeanExporter - Registering beans for JMX exposure on startup
+[main][I] EndpointMBeanExporter - Registering beans for JMX exposure on startup
+[main][I] AnnotationConfigEmbeddedWebApplicationContext - Refreshing org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@5870fc05: startup date [Fri Jun 24 17:12:40 CEST 2016]; parent: org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@243c4f91
+[main][I] DefaultListableBeanFactory - Overriding bean definition for bean 'handlerExceptionResolver' with a different definition: replacing [Root bean: class [null]; scope=; abstract=false; lazyInit=false; autowireMode=3; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=org.springframework.web.servlet.config.annotation.DelegatingWebMvcConfiguration; factoryMethodName=handlerExceptionResolver; initMethodName=null; destroyMethodName=(inferred); defined in class org.springframework.web.servlet.config.annotation.DelegatingWebMvcConfiguration] with [Root bean: class [null]; scope=; abstract=false; lazyInit=false; autowireMode=3; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=endpointWebMvcChildContextConfiguration; factoryMethodName=compositeHandlerExceptionResolver; initMethodName=null; destroyMethodName=(inferred); defined in org.springframework.boot.actuate.autoconfigure.EndpointWebMvcChildContextConfiguration]
+[main][I] TomcatEmbeddedServletContainer - Tomcat initialized with port(s): 8080 (http)
+[main][I] StandardService - Starting service Tomcat
+[main][I] StandardEngine - Starting Servlet Engine: Apache Tomcat/8.0.33
+[localhost-startStop-1][I] [/] - Initializing Spring embedded WebApplicationContext
+[localhost-startStop-1][I] ContextLoader - Root WebApplicationContext: initialization completed in 104 ms
+[localhost-startStop-1][I] ServletRegistrationBean - Mapping servlet: 'dispatcherServlet' to [/]
+[localhost-startStop-1][I] FilterRegistrationBean - Mapping filter: 'springSecurityFilterChain' to: [/*]
+[main][I] EndpointHandlerMapping - Mapped "{[/beans || /beans.json],methods=[GET],produces=[application/json]}" onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.EndpointMvcAdapter.invoke()
+[main][I] EndpointHandlerMapping - Mapped "{[/configprops || /configprops.json],methods=[GET],produces=[application/json]}" onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.EndpointMvcAdapter.invoke()
+[main][I] EndpointHandlerMapping - Mapped "{[/autoconfig || /autoconfig.json],methods=[GET],produces=[application/json]}" onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.EndpointMvcAdapter.invoke()
+[main][I] EndpointHandlerMapping - Mapped "{[/metrics/{name:.*}],methods=[GET],produces=[application/json]}" onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.MetricsMvcEndpoint.value(java.lang.String)
+[main][I] EndpointHandlerMapping - Mapped "{[/metrics || /metrics.json],methods=[GET],produces=[application/json]}" onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.EndpointMvcAdapter.invoke()
+[main][I] EndpointHandlerMapping - Mapped "{[/env/{name:.*}],methods=[GET],produces=[application/json]}" onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.EnvironmentMvcEndpoint.value(java.lang.String)
+[main][I] EndpointHandlerMapping - Mapped "{[/env || /env.json],methods=[GET],produces=[application/json]}" onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.EndpointMvcAdapter.invoke()
+[main][I] EndpointHandlerMapping - Mapped "{[/trace || /trace.json],methods=[GET],produces=[application/json]}" onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.EndpointMvcAdapter.invoke()
+[main][I] EndpointHandlerMapping - Mapped "{[/dump || /dump.json],methods=[GET],produces=[application/json]}" onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.EndpointMvcAdapter.invoke()
+[main][I] EndpointHandlerMapping - Mapped "{[/health || /health.json],produces=[application/json]}" onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.HealthMvcEndpoint.invoke(java.security.Principal)
+[main][I] EndpointHandlerMapping - Mapped "{[/info || /info.json],methods=[GET],produces=[application/json]}" onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.EndpointMvcAdapter.invoke()
+[main][I] EndpointHandlerMapping - Mapped "{[/mappings || /mappings.json],methods=[GET],produces=[application/json]}" onto public java.lang.Object org.springframework.boot.actuate.endpoint.mvc.EndpointMvcAdapter.invoke()
+[main][I] RequestMappingHandlerMapping - Mapped "{[/error]}" onto public java.util.Map<java.lang.String, java.lang.Object> org.springframework.boot.actuate.endpoint.mvc.ManagementErrorEndpoint.invoke()
+[main][I] SimpleUrlHandlerMapping - Mapped URL path [/login] onto handler of type [class org.springframework.web.servlet.mvc.ParameterizableViewController]
+[main][I] SimpleUrlHandlerMapping - Mapped URL path [/logout] onto handler of type [class org.springframework.web.servlet.mvc.ParameterizableViewController]
+[main][I] SimpleUrlHandlerMapping - Mapped URL path [/ui/404.html] onto handler of type [class org.springframework.web.servlet.mvc.ParameterizableViewController]
+[main][I] SimpleUrlHandlerMapping - Mapped URL path [/ui/401.html] onto handler of type [class org.springframework.web.servlet.mvc.ParameterizableViewController]
+[main][I] SimpleUrlHandlerMapping - Mapped URL path [/ui/500.html] onto handler of type [class org.springframework.web.servlet.mvc.ParameterizableViewController]
+[main][I] SimpleUrlHandlerMapping - Mapped URL path [/webjars/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+[main][I] SimpleUrlHandlerMapping - Mapped URL path [/**] onto handler of type [class org.springframework.web.servlet.resource.ResourceHttpRequestHandler]
+[main][I] RequestMappingHandlerAdapter - Looking for @ControllerAdvice: org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@5870fc05: startup date [Fri Jun 24 17:12:40 CEST 2016]; parent: org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@243c4f91
+[main][I] Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+[main][I] Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+[main][I] NioSelectorPool - Using a shared selector for servlet write/read
+[main][I] TomcatEmbeddedServletContainer - Tomcat started on port(s): 8080 (http)
+[main][I] DefaultLifecycleProcessor - Starting beans in phase 0
+[main][I] EndpointMBeanExporter - Located managed bean 'requestMappingEndpoint': registering with JMX server as MBean [org.springframework.boot:type=Endpoint,name=requestMappingEndpoint]
+[main][I] EndpointMBeanExporter - Located managed bean 'environmentEndpoint': registering with JMX server as MBean [org.springframework.boot:type=Endpoint,name=environmentEndpoint]
+[main][I] EndpointMBeanExporter - Located managed bean 'healthEndpoint': registering with JMX server as MBean [org.springframework.boot:type=Endpoint,name=healthEndpoint]
+[main][I] EndpointMBeanExporter - Located managed bean 'beansEndpoint': registering with JMX server as MBean [org.springframework.boot:type=Endpoint,name=beansEndpoint]
+[main][I] EndpointMBeanExporter - Located managed bean 'infoEndpoint': registering with JMX server as MBean [org.springframework.boot:type=Endpoint,name=infoEndpoint]
+[main][I] EndpointMBeanExporter - Located managed bean 'metricsEndpoint': registering with JMX server as MBean [org.springframework.boot:type=Endpoint,name=metricsEndpoint]
+[main][I] EndpointMBeanExporter - Located managed bean 'traceEndpoint': registering with JMX server as MBean [org.springframework.boot:type=Endpoint,name=traceEndpoint]
+[main][I] EndpointMBeanExporter - Located managed bean 'dumpEndpoint': registering with JMX server as MBean [org.springframework.boot:type=Endpoint,name=dumpEndpoint]
+[main][I] EndpointMBeanExporter - Located managed bean 'autoConfigurationReportEndpoint': registering with JMX server as MBean [org.springframework.boot:type=Endpoint,name=autoConfigurationReportEndpoint]
+[main][I] EndpointMBeanExporter - Located managed bean 'configurationPropertiesReportEndpoint': registering with JMX server as MBean [org.springframework.boot:type=Endpoint,name=configurationPropertiesReportEndpoint]
+[main][I] Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8888"]
+[main][I] Http11NioProtocol - Starting ProtocolHandler ["http-nio-8888"]
+[main][I] NioSelectorPool - Using a shared selector for servlet write/read
+[main][I] TomcatEmbeddedServletContainer - Tomcat started on port(s): 8888 (http)
+[main][I] KomeaFoundationGuiApplication - Started KomeaFoundationGuiApplication in 11.325 seconds (JVM running for 11.962)
+[Thread-3][I] AnnotationConfigEmbeddedWebApplicationContext - Closing org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@243c4f91: startup date [Fri Jun 24 17:12:30 CEST 2016]; root of context hierarchy

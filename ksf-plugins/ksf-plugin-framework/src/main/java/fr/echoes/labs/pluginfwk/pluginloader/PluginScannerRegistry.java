@@ -5,7 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.echoes.labs.pluginfwk.api.plugin.PluginManager;
-import fr.echoes.labs.pluginfwk.api.plugin.PluginScanner;
+import fr.echoes.labs.pluginfwk.api.scanner.PluginScanner;
 
 public class PluginScannerRegistry {
 
@@ -55,7 +55,9 @@ public class PluginScannerRegistry {
 	}
 
 	public void scanForPlugins() {
+		LOGGER.info("Requesting to the plugin scanners to reload the plugins");
 		for (final PluginScanner pluginScanner : this.pluginScanners) {
+			LOGGER.info("Triggering the plugin scanner {}", pluginScanner.getName());
 			pluginScanner.reloadPlugins(this.pluginManager, this.pluginClassLoader.getClassLoader());
 		}
 

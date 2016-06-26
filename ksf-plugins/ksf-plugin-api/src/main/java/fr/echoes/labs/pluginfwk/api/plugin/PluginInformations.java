@@ -37,6 +37,6 @@ public interface PluginInformations {
 	 *
 	 * @return the definition of the plugin properties
 	 */
-	PluginProperties getPluginProperties();
+	PluginPropertiesAndDescription getPluginProperties();
 
 }

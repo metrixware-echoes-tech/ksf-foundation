@@ -20,9 +20,9 @@ import com.tocea.corolla.products.events.EventProjectUpdated;
 import com.tocea.corolla.products.events.EventReleaseCreated;
 import com.tocea.corolla.products.events.EventReleaseFinished;
 
-import fr.echoes.labs.ksf.extensions.projects.IProjectLifecycleExtension;
-import fr.echoes.labs.ksf.extensions.projects.NotifyResult;
-import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
+import fr.echoes.labs.ksf.cc.extensions.projects.IProjectLifecycleExtension;
+import fr.echoes.labs.ksf.cc.extensions.projects.NotifyResult;
+import fr.echoes.labs.ksf.cc.extensions.projects.ProjectDto;
 import fr.echoes.labs.pluginfwk.api.extension.ExtensionManager;
 
 /**

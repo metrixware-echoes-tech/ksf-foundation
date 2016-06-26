@@ -14,7 +14,7 @@ public class ErrorEventHandler {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ErrorEventHandler.class);
 
 	/**
-	 * Listen to any event and dispatch them to the interested plugins.
+	 * Listen to any event and dispatch them to the interested springplugins.
 	 *
 	 * @param _object
 	 *            the event object

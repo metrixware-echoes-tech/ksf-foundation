@@ -6,7 +6,7 @@ import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.IProjectTabPanel;
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
 
 /**
- * This interface defines the widgets provided by plugins to fill the project
+ * This interface defines the widgets provided by springplugins to fill the project
  * dashboard page.
  *
  * @author sleroy
