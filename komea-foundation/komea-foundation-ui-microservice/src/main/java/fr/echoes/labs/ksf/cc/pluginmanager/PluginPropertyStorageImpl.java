@@ -6,6 +6,7 @@ import java.util.Map.Entry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import fr.echoes.labs.pluginfwk.api.propertystorage.PluginProperties;
@@ -25,6 +26,7 @@ public class PluginPropertyStorageImpl implements PluginPropertyStorage {
 	 * @param _pluginFrameworkConfigurationBean
 	 *            the plugin framework configuration bean
 	 */
+	@Autowired
 	public PluginPropertyStorageImpl(final PluginFrameworkConfigurationBean _pluginFrameworkConfigurationBean) {
 		super();
 		this.pluginFrameworkConfigurationBean = _pluginFrameworkConfigurationBean;
