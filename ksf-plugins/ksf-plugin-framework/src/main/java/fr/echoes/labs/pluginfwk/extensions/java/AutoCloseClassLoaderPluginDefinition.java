@@ -2,7 +2,6 @@ package fr.echoes.labs.pluginfwk.extensions.java;
 
 import fr.echoes.labs.pluginfwk.api.extension.IExtension;
 import fr.echoes.labs.pluginfwk.api.plugin.PluginDefinition;
-import fr.echoes.labs.pluginfwk.api.plugin.PluginPropertiesAndDescription;
 import fr.echoes.labs.pluginfwk.api.propertystorage.PluginPropertyStorage;
 
 public class AutoCloseClassLoaderPluginDefinition implements PluginDefinition {
@@ -52,7 +51,7 @@ public class AutoCloseClassLoaderPluginDefinition implements PluginDefinition {
 	}
 
 	@Override
-	public PluginPropertiesAndDescription getPluginProperties() {
+	public Object getPluginProperties() {
 		return this.pluginDefinition.getPluginProperties();
 	}
 

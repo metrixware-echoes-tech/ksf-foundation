@@ -1,11 +1,7 @@
 package fr.echoes.labs.ksf.extensions.exampleplugin;
 
-import java.util.Collections;
-
-import fr.echoes.labs.ksf.plugins.api.PluginPropertiesAndDescriptionImpl;
 import fr.echoes.labs.pluginfwk.api.extension.IExtension;
 import fr.echoes.labs.pluginfwk.api.plugin.PluginDefinition;
-import fr.echoes.labs.pluginfwk.api.plugin.PluginPropertiesAndDescription;
 import fr.echoes.labs.pluginfwk.api.propertystorage.PluginPropertyStorage;
 
 public class ExamplePlugin implements PluginDefinition {
@@ -41,8 +37,8 @@ public class ExamplePlugin implements PluginDefinition {
 	}
 
 	@Override
-	public PluginPropertiesAndDescription getPluginProperties() {
-		return new PluginPropertiesAndDescriptionImpl(Collections.emptyMap(), Collections.emptyMap());
+	public Object getPluginProperties() {
+		return null;
 	}
 
 	@Override

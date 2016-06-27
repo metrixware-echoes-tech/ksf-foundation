@@ -1,7 +1,5 @@
 package fr.echoes.labs.pluginfwk.api.propertystorage;
 
-import java.util.Map;
-
 public interface PluginProperties {
 
 	/**
@@ -16,6 +14,6 @@ public interface PluginProperties {
 	 *
 	 * @return the plugin properties
 	 */
-	Map<String, ?> getPluginProperties();
+	Object getPluginProperties();
 
 }

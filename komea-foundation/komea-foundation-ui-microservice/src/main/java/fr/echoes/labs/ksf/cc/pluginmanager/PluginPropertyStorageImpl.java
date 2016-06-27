@@ -1,16 +1,16 @@
 package fr.echoes.labs.ksf.cc.pluginmanager;
 
 import java.io.File;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+
 import fr.echoes.labs.pluginfwk.api.propertystorage.PluginProperties;
-import fr.echoes.labs.pluginfwk.api.propertystorage.PluginPropertiesBean;
 import fr.echoes.labs.pluginfwk.api.propertystorage.PluginPropertyStorage;
 
 @Service
@@ -19,6 +19,8 @@ public class PluginPropertyStorageImpl implements PluginPropertyStorage {
 	private static final Logger						LOGGER	= LoggerFactory.getLogger(PluginPropertyStorageImpl.class);
 
 	private final PluginFrameworkConfigurationBean	pluginFrameworkConfigurationBean;
+
+	private final Cache<String, Object>				configurationCache;
 
 	/**
 	 * Instantiates a new ksf plugin property storage.
@@ -30,6 +32,9 @@ public class PluginPropertyStorageImpl implements PluginPropertyStorage {
 	public PluginPropertyStorageImpl(final PluginFrameworkConfigurationBean _pluginFrameworkConfigurationBean) {
 		super();
 		this.pluginFrameworkConfigurationBean = _pluginFrameworkConfigurationBean;
+		// Automatically retrieves the configuration.
+		this.configurationCache = CacheBuilder.newBuilder().build();
+
 	}
 
 	/**
@@ -65,20 +70,16 @@ public class PluginPropertyStorageImpl implements PluginPropertyStorage {
 	 * fr.echoes.labs.pluginfwk.api.propertystorage.PluginPropertyStorage#initDefaultProperties(fr.echoes.labs.pluginfwk.api.propertystorage.PluginProperties)
 	 */
 	@Override
-	public void initDefaultProperties(final PluginProperties _pluginProperties) {
-		this.readPluginProperties(_pluginProperties.getPluginID());
-		LOGGER.info("Serialization of {}", _pluginProperties.getPluginID());
-		final Map<String, ?> defaultPropertiesMap = _pluginProperties.getPluginProperties();
-
-		final PluginPropertiesBean pluginProperties = this.readPluginProperties(_pluginProperties.getPluginID());
-
-		final Map<String, Object> propertiesAsMap = pluginProperties.getPluginPropertiesAsMap();
-		for (final Entry<String, ?> defaultKey : defaultPropertiesMap.entrySet()) {
-			if (!propertiesAsMap.containsKey(defaultKey.getKey())) {
-				LOGGER.debug("Updating the property {} with {}", defaultKey.getKey(), defaultKey.getValue());
-				propertiesAsMap.put(defaultKey.getKey(), defaultKey.getValue());
-			}
+	public synchronized void initDefaultProperties(final PluginProperties _pluginProperties) {
+		if (_pluginProperties == null) {
+			return;
 		}
+		if (this.getPluginFileStorage(_pluginProperties.getPluginID()).exists()) {
+			return;
+		}
+		this.configurationCache.invalidate(_pluginProperties.getPluginID());
+		final PluginPropertiesBeanImpl propertiesBeanImpl = new PluginPropertiesBeanImpl(this.getPluginFileStorage(_pluginProperties.getPluginID()));
+		propertiesBeanImpl.writeProperties(_pluginProperties.getPluginProperties());
 
 	}
 
@@ -87,17 +88,22 @@ public class PluginPropertyStorageImpl implements PluginPropertyStorage {
 	}
 
 	@Override
-	public PluginPropertiesBean readPluginProperties(final String _pluginID) {
-		final PluginPropertiesBeanImpl propertiesBeanImpl = new PluginPropertiesBeanImpl(this.getPluginFileStorage(_pluginID));
-		propertiesBeanImpl.readProperties();
-		return propertiesBeanImpl;
+	public synchronized <T> T readPluginProperties(final String _pluginID) {
+		T cacheObject = (T) this.configurationCache.getIfPresent(_pluginID);
+		if (cacheObject == null) {
+			final File pluginFileStorage = this.getPluginFileStorage(_pluginID);
+			final PluginPropertiesBeanImpl propertiesBeanImpl = new PluginPropertiesBeanImpl(pluginFileStorage);
+			cacheObject = propertiesBeanImpl.readProperties();
+			this.configurationCache.put(_pluginID, cacheObject);
+		}
+		return cacheObject;
 	}
 
 	@Override
-	public void updatePluginProperties(final PluginProperties _pluginProperties) {
+	public synchronized void updatePluginProperties(final PluginProperties _pluginProperties) {
+		this.configurationCache.put(_pluginProperties.getPluginID(), _pluginProperties);
 		final PluginPropertiesBeanImpl propertiesBeanImpl = new PluginPropertiesBeanImpl(this.getPluginFileStorage(_pluginProperties.getPluginID()));
-		propertiesBeanImpl.setProperties(_pluginProperties);
-		propertiesBeanImpl.writeProperties();
+		propertiesBeanImpl.writeProperties(_pluginProperties.getPluginProperties());
 
 	}
 

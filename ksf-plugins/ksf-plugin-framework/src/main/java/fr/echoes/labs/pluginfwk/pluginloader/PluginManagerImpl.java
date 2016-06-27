@@ -14,9 +14,29 @@ import fr.echoes.labs.pluginfwk.api.plugin.PluginDefinition;
 import fr.echoes.labs.pluginfwk.api.plugin.PluginException;
 import fr.echoes.labs.pluginfwk.api.plugin.PluginInformations;
 import fr.echoes.labs.pluginfwk.api.plugin.PluginManager;
+import fr.echoes.labs.pluginfwk.api.propertystorage.PluginProperties;
 import fr.echoes.labs.pluginfwk.api.propertystorage.PluginPropertyStorage;
 
 public class PluginManagerImpl implements PluginManager {
+
+	private final class PluginPropertiesImplementation implements PluginProperties {
+
+		private final PluginDefinition pluginDefinition;
+
+		private PluginPropertiesImplementation(final PluginDefinition pluginDefinition) {
+			this.pluginDefinition = pluginDefinition;
+		}
+
+		@Override
+		public String getPluginID() {
+			return this.pluginDefinition.getId();
+		}
+
+		@Override
+		public Object getPluginProperties() {
+			return this.pluginDefinition.getPluginProperties();
+		}
+	}
 
 	private static final Logger					LOGGER			= LoggerFactory.getLogger(PluginManagerImpl.class.getName() + ".[PLUGINFWK]");
 
@@ -72,8 +92,17 @@ public class PluginManagerImpl implements PluginManager {
 		if (pluginDefinition == null) {
 			return;
 		}
+		if (this.loadedPlugins.containsKey(pluginDefinition)) {
+			LOGGER.error("Plugin already initialized {}", pluginDefinition);
+			return;
+		}
+
 		LOGGER.info("Registration of the plugin {} with ===> id {}", pluginDefinition.getName(), pluginDefinition.getId());
+		// Initializes default properties
+		this.pluginPropertyStorage.initDefaultProperties(new PluginPropertiesImplementation(pluginDefinition));
+		// Initializes the plugin.
 		pluginDefinition.init(this.pluginPropertyStorage);
+
 		this.addPluginToIndex(pluginDefinition);
 		this.registerPluginExtensions(pluginDefinition);
 
