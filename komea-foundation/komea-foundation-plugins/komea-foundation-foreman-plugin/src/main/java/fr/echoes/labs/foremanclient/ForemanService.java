@@ -356,6 +356,12 @@ public class ForemanService implements IForemanService {
 
 		 final PowerAction powerAction = new PowerAction();
 		 if ("image".equals(newHost.provision_method)) {
+			 try {
+				 //FIXME
+				Thread.sleep(10000); // wait 10 seconds
+			} catch (final InterruptedException e) {
+				LOGGER.error("[foreman]", e);
+			}
 			 powerAction.power_action = "reset";
 		 } else {
 			 powerAction.power_action = "start";
