@@ -355,7 +355,11 @@ public class ForemanService implements IForemanService {
 		 }
 
 		 final PowerAction powerAction = new PowerAction();
-		 powerAction.power_action = "start";
+		 if ("image".equals(newHost.provision_method)) {
+			 powerAction.power_action = "reset";
+		 } else {
+			 powerAction.power_action = "start";
+		 }
 		 api.hostPower(host.id, powerAction);
 
 	     return host;

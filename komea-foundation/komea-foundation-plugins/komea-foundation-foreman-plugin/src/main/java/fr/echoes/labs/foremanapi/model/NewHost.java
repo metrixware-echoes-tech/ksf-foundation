@@ -81,4 +81,7 @@ public class NewHost {
 	@JsonProperty("ptable_id")
 	public String ptable_id;
 
+	@JsonProperty("enabled")
+	public Boolean enabled = true;
+
 }
