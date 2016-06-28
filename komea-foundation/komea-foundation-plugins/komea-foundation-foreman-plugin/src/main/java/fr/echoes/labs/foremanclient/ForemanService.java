@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import fr.echoes.labs.foremanapi.IForemanApi;
+import fr.echoes.labs.foremanapi.VmComputeAttributes;
 import fr.echoes.labs.foremanapi.model.Environment;
 import fr.echoes.labs.foremanapi.model.Environments;
 import fr.echoes.labs.foremanapi.model.Filter;
@@ -63,10 +64,12 @@ import fr.echoes.labs.ksf.cc.plugins.foreman.services.ForemanConfigurationServic
 public class ForemanService implements IForemanService {
 
 
-     private static final String DEFAULT_ENVIRONMENT_ID = "1";
+     private static final int ONE_SECOND = 1000;
+	private static final String DEFAULT_ENVIRONMENT_ID = "1";
      private static final Logger LOGGER = LoggerFactory.getLogger(ForemanService.class);
 
      public static final String PER_PAGE_RESULT = String.valueOf(Integer.MAX_VALUE);
+	private static final int MAXIMUM_CHECK_SHUTDOWN_RETRIES = 10;
 
      @Autowired
      private ForemanConfigurationService config;
@@ -355,21 +358,51 @@ public class ForemanService implements IForemanService {
 		 }
 
 		 final PowerAction powerAction = new PowerAction();
+
+		 //
+		 // If the VM creation is image based we need to reboot it.
+		 // As the Foreman bug prior to the 1.10 version http://projects.theforeman.org/issues/13430
+		 // prevents us to use the "reboot" action we need to stop it, wait for it to be stopped 
+		 // and restart it.
+		 //
 		 if ("image".equals(newHost.provision_method)) {
-			 try {
-				 //FIXME
-				Thread.sleep(10000); // wait 10 seconds
-			} catch (final InterruptedException e) {
-				LOGGER.error("[foreman]", e);
-			}
-			 powerAction.power_action = "reset";
-		 } else {
-			 powerAction.power_action = "start";
+
+			 // Stop the VM
+			 powerAction.power_action = "stop";
+			 api.hostPower(host.id, powerAction);
+
+			 waitVmShutdown(api, host);
 		 }
+
+		 // Start the VM
+		 powerAction.power_action = "start";
 		 api.hostPower(host.id, powerAction);
 
 	     return host;
      }
+
+	/**
+	 * Waits that the VM shutdown.
+	 */
+	private void waitVmShutdown(IForemanApi api, final Host host) {
+
+		 VmComputeAttributes vmComputeAttributes;
+		 int shutdownRetriesCount = 0;
+		 boolean vmIsRunning = false;
+
+		 do {
+			 try {
+				Thread.sleep(3 * ONE_SECOND);
+			} catch (final InterruptedException e) {
+				LOGGER.error("[foreman]", e);
+			}
+			 vmComputeAttributes = api.getVmComputeAttributes(host.id);
+			 shutdownRetriesCount++;
+
+			 vmIsRunning = "running".equals(vmComputeAttributes.state);
+		 } while (vmIsRunning && shutdownRetriesCount <= MAXIMUM_CHECK_SHUTDOWN_RETRIES);
+
+	}
 
      private String getUnusedIp() {
     	final String unusedIpScriptPath = this.config.getUnusedIpScript();

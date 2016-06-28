@@ -55,7 +55,7 @@ public class ForemanConfigurationService {
     @Value("${ksf.foreman.puppetModuleInstallScript:}")
     private String puppetModuleInstallScript;
 
-    @Value("${ksf.foreman.provisioMethod:build}")
+    @Value("${ksf.foreman.provisionMethod:build}")
     private String provisionMethod;
 
     @Value("${ksf.foreman.imageId:}")
