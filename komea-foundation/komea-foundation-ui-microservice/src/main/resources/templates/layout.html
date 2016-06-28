@@ -144,6 +144,14 @@
          			var message = /*[[#{foundation.foreman.widget.newInstanceMessage}]]*/;
         			displayLoadingScreen(message + ' ' + hostName, [[#{foundation.foreman.widget.newInstanceDetailMessage}]]);
         		});
+
+        		$('#new_env').submit(function() {
+         			var envName = $('#envName').val();
+         			var message = /*[[#{foundation.foreman.widget.newEnvironmentMessage}]]*/;
+        			displayLoadingScreen(message + ' ' + envName, [[#{foundation.foreman.widget.newEnvironmentDetailMessage}]]);
+        		});
+        		
+        		
                 
                 <div th:if="${validationErrors != null}" th:remove="tag">
                 	$('#validationErrorsModal').modal('show');
