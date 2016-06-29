@@ -17,11 +17,11 @@ public class ProjectDashboardWidgets implements IProjectDashboardWidgets {
 			return;
 		}
 
-		widgets.add(_widget);
+		this.widgets.add(_widget);
 	}
 
 	public List<ProjectDashboardWidget> getWidgets() {
-		return Collections.unmodifiableList(widgets);
+		return Collections.unmodifiableList(this.widgets);
 	}
 
 }

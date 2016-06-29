@@ -8,6 +8,8 @@ package fr.echoes.labs.ksf.cc.ui.views.projects;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
@@ -41,7 +43,6 @@ import com.tocea.corolla.products.domain.Project;
 import com.tocea.corolla.products.exceptions.ProjectNotFoundException;
 import com.tocea.corolla.users.dao.IUserDAO;
 import com.tocea.corolla.users.domain.User;
-import com.tocea.corolla.users.dto.UserDto;
 
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.IProjectTabPanel;
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
@@ -62,33 +63,49 @@ import fr.echoes.labs.ksf.users.security.auth.UserDetailsRetrievingService;
 @Controller
 public class ProjectController {
 
-	private static String FORM_PROJECT 	= "projects/form";
-	private static String LIST_PAGE		= "projects/list";
-	private static String VIEW_PAGE		= "projects/overview";
+	private static String						FORM_PROJECT	= "projects/form";
+	private static String						LIST_PAGE		= "projects/list";
+	private static String						VIEW_PAGE		= "projects/overview";
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ProjectController.class);
-
-	@Autowired
-	private IProjectDashboardExtensionManager projectDashboardExtensionManager;
+	private static final Logger					LOGGER			= LoggerFactory.getLogger(ProjectController.class);
 
 	@Autowired
-	IProjectDAO projectDao;
+	private IProjectDashboardExtensionManager	projectDashboardExtensionManager;
 
 	@Autowired
-	IUserDAO userDao;
+	IProjectDAO									projectDao;
 
 	@Autowired
-	IReleaseDAO releaseDao;
+	IUserDAO									userDao;
 
 	@Autowired
-	private UserDetailsRetrievingService userDetailsRetrievingService;
-	
+	IReleaseDAO									releaseDao;
+
 	@Autowired
-	Gate gate;
+	private UserDetailsRetrievingService		userDetailsRetrievingService;
+
+	@Autowired
+	Gate										gate;
 
 	@Autowired(required = false)
-	private IValidator[] validators;
+	private IValidator[]						validators;
 
+	@RequestMapping(value = "/ui/projects/features/new")
+	public ModelAndView createFeature(@RequestParam("projectKey") final String projectKey, @RequestParam("featureId") final String featureId,
+			@RequestParam("featureSubject") final String featureSubject) {
+
+		final Project project = this.projectDao.findByKey(projectKey);
+
+		if (project == null) {
+			throw new ProjectNotFoundException();
+		}
+
+		final String currentUserName = this.userDetailsRetrievingService.getCurrentUserLogin();
+
+		this.gate.dispatch(new CreateFeatureCommand(project, currentUserName, featureId, featureSubject));
+
+		return new ModelAndView("redirect:/ui/projects/" + project.getKey());
+	}
 
 	@RequestMapping(value = "/ui/projects/new", method = RequestMethod.POST)
 	public ModelAndView createProject(@Valid @ModelAttribute("project") SFProjectDTO newProject, final BindingResult _result) {
@@ -121,7 +138,8 @@ public class ProjectController {
 	}
 
 	@RequestMapping(value = "/ui/projects/releases/new")
-	public ModelAndView createRelease(@RequestParam("projectKey") final String projectKey, @RequestParam("releaseVersion") final String releaseVersion, @RequestParam("releaseId") final String releaseId) {
+	public ModelAndView createRelease(@RequestParam("projectKey") final String projectKey, @RequestParam("releaseVersion") final String releaseVersion,
+			@RequestParam("releaseId") final String releaseId) {
 
 		final Project project = this.projectDao.findByKey(projectKey);
 
@@ -137,70 +155,23 @@ public class ProjectController {
 
 		final String currentUserName = this.userDetailsRetrievingService.getCurrentUserLogin();
 
-    	this.gate.dispatch(new CreateReleaseCommand(project, currentUserName, releaseVersion));
+		this.gate.dispatch(new CreateReleaseCommand(project, currentUserName, releaseVersion));
 
-    	this.releaseDao.save(release);
-
-		return new ModelAndView("redirect:/ui/projects/" + project.getKey());
-	}
-
-	@RequestMapping(value = "/ui/projects/releases/finish")
-	public ModelAndView finishRelease(@RequestParam("projectKey") final String projectKey,  @RequestParam("releaseVersion") final String releaseVersion, RedirectAttributes redirectAttributes) {
-
-		final Project project = this.projectDao.findByKey(projectKey);
-
-		if (project == null) {
-			throw new ProjectNotFoundException();
-		}
-
-		final List<IValidatorResult> validateResults = new ArrayList<IValidatorResult>();
-		if (this.validators != null) {
-			for (final IValidator validator : this.validators) {
-				final List<IValidatorResult> result = validator.validateRelease(project.getName(), releaseVersion);
-				if (result != null) {
-					validateResults.addAll(result);
-				}
-			}
-		}
-
-		if (validateResults.isEmpty()) {
-			this.gate.dispatch(new FinishReleaseCommand(project, releaseVersion));
-			deleteFromStartedRelease(releaseVersion);
-
-		} else {
-			redirectAttributes.addFlashAttribute("validationErrors", validateResults);
-		}
+		this.releaseDao.save(release);
 
 		return new ModelAndView("redirect:/ui/projects/" + project.getKey());
 	}
 
-	private void deleteFromStartedRelease(String releaseVersion) {
-		for (final Release release : this.releaseDao.findAll()) {
-			if (StringUtils.equals(release.getReleaseVersion(), releaseVersion)) {
-				this.releaseDao.delete(release);;
-			}
-		}
-	}
-
-
-	@RequestMapping(value = "/ui/projects/features/new")
-	public ModelAndView createFeature(@RequestParam("projectKey") final String projectKey, @RequestParam("featureId") final String featureId, @RequestParam("featureSubject") final String featureSubject) {
-
-		final Project project = this.projectDao.findByKey(projectKey);
-
-		if (project == null) {
-			throw new ProjectNotFoundException();
-		}
-
-		final String currentUserName = this.userDetailsRetrievingService.getCurrentUserLogin();
-
-        this.gate.dispatch(new CreateFeatureCommand(project, currentUserName, featureId, featureSubject));
-
-		return new ModelAndView("redirect:/ui/projects/" + project.getKey());
+	@RequestMapping(value = "/ui/projects/delete/{projectKey}")
+	public ModelAndView DeleteProjectPage(@PathVariable final String projectKey) {
+		final Project findByKey = this.projectDao.findByKey(projectKey);
+		this.gate.dispatch(new DeleteProjectCommand(findByKey.getId()));
+		return new ModelAndView("redirect:/ui/projects/");
 	}
 
 	@RequestMapping(value = "/ui/projects/features/finish")
-	public ModelAndView finishFeature(@RequestParam("projectKey") final String projectKey, @RequestParam("featureId") final String featureId, @RequestParam("featureSubject") final String featureSubject, RedirectAttributes redirectAttributes) {
+	public ModelAndView finishFeature(@RequestParam("projectKey") final String projectKey, @RequestParam("featureId") final String featureId,
+			@RequestParam("featureSubject") final String featureSubject, final RedirectAttributes redirectAttributes) {
 
 		final Project project = this.projectDao.findByKey(projectKey);
 
@@ -208,7 +179,7 @@ public class ProjectController {
 			throw new ProjectNotFoundException();
 		}
 
-		final List<IValidatorResult> validateResults = new ArrayList<IValidatorResult>();
+		final List<IValidatorResult> validateResults = new ArrayList<>();
 		if (this.validators != null) {
 			for (final IValidator validator : this.validators) {
 				final List<IValidatorResult> result = validator.validateFeature(project.getName(), featureId, featureSubject);
@@ -220,6 +191,37 @@ public class ProjectController {
 
 		if (validateResults.isEmpty()) {
 			this.gate.dispatch(new FinishFeatureCommand(project, featureId, featureSubject));
+		} else {
+			redirectAttributes.addFlashAttribute("validationErrors", validateResults);
+		}
+
+		return new ModelAndView("redirect:/ui/projects/" + project.getKey());
+	}
+
+	@RequestMapping(value = "/ui/projects/releases/finish")
+	public ModelAndView finishRelease(@RequestParam("projectKey") final String projectKey, @RequestParam("releaseVersion") final String releaseVersion,
+			final RedirectAttributes redirectAttributes) {
+
+		final Project project = this.projectDao.findByKey(projectKey);
+
+		if (project == null) {
+			throw new ProjectNotFoundException();
+		}
+
+		final List<IValidatorResult> validateResults = new ArrayList<>();
+		if (this.validators != null) {
+			for (final IValidator validator : this.validators) {
+				final List<IValidatorResult> result = validator.validateRelease(project.getName(), releaseVersion);
+				if (result != null) {
+					validateResults.addAll(result);
+				}
+			}
+		}
+
+		if (validateResults.isEmpty()) {
+			this.gate.dispatch(new FinishReleaseCommand(project, releaseVersion));
+			this.deleteFromStartedRelease(releaseVersion);
+
 		} else {
 			redirectAttributes.addFlashAttribute("validationErrors", validateResults);
 		}
@@ -257,7 +259,7 @@ public class ProjectController {
 	}
 
 	@RequestMapping(value = "/ui/projects/{projectKey}")
-	public ModelAndView getProjectPage(@PathVariable final String projectKey) {
+	public ModelAndView getProjectPage(@PathVariable final String projectKey, final HttpServletRequest _request, final HttpServletResponse _response) {
 
 		final Project project = this.projectDao.findByKey(projectKey);
 
@@ -266,50 +268,28 @@ public class ProjectController {
 		}
 
 		final ModelAndView model = new ModelAndView(VIEW_PAGE);
-		model.addObject("projectData", createProjectPageListDTO(project));
+		model.addObject("projectData", this.createProjectPageListDTO(project));
 
 		final List<IProjectTabPanel> panels = Lists.newArrayList();
-		final List<ProjectDashboardWidget> widgets = this.projectDashboardExtensionManager.getDashboardWidgets();
+		final List<ProjectDashboardWidget> dashboardWidgets = this.projectDashboardExtensionManager.getDashboardWidgets();
+		final List<ProjectDashboardWidgetDto> widgetsDto = Lists.transform(dashboardWidgets,
+				new ProjectDashboardWidgetDTOFunction(projectKey, _request, _response));
 
-		for(final ProjectDashboardWidget widget : widgets) {
+		for (final ProjectDashboardWidget widget : dashboardWidgets) {
 			panels.addAll(widget.getTabPanels(projectKey));
 		}
 
-		final List<Project> parentProjects = getParentProjects(project);
+		final List<Project> parentProjects = this.getParentProjects(project);
 
-		model.addObject("widgets", widgets);
+		model.addObject("widgets", widgetsDto);
 		model.addObject("panels", panels);
 		model.addObject("parentProjects", parentProjects);
 
 		return model;
 	}
 
-
-    private List<Project> getParentProjects(Project project) {
-    	final List<Project> parents = new ArrayList<Project>();
-    	String parentId;
-    	Project currentProject = project;
-    	while ((parentId = currentProject.getParentId()) != null) {
-    		final Project parent = this.projectDao.findOne(parentId);
-    		parents.add(parent);
-    		currentProject = parent;
-    	}
-
-		return Lists.reverse(parents);
-	}
-
-	@RequestMapping(value = "/ui/projects/delete/{projectKey}")
-    public ModelAndView DeleteProjectPage(@PathVariable final String projectKey) {
-    	final Project findByKey = this.projectDao.findByKey(projectKey);
-    	this.gate.dispatch(new DeleteProjectCommand(findByKey.getId()));
-    	return new ModelAndView("redirect:/ui/projects/");
-    }
-
-
 	@ResponseStatus(value = HttpStatus.NOT_FOUND)
-	@ExceptionHandler({
-		ProjectNotFoundException.class
-	})
+	@ExceptionHandler({ ProjectNotFoundException.class })
 	public void handlePageNotFoundException() {
 	}
 
@@ -329,6 +309,28 @@ public class ProjectController {
 		}
 
 		return new ProjectPagelistDTO(project, findOne);
+	}
+
+	private void deleteFromStartedRelease(final String releaseVersion) {
+		for (final Release release : this.releaseDao.findAll()) {
+			if (StringUtils.equals(release.getReleaseVersion(), releaseVersion)) {
+				this.releaseDao.delete(release);
+				;
+			}
+		}
+	}
+
+	private List<Project> getParentProjects(final Project project) {
+		final List<Project> parents = new ArrayList<>();
+		String parentId;
+		Project currentProject = project;
+		while ((parentId = currentProject.getParentId()) != null) {
+			final Project parent = this.projectDao.findOne(parentId);
+			parents.add(parent);
+			currentProject = parent;
+		}
+
+		return Lists.reverse(parents);
 	}
 
 }
