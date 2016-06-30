@@ -270,30 +270,6 @@ public class GitService implements IGitService {
             });
 		}
 
-//		final SshSessionFactory sshSessionFactory = new JschConfigSessionFactory() {
-//
-//			@Override
-//			protected JSch createDefaultJSch(FS fs) throws JSchException {
-//				final JSch defaultJSch = super.createDefaultJSch(fs);
-//				final String sshPrivateKeyPath = GitService.this.configuration.getSshPrivateKeyPath();
-//
-//				if (!StringUtils.isBlank(sshPrivateKeyPath)) {
-//					LOGGER.info("[git] Use SSH private key : {}", sshPrivateKeyPath);
-//					defaultJSch.addIdentity(sshPrivateKeyPath);
-//				}
-//
-//				return defaultJSch;
-//			}
-//
-//			@Override
-//			protected void configure(Host hc, Session session) {
-//				if (!GitService.this.configuration.isStrictHostKeyChecking()) { // true/yes is the default value so we don't need to change the configuration
-//					LOGGER.info("[git] StrictHostKeyChecking : no");
-//					session.setConfig("StrictHostKeyChecking", "no");
-//				}
-//
-//			}
-//		};
 	}
 
 	private MergeResult mergeBranches(Git git, String branch, String destinationBranch, boolean createBranch) throws IOException, NoHeadException, ConcurrentRefUpdateException, CheckoutConflictException, InvalidMergeHeadsException, WrongRepositoryStateException, NoMessageException, GitAPIException  {
@@ -362,12 +338,12 @@ public class GitService implements IGitService {
 			git = callCloneCommand(gitProjectUri, workingDirectory);
 
 			final MergeResult mergeResult = mergeBranches(git, branchName, DEVELOP, true);
-			if (mergeResult.getMergeStatus().equals(MergeResult.MergeStatus.CONFLICTING)) {
-				throw new GitExtensionMergeException("Cannot merge '"+ branchName +"' into " + DEVELOP);
-			} else {
-				deleteBranche(git, branchName);
+
+			if (!mergeResult.getMergeStatus().isSuccessful()) {
+				throw new GitExtensionMergeException("Cannot merge '"+ branchName +"' into " + DEVELOP + " " + mergeResult.getMergeStatus());
 			}
 
+			deleteBranche(git, branchName);
 
 		} catch (final Exception e) {
 			throw new GitExtensionException(e);
@@ -423,17 +399,16 @@ public class GitService implements IGitService {
 			tagBranch(git, branchName, releaseName);
 
 			final MergeResult mergeIntoDevlopResult = mergeBranches(git, branchName, DEVELOP, true);
-			if (mergeIntoDevlopResult.getMergeStatus().equals(MergeResult.MergeStatus.CONFLICTING)) {
-				throw new GitExtensionMergeException("Cannot merge '"+ branchName +"' into " + DEVELOP);
+			if (!mergeIntoDevlopResult.getMergeStatus().isSuccessful()) {
+				throw new GitExtensionMergeException("Cannot merge '"+ branchName +"' into " + DEVELOP  + " " + mergeIntoDevlopResult.getMergeStatus());
 			}
 
 			final MergeResult mergeIntoMasterResult = mergeBranches(git, branchName, MASTER, false);
-			if (mergeIntoMasterResult.getMergeStatus().equals(MergeResult.MergeStatus.CONFLICTING)) {
-				throw new GitExtensionMergeException("Cannot merge '"+ branchName +"' into " + DEVELOP);
-			} else {
-				deleteBranche(git, branchName); // Both merges have succeeded we can delete the release branch
+			if (!mergeIntoMasterResult.getMergeStatus().isSuccessful()) {
+				throw new GitExtensionMergeException("Cannot merge '"+ branchName +"' into " + MASTER + " " + mergeIntoMasterResult.getMergeStatus());
 			}
 
+			deleteBranche(git, branchName); // Both merges have succeeded we can delete the release branch
 
 		} catch (final Exception e) {
 			throw new GitExtensionException(e);

@@ -152,6 +152,10 @@
         		});
         		
         		
+                <div th:if="${gitMergeError != null}" th:remove="tag">
+            		$('#projectErrorPopup').modal('show');
+            	</div>
+        		
                 
                 <div th:if="${validationErrors != null}" th:remove="tag">
                 	$('#validationErrorsModal').modal('show');
