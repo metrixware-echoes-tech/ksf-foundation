@@ -389,7 +389,7 @@ public class JenkinsService implements IJenkinsService {
 	}
 
 	private String getProjectScmUrl(String projectName) {
-		final Map<String, String> variables = new HashMap<String, String>(2);
+		final Map<String, String> variables = new HashMap<String, String>(4);
 		variables.put("scmUrl", this.configurationService.getScmUrl());
 		variables.put("projectName", projectName);
 		variables.put("projectKey", ProjectUtils.createIdentifier(projectName));

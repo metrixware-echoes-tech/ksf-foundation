@@ -1,5 +1,6 @@
 package fr.echoes.labs.komea.foundation.plugins.jenkins.services;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,9 @@ public class JenkinsConfigurationService {
 
 	@Value("${ksf.jenkins.url}")
 	private String url;
+
+	@Value("${ksf.jenkins.sso.url:}")
+	private String ssoUrl;
 
 	@Value("${ksf.jenkins.templateName}")
 	private String templateName;
@@ -50,11 +54,25 @@ public class JenkinsConfigurationService {
 	private String gitFeatureBranchPattern;
 
 	public String getUrl() {
-        if ('/' == this.url.charAt(this.url.length() - 1)) {
-            this.url = this.url.substring(0, this.url.length() - 1);
-        }
-        return this.url;
+        return removeLastSlash(this.url);
 	}
+
+	public String getSsoUrl() {
+		if (StringUtils.isBlank(this.ssoUrl)) {
+			return getUrl();
+		}
+        return removeLastSlash(this.ssoUrl);
+	}
+
+	private String removeLastSlash(String url) {
+        final int length = url.length();
+		if (length > 0 && '/' == url.charAt(length - 1)) {
+            url = url.substring(0, length - 1);
+        }
+		return url;
+	}
+
+
 
 	public String getTemplateName() {
 		return this.templateName;

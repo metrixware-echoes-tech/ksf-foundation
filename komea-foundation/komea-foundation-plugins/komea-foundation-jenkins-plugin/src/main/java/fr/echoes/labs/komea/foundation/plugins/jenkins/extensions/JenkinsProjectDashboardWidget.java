@@ -1,22 +1,15 @@
 package fr.echoes.labs.komea.foundation.plugins.jenkins.extensions;
 
-import com.google.common.collect.Lists;
-import com.tocea.corolla.products.dao.IProjectDAO;
-import com.tocea.corolla.products.domain.Project;
-import fr.echoes.labs.komea.foundation.plugins.jenkins.JenkinsExtensionException;
-import fr.echoes.labs.komea.foundation.plugins.jenkins.services.IJenkinsService;
-import fr.echoes.labs.komea.foundation.plugins.jenkins.services.JenkinsBuildInfo;
-import fr.echoes.labs.komea.foundation.plugins.jenkins.services.JenkinsConfigurationService;
-import fr.echoes.labs.komea.foundation.plugins.jenkins.services.JenkinsErrorHandlingService;
-import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.IProjectTabPanel;
-import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.MenuAction;
-import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.net.URLDecoder;
 import java.util.List;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +24,19 @@ import org.thymeleaf.context.Context;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
+import com.google.common.collect.Lists;
+import com.tocea.corolla.products.dao.IProjectDAO;
+import com.tocea.corolla.products.domain.Project;
+
+import fr.echoes.labs.komea.foundation.plugins.jenkins.JenkinsExtensionException;
+import fr.echoes.labs.komea.foundation.plugins.jenkins.services.IJenkinsService;
+import fr.echoes.labs.komea.foundation.plugins.jenkins.services.JenkinsBuildInfo;
+import fr.echoes.labs.komea.foundation.plugins.jenkins.services.JenkinsConfigurationService;
+import fr.echoes.labs.komea.foundation.plugins.jenkins.services.JenkinsErrorHandlingService;
+import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.IProjectTabPanel;
+import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.MenuAction;
+import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
+
 /**
  * @author dcollard
  *
@@ -38,7 +44,9 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 @Component
 public class JenkinsProjectDashboardWidget implements ProjectDashboardWidget {
 
-    private static TemplateEngine templateEngine = createTemplateEngine();
+    private static final String SLASH = "/";
+
+	private static TemplateEngine templateEngine = createTemplateEngine();
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JenkinsProjectDashboardWidget.class);
 
@@ -136,7 +144,7 @@ public class JenkinsProjectDashboardWidget implements ProjectDashboardWidget {
                         = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
                         .getRequest();
 
-                String url = JenkinsProjectDashboardWidget.this.configurationService.getUrl();
+                String url = JenkinsProjectDashboardWidget.this.configurationService.getSsoUrl();
 
                 final String buildUrl = request.getParameter("buildUrl");
 
@@ -144,10 +152,32 @@ public class JenkinsProjectDashboardWidget implements ProjectDashboardWidget {
 
                     try {
                         url = URLDecoder.decode(buildUrl, "UTF-8");
+                        String buildPath = new URL(url).getPath(); // /jenkins/job/
+                        if (StringUtils.isNotEmpty(buildPath)) {
+                        	String jenkinsUrl = JenkinsProjectDashboardWidget.this.configurationService.getSsoUrl();
+                        	String serviceBase = new URL(jenkinsUrl).getPath();
+
+                			final int indexOfSecondSlash = serviceBase.indexOf(SLASH, serviceBase.indexOf(SLASH) + 1);
+                			if (indexOfSecondSlash > 0) {
+                				serviceBase = serviceBase.substring(0, indexOfSecondSlash);
+                			}
+
+                        	final int indexOf = buildPath.indexOf(serviceBase);
+                        	if (indexOf == 0) {
+                        		buildPath = buildPath.substring(serviceBase.length());
+                        		if (jenkinsUrl.endsWith(SLASH)) {
+                        			jenkinsUrl = jenkinsUrl.substring(0, jenkinsUrl.length() - 1);
+                        		}
+                        		url = jenkinsUrl + buildPath;
+                        	}
+                        }
+
                     } catch (final UnsupportedEncodingException e) {
-                        LOGGER.error("", e);
+                        LOGGER.error("[jenkins]", e);
                         url = JenkinsProjectDashboardWidget.this.configurationService.getUrl();
-                    }
+                    } catch (final MalformedURLException e) {
+                        LOGGER.error("[jenkins]", e);
+					}
                 } else {
                     try {
                         final Project project = JenkinsProjectDashboardWidget.this.projectDao.findByKey(projectKey);
@@ -194,5 +224,4 @@ public class JenkinsProjectDashboardWidget implements ProjectDashboardWidget {
     public boolean hasHtmlPanelBody() {
         return true;
     }
-
 }

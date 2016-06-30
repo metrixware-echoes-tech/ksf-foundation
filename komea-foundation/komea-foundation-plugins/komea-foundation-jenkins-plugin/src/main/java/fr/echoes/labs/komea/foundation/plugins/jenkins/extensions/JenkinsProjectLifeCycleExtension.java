@@ -7,8 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.annotation.Order;
 
-import com.tocea.corolla.cqrs.gate.Gate;
-import com.tocea.corolla.products.commands.EditProjectBranchCommand;
 import com.tocea.corolla.products.dao.IProjectDAO;
 
 import fr.echoes.labs.komea.foundation.plugins.jenkins.JenkinsExtensionException;
