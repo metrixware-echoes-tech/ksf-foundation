@@ -6,4 +6,6 @@ dependencies {
 	compile "commons-io:commons-io:$APACHE_COMMONIO"
 	//compile 'javax.servlet:javax.servlet-api:3.0.1'
 
+	testCompile project(":ksf-commons:ksf-backend-testutils")
+
 }
