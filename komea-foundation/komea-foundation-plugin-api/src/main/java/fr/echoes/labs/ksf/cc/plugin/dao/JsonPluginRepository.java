@@ -12,6 +12,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -135,7 +136,7 @@ public class JsonPluginRepository<T> implements CrudRepository<T, Integer> {
 		}
 	}
 
-	private static final Logger				LOGGER	= LoggerFactory.getLogger(JsonPluginRepository.class);
+	private final Logger					LOGGER;
 
 	/** The plugin ID. */
 	private final String					pluginID;
@@ -163,13 +164,19 @@ public class JsonPluginRepository<T> implements CrudRepository<T, Integer> {
 	 *            the plugin ID
 	 * @param _storageClass
 	 *            the storage class
+	 * @param _configurationFile
+	 *            the configuration file
 	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	public JsonPluginRepository(final String _pluginID, final Class<T> _storageClass, final File _configurationFile) throws IOException {
 		super();
 		this.pluginID = _pluginID;
 		this.storageClass = _storageClass;
 		this.configurationFile = _configurationFile;
+		this.LOGGER = LoggerFactory.getLogger("plugin.configuration." + FilenameUtils.getBaseName(_configurationFile.getName()));
+		this.LOGGER.info("Creation of the JsonRepositoryPlugin in {}", _configurationFile);
+
 		if (this.configurationFile.exists()) {
 			this.document = this.read();
 		} else {
@@ -177,6 +184,7 @@ public class JsonPluginRepository<T> implements CrudRepository<T, Integer> {
 		}
 		this.idResolver = new BasicIdResolver<>();
 		this.executorService = Executors.newSingleThreadExecutor();
+
 	}
 
 	/**
@@ -390,7 +398,7 @@ public class JsonPluginRepository<T> implements CrudRepository<T, Integer> {
 				try {
 					objectMapper.writeValue(JsonPluginRepository.this.configurationFile, DAOIndex.class);
 				} catch (final IOException e) {
-					LOGGER.error("Could not save the informations of the DAO " + JsonPluginRepository.this, e);
+					JsonPluginRepository.this.LOGGER.error("Could not save the informations of the DAO " + JsonPluginRepository.this, e);
 				}
 			}
 
@@ -399,7 +407,7 @@ public class JsonPluginRepository<T> implements CrudRepository<T, Integer> {
 		try {
 			thread.join();
 		} catch (final InterruptedException e) {
-			LOGGER.error("Could not save the DAO", e);
+			this.LOGGER.error("Could not save the DAO", e);
 		}
 	}
 
