@@ -154,6 +154,7 @@
         		
                 <div th:if="${gitMergeError != null}" th:remove="tag">
             		$('#projectErrorPopup').modal('show');
+            		$('#projectErrorPopupMessage').text(/*[[${gitMergeError}]]*/);
             	</div>
         		
                 

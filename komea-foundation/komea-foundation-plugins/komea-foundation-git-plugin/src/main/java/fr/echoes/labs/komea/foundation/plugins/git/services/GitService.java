@@ -340,11 +340,13 @@ public class GitService implements IGitService {
 			final MergeResult mergeResult = mergeBranches(git, branchName, DEVELOP, true);
 
 			if (!mergeResult.getMergeStatus().isSuccessful()) {
-				throw new GitExtensionMergeException("Cannot merge '"+ branchName +"' into " + DEVELOP + " " + mergeResult.getMergeStatus());
+				throw new GitExtensionMergeException("Cannot merge '"+ branchName +"' into " + DEVELOP + ": " + mergeResult.getMergeStatus());
 			}
 
 			deleteBranche(git, branchName);
 
+		} catch (final GitExtensionException e) {
+			throw e;
 		} catch (final Exception e) {
 			throw new GitExtensionException(e);
 		} finally {
@@ -400,16 +402,18 @@ public class GitService implements IGitService {
 
 			final MergeResult mergeIntoDevlopResult = mergeBranches(git, branchName, DEVELOP, true);
 			if (!mergeIntoDevlopResult.getMergeStatus().isSuccessful()) {
-				throw new GitExtensionMergeException("Cannot merge '"+ branchName +"' into " + DEVELOP  + " " + mergeIntoDevlopResult.getMergeStatus());
+				throw new GitExtensionMergeException("Cannot merge '"+ branchName +"' into " + DEVELOP  + ": " + mergeIntoDevlopResult.getMergeStatus());
 			}
 
 			final MergeResult mergeIntoMasterResult = mergeBranches(git, branchName, MASTER, false);
 			if (!mergeIntoMasterResult.getMergeStatus().isSuccessful()) {
-				throw new GitExtensionMergeException("Cannot merge '"+ branchName +"' into " + MASTER + " " + mergeIntoMasterResult.getMergeStatus());
+				throw new GitExtensionMergeException("Cannot merge '"+ branchName +"' into " + MASTER + ": " + mergeIntoMasterResult.getMergeStatus());
 			}
 
 			deleteBranche(git, branchName); // Both merges have succeeded we can delete the release branch
 
+		} catch (final GitExtensionException e) {
+			throw e;
 		} catch (final Exception e) {
 			throw new GitExtensionException(e);
 		} finally {
