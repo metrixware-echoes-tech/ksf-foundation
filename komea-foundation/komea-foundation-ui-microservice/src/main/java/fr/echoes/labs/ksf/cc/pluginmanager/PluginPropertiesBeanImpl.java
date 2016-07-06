@@ -1,9 +1,9 @@
 package fr.echoes.labs.ksf.cc.pluginmanager;
 
 import java.io.File;
-import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
+import org.javers.common.validation.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,15 +48,18 @@ public class PluginPropertiesBeanImpl {
 	 *            the generic type
 	 * @return the t
 	 */
-	public <T> T readProperties() {
+	public <T> T readProperties(final Class<T> _expectedType) {
+		Validate.argumentIsNotNull(_expectedType);
 		if (this.pluginFileStorage.exists()) {
 
 			try {
-				this.data = this.objectMapper.readValue(FileUtils.openInputStream(this.pluginFileStorage), Object.class);
-
-			} catch (final IOException e) {
+				this.data = this.objectMapper.readValue(FileUtils.openInputStream(this.pluginFileStorage), _expectedType);
+				LOGGER.info("Read data with type {} from plugin {}", _expectedType.getName(), this.pluginFileStorage);
+			} catch (final Exception e) {
 				LOGGER.warn("Impossible to read properties from {}", this.pluginFileStorage, e);
 			}
+
+		} else {
 			LOGGER.warn("Nothing to read in {}", this.pluginFileStorage);
 		}
 		return (T) this.data;
@@ -69,9 +72,10 @@ public class PluginPropertiesBeanImpl {
 	public void writeProperties(final Object _data) {
 		try {
 			this.data = _data;
-			this.objectMapper.writeValue(FileUtils.openOutputStream(this.pluginFileStorage), this.data);
-		} catch (final IOException e) {
+			this.objectMapper.writerWithDefaultPrettyPrinter().writeValue(FileUtils.openOutputStream(this.pluginFileStorage), this.data);
+		} catch (final Exception e) {
 			LOGGER.warn("Impossible to write properties {}", this.pluginFileStorage, e);
+			this.pluginFileStorage.delete();
 		}
 	}
 

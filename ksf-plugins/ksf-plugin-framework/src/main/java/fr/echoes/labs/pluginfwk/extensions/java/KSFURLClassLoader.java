@@ -17,10 +17,10 @@ public class KSFURLClassLoader extends URLClassLoader {
 
 		final URL[] jarFileURLS = new URL[jarFiles.size()];
 		int i = 0;
-		LOGGER.info("Creates classloader with {} extra libraries", jarFiles.size());
+		LOGGER.debug("Creates classloader with {} extra libraries", jarFiles.size());
 		for (final File jarFile : jarFiles) {
 			try {
-				LOGGER.info("> Library {}", jarFile);
+				LOGGER.debug("> Library {}", jarFile);
 				jarFileURLS[i++] = jarFile.toURI().toURL();
 			} catch (final Throwable e) {
 				LOGGER.error("Could not load the extension library {}", jarFile, e);

@@ -394,6 +394,7 @@ public class JsonPluginRepository<T> implements CrudRepository<T, Integer> {
 
 			@Override
 			public void run() {
+				JsonPluginRepository.this.LOGGER.info("Saving configuration");
 				final ObjectMapper objectMapper = new ObjectMapper();
 				try {
 					objectMapper.writeValue(JsonPluginRepository.this.configurationFile, DAOIndex.class);

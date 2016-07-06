@@ -32,7 +32,7 @@ public interface PluginPropertyStorage {
 	 *            the plugin ID
 	 * @return the plugin properties
 	 */
-	<T> T readPluginProperties(String _pluginID);
+	<T> T readPluginProperties(String _pluginID, Class<T> _expectedType);
 
 	/**
 	 * Update plugin properties.

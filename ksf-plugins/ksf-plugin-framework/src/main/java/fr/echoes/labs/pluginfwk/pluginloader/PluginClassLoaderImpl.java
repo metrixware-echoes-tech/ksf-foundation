@@ -65,6 +65,7 @@ public class PluginClassLoaderImpl implements Closeable {
 	 */
 	@SuppressWarnings("nls")
 	public void reloadClassLoader() {
+		this.closeClassLoader();
 		final File extraLibsFolder = this.pluginFrameworkConfiguration.getExtraLibsFolder();
 		if (extraLibsFolder != null && extraLibsFolder.exists() && extraLibsFolder.isDirectory()) {
 			LOGGER.info("Scanning a folder to load extra libraries");

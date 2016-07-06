@@ -71,10 +71,15 @@ public class PluginPropertyStorageImpl implements PluginPropertyStorage {
 	 */
 	@Override
 	public synchronized void initDefaultProperties(final PluginProperties _pluginProperties) {
-		if (_pluginProperties == null) {
+		LOGGER.debug("Initialization of the default properties for the plugin {}", _pluginProperties);
+		if (_pluginProperties == null || _pluginProperties.getPluginProperties() == null) {
+			LOGGER.debug("No need to define default properties for {}", _pluginProperties);
 			return;
 		}
-		if (this.getPluginFileStorage(_pluginProperties.getPluginID()).exists()) {
+		final Object pluginProperties = this.readPluginProperties(_pluginProperties.getPluginID(), Object.class);
+		if (pluginProperties != null) {
+
+			// Configuration already existing.
 			return;
 		}
 		this.configurationCache.invalidate(_pluginProperties.getPluginID());
@@ -87,6 +92,7 @@ public class PluginPropertyStorageImpl implements PluginPropertyStorage {
 	 * Inits the folder.
 	 */
 	public void initFolder() {
+		LOGGER.debug("Initialization of the plugin configuration folder");
 		this.pluginFrameworkConfigurationBean.createPluginConfigurationStorageFolder();
 	}
 
@@ -95,14 +101,24 @@ public class PluginPropertyStorageImpl implements PluginPropertyStorage {
 	 * @see fr.echoes.labs.pluginfwk.api.propertystorage.PluginPropertyStorage#readPluginProperties(java.lang.String)
 	 */
 	@Override
-	public synchronized <T> T readPluginProperties(final String _pluginID) {
+	public synchronized <T> T readPluginProperties(final String _pluginID, final Class<T> _expectedObject) {
+		LOGGER.debug("Trying to read plugin properties {}", _pluginID);
 		T cacheObject = (T) this.configurationCache.getIfPresent(_pluginID);
 		if (cacheObject == null) {
 			final File pluginFileStorage = this.getPluginFileStorage(_pluginID);
-			final PluginPropertiesBeanImpl propertiesBeanImpl = new PluginPropertiesBeanImpl(pluginFileStorage);
-			cacheObject = propertiesBeanImpl.readProperties();
-			if (cacheObject != null) {
-				this.configurationCache.put(_pluginID, cacheObject);
+			if (!pluginFileStorage.exists()) {
+				LOGGER.warn("No configuration file found for the plugin {}", _pluginID);
+				return null;
+			} else {
+
+				LOGGER.debug("Reading properties for {}", _pluginID);
+				final PluginPropertiesBeanImpl propertiesBeanImpl = new PluginPropertiesBeanImpl(pluginFileStorage);
+				cacheObject = propertiesBeanImpl.readProperties(_expectedObject);
+				if (cacheObject != null) {
+					this.configurationCache.put(_pluginID, cacheObject);
+				} else {
+					LOGGER.debug("Nothing to store into the cache of {}", _pluginID);
+				}
 			}
 		}
 		return cacheObject;
@@ -110,15 +126,28 @@ public class PluginPropertyStorageImpl implements PluginPropertyStorage {
 
 	@Override
 	public synchronized void updatePluginProperties(final PluginProperties _pluginProperties) {
+		LOGGER.info("Updating properties of the plugin {}", _pluginProperties.getPluginID());
 		final Object pluginProperties = _pluginProperties.getPluginProperties();
 		if (pluginProperties != null) {
 			this.configurationCache.put(_pluginProperties.getPluginID(), pluginProperties);
+			this.writeProperties(_pluginProperties, pluginProperties);
 		} else {
 			this.configurationCache.invalidate(_pluginProperties.getPluginID());
+			this.deleteProperties(_pluginProperties);
 		}
+
+	}
+
+	private void deleteProperties(final PluginProperties _pluginProperties) {
+		LOGGER.warn("Deleting properties of {}", _pluginProperties.getPluginID());
+		this.getPluginFileStorage(_pluginProperties.getPluginID()).delete();
+
+	}
+
+	private void writeProperties(final PluginProperties _pluginProperties, final Object pluginProperties) {
+		LOGGER.info("Writing properties of {}", _pluginProperties.getPluginID());
 		final PluginPropertiesBeanImpl propertiesBeanImpl = new PluginPropertiesBeanImpl(this.getPluginFileStorage(_pluginProperties.getPluginID()));
 		propertiesBeanImpl.writeProperties(pluginProperties);
-
 	}
 
 }
