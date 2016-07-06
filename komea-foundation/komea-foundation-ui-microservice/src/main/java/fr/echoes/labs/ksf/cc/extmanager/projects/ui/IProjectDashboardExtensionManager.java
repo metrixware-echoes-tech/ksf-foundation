@@ -25,7 +25,7 @@ public interface IProjectDashboardExtensionManager {
 	 * Gets the dashboard widget.
 	 *
 	 * @param widgetID
-	 *            the widget ID
+	 *            the widget JENKINS_PLUGIN
 	 * @return the dashboard widget
 	 */
 	ProjectDashboardWidget getDashboardWidget(String widgetID) throws ProjectDashboardWidgetNotFoundException;

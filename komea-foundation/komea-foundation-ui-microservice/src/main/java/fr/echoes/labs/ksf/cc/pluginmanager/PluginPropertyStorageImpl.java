@@ -41,7 +41,7 @@ public class PluginPropertyStorageImpl implements PluginPropertyStorage {
 	 * Gets the plugin file storage.
 	 *
 	 * @param pluginID
-	 *            the plugin ID
+	 *            the plugin JENKINS_PLUGIN
 	 * @return the plugin file storage
 	 */
 	public File getPluginFileStorage(final String pluginID) {
@@ -52,7 +52,7 @@ public class PluginPropertyStorageImpl implements PluginPropertyStorage {
 	 * Gets the plugin file storage.
 	 *
 	 * @param pluginID
-	 *            the plugin ID
+	 *            the plugin JENKINS_PLUGIN
 	 * @return the plugin file storage
 	 */
 	@Override
