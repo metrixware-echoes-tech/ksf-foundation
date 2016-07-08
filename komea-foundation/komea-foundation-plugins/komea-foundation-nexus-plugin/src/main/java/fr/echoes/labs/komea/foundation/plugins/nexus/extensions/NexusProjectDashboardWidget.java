@@ -1,9 +1,15 @@
 package fr.echoes.labs.komea.foundation.plugins.nexus.extensions;
 
+import com.google.common.collect.Lists;
+import com.tocea.corolla.products.dao.IProjectDAO;
+import com.tocea.corolla.products.domain.Project;
+import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.IProjectTabPanel;
+import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.MenuAction;
+import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
+import fr.echoes.labs.ksf.cc.extensions.services.project.ProjectUtils;
+import fr.echoes.labs.ksf.cc.plugins.nexus.services.NexusConfigurationService;
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,16 +22,6 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
-import com.google.common.collect.Lists;
-import com.tocea.corolla.products.dao.IProjectDAO;
-import com.tocea.corolla.products.domain.Project;
-
-import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.IProjectTabPanel;
-import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.MenuAction;
-import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
-import fr.echoes.labs.ksf.cc.extensions.services.project.ProjectUtils;
-import fr.echoes.labs.ksf.cc.plugins.nexus.services.NexusConfigurationService;
-
 /**
  * @author dcollard
  *
@@ -33,95 +29,98 @@ import fr.echoes.labs.ksf.cc.plugins.nexus.services.NexusConfigurationService;
 @Component
 public class NexusProjectDashboardWidget implements ProjectDashboardWidget {
 
-	private static TemplateEngine templateEngine = createTemplateEngine();
+    private static TemplateEngine templateEngine = createTemplateEngine();
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(NexusProjectDashboardWidget.class);
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(NexusProjectDashboardWidget.class);
+    @Autowired
+    private NexusConfigurationService configurationService;
 
-	@Autowired
-	private NexusConfigurationService configurationService;
+    @Autowired
+    private MessageSource messageResource;
 
-	@Autowired
-	private MessageSource messageResource;
+    @Autowired
+    private IProjectDAO projectDao;
 
-	@Autowired
-	private IProjectDAO projectDao;
+    @Override
+    public List<MenuAction> getDropdownActions() {
+        return null;
+    }
 
-	@Override
-	public List<MenuAction> getDropdownActions() {
-		return null;
-	}
+    @Override
+    public String getHtmlPanelBody(String projectId) {;
+        return null;
+    }
 
-	@Override
-	public String getHtmlPanelBody(String projectId) {;
-		return null;
-	}
+    @Override
+    public String getIconUrl() {
+        return "/pictures/nexus.png";
+    }
 
-	@Override
-	public String getIconUrl() {
-		return "/pictures/nexus.png";
-	}
+    @Override
+    public String getTitle() {
+        return new MessageSourceAccessor(NexusProjectDashboardWidget.this.messageResource).getMessage("foundation.nexus");
+    }
 
-	@Override
-	public String getTitle() {
-		return new MessageSourceAccessor(NexusProjectDashboardWidget.this.messageResource).getMessage("foundation.nexus") ;
-	}
+    @Override
+    public List<IProjectTabPanel> getTabPanels(final String projectKey) {
+        final Project project = this.projectDao.findByKey(projectKey);
 
+        final IProjectTabPanel iframePanel = new IProjectTabPanel() {
 
-	@Override
-	public List<IProjectTabPanel> getTabPanels(final String projectKey) {
-		final Project project = this.projectDao.findByKey(projectKey);
+            @Override
+            public String getTitle() {
+                return new MessageSourceAccessor(NexusProjectDashboardWidget.this.messageResource).getMessage("foundation.nexus.tab.title");
+            }
 
-		final IProjectTabPanel iframePanel = new IProjectTabPanel() {
+            @Override
+            public String getContent() {
 
-			@Override
-			public String getTitle() {
-				return new MessageSourceAccessor(NexusProjectDashboardWidget.this.messageResource).getMessage("foundation.nexus.tab.title");
-			}
+                final Context ctx = new Context();
 
-			@Override
-			public String getContent() {
+                final HttpServletRequest request
+                        = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
+                        .getRequest();
 
-				final Context ctx = new Context();
+                String url = NexusProjectDashboardWidget.this.configurationService.getUrl();
 
-				final HttpServletRequest request =
-						((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
-						.getRequest();
+                final String projectName = project.getName();
 
-				String url = NexusProjectDashboardWidget.this.configurationService.getUrl();
+                url += "/#view-repositories;" + ProjectUtils.createIdentifier(projectName) + "~browsestorage";
 
-				final String projectName = project.getName();
+                LOGGER.info("[nexus] project URL : {}", url);
 
-				url += "/#view-repositories;" + ProjectUtils.createIdentifier(projectName)+ "~browsestorage";
+                ctx.setVariable("nexusURL", url);
 
-				LOGGER.info("[nexus] project URL : {}", url);
+                return templateEngine.process("nexusManagementPanel", ctx);
+            }
 
-				ctx.setVariable("nexusURL", url);
+            @Override
+            public String getIconUrl() {
+                return NexusProjectDashboardWidget.this.getIconUrl();
+            }
+        };
 
-				return templateEngine.process("nexusManagementPanel", ctx);
-			}
+        return Lists.newArrayList(iframePanel);
+    }
 
-			@Override
-			public String getIconUrl() {
-				return NexusProjectDashboardWidget.this.getIconUrl();
-			}
-		};
+    private static TemplateEngine createTemplateEngine() {
 
-		return Lists.newArrayList(iframePanel);
-	}
+        final ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
+        templateResolver.setTemplateMode("XHTML");
+        templateResolver.setPrefix("templates/");
+        templateResolver.setSuffix(".html");
 
-	private static TemplateEngine createTemplateEngine() {
+        final TemplateEngine templateEngine = new TemplateEngine();
+        templateEngine.setTemplateResolver(templateResolver);
 
-		final ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
-		templateResolver.setTemplateMode("XHTML");
-		templateResolver.setPrefix("templates/");
-		templateResolver.setSuffix(".html");
+        return templateEngine;
 
-		final TemplateEngine templateEngine = new TemplateEngine();
-		templateEngine.setTemplateResolver(templateResolver);
+    }
 
-		return templateEngine;
-
-	}
+    @Override
+    public boolean hasHtmlPanelBody() {
+        return false;
+    }
 
 }

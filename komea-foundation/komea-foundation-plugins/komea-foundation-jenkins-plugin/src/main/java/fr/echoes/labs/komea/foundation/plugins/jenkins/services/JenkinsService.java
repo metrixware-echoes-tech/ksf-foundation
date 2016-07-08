@@ -125,15 +125,9 @@ public class JenkinsService implements IJenkinsService {
 
 	private FolderJob getProjectParentFolder(final JenkinsServer jenkins, String projectName) throws IOException {
 		LOGGER.info("[jenkins] getting job folder: {}", projectName);
-		FolderJob folderJob = JenkinsFolderCache.INSTANCE.get(projectName);
-		if (folderJob == null) {
-			final JobWithDetails root = jenkins.getJob(projectName);
-			final Optional<FolderJob> projectFolder = jenkins.getFolderJob(root);
-			folderJob = projectFolder.get();
-			JenkinsFolderCache.INSTANCE.put(projectName, folderJob);
-		} else {
-			LOGGER.info("[jenkins] using cached job folder: {}", projectName);
-		}
+		final JobWithDetails root = jenkins.getJob(projectName);
+		final Optional<FolderJob> projectFolder = jenkins.getFolderJob(root);
+		final FolderJob folderJob = projectFolder.get();
 		return folderJob;
 	}
 
@@ -395,7 +389,7 @@ public class JenkinsService implements IJenkinsService {
 	}
 
 	private String getProjectScmUrl(String projectName) {
-		final Map<String, String> variables = new HashMap<String, String>(2);
+		final Map<String, String> variables = new HashMap<String, String>(4);
 		variables.put("scmUrl", this.configurationService.getScmUrl());
 		variables.put("projectName", projectName);
 		variables.put("projectKey", ProjectUtils.createIdentifier(projectName));

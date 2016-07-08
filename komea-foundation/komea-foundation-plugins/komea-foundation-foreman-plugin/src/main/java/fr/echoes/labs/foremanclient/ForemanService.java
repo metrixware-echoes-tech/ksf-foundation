@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import fr.echoes.labs.foremanapi.IForemanApi;
+import fr.echoes.labs.foremanapi.VmComputeAttributes;
 import fr.echoes.labs.foremanapi.model.Environment;
 import fr.echoes.labs.foremanapi.model.Environments;
 import fr.echoes.labs.foremanapi.model.Filter;
@@ -63,10 +64,12 @@ import fr.echoes.labs.ksf.cc.plugins.foreman.services.ForemanConfigurationServic
 public class ForemanService implements IForemanService {
 
 
-     private static final String DEFAULT_ENVIRONMENT_ID = "1";
+     private static final int ONE_SECOND = 1000;
+	private static final String DEFAULT_ENVIRONMENT_ID = "1";
      private static final Logger LOGGER = LoggerFactory.getLogger(ForemanService.class);
 
      public static final String PER_PAGE_RESULT = String.valueOf(Integer.MAX_VALUE);
+	private static final int MAXIMUM_CHECK_SHUTDOWN_RETRIES = 10;
 
      @Autowired
      private ForemanConfigurationService config;
@@ -283,23 +286,6 @@ public class ForemanService implements IForemanService {
 
      private void addRoleToUser(final IForemanApi api, String userId, String roleId) {
     	 updateRoleTOuser(api, userId, roleId, true);
-//          final User user = api.getUser(userId);
-//
-//          final List<String> roleIds = new ArrayList<String>();
-//
-//          for (final Role role : user.roles) {
-//               roleIds.add(role.id);
-//          }
-//
-//          roleIds.add(roleId);
-//
-//          final NewUser newUser = new NewUser();
-//
-//          final UserWrapper userWrapper = new UserWrapper();
-//          newUser.role_ids = roleIds;
-//          userWrapper.setUser(newUser);
-//
-//          api.updateUser(user.id, userWrapper);
      }
 
      /* (non-Javadoc)
@@ -324,12 +310,23 @@ public class ForemanService implements IForemanService {
 		 newHost.environment_id = findEnvironmentId(api, parameterObject.getEnvironmentName());
 		 newHost.operatingsystem_id = parameterObject.getOperatingSystemId();
 		 newHost.architecture_id = parameterObject.getArchitectureId();
-		 newHost.domain_id = parameterObject.getDomainId();
+		// newHost.domain_id = parameterObject.getDomainId();
+		 newHost.domain_id = "2";
 		 newHost.root_pass = parameterObject.getRootPassword();
+		 newHost.subnet_id = "2";
+
+		 newHost.provision_method = parameterObject.getProvisionMethod();
+		 newHost.medium_id = "2";
+		 newHost.ptable_id = "54";
+
+		 final String imageId = parameterObject.getImageId();
+		 if (!org.apache.commons.lang3.StringUtils.isBlank(imageId)) {
+			 newHost.compute_attributes.image_id = imageId;
+		 }
 
 		 final NetworkInterface eth0 = new NetworkInterface();
 		 eth0.subnet_id = null;
-		 eth0.domain_id = null;
+		 eth0.domain_id = "3";
 		 eth0.managed = "0";
 		 eth0.primary = "0";
 		 eth0.provision = "0";
@@ -339,6 +336,7 @@ public class ForemanService implements IForemanService {
 
 		 final NetworkInterface eth1 = new NetworkInterface();
 		 eth1.identifier = "eth1";
+		 eth1.ip = getUnusedIp();
 		 newHost.interfaces_attributes.put("1", eth1 );
 
 
@@ -360,13 +358,64 @@ public class ForemanService implements IForemanService {
 		 }
 
 		 final PowerAction powerAction = new PowerAction();
+
+		 //
+		 // If the VM creation is image based we need to reboot it.
+		 // As the Foreman bug prior to the 1.10 version http://projects.theforeman.org/issues/13430
+		 // prevents us to use the "reboot" action we need to stop it, wait for it to be stopped 
+		 // and restart it.
+		 //
+		 if ("image".equals(newHost.provision_method)) {
+
+			 // Stop the VM
+			 powerAction.power_action = "stop";
+			 api.hostPower(host.id, powerAction);
+
+			 waitVmShutdown(api, host);
+		 }
+
+		 // Start the VM
 		 powerAction.power_action = "start";
 		 api.hostPower(host.id, powerAction);
 
 	     return host;
      }
 
-     private List<String> findPuppetClassesId(IForemanApi api, String environmentName) {
+	/**
+	 * Waits that the VM shutdown.
+	 */
+	private void waitVmShutdown(IForemanApi api, final Host host) {
+
+		 VmComputeAttributes vmComputeAttributes;
+		 int shutdownRetriesCount = 0;
+		 boolean vmIsRunning = false;
+
+		 do {
+			 try {
+				Thread.sleep(3 * ONE_SECOND);
+			} catch (final InterruptedException e) {
+				LOGGER.error("[foreman]", e);
+			}
+			 vmComputeAttributes = api.getVmComputeAttributes(host.id);
+			 shutdownRetriesCount++;
+
+			 vmIsRunning = "running".equals(vmComputeAttributes.state);
+		 } while (vmIsRunning && shutdownRetriesCount <= MAXIMUM_CHECK_SHUTDOWN_RETRIES);
+
+	}
+
+     private String getUnusedIp() {
+    	final String unusedIpScriptPath = this.config.getUnusedIpScript();
+    	final UnusedIpGetter unusedIp = new UnusedIpGetter(unusedIpScriptPath);
+		try {
+			return unusedIp.get();
+		} catch (final Exception e) {
+			LOGGER.error("[foreman] failed to get unused IP", e);
+			return "";
+		}
+	}
+
+	private List<String> findPuppetClassesId(IForemanApi api, String environmentName) {
     	 final List<String> result = new ArrayList<String>();
 
     	 final String environmentId = findEnvironmentId(api, environmentName);
@@ -603,6 +652,7 @@ public class ForemanService implements IForemanService {
 		return hosts != null ? hosts.results : null;
 
 	}
+
 
 
 }

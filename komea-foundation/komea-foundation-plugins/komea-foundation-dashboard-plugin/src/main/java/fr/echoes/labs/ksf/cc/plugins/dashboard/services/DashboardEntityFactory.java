@@ -38,7 +38,7 @@ public class DashboardEntityFactory {
 		final String redmineProjectTag = configurationService.getRedmineProjectTag();
 		
 		if (!StringUtils.isEmpty(redmineProjectTag)) {
-			final String redmineProjectKey = ProjectUtils.createIdentifier(project.getKey());			
+			final String redmineProjectKey = ProjectUtils.createIdentifier(project.getName());			
 			projectEntity.addAttribute(redmineProjectTag, redmineProjectKey);
 		}
 		

@@ -12,7 +12,6 @@ import com.tocea.corolla.products.dao.IProjectDAO;
 import fr.echoes.labs.komea.foundation.plugins.git.GitExtensionMergeException;
 import fr.echoes.labs.komea.foundation.plugins.git.services.GitErrorHandlingService;
 import fr.echoes.labs.komea.foundation.plugins.git.services.IGitService;
-import fr.echoes.labs.ksf.cc.extensions.gui.ProjectExtensionConstants;
 import fr.echoes.labs.ksf.extensions.annotations.Extension;
 import fr.echoes.labs.ksf.extensions.projects.IProjectLifecycleExtension;
 import fr.echoes.labs.ksf.extensions.projects.NotifyResult;
@@ -67,12 +66,12 @@ public class GitProjectLifeCycleExtension implements IProjectLifecycleExtension 
 		try {
 
 			this.gitService.createProject(project);
-			
+
 		} catch (final Exception ex) {
 			LOGGER.error("[Git] Failed to create project {} ", project.getName(), ex);
 			this.errorHandler.registerError("Unable to create Git repository.");
 		}
-		
+
 		return NotifyResult.CONTINUE;
 
 	}
@@ -124,11 +123,12 @@ public class GitProjectLifeCycleExtension implements IProjectLifecycleExtension 
 			this.gitService.closeFeature(project.getName(), featureId, featureSubject);
 		} catch (final GitExtensionMergeException e) {
 			LOGGER.error("[Git] Failed to finish feature for project {} ", project.getName(), e);
-			this.errorHandler.registerError("Failed to finish feature: " + e.getMessage());
+			this.errorHandler.registerError(GitErrorHandlingService.SESSION_ITEM_GIT_MERGE_ERROR, "Failed to finish feature: " + e.getMessage());
 			return NotifyResult.TERMINATE;
 		} catch (final Exception e) {
 			LOGGER.error("[Git] Failed to finish feature for project {} ", project.getName(), e);
 			this.errorHandler.registerError("Failed to finish feature.");
+			return NotifyResult.TERMINATE;
 		}
 		return NotifyResult.CONTINUE;
 	}
@@ -137,9 +137,14 @@ public class GitProjectLifeCycleExtension implements IProjectLifecycleExtension 
 	public NotifyResult notifyFinishedRelease(ProjectDto project, String releaseName) {
 		try {
 			this.gitService.closeRelease(project.getName(), releaseName);
+		} catch (final GitExtensionMergeException e) {
+			LOGGER.error("[Git] Failed to close feature for project {} ", project.getName(), e);
+			this.errorHandler.registerError(GitErrorHandlingService.SESSION_ITEM_GIT_MERGE_ERROR, "Failed to close feature: " + e.getMessage());
+			return NotifyResult.TERMINATE;
 		} catch (final Exception ex) {
 			LOGGER.error("[Git] Failed to close feature for project {} ", project.getName(), ex);
 			this.errorHandler.registerError("Failed to create release.");
+			return NotifyResult.TERMINATE;
 		}
 		return NotifyResult.CONTINUE;
 	}

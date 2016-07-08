@@ -17,6 +17,6 @@ public class VolumesAttributes {
 	public String allocation = "0G";
 
 	@JsonProperty("format_type")
-	public String format_type = "raw";
+	public String format_type = "qcow2";
 
 }

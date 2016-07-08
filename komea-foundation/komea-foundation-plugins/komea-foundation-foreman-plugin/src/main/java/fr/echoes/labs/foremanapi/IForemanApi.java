@@ -297,6 +297,12 @@ public interface IForemanApi {
 	@Produces(MediaType.APPLICATION_JSON)
 	OverrideValues getOverrideValues(@PathParam("smartClassParametesId") String smartClassParametesId);
 
+	@GET
+	@Path("/api/hosts/{id}/vm_compute_attributes")
+	@Produces(MediaType.APPLICATION_JSON)
+	VmComputeAttributes getVmComputeAttributes(
+			@PathParam("id") String hostId);
+
 	@POST
 	@Path("/api/smart_class_parameters/{smartClassParametesId}/override_values")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -312,5 +318,5 @@ public interface IForemanApi {
 	@Path("/api/hosts/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	void deleteHost(@PathParam("id") String id);
-	
+
 }

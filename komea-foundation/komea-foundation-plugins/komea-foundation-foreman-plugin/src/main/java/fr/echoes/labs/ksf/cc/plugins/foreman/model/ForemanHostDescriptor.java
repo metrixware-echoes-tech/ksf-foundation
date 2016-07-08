@@ -1,7 +1,7 @@
 package fr.echoes.labs.ksf.cc.plugins.foreman.model;
 
 public class ForemanHostDescriptor {
-	
+
 	private String hostName;
 	private String computeResourceId;
 	private String computeProfileId;
@@ -12,11 +12,13 @@ public class ForemanHostDescriptor {
 	private String puppetConfiguration;
 	private String domainId;
 	private String rootPassword;
+	private String provisionMethod;
+	private String imageId;
 
 	public ForemanHostDescriptor() {
-		
+
 	}
-	
+
 	public ForemanHostDescriptor(String hostName, String computeResourceId, String computeProfileId,
 			String hostGroupName, String environmentName, String operatingSystemId, String architectureId,
 			String puppetConfiguration, String domainId, String rootPassword) {
@@ -33,7 +35,7 @@ public class ForemanHostDescriptor {
 	}
 
 	public String getHostName() {
-		return hostName;
+		return this.hostName;
 	}
 
 	public void setHostName(String hostName) {
@@ -41,7 +43,7 @@ public class ForemanHostDescriptor {
 	}
 
 	public String getComputeResourceId() {
-		return computeResourceId;
+		return this.computeResourceId;
 	}
 
 	public void setComputeResourceId(String computeResourceId) {
@@ -49,7 +51,7 @@ public class ForemanHostDescriptor {
 	}
 
 	public String getComputeProfileId() {
-		return computeProfileId;
+		return this.computeProfileId;
 	}
 
 	public void setComputeProfileId(String computeProfileId) {
@@ -57,7 +59,7 @@ public class ForemanHostDescriptor {
 	}
 
 	public String getHostGroupName() {
-		return hostGroupName;
+		return this.hostGroupName;
 	}
 
 	public void setHostGroupName(String hostGroupName) {
@@ -65,7 +67,7 @@ public class ForemanHostDescriptor {
 	}
 
 	public String getEnvironmentName() {
-		return environmentName;
+		return this.environmentName;
 	}
 
 	public void setEnvironmentName(String environmentName) {
@@ -73,7 +75,7 @@ public class ForemanHostDescriptor {
 	}
 
 	public String getOperatingSystemId() {
-		return operatingSystemId;
+		return this.operatingSystemId;
 	}
 
 	public void setOperatingSystemId(String operatingSystemId) {
@@ -81,7 +83,7 @@ public class ForemanHostDescriptor {
 	}
 
 	public String getArchitectureId() {
-		return architectureId;
+		return this.architectureId;
 	}
 
 	public void setArchitectureId(String architectureId) {
@@ -89,7 +91,7 @@ public class ForemanHostDescriptor {
 	}
 
 	public String getPuppetConfiguration() {
-		return puppetConfiguration;
+		return this.puppetConfiguration;
 	}
 
 	public void setPuppetConfiguration(String puppetConfiguration) {
@@ -97,7 +99,7 @@ public class ForemanHostDescriptor {
 	}
 
 	public String getDomainId() {
-		return domainId;
+		return this.domainId;
 	}
 
 	public void setDomainId(String domainId) {
@@ -105,10 +107,26 @@ public class ForemanHostDescriptor {
 	}
 
 	public String getRootPassword() {
-		return rootPassword;
+		return this.rootPassword;
 	}
 
 	public void setRootPassword(String rootPassword) {
 		this.rootPassword = rootPassword;
+	}
+
+	public String getProvisionMethod() {
+		return this.provisionMethod;
+	}
+
+	public void setProvisionMethod(String provisionMethod) {
+		this.provisionMethod = provisionMethod;
+	}
+
+	public String getImageId() {
+		return this.imageId;
+	}
+
+	public void setImageId(String imageId) {
+		this.imageId = imageId;
 	}
 }

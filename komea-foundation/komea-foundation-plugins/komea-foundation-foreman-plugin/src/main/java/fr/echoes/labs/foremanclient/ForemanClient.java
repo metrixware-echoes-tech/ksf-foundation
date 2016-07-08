@@ -19,6 +19,7 @@ import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.AuthCache;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
@@ -115,9 +116,15 @@ public class ForemanClient {
 		        .build();
 
 		// Create client executor and proxy
+
+		RequestConfig.Builder requestBuilder = RequestConfig.custom();
+		requestBuilder = requestBuilder.setConnectTimeout(Integer.MAX_VALUE);
+		requestBuilder = requestBuilder.setConnectionRequestTimeout(Integer.MAX_VALUE);
+
 		final HttpClientConnectionManager cm = new PoolingHttpClientConnectionManager(socketFactoryRegistry);
 
 		httpClientBuilder.setConnectionManager(cm);
+		httpClientBuilder.setDefaultRequestConfig(requestBuilder.build());
 
 		final HttpClient httpClient = httpClientBuilder.build();
 

@@ -16,6 +16,9 @@ public class ComputeAttribute {
 	@JsonProperty("start")
 	public String start = "1";
 
+	@JsonProperty("image_id")
+	public String image_id;
+
 	@JsonProperty("volumes_attributes")
 	public Map<String, VolumesAttributes> volumes_attributes = new HashMap<String, VolumesAttributes>();
 

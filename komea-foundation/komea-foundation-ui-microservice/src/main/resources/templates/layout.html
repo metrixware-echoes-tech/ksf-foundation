@@ -73,7 +73,7 @@
 		<!--  Salvattore -->
 		<script th:src="@{/assets/salvattore/salvattore.js}" src="../static/assets/salvattore.js" type="text/javascript" />
 
-		<script type="text/javascript">
+		<script type="text/javascript" th:inline="javascript">
 			
 		    $(function () {
 			  $('[data-toggle="tooltip"]').tooltip();
@@ -138,7 +138,25 @@
                 	$('#releaseInformation').modal('show');
                 }); 
                 
+             
+        		$('#instantiate_host').submit(function() {
+         			var hostName = $('#hostName').val();
+         			var message = /*[[#{foundation.foreman.widget.newInstanceMessage}]]*/;
+        			displayLoadingScreen(message + ' ' + hostName, [[#{foundation.foreman.widget.newInstanceDetailMessage}]]);
+        		});
 
+        		$('#new_env').submit(function() {
+         			var envName = $('#envName').val();
+         			var message = /*[[#{foundation.foreman.widget.newEnvironmentMessage}]]*/;
+        			displayLoadingScreen(message + ' ' + envName, [[#{foundation.foreman.widget.newEnvironmentDetailMessage}]]);
+        		});
+        		
+        		
+                <div th:if="${gitMergeError != null}" th:remove="tag">
+            		$('#projectErrorPopup').modal('show');
+            		$('#projectErrorPopupMessage').text(/*[[${gitMergeError}]]*/);
+            	</div>
+        		
                 
                 <div th:if="${validationErrors != null}" th:remove="tag">
                 	$('#validationErrorsModal').modal('show');

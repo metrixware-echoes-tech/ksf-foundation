@@ -1,6 +1,8 @@
 package fr.echoes.labs.komea.foundation.plugins.jenkins.extensions;
 
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.net.URLDecoder;
 import java.util.List;
 
@@ -42,159 +44,184 @@ import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWi
 @Component
 public class JenkinsProjectDashboardWidget implements ProjectDashboardWidget {
 
+    private static final String SLASH = "/";
+
 	private static TemplateEngine templateEngine = createTemplateEngine();
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(JenkinsProjectDashboardWidget.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(JenkinsProjectDashboardWidget.class);
 
-	@Autowired
-	private JenkinsConfigurationService configurationService;
+    @Autowired
+    private JenkinsConfigurationService configurationService;
 
-	@Autowired
-	private IJenkinsService jenkinsService;
+    @Autowired
+    private IJenkinsService jenkinsService;
 
-	@Autowired
-	private IProjectDAO projectDAO;
+    @Autowired
+    private IProjectDAO projectDAO;
 
-	@Autowired
-	private JenkinsErrorHandlingService errorHandler;
+    @Autowired
+    private JenkinsErrorHandlingService errorHandler;
 
-	@Autowired
-	private HttpServletRequest request;
+    @Autowired
+    private HttpServletRequest request;
 
-	@Autowired
-	private HttpServletResponse response;
+    @Autowired
+    private HttpServletResponse response;
 
-	@Autowired
-	private ServletContext servletContext;
+    @Autowired
+    private ServletContext servletContext;
 
-	@Autowired
-	IProjectDAO projectDao;
+    @Autowired
+    IProjectDAO projectDao;
 
-	@Autowired
-	private MessageSource messageResource;
+    @Autowired
+    private MessageSource messageResource;
 
-	@Override
-	public List<MenuAction> getDropdownActions() {
+    @Override
+    public List<MenuAction> getDropdownActions() {
 
-		return null;
-	}
+        return null;
+    }
 
-	@Override
-	public String getHtmlPanelBody(String projectId) {
+    @Override
+    public String getHtmlPanelBody(String projectId) {
 
-		final Project project = this.projectDAO.findOne(projectId);
+        final Project project = this.projectDAO.findOne(projectId);
 
-		final WebContext ctx = new WebContext(this.request, this.response, this.servletContext);
-		ctx.setVariable("projectId", projectId);
+        final WebContext ctx = new WebContext(this.request, this.response, this.servletContext);
+        ctx.setVariable("projectId", projectId);
 
-		final String projectName = project.getName();
+        final String projectName = project.getName();
 
-		try {
-			final List<JenkinsBuildInfo> buildInfo = this.jenkinsService.getBuildInfo(projectName);
+        try {
+            final List<JenkinsBuildInfo> buildInfo = this.jenkinsService.getBuildInfo(projectName);
 
-			final String baseUrl = getBaseUrl();
+            final String baseUrl = getBaseUrl();
 
-			ctx.setVariable("buildBase", baseUrl + "/ui/projects/" + project.getKey() + "?buildUrl=");
+            ctx.setVariable("buildBase", baseUrl + "/ui/projects/" + project.getKey() + "?buildUrl=");
 
-			ctx.setVariable("jenkinsBuildHistory", buildInfo);
-		} catch (final JenkinsExtensionException e) {
-			LOGGER.error("[Jenkins] Failed to retrieve build history", e);
-			this.errorHandler.registerError(e);
-		}
+            ctx.setVariable("jenkinsBuildHistory", buildInfo);
+        } catch (final JenkinsExtensionException e) {
+            LOGGER.error("[Jenkins] Failed to retrieve build history", e);
+            this.errorHandler.registerError(e);
+        }
 
-		ctx.setVariable("jenkinsError", this.errorHandler.retrieveError());
+        ctx.setVariable("jenkinsError", this.errorHandler.retrieveError());
 
-		return templateEngine.process("jenkinsPanel", ctx);
-	}
+        return templateEngine.process("jenkinsPanel", ctx);
+    }
 
-	private String getBaseUrl() {
-		return this.request.getContextPath();
-	}
+    private String getBaseUrl() {
+        return this.request.getContextPath();
+    }
 
+    @Override
+    public String getIconUrl() {
+        return "/pictures/jenkins.png";
+    }
 
-	@Override
-	public String getIconUrl() {
-		return "/pictures/jenkins.png";
-	}
+    @Override
+    public String getTitle() {
+        return new MessageSourceAccessor(JenkinsProjectDashboardWidget.this.messageResource).getMessage("foundation.jenkins");
+    }
 
-	@Override
-	public String getTitle() {
-		return new MessageSourceAccessor(JenkinsProjectDashboardWidget.this.messageResource).getMessage("foundation.jenkins") ;
-	}
+    @Override
+    public List<IProjectTabPanel> getTabPanels(final String projectKey) {
 
+        final IProjectTabPanel iframePanel = new IProjectTabPanel() {
 
-	@Override
-	public List<IProjectTabPanel> getTabPanels(final String projectKey) {
+            @Override
+            public String getTitle() {
+                return new MessageSourceAccessor(JenkinsProjectDashboardWidget.this.messageResource).getMessage("foundation.jenkins.tab.title");
+            }
 
-		final IProjectTabPanel iframePanel = new IProjectTabPanel() {
+            @Override
+            public String getContent() {
 
-			@Override
-			public String getTitle() {
-				return new MessageSourceAccessor(JenkinsProjectDashboardWidget.this.messageResource).getMessage("foundation.jenkins.tab.title") ;
-			}
+                final Context ctx = new Context();
 
-			@Override
-			public String getContent() {
+                final HttpServletRequest request
+                        = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
+                        .getRequest();
 
-				final Context ctx = new Context();
+                String url = JenkinsProjectDashboardWidget.this.configurationService.getSsoUrl();
 
-				final HttpServletRequest request =
-						((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
-						.getRequest();
+                final String buildUrl = request.getParameter("buildUrl");
 
-				String url = JenkinsProjectDashboardWidget.this.configurationService.getUrl();
+                if (StringUtils.isNotEmpty(buildUrl)) {
 
-				final String buildUrl = request.getParameter("buildUrl");
+                    try {
+                        url = URLDecoder.decode(buildUrl, "UTF-8");
+                        String buildPath = new URL(url).getPath(); // /jenkins/job/
+                        if (StringUtils.isNotEmpty(buildPath)) {
+                        	String jenkinsUrl = JenkinsProjectDashboardWidget.this.configurationService.getSsoUrl();
+                        	String serviceBase = new URL(jenkinsUrl).getPath();
 
-				if (StringUtils.isNotEmpty(buildUrl)) {
+                			final int indexOfSecondSlash = serviceBase.indexOf(SLASH, serviceBase.indexOf(SLASH) + 1);
+                			if (indexOfSecondSlash > 0) {
+                				serviceBase = serviceBase.substring(0, indexOfSecondSlash);
+                			}
 
-					try {
-						url = URLDecoder.decode(buildUrl, "UTF-8");
-					} catch (final UnsupportedEncodingException e) {
-						LOGGER.error("", e);
-						url = JenkinsProjectDashboardWidget.this.configurationService.getUrl();
+                        	final int indexOf = buildPath.indexOf(serviceBase);
+                        	if (indexOf == 0) {
+                        		buildPath = buildPath.substring(serviceBase.length());
+                        		if (jenkinsUrl.endsWith(SLASH)) {
+                        			jenkinsUrl = jenkinsUrl.substring(0, jenkinsUrl.length() - 1);
+                        		}
+                        		url = jenkinsUrl + buildPath;
+                        	}
+                        }
+
+                    } catch (final UnsupportedEncodingException e) {
+                        LOGGER.error("[jenkins]", e);
+                        url = JenkinsProjectDashboardWidget.this.configurationService.getUrl();
+                    } catch (final MalformedURLException e) {
+                        LOGGER.error("[jenkins]", e);
 					}
-				} else {
-					try {
-						final Project project = JenkinsProjectDashboardWidget.this.projectDao.findByKey(projectKey);
-						final String jobId = JenkinsProjectDashboardWidget.this.jenkinsService.getJobId(project.getName());
-						if (StringUtils.isNotEmpty(jobId)) {
-							url = url + "/job/" + jobId;
-						}
-					} catch (final JenkinsExtensionException e) {
-						LOGGER.error("[Jenkins] failed to construct Jenkins project URL", e);
-					}
-				}
+                } else {
+                    try {
+                        final Project project = JenkinsProjectDashboardWidget.this.projectDao.findByKey(projectKey);
+                        final String jobId = JenkinsProjectDashboardWidget.this.jenkinsService.getJobId(project.getName());
+                        if (StringUtils.isNotEmpty(jobId)) {
+                            url = url + "/job/" + jobId;
+                        }
+                    } catch (final JenkinsExtensionException e) {
+                        LOGGER.error("[Jenkins] failed to construct Jenkins project URL", e);
+                    }
+                }
 
-				LOGGER.info("[jenkins] project URL : {}", url);
+                LOGGER.info("[jenkins] project URL : {}", url);
 
-				ctx.setVariable("jenkinsURL", url);
+                ctx.setVariable("jenkinsURL", url);
 
-				return templateEngine.process("jenkinsManagementPanel", ctx);
-			}
+                return templateEngine.process("jenkinsManagementPanel", ctx);
+            }
 
-			@Override
-			public String getIconUrl() {
-				return JenkinsProjectDashboardWidget.this.getIconUrl();
-			}
-		};
+            @Override
+            public String getIconUrl() {
+                return JenkinsProjectDashboardWidget.this.getIconUrl();
+            }
+        };
 
-		return Lists.newArrayList(iframePanel);
-	}
+        return Lists.newArrayList(iframePanel);
+    }
 
+    private static TemplateEngine createTemplateEngine() {
 
-	private static TemplateEngine createTemplateEngine() {
+        final ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
+        templateResolver.setTemplateMode("XHTML");
+        templateResolver.setPrefix("templates/");
+        templateResolver.setSuffix(".html");
 
-		final ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
-		templateResolver.setTemplateMode("XHTML");
-		templateResolver.setPrefix("templates/");
-		templateResolver.setSuffix(".html");
+        final TemplateEngine templateEngine = new TemplateEngine();
+        templateEngine.setTemplateResolver(templateResolver);
 
-		final TemplateEngine templateEngine = new TemplateEngine();
-		templateEngine.setTemplateResolver(templateResolver);
+        return templateEngine;
 
-		return templateEngine;
+    }
 
-	}
-
+    @Override
+    public boolean hasHtmlPanelBody() {
+        return true;
+    }
 }

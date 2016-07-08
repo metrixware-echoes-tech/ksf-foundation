@@ -14,7 +14,6 @@ import org.springframework.core.annotation.Order;
 import com.taskadapter.redmineapi.bean.Version;
 import com.tocea.corolla.products.dao.IProjectDAO;
 
-import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineExtensionException;
 import fr.echoes.labs.ksf.cc.plugins.redmine.services.IRedmineService;
 import fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineConfigurationService;
 import fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineErrorHandlingService;
@@ -108,15 +107,15 @@ public class RedmineProjectLifeCycleExtension implements IProjectLifecycleExtens
 
 	@Override
 	public NotifyResult notifyCreatedRelease(ProjectDto project, String releaseVersion, String username) {
-		try {
-
-			final String releaseTicketSubject = createReleaseTicketSubject(project, releaseVersion);
-
-			this.redmineService.createTicket(project, releaseVersion, releaseTicketSubject, username);
-		} catch (final RedmineExtensionException e) {
-			LOGGER.error("[Redmine] Failed to create a ticket for the release {} of the project {}", releaseVersion, project.getName());
-			this.errorHandler.registerError("Failed to create a Redmine ticket for the release.");
-		}
+//		try {
+//
+//			final String releaseTicketSubject = createReleaseTicketSubject(project, releaseVersion);
+//
+//			this.redmineService.createTicket(project, releaseVersion, releaseTicketSubject, username, this.configurationService.getTaskTrackerId());
+//		} catch (final RedmineExtensionException e) {
+//			LOGGER.error("[Redmine] Failed to create a ticket for the release {} of the project {}", releaseVersion, project.getName());
+//			this.errorHandler.registerError("Failed to create a Redmine ticket for the release.");
+//		}
 		return NotifyResult.CONTINUE;
 	}
 

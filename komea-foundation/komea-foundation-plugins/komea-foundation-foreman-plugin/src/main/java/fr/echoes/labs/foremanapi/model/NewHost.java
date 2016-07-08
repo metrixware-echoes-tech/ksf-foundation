@@ -75,4 +75,13 @@ public class NewHost {
 	@JsonProperty("compute_attributes")
 	public ComputeAttribute compute_attributes = new ComputeAttribute();
 
+	@JsonProperty("medium_id")
+	public String medium_id;
+
+	@JsonProperty("ptable_id")
+	public String ptable_id;
+
+	@JsonProperty("enabled")
+	public Boolean enabled = true;
+
 }
