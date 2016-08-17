@@ -1,0 +1,19 @@
+Références documentaires
+========================
+
+Documents internes
+------------------
+- Sylvain Leroy *Architecture de l’usine logicielle KSF pour Amabis* 14 Aout 2015 ref:AMABIS_KSF_architecture_generale-1.1.pdf
+
+
+Documents externes
+------------------
+
+- Jez Humble, David Farley *Continuous delivery: reliable software releases through build, test, and deployment automation* Jul 27, 2010 by Addison-Wesley Professional.
+ 
+- Jacques Printz, Jean-François Pradat-Peyre *Pratique des tests logiciels / Concevoir et mettre en oeuvre une stratégie de tests. Préparer la certification ISTQB* Collection: InfoPro, Dunod 2014 - 2ème édition - 240 pages - 175x250 mm EAN13 : 9782100706082
+
+.. _gartner_quadrant_2012: 
+
+- (Gartner group) Analysts: Thomas E. Murphy, Jim Duggan *Magic Quadrant for Application Life Cycle Management* 5 June 2012 ID:G00218016
+ 

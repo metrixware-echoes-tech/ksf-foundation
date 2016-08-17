@@ -1,0 +1,49 @@
+.. KOMEA ESF documentation master file, created by
+   sphinx-quickstart on Tue Jul  7 16:37:14 2015.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+Bienvenue dans le guide utilisateur de |kesf| !
+===============================================
+
+
+Généralités : 
+
+.. toctree::
+   :maxdepth: 2
+
+   presentation
+   tools
+   architecture
+   user_and_rights_management
+   workflows
+ 
+Fonctionnalités principales :
+ 
+.. toctree::
+   :maxdepth: 2
+   
+   login
+   create_project
+   manage_project
+   create_vm
+   
+A classer/trier [NE SERA PAS INCLUS SOUS CETTE FORME DANS LA VERSION DEFINITIVE DE LA DOC] :    
+   
+.. toctree::
+   :maxdepth: 2
+   
+   release_plan
+   hypotheses_et_contraintes
+   publications
+   concurrence
+   annexes
+   
+   
+Indices and tables
+==================
+
+ :ref:`genindex`
+ :ref:`modindex`
+ :ref:`search`
+	 

@@ -1,0 +1,21 @@
+.. _tools:
+
+Outils compatibles
+==================
+
+.. note:: Il s'agit ici de la description des outils disponibles dans l'usine logicielle. Cette liste est amenée à s'étendre avec les prochaines versions du logiciel.
+
+.. toctree::
+   :maxdepth: 2
+
+   tools_redmine
+   tools_git
+   tools_jenkins
+   tools_puppet
+   tools_foreman
+   tools_komea_dashboard
+   tools_komea_foundation
+   tools_komea_activity
+   tools_komea_checking
+
+   

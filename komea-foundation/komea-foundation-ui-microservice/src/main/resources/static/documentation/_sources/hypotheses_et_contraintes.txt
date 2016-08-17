@@ -1,0 +1,74 @@
+Hypotheses et contraintes
+=========================
+
+Hypothèses
+----------
+
+
+exemples évoqués avec Julie, à compléter :
+
+H1 : modules Opensource
+   donc travail sur les licences
+   
+H2 : pouvoir s'intégrer avec l'existant
+   effectivement, ce n'est pas uniquement une feature produit (quoique) mais aussi une feature projet d'implémentation
+   
+H3 : produit complet out of the box
+   on fournit la formation qui permet de s'appropprier la solution
+   
+H4 : mode SAS (why not)
+   cela suppose une infrastructure adhoc
+   
+H5 : livraison sources et binaires
+   sous quelles conditions ?
+
+H6 : service de montée de version
+   le cout de ce service doit être indexé sur la complexité de la config client (tarif de base pour une config out of the box , puis incrément pour chaque module customisé ou non supporté)
+   
+H7 : pas de gestion de licence utilisateur
+   donc pas de serveur de licence et tout le bazar
+   
+H8 : langages cibles : tous ?
+   priorité au C et au C++
+   
+H9 : IDE agnostic ?
+	ou on exige Netbeans ou eclipse (autre IDE = non standard = surcout)
+
+Contraintes
+-----------
+
+**Plate-forme technique**
+
+Exemple de  ce qui a été livré à Airbus pour les spec hard et soft. 
+
+Le périmètre concerné :
+
+- brique de gestion de configuration : Puppet
+- brique de gestion du cycle de vie des machines : Foreman
+
+Besoins en terme de ressources matérielles :
+- 2 vcpu
+- 4 Go RAM
+- 50Go disque dur
+- 1 interface réseau
+
+Nous apportons une VM.
+
+La VM peut être déployée sur deux hyperviseurs différents : KVM ou VMware vSphere Cluster (pas un ESXi en standalone).
+
+La VM usine sera une Debian 8 Jessie sour format OVA pour VMware, en format KVM dans le cas inverse
+
+Il y aura des clefs ssh à échanger avec cet hyperviseur pour que l'usine puisse le piloter.
+
+En termes de ports ouverts :
+- La VM usine doit accéder au port 22 de l'hyperviseur
+- La VM usine accède aux ports TCP 5901 à 5964 de l'hyperviseur
+- Le poste utilisateur accède aux ports TCP 69,80, 443, 5910-5930, 8140, 8443, 22 de l'usine
+- La VM usine doit accéder à Internet
+
+Afin d'automatiser au maximum le déploiement des services, nous avons besoin d'un serveur qui fait DNS+DHCP. L'usine est compatible avec les services suivants :
+- Linux Bind
+- Microsoft DNS Server
+- Linux ISC DHCP
+- Microsoft DHCP Servers
+  

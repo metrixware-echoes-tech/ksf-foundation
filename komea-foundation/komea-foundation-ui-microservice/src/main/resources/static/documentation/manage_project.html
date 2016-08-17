@@ -1,0 +1,581 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Gérer un projet &mdash; documentation Komea Software Factory 2.0.0</title>
+    
+    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootswatch-3.3.6/united/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="_static/my-styles.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '2.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="documentation Komea Software Factory 2.0.0" href="index.html" />
+    <link rel="next" title="Créer des modèles de VMs et les instancier" href="create_vm.html" />
+    <link rel="prev" title="Créer un projet" href="create_project.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body role="document">
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html"><img src="_static/KSF-logo.png">
+          Komea Software Factory</a>
+        <span class="navbar-text navbar-version pull-left"><b>2.0</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="presentation.html">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="resume.html">Périmètre</a></li>
+<li class="toctree-l2"><a class="reference internal" href="definitions.html">Définitions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="domaines_fonctionnels.html">Domaines fonctionnels</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tools.html">Outils compatibles</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tools_redmine.html">Forge logicielle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tools_git.html">Gestion de sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tools_jenkins.html">Intégration continue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tools_puppet.html">Gestion de configurations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tools_foreman.html">Gestion de cycle de vie des machines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tools_komea_dashboard.html">Komea Dashboard</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tools_komea_foundation.html">Komea Foundation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tools_komea_activity.html">Komea Activity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tools_komea_checking.html">Komea Checking</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#architecture-technique">Architecture technique</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#architecture-fonctionnelle">Architecture fonctionnelle</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="user_and_rights_management.html">Gestion des utilisateurs et des droits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="workflows.html">Workflows</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="workflows.html#gestion-de-projet">Gestion de projet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="workflows.html#creation-du-projet">Création du projet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="workflows.html#gestion-des-branches">Gestion des branches</a></li>
+</ul>
+</li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="login.html">S&#8217;authentifier</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="login.html#specification-detaillee">Spécification détaillée</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="create_project.html">Créer un projet</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="create_project.html#creation">Création</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Gérer un projet</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#creation-d-une-version">Création d&#8217;une version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#creation-d-une-fonctionnalite">Création d&#8217;une fonctionnalité</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#travail-sur-une-fonctionnalite">Travail sur une fonctionnalité</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#terminer-une-fonctionnalite">Terminer une fonctionnalité</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#creer-une-livraison-release">Créer une livraison (release)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#declencher-une-livraison-release">Déclencher une livraison (release)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="create_vm.html">Créer des modèles de VMs et les instancier</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="create_vm.html#technologies">Technologies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="create_vm.html#definitions">Définitions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="create_vm.html#creer-un-environnement">Créer un environnement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="create_vm.html#creer-une-cible">Créer une cible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="create_vm.html#instancier-une-vm">Instancier une VM</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="release_plan.html">Release Plan</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="release_plan.html#ksf-1-0-nov-2015-airbus">KSF 1.0    Nov 2015 (Airbus)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="release_plan.html#ksf-1-1-jan-2016-amabis-airbus">KSF 1.1    Jan 2016 (Amabis, Airbus)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="release_plan.html#ksf-1-2-avr-2016-interne">KSF 1.2   Avr 2016 (interne)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="release_plan.html#komea-cc">Komea-CC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="release_plan.html#komea-dashboard">Komea-Dashboard</a></li>
+<li class="toctree-l2"><a class="reference internal" href="release_plan.html#corolla">Corolla</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="hypotheses_et_contraintes.html">Hypotheses et contraintes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hypotheses_et_contraintes.html#hypotheses">Hypothèses</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hypotheses_et_contraintes.html#contraintes">Contraintes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="publications.html">Publications</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="publications.html#documents-produit">Documents Produit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="publications.html#sample-demos">Sample/ Démos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="publications.html#supports-de-formation">Supports de formation (?)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="publications.html#documentation-avant-vente">documentation avant-vente</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="concurrence.html">Concurrence</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="concurrence.html#offres-concurrentes">Offres concurrentes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="concurrence.html#kovair-omnibus">Kovair Omnibus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="concurrence.html#polarion-alm">Polarion ALM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="concurrence.html#tableau-comparatif">Tableau comparatif</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="annexes.html">Annexes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="references_documentaires.html">Références documentaires</a></li>
+<li class="toctree-l2"><a class="reference internal" href="annexes.html#open-services-for-lifecycle-collaboration">Open Services for Lifecycle Collaboration</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Gérer un projet</a><ul>
+<li><a class="reference internal" href="#creation-d-une-version">Création d&#8217;une version</a><ul>
+<li><a class="reference internal" href="#redmine">Redmine</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#creation-d-une-fonctionnalite">Création d&#8217;une fonctionnalité</a><ul>
+<li><a class="reference internal" href="#id1">Redmine</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#travail-sur-une-fonctionnalite">Travail sur une fonctionnalité</a><ul>
+<li><a class="reference internal" href="#actions-supplementaires-de-komea-foundation">Actions supplémentaires de Komea Foundation</a><ul>
+<li><a class="reference internal" href="#id2">Redmine</a></li>
+<li><a class="reference internal" href="#jenkins">Jenkins</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#resume-en-images">Résumé en images</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#terminer-une-fonctionnalite">Terminer une fonctionnalité</a><ul>
+<li><a class="reference internal" href="#id3">Actions supplémentaires de Komea Foundation</a><ul>
+<li><a class="reference internal" href="#id4">Redmine</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id5">Résumé en images</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#creer-une-livraison-release">Créer une livraison (release)</a><ul>
+<li><a class="reference internal" href="#id6">Actions supplémentaires de Komea Foundation</a><ul>
+<li><a class="reference internal" href="#id7">Jenkins</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id8">Résumé en images</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#declencher-une-livraison-release">Déclencher une livraison (release)</a><ul>
+<li><a class="reference internal" href="#id9">Actions supplémentaires de Komea Foundation</a><ul>
+<li><a class="reference internal" href="#id10">Redmine</a></li>
+<li><a class="reference internal" href="#id11">Jenkins</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id12">Résumé en images</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="create_project.html" title="Previous Chapter: Créer un projet"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Créer un projet</span>
+    </a>
+  </li>
+  <li>
+    <a href="create_vm.html" title="Next Chapter: Créer des modèles de VMs et les instancier"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Créer des mod... &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="gerer-un-projet">
+<span id="manage-project"></span><h1>Gérer un projet<a class="headerlink" href="#gerer-un-projet" title="Lien permanent vers ce titre">¶</a></h1>
+<p>Si on devait résumer la gestion d&#8217;un projet au quotidien, d&#8217;un point de vue informatique c&#8217;est principalement la gestion des demandes d&#8217;évolutions et les livraisons des nouvelles versions.</p>
+<p>Pour cela, KSF, à travers Komea Foundation, se base sur les principes de git flow pour gérer la création de nouvelles features et de nouvelles releases, tout en s&#8217;appuyant sur les outils existants pour faciliter la gestion de ce modèle.</p>
+<div class="section" id="creation-d-une-version">
+<h2>Création d&#8217;une version<a class="headerlink" href="#creation-d-une-version" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Cela se passe dans la forge logicielle.</p>
+<div class="section" id="redmine">
+<h3>Redmine<a class="headerlink" href="#redmine" title="Lien permanent vers ce titre">¶</a></h3>
+<table border="1" class="docutils" id="id13">
+<caption><span class="caption-text">Création d&#8217;une version</span><a class="headerlink" href="#id13" title="Lien permanent vers ce tableau">¶</a></caption>
+<colgroup>
+<col width="10%" />
+<col width="20%" />
+<col width="70%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head stub">Etape</th>
+<th class="head">Description</th>
+<th class="head">Image</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><th class="stub">1</th>
+<td>Dans l&#8217;administration d&#8217;un projet, se rendre à l&#8217;onglet versions.</td>
+<td><a class="first last reference internal image-reference" href="_images/200_version_crea.png"><img alt="_images/200_version_crea.png" class="align-center" src="_images/200_version_crea.png" style="width: 80%;" /></a>
+</td>
+</tr>
+<tr class="row-odd"><th class="stub">2</th>
+<td>On ajoute une nouvelle version, on peut alors remplie le formulaire ci-contre.</td>
+<td><a class="first last reference internal image-reference" href="_images/200_version_crea_rempli.png"><img alt="_images/200_version_crea_rempli.png" class="align-center" src="_images/200_version_crea_rempli.png" style="width: 80%;" /></a>
+</td>
+</tr>
+<tr class="row-even"><th class="stub">3</th>
+<td>La version est créée !</td>
+<td><a class="first last reference internal image-reference" href="_images/200_version_crea_ok.png"><img alt="_images/200_version_crea_ok.png" class="align-center" src="_images/200_version_crea_ok.png" style="width: 80%;" /></a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="creation-d-une-fonctionnalite">
+<h2>Création d&#8217;une fonctionnalité<a class="headerlink" href="#creation-d-une-fonctionnalite" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Une version doit pré-éxister. Avant de commencer à travailler sur un projet, quelle que soit la méthode de travail, il faut préparer les tâches à effectuer. Ces tâches sont décrites dans des tickets &#8220;evolution&#8221;. Pour ajouter une nouvelle fonctionnalité à développer, cela se passe là encore dans la forge logicielle.</p>
+<div class="section" id="id1">
+<h3>Redmine<a class="headerlink" href="#id1" title="Lien permanent vers ce titre">¶</a></h3>
+<table border="1" class="docutils" id="id14">
+<caption><span class="caption-text">Création d&#8217;une évolution</span><a class="headerlink" href="#id14" title="Lien permanent vers ce tableau">¶</a></caption>
+<colgroup>
+<col width="10%" />
+<col width="20%" />
+<col width="70%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head stub">Etape</th>
+<th class="head">Description</th>
+<th class="head">Image</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><th class="stub">1</th>
+<td><dl class="first last docutils">
+<dt>Dans un projet, onglet &#8220;Nouvelle demande&#8221;, on peut alors remplir le formulaire de création de ticket.</dt>
+<dd>On sélectionne le tracker &#8220;evolution&#8221; et la version préalablement créée au cours de laquelle sera développée cette fonctionnalité.</dd>
+</dl>
+</td>
+<td><a class="first last reference internal image-reference" href="_images/300_feature_crea.png"><img alt="_images/300_feature_crea.png" class="align-center" src="_images/300_feature_crea.png" style="width: 80%;" /></a>
+</td>
+</tr>
+<tr class="row-odd"><th class="stub">2</th>
+<td>Une fois le ticket créé, on obtient le résultat suivant.</td>
+<td><a class="first last reference internal image-reference" href="_images/300_feature_crea_ok.png"><img alt="_images/300_feature_crea_ok.png" class="align-center" src="_images/300_feature_crea_ok.png" style="width: 80%;" /></a>
+</td>
+</tr>
+<tr class="row-even"><th class="stub">3</th>
+<td>Lorsque l&#8217;on revient à l&#8217;onglet principal du projet dans Komea Foundation, on observe qu&#8217;une nouvelle ligne est apparue.</td>
+<td><a class="first last reference internal image-reference" href="_images/300_feature_possible.png"><img alt="_images/300_feature_possible.png" class="align-center" src="_images/300_feature_possible.png" style="width: 80%;" /></a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="travail-sur-une-fonctionnalite">
+<h2>Travail sur une fonctionnalité<a class="headerlink" href="#travail-sur-une-fonctionnalite" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Cela correspond à &#8220;feature start&#8221; au sens git flow. Une branche feature est créée à partir de la branche develop.</p>
+<div class="section" id="actions-supplementaires-de-komea-foundation">
+<h3>Actions supplémentaires de Komea Foundation<a class="headerlink" href="#actions-supplementaires-de-komea-foundation" title="Lien permanent vers ce titre">¶</a></h3>
+<div class="section" id="id2">
+<h4>Redmine<a class="headerlink" href="#id2" title="Lien permanent vers ce titre">¶</a></h4>
+<p>Le ticket est passé au statut &#8220;En cours&#8221;
+Le dépôt est mis à jour avec la nouvelle branche</p>
+</div>
+<div class="section" id="jenkins">
+<h4>Jenkins<a class="headerlink" href="#jenkins" title="Lien permanent vers ce titre">¶</a></h4>
+<p>Le job correspondant à la nouvelle branche est créée automatiquement. Il est préparamétré pour utiliser les fichiers build.sh et deploy.sh qui sont dans la branche. Il est également préparamétré pour déposer le résultat du build dans Nexus.
+Si Komea Checking est activé, il est aussi préparamétré pour passer la douane applicative.</p>
+</div>
+</div>
+<div class="section" id="resume-en-images">
+<h3>Résumé en images<a class="headerlink" href="#resume-en-images" title="Lien permanent vers ce titre">¶</a></h3>
+<table border="1" class="docutils" id="id15">
+<caption><span class="caption-text">Démarrer le travail sur une fonctionnalité</span><a class="headerlink" href="#id15" title="Lien permanent vers ce tableau">¶</a></caption>
+<colgroup>
+<col width="10%" />
+<col width="20%" />
+<col width="70%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head stub">Etape</th>
+<th class="head">Description</th>
+<th class="head">Image</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><th class="stub">1</th>
+<td>On clique sur le bouton de type &#8220;play&#8221; pour démarrer le développement de la feature correspondant</td>
+<td><a class="first last reference internal image-reference" href="_images/300_feature_demarrer.png"><img alt="_images/300_feature_demarrer.png" class="align-center" src="_images/300_feature_demarrer.png" style="width: 80%;" /></a>
+</td>
+</tr>
+<tr class="row-odd"><th class="stub">2</th>
+<td>Une popup de confirmation apparaît.</td>
+<td><a class="first last reference internal image-reference" href="_images/300_feature_demarrer_confirmation.png"><img alt="_images/300_feature_demarrer_confirmation.png" class="align-center" src="_images/300_feature_demarrer_confirmation.png" style="width: 80%;" /></a>
+</td>
+</tr>
+<tr class="row-even"><th class="stub">3</th>
+<td>La feature est démarrée.</td>
+<td><a class="first last reference internal image-reference" href="_images/300_feature_demarrer_ok.png"><img alt="_images/300_feature_demarrer_ok.png" class="align-center" src="_images/300_feature_demarrer_ok.png" style="width: 80%;" /></a>
+</td>
+</tr>
+<tr class="row-odd"><th class="stub">4</th>
+<td>Le dépôt est mis à jour</td>
+<td><a class="first last reference internal image-reference" href="_images/300_feature_depot_maj_ok.png"><img alt="_images/300_feature_depot_maj_ok.png" class="align-center" src="_images/300_feature_depot_maj_ok.png" style="width: 80%;" /></a>
+</td>
+</tr>
+<tr class="row-even"><th class="stub">5</th>
+<td>Le job d&#8217;intégration continue est créé</td>
+<td><a class="first last reference internal image-reference" href="_images/300_feature_job_cree.png"><img alt="_images/300_feature_job_cree.png" class="align-center" src="_images/300_feature_job_cree.png" style="width: 80%;" /></a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="terminer-une-fonctionnalite">
+<h2>Terminer une fonctionnalité<a class="headerlink" href="#terminer-une-fonctionnalite" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Cela correspond à &#8220;feature finish&#8221; au sens git flow. Cela effectue les étapes suivantes :</p>
+<ul class="simple">
+<li>Fusion de la branche feature dans la branche</li>
+<li>Supprime la branche feature</li>
+</ul>
+<div class="section" id="id3">
+<h3>Actions supplémentaires de Komea Foundation<a class="headerlink" href="#id3" title="Lien permanent vers ce titre">¶</a></h3>
+<p>Tout d&#8217;abord, au moment de terminer une fonctionnalité, Komea Foundation va vérifier que le job créé pour la branche a bien été déroulé et qu&#8217;il est bien marqué en &#8220;Success&#8221;. Si ce n&#8217;est pas le cas, un message d&#8217;erreur va apparaître et les actions git flow ne seront pas effectuées.</p>
+<div class="section" id="id4">
+<h4>Redmine<a class="headerlink" href="#id4" title="Lien permanent vers ce titre">¶</a></h4>
+<p>Le ticket est passé au statut &#8220;Fermé&#8221;
+Le dépôt est mis à jour</p>
+</div>
+</div>
+<div class="section" id="id5">
+<h3>Résumé en images<a class="headerlink" href="#id5" title="Lien permanent vers ce titre">¶</a></h3>
+<table border="1" class="docutils" id="id16">
+<caption><span class="caption-text">Terminer une fonctionnalité</span><a class="headerlink" href="#id16" title="Lien permanent vers ce tableau">¶</a></caption>
+<colgroup>
+<col width="10%" />
+<col width="20%" />
+<col width="70%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head stub">Etape</th>
+<th class="head">Description</th>
+<th class="head">Image</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><th class="stub">1</th>
+<td>Une fois la fonctionnalité démarrée, l&#8217;interface offre la possibilité de la terminer.</td>
+<td><a class="first last reference internal image-reference" href="_images/300_feature_demarrer_ok.png"><img alt="_images/300_feature_demarrer_ok.png" class="align-center" src="_images/300_feature_demarrer_ok.png" style="width: 80%;" /></a>
+</td>
+</tr>
+<tr class="row-odd"><th class="stub">2</th>
+<td>Si on essaie de la fermer immédiatement, alors que le job n&#8217;est pas réussi, on a un message d&#8217;information.</td>
+<td><a class="first last reference internal image-reference" href="_images/300_feature_impossible.png"><img alt="_images/300_feature_impossible.png" class="align-center" src="_images/300_feature_impossible.png" style="width: 80%;" /></a>
+</td>
+</tr>
+<tr class="row-even"><th class="stub">3</th>
+<td>Si on clique sur le bouton d&#8217;information, on obtient en particulier le nom de la branche dans git que l&#8217;on peut aisément copier dans son presse-papier.</td>
+<td><a class="first last reference internal image-reference" href="_images/300_feature_infos.png"><img alt="_images/300_feature_infos.png" class="align-center" src="_images/300_feature_infos.png" style="width: 80%;" /></a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="creer-une-livraison-release">
+<h2>Créer une livraison (release)<a class="headerlink" href="#creer-une-livraison-release" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Une version doit pré-éxister. Une livraison est basée sur une version. Dans KSF, créer une livraison correspond au &#8220;release start&#8221; de git flow. C&#8217;est une opération dans laquelle une nouvelle branche &#8220;release&#8221; est créés à partir de la branche &#8220;develop&#8221;. Cette branche est là pour accueillir les modifications de livraison (release note, changelog, numérotation, etc.) et faire les derniers tests pour être sûr que tout va fonctionner au moment de livrer.</p>
+<div class="section" id="id6">
+<h3>Actions supplémentaires de Komea Foundation<a class="headerlink" href="#id6" title="Lien permanent vers ce titre">¶</a></h3>
+<div class="section" id="id7">
+<h4>Jenkins<a class="headerlink" href="#id7" title="Lien permanent vers ce titre">¶</a></h4>
+<p>Le job correspondant à la nouvelle branche est créée automatiquement. Il est préparamétré pour utiliser les fichiers build.sh et deploy.sh qui sont dans la branche. Il est également préparamétré pour déposer le résultat du build dans Nexus.
+Si Komea Checking est activé, il est aussi préparamétré pour passer la douane applicative.</p>
+</div>
+</div>
+<div class="section" id="id8">
+<h3>Résumé en images<a class="headerlink" href="#id8" title="Lien permanent vers ce titre">¶</a></h3>
+<table border="1" class="docutils" id="id17">
+<caption><span class="caption-text">Démarrer une livraison</span><a class="headerlink" href="#id17" title="Lien permanent vers ce tableau">¶</a></caption>
+<colgroup>
+<col width="10%" />
+<col width="20%" />
+<col width="70%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head stub">Etape</th>
+<th class="head">Description</th>
+<th class="head">Image</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><th class="stub">1</th>
+<td>On clique sur le bouton de type &#8220;play&#8221; pour démarrer la livraison.</td>
+<td><a class="first last reference internal image-reference" href="_images/400_release_possible.png"><img alt="_images/400_release_possible.png" class="align-center" src="_images/400_release_possible.png" style="width: 80%;" /></a>
+</td>
+</tr>
+<tr class="row-odd"><th class="stub">2</th>
+<td>Le nouveau job d&#8217;intégration continue est créé.</td>
+<td><a class="first last reference internal image-reference" href="_images/400_release_job_cree.png"><img alt="_images/400_release_job_cree.png" class="align-center" src="_images/400_release_job_cree.png" style="width: 80%;" /></a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="declencher-une-livraison-release">
+<h2>Déclencher une livraison (release)<a class="headerlink" href="#declencher-une-livraison-release" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Une fois que tous les développements sont terminés, que les dernières touches ont été apportées sur la branche de livraison, il est alors possible de livrer. C&#8217;est ce qui correspond à &#8220;release finish&#8221; dans git flow. Cela effectue les étapes suivantes :</p>
+<ul class="simple">
+<li>Fusion de la branche de livraison dans la branche master</li>
+<li>Tag de la livraison avec son nom</li>
+<li>Fusion de la branche de livraison dans la branche develop</li>
+<li>Suppression de la branche de livraison</li>
+</ul>
+<div class="section" id="id9">
+<h3>Actions supplémentaires de Komea Foundation<a class="headerlink" href="#id9" title="Lien permanent vers ce titre">¶</a></h3>
+<p>Tout d&#8217;abord, au moment de terminer une livraison, Komea Foundation va vérifier que le job créé pour la branche a bien été déroulé et qu&#8217;il est bien marqué en &#8220;Success&#8221;. Si ce n&#8217;est pas le cas, un message d&#8217;erreur va apparaître et les actions git flow ne seront pas effectuées.</p>
+<p>Par ailleurs, on vérifie également qu&#8217;il ne reste pas de fonctionnalité en suspens pour la version sur laquelle porte la livraison. Si c&#8217;est le cas, il convient de terminer le travail ou de la shifter vers une version future.</p>
+<div class="section" id="id10">
+<h4>Redmine<a class="headerlink" href="#id10" title="Lien permanent vers ce titre">¶</a></h4>
+<p>La version est fermée.
+Le dépôt est mis à jour.</p>
+</div>
+<div class="section" id="id11">
+<h4>Jenkins<a class="headerlink" href="#id11" title="Lien permanent vers ce titre">¶</a></h4>
+<p>Le job correspondant à la nouvelle branche est créée automatiquement. Il est préparamétré pour utiliser les fichiers build.sh et deploy.sh qui sont dans la branche. Il est également préparamétré pour déposer le résultat du build dans Nexus.
+Si Komea Checking est activé, il est aussi préparamétré pour passer la douane applicative.</p>
+</div>
+</div>
+<div class="section" id="id12">
+<h3>Résumé en images<a class="headerlink" href="#id12" title="Lien permanent vers ce titre">¶</a></h3>
+<table border="1" class="docutils" id="id18">
+<caption><span class="caption-text">Terminer une livraison</span><a class="headerlink" href="#id18" title="Lien permanent vers ce tableau">¶</a></caption>
+<colgroup>
+<col width="10%" />
+<col width="20%" />
+<col width="70%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head stub">Etape</th>
+<th class="head">Description</th>
+<th class="head">Image</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><th class="stub">1</th>
+<td>Si essaie de terminer la livraison alors que les conditions ne sont pas remplies, un message d&#8217;information apparaît.</td>
+<td><a class="first last reference internal image-reference" href="_images/400_release_impossible.png"><img alt="_images/400_release_impossible.png" class="align-center" src="_images/400_release_impossible.png" style="width: 80%;" /></a>
+</td>
+</tr>
+<tr class="row-odd"><th class="stub">2</th>
+<td>Lorsque l&#8217;on termine une release, la branche release est mergée sur develop et master.</td>
+<td><a class="first last reference internal image-reference" href="_images/400_release_merge_master_ok.png"><img alt="_images/400_release_merge_master_ok.png" class="align-center" src="_images/400_release_merge_master_ok.png" style="width: 80%;" /></a>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+<div id="sourcelink">
+  <a href="_sources/manage_project.txt"
+     rel="nofollow">Source</a>
+</div>
+      
+    </p>
+    <p>
+        &copy; Copyright 2015-16, Echoes.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.3.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

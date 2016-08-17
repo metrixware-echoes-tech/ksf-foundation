@@ -1,0 +1,305 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Hypotheses et contraintes &mdash; documentation Komea Software Factory 2.0.0</title>
+    
+    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootswatch-3.3.6/united/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="_static/my-styles.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '2.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="documentation Komea Software Factory 2.0.0" href="index.html" />
+    <link rel="next" title="Publications" href="publications.html" />
+    <link rel="prev" title="Release Plan" href="release_plan.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body role="document">
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html"><img src="_static/KSF-logo.png">
+          Komea Software Factory</a>
+        <span class="navbar-text navbar-version pull-left"><b>2.0</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="presentation.html">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="resume.html">Périmètre</a></li>
+<li class="toctree-l2"><a class="reference internal" href="definitions.html">Définitions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="domaines_fonctionnels.html">Domaines fonctionnels</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tools.html">Outils compatibles</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tools_redmine.html">Forge logicielle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tools_git.html">Gestion de sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tools_jenkins.html">Intégration continue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tools_puppet.html">Gestion de configurations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tools_foreman.html">Gestion de cycle de vie des machines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tools_komea_dashboard.html">Komea Dashboard</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tools_komea_foundation.html">Komea Foundation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tools_komea_activity.html">Komea Activity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tools_komea_checking.html">Komea Checking</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#architecture-technique">Architecture technique</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#architecture-fonctionnelle">Architecture fonctionnelle</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="user_and_rights_management.html">Gestion des utilisateurs et des droits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="workflows.html">Workflows</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="workflows.html#gestion-de-projet">Gestion de projet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="workflows.html#creation-du-projet">Création du projet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="workflows.html#gestion-des-branches">Gestion des branches</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="login.html">S&#8217;authentifier</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="login.html#specification-detaillee">Spécification détaillée</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="create_project.html">Créer un projet</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="create_project.html#creation">Création</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="manage_project.html">Gérer un projet</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="manage_project.html#creation-d-une-version">Création d&#8217;une version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manage_project.html#creation-d-une-fonctionnalite">Création d&#8217;une fonctionnalité</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manage_project.html#travail-sur-une-fonctionnalite">Travail sur une fonctionnalité</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manage_project.html#terminer-une-fonctionnalite">Terminer une fonctionnalité</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manage_project.html#creer-une-livraison-release">Créer une livraison (release)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manage_project.html#declencher-une-livraison-release">Déclencher une livraison (release)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="create_vm.html">Créer des modèles de VMs et les instancier</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="create_vm.html#technologies">Technologies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="create_vm.html#definitions">Définitions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="create_vm.html#creer-un-environnement">Créer un environnement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="create_vm.html#creer-une-cible">Créer une cible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="create_vm.html#instancier-une-vm">Instancier une VM</a></li>
+</ul>
+</li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="release_plan.html">Release Plan</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="release_plan.html#ksf-1-0-nov-2015-airbus">KSF 1.0    Nov 2015 (Airbus)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="release_plan.html#ksf-1-1-jan-2016-amabis-airbus">KSF 1.1    Jan 2016 (Amabis, Airbus)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="release_plan.html#ksf-1-2-avr-2016-interne">KSF 1.2   Avr 2016 (interne)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="release_plan.html#komea-cc">Komea-CC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="release_plan.html#komea-dashboard">Komea-Dashboard</a></li>
+<li class="toctree-l2"><a class="reference internal" href="release_plan.html#corolla">Corolla</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Hypotheses et contraintes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#hypotheses">Hypothèses</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#contraintes">Contraintes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="publications.html">Publications</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="publications.html#documents-produit">Documents Produit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="publications.html#sample-demos">Sample/ Démos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="publications.html#supports-de-formation">Supports de formation (?)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="publications.html#documentation-avant-vente">documentation avant-vente</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="concurrence.html">Concurrence</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="concurrence.html#offres-concurrentes">Offres concurrentes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="concurrence.html#kovair-omnibus">Kovair Omnibus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="concurrence.html#polarion-alm">Polarion ALM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="concurrence.html#tableau-comparatif">Tableau comparatif</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="annexes.html">Annexes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="references_documentaires.html">Références documentaires</a></li>
+<li class="toctree-l2"><a class="reference internal" href="annexes.html#open-services-for-lifecycle-collaboration">Open Services for Lifecycle Collaboration</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Hypotheses et contraintes</a><ul>
+<li><a class="reference internal" href="#hypotheses">Hypothèses</a></li>
+<li><a class="reference internal" href="#contraintes">Contraintes</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="release_plan.html" title="Previous Chapter: Release Plan"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Release Plan</span>
+    </a>
+  </li>
+  <li>
+    <a href="publications.html" title="Next Chapter: Publications"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Publications &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="hypotheses-et-contraintes">
+<h1>Hypotheses et contraintes<a class="headerlink" href="#hypotheses-et-contraintes" title="Lien permanent vers ce titre">¶</a></h1>
+<div class="section" id="hypotheses">
+<h2>Hypothèses<a class="headerlink" href="#hypotheses" title="Lien permanent vers ce titre">¶</a></h2>
+<p>exemples évoqués avec Julie, à compléter :</p>
+<dl class="docutils">
+<dt>H1</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">modules Opensource</span><dd>donc travail sur les licences</dd>
+<dt>H2</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">pouvoir s&#8217;intégrer avec l&#8217;existant</span><dd>effectivement, ce n&#8217;est pas uniquement une feature produit (quoique) mais aussi une feature projet d&#8217;implémentation</dd>
+<dt>H3</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">produit complet out of the box</span><dd>on fournit la formation qui permet de s&#8217;appropprier la solution</dd>
+<dt>H4</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">mode SAS (why not)</span><dd>cela suppose une infrastructure adhoc</dd>
+<dt>H5</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">livraison sources et binaires</span><dd>sous quelles conditions ?</dd>
+<dt>H6</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">service de montée de version</span><dd>le cout de ce service doit être indexé sur la complexité de la config client (tarif de base pour une config out of the box , puis incrément pour chaque module customisé ou non supporté)</dd>
+<dt>H7</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">pas de gestion de licence utilisateur</span><dd>donc pas de serveur de licence et tout le bazar</dd>
+<dt>H8</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">langages cibles</span> <span class="classifier-delimiter">:</span> <span class="classifier">tous ?</span><dd>priorité au C et au C++</dd>
+<dt>H9</dt>
+ <span class="classifier-delimiter">:</span> <span class="classifier">IDE agnostic ?</span><dd>ou on exige Netbeans ou eclipse (autre IDE = non standard = surcout)</dd>
+</dl>
+</div>
+<div class="section" id="contraintes">
+<h2>Contraintes<a class="headerlink" href="#contraintes" title="Lien permanent vers ce titre">¶</a></h2>
+<p><strong>Plate-forme technique</strong></p>
+<p>Exemple de  ce qui a été livré à Airbus pour les spec hard et soft.</p>
+<p>Le périmètre concerné :</p>
+<ul class="simple">
+<li>brique de gestion de configuration : Puppet</li>
+<li>brique de gestion du cycle de vie des machines : Foreman</li>
+</ul>
+<p>Besoins en terme de ressources matérielles :
+- 2 vcpu
+- 4 Go RAM
+- 50Go disque dur
+- 1 interface réseau</p>
+<p>Nous apportons une VM.</p>
+<p>La VM peut être déployée sur deux hyperviseurs différents : KVM ou VMware vSphere Cluster (pas un ESXi en standalone).</p>
+<p>La VM usine sera une Debian 8 Jessie sour format OVA pour VMware, en format KVM dans le cas inverse</p>
+<p>Il y aura des clefs ssh à échanger avec cet hyperviseur pour que l&#8217;usine puisse le piloter.</p>
+<p>En termes de ports ouverts :
+- La VM usine doit accéder au port 22 de l&#8217;hyperviseur
+- La VM usine accède aux ports TCP 5901 à 5964 de l&#8217;hyperviseur
+- Le poste utilisateur accède aux ports TCP 69,80, 443, 5910-5930, 8140, 8443, 22 de l&#8217;usine
+- La VM usine doit accéder à Internet</p>
+<p>Afin d&#8217;automatiser au maximum le déploiement des services, nous avons besoin d&#8217;un serveur qui fait DNS+DHCP. L&#8217;usine est compatible avec les services suivants :
+- Linux Bind
+- Microsoft DNS Server
+- Linux ISC DHCP
+- Microsoft DHCP Servers</p>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+<div id="sourcelink">
+  <a href="_sources/hypotheses_et_contraintes.txt"
+     rel="nofollow">Source</a>
+</div>
+      
+    </p>
+    <p>
+        &copy; Copyright 2015-16, Echoes.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.3.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

@@ -1,0 +1,25 @@
+.. _tools_puppet:
+
+*************************
+Gestion de configurations
+*************************
+
+Puppet
+******
+
+.. note:: Ci-dessous une brève introduction à Puppet. La documentation complète est disponible à cette adresse : https://puppet.com/
+
+Qu'est ce que Puppet ?
+======================
+
+L'informatique a atteint un point où la complexité et la taille des infrastructures n'est plus gérable "à la main". Il faut aller toujours plus vite, le tout de manière sécurisée et fiable. La promesse de Puppet c'est de pouvoir faire plus de choses, mieux et en moins de temps.
+
+Avec Puppet, il suffit de décrire l'état dans lequel on souhaite avoir son infrastructure et Puppet va automatiquement configurer ce qui doit l'être. Puppet permet d'automatiser chaque étape de la livraison d'un logiciel.
+
+Dans KSF, Puppet est utilisé pour assurer le déploiement et la configuration des logiciels, à la fois ceux de l'usine elle-même et ceux produits en son sein.
+
+En résumé, grâce à Puppet et son intégration dans KSF vous allez :
+- Libérer du temps pour vous consacrer à ce qui a réellement une valeur "business"
+- Assurer la stabilité et la fiabilité de vos logiciels
+- Améliorer la collaboration entre les admin sys, les intégrateurs et les développeurs
+

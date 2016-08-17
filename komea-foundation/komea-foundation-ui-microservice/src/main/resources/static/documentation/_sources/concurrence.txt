@@ -1,0 +1,40 @@
+Concurrence
+===========
+
+
+
+Offres concurrentes
+-------------------
+
+L'idée est de mettre ici les liens vers les offres concurrentes avec une analyse de leur positionnement.
+
+.. note::
+   Dans les concurrents, on trouve toujours l'appellation ALM alors que notre scope est l'usine logicielle uniquement. Cela peut permettre de nous différencier même si les différences au niveau de la couverture fonctionnelle ne sautent pas aux yeux.
+
+Kovair Omnibus
+--------------
+
+http://fr.slideshare.net/Kovair/overview-of-kovair-omnibus-integration-platform (notamment slides 8 à 12)
+
+http://fr.slideshare.net/Kovair/benefits-of-real-time-kpis-metrics-in-an-integrated-environment?related=1
+
+.. image:: ../images/Kovair-sample.png
+
+.. image:: ../images/Kovair-tools.png
+
+Polarion ALM
+------------
+
+extrait du site http://www.polarion.com
+
+.. image:: ../images/polarion.png
+
+
+
+Tableau comparatif
+------------------
+
+Ce tableau a été bati à partir du document :ref:`*Magic Quadrant for Application Life Cycle Management* 5 June 2012 <gartner_quadrant_2012>`
+
+.. image:: ../images/Concurrence_20150903-1.png
+.. image:: ../images/Concurrence_20150903-2.png
