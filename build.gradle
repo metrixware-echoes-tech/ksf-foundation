@@ -71,4 +71,12 @@ allprojects {
 
 }
 
+sonarqube {
+    properties {
+        property "sonar.exclusions", "**/static/**"
+    }
+}
+
+
 task wrapper(type: Wrapper) { gradleVersion = GRADLE_VERSION }
+
