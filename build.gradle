@@ -8,7 +8,7 @@ plugins {
  * Package of dependencies
  */
 
-apply from: "$gradleConfigUrl/git.gradle" 	// populates $branch
+apply from: "$gradleConfigUrl/version.gradle" 	// populates $branch
 
 apply from: "$gradleConfigUrl/init.gradle" 	// populates $branch
 
