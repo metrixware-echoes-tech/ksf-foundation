@@ -1,14 +1,10 @@
 
 subprojects {
 
- group = "com.echoeslab.ksf.commandAndControl"
-
+ group = "fr.echoes.ksf.foundation"
 
  dependencies {
   
-       
-
-
  }
 }
 
