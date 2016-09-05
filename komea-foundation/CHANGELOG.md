@@ -1,5 +1,11 @@
 # Product ChangeLog
 
+### 0.4.2 July 31 2016
+  - [#20582] Feature: Permettre d'accéder / de publier des fichiers externes au jar à travers foundation
+  - [#20558] Bugfix: Indisponibilité de l'adresse IP utilisée par Foreman lors de l'instantiation d'une nouvelle VM.
+  - [#20545] Bugfix: Lors de la création d'un projet, le groupe d'hôte est bien créé mais génère une erreur qui empêche la création du rôle.
+  - [#20340] Change: Mise à jour de la documentation.
+
 ### 0.4.1 July 07 2016
   - [#20246] Feature: Configuration de cibles dans Foreman à partir d'une image de VM (Non ISO)
   - [#20190] Bugfix: La configuration de Foundation pour la création d'un host est ignorée
