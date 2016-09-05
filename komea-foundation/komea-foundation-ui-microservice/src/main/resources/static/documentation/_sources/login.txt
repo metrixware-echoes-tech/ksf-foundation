@@ -1,0 +1,33 @@
+.. _login:
+
+S'authentifier
+==============
+
+Le SSO (Single Sign On) permet d'utiliser les différents outils de l'usine logicielle sans avoir besoin de s'authentifier avec chaque outil. Idéalement, l'authentification est faite dans l'annuaire de l'entreprise (AD, OpenLDAP, etc.) puis propagée par le SSO vers les composants de l'usine logicielle.
+
+Il est ainsi possible d'utiliser l'annuaire de l'entreprise pour définir l'ensemble de rôles des utilisateurs de l'usine. La configuration des outils pourra ainsi se faire plus rapidement.
+
+En cas d’absence de SSO, une entreprise s’expose à :
+
+*	Perdre du temps lors de l'utilisation des outils voire provoquer un refus de la part des utilisateurs.
+*   Perdre du temps à gérer les droits des utilisateurs dans les différents produits.
+
+Exemple d'outils Open source : 
+
+*   gSSO (http://01.org/gsso/)
+*   Keycloack 
+*   ... 
+
+Spécification détaillée
+-----------------------
+conditions initiales : aucun utilisateur n'est identifié dans KSF
+
+- L'utilisateur clique sur l'item "Login" du bandeau 
+- un formulaire s'affiche pour entrer user/pswd. (P2) bouton "remember me".
+- L'authentification est lancée auprès du gestionnaire site (annuaire LDAP ou autre) *ceci est donc configuré lors de l'installation de KSF ou paramétré dans la config?* 
+- Une fois l'utilisateur authentifié :
+
+  - le bandeau affiche son nom suivi d'un bouton "Logout"
+  - un menu Projet apparait avec la liste des Projets dans lequel le développeur peut intervenir **(on la calcule comment?)**, suivi d'un item "+" pour créer un projet
+  
+  .. image:: ../images/Menu_Projets.png

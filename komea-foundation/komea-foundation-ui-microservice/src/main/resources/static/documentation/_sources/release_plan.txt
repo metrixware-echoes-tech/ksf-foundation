@@ -1,0 +1,91 @@
+Release Plan
+============
+
+
+KSF 1.0    Nov 2015 (Airbus)
+----------------------------
+- Komea-CC 1.0
+- Foreman
+- Puppet
+
+
+KSF 1.1    Jan 2016 (Amabis, Airbus)
+------------------------------------
+- Komea-CC 1.1
+- Komea-Dashboard 4.0
+- Foreman
+- Puppet
+- Redmine
+- Jenkins
+
+KSF 1.2   Avr 2016 (interne)
+----------------------------
+- Komea-CC 1.2
+- Komea-Dashboard 4.0
+- Corolla 1.0
+- Foreman
+- Puppet
+- Redmine
+- Jenkins
+- GitLab
+- Push Business for KSF
+
+
+\------------------------------------------------------------------------------------------------------------------------------------------------
+
+Komea-CC
+--------
+
+Release 1.0
+
+- Interface d'administration de l'usine
+- Installateur de l'usine logicielle
+- HUB applicatif (genre Apache-Kafka)
+- Connecteur Foreman/Puppet 
+
+Release 1.1
+
+- Connecteur Redmine
+- Connecteur Jenkins
+- Connecteur Komea-Dashboard
+
+Release 1.2
+
+- Authentification unifiée
+- Connecteur GitLab
+- Connecteur Push business fo KSF
+
+Release later
+
+- Connecteur Nexus
+- Connecteur plug-in Compilation/Packaging C/C++
+
+\------------------------------------------------------------------------------------------------------------------------------------------------
+
+Komea-Dashboard
+---------------
+Release 4 : 14 Jan (Amabis)
+
+- compatibilité avec les dashboard Kibana
+- moteur BI Elastic Search
+- jeu de KPI standard
+- intégration avec KSF
+- Gestion de l'organisation dynamique 
+
+\------------------------------------------------------------------------------------------------------------------------------------------------
+
+Corolla
+-------
+
+Release 1.0
+
+- gestion des Tests
+- gestion des campagnes de test
+
+\------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+   	

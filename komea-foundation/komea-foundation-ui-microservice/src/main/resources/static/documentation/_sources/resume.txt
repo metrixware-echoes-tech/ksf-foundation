@@ -1,0 +1,61 @@
+*********
+Périmètre
+*********
+
+Ce document est destiné à l'ensemble des personnes ayant à utiliser ou configurer KSF.
+
+Contexte général
+****************
+
+Toutes les entreprises qui fabriquent du logiciel ont une usine logicielle. Celle-ci est l'assemblage d'outils et de méthodes divers et variés. Il s'agit d'une chaîne de production qui permet d'automatiser les tâches répétitives (gestion des branches, compilation, déploiement et configuration, etc.).
+
+Komea Software Factory fournit aux équipes de développement des solutions innovantes leur permettant de contrôler et d’améliorer en continu la qualité et l’intégrité de leurs développements. 
+
+Nous intervenons en support aux développeurs, architectes et chefs de projets dans un effort permanent de lutte contre la dette technique, en leur fournissant une usine logicielle moderne ainsi que des informations sur la qualité du code et de l’architecture de certaines applications et des outils exclusifs de reengineering et de migration.
+
+.. note:: La fabrication de logiciel est de nos jours un axe stratégique vital pour beaucoup d'entreprises car elle conditionne leur survie et leur succès.
+  
+Périmètre technico-fonctionnel
+******************************
+
+Le détail des domaines d'application de l'usine sont abordé tout au long de ce guide d'utilisation. Voici le résumé des principaux champs d'application de Komea Software Factory (KSF).
+
+Gestion des sources
+===================
+- L'historisation des modifications
+- La conservation des différentes versions du code
+- La gestion des branches (branching model)
+- Un accès concurrentiel aux ressources pour une équipe de plusieurs développeurs.
+
+Gestion de projet
+=================
+- Suivre l'ensemble des évolutions sur un produit
+- Suivre le travail de l'équipe de développement au quotidien avec la notion de "reste à faire"
+- Suivre un projet en mode Agile ou non grâce à des graphiques de type "Burndown chart"
+- Suivre les imputation relatives au CIR
+
+Construction de l'application
+=============================
+- Compilation
+- Gestion des dépendances (centralisation)
+- Production des livrables
+
+Intégration continue
+====================
+- Douane applicative
+- Orchestration de tous les processus
+- Passage des tests à chaque build
+- Production d'indicateurs sur la qualité du code
+
+Déploiement continu
+===================
+- Déploiement en continu
+- Configuration automatique des applications
+
+Tableau de bord
+===============
+- Vue d'ensemble sur tous les outils
+- Vision du bon fonctionnement de l'usine logicielle
+- Vérification de la bonne utilisation de l'usine
+
+.. note:: Tous ces outils sont rassemblés **au sein d'une même plateforme** : Komea Software Factory

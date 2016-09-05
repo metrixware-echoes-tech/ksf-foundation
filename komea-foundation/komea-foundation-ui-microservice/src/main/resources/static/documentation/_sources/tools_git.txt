@@ -1,0 +1,20 @@
+.. _tools_git:
+
+******************
+Gestion de sources
+******************
+
+Git
+***
+
+.. note:: Ci-dessous une brève introduction à git et à gitflow. La documentation complète est disponible à cette adresse : https://git-scm.com/
+
+Qu'est ce que Git ?
+===================
+
+Git est système de contrôle de version libre et gratuit. Il est conçu pour gérer des projets du plus simple au plus complexe rapidement et efficacement.
+
+Qu'est ce que Git Flow ?
+========================
+
+Git flow est l'implémentation du modèle de branche Git reconnu par la communauté.

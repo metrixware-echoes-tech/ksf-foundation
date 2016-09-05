@@ -1,0 +1,139 @@
+.. _create_project:
+
+***************
+Créer un projet
+***************
+
+Komea Foundation permet de créer des projets de manière transverse dans les différents outils présents au sein de l'usine. Dans cette page, nous allons voir comment faire et détailler les actions effectuées automatiquement lors de la création d'un projet.
+
+Création
+********
+
+Pour créer un nouveau projet, il suffit de cliquer sur le + qui se situe en haut à gauche de l'écran.
+
+.. list-table:: Paramètres de création
+   :widths: 10 20 70
+   :header-rows: 1 
+   :stub-columns: 1 
+   
+   * - Nom
+     - Type
+     - Description
+   * - Nom
+     - Chaîne
+     - Nom du projet
+   * - Projet parent
+     - Selecteur
+     - Permet de choisir un projet parent parmi les projets existants
+   * - Outils
+     - Choix multiple
+     - Dans KSF v2, le choix est forcé, nous n'avons implémenté qu'un seul outil par catégorie d'outils.
+	 
+Voici les étapes de création : 
+
+.. list-table:: Création d'un projet 
+   :widths: 10 20 70
+   :header-rows: 1 
+   :stub-columns: 1 
+   
+   * - Etape
+     - Description
+     - Image
+   * - 1
+     - La page d'accueil
+     - .. image:: ../images/captures/100_project_list.png
+          :width: 80%
+          :align: center
+   * - 2
+     - Le + en image
+     - .. image:: ../images/captures/100_project_create.png
+          :width: 80%
+          :align: center
+   * - 3
+     - Page de création
+     - .. image:: ../images/captures/100_project_create_screen.png
+          :width: 80%
+          :align: center
+   * - 4
+     - Page d'attente
+     - .. image:: ../images/captures/100_project_create_wait.png
+          :width: 80%
+          :align: center
+   * - 5
+     - Un nouveau projet tout neuf !
+     - .. image:: ../images/captures/100_project_create_ok.png
+          :width: 80%
+          :align: center
+
+Que s'est il passé pendant ce temps ? Au moment où l'où créée un nouveau projet, Komea Foundation communique avec les différents outils pour créer les éléments nécessaires dans chacun d'eux.
+
+.. list-table:: Eléments créés 
+   :widths: 20 80
+   :header-rows: 1 
+   :stub-columns: 1 
+   
+   * - Logiciel
+     - Eléments créés
+   * - Komea Foundation
+     - Un projet est créé. Son identifiant est basé sur le nom donné au projet.
+   * - Redmine
+     - Un projet redmine est créé. Son identifiant est basé sur le nom donné au projet.
+   * - Git
+     - Les différents éléments sont créés ou ajoutés dans Git : 
+	  * Un dépôt 
+	  * Les branches master et develop 
+	  * Un fichier README.md 
+	  * Des fichiers de configuration
+   * - Jenkins
+     - Les jobs correspondant aux branches master et develop sont créés
+   * - Nexus
+     - Un dépôt pour les futurs artefacts est créé
+   * - Foreman
+     - Un groupe d'hôtes est créé pour accueillir les futures VM du projet !
+   * - Komea Dashboard
+     - Les indicateurs sont pré-existants, prêts à l'emploi
+
+
+.. list-table:: En images
+   :widths: 10 20 70
+   :header-rows: 1 
+   :stub-columns: 1 
+   
+   * - Logiciel
+     - Description
+     - Image
+   * - Redmine
+     - Un projet redmine est créé
+     - .. image:: ../images/captures/100_project_create_ok_redmine.png
+          :width: 80%
+          :align: center
+   * - Git
+     - Un dépôt git avec les branches master et develop, ainsi qu'un fichier README.md et des éléments de configuration sont créés
+     - .. image:: ../images/captures/100_project_create_ok_git.png
+          :width: 80%
+          :align: center
+   * - Jenkins
+     - Les jobs correspondant aux branches master et develop sont créés
+     - .. image:: ../images/captures/100_project_create_ok_jenkins.png
+          :width: 80%
+          :align: center
+   * - Nexus
+     - Un dépôt pour les futurs artefacts est créé
+     - .. image:: ../images/captures/100_project_create_ok_nexus.png
+          :width: 80%
+          :align: center
+   * - Foreman
+     - Un groupe d'hôtes est créé pour accueillir les futures VM du projet !
+     - .. image:: ../images/captures/100_project_create_ok_foreman.png
+          :width: 80%
+          :align: center  
+   * - Komea Dashboard
+     - Les indicateurs sont pré-existants, prêts à l'emploi
+     - .. image:: ../images/captures/100_project_create_ok_dashboard.png
+          :width: 80%
+          :align: center  
+
+
+
+
+

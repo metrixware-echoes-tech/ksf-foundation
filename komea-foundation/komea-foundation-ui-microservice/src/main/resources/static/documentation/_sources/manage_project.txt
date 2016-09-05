@@ -1,0 +1,270 @@
+.. _manage_project:
+
+***************
+Gérer un projet
+***************
+
+Si on devait résumer la gestion d'un projet au quotidien, d'un point de vue informatique c'est principalement la gestion des demandes d'évolutions et les livraisons des nouvelles versions.
+
+Pour cela, KSF, à travers Komea Foundation, se base sur les principes de git flow pour gérer la création de nouvelles features et de nouvelles releases, tout en s'appuyant sur les outils existants pour faciliter la gestion de ce modèle.
+
+Création d'une version
+**********************
+
+Cela se passe dans la forge logicielle.
+
+Redmine
+=======
+
+.. list-table:: Création d'une version
+   :widths: 10 20 70
+   :header-rows: 1 
+   :stub-columns: 1 
+   
+   * - Etape
+     - Description
+     - Image
+   * - 1
+     - Dans l'administration d'un projet, se rendre à l'onglet versions.
+     - .. image:: ../images/captures/200_version_crea.png
+          :width: 80%
+          :align: center
+   * - 2
+     - On ajoute une nouvelle version, on peut alors remplie le formulaire ci-contre.
+     - .. image:: ../images/captures/200_version_crea_rempli.png
+          :width: 80%
+          :align: center
+   * - 3
+     - La version est créée !
+     - .. image:: ../images/captures/200_version_crea_ok.png
+          :width: 80%
+          :align: center
+
+Création d'une fonctionnalité
+*****************************
+
+Une version doit pré-éxister. Avant de commencer à travailler sur un projet, quelle que soit la méthode de travail, il faut préparer les tâches à effectuer. Ces tâches sont décrites dans des tickets "evolution". Pour ajouter une nouvelle fonctionnalité à développer, cela se passe là encore dans la forge logicielle.
+
+Redmine
+=======
+
+.. list-table:: Création d'une évolution
+   :widths: 10 20 70
+   :header-rows: 1 
+   :stub-columns: 1 
+   
+   * - Etape
+     - Description
+     - Image
+   * - 1
+     - Dans un projet, onglet "Nouvelle demande", on peut alors remplir le formulaire de création de ticket.
+	   On sélectionne le tracker "evolution" et la version préalablement créée au cours de laquelle sera développée cette fonctionnalité.
+     - .. image:: ../images/captures/300_feature_crea.png
+          :width: 80%
+          :align: center
+   * - 2
+     - Une fois le ticket créé, on obtient le résultat suivant.
+     - .. image:: ../images/captures/300_feature_crea_ok.png
+          :width: 80%
+          :align: center
+   * - 3
+     - Lorsque l'on revient à l'onglet principal du projet dans Komea Foundation, on observe qu'une nouvelle ligne est apparue.
+     - .. image:: ../images/captures/300_feature_possible.png
+          :width: 80%
+          :align: center
+
+
+
+Travail sur une fonctionnalité
+******************************
+
+Cela correspond à "feature start" au sens git flow. Une branche feature est créée à partir de la branche develop.
+
+Actions supplémentaires de Komea Foundation
+===========================================
+
+Redmine
+-------
+
+Le ticket est passé au statut "En cours"
+Le dépôt est mis à jour avec la nouvelle branche
+
+Jenkins
+-------
+
+Le job correspondant à la nouvelle branche est créée automatiquement. Il est préparamétré pour utiliser les fichiers build.sh et deploy.sh qui sont dans la branche. Il est également préparamétré pour déposer le résultat du build dans Nexus.
+Si Komea Checking est activé, il est aussi préparamétré pour passer la douane applicative.
+
+Résumé en images
+================
+
+.. list-table:: Démarrer le travail sur une fonctionnalité
+   :widths: 10 20 70
+   :header-rows: 1 
+   :stub-columns: 1 
+   
+   * - Etape
+     - Description
+     - Image
+   * - 1
+     - On clique sur le bouton de type "play" pour démarrer le développement de la feature correspondant
+     - .. image:: ../images/captures/300_feature_demarrer.png
+          :width: 80%
+          :align: center
+   * - 2
+     - Une popup de confirmation apparaît.
+     - .. image:: ../images/captures/300_feature_demarrer_confirmation.png
+          :width: 80%
+          :align: center
+   * - 3
+     - La feature est démarrée.
+     - .. image:: ../images/captures/300_feature_demarrer_ok.png
+          :width: 80%
+          :align: center
+   * - 4
+     - Le dépôt est mis à jour
+     - .. image:: ../images/captures/300_feature_depot_maj_ok.png
+          :width: 80%
+          :align: center
+   * - 5
+     - Le job d'intégration continue est créé
+     - .. image:: ../images/captures/300_feature_job_cree.png
+          :width: 80%
+          :align: center
+
+Terminer une fonctionnalité
+***************************
+
+Cela correspond à "feature finish" au sens git flow. Cela effectue les étapes suivantes : 
+
+* Fusion de la branche feature dans la branche 
+* Supprime la branche feature
+
+Actions supplémentaires de Komea Foundation
+===========================================
+
+Tout d'abord, au moment de terminer une fonctionnalité, Komea Foundation va vérifier que le job créé pour la branche a bien été déroulé et qu'il est bien marqué en "Success". Si ce n'est pas le cas, un message d'erreur va apparaître et les actions git flow ne seront pas effectuées.
+
+Redmine
+-------
+
+Le ticket est passé au statut "Fermé"
+Le dépôt est mis à jour
+
+Résumé en images
+================
+
+.. list-table:: Terminer une fonctionnalité
+   :widths: 10 20 70
+   :header-rows: 1 
+   :stub-columns: 1 
+
+   * - Etape
+     - Description
+     - Image
+   * - 1
+     - Une fois la fonctionnalité démarrée, l'interface offre la possibilité de la terminer.
+     - .. image:: ../images/captures/300_feature_demarrer_ok.png
+          :width: 80%
+          :align: center
+   * - 2
+     - Si on essaie de la fermer immédiatement, alors que le job n'est pas réussi, on a un message d'information.
+     - .. image:: ../images/captures/300_feature_impossible.png
+          :width: 80%
+          :align: center
+   * - 3
+     - Si on clique sur le bouton d'information, on obtient en particulier le nom de la branche dans git que l'on peut aisément copier dans son presse-papier.
+     - .. image:: ../images/captures/300_feature_infos.png
+          :width: 80%
+          :align: center
+
+
+
+
+Créer une livraison (release)
+*****************************
+
+Une version doit pré-éxister. Une livraison est basée sur une version. Dans KSF, créer une livraison correspond au "release start" de git flow. C'est une opération dans laquelle une nouvelle branche "release" est créés à partir de la branche "develop". Cette branche est là pour accueillir les modifications de livraison (release note, changelog, numérotation, etc.) et faire les derniers tests pour être sûr que tout va fonctionner au moment de livrer.
+
+Actions supplémentaires de Komea Foundation
+===========================================
+
+Jenkins
+-------
+
+Le job correspondant à la nouvelle branche est créée automatiquement. Il est préparamétré pour utiliser les fichiers build.sh et deploy.sh qui sont dans la branche. Il est également préparamétré pour déposer le résultat du build dans Nexus.
+Si Komea Checking est activé, il est aussi préparamétré pour passer la douane applicative.
+
+Résumé en images
+================
+
+.. list-table:: Démarrer une livraison
+   :widths: 10 20 70
+   :header-rows: 1 
+   :stub-columns: 1 
+   
+   * - Etape
+     - Description
+     - Image
+   * - 1
+     - On clique sur le bouton de type "play" pour démarrer la livraison.
+     - .. image:: ../images/captures/400_release_possible.png
+          :width: 80%
+          :align: center
+   * - 2
+     - Le nouveau job d'intégration continue est créé.
+     - .. image:: ../images/captures/400_release_job_cree.png
+          :width: 80%
+          :align: center
+
+
+Déclencher une livraison (release)
+**********************************
+
+Une fois que tous les développements sont terminés, que les dernières touches ont été apportées sur la branche de livraison, il est alors possible de livrer. C'est ce qui correspond à "release finish" dans git flow. Cela effectue les étapes suivantes : 
+
+* Fusion de la branche de livraison dans la branche master
+* Tag de la livraison avec son nom
+* Fusion de la branche de livraison dans la branche develop
+* Suppression de la branche de livraison
+
+Actions supplémentaires de Komea Foundation
+===========================================
+
+Tout d'abord, au moment de terminer une livraison, Komea Foundation va vérifier que le job créé pour la branche a bien été déroulé et qu'il est bien marqué en "Success". Si ce n'est pas le cas, un message d'erreur va apparaître et les actions git flow ne seront pas effectuées. 
+
+Par ailleurs, on vérifie également qu'il ne reste pas de fonctionnalité en suspens pour la version sur laquelle porte la livraison. Si c'est le cas, il convient de terminer le travail ou de la shifter vers une version future.
+
+Redmine
+-------
+
+La version est fermée.
+Le dépôt est mis à jour.
+
+Jenkins
+-------
+
+Le job correspondant à la nouvelle branche est créée automatiquement. Il est préparamétré pour utiliser les fichiers build.sh et deploy.sh qui sont dans la branche. Il est également préparamétré pour déposer le résultat du build dans Nexus.
+Si Komea Checking est activé, il est aussi préparamétré pour passer la douane applicative.
+
+Résumé en images
+================
+
+.. list-table:: Terminer une livraison
+   :widths: 10 20 70
+   :header-rows: 1 
+   :stub-columns: 1 
+   
+   * - Etape
+     - Description
+     - Image
+   * - 1
+     - Si essaie de terminer la livraison alors que les conditions ne sont pas remplies, un message d'information apparaît.
+     - .. image:: ../images/captures/400_release_impossible.png
+          :width: 80%
+          :align: center
+   * - 2
+     - Lorsque l'on termine une release, la branche release est mergée sur develop et master.
+     - .. image:: ../images/captures/400_release_merge_master_ok.png
+          :width: 80%
+          :align: center

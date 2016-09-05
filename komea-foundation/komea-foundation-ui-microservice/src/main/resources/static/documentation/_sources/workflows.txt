@@ -1,0 +1,196 @@
+﻿.. _workflows:
+
+*********
+Workflows
+*********
+
+.. note:: Dans cette page vous trouverez la liste complète des cas d'utilisation apportés par l'usine logicielle. Cette liste ne contient pas les cas d'utilisation des produits embarqués dans l'usine. Pour ceux-ci, se référer à leurs documentations respectives. 
+
+Gestion de projet
+*****************
+
+Le workflow de gestion de projet de l'usine est défini à l'aide des éléments suivants : 
+
+Les trackers (types de tickets)
+===============================
+
+User Story / Technical Story
+----------------------------
+
+Il s'agit de fonctionnalité telles que vues par les Clients pour les User Story, purement techniques pour les Technical Story. Elles sont crées par le PO / le responsable technique du projet.
+
+Evolution
+---------
+
+Il s'agit d'une tache de développement pour ajouter/modifier une/des fonctionnalités au produit. 
+
+Defaut
+------
+
+Il s'agit d'un écart constaté entre le comportement tel que décrit dans les specs/la documentation et le comportement réel. 
+
+Tâche
+-----
+
+On identifie ici les taches nécessaires aux développement du produit. La documentation et les tests sont à considérer comme des tâches.
+
+Support
+-------
+On identifie ici les taches de support hors développement du produit et hors défaut produit. 
+
+.. note:: Le rattachement aux User Story / Technical Story et le découpage en evolution, tâches, etc. est de la responsabilité du Chef de Projet.
+
+.. note:: Il est possible de gérer des arborescences de tickets : par exemple, rattacher les évolutions et anomalies à une User Story, découper une évolution en plusieurs sous-évolutions et/ou sous-taches, etc.
+
+
+Les statuts (état d'un ticket)
+==============================
+
+Nouveau
+-------
+
+Statut lors de la création du ticket.
+
+En cours
+--------
+
+Lorsque l'on commence à travailler sur le ticket.
+Demande d'information : l'assigné(e) peut indiquer dans le champ "Besoin d'info" (NeedInfo) une autre personne et lui demander un complément d'info à travers une note dans le ticket. Il peut continuer à travailler sur le ticket en parallèle. La personne indiquée doit répondre à la question et se retirer de la liste "Besoin d'info".
+Si la demande d'information se prolonge et qu'on ne travaille plus sur le sujet, on passe en Résolu/Gelé pour que le problème soit géré par le Chef de Projet.
+
+Résolu
+------
+
+Lorsque l'on arrête de travailler sur le ticket pour différentes raisons documentées dans un sous-statut :
+
+- Fait (tache réalisée à valider)
+- Dupliqué (un ticket identique existe déja. On indique l'id du ticket) 
+- NeSeraPasfait (on ne fait pas finalement alors que le ticket est valide - l'explication est mise en commentaire)
+- Rejeté (l'explication est mise en commentaire)
+- Gelé (mis de coté, en attente de décision ultérieure, etc.)
+
+.. note:: Ces sous-statuts sont proposés pour validation/action par le Chef de Projet.
+
+note : il n'y a pas de statut "à tester" car cela voudrait dire qu'un développeur fait quelque chose qu'il ne teste pas !? ça existe ça ? au point qu'il faut le gérer dans le système d'information ? Les tests devraient être mis à jour et gérés dans un plan de test, pas dans le ticket.
+Si besoin, le développement des tests peut être modélisé et géré dans un ticket à part car les tests font partie du produit (comme la documentation...)
+
+Fermé
+-----
+
+Le ticket est cloturé quand il a été validé par qui de droit (donc suite à la revue et à la validation des tests). Le sous-statut est bien sur conservé.
+
+.. note:: En cas de défaut constaté suite à un test, on a le choix : 
+   
+   - Ouverture de un ticket d'anomalie (la méthode préférée)
+   - On repasse le ticket en statut "En cours" avec un commentaire (plutôt hors campagne de test, pour les tickets Support, Defect par exemple)
+
+Les activités (type de travaux effectués)
+=========================================
+
+Les activités permettent de classer les travaux effectués et de quantifier le temps passé sur différentes tâches (en vue par exemple de calculer le CIR)
+
+- Management : au sens Réunion d’équipe et tout acte de gestion/information/coordination interne hors projet
+- Absence : période sans production d’aucune sorte
+- Avant-Vente : réunion client, POC, devis, etc. pour réaliser une vente
+- Marketing Produit : marketing produit amont (Road Map, spécifications fonctionnelles ) et aval (fiche produit, offre, sales materials, etc.) 
+- Veille Technologique : présence à des salons
+- Etude / Specifications : documents produits dans le cadre d’un projet client ou d’une nouvelle fonctionnalité d’un produit
+- Qualification : des produits développés avant livraison (y compris pour une version corrective)
+- Développement : développements (fonctionnalités) et tests unitaires
+- Intégration (Packaging, Mise en Prod) : Opérations post-qualification nécessaires pour générer une version d’un produit (y compris version corrective)
+- Formation : formation ou auto-formation **reçue** par un collaborateur (pas les formations client)
+- Assistance -> pourrait regrouper le support ?
+  - Support : au sens large, pour le client, hors activités déjà mentionnées.
+  - Training : Formation **donnée** ou activité autour d’une formation client (hors création de support de cours)-> Assistance 
+  
+  
+Gérer un projet
+---------------
+
+Création du projet
+******************
+
+- Ajout du projet dans l'usine
+- Création d'un dépôt de source contenant les branches master et develop
+- Ajout d'un fichier README.md au dépôt
+- Ajout d'un fichier build.sh et un fichier publish.sh au dépôt qui seront utilisés par l'intégration continue
+- Création d'un répertoire dans l'intégration continue qui contient les jobs qui permettent de construire les branches master et develop
+- Création du tableau de bord qui correspond au projet
+
+Gestion des branches
+********************
+
+Le modèle de branche utilisé dans l'usine respecte le `modèle de branche de Viencent Driessen <http://nvie.com/posts/a-successful-git-branching-model/>`_.
+
+Feature
+=======
+
+Nomenclature : `feat-idticket-description`
+
+Création d'une feature dans l'usine
+-----------------------------------
+
+- Prise en charge de la feature par un développeur (à l'origine un ticket dans le gestionnaire de tickets)
+- Passage au status "En cours"
+- Création de la branche
+- Création du job Jenkins
+
+Fermeture d'une feature dans l'usine
+------------------------------------
+
+- Merge de la branche vers la branche develop
+- Tag et suppression de la branche (il est ainsi possible de la récupérer si besoin)
+- Suppression du job dans Jenkins
+- Fermeture du ticket dans le gestionnaire de tickets (fait)
+
+Annulation d'une feature dans l'usine
+-------------------------------------
+
+- Tag et suppression de la branche (il est ainsi possible de la récupérer si besoin)
+- Suppression du job dans Jenkins
+- Fermeture du ticket (rejeté)
+
+Release
+=======
+
+Nomenclature : `release-version-description`
+
+Création d'une release dans l'usine
+-----------------------------------
+- Création de la branche release à partir d'une version existante du gestionnaire de tickets
+- Création de la branche à partir de la branche develop
+- Création du job Jenkins
+
+Validation / Fermeture d'une release
+------------------------------------
+- Vérification des tickets : s'il reste des tickets à traiter dans la version concernée, un message d'avertissement est affiché à l'utilisateur, il n'est pas possible de faire la release dans ce cas
+- Vérification de l'état du build avant merge
+- Merge
+- Tag et suppression de la branche
+- Suppression du job Jenkins
+- Fermeture de la version dans le gestionnaire de tickets
+- (Genéreration de la release note)
+
+Déploiement continu - création des VMs
+--------------------------------------
+
+Définitions	
+===========
+
+Un environnement est une combinaison de modules applicatifs à choisir parmi ceux mis à disposition dans l'usine. (ex : Java, Tomcat)
+
+Une cible est un environnement dont la configuration a été définie pour être appliqué sur une machine donnée (ex : Java 8 sur une Debian 8)
+
+Environnement
+-------------
+
+L'usine permet de créer des environnement qui sont spéficiés à l'aide d'un fichier JSON.
+(Une version ultérieure permettra de les configurer via une interface graphique)
+
+Cible
+-----
+
+L'usine permet de créer une cible à l'aide d'un fichier JSON.
+(Une version ultérieure permettra de les configurer via une interface graphique)
+
+Il est ensuite possible d'instancier une cible qui deviendra une VM directement dans l'usine.

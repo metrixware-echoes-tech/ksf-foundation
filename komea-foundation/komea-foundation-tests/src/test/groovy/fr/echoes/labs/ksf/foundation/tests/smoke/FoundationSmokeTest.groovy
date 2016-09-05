@@ -6,8 +6,11 @@ import fr.echoes.labs.ksf.foundation.tests.conf.SSLUtilities
 import fr.echoes.labs.ksf.foundation.tests.conf.SmokeTestSpecification;
 import groovy.util.logging.Slf4j;
 import spock.lang.Specification;
+import spock.lang.Ignore;
 
+// TODO: This test should be be reactivated when a deployed instance of Komea Foundation will be available
 @Slf4j
+@Ignore
 class FoundationSmokeTest extends SmokeTestSpecification {
 
 	def "Komea Foundation and all its modules should be working"() {

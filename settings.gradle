@@ -1,4 +1,4 @@
-rootProject.name = 'ksf-parent'
+rootProject.name = key
 
 // KSF-Commons
 
@@ -16,9 +16,9 @@ include "ksf-commons:ksf-backend-plugin-api"
 
 // Corolla
 
-include "corolla:corolla-backend-requirements"
-include "corolla:corolla-ui-widgets"
-include "corolla:corolla-ui-microservice"
+//include "corolla:corolla-backend-requirements"
+//include "corolla:corolla-ui-widgets"
+//include "corolla:corolla-ui-microservice"
 
 // Komea Foundation
 

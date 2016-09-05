@@ -1,0 +1,484 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Workflows &mdash; documentation Komea Software Factory 2.0.0</title>
+    
+    <link rel="stylesheet" href="_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootswatch-3.3.6/united/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="_static/my-styles.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '2.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/translations.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
+    <link rel="top" title="documentation Komea Software Factory 2.0.0" href="index.html" />
+    <link rel="next" title="S’authentifier" href="login.html" />
+    <link rel="prev" title="Gestion des utilisateurs et des droits" href="user_and_rights_management.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body role="document">
+
+  <div id="navbar" class="navbar navbar-inverse navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="index.html"><img src="_static/KSF-logo.png">
+          Komea Software Factory</a>
+        <span class="navbar-text navbar-version pull-left"><b>2.0</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="presentation.html">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="resume.html">Périmètre</a></li>
+<li class="toctree-l2"><a class="reference internal" href="definitions.html">Définitions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="domaines_fonctionnels.html">Domaines fonctionnels</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tools.html">Outils compatibles</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tools_redmine.html">Forge logicielle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tools_git.html">Gestion de sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tools_jenkins.html">Intégration continue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tools_puppet.html">Gestion de configurations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tools_foreman.html">Gestion de cycle de vie des machines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tools_komea_dashboard.html">Komea Dashboard</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tools_komea_foundation.html">Komea Foundation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tools_komea_activity.html">Komea Activity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tools_komea_checking.html">Komea Checking</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#architecture-technique">Architecture technique</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#architecture-fonctionnelle">Architecture fonctionnelle</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="user_and_rights_management.html">Gestion des utilisateurs et des droits</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Workflows</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#gestion-de-projet">Gestion de projet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#creation-du-projet">Création du projet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#gestion-des-branches">Gestion des branches</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="login.html">S&#8217;authentifier</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="login.html#specification-detaillee">Spécification détaillée</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="create_project.html">Créer un projet</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="create_project.html#creation">Création</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="manage_project.html">Gérer un projet</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="manage_project.html#creation-d-une-version">Création d&#8217;une version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manage_project.html#creation-d-une-fonctionnalite">Création d&#8217;une fonctionnalité</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manage_project.html#travail-sur-une-fonctionnalite">Travail sur une fonctionnalité</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manage_project.html#terminer-une-fonctionnalite">Terminer une fonctionnalité</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manage_project.html#creer-une-livraison-release">Créer une livraison (release)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manage_project.html#declencher-une-livraison-release">Déclencher une livraison (release)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="create_vm.html">Créer des modèles de VMs et les instancier</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="create_vm.html#technologies">Technologies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="create_vm.html#definitions">Définitions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="create_vm.html#creer-un-environnement">Créer un environnement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="create_vm.html#creer-une-cible">Créer une cible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="create_vm.html#instancier-une-vm">Instancier une VM</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="release_plan.html">Release Plan</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="release_plan.html#ksf-1-0-nov-2015-airbus">KSF 1.0    Nov 2015 (Airbus)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="release_plan.html#ksf-1-1-jan-2016-amabis-airbus">KSF 1.1    Jan 2016 (Amabis, Airbus)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="release_plan.html#ksf-1-2-avr-2016-interne">KSF 1.2   Avr 2016 (interne)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="release_plan.html#komea-cc">Komea-CC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="release_plan.html#komea-dashboard">Komea-Dashboard</a></li>
+<li class="toctree-l2"><a class="reference internal" href="release_plan.html#corolla">Corolla</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="hypotheses_et_contraintes.html">Hypotheses et contraintes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hypotheses_et_contraintes.html#hypotheses">Hypothèses</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hypotheses_et_contraintes.html#contraintes">Contraintes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="publications.html">Publications</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="publications.html#documents-produit">Documents Produit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="publications.html#sample-demos">Sample/ Démos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="publications.html#supports-de-formation">Supports de formation (?)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="publications.html#documentation-avant-vente">documentation avant-vente</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="concurrence.html">Concurrence</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="concurrence.html#offres-concurrentes">Offres concurrentes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="concurrence.html#kovair-omnibus">Kovair Omnibus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="concurrence.html#polarion-alm">Polarion ALM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="concurrence.html#tableau-comparatif">Tableau comparatif</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="annexes.html">Annexes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="references_documentaires.html">Références documentaires</a></li>
+<li class="toctree-l2"><a class="reference internal" href="annexes.html#open-services-for-lifecycle-collaboration">Open Services for Lifecycle Collaboration</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Workflows</a><ul>
+<li><a class="reference internal" href="#gestion-de-projet">Gestion de projet</a><ul>
+<li><a class="reference internal" href="#les-trackers-types-de-tickets">Les trackers (types de tickets)</a><ul>
+<li><a class="reference internal" href="#user-story-technical-story">User Story / Technical Story</a></li>
+<li><a class="reference internal" href="#evolution">Evolution</a></li>
+<li><a class="reference internal" href="#defaut">Defaut</a></li>
+<li><a class="reference internal" href="#tache">Tâche</a></li>
+<li><a class="reference internal" href="#support">Support</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#les-statuts-etat-d-un-ticket">Les statuts (état d&#8217;un ticket)</a><ul>
+<li><a class="reference internal" href="#nouveau">Nouveau</a></li>
+<li><a class="reference internal" href="#en-cours">En cours</a></li>
+<li><a class="reference internal" href="#resolu">Résolu</a></li>
+<li><a class="reference internal" href="#ferme">Fermé</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#les-activites-type-de-travaux-effectues">Les activités (type de travaux effectués)</a><ul>
+<li><a class="reference internal" href="#gerer-un-projet">Gérer un projet</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#creation-du-projet">Création du projet</a></li>
+<li><a class="reference internal" href="#gestion-des-branches">Gestion des branches</a><ul>
+<li><a class="reference internal" href="#feature">Feature</a><ul>
+<li><a class="reference internal" href="#creation-d-une-feature-dans-l-usine">Création d&#8217;une feature dans l&#8217;usine</a></li>
+<li><a class="reference internal" href="#fermeture-d-une-feature-dans-l-usine">Fermeture d&#8217;une feature dans l&#8217;usine</a></li>
+<li><a class="reference internal" href="#annulation-d-une-feature-dans-l-usine">Annulation d&#8217;une feature dans l&#8217;usine</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#release">Release</a><ul>
+<li><a class="reference internal" href="#creation-d-une-release-dans-l-usine">Création d&#8217;une release dans l&#8217;usine</a></li>
+<li><a class="reference internal" href="#validation-fermeture-d-une-release">Validation / Fermeture d&#8217;une release</a></li>
+<li><a class="reference internal" href="#deploiement-continu-creation-des-vms">Déploiement continu - création des VMs</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#definitions">Définitions</a><ul>
+<li><a class="reference internal" href="#environnement">Environnement</a></li>
+<li><a class="reference internal" href="#cible">Cible</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="user_and_rights_management.html" title="Previous Chapter: Gestion des utilisateurs et des droits"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Gestion des u...</span>
+    </a>
+  </li>
+  <li>
+    <a href="login.html" title="Next Chapter: S’authentifier"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">S’authentifier &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="workflows">
+<span id="id1"></span><h1>Workflows<a class="headerlink" href="#workflows" title="Lien permanent vers ce titre">¶</a></h1>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Dans cette page vous trouverez la liste complète des cas d&#8217;utilisation apportés par l&#8217;usine logicielle. Cette liste ne contient pas les cas d&#8217;utilisation des produits embarqués dans l&#8217;usine. Pour ceux-ci, se référer à leurs documentations respectives.</p>
+</div>
+<div class="section" id="gestion-de-projet">
+<h2>Gestion de projet<a class="headerlink" href="#gestion-de-projet" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Le workflow de gestion de projet de l&#8217;usine est défini à l&#8217;aide des éléments suivants :</p>
+<div class="section" id="les-trackers-types-de-tickets">
+<h3>Les trackers (types de tickets)<a class="headerlink" href="#les-trackers-types-de-tickets" title="Lien permanent vers ce titre">¶</a></h3>
+<div class="section" id="user-story-technical-story">
+<h4>User Story / Technical Story<a class="headerlink" href="#user-story-technical-story" title="Lien permanent vers ce titre">¶</a></h4>
+<p>Il s&#8217;agit de fonctionnalité telles que vues par les Clients pour les User Story, purement techniques pour les Technical Story. Elles sont crées par le PO / le responsable technique du projet.</p>
+</div>
+<div class="section" id="evolution">
+<h4>Evolution<a class="headerlink" href="#evolution" title="Lien permanent vers ce titre">¶</a></h4>
+<p>Il s&#8217;agit d&#8217;une tache de développement pour ajouter/modifier une/des fonctionnalités au produit.</p>
+</div>
+<div class="section" id="defaut">
+<h4>Defaut<a class="headerlink" href="#defaut" title="Lien permanent vers ce titre">¶</a></h4>
+<p>Il s&#8217;agit d&#8217;un écart constaté entre le comportement tel que décrit dans les specs/la documentation et le comportement réel.</p>
+</div>
+<div class="section" id="tache">
+<h4>Tâche<a class="headerlink" href="#tache" title="Lien permanent vers ce titre">¶</a></h4>
+<p>On identifie ici les taches nécessaires aux développement du produit. La documentation et les tests sont à considérer comme des tâches.</p>
+</div>
+<div class="section" id="support">
+<h4>Support<a class="headerlink" href="#support" title="Lien permanent vers ce titre">¶</a></h4>
+<p>On identifie ici les taches de support hors développement du produit et hors défaut produit.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Le rattachement aux User Story / Technical Story et le découpage en evolution, tâches, etc. est de la responsabilité du Chef de Projet.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Il est possible de gérer des arborescences de tickets : par exemple, rattacher les évolutions et anomalies à une User Story, découper une évolution en plusieurs sous-évolutions et/ou sous-taches, etc.</p>
+</div>
+</div>
+</div>
+<div class="section" id="les-statuts-etat-d-un-ticket">
+<h3>Les statuts (état d&#8217;un ticket)<a class="headerlink" href="#les-statuts-etat-d-un-ticket" title="Lien permanent vers ce titre">¶</a></h3>
+<div class="section" id="nouveau">
+<h4>Nouveau<a class="headerlink" href="#nouveau" title="Lien permanent vers ce titre">¶</a></h4>
+<p>Statut lors de la création du ticket.</p>
+</div>
+<div class="section" id="en-cours">
+<h4>En cours<a class="headerlink" href="#en-cours" title="Lien permanent vers ce titre">¶</a></h4>
+<p>Lorsque l&#8217;on commence à travailler sur le ticket.
+Demande d&#8217;information : l&#8217;assigné(e) peut indiquer dans le champ &#8220;Besoin d&#8217;info&#8221; (NeedInfo) une autre personne et lui demander un complément d&#8217;info à travers une note dans le ticket. Il peut continuer à travailler sur le ticket en parallèle. La personne indiquée doit répondre à la question et se retirer de la liste &#8220;Besoin d&#8217;info&#8221;.
+Si la demande d&#8217;information se prolonge et qu&#8217;on ne travaille plus sur le sujet, on passe en Résolu/Gelé pour que le problème soit géré par le Chef de Projet.</p>
+</div>
+<div class="section" id="resolu">
+<h4>Résolu<a class="headerlink" href="#resolu" title="Lien permanent vers ce titre">¶</a></h4>
+<p>Lorsque l&#8217;on arrête de travailler sur le ticket pour différentes raisons documentées dans un sous-statut :</p>
+<ul class="simple">
+<li>Fait (tache réalisée à valider)</li>
+<li>Dupliqué (un ticket identique existe déja. On indique l&#8217;id du ticket)</li>
+<li>NeSeraPasfait (on ne fait pas finalement alors que le ticket est valide - l&#8217;explication est mise en commentaire)</li>
+<li>Rejeté (l&#8217;explication est mise en commentaire)</li>
+<li>Gelé (mis de coté, en attente de décision ultérieure, etc.)</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Ces sous-statuts sont proposés pour validation/action par le Chef de Projet.</p>
+</div>
+<p>note : il n&#8217;y a pas de statut &#8220;à tester&#8221; car cela voudrait dire qu&#8217;un développeur fait quelque chose qu&#8217;il ne teste pas !? ça existe ça ? au point qu&#8217;il faut le gérer dans le système d&#8217;information ? Les tests devraient être mis à jour et gérés dans un plan de test, pas dans le ticket.
+Si besoin, le développement des tests peut être modélisé et géré dans un ticket à part car les tests font partie du produit (comme la documentation...)</p>
+</div>
+<div class="section" id="ferme">
+<h4>Fermé<a class="headerlink" href="#ferme" title="Lien permanent vers ce titre">¶</a></h4>
+<p>Le ticket est cloturé quand il a été validé par qui de droit (donc suite à la revue et à la validation des tests). Le sous-statut est bien sur conservé.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>En cas de défaut constaté suite à un test, on a le choix :</p>
+<ul class="last simple">
+<li>Ouverture de un ticket d&#8217;anomalie (la méthode préférée)</li>
+<li>On repasse le ticket en statut &#8220;En cours&#8221; avec un commentaire (plutôt hors campagne de test, pour les tickets Support, Defect par exemple)</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="les-activites-type-de-travaux-effectues">
+<h3>Les activités (type de travaux effectués)<a class="headerlink" href="#les-activites-type-de-travaux-effectues" title="Lien permanent vers ce titre">¶</a></h3>
+<p>Les activités permettent de classer les travaux effectués et de quantifier le temps passé sur différentes tâches (en vue par exemple de calculer le CIR)</p>
+<ul class="simple">
+<li>Management : au sens Réunion d’équipe et tout acte de gestion/information/coordination interne hors projet</li>
+<li>Absence : période sans production d’aucune sorte</li>
+<li>Avant-Vente : réunion client, POC, devis, etc. pour réaliser une vente</li>
+<li>Marketing Produit : marketing produit amont (Road Map, spécifications fonctionnelles ) et aval (fiche produit, offre, sales materials, etc.)</li>
+<li>Veille Technologique : présence à des salons</li>
+<li>Etude / Specifications : documents produits dans le cadre d’un projet client ou d’une nouvelle fonctionnalité d’un produit</li>
+<li>Qualification : des produits développés avant livraison (y compris pour une version corrective)</li>
+<li>Développement : développements (fonctionnalités) et tests unitaires</li>
+<li>Intégration (Packaging, Mise en Prod) : Opérations post-qualification nécessaires pour générer une version d’un produit (y compris version corrective)</li>
+<li>Formation : formation ou auto-formation <strong>reçue</strong> par un collaborateur (pas les formations client)</li>
+<li>Assistance -&gt; pourrait regrouper le support ?
+- Support : au sens large, pour le client, hors activités déjà mentionnées.
+- Training : Formation <strong>donnée</strong> ou activité autour d’une formation client (hors création de support de cours)-&gt; Assistance</li>
+</ul>
+<div class="section" id="gerer-un-projet">
+<h4>Gérer un projet<a class="headerlink" href="#gerer-un-projet" title="Lien permanent vers ce titre">¶</a></h4>
+</div>
+</div>
+</div>
+<div class="section" id="creation-du-projet">
+<h2>Création du projet<a class="headerlink" href="#creation-du-projet" title="Lien permanent vers ce titre">¶</a></h2>
+<ul class="simple">
+<li>Ajout du projet dans l&#8217;usine</li>
+<li>Création d&#8217;un dépôt de source contenant les branches master et develop</li>
+<li>Ajout d&#8217;un fichier README.md au dépôt</li>
+<li>Ajout d&#8217;un fichier build.sh et un fichier publish.sh au dépôt qui seront utilisés par l&#8217;intégration continue</li>
+<li>Création d&#8217;un répertoire dans l&#8217;intégration continue qui contient les jobs qui permettent de construire les branches master et develop</li>
+<li>Création du tableau de bord qui correspond au projet</li>
+</ul>
+</div>
+<div class="section" id="gestion-des-branches">
+<h2>Gestion des branches<a class="headerlink" href="#gestion-des-branches" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Le modèle de branche utilisé dans l&#8217;usine respecte le <a class="reference external" href="http://nvie.com/posts/a-successful-git-branching-model/">modèle de branche de Viencent Driessen</a>.</p>
+<div class="section" id="feature">
+<h3>Feature<a class="headerlink" href="#feature" title="Lien permanent vers ce titre">¶</a></h3>
+<p>Nomenclature : <cite>feat-idticket-description</cite></p>
+<div class="section" id="creation-d-une-feature-dans-l-usine">
+<h4>Création d&#8217;une feature dans l&#8217;usine<a class="headerlink" href="#creation-d-une-feature-dans-l-usine" title="Lien permanent vers ce titre">¶</a></h4>
+<ul class="simple">
+<li>Prise en charge de la feature par un développeur (à l&#8217;origine un ticket dans le gestionnaire de tickets)</li>
+<li>Passage au status &#8220;En cours&#8221;</li>
+<li>Création de la branche</li>
+<li>Création du job Jenkins</li>
+</ul>
+</div>
+<div class="section" id="fermeture-d-une-feature-dans-l-usine">
+<h4>Fermeture d&#8217;une feature dans l&#8217;usine<a class="headerlink" href="#fermeture-d-une-feature-dans-l-usine" title="Lien permanent vers ce titre">¶</a></h4>
+<ul class="simple">
+<li>Merge de la branche vers la branche develop</li>
+<li>Tag et suppression de la branche (il est ainsi possible de la récupérer si besoin)</li>
+<li>Suppression du job dans Jenkins</li>
+<li>Fermeture du ticket dans le gestionnaire de tickets (fait)</li>
+</ul>
+</div>
+<div class="section" id="annulation-d-une-feature-dans-l-usine">
+<h4>Annulation d&#8217;une feature dans l&#8217;usine<a class="headerlink" href="#annulation-d-une-feature-dans-l-usine" title="Lien permanent vers ce titre">¶</a></h4>
+<ul class="simple">
+<li>Tag et suppression de la branche (il est ainsi possible de la récupérer si besoin)</li>
+<li>Suppression du job dans Jenkins</li>
+<li>Fermeture du ticket (rejeté)</li>
+</ul>
+</div>
+</div>
+<div class="section" id="release">
+<h3>Release<a class="headerlink" href="#release" title="Lien permanent vers ce titre">¶</a></h3>
+<p>Nomenclature : <cite>release-version-description</cite></p>
+<div class="section" id="creation-d-une-release-dans-l-usine">
+<h4>Création d&#8217;une release dans l&#8217;usine<a class="headerlink" href="#creation-d-une-release-dans-l-usine" title="Lien permanent vers ce titre">¶</a></h4>
+<ul class="simple">
+<li>Création de la branche release à partir d&#8217;une version existante du gestionnaire de tickets</li>
+<li>Création de la branche à partir de la branche develop</li>
+<li>Création du job Jenkins</li>
+</ul>
+</div>
+<div class="section" id="validation-fermeture-d-une-release">
+<h4>Validation / Fermeture d&#8217;une release<a class="headerlink" href="#validation-fermeture-d-une-release" title="Lien permanent vers ce titre">¶</a></h4>
+<ul class="simple">
+<li>Vérification des tickets : s&#8217;il reste des tickets à traiter dans la version concernée, un message d&#8217;avertissement est affiché à l&#8217;utilisateur, il n&#8217;est pas possible de faire la release dans ce cas</li>
+<li>Vérification de l&#8217;état du build avant merge</li>
+<li>Merge</li>
+<li>Tag et suppression de la branche</li>
+<li>Suppression du job Jenkins</li>
+<li>Fermeture de la version dans le gestionnaire de tickets</li>
+<li>(Genéreration de la release note)</li>
+</ul>
+</div>
+<div class="section" id="deploiement-continu-creation-des-vms">
+<h4>Déploiement continu - création des VMs<a class="headerlink" href="#deploiement-continu-creation-des-vms" title="Lien permanent vers ce titre">¶</a></h4>
+</div>
+</div>
+<div class="section" id="definitions">
+<h3>Définitions<a class="headerlink" href="#definitions" title="Lien permanent vers ce titre">¶</a></h3>
+<p>Un environnement est une combinaison de modules applicatifs à choisir parmi ceux mis à disposition dans l&#8217;usine. (ex : Java, Tomcat)</p>
+<p>Une cible est un environnement dont la configuration a été définie pour être appliqué sur une machine donnée (ex : Java 8 sur une Debian 8)</p>
+<div class="section" id="environnement">
+<h4>Environnement<a class="headerlink" href="#environnement" title="Lien permanent vers ce titre">¶</a></h4>
+<p>L&#8217;usine permet de créer des environnement qui sont spéficiés à l&#8217;aide d&#8217;un fichier JSON.
+(Une version ultérieure permettra de les configurer via une interface graphique)</p>
+</div>
+<div class="section" id="cible">
+<h4>Cible<a class="headerlink" href="#cible" title="Lien permanent vers ce titre">¶</a></h4>
+<p>L&#8217;usine permet de créer une cible à l&#8217;aide d&#8217;un fichier JSON.
+(Une version ultérieure permettra de les configurer via une interface graphique)</p>
+<p>Il est ensuite possible d&#8217;instancier une cible qui deviendra une VM directement dans l&#8217;usine.</p>
+</div>
+</div>
+</div>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+        <br/>
+        
+<div id="sourcelink">
+  <a href="_sources/workflows.txt"
+     rel="nofollow">Source</a>
+</div>
+      
+    </p>
+    <p>
+        &copy; Copyright 2015-16, Echoes.<br/>
+      Créé avec <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.3.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

@@ -23,13 +23,12 @@ public class UnusedIpGetter {
 		".*\"(([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
 		"([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
 		"([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
-		"([01]?\\d\\d?|2[0-4]\\d|25[0-5])).*";
+		"([01]?\\d\\d?|2[0-4]\\d|25[0-5]))\".*";
 
 	public UnusedIpGetter(String scriptPath) {
-		LOGGER.debug("[foreman] unused IP script : '{}'", scriptPath);
+		LOGGER.debug("[foreman] unused IP script path : '{}'", scriptPath);
 		this.scriptPath = scriptPath;
 	}
-
 
 
 	public String get() throws Exception {
@@ -44,6 +43,7 @@ public class UnusedIpGetter {
 		try {
 			final IProcessLaunchResult process = processLauncher.launchSync(true);
 			final String scriptOutput = StringUtils.join(process.getInputStreamLines(), '\n');
+			LOGGER.debug("[foreman] unused IP script output : '{}'", scriptOutput);
 			if (process.getExitValue() != 0) {
 				LOGGER.error(scriptOutput);
 				return StringUtils.EMPTY;
@@ -56,18 +56,23 @@ public class UnusedIpGetter {
 
 	}
 
-	private String extractIp(String scriptOutput) {
+	/**
+	 * @param scriptOutput the text containing an IP to extract.
+	 * @return the extracted IP or an empty String if the text doesn't contain an IP or if the input is {@code null}.
+	 */
+	protected String extractIp(String scriptOutput) {
+		if (scriptOutput == null) {
+			return StringUtils.EMPTY;
+		}
 		final Pattern ipPattern = Pattern.compile(IPADDRESS_PATTERN) ;
 		final Matcher m = ipPattern.matcher(scriptOutput) ;
 		final String ip;
 		if (m.matches()) {
 			ip = m.group(1);
 		} else {
-			ip = "";
+			ip = StringUtils.EMPTY;
 			LOGGER.error("IP address not found in " + scriptOutput);
 		}
 		return ip;
 	}
-
-
 }

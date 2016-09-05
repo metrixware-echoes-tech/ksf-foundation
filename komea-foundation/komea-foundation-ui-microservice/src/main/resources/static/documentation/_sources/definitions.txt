@@ -1,0 +1,56 @@
+Définitions
+===========
+
+.. glossary::
+
+   Usine logicielle
+      (source http://www.opcoach.com/usine-logicielle/) *Une usine logicielle est un ensemble d’outils et de méthode(s) permettant aux développeurs et architectes logiciels de mener à bien leur mission*, c'est-à-dire produire rapidement des logiciels performants, fiables et répondant aux besoins de leurs clients.
+      
+      Elle joue un rôle essentiel dans l’industrialisation des développements : c’est la clé de voûte de l’intégration, de la livraison et du déploiement en continu en vue de l’amélioration continue.
+      
+      .. image:: ../images/UsineLogicielle.png
+      
+      d'apres http://www.scub-foundation.org/accueil/vue-d-ensemble/qu-est-ce-qu-une-usine-logicielle/:
+      Une usine logicielle est un ensemble d’outils pré-configurés, de frameworks, de conventions, de processus, de documentations et de modèles de projets qui structurent les développeurs et leurs développements.
+      
+   ALM (Application LifeCycle Management)
+      L'ALM est l'ensemble des méthodes et outils permettant de gérer une application informatique depuis sa conception jusqu'à sa fin de vie.
+      
+      (source wikipedia) "Application lifecycle management (ALM) is the product lifecycle management (governance, development, and maintenance) of computer programs. It encompasses requirements management, software architecture, computer programming, software testing, software maintenance, change management, continuous integration, project management, and release management."
+      
+      	  	  
+   L’Intégration Continue
+      L’intégration continue consiste à assurer automatiquement la bonne compilation du code, le jeu des tests unitaires, l’empaquetage, le déploiement et l’exécution des tests du système dans un environnement d’intégration. Cet environnement étant indépendant des configurations spécifiques des postes de développeurs, le respect des règles est garanti.
+      Le paquet produit à l’issue de ce processus sera utilisé pour le déploiement sur l’ensemble des environnements, y compris la production.
+      *L’intégration continue fiabilise les activités de développement.*
+      
+   La Livraison Continue
+      La livraison continue utilise les mécanismes de l’intégration continue mais avec une contrainte supplémentaire. Elle requiert que le paquet produit par le processus d’intégration puisse être à tout moment déployé rapidement et en toute sécurité sur la production. Cela comprend le processus automatique de mise à jour correspondante de l’environnement.
+      Schématiquement, il ne reste plus qu’à appuyer sur un bouton pour mettre en production.
+      *La livraison continue fiabilise les activités d’intégration.*
+      
+   Le Déploiement Continu
+      Le déploiement continu est l’étape suivant la livraison continue. Chaque changement passant les tests automatisés est automatiquement déployé en production.
+      *Le déploiement continu devrait être l'objectif de la plupart des entreprises qui ne sont pas limitées par des exigences réglementaires.*
+
+   Développeur
+      C’est un spécialiste de la programmation. Il conçoit et développe des applications informatiques. Il s’occupe de la conception et de l’écriture d’un programme, en partie ou en totalité. 
+      
+   Intégrateur
+      C’est un spécialiste des outils informatiques. Sa mission consiste à assembler différents composants logiciels en fonction d’une l’architecture préalablement retenue.
+      
+   Responsable produit
+      C’est lui qui gère la roadmap et les spécifications fonctionnelles de son produit. Il est responsable de la qualité, du niveau fonctionnel, du coût et des dates de disponibilité du produit.
+      
+   Support
+       Ce sont les personnes chargées de répondre aux demandes des utilisateurs concernant le produit.
+       
+   Utilisateurs
+       Ce sont les personnes qui se servent du produit, que ce soit en interne ou en externe.
+       
+   Maitrise d'Ouvrage
+       Ce sont les responsables fonctionnels des utilisateurs et du process de l'entreprise. Ce sont les clients payeurs et décideurs (et non les utilisateurs généralement)
+
+    
+
+   
