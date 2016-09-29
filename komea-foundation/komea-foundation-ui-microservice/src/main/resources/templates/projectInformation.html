@@ -57,11 +57,11 @@
                                     </div>
 
                                     <div th:if="${feature.getStatus() == T(fr.echoes.labs.ksf.cc.extensions.services.project.TicketStatus).CREATED}" class="pull-right">
-                                        <button class="fa fa-info featureInfoButton" type="button" th:attr="data-id=${feature.getId()}, data-subject=${feature.getSubject()}, data-gitbranch=${@projectInformationService.getGitFeatureBranchName(feature.getId(), feature.getSubject())}, data-jenkinsjob=${@projectInformationService.getFeatureJobName(projectData.project.name, feature.getId(), feature.getSubject())}"></button>
+                                        <button class="fa fa-info featureInfoButton" type="button"  style="float:left;" th:attr="data-id=${feature.getId()}, data-subject=${feature.getSubject()}, data-gitbranch=${@projectInformationService.getGitFeatureBranchName(feature.getId(), feature.getSubject())}, data-jenkinsjob=${@projectInformationService.getFeatureJobName(projectData.project.name, feature.getId(), feature.getSubject())}"></button>
                                         <form th:attr="action=@{/ui/projects/features/finish}"
-
                                               class="form-horizontal" method="post"
-                                              role="form" data-toggle="validator">
+                                              role="form" data-toggle="validator"
+                                               style="float:left;margin:0 5px;" >
 
                                             <input name="projectKey" type="hidden" th:value="${projectData.project.key}" />
                                             <input name="featureId" type="hidden" th:value="${feature.getId()}" />
@@ -69,9 +69,9 @@
                                             <button onclick="return confirm(finishFeatureMessage)" class="fa fa-check" type="submit" style="color:Green" data-toggle="tooltip" th:title="#{foundation.projects.overview.widget.overview.project.features.finishFeature} + ' #' + ${feature.getId()}"></button>
                                         </form>
                                         <form th:attr="action=@{/ui/projects/features/cancel}"
-
                                               class="form-horizontal" method="post"
-                                              role="form" data-toggle="validator">
+                                              role="form" data-toggle="validator"
+                                              style="float:left;" >
 
                                             <input name="projectKey" type="hidden" th:value="${projectData.project.key}" />
                                             <input name="featureId" type="hidden" th:value="${feature.getId()}" />

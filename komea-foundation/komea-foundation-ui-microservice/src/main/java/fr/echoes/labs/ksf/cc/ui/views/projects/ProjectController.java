@@ -225,26 +225,11 @@ public class ProjectController {
     public ModelAndView cancelFeature(@RequestParam("projectKey") final String projectKey, @RequestParam("featureId") final String featureId, @RequestParam("featureSubject") final String featureSubject, RedirectAttributes redirectAttributes) {
 
         final Project project = this.projectDao.findByKey(projectKey);
-
         if (project == null) {
             throw new ProjectNotFoundException();
         }
 
-        final List<IValidatorResult> validateResults = new ArrayList<IValidatorResult>();
-        if (this.validators != null) {
-            for (final IValidator validator : this.validators) {
-                final List<IValidatorResult> result = validator.validateFeature(project.getName(), featureId, featureSubject);
-                if (result != null) {
-                    validateResults.addAll(result);
-                }
-            }
-        }
-
-        if (validateResults.isEmpty()) {
-            this.gate.dispatch(new CancelFeatureCommand(project, featureId, featureSubject));
-        } else {
-            redirectAttributes.addFlashAttribute("validationErrors", validateResults);
-        }
+        this.gate.dispatch(new CancelFeatureCommand(project, featureId, featureSubject));
 
         return new ModelAndView("redirect:/ui/projects/" + project.getKey());
     }

@@ -183,7 +183,7 @@ public class JenkinsService implements IJenkinsService {
 
             final List<Build> builds;
             if (useFolder) {
-                builds = getFolderBuilds(jenkins, getFolderJobName(projectName), builsdPerJobLimit);
+                builds = getFolderBuilds(jenkins, projectName, builsdPerJobLimit);
             } else {
                 builds = new ArrayList<Build>();
                 builds.addAll(getJobBuilds(jenkins, projectName, getJobName(projectName, DEVELOP), useFolder, builsdPerJobLimit));
