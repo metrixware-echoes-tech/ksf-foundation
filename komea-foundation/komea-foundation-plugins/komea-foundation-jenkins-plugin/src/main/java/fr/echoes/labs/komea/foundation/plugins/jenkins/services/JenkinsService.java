@@ -101,10 +101,10 @@ public class JenkinsService implements IJenkinsService {
             final JenkinsServer jenkins = createJenkinsClient();
             final String jobName = getFolderJobName(projectName);
             final String jobXml = jenkins.getJobXml(jobName);
-            final int index = jobXml.indexOf('>');
-            final String jobNewXml = jobXml.substring(0, index + 1)
+            final int index = jobXml.indexOf("<properties");
+            final String jobNewXml = jobXml.substring(0, index)
                     + "<displayName>" + projectName + "</displayName>"
-                    + jobXml.substring(index + 1);
+                    + jobXml.substring(index);
             jenkins.updateJob(jobName, jobNewXml);
         } catch (final Exception e) {
             throw new JenkinsExtensionException("Failed to update Jenkins job", e);
