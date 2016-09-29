@@ -143,4 +143,12 @@ public class NexusProjectLifeCycleExtension implements IProjectLifecycleExtensio
 
     }
 
+    @Override
+    public NotifyResult notifyCanceledFeature(ProjectDto projectDto, String featureId,
+            String featureSubject) {
+        // Do nothing
+        return NotifyResult.CONTINUE;
+
+    }
+
 }

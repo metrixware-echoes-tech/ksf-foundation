@@ -9,22 +9,26 @@ import fr.echoes.labs.ksf.extensions.api.IExtension;
  * @author sleroy
  *
  */
-public interface IProjectLifecycleExtension extends IExtension{
-	NotifyResult notifyCreatedProject(ProjectDto project);
+public interface IProjectLifecycleExtension extends IExtension {
 
-	NotifyResult notifyDeletedProject(ProjectDto project);
+    NotifyResult notifyCreatedProject(ProjectDto project);
 
-	NotifyResult notifyDuplicatedProject(ProjectDto project);
+    NotifyResult notifyDeletedProject(ProjectDto project);
 
-	NotifyResult notifyUpdatedProject(ProjectDto project);
+    NotifyResult notifyDuplicatedProject(ProjectDto project);
 
-	NotifyResult notifyCreatedRelease(ProjectDto project, String releaseName, String username);
+    NotifyResult notifyUpdatedProject(ProjectDto project);
 
-	NotifyResult notifyFinishedRelease(ProjectDto project, String releaseName);
+    NotifyResult notifyCreatedRelease(ProjectDto project, String releaseName, String username);
 
-	NotifyResult notifyCreatedFeature(ProjectDto project, String featureId,
-			String featureSubject, String username);
+    NotifyResult notifyFinishedRelease(ProjectDto project, String releaseName);
 
-	NotifyResult notifyFinishedFeature(ProjectDto projectDto, String featureId,
-			String featureSubject);
+    NotifyResult notifyCreatedFeature(ProjectDto project, String featureId,
+            String featureSubject, String username);
+
+    NotifyResult notifyFinishedFeature(ProjectDto projectDto, String featureId,
+            String featureSubject);
+
+    NotifyResult notifyCanceledFeature(ProjectDto projectDto, String featureId,
+            String featureSubject);
 }

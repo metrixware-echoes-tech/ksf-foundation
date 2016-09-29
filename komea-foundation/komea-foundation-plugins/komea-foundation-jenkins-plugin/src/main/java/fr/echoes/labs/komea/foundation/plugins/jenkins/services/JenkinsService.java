@@ -14,7 +14,6 @@ import com.offbytwo.jenkins.model.FolderJob;
 import com.offbytwo.jenkins.model.Job;
 import com.offbytwo.jenkins.model.JobWithDetails;
 import fr.echoes.labs.komea.foundation.plugins.jenkins.JenkinsExtensionException;
-import fr.echoes.labs.komea.foundation.plugins.jenkins.utils.DashboardJobNameFormatter;
 import fr.echoes.labs.komea.foundation.plugins.jenkins.utils.JenkinsUtils;
 import fr.echoes.labs.ksf.cc.extensions.gui.ProjectExtensionConstants;
 import fr.echoes.labs.ksf.cc.extensions.services.project.ProjectUtils;
@@ -60,19 +59,18 @@ public class JenkinsService implements IJenkinsService {
             final String masterJobName = getJobName(projectName, MASTER);
             final String developJobName = getJobName(projectName, DEVELOP);
 
+            final List<String> jobs = Lists.newArrayList();
+
             if (useFolder()) {
                 createFolder(new JenkinsHttpClient(getJenkinsUri()), projectName);
                 updateFolderDisplayName(projectName);
+                jobs.add(getFolderJobName(projectName));
             }
             createJob(projectName, masterJobName, MASTER);
             createJob(projectName, developJobName, DEVELOP);
 
-            final DashboardJobNameFormatter dashboardNameFormatter = new DashboardJobNameFormatter();
-            final List<String> jobs = Lists.newArrayList(
-                    projectName,
-                    dashboardNameFormatter.format(masterJobName, projectName),
-                    dashboardNameFormatter.format(developJobName, projectName)
-            );
+            jobs.add(masterJobName);
+            jobs.add(developJobName);
             projectDTO.getOtherAttributes().put(ProjectExtensionConstants.CI_JOBS_KEY, jobs);
 
         } catch (final Exception e) {
@@ -347,6 +345,7 @@ public class JenkinsService implements IJenkinsService {
     public String getJobId(String projectName) throws JenkinsExtensionException {
 
         Objects.requireNonNull(projectName);
+        final String jobName = getFolderJobName(projectName);
 
         try {
 
@@ -354,7 +353,7 @@ public class JenkinsService implements IJenkinsService {
             final Map<String, Job> jobs = jenkinsClient.getJobs();
             for (final Map.Entry<String, Job> entry : jobs.entrySet()) {
                 final Job job = entry.getValue();
-                if (projectName.equals(job.getName())) {
+                if (jobName.equals(job.getName())) {
                     return entry.getKey();
                 }
             }

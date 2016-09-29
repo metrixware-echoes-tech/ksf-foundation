@@ -1,7 +1,6 @@
 package fr.echoes.labs.ksf.cc.plugins.redmine.services;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +35,9 @@ public class RedmineConfigurationService {
     @Value("${ksf.redmine.featureStatusClosedId}")
     private int featureStatusClosedId;
 
+    @Value("${ksf.redmine.featureStatusRejectedId}")
+    private int featureStatusRejectedId;
+
     @Value("${ksf.redmine.releaseTicketMessagePattern}")
     private String releaseTicketMessagePattern;
 
@@ -51,95 +53,103 @@ public class RedmineConfigurationService {
     @Value("${ksf.redmine.taskTrackerId}")
     private Integer taskTrackerId;
 
-	public String getUrl() {
+    public String getUrl() {
         if ('/' == this.url.charAt(this.url.length() - 1)) {
             this.url = this.url.substring(0, this.url.length() - 1);
         }
         return this.url;
-	}
+    }
 
-	/**
-	 * @return the appiAccessKey
-	 */
-	public String getApiAccessKey() {
-		return this.appiAccessKey;
-	}
+    /**
+     * @return the appiAccessKey
+     */
+    public String getApiAccessKey() {
+        return this.appiAccessKey;
+    }
 
-	/**
-	 * @return the resultItemsLimit
-	 */
-	public int getResultItemsLimit() {
-		return this.resultItemsLimit;
-	}
+    /**
+     * @return the resultItemsLimit
+     */
+    public int getResultItemsLimit() {
+        return this.resultItemsLimit;
+    }
 
-	/**
-	 * @return the featureTrackerId
-	 */
-	public int getFeatureTrackerId() {
-		return this.featureTrackerId;
-	}
+    /**
+     * @return the featureTrackerId
+     */
+    public int getFeatureTrackerId() {
+        return this.featureTrackerId;
+    }
 
-	/**
-	 * @return the featureStatusClosedId
-	 */
-	public int getFeatureStatusClosedId() {
-		return this.featureStatusClosedId;
-	}
+    /**
+     * @return the featureStatusClosedId
+     */
+    public int getFeatureStatusClosedId() {
+        return this.featureStatusClosedId;
+    }
 
-	/**
-	 * @return the featureStatusNewId
-	 */
-	public int getFeatureStatusNewId() {
-		return this.featureStatusNewId;
-	}
+    /**
+     * @return the featureStatusRejectedId
+     */
+    public int getFeatureStatusRejectedId() {
+        return this.featureStatusRejectedId;
+    }
 
-	/**
-	 * @return the featureStatusAssignedId
-	 */
-	public int getFeatureStatusAssignedId() {
-		return this.featureStatusAssignedId;
-	}
+    /**
+     * @return the featureStatusNewId
+     */
+    public int getFeatureStatusNewId() {
+        return this.featureStatusNewId;
+    }
 
-	/**
-	 * @return the releaseTicketMessagePattern
-	 */
-	public String getReleaseTicketMessagePattern() {
-		return this.releaseTicketMessagePattern;
-	}
+    /**
+     * @return the featureStatusAssignedId
+     */
+    public int getFeatureStatusAssignedId() {
+        return this.featureStatusAssignedId;
+    }
 
-	/**
-	 * @return the adminUserName
-	 */
-	public String getAdminUserName() {
-		return this.adminUserName;
-	}
+    /**
+     * @return the releaseTicketMessagePattern
+     */
+    public String getReleaseTicketMessagePattern() {
+        return this.releaseTicketMessagePattern;
+    }
 
-	/**
-	 * @return the bugTrackerId
-	 */
-	public int getBugTrackerId() {
-		return this.bugTrackerId;
-	}
+    /**
+     * @return the adminUserName
+     */
+    public String getAdminUserName() {
+        return this.adminUserName;
+    }
 
-	/**
-	 * @return the featureIds
-	 */
-	public List<Integer> getFeatureIds() {
-		return this.featureIds;
-	}
+    /**
+     * @return the bugTrackerId
+     */
+    public int getBugTrackerId() {
+        return this.bugTrackerId;
+    }
 
-	/**
-	 * @return {@code true} to avoid the server error when calling the Redmine API to get a issue with its ID.
-	 */
-	public boolean isHackBugApi() {
-		return this.hackBugApi;
-	}
+    /**
+     * @return the featureIds
+     */
+    public List<Integer> getFeatureIds() {
+        return this.featureIds;
+    }
 
-	/**
-	 * @return the taskTrackerId
-	 */
-	public Integer getTaskTrackerId() {
-		return this.taskTrackerId;
-	}
+    /**
+     * @return {@code true} to avoid the server error when calling the Redmine
+     * API to get a issue with its ID.
+     */
+    public boolean isHackBugApi() {
+        return this.hackBugApi;
+    }
+
+    /**
+     * @return the taskTrackerId
+     */
+    public Integer getTaskTrackerId() {
+        return this.taskTrackerId;
+    }
 
 }
