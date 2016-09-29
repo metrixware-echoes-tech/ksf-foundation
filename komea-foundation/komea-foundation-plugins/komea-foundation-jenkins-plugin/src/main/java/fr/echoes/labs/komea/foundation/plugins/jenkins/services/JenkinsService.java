@@ -62,6 +62,7 @@ public class JenkinsService implements IJenkinsService {
 
             if (useFolder()) {
                 createFolder(new JenkinsHttpClient(getJenkinsUri()), projectName);
+                updateFolderDisplayName(projectName);
             }
             createJob(projectName, masterJobName, MASTER);
             createJob(projectName, developJobName, DEVELOP);
@@ -84,21 +85,39 @@ public class JenkinsService implements IJenkinsService {
         LOGGER.info("[jenkins] creating folder '{}'", projectName);
         final ImmutableMap<String, String> params = ImmutableMap.of(
                 "mode", "com.cloudbees.hudson.plugins.folder.Folder",
-                "name", ProjectUtils.createIdentifier(projectName),
-                "displayName", projectName,
+                "name", getFolderJobName(projectName),
                 "from", "",
                 "Submit", "OK");
         jenkinsHttpClient.post_form("/" + "createItem?", params, false);
         LOGGER.info("[jenkins] folder '{}' created", projectName);
     }
 
+    private String getFolderJobName(final String projectName) {
+        return ProjectUtils.createIdentifier(projectName);
+    }
+
+    private void updateFolderDisplayName(final String projectName) throws JenkinsExtensionException {
+        try {
+            final JenkinsServer jenkins = createJenkinsClient();
+            final String jobName = getFolderJobName(projectName);
+            final String jobXml = jenkins.getJobXml(jobName);
+            final int index = jobXml.indexOf('>');
+            final String jobNewXml = jobXml.substring(0, index + 1)
+                    + "<displayName>" + projectName + "</displayName>"
+                    + jobXml.substring(index + 1);
+            jenkins.updateJob(jobName, jobNewXml);
+        } catch (final Exception e) {
+            throw new JenkinsExtensionException("Failed to update Jenkins job", e);
+        }
+    }
+
     private URI getJenkinsUri() throws URISyntaxException {
         return new URI(this.configurationService.getUrl());
     }
 
-    private FolderJob getProjectParentFolder(final JenkinsServer jenkins, String projectName) throws IOException {
+    private FolderJob getProjectFolder(final JenkinsServer jenkins, String projectName) throws IOException {
         LOGGER.info("[jenkins] getting job folder: {}", projectName);
-        final JobWithDetails root = jenkins.getJob(projectName);
+        final JobWithDetails root = jenkins.getJob(getFolderJobName(projectName));
         final Optional<FolderJob> projectFolder = jenkins.getFolderJob(root);
         final FolderJob folderJob = projectFolder.get();
         return folderJob;
@@ -166,7 +185,7 @@ public class JenkinsService implements IJenkinsService {
 
             final List<Build> builds;
             if (useFolder) {
-                builds = getFolderBuilds(jenkins, projectName, builsdPerJobLimit);
+                builds = getFolderBuilds(jenkins, getFolderJobName(projectName), builsdPerJobLimit);
             } else {
                 builds = new ArrayList<Build>();
                 builds.addAll(getJobBuilds(jenkins, projectName, getJobName(projectName, DEVELOP), useFolder, builsdPerJobLimit));
@@ -191,10 +210,10 @@ public class JenkinsService implements IJenkinsService {
         return createJenkinsClient(jenkinsHttpClient);
     }
 
-    private List<Build> getJobBuilds(JenkinsServer jenkins, String projectName, String branchName, boolean useFolder, int builsdPerJobLimit)
+    private List<Build> getJobBuilds(JenkinsServer jenkins, String projectName, String jobName, boolean useFolder, int builsdPerJobLimit)
             throws IOException, JenkinsExtensionException {
 
-        final JobWithDetails root = getJobWithDetails(jenkins, projectName, branchName,
+        final JobWithDetails root = getJobWithDetails(jenkins, projectName, jobName,
                 useFolder);
 
         final List<Build> builds = root.getBuilds();
@@ -208,7 +227,7 @@ public class JenkinsService implements IJenkinsService {
             throws IOException, JenkinsExtensionException {
 
         final List<Build> builds = new ArrayList<Build>();
-        final FolderJob projectFolder = getProjectParentFolder(jenkins, projectName);
+        final FolderJob projectFolder = getProjectFolder(jenkins, projectName);
         final Map<String, Job> jobs = projectFolder.getJobs();
         for (final Map.Entry<String, Job> entry : jobs.entrySet()) {
             final Job job = entry.getValue();
@@ -228,7 +247,7 @@ public class JenkinsService implements IJenkinsService {
             JenkinsExtensionException {
         final JobWithDetails root;
         if (useFolder) {
-            final FolderJob projectFolder = getProjectParentFolder(jenkins, projectName);
+            final FolderJob projectFolder = getProjectFolder(jenkins, projectName);
             root = jenkins.getJob(projectFolder, jobName);
         } else {
             root = jenkins.getJob(jobName);
@@ -278,7 +297,7 @@ public class JenkinsService implements IJenkinsService {
             final String resolvedXmlConfig = createConfigXml(displayName, scmUrl, gitBranchName);
 
             if (useFolder()) {
-                final FolderJob projectFolder = getProjectParentFolder(jenkins, projectName);
+                final FolderJob projectFolder = getProjectFolder(jenkins, projectName);
                 jenkins.createJob(projectFolder, jobName, resolvedXmlConfig, false);
             } else {
                 jenkins.createJob(jobName, resolvedXmlConfig, false);
