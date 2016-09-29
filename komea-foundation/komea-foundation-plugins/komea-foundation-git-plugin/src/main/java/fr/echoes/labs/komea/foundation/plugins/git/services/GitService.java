@@ -300,13 +300,13 @@ public class GitService implements IGitService {
 
     @Override
     public void createRelease(String projectName, String releaseVersion) throws GitExtensionException {
-        final String branchName = getReleaseBranchName(projectName, releaseVersion);
+        final String branchName = getReleaseBranchName(releaseVersion);
         createBranch(projectName, branchName);
     }
 
     @Override
     public void createFeature(String projectName, String featureId, String featureSubject) throws GitExtensionException {
-        final String branchName = getFeatureBranchName(projectName, featureId, featureSubject);
+        final String branchName = getFeatureBranchName(featureId, featureSubject);
         createBranch(projectName, branchName);
     }
 
@@ -315,7 +315,7 @@ public class GitService implements IGitService {
             String featureSubject) throws GitExtensionException {
 
         final String gitProjectUri = getProjectScmUrl(projectName);
-        final String branchName = getFeatureBranchName(projectName, featureId, featureSubject);
+        final String branchName = getFeatureBranchName(featureId, featureSubject);
 
         File workingDirectory = null;
         Git git = null;
@@ -357,7 +357,7 @@ public class GitService implements IGitService {
             String featureSubject) throws GitExtensionException {
 
         final String gitProjectUri = getProjectScmUrl(projectName);
-        final String branchName = getFeatureBranchName(projectName, featureId, featureSubject);
+        final String branchName = getFeatureBranchName(featureId, featureSubject);
 
         File workingDirectory = null;
         Git git = null;
@@ -391,29 +391,28 @@ public class GitService implements IGitService {
     private String getProjectScmUrl(String projectName) {
         final Map<String, String> variables = new HashMap<String, String>(2);
         variables.put("scmUrl", this.configuration.getScmUrl());
-        variables.put("projectName", projectName);
         variables.put("projectKey", ProjectUtils.createIdentifier(projectName));
         return replaceVariables(this.configuration.getProjectScmUrlPattern(), variables);
     }
 
-    private String getReleaseBranchName(String projectName, String releaseVersion) {
+    private String getReleaseBranchName(String releaseVersion) {
         final Map<String, String> variables = new HashMap<String, String>(1);
-        variables.put("releaseVersion", releaseVersion);
-        return ProjectUtils.createIdentifier(replaceVariables(this.configuration.getBranchReleasePattern(), variables));
+        variables.put("releaseVersion", ProjectUtils.createIdentifier(releaseVersion));
+        return replaceVariables(this.configuration.getBranchReleasePattern(), variables);
     }
 
-    private String getFeatureBranchName(String projectName, String featureId, String featureDescription) {
+    private String getFeatureBranchName(String featureId, String featureDescription) {
         final Map<String, String> variables = new HashMap<String, String>(2);
-        variables.put("featureId", featureId);
-        variables.put("featureDescription", featureDescription);
-        return ProjectUtils.createIdentifier(replaceVariables(this.configuration.getBranchFeaturePattern(), variables));
+        variables.put("featureId", ProjectUtils.createIdentifier(featureId));
+        variables.put("featureDescription", ProjectUtils.createIdentifier(featureDescription));
+        return replaceVariables(this.configuration.getBranchFeaturePattern(), variables);
     }
 
     @Override
     public void closeRelease(String projectName, String releaseName)
             throws GitExtensionException {
         final String gitProjectUri = getProjectScmUrl(projectName);
-        final String branchName = getReleaseBranchName(projectName, releaseName);
+        final String branchName = getReleaseBranchName(releaseName);
 
         File workingDirectory = null;
         Git git = null;

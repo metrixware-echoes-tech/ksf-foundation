@@ -129,6 +129,13 @@ public class JenkinsService implements IJenkinsService {
 
     }
 
+    private String getDisplayName(final String projectName, final String branchName) {
+        final Map<String, String> variables = new HashMap<String, String>(2);
+        variables.put("projectName", ProjectUtils.createIdentifier(projectName));
+        variables.put("branchName", branchName);
+        return replaceVariables(this.configurationService.getJobNamePattern(), variables);
+    }
+
     private JenkinsServer createJenkinsClient(JenkinsHttpClient jenkinsHttpClient) throws URISyntaxException {
         return new JenkinsServer(jenkinsHttpClient);
     }
@@ -270,8 +277,8 @@ public class JenkinsService implements IJenkinsService {
     @Override
     public void createRelease(final ProjectDto project, String releaseVersion) throws JenkinsExtensionException {
         final String projectName = project.getName();
+        final String gitBranchName = getGitReleaseBranchName(releaseVersion);
         final String jobName = getReleaseJobName(projectName, releaseVersion);
-        final String gitBranchName = getGitReleaseBranchName(projectName, releaseVersion);
         createJob(projectName, jobName, gitBranchName);
         JenkinsUtils.registerJob(project, jobName);
     }
@@ -280,7 +287,7 @@ public class JenkinsService implements IJenkinsService {
     public void createFeature(final ProjectDto project, String featureId, String featureSubject) throws JenkinsExtensionException {
         final String projectName = project.getName();
         final String jobName = getFeatureJobName(projectName, featureId, featureSubject);
-        final String gitBranchName = getGitFeatureBranchName(projectName, featureId, featureSubject);
+        final String gitBranchName = getGitFeatureBranchName(featureId, featureSubject);
         createJob(projectName, jobName, gitBranchName);
         JenkinsUtils.registerJob(project, jobName);
     }
@@ -291,7 +298,7 @@ public class JenkinsService implements IJenkinsService {
             jenkins = createJenkinsClient();
 
             final String scmUrl = getProjectScmUrl(projectName);
-            final String displayName = projectName + " - " + gitBranchName;
+            final String displayName = getDisplayName(projectName, gitBranchName);
             final String resolvedXmlConfig = createConfigXml(displayName, scmUrl, gitBranchName);
 
             if (useFolder()) {
@@ -327,17 +334,17 @@ public class JenkinsService implements IJenkinsService {
 
     private String getReleaseJobName(String projectName, String releaseVersion) {
         final Map<String, String> variables = new HashMap<String, String>(2);
-        variables.put("projectName", projectName);
-        variables.put("releaseVersion", releaseVersion);
+        variables.put("projectName", ProjectUtils.createIdentifier(projectName));
+        variables.put("releaseVersion", ProjectUtils.createIdentifier(releaseVersion));
         return replaceVariables(this.configurationService.getJobReleasePattern(), variables);
     }
 
     private String getFeatureJobName(String projectName, String featureId,
             String featureSubject) {
         final Map<String, String> variables = new HashMap<String, String>(3);
-        variables.put("projectName", projectName);
-        variables.put("featureId", featureId);
-        variables.put("featureDescription", featureSubject);
+        variables.put("projectName", ProjectUtils.createIdentifier(projectName));
+        variables.put("featureId", ProjectUtils.createIdentifier(featureId));
+        variables.put("featureDescription", ProjectUtils.createIdentifier(featureSubject));
         return replaceVariables(this.configurationService.getJobFeaturePattern(), variables);
     }
 
@@ -365,23 +372,22 @@ public class JenkinsService implements IJenkinsService {
         return null;
     }
 
-    private String getGitReleaseBranchName(String projectName, String releaseVersion) {
+    private String getGitReleaseBranchName(String releaseVersion) {
         final Map<String, String> variables = new HashMap<String, String>(1);
-        variables.put("releaseVersion", releaseVersion);
-        return ProjectUtils.createIdentifier(replaceVariables(this.configurationService.getGitReleaseBranchPattern(), variables));
+        variables.put("releaseVersion", ProjectUtils.createIdentifier(releaseVersion));
+        return replaceVariables(this.configurationService.getGitReleaseBranchPattern(), variables);
     }
 
-    private String getGitFeatureBranchName(String projectName, String featureId, String featureDescription) {
+    private String getGitFeatureBranchName(String featureId, String featureDescription) {
         final Map<String, String> variables = new HashMap<String, String>(2);
-        variables.put("featureId", featureId);
-        variables.put("featureDescription", featureDescription);
-        return ProjectUtils.createIdentifier(replaceVariables(this.configurationService.getGitFeatureBranchPattern(), variables));
+        variables.put("featureId", ProjectUtils.createIdentifier(featureId));
+        variables.put("featureDescription", ProjectUtils.createIdentifier(featureDescription));
+        return replaceVariables(this.configurationService.getGitFeatureBranchPattern(), variables);
     }
 
     private String getProjectScmUrl(String projectName) {
-        final Map<String, String> variables = new HashMap<String, String>(4);
+        final Map<String, String> variables = new HashMap<String, String>(2);
         variables.put("scmUrl", this.configurationService.getScmUrl());
-        variables.put("projectName", projectName);
         variables.put("projectKey", ProjectUtils.createIdentifier(projectName));
         return replaceVariables(this.configurationService.getProjectScmUrlPattern(), variables);
     }

@@ -11,129 +11,137 @@ import org.springframework.stereotype.Service;
 @Service("jenkinsConfiguration")
 public class JenkinsConfigurationService {
 
-	@Value("${ksf.jenkins.url}")
-	private String url;
+    @Value("${ksf.jenkins.url}")
+    private String url;
 
-	@Value("${ksf.jenkins.sso.url:}")
-	private String ssoUrl;
+    @Value("${ksf.jenkins.sso.url:}")
+    private String ssoUrl;
 
-	@Value("${ksf.jenkins.templateName}")
-	private String templateName;
+    @Value("${ksf.jenkins.templateName}")
+    private String templateName;
 
-	@Value("${ksf.scmUrl}")
-	private String scmUrl;
+    @Value("${ksf.scmUrl}")
+    private String scmUrl;
 
-	@Value("${ksf.jenkins.useFolders}")
-	private boolean useFolders;
+    @Value("${ksf.jenkins.useFolders}")
+    private boolean useFolders;
 
-	@Value("${ksf.jenkins.builsdPerJobLimit}")
-	private int builsdPerJobLimit;
+    @Value("${ksf.jenkins.builsdPerJobLimit}")
+    private int builsdPerJobLimit;
 
-	@Value("${ksf.buildSystem.defaultScript}")
-	private String buildScript;
+    @Value("${ksf.buildSystem.defaultScript}")
+    private String buildScript;
 
-	@Value("${ksf.artifacts.publishScript}")
-	private String publishScript;
+    @Value("${ksf.artifacts.publishScript}")
+    private String publishScript;
 
-	@Value("${ksf.projectScmUrlPattern}")
-	private String projectScmUrlPattern;
+    @Value("${ksf.projectScmUrlPattern}")
+    private String projectScmUrlPattern;
 
-	@Value("${ksf.jenkins.job.namePattern}")
-	private String jobNamePattern;
+    @Value("${ksf.jenkins.job.displayNamePattern}")
+    private String jobDisplayNamePattern;
 
-	@Value("${ksf.jenkins.job.releasePattern}")
-	private String jobReleasePattern;
+    @Value("${ksf.jenkins.job.namePattern}")
+    private String jobNamePattern;
 
-	@Value("${ksf.jenkins.job.featurePattern}")
-	private String jobFeaturePattern;
+    @Value("${ksf.jenkins.job.releasePattern}")
+    private String jobReleasePattern;
 
-	@Value("${ksf.git.branch.releasePattern}")
-	private String gitReleaseBranchPattern;
+    @Value("${ksf.jenkins.job.featurePattern}")
+    private String jobFeaturePattern;
 
-	@Value("${ksf.git.branch.featurePattern}")
-	private String gitFeatureBranchPattern;
+    @Value("${ksf.git.branch.releasePattern}")
+    private String gitReleaseBranchPattern;
 
-	public String getUrl() {
+    @Value("${ksf.git.branch.featurePattern}")
+    private String gitFeatureBranchPattern;
+
+    public String getUrl() {
         return removeLastSlash(this.url);
-	}
+    }
 
-	public String getSsoUrl() {
-		if (StringUtils.isBlank(this.ssoUrl)) {
-			return getUrl();
-		}
+    public String getSsoUrl() {
+        if (StringUtils.isBlank(this.ssoUrl)) {
+            return getUrl();
+        }
         return removeLastSlash(this.ssoUrl);
-	}
+    }
 
-	private String removeLastSlash(String url) {
+    private String removeLastSlash(String url) {
         final int length = url.length();
-		if (length > 0 && '/' == url.charAt(length - 1)) {
+        if (length > 0 && '/' == url.charAt(length - 1)) {
             url = url.substring(0, length - 1);
         }
-		return url;
-	}
+        return url;
+    }
 
+    public String getTemplateName() {
+        return this.templateName;
+    }
 
+    public String getScmUrl() {
+        return this.scmUrl;
+    }
 
-	public String getTemplateName() {
-		return this.templateName;
-	}
+    public boolean useFolders() {
+        return this.useFolders;
+    }
 
-	public String getScmUrl() {
-		return this.scmUrl;
-	}
+    public int getBuilsdPerJobLimit() {
+        return this.builsdPerJobLimit;
+    }
 
-	public boolean useFolders() {
-		return this.useFolders;
-	}
+    public String getBuildScript() {
+        return this.buildScript;
+    }
 
-	public int getBuilsdPerJobLimit() {
-		return this.builsdPerJobLimit;
-	}
+    public String getPublishScript() {
+        return this.publishScript;
+    }
 
-	public String getBuildScript() {
-		return this.buildScript;
-	}
+    public String getProjectScmUrlPattern() {
+        return this.projectScmUrlPattern;
+    }
 
-	public String getPublishScript() {
-		return this.publishScript;
-	}
+    /**
+     * @return the jobReleasePattern
+     */
+    public String getJobReleasePattern() {
+        return this.jobReleasePattern;
+    }
 
-	public String getProjectScmUrlPattern() {
-		return this.projectScmUrlPattern;
-	}
+    /**
+     * @return the jobFeaturePattern
+     */
+    public String getJobFeaturePattern() {
+        return this.jobFeaturePattern;
+    }
 
-	/**
-	 * @return the jobReleasePattern
-	 */
-	public String getJobReleasePattern() {
-		return this.jobReleasePattern;
-	}
+    /**
+     * @return the gitReleaseBranchPattern
+     */
+    public String getGitReleaseBranchPattern() {
+        return this.gitReleaseBranchPattern;
+    }
 
-	/**
-	 * @return the jobFeaturePattern
-	 */
-	public String getJobFeaturePattern() {
-		return this.jobFeaturePattern;
-	}
+    /**
+     * @return the gitFeatureBranchPattern
+     */
+    public String getGitFeatureBranchPattern() {
+        return this.gitFeatureBranchPattern;
+    }
 
-	/**
-	 * @return the gitReleaseBranchPattern
-	 */
-	public String getGitReleaseBranchPattern() {
-		return this.gitReleaseBranchPattern;
-	}
+    /**
+     * @return the jobNamePattern
+     */
+    public String getJobNamePattern() {
+        return this.jobNamePattern;
+    }
 
-	/**
-	 * @return the gitFeatureBranchPattern
-	 */
-	public String getGitFeatureBranchPattern() {
-		return this.gitFeatureBranchPattern;
-	}
-
-	/**
-	 * @return the jobNamePattern
-	 */
-	public String getJobNamePattern() {
-		return this.jobNamePattern;
-	}
+    /**
+     * @return the jobDisplayNamePattern
+     */
+    public String getJobDisplayNamePattern() {
+        return this.jobDisplayNamePattern;
+    }
 }
