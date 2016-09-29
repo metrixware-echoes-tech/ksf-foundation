@@ -1,6 +1,7 @@
 <project>
 	<actions />
 	<description />
+        <displayName>${displayName}</displayName>
 	<keepDependencies>false</keepDependencies>
 	<properties />
 	<scm class="hudson.plugins.git.GitSCM">
