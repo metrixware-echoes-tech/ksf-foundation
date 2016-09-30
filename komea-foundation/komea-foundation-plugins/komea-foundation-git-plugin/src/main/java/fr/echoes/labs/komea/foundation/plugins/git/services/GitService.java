@@ -116,7 +116,7 @@ public class GitService implements IGitService {
     private File createCloneDestinationDirectory(final String projectName)
             throws GitExtensionException, IOException {
 
-        final File workingDirectory = new File(this.configuration.getGitWorkingdirectory(), projectName);
+        final File workingDirectory = new File(this.configuration.getGitWorkingdirectory(), ProjectUtils.createIdentifier(projectName));
 
         if (workingDirectory.exists()) {
             if (!workingDirectory.isDirectory()) {

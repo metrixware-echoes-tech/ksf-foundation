@@ -121,21 +121,6 @@ public class JenkinsService implements IJenkinsService {
         return folderJob;
     }
 
-    private String getJobName(String projectName, String branchName) {
-        final Map<String, String> variables = new HashMap<String, String>(2);
-        variables.put("projectName", ProjectUtils.createIdentifier(projectName));
-        variables.put("branchName", branchName);
-        return replaceVariables(this.configurationService.getJobNamePattern(), variables);
-
-    }
-
-    private String getDisplayName(final String projectName, final String branchName) {
-        final Map<String, String> variables = new HashMap<String, String>(2);
-        variables.put("projectName", ProjectUtils.createIdentifier(projectName));
-        variables.put("branchName", branchName);
-        return replaceVariables(this.configurationService.getJobNamePattern(), variables);
-    }
-
     private JenkinsServer createJenkinsClient(JenkinsHttpClient jenkinsHttpClient) throws URISyntaxException {
         return new JenkinsServer(jenkinsHttpClient);
     }
@@ -313,39 +298,23 @@ public class JenkinsService implements IJenkinsService {
         }
     }
 
-    private void deleteJob(String projectName, String branchName) throws JenkinsExtensionException {
-
+    private void deleteJob(String folderJobName, String jobName) throws JenkinsExtensionException {
+        String path = null;
         try {
             final JenkinsHttpClient jenkinsHttpClient = new JenkinsHttpClient(new URI(this.configurationService.getUrl()));
 
-            final String path = "/job/" + EncodingUtils.encode(projectName) + "/job/" + EncodingUtils.encode(branchName) + "/doDelete";
+            path = "/job/" + EncodingUtils.encode(folderJobName) + "/job/" + EncodingUtils.encode(jobName) + "/doDelete";
 
             jenkinsHttpClient.post(path, false); // crumbFlag is set to false to avoid "org.apache.http.client.HttpResponseException: Not Found",
             // see https://github.com/jenkinsci/java-client-api/issues/56
 
         } catch (final Exception e) {
-            throw new JenkinsExtensionException("Failed to delete Jenkins job", e);
+            throw new JenkinsExtensionException("Failed to delete Jenkins job with path " + path, e);
         }
     }
 
     private boolean useFolder() {
         return this.configurationService.useFolders();
-    }
-
-    private String getReleaseJobName(String projectName, String releaseVersion) {
-        final Map<String, String> variables = new HashMap<String, String>(2);
-        variables.put("projectName", ProjectUtils.createIdentifier(projectName));
-        variables.put("releaseVersion", ProjectUtils.createIdentifier(releaseVersion));
-        return replaceVariables(this.configurationService.getJobReleasePattern(), variables);
-    }
-
-    private String getFeatureJobName(String projectName, String featureId,
-            String featureSubject) {
-        final Map<String, String> variables = new HashMap<String, String>(3);
-        variables.put("projectName", ProjectUtils.createIdentifier(projectName));
-        variables.put("featureId", ProjectUtils.createIdentifier(featureId));
-        variables.put("featureDescription", ProjectUtils.createIdentifier(featureSubject));
-        return replaceVariables(this.configurationService.getJobFeaturePattern(), variables);
     }
 
     @Override
@@ -370,6 +339,37 @@ public class JenkinsService implements IJenkinsService {
         }
 
         return null;
+    }
+
+    private String getJobName(String projectName, String branchName) {
+        final Map<String, String> variables = new HashMap<String, String>(2);
+        variables.put("projectName", ProjectUtils.createIdentifier(projectName));
+        variables.put("branchName", ProjectUtils.createIdentifier(branchName));
+        return replaceVariables(this.configurationService.getJobNamePattern(), variables);
+
+    }
+
+    private String getDisplayName(final String projectName, final String branchName) {
+        final Map<String, String> variables = new HashMap<String, String>(2);
+        variables.put("projectName", projectName);
+        variables.put("branchName", branchName);
+        return replaceVariables(this.configurationService.getJobNamePattern(), variables);
+    }
+
+    private String getReleaseJobName(String projectName, String releaseVersion) {
+        final Map<String, String> variables = new HashMap<String, String>(2);
+        variables.put("projectName", ProjectUtils.createIdentifier(projectName));
+        variables.put("releaseVersion", ProjectUtils.createIdentifier(releaseVersion));
+        return replaceVariables(this.configurationService.getJobReleasePattern(), variables);
+    }
+
+    private String getFeatureJobName(String projectName, String featureId,
+            String featureSubject) {
+        final Map<String, String> variables = new HashMap<String, String>(3);
+        variables.put("projectName", ProjectUtils.createIdentifier(projectName));
+        variables.put("featureId", ProjectUtils.createIdentifier(featureId));
+        variables.put("featureDescription", ProjectUtils.createIdentifier(featureSubject));
+        return replaceVariables(this.configurationService.getJobFeaturePattern(), variables);
     }
 
     private String getGitReleaseBranchName(String releaseVersion) {
@@ -433,14 +433,16 @@ public class JenkinsService implements IJenkinsService {
     public void deleteFeatureJob(String projectName, String featureId,
             String featureSubject) throws JenkinsExtensionException {
         final String featureJobName = getFeatureJobName(projectName, featureId, featureSubject);
-        deleteJob(projectName, featureJobName);
+        final String folderJobName = getFolderJobName(projectName);
+        deleteJob(folderJobName, featureJobName);
     }
 
     @Override
     public void deleteReleaseJob(String projectName, String releaseName)
             throws JenkinsExtensionException {
         final String releaseJobName = getReleaseJobName(projectName, releaseName);
-        deleteJob(projectName, releaseJobName);
+        final String folderJobName = getFolderJobName(projectName);
+        deleteJob(folderJobName, releaseJobName);
     }
 
 }
