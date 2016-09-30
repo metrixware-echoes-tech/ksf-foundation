@@ -145,4 +145,9 @@ public class ForemanProjectLifeCycleExtension implements IProjectLifecycleExtens
 
     }
 
+    @Override
+    public String getName() {
+        return "foreman";
+    }
+
 }

@@ -37,41 +37,52 @@ public class ProjectLifecycleExtensionManager {
     private Gate gate;
 
     @Subscribe
-    public void notifyCreation(final EventNewProjectCreated _event) {
+    public void notifyNewProjectCreated(final EventNewProjectCreated _event) {
         if (this.extensions == null) {
             return;
         }
         final ProjectDto projectDto = newProjectDto(_event.getCreatedProject());
         for (final IProjectLifecycleExtension extension : this.extensions) {
-
-            extension.notifyCreatedProject(projectDto);
+            final String extensionName = extension.getName();
+            LOGGER.info("Extension " + extensionName + " is notified that a project has been created.");
+            final NotifyResult result = extension.notifyCreatedProject(projectDto);
+            if (result != NotifyResult.CONTINUE) {
+                LOGGER.warn("Extension " + extensionName + " has failed to handle the creation of a project.");
+            }
         }
 
         saveAttributes(_event.getCreatedProject(), projectDto);
     }
 
     @Subscribe
-    public void notifyCreation(final EventProjectDeleted _event) {
+    public void notifyProjectDeleted(final EventProjectDeleted _event) {
         if (this.extensions == null) {
             return;
         }
         final ProjectDto projectDto = newProjectDto(_event.getProject());
         for (final IProjectLifecycleExtension extension : this.extensions) {
-            extension.notifyDeletedProject(projectDto);
+            final String extensionName = extension.getName();
+            LOGGER.info("Extension " + extensionName + " is notified that a project has been deleted.");
+            final NotifyResult result = extension.notifyDeletedProject(projectDto);
+            if (result != NotifyResult.CONTINUE) {
+                LOGGER.warn("Extension " + extensionName + " has failed to handle the deletion of a project.");
+            }
         }
 
     }
 
     @Subscribe
-    public void notifyCreation(final EventReleaseCreated event) {
+    public void notifyReleaseCreated(final EventReleaseCreated event) {
         if (this.extensions == null) {
             return;
         }
         final ProjectDto projectDto = newProjectDto(event.getProject());
         for (final IProjectLifecycleExtension extension : this.extensions) {
+            final String extensionName = extension.getName();
+            LOGGER.info("Extension " + extensionName + " is notified that a release bas been created.");
             final NotifyResult result = extension.notifyCreatedRelease(projectDto, event.getReleaseVersion(), event.getUsername());
             if (result != NotifyResult.CONTINUE) {
-                break;
+                LOGGER.warn("Extension " + extensionName + " has failed to handle the creation of a release.");
             }
         }
 
@@ -79,30 +90,34 @@ public class ProjectLifecycleExtensionManager {
     }
 
     @Subscribe
-    public void notifyCreation(final EventReleaseFinished event) {
+    public void notifyReleaseFinished(final EventReleaseFinished event) {
         if (this.extensions == null) {
             return;
         }
         final ProjectDto projectDto = newProjectDto(event.getProject());
         for (final IProjectLifecycleExtension extension : this.extensions) {
+            final String extensionName = extension.getName();
+            LOGGER.info("Extension " + extensionName + " is notified that a release has been finished.");
             final NotifyResult result = extension.notifyFinishedRelease(projectDto, event.getReleaseVersion());
             if (result != NotifyResult.CONTINUE) {
-                break;
+                LOGGER.warn("Extension " + extensionName + " has failed to handle the finish of a release.");
             }
         }
 
     }
 
     @Subscribe
-    public void notifyCreation(final EventFeatureCreated event) {
+    public void notifyFeatureCreated(final EventFeatureCreated event) {
         if (this.extensions == null) {
             return;
         }
         final ProjectDto projectDto = newProjectDto(event.getProject());
         for (final IProjectLifecycleExtension extension : this.extensions) {
+            final String extensionName = extension.getName();
+            LOGGER.info("Extension " + extensionName + " is notified that a feature has been created.");
             final NotifyResult result = extension.notifyCreatedFeature(projectDto, event.getFeatureId(), event.getFeatureSubject(), event.getUsername());
             if (result != NotifyResult.CONTINUE) {
-                break;
+                LOGGER.warn("Extension " + extensionName + " has failed to handle the creation of a feature.");
             }
         }
 
@@ -110,43 +125,52 @@ public class ProjectLifecycleExtensionManager {
     }
 
     @Subscribe
-    public void notifyCreation(final EventFeatureFinished event) {
+    public void notifyFeatureFinished(final EventFeatureFinished event) {
         if (this.extensions == null) {
             return;
         }
         final ProjectDto projectDto = newProjectDto(event.getProject());
         for (final IProjectLifecycleExtension extension : this.extensions) {
+            final String extensionName = extension.getName();
+            LOGGER.info("Extension " + extensionName + " is notified that a feature has been finished.");
             final NotifyResult result = extension.notifyFinishedFeature(projectDto, event.getFeatureId(), event.getFeatureSubject());
             if (result != NotifyResult.CONTINUE) {
-                break;
+                LOGGER.warn("Extension " + extensionName + " has failed to handle the finish of a feature.");
             }
         }
 
     }
 
     @Subscribe
-    public void notifyCreation(final EventFeatureCanceled event) {
+    public void notifyFeatureCanceled(final EventFeatureCanceled event) {
         if (this.extensions == null) {
             return;
         }
         final ProjectDto projectDto = newProjectDto(event.getProject());
         for (final IProjectLifecycleExtension extension : this.extensions) {
+            final String extensionName = extension.getName();
+            LOGGER.info("Extension " + extensionName + " is notified that a feature has been canceled.");
             final NotifyResult result = extension.notifyCanceledFeature(projectDto, event.getFeatureId(), event.getFeatureSubject());
             if (result != NotifyResult.CONTINUE) {
-                break;
+                LOGGER.warn("Extension " + extensionName + " has failed to handle the cancelation of a feature.");
             }
         }
 
     }
 
     @Subscribe
-    public void notifyCreation(final EventProjectUpdated _event) {
+    public void notifyProjectUpdated(final EventProjectUpdated _event) {
         if (this.extensions == null) {
             return;
         }
         final ProjectDto projectDto = newProjectDto(_event.getProject());
         for (final IProjectLifecycleExtension extension : this.extensions) {
-            extension.notifyUpdatedProject(projectDto);
+            final String extensionName = extension.getName();
+            LOGGER.info("Extension " + extensionName + " is notified that a project has been updated.");
+            final NotifyResult result = extension.notifyUpdatedProject(projectDto);
+            if (result != NotifyResult.CONTINUE) {
+                LOGGER.warn("Extension " + extensionName + " has failed to handle the update of a project.");
+            }
         }
 
     }

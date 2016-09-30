@@ -11,6 +11,8 @@ import fr.echoes.labs.ksf.extensions.api.IExtension;
  */
 public interface IProjectLifecycleExtension extends IExtension {
 
+    String getName();
+
     NotifyResult notifyCreatedProject(ProjectDto project);
 
     NotifyResult notifyDeletedProject(ProjectDto project);

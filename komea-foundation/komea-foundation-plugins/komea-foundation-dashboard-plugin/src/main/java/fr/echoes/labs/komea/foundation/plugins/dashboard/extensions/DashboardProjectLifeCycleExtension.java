@@ -159,4 +159,9 @@ public class DashboardProjectLifeCycleExtension implements IProjectLifecycleExte
             String featureSubject) {
         return NotifyResult.CONTINUE;
     }
+
+    @Override
+    public String getName() {
+        return "dashboard";
+    }
 }

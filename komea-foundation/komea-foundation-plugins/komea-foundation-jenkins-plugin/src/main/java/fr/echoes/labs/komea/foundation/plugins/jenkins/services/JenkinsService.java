@@ -114,7 +114,6 @@ public class JenkinsService implements IJenkinsService {
     }
 
     private FolderJob getProjectFolder(final JenkinsServer jenkins, String projectName) throws IOException {
-        LOGGER.info("[jenkins] getting job folder: {}", projectName);
         final JobWithDetails root = jenkins.getJob(getFolderJobName(projectName));
         final Optional<FolderJob> projectFolder = jenkins.getFolderJob(root);
         final FolderJob folderJob = projectFolder.get();

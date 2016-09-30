@@ -164,4 +164,9 @@ public class GitProjectLifeCycleExtension implements IProjectLifecycleExtension 
         return NotifyResult.CONTINUE;
     }
 
+    @Override
+    public String getName() {
+        return "git";
+    }
+
 }

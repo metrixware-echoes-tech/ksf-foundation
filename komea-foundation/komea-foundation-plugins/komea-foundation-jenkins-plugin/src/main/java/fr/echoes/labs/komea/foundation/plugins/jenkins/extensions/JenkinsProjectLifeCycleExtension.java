@@ -155,4 +155,8 @@ public class JenkinsProjectLifeCycleExtension implements IProjectLifecycleExtens
 
     }
 
+    @Override
+    public String getName() {
+        return "jenkins";
+    }
 }

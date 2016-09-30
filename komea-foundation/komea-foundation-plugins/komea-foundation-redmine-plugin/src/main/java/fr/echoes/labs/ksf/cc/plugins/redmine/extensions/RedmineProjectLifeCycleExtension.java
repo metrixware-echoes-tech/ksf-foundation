@@ -183,4 +183,9 @@ public class RedmineProjectLifeCycleExtension implements IProjectLifecycleExtens
         return sub.replace(str);
     }
 
+    @Override
+    public String getName() {
+        return "redmine";
+    }
+
 }

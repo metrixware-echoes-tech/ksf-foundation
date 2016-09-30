@@ -151,4 +151,9 @@ public class NexusProjectLifeCycleExtension implements IProjectLifecycleExtensio
 
     }
 
+    @Override
+    public String getName() {
+        return "nexus";
+    }
+
 }
