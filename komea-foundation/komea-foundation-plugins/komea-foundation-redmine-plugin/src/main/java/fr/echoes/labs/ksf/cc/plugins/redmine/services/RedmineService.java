@@ -345,12 +345,18 @@ public class RedmineService implements IRedmineService {
                 issue = issueManager.getIssueById(Integer.valueOf(ticketId));
             }
 
-            issue.setStatusId(statusId);
-
-            this.changeIssueAssignee(issue, username, redmineManager);
-
-            issueManager.update(issue);
-            LOGGER.info("[redmine] Changing redmine issue status - status updated");
+            if (issue == null) {
+                throw new RedmineExtensionException("[redmine] Failed to change issue '"
+                        + ticketId + "' status because this issue was not found.");
+            } else {
+                issue.setStatusId(statusId);
+                this.changeIssueAssignee(issue, username, redmineManager);
+                issueManager.update(issue);
+                LOGGER.info("[redmine] Changing redmine issue status - status updated");
+            }
+        } catch (final RedmineExtensionException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw e;
         } catch (final Exception e) {
             LOGGER.error("[redmine] Failed to change issue '" + ticketId + "' status", e);
             throw new RedmineExtensionException("Failed to change ticket status.", e);

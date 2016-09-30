@@ -1,96 +1,103 @@
 .project-form {
-	width: 1100px;
-	margin-left: auto;
-	margin-right: auto;
+    width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .project-form h1 {
-	margin-top: 30px;
-	margin-bottom: 30px;
+    margin-top: 30px;
+    margin-bottom: 30px;
 }
 
 .app-list {
-	list-style-type: none;
+    list-style-type: none;
 }
 
 .app-list li {
-	float: left;
-	margin: 10px;
-	padding: 5px 10px;
-	cursor: pointer;
+    float: left;
+    margin: 10px;
+    padding: 5px 10px;
+    cursor: pointer;
 }
 
 .app-list li label {
-	display: block;
-	text-align: center;
-	padding-top: 5px;
+    display: block;
+    text-align: center;
+    padding-top: 5px;
 }
 
 .app-list li.active {
-	box-shadow:0px 1px 4px 0px #FACC2E;
-	background-color: #fff7e5;
-	border-radius: 5px;
+    box-shadow:0px 1px 4px 0px #FACC2E;
+    background-color: #fff7e5;
+    border-radius: 5px;
 }
 
 .app-list li.disabled img {
-	filter: gray; /* IE6-9 */
-  	filter: grayscale(1); /* Firefox 35+ */
-  	-webkit-filter: grayscale(1); /* Google Chrome, Safari 6+ & Opera 15+ */
+    filter: gray; /* IE6-9 */
+    filter: grayscale(1); /* Firefox 35+ */
+    -webkit-filter: grayscale(1); /* Google Chrome, Safari 6+ & Opera 15+ */
 }
 
 .panel-title {
-  margin-top: 0;
-  margin-bottom: 0;
-  font-size: 16px;
-  color: inherit;
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 16px;
+    color: inherit;
 }
 
 .project-properties {
-	padding: 10px 0 15px 8px;
+    padding: 10px 0 15px 8px;
 }
 
 .project-properties p {
-	margin-bottom: 2px;
+    margin-bottom: 2px;
 }
 
 .project-properties label {
-	font-weight: normal;
+    font-weight: normal;
 }
 
 .panel-title {
-	font-size: 18px;
+    font-size: 18px;
+}
+
+.column {
+    min-width: 600px;
+}
+.project-widget-panel {
+    min-width: 580px;
 }
 
 .project-widget-panel .panel-heading h3 {
-	display: inline;
-	margin-left: 5px;
+    display: inline;
+    margin-left: 5px;
 }
 
 .project-widget-panel .panel-heading img {
-	width: 40px;
- 	display: inline;
+    width: 40px;
+    display: inline;
 }
 
 .project-overview .tab-content .tab-project-information {
-	padding-top: 20px;
+    padding-top: 20px;
 }
 
 html, body, iframe {
-	height: 100%;
+    height: 100%;
 }
 
 .project-list-tools img {
-	width: 36px;
-	margin-right: 10px;
+    width: 36px;
+    margin-right: 10px;
 }
 
 .logo {
-	width: 60px;
-	margin-right: 10px;
+    width: 60px;
+    margin-right: 10px;
 }
 
 .tab-content {
-	padding-bottom: 0;
+    padding-bottom: 0;
 }
 
 .validation-message-list li {
@@ -110,48 +117,48 @@ html, body, iframe {
 }
 
 .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
-  background-color: #e7eeee;
+    background-color: #e7eeee;
 }
 
 .navbar {
-	margin-bottom: 0;
+    margin-bottom: 0;
 }
 
 
 .breadcrumb {
-	background: rgba(248, 248, 242, 1);
-	border: 0px solid rgba(245, 245, 245, 1);
-	border-radius: 0px;
-	display: block;
-	margin-bottom: 8px;
-	border-bottom: 1px solid rgba(225,225,225, 1);
+    background: rgba(248, 248, 242, 1);
+    border: 0px solid rgba(245, 245, 245, 1);
+    border-radius: 0px;
+    display: block;
+    margin-bottom: 8px;
+    border-bottom: 1px solid rgba(225,225,225, 1);
 }
 
 .breadcrumb li {
-	font-size: 14px;
+    font-size: 14px;
 }
 
 .breadcrumb a {
-	color: rgba(66, 139, 202, 1);
+    color: rgba(66, 139, 202, 1);
 }
 
 .breadcrumb a:hover {
-	color: rgba(42, 100, 150, 1);
+    color: rgba(42, 100, 150, 1);
 }
 
 .breadcrumb>.active {
-	color: rgba(153, 153, 153, 1);
+    color: rgba(153, 153, 153, 1);
 }
 
 .breadcrumb>li+li:before {
-	color: rgba(204, 204, 204, 1);
-	content: "\276F\00a0";
+    color: rgba(204, 204, 204, 1);
+    content: "\276F\00a0";
 }
 .breadcrumb {
-	padding: 4px 0px 4px 5px;
+    padding: 4px 0px 4px 5px;
 }
 
 .tooltip-inner {
-  max-width: 500px;
+    max-width: 500px;
 }
 
