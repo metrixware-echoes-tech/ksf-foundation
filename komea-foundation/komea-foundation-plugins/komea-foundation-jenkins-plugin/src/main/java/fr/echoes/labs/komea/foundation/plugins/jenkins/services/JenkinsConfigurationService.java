@@ -1,6 +1,5 @@
 package fr.echoes.labs.komea.foundation.plugins.jenkins.services;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -13,9 +12,6 @@ public class JenkinsConfigurationService {
 
     @Value("${ksf.jenkins.url}")
     private String url;
-
-    @Value("${ksf.jenkins.sso.url:}")
-    private String ssoUrl;
 
     @Value("${ksf.jenkins.templateName}")
     private String templateName;
@@ -58,13 +54,6 @@ public class JenkinsConfigurationService {
 
     public String getUrl() {
         return removeLastSlash(this.url);
-    }
-
-    public String getSsoUrl() {
-        if (StringUtils.isBlank(this.ssoUrl)) {
-            return getUrl();
-        }
-        return removeLastSlash(this.ssoUrl);
     }
 
     private String removeLastSlash(String url) {
