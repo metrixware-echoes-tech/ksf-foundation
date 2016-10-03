@@ -1,9 +1,17 @@
 package fr.echoes.labs.komea.foundation.plugins.dashboard.extensions;
 
+import com.google.common.collect.Lists;
+import com.tocea.corolla.products.dao.IProjectDAO;
+import com.tocea.corolla.products.domain.Project;
+import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.IProjectTabPanel;
+import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.MenuAction;
+import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
+import fr.echoes.labs.ksf.cc.plugins.dashboard.services.DashboardConfigurationService;
+import fr.echoes.labs.ksf.cc.plugins.dashboard.services.DashboardLiferayService;
+import fr.echoes.labs.ksf.cc.plugins.dashboard.utils.DashboardConstants;
+import fr.echoes.labs.ksf.cc.plugins.dashboard.utils.DashboardUrlBuilder;
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,17 +23,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
-
-import com.google.common.collect.Lists;
-import com.tocea.corolla.products.dao.IProjectDAO;
-import com.tocea.corolla.products.domain.Project;
-
-import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.IProjectTabPanel;
-import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.MenuAction;
-import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
-import fr.echoes.labs.ksf.cc.plugins.dashboard.services.DashboardConfigurationService;
-import fr.echoes.labs.ksf.cc.plugins.dashboard.services.DashboardLiferayService;
-import fr.echoes.labs.ksf.cc.plugins.dashboard.utils.DashboardUrlBuilder;
 
 /**
  * @author dcollard
@@ -116,6 +113,11 @@ public class DashboardProjectDashboardWidget implements ProjectDashboardWidget {
             public String getIconUrl() {
                 return DashboardProjectDashboardWidget.this.getIconUrl();
             }
+
+            @Override
+            public String getId() {
+                return DashboardConstants.ID;
+            }
         };
 
         return Lists.newArrayList(iframePanel);
@@ -138,6 +140,11 @@ public class DashboardProjectDashboardWidget implements ProjectDashboardWidget {
     @Override
     public boolean hasHtmlPanelBody() {
         return false;
+    }
+
+    @Override
+    public String getId() {
+        return DashboardConstants.ID;
     }
 
 }

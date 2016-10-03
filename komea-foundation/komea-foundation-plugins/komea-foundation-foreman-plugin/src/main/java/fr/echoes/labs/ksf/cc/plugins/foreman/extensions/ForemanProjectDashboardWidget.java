@@ -15,6 +15,7 @@ import fr.echoes.labs.ksf.cc.plugins.foreman.model.ForemanTarget;
 import fr.echoes.labs.ksf.cc.plugins.foreman.services.ForemanClientFactory;
 import fr.echoes.labs.ksf.cc.plugins.foreman.services.ForemanConfigurationService;
 import fr.echoes.labs.ksf.cc.plugins.foreman.services.ForemanErrorHandlingService;
+import fr.echoes.labs.ksf.cc.plugins.foreman.utils.ForemanConstants;
 import fr.echoes.labs.ksf.cc.plugins.foreman.utils.ThymeleafTemplateEngineUtils;
 import java.util.List;
 import javax.servlet.ServletContext;
@@ -172,6 +173,11 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
             public String getIconUrl() {
                 return ForemanProjectDashboardWidget.this.getIconUrl();
             }
+
+            @Override
+            public String getId() {
+                return ForemanConstants.ID;
+            }
         };
 
         return Lists.newArrayList(iframePanel);
@@ -180,6 +186,11 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
     @Override
     public boolean hasHtmlPanelBody() {
         return true;
+    }
+
+    @Override
+    public String getId() {
+        return ForemanConstants.ID;
     }
 
 }

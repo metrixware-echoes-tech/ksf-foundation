@@ -4,6 +4,7 @@ import com.tocea.corolla.products.dao.IProjectDAO;
 import fr.echoes.labs.komea.foundation.plugins.jenkins.JenkinsExtensionException;
 import fr.echoes.labs.komea.foundation.plugins.jenkins.services.IJenkinsService;
 import fr.echoes.labs.komea.foundation.plugins.jenkins.services.JenkinsErrorHandlingService;
+import fr.echoes.labs.komea.foundation.plugins.jenkins.utils.JenkinsConstants;
 import fr.echoes.labs.ksf.extensions.annotations.Extension;
 import fr.echoes.labs.ksf.extensions.projects.IProjectLifecycleExtension;
 import fr.echoes.labs.ksf.extensions.projects.NotifyResult;
@@ -157,6 +158,6 @@ public class JenkinsProjectLifeCycleExtension implements IProjectLifecycleExtens
 
     @Override
     public String getName() {
-        return "jenkins";
+        return JenkinsConstants.ID;
     }
 }

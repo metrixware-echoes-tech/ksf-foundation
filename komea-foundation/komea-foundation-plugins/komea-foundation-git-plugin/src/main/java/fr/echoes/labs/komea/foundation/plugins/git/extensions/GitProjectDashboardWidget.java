@@ -1,13 +1,22 @@
 package fr.echoes.labs.komea.foundation.plugins.git.extensions;
 
+import com.google.common.collect.Lists;
+import com.tocea.corolla.products.dao.IProjectDAO;
+import com.tocea.corolla.products.domain.Project;
+import fr.echoes.labs.komea.foundation.plugins.git.services.GitConfigurationService;
+import fr.echoes.labs.komea.foundation.plugins.git.services.GitErrorHandlingService;
+import fr.echoes.labs.komea.foundation.plugins.git.utils.GitConstants;
+import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.IProjectTabPanel;
+import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.MenuAction;
+import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
+import fr.echoes.labs.ksf.cc.extensions.services.project.ProjectUtils;
+import fr.echoes.labs.ksf.users.security.api.ICurrentUserService;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.lang3.text.StrSubstitutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,18 +28,6 @@ import org.springframework.stereotype.Component;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
-
-import com.google.common.collect.Lists;
-import com.tocea.corolla.products.dao.IProjectDAO;
-import com.tocea.corolla.products.domain.Project;
-
-import fr.echoes.labs.komea.foundation.plugins.git.services.GitConfigurationService;
-import fr.echoes.labs.komea.foundation.plugins.git.services.GitErrorHandlingService;
-import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.IProjectTabPanel;
-import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.MenuAction;
-import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
-import fr.echoes.labs.ksf.cc.extensions.services.project.ProjectUtils;
-import fr.echoes.labs.ksf.users.security.api.ICurrentUserService;
 
 /**
  * @author dcollard
@@ -153,6 +150,11 @@ public class GitProjectDashboardWidget implements ProjectDashboardWidget {
     @Override
     public boolean hasHtmlPanelBody() {
         return true;
+    }
+
+    @Override
+    public String getId() {
+        return GitConstants.ID;
     }
 
 }

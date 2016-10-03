@@ -5,6 +5,7 @@ import com.tocea.corolla.products.dao.IProjectDAO;
 import fr.echoes.labs.ksf.cc.plugins.redmine.services.IRedmineService;
 import fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineConfigurationService;
 import fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineErrorHandlingService;
+import fr.echoes.labs.ksf.cc.plugins.redmine.utils.RedmineConstants;
 import fr.echoes.labs.ksf.extensions.annotations.Extension;
 import fr.echoes.labs.ksf.extensions.projects.IProjectLifecycleExtension;
 import fr.echoes.labs.ksf.extensions.projects.NotifyResult;
@@ -185,7 +186,7 @@ public class RedmineProjectLifeCycleExtension implements IProjectLifecycleExtens
 
     @Override
     public String getName() {
-        return "redmine";
+        return RedmineConstants.ID;
     }
 
 }

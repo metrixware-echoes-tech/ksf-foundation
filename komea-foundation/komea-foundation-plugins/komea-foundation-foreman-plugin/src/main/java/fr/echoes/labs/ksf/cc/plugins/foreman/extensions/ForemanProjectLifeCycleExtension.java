@@ -7,6 +7,7 @@ import fr.echoes.labs.ksf.cc.plugins.foreman.dao.IForemanTargetDAO;
 import fr.echoes.labs.ksf.cc.plugins.foreman.model.ForemanTarget;
 import fr.echoes.labs.ksf.cc.plugins.foreman.services.ForemanClientFactory;
 import fr.echoes.labs.ksf.cc.plugins.foreman.services.ForemanErrorHandlingService;
+import fr.echoes.labs.ksf.cc.plugins.foreman.utils.ForemanConstants;
 import fr.echoes.labs.ksf.extensions.annotations.Extension;
 import fr.echoes.labs.ksf.extensions.projects.IProjectLifecycleExtension;
 import fr.echoes.labs.ksf.extensions.projects.NotifyResult;
@@ -147,7 +148,7 @@ public class ForemanProjectLifeCycleExtension implements IProjectLifecycleExtens
 
     @Override
     public String getName() {
-        return "foreman";
+        return ForemanConstants.ID;
     }
 
 }

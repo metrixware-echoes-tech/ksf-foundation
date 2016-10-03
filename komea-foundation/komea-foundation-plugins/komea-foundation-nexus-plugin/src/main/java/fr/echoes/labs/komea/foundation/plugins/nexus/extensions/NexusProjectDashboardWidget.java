@@ -8,6 +8,7 @@ import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.MenuAction;
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
 import fr.echoes.labs.ksf.cc.extensions.services.project.ProjectUtils;
 import fr.echoes.labs.ksf.cc.plugins.nexus.services.NexusConfigurationService;
+import fr.echoes.labs.ksf.cc.plugins.nexus.utils.NexusConstants;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
@@ -99,6 +100,11 @@ public class NexusProjectDashboardWidget implements ProjectDashboardWidget {
             public String getIconUrl() {
                 return NexusProjectDashboardWidget.this.getIconUrl();
             }
+
+            @Override
+            public String getId() {
+                return NexusConstants.ID;
+            }
         };
 
         return Lists.newArrayList(iframePanel);
@@ -121,6 +127,11 @@ public class NexusProjectDashboardWidget implements ProjectDashboardWidget {
     @Override
     public boolean hasHtmlPanelBody() {
         return false;
+    }
+
+    @Override
+    public String getId() {
+        return NexusConstants.ID;
     }
 
 }

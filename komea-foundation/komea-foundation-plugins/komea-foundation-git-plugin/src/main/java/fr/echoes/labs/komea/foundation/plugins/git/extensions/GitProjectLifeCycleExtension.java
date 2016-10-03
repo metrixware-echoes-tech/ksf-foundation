@@ -4,6 +4,7 @@ import com.tocea.corolla.products.dao.IProjectDAO;
 import fr.echoes.labs.komea.foundation.plugins.git.GitExtensionMergeException;
 import fr.echoes.labs.komea.foundation.plugins.git.services.GitErrorHandlingService;
 import fr.echoes.labs.komea.foundation.plugins.git.services.IGitService;
+import fr.echoes.labs.komea.foundation.plugins.git.utils.GitConstants;
 import fr.echoes.labs.ksf.extensions.annotations.Extension;
 import fr.echoes.labs.ksf.extensions.projects.IProjectLifecycleExtension;
 import fr.echoes.labs.ksf.extensions.projects.NotifyResult;
@@ -166,7 +167,7 @@ public class GitProjectLifeCycleExtension implements IProjectLifecycleExtension 
 
     @Override
     public String getName() {
-        return "git";
+        return GitConstants.ID;
     }
 
 }

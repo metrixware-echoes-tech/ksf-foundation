@@ -1,27 +1,7 @@
 package fr.echoes.labs.ksf.cc.plugins.foreman.controllers;
 
-import java.io.IOException;
-import java.util.Set;
-
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
-
-import org.apache.commons.lang3.StringUtils;
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-
 import com.tocea.corolla.products.dao.IProjectDAO;
 import com.tocea.corolla.products.domain.Project;
-
 import fr.echoes.labs.foremanapi.IForemanApi;
 import fr.echoes.labs.foremanapi.model.Host;
 import fr.echoes.labs.foremanclient.IForemanService;
@@ -37,6 +17,22 @@ import fr.echoes.labs.ksf.cc.plugins.foreman.services.ForemanErrorHandlingServic
 import fr.echoes.labs.ksf.cc.plugins.foreman.services.ForemanHostDescriptorFactory;
 import fr.echoes.labs.puppet.PuppetClient;
 import fr.echoes.labs.puppet.PuppetException;
+import java.io.IOException;
+import java.util.Set;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+import org.apache.commons.lang3.StringUtils;
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class ForemanActionsController {
@@ -129,7 +125,7 @@ public class ForemanActionsController {
         }
         try {
 
-        	final IForemanApi foremanApi = this.foremanClientFactory.createForemanClient();
+            final IForemanApi foremanApi = this.foremanClientFactory.createForemanClient();
             this.foremanService.importPuppetClasses(foremanApi, this.configurationService.getSmartProxyId());
 
         } catch (final Exception e) {
@@ -182,25 +178,25 @@ public class ForemanActionsController {
 
         final ForemanEnvironnment environment = target.getEnvironment();
 
-		String redirectURL = "/ui/projects/"+project.getKey();
+        String redirectURL = "/ui/projects/" + project.getKey();
 
-		try {
+        try {
 
-			// Create a host descriptor using the provided data and the data from the configuration file
-			final ForemanHostDescriptor hostDescriptor = this.hostDescriptorFactory.createHostDescriptor(project, target, hostName, hostPass);
+            // Create a host descriptor using the provided data and the data from the configuration file
+            final ForemanHostDescriptor hostDescriptor = this.hostDescriptorFactory.createHostDescriptor(project, target, hostName, hostPass);
 
-			// Call Foreman to create the VM
-			final IForemanApi foremanApi = this.foremanClientFactory.createForemanClient();
-			final Host host = this.foremanService.createHost(foremanApi, hostDescriptor);
+            // Call Foreman to create the VM
+            final IForemanApi foremanApi = this.foremanClientFactory.createForemanClient();
+            final Host host = this.foremanService.createHost(foremanApi, hostDescriptor);
 
             //TODO find a way to generate the plugin tab ID dynamically
-            redirectURL += "?foremanHost=" + host.name + "#pluginTab3";
+            redirectURL += "?foremanHost=" + host.name + "#foreman";
 
         } catch (final ForemanHostAlreadyExistException e) {
-        	LOGGER.error("[foreman] Failed to create host {} : {}", hostName, e);
-        	this.errorHandler.registerError("Failed to instantiate target. The provided name is already used for another instance.");
-        }catch (final Exception e) {
-			LOGGER.error("[foreman] Failed to create host {} : {}.", hostName, e);
+            LOGGER.error("[foreman] Failed to create host {} : {}", hostName, e);
+            this.errorHandler.registerError("Failed to instantiate target. The provided name is already used for another instance.");
+        } catch (final Exception e) {
+            LOGGER.error("[foreman] Failed to create host {} : {}.", hostName, e);
             this.errorHandler.registerError("Failed to instantiate target. Please verify your Foreman configuration.");
         }
 

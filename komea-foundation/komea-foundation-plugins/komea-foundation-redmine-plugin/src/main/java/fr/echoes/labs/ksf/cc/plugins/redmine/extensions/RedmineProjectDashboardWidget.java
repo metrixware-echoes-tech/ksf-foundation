@@ -13,6 +13,7 @@ import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineQuery.Builder;
 import fr.echoes.labs.ksf.cc.plugins.redmine.services.IRedmineService;
 import fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineConfigurationService;
 import fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineErrorHandlingService;
+import fr.echoes.labs.ksf.cc.plugins.redmine.utils.RedmineConstants;
 import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -184,6 +185,11 @@ public class RedmineProjectDashboardWidget implements ProjectDashboardWidget {
             public String getIconUrl() {
                 return RedmineProjectDashboardWidget.this.getIconUrl();
             }
+
+            @Override
+            public String getId() {
+                return RedmineConstants.ID;
+            }
         };
 
         return Lists.newArrayList(iframePanel);
@@ -206,6 +212,11 @@ public class RedmineProjectDashboardWidget implements ProjectDashboardWidget {
     @Override
     public boolean hasHtmlPanelBody() {
         return true;
+    }
+
+    @Override
+    public String getId() {
+        return RedmineConstants.ID;
     }
 
 }

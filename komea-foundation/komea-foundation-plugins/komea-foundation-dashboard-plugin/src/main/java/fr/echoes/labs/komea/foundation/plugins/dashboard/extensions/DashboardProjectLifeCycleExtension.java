@@ -4,6 +4,7 @@ import com.tocea.corolla.products.dao.IProjectDAO;
 import fr.echoes.labs.ksf.cc.extensions.services.project.ProjectUtils;
 import fr.echoes.labs.ksf.cc.plugins.dashboard.services.DashboardLiferayService;
 import fr.echoes.labs.ksf.cc.plugins.dashboard.services.DashboardService;
+import fr.echoes.labs.ksf.cc.plugins.dashboard.utils.DashboardConstants;
 import fr.echoes.labs.ksf.extensions.annotations.Extension;
 import fr.echoes.labs.ksf.extensions.projects.IProjectLifecycleExtension;
 import fr.echoes.labs.ksf.extensions.projects.NotifyResult;
@@ -162,6 +163,6 @@ public class DashboardProjectLifeCycleExtension implements IProjectLifecycleExte
 
     @Override
     public String getName() {
-        return "dashboard";
+        return DashboardConstants.ID;
     }
 }

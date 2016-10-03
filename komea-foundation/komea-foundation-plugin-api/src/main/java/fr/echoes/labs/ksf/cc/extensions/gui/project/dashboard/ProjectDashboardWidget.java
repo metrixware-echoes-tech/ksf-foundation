@@ -21,4 +21,6 @@ public interface ProjectDashboardWidget {
 
     List<IProjectTabPanel> getTabPanels(String projectKey);
 
+    String getId();
+
 }
