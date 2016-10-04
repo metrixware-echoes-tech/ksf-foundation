@@ -19,6 +19,7 @@ import fr.echoes.labs.ksf.foreman.api.model.PuppetClass;
 public class PuppetModulesBackupServiceTest {
 
 	private static final String STORAGE_PATH = "build/tmp/dataset";
+	private static final String SOURCE_PATH = "src/test/resources/dataset/";
 	
 	private BackupStorage backupStorage;
 	private PuppetModulesBackupService backupService;
@@ -33,13 +34,15 @@ public class PuppetModulesBackupServiceTest {
 		this.backupService = new PuppetModulesBackupService(this.backupStorage);
 	}
 	
+	private void initDataset() throws IOException {
+		FileUtils.copyDirectory(new File(SOURCE_PATH), new File(STORAGE_PATH));
+	}
+	
 	@Test
 	public void testReadHostGroups() throws IOException {
 		
 		// given
-		final File srcDir = new File("src/test/resources/dataset/");
-		final File tmpDir = new File(STORAGE_PATH);
-		FileUtils.copyDirectory(srcDir, tmpDir);
+		initDataset();
 		
 		// when
 		final Map<String, List<PuppetClass>> results = this.backupService.readHostGroups();
@@ -51,6 +54,22 @@ public class PuppetModulesBackupServiceTest {
 		Entry<String, List<PuppetClass>> entry = results.entrySet().iterator().next();
 		Assert.assertEquals("Provision from foreman.ksf.local", entry.getKey());
 		Assert.assertEquals(15, entry.getValue().size());
+		
+	}
+	
+	@Test
+	public void testReadHostClasses() throws IOException {
+		
+		// given
+		final ForemanHost host = new ForemanHost("1", "dashboard.ksf.local");
+		
+		initDataset();
+				
+		// when
+		final List<PuppetClass> results = this.backupService.readHostClasses(host);
+		
+		// then
+		Assert.assertEquals(6, results.size());
 		
 	}
 	
@@ -74,11 +93,25 @@ public class PuppetModulesBackupServiceTest {
 	}
 	
 	@Test
+	public void testWriteEmptyHostGroups() throws IOException {
+		
+		// given
+		final String hostGroup = "myEmptyHostGroup";
+		final List<PuppetClass> puppetClasses = Lists.newArrayList();
+		
+		// when
+		this.backupService.writeHostGroupClasses(hostGroup, puppetClasses);
+		
+		// then
+		Assert.assertFalse(new File(STORAGE_PATH+"/hostgroups/"+hostGroup+"-classes.csv").exists());	
+		
+	}
+	
+	@Test
 	public void testWriteHost() throws IOException {
 		
 		// given
-		final ForemanHost host = new ForemanHost();
-		host.setName("my.host.local");
+		final ForemanHost host = new ForemanHost("1", "my.host.local");
 		
 		// given
 		final List<PuppetClass> puppetClasses = Lists.newArrayList(
@@ -94,6 +127,24 @@ public class PuppetModulesBackupServiceTest {
 		Assert.assertTrue(new File(STORAGE_PATH+"/hosts").exists());
 		Assert.assertTrue(new File(STORAGE_PATH+"/hosts/"+host.getName()).exists());
 		Assert.assertTrue(new File(STORAGE_PATH+"/hosts/"+host.getName()+"/"+host.getName()+"-classes.csv").exists());
+	}
+	
+	@Test
+	public void testWriteEmptyHost() throws IOException {
+		
+		// given
+		final ForemanHost host = new ForemanHost("1", "my.empty.host.local");
+		
+		// given
+		final List<PuppetClass> puppetClasses = Lists.newArrayList();
+				
+		// when
+		this.backupService.writeHostClasses(host, puppetClasses);
+		
+		// then
+		Assert.assertFalse(new File(STORAGE_PATH+"/hosts/"+host.getName()).exists());
+		Assert.assertFalse(new File(STORAGE_PATH+"/hosts/"+host.getName()+"/"+host.getName()+"-classes.csv").exists());
+		
 	}
 	
 }
