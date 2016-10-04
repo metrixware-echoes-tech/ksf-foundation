@@ -1,0 +1,8 @@
+moduleName,name
+java,java
+wrappers,wrappers::firewall
+apt,apt::backports
+apt,apt
+sys,sys::curl
+wrappers,wrappers::nexus_artifact::artifact
+komea_foundation,komea_foundation

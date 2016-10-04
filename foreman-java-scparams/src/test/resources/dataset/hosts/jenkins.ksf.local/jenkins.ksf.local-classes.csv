@@ -1,0 +1,4 @@
+moduleName,name
+jenkins,jenkins
+java,java
+wrappers,wrappers::jenkins::plugin

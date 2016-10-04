@@ -1,0 +1,16 @@
+moduleName,name
+backupninja,backupninja::client
+bash,bash
+echoes_firewall,echoes_firewall
+fail2ban,fail2ban
+fail2ban,fail2ban::jail::ssh
+fail2ban,fail2ban::jail::ssh_ddos
+hosts,hosts
+munin,munin::node
+ntp,ntp
+vim,vim
+wrappers,wrappers::accounts::user
+wrappers,wrappers::backupninja::rdiff
+wrappers,wrappers::file
+wrappers,wrappers::file_line
+wrappers,wrappers::firewall

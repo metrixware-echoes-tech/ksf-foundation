@@ -1,0 +1,18 @@
+puppetModule,puppetClass,parameter,value,usePuppetDefault
+jasig,jasig,ldap_baseDn,"cn=users,dc=metrixware,dc=local",false
+jasig,jasig,ldap_domain,metrixware.local,false
+jasig,jasig,ldap_managerDn,"cn=Utilisateur KSF,cn=Users,dc=metrixware,dc=local",false
+jasig,jasig,ldap_managerPassword,490ebc83a2b4dc242a957551e082a1a6024259ef9676058e72fc8851ac1bf22b,false
+jasig,jasig,ldap_rootDn,"dc=metrixware,dc=local",false
+jasig,jasig,ldap_search_filter,sAMAccountName={user},false
+jasig,jasig,ldap_trustedCert,,false
+jasig,jasig,ldap_url,ldap://10.1.0.1:389,false
+jasig,jasig,ldap_useSSL,false,false
+jasig,jasig,ldap_useStartTLS,false,false
+jasig,jasig,server_name,https://ksf-dev.metrixware.local/,false
+jasig,jasig,service_directory,/etc/cas/services,false
+wrappers,wrappers::firewall,resources,"{""200 allow HTTP access"":{""dport"":8080,""proto"":""tcp"",""action"":""accept""},""200 allow HTTP access - IPv6"":{""dport"":8080,""proto"":""tcp"",""action"":""accept"",""provider"":""ip6tables""}}",false
+wrappers,wrappers::jasig::service,resources,"{""Foundation"":{""serviceId"":""^https://ksf-dev.metrixware.local.+foundation.+"",""name"":""Foundation_MXW.json"",""id"":101,""enabled"":true,""sso_enabled"":true},""Jenkins"":{""serviceId"":""^https://ksf-dev.metrixware.local.+jenkins.+"",""name"":""Jenkins_MXW.json"",""id"":102,""enabled"":true,""sso_enabled"":true},""Redmine"":{""serviceId"":""^https://ksf-dev.metrixware.local.+redmine.+"",""name"":""Redmine_MXW.json"",""id"":103,""enabled"":true,""sso_enabled"":true},""Dashboard"":{""serviceId"":""^https://ksf-dev.metrixware.local.+dashboard.+"",""name"":""Dashboard_MXW.json"",""id"":104,""enabled"":true,""sso_enabled"":true},""Dashboard2"":{""serviceId"":""^https://dashboard-demo.metrixware.local.+dashboard.+"",""name"":""Dashboard2_MXW.json"",""id"":105,""enabled"":true,""sso_enabled"":true},""Dashboard3"":{""serviceId"":""^https://ksf-dev.metrixware.local/.*"",""name"":""Dashboard3_MXW.json"",""id"":106,""enabled"":true,""sso_enabled"":true}}",false
+wrappers,wrappers::tomcat::instance,resources,"{""tomcat8"":{""package_name"":""tomcat8"",""install_from_source"":false}}",false
+wrappers,wrappers::tomcat::service,resources,"{""default"":{""service_ensure"":""running"",""service_name"":""tomcat8"",""use_init"":true}}",false
+wrappers,wrappers::tomcat::war,resources,"{""cas-overlay-1.0.war"":{""war_source"":""https://ksf.echoes.fr/nexus/service/local/repositories/komea/content/org/jasig/cas/cas-overlay/1.0/cas-overlay-1.0.war"",""catalina_base"":""/var/lib/tomcat8""}}",false

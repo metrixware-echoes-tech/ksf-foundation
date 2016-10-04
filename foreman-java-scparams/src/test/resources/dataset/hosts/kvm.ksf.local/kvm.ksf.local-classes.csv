@@ -1,0 +1,11 @@
+moduleName,name
+bash,bash
+vim,vim
+ntp,ntp
+wrappers,wrappers::accounts::user
+fail2ban,fail2ban
+fail2ban,fail2ban::jail::ssh
+fail2ban,fail2ban::jail::ssh_ddos
+sysctl,sysctl::values
+echoes_firewall,echoes_firewall
+wrappers,wrappers::firewall
