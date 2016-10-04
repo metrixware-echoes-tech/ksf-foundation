@@ -32,11 +32,17 @@ public class RedmineConfigurationService {
     @Value("${ksf.redmine.featureStatusAssignedId}")
     private int featureStatusAssignedId;
 
+    @Value("${ksf.redmine.featureStatusResolvedId}")
+    private int featureStatusResolvedId;
+
     @Value("${ksf.redmine.featureStatusClosedId}")
     private int featureStatusClosedId;
 
-    @Value("${ksf.redmine.featureStatusRejectedId}")
-    private int featureStatusRejectedId;
+    @Value("${ksf.redmine.featureResolutionRejectedValue}")
+    private String featureResolutionRejectedValue;
+
+    @Value("${ksf.redmine.customField.resolution.id}")
+    private int resolutionFieldId;
 
     @Value("${ksf.redmine.releaseTicketMessagePattern}")
     private String releaseTicketMessagePattern;
@@ -82,6 +88,13 @@ public class RedmineConfigurationService {
     }
 
     /**
+     * @return the featureStatusResolvedId
+     */
+    public int getFeatureStatusResolvedId() {
+        return this.featureStatusResolvedId;
+    }
+
+    /**
      * @return the featureStatusClosedId
      */
     public int getFeatureStatusClosedId() {
@@ -89,10 +102,17 @@ public class RedmineConfigurationService {
     }
 
     /**
-     * @return the featureStatusRejectedId
+     * @return the featureResolutionRejectedValue
      */
-    public int getFeatureStatusRejectedId() {
-        return this.featureStatusRejectedId;
+    public String getFeatureResolutionRejectedValue() {
+        return this.featureResolutionRejectedValue;
+    }
+
+    /**
+     * @return the resolutionFieldId
+     */
+    public int getResolutionFieldId() {
+        return this.resolutionFieldId;
     }
 
     /**

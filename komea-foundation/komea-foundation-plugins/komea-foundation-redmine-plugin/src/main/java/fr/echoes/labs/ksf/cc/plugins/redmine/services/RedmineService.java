@@ -7,6 +7,8 @@ import com.taskadapter.redmineapi.RedmineException;
 import com.taskadapter.redmineapi.RedmineManager;
 import com.taskadapter.redmineapi.RedmineManagerFactory;
 import com.taskadapter.redmineapi.UserManager;
+import com.taskadapter.redmineapi.bean.CustomField;
+import com.taskadapter.redmineapi.bean.CustomFieldFactory;
 import com.taskadapter.redmineapi.bean.Issue;
 import com.taskadapter.redmineapi.bean.IssueCategory;
 import com.taskadapter.redmineapi.bean.Project;
@@ -331,29 +333,47 @@ public class RedmineService implements IRedmineService {
     }
 
     @Override
+    public void rejectIssue(String ticketId, String username) throws RedmineExtensionException {
+
+        LOGGER.info("[redmine] Rejecting redmine issue '{}'", ticketId);
+        final RedmineManager redmineManager = getRedmineManager();
+        final IssueManager issueManager = redmineManager.getIssueManager();
+        try {
+
+            final Issue issue = this.getIssueById(Integer.valueOf(ticketId), issueManager);
+            this.changeIssueAssignee(issue, username, redmineManager);
+            issue.setStatusId(this.configuration.getFeatureStatusClosedId());
+            final int resolutionFieldId = this.configuration.getResolutionFieldId();
+            CustomField fieldResolution = issue.getCustomFieldById(resolutionFieldId);
+            if (fieldResolution == null) {
+                fieldResolution = CustomFieldFactory.create(resolutionFieldId);
+                issue.addCustomField(fieldResolution);
+            }
+            fieldResolution.setValue(this.configuration.getFeatureResolutionRejectedValue());
+            issueManager.update(issue);
+
+            LOGGER.info("[redmine] Rejecting redmine issue - issue rejected");
+        } catch (final RedmineExtensionException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw e;
+        } catch (final Exception e) {
+            LOGGER.error("[redmine] Failed to reject issue '" + ticketId + "'", e);
+            throw new RedmineExtensionException("Failed to reject ticket.", e);
+        }
+    }
+
+    @Override
     public void changeStatus(String ticketId, int statusId, String username) throws RedmineExtensionException {
 
         LOGGER.info("[redmine] Changing redmine issue '{}' status to status ID '{}'", ticketId, statusId);
         final RedmineManager redmineManager = getRedmineManager();
         final IssueManager issueManager = redmineManager.getIssueManager();
         try {
-            final Issue issue;
-            LOGGER.info("[redmine] Changing redmine issue - property bug API is {}", this.configuration.isHackBugApi());
-            if (this.configuration.isHackBugApi()) {
-                issue = this.getIssueById(Integer.valueOf(ticketId), redmineManager);
-            } else {
-                issue = issueManager.getIssueById(Integer.valueOf(ticketId));
-            }
-
-            if (issue == null) {
-                throw new RedmineExtensionException("[redmine] Failed to change issue '"
-                        + ticketId + "' status because this issue was not found.");
-            } else {
-                issue.setStatusId(statusId);
-                this.changeIssueAssignee(issue, username, redmineManager);
-                issueManager.update(issue);
-                LOGGER.info("[redmine] Changing redmine issue status - status updated");
-            }
+            final Issue issue = this.getIssueById(Integer.valueOf(ticketId), issueManager);
+            issue.setStatusId(statusId);
+            this.changeIssueAssignee(issue, username, redmineManager);
+            issueManager.update(issue);
+            LOGGER.info("[redmine] Changing redmine issue status - status updated");
         } catch (final RedmineExtensionException e) {
             LOGGER.error(e.getMessage(), e);
             throw e;
@@ -374,16 +394,26 @@ public class RedmineService implements IRedmineService {
         }
     }
 
-    private Issue getIssueById(Integer issueId, final RedmineManager redmineManager) throws RedmineException {
-        final List<Issue> issues = redmineManager.getIssueManager().getIssues(null, null);
-        if (issues != null) {
-            for (final Issue issue : issues) {
-                if (issue.getId().equals(issueId)) {
-                    return issue;
+    private Issue getIssueById(Integer issueId, final IssueManager issueManager) throws RedmineException, RedmineExtensionException {
+        Issue issue = null;
+        LOGGER.info("[redmine] property bug API is {}", this.configuration.isHackBugApi());
+        if (this.configuration.isHackBugApi()) {
+            final List<Issue> issues = issueManager.getIssues(null, null);
+            if (issues != null) {
+                for (final Issue iss : issues) {
+                    if (iss.getId().equals(issueId)) {
+                        issue = iss;
+                        break;
+                    }
                 }
             }
+        } else {
+            issue = issueManager.getIssueById(issueId);
         }
-        return null;
+        if (issue == null) {
+            throw new RedmineExtensionException("[redmine] Issue '" + issueId + "' was not found.");
+        }
+        return issue;
     }
 
     @Override

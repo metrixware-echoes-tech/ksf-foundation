@@ -155,11 +155,10 @@ public class RedmineProjectLifeCycleExtension implements IProjectLifecycleExtens
     public NotifyResult notifyCanceledFeature(ProjectDto projectDto, String ticketId,
             String featureSubject) {
         try {
-            this.redmineService.changeStatus(ticketId, this.configurationService.getFeatureStatusRejectedId(), null);
-
+            this.redmineService.rejectIssue(ticketId, null);
         } catch (final Exception ex) {
-            LOGGER.error("[Redmine] Failed to change ticket #{} status", ticketId, ex);
-            this.errorHandler.registerError("Failed to change Redmine ticket status.");
+            LOGGER.error("[Redmine] Failed to reject ticket #{} ", ticketId, ex);
+            this.errorHandler.registerError("Failed to reject Redmine ticket #" + ticketId);
         }
         return NotifyResult.CONTINUE;
     }
