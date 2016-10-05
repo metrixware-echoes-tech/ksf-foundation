@@ -1,0 +1,6 @@
+moduleName,name
+munin,munin::master
+wrappers,wrappers::firewall
+apache,apache
+apache,apache::mod::fcgid
+wrappers,wrappers::file

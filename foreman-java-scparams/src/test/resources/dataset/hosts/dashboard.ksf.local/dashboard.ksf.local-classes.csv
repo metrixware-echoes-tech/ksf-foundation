@@ -1,0 +1,7 @@
+moduleName,name
+elasticsearch,elasticsearch
+komea_dashboard_core,komea_dashboard_core
+java,java
+komea_security,komea_security
+komea_dashboard_liferay,komea_dashboard_liferay
+mysql,mysql::server

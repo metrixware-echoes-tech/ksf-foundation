@@ -1,0 +1,18 @@
+puppetModule,puppetClass,parameter,value,usePuppetDefault
+echoes_firewall,echoes_firewall,allow_icmp,true,false
+echoes_firewall,echoes_firewall,ipv4_forward_policy,accept,false
+echoes_firewall,echoes_firewall,ipv4_input_policy,accept,false
+echoes_firewall,echoes_firewall,ipv4_output_policy,accept,false
+echoes_firewall,echoes_firewall,ipv6_forward_policy,accept,false
+echoes_firewall,echoes_firewall,ipv6_input_policy,accept,false
+echoes_firewall,echoes_firewall,ipv6_output_policy,accept,false
+hosts,hosts,host_entries,"{""ksf-dev.metrixware.local"":{""ip"":""192.168.122.7""}}",false
+komea_dashboard_core,komea_dashboard_core::config,cas_url,test2,false
+munin,munin::node,allow,"[""192.168.122.0/24""]",false
+munin,munin::node,export_node,disabled,false
+wrappers,wrappers::accounts::user,resources,"{""root"":{""comment"":""Root, Puppet-managed User"",""shell"":""/bin/bash"",""password"":""$6$0p9NZyN3$r/U01sKMsNJoaW4M7cfYnNSHGLhO5K5pgJW7z2DzA1iO.7gp9BJIdxTlCYXHvgU5EiINmrb70iFYFoeF.cIY90""},""fpoinsaut"":{""comment"":""Florent Poinsaut, Puppet-managed User"",""shell"":""/bin/bash"",""password"":""$6$i4NGG9dc$YzL.tRm0rnIGcjZqEYruYu5k6P6NKniahi28Anc7E7ihal6pPkrnuLRfaK8pTDmZZvOLRJKRSQTDMdMnXcuDQ1""},""tsaquet"":{""comment"":""Thomas Saquet, Puppet-managed User"",""shell"":""/bin/bash"",""password"":""$6$Ynwb02zE$Sg9kKilNozEqX0W1.wXy512dxVD/SjRt5ycHjoU4lh58XbxjmrhXeIKgIyJL.WKbOzO8WrIIRv1wMJiT1YXG8/""},""scarreau"":{""comment"":""Sebastien Carreau, Puppet-managed User"",""shell"":""/bin/bash"",""password"":""$6$PgndOsNV$LA2ELFNUVihShz38jmHIpUzh/38ZDUTh9ioRW1zQ.WWTwmYuqj.2kp8VxCMr/rUL3..IYEks09s2/aaqF/5Q20""},""dmichel"":{""comment"":""David Michel, Puppet-managed User"",""shell"":""/bin/bash"",""password"":""$6$PgndOsNV$LA2ELFNUVihShz38jmHIpUzh/38ZDUTh9ioRW1zQ.WWTwmYuqj.2kp8VxCMr/rUL3..IYEks09s2/aaqF/5Q20""},""dcollard"":{""comment"":""David Collard, Puppet-managed User"",""shell"":""/bin/bash"",""password"":""$6$PgndOsNV$LA2ELFNUVihShz38jmHIpUzh/38ZDUTh9ioRW1zQ.WWTwmYuqj.2kp8VxCMr/rUL3..IYEks09s2/aaqF/5Q20""},""ksfuser"":{""comment"":""Technical User, Puppet-managed User"",""shell"":""/bin/bash"",""password"":""$6$PgndOsNV$LA2ELFNUVihShz38jmHIpUzh/38ZDUTh9ioRW1zQ.WWTwmYuqj.2kp8VxCMr/rUL3..IYEks09s2/aaqF/5Q20""}}",false
+wrappers,wrappers::backupninja::rdiff,resources,"<%= @host.shortname  %>:\r\n  keep: 1D\r\n  type: remote\r\n  user: backupninja\r\n  home: \""/var/backups/<%= @host.domain  %>/<%= @host.shortname  %>\""\r\n  host: haproxy.<%= @host.domain  %>",false
+wrappers,wrappers::file,defaults,"{""owner"":""root"",""group"":""root""}",false
+wrappers,wrappers::file,resources,"\""/root/.ssh/id_rsa\"":\r\n  ensure: file\r\n  mode: '0600'\r\n  content: <%= @host.params['id_dsa'] %>\r\n\""/root/.ssh/id_rsa.pub\"":\r\n  ensure: file\r\n  mode: '0644'\r\n  content: <%= !@host.params['id_dsa.pub'].empty? && @host.params['id_dsa.pub'].split(@host.shortname + \"": \"").size > 1 ? @host.params['id_dsa.pub'].split(@host.shortname + \"": \"")[1].split(\""\\n\"")[0] : \""\"" %>\r\n\""/root/.ssh/known_hosts\"":\r\n  ensure: file\r\n  mode: '0644'",false
+wrappers,wrappers::file_line,resources,"{""Allow HAProxy for backup"":{""path"":""/root/.ssh/known_hosts"",""line"":""|1|xBHAboImFWnY3aiRPSJHlIZJWZk=|3RilszmJjgBqu3p+5aJbcSjfOw4= ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBO9J7UVFtBv7N5gi3iENlsQAE3BHY+4rmlQoGArVbmdwcl9Q9tkI0tSAk66TSVn+Dl5CR88CvWJ9s3i7avpCYnU=""}}",false
+wrappers,wrappers::firewall,resources,"{""150 allow Munin-Node access"":{""dport"":""munin"",""proto"":""tcp"",""action"":""accept""},""150 allow Munin-Node access - IPv6"":{""dport"":""munin"",""proto"":""tcp"",""action"":""accept"",""provider"":""ip6tables""}}",false

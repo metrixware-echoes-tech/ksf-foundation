@@ -1,0 +1,9 @@
+moduleName,name
+haproxy,haproxy
+wrappers,wrappers::haproxy::backend
+wrappers,wrappers::haproxy::frontend
+wrappers,wrappers::openssl::certificate::x509
+wrappers,wrappers::concat
+wrappers,wrappers::concat::fragment
+wrappers,wrappers::firewall
+sysctl,sysctl::values

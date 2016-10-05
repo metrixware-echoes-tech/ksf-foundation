@@ -1,0 +1,5 @@
+moduleName,name
+nexus,nexus
+java,java
+apt,apt::backports
+apt,apt

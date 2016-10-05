@@ -1,0 +1,45 @@
+
+apply plugin:'application'
+mainClassName = "fr.echoes.labs.ksf.foreman.Launcher"
+
+dependencies{
+	
+	compile group: 'args4j', name: 'args4j', version: '2.33'
+	compile group: 'net.sf.supercsv', name: 'super-csv', version: '2.4.0'
+	
+}
+
+startScripts {
+	doLast {
+		def winScriptFile  = file getWindowsScript()
+		def winFileText = winScriptFile.text
+		winFileText = winFileText.replaceAll('set CLASSPATH=.*', 'rem original CLASSPATH declaration replaced by:\nset CLASSPATH=%APP_HOME%\\\\lib\\\\\\*')
+		winScriptFile.text = winFileText
+	}
+}
+
+//task copyDocumentation(type: Copy) {
+//	from 'src/main/resources/documentation'
+//	into "$buildDir/documentation"
+//}
+//
+//task createDocs {
+//	def docsPath = "$buildDir/docs"
+//	def docs = new File(docsPath)
+//	outputs.dir docs
+//	doLast {
+//		docs.mkdirs()
+//		copy {
+//			from getTemplateLocation(buildDir)
+//			into docsPath
+//		}
+//		copyContent(docsPath, "connector.html", "index.html")
+//	}
+//}
+
+//applicationDistribution.from(createDocs) {
+//	into 'documentation'
+//}
+
+//createDocs.mustRunAfter processResources
+//createDocs.mustRunAfter markdownToHtml
