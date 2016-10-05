@@ -19,10 +19,18 @@
  */
 package com.tocea.corolla.revisions.services;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
+import com.tocea.corolla.revisions.domain.Change;
+import com.tocea.corolla.revisions.domain.Commit;
+import com.tocea.corolla.revisions.domain.IChange;
+import com.tocea.corolla.revisions.domain.ICommit;
+import com.tocea.corolla.revisions.exceptions.InvalidCommitInformationException;
+import com.tocea.corolla.revisions.exceptions.SnapshotBuildFailureException;
+import fr.echoes.labs.ksf.users.security.api.CurrentUserService;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-
 import org.apache.commons.beanutils.PropertyUtils;
 import org.javers.core.Javers;
 import org.javers.core.diff.Diff;
@@ -36,17 +44,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
-import com.tocea.corolla.revisions.domain.Change;
-import com.tocea.corolla.revisions.domain.Commit;
-import com.tocea.corolla.revisions.domain.IChange;
-import com.tocea.corolla.revisions.domain.ICommit;
-import com.tocea.corolla.revisions.exceptions.InvalidCommitInformationException;
-import com.tocea.corolla.revisions.exceptions.SnapshotBuildFailureException;
-
-import fr.echoes.labs.ksf.users.security.api.ICurrentUserService;
-
 @Service
 public class JaversRevisionService implements IRevisionService {
 
@@ -56,7 +53,7 @@ public class JaversRevisionService implements IRevisionService {
     private Javers javers;
 
     @Autowired
-    private ICurrentUserService currentUserService;
+    private CurrentUserService currentUserService;
 
     @Override
     public void commit(final Object obj) {
