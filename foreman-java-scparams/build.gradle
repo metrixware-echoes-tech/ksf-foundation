@@ -6,6 +6,8 @@ dependencies{
 	
 	compile group: 'args4j', name: 'args4j', version: '2.33'
 	compile group: 'net.sf.supercsv', name: 'super-csv', version: '2.4.0'
+	compile group: 'ch.qos.logback', name: 'logback-classic', version: "${LOG_LOGBACK}"
+	compile group: 'ch.qos.logback', name: 'logback-core', version: "${LOG_LOGBACK}"
 	
 }
 
