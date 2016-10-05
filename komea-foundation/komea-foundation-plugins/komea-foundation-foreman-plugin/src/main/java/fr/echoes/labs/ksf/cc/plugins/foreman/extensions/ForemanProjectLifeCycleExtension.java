@@ -1,6 +1,14 @@
 package fr.echoes.labs.ksf.cc.plugins.foreman.extensions;
 
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.tocea.corolla.products.dao.IProjectDAO;
+
 import fr.echoes.labs.foremanapi.IForemanApi;
 import fr.echoes.labs.foremanclient.IForemanService;
 import fr.echoes.labs.ksf.cc.plugins.foreman.dao.IForemanTargetDAO;
@@ -12,12 +20,7 @@ import fr.echoes.labs.ksf.extensions.annotations.Extension;
 import fr.echoes.labs.ksf.extensions.projects.IProjectLifecycleExtension;
 import fr.echoes.labs.ksf.extensions.projects.NotifyResult;
 import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
-import fr.echoes.labs.ksf.users.security.api.CurrentUserService;
-import java.util.List;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import fr.echoes.labs.ksf.users.security.api.ICurrentUserService;
 
 @Extension
 public class ForemanProjectLifeCycleExtension implements IProjectLifecycleExtension {
@@ -40,7 +43,7 @@ public class ForemanProjectLifeCycleExtension implements IProjectLifecycleExtens
     private IProjectDAO projectDAO;
 
     @Autowired
-    private CurrentUserService currentUserService;
+    private ICurrentUserService currentUserService;
 
     @Override
     public NotifyResult notifyCreatedProject(ProjectDto _project) {
