@@ -1,7 +1,6 @@
 package fr.echoes.labs.ksf.cc.plugins.redmine.extensions;
 
 import com.taskadapter.redmineapi.bean.Version;
-import com.tocea.corolla.products.dao.IProjectDAO;
 import fr.echoes.labs.ksf.cc.plugins.redmine.services.IRedmineService;
 import fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineConfigurationService;
 import fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineErrorHandlingService;
@@ -10,7 +9,7 @@ import fr.echoes.labs.ksf.extensions.annotations.Extension;
 import fr.echoes.labs.ksf.extensions.projects.IProjectLifecycleExtension;
 import fr.echoes.labs.ksf.extensions.projects.NotifyResult;
 import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
-import fr.echoes.labs.ksf.users.security.api.ICurrentUserService;
+import fr.echoes.labs.ksf.users.security.api.CurrentUserService;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
@@ -18,7 +17,6 @@ import org.apache.commons.lang3.text.StrSubstitutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.core.annotation.Order;
 
 /**
@@ -38,28 +36,13 @@ public class RedmineProjectLifeCycleExtension implements IProjectLifecycleExtens
     private IRedmineService redmineService;
 
     @Autowired
-    private IProjectDAO projectDAO;
-
-    @Autowired
-    private ApplicationContext applicationContext;
-
-    @Autowired
     private RedmineConfigurationService configurationService;
 
-    private ICurrentUserService currentUserService;
-
-    public void init() {
-
-        if (this.currentUserService == null) {
-            this.currentUserService = this.applicationContext.getBean(ICurrentUserService.class);
-        }
-    }
+    @Autowired
+    private CurrentUserService currentUserService;
 
     @Override
     public NotifyResult notifyCreatedProject(ProjectDto project) {
-
-        init();
-
         final String logginName = this.currentUserService.getCurrentUserLogin();
 
         if (StringUtils.isEmpty(logginName)) {

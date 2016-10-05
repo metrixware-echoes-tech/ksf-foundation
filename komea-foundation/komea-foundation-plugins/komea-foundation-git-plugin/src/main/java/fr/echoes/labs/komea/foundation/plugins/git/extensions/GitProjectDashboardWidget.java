@@ -10,7 +10,7 @@ import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.IProjectTabPanel;
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.MenuAction;
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
 import fr.echoes.labs.ksf.cc.extensions.services.project.ProjectUtils;
-import fr.echoes.labs.ksf.users.security.api.ICurrentUserService;
+import fr.echoes.labs.ksf.users.security.api.CurrentUserService;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +21,6 @@ import org.apache.commons.lang3.text.StrSubstitutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.stereotype.Component;
@@ -67,17 +66,8 @@ public class GitProjectDashboardWidget implements ProjectDashboardWidget {
         return null;
     }
 
-    private ICurrentUserService currentUserService;
-
     @Autowired
-    private ApplicationContext applicationContext;
-
-    public void init() {
-
-        if (this.currentUserService == null) {
-            this.currentUserService = this.applicationContext.getBean(ICurrentUserService.class);
-        }
-    }
+    private CurrentUserService currentUserService;
 
     @Override
     public String getHtmlPanelBody(String projectId) {
@@ -131,7 +121,6 @@ public class GitProjectDashboardWidget implements ProjectDashboardWidget {
     }
 
     private String getProjectScmUrl(String projectName) {
-        init();
         final String logginName = this.currentUserService.getCurrentUserLogin();
         final Map<String, String> variables = new HashMap<String, String>(4);
         variables.put("scmUrl", this.config.getScmUrl());

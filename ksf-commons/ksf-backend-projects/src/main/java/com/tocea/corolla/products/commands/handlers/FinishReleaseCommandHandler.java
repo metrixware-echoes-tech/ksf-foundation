@@ -1,22 +1,17 @@
 package com.tocea.corolla.products.commands.handlers;
 
-import javax.transaction.Transactional;
-import javax.validation.Valid;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.tocea.corolla.cqrs.annotations.CommandHandler;
 import com.tocea.corolla.cqrs.gate.Gate;
 import com.tocea.corolla.cqrs.handler.ICommandHandler;
-import com.tocea.corolla.products.commands.FinishFeatureCommand;
-import com.tocea.corolla.products.dao.IProjectBranchDAO;
-import com.tocea.corolla.products.dao.IProjectDAO;
+import com.tocea.corolla.products.commands.FinishReleaseCommand;
 import com.tocea.corolla.products.domain.Project;
-import com.tocea.corolla.products.events.EventFeatureFinished;
+import com.tocea.corolla.products.events.EventReleaseFinished;
 import com.tocea.corolla.products.exceptions.ProjectNotFoundException;
-
+import javax.transaction.Transactional;
+import javax.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @author dcollard
@@ -24,41 +19,27 @@ import com.tocea.corolla.products.exceptions.ProjectNotFoundException;
  */
 @CommandHandler
 @Transactional
-public class FinishReleaseCommandHandler implements ICommandHandler<FinishFeatureCommand, Project> {
+public class FinishReleaseCommandHandler implements ICommandHandler<FinishReleaseCommand, Project> {
 
-	private static final Logger LOG = LoggerFactory.getLogger(FinishReleaseCommandHandler.class);
+    private static final Logger LOG = LoggerFactory.getLogger(FinishReleaseCommandHandler.class);
 
-	@Autowired
-	private IProjectDAO projectDAO;
+    @Autowired
+    private Gate gate;
 
-	@Autowired
-	private IProjectBranchDAO branchDAO;
+    @Override
+    public Project handle(@Valid final FinishReleaseCommand command) {
 
-	@Autowired
-	private Gate gate;
+        final Project project = command.getProject();
+        final String releaseVersion = command.getReleaseVersion();
 
-	/**
-	 * Treats the command "When a project feature is created"
-	 *
-	 * @param command
-	 * @return
-	 */
-	@Override
-	public Project handle(@Valid final FinishFeatureCommand command) {
+        if (project == null) {
+            throw new ProjectNotFoundException();
+        }
 
-		final Project project = command.getProject();
-		final String featureId = command.getFeatureId();
-		final String featureSubject = command.getFeatureSubject();
+        this.gate.dispatchEvent(new EventReleaseFinished(project, releaseVersion));
 
-		if (project == null) {
-			throw new ProjectNotFoundException();
-		}
+        return project;
 
-		this.gate.dispatchEvent(new EventFeatureFinished(project, featureId, featureSubject));
-
-
-		return project;
-
-	}
+    }
 
 }
