@@ -7,10 +7,12 @@ import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.NotFoundException;
+import javax.ws.rs.ServiceUnavailableException;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.AuthCache;
@@ -21,6 +23,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.protocol.HttpClientContext;
+import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.BasicAuthCache;
@@ -124,21 +127,33 @@ public abstract class AbstractApiClient {
 		}	
 	}
 	
-	protected void handleError(final HttpResponse response) throws UnsupportedOperationException, IOException {
+	protected void handleError(final HttpResponse response) throws IOException {
 		
 		int statusCode = response.getStatusLine().getStatusCode();
 		
 		switch(statusCode) {
-			case 400:
+			case HttpStatus.SC_BAD_REQUEST:
 				throw new BadRequestException(extractBody(response));
-			case 401:
+			case HttpStatus.SC_UNAUTHORIZED:
 				throw new ForbiddenException(extractBody(response));
-			case 404:
+			case HttpStatus.SC_FORBIDDEN:
+				throw new ForbiddenException(extractBody(response));
+			case HttpStatus.SC_NOT_FOUND:
 				throw new NotFoundException(extractBody(response));
-			case 405:
+			case HttpStatus.SC_METHOD_NOT_ALLOWED:
 				throw new BadRequestException(extractBody(response));
-			case 500:
+			case HttpStatus.SC_INTERNAL_SERVER_ERROR:
 				throw new InternalServerErrorException(extractBody(response));
+			case HttpStatus.SC_GATEWAY_TIMEOUT:
+				throw new ConnectTimeoutException(extractBody(response));
+			case HttpStatus.SC_SERVICE_UNAVAILABLE:
+				throw new ServiceUnavailableException(extractBody(response));
+			case HttpStatus.SC_BAD_GATEWAY:
+				throw new BadRequestException(extractBody(response));
+			case HttpStatus.SC_REQUEST_TIMEOUT:
+				throw new ConnectTimeoutException(extractBody(response));
+			case HttpStatus.SC_UNSUPPORTED_MEDIA_TYPE:
+				throw new BadRequestException(extractBody(response));
 		}
 		
 	}
