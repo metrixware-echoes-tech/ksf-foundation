@@ -23,6 +23,9 @@ public class Launcher {
 
 	public static final Logger LOGGER = LoggerFactory.getLogger(Launcher.class);
 	
+	private static final String ACTION_BACKUP = "backup";
+	private static final String ACTION_INSTALL = "install";
+	
 	private final CommandLineOptions options;
 	
 	private ForemanClient foreman;
@@ -64,24 +67,24 @@ public class Launcher {
 	
 	public void run() throws IOException {
 		
-		final String mode = options.getMode();
-		final IAction action;
-		
-		// detect mode
-		if ("backup".equals(mode.toLowerCase())) {
-			action = new BackupAction(foreman, smartParamBackupdService, hostPuppetModulesBackupService);
-		}else if ("install".equals(mode.toLowerCase())) {
-			action = new InstallAction(foreman, smartParamBackupdService, hostPuppetModulesBackupService, this.backupStorage);
-		}else{
-			throw new IllegalArgumentException(mode+" is not a valid mode.");
-		}
-		
 		// execute action
-		action.execute();
+		resolveAction(options.getMode()).execute();
 		
 		// display stats
 		for (Entry<String, Integer> entry : foreman.getNbRequests().entrySet()) {
 			LOGGER.info("Nb requests {} executed: {}", entry.getKey(), entry.getValue());
+		}
+		
+	}
+	
+	public IAction resolveAction(final String mode) {
+		
+		if (ACTION_BACKUP.equalsIgnoreCase(mode)) {
+			return new BackupAction(foreman, smartParamBackupdService, hostPuppetModulesBackupService);
+		}else if (ACTION_INSTALL.equalsIgnoreCase(mode)) {
+			return new InstallAction(foreman, smartParamBackupdService, hostPuppetModulesBackupService, backupStorage);
+		}else{
+			throw new IllegalArgumentException(mode+" is not a valid mode.");
 		}
 		
 	}

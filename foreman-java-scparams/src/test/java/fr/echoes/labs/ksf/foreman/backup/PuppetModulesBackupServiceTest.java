@@ -25,9 +25,9 @@ public class PuppetModulesBackupServiceTest {
 	private PuppetModulesBackupService backupService;
 	
 	@Before
-	public void setup() {
+	public void setup() throws IOException {
 
-		new File(STORAGE_PATH).delete();
+		FileUtils.deleteDirectory(new File(STORAGE_PATH));
 		new File(STORAGE_PATH).mkdirs();
 		
 		this.backupStorage = new BackupStorage(STORAGE_PATH);
@@ -54,6 +54,17 @@ public class PuppetModulesBackupServiceTest {
 		Entry<String, List<PuppetClass>> entry = results.entrySet().iterator().next();
 		Assert.assertEquals("Provision from foreman.ksf.local", entry.getKey());
 		Assert.assertEquals(15, entry.getValue().size());
+		
+	}
+	
+	@Test
+	public void testReadHostGroupsWithoutDirectory() throws IOException {
+		
+		// when
+		final Map<String, List<PuppetClass>> results = this.backupService.readHostGroups();
+		
+		// then
+		Assert.assertTrue(results.isEmpty());
 		
 	}
 	

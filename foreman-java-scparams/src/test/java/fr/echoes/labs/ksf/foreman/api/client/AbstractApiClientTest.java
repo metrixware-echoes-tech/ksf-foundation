@@ -119,4 +119,10 @@ public class AbstractApiClientTest {
 		this.client.handleError(buildResponseMock(415));
 	}
 	
+	@Test
+	public void testOK() throws IOException {
+		
+		this.client.handleError(buildResponseMock(200));
+	}
+	
 }

@@ -46,7 +46,7 @@ public class SmartClassParameterBackupService extends CsvBackupService<SmartClas
 		}else{
 			
 			LOGGER.info("Writing {} override values of host {} into {}", values.size(), host.getName(), folderPath);
-			sortThenWrite(values, HEADER, folderPath, host.getName()+"-parameters.csv");
+			sortThenWrite(values, folderPath, host.getName()+"-parameters.csv");
 		}
 	}
 	
@@ -69,7 +69,7 @@ public class SmartClassParameterBackupService extends CsvBackupService<SmartClas
 			LOGGER.info("No global override values found for host");
 		}else{
 			LOGGER.info("Writing {} override values into {}", values.size(), dirPath);
-			sortThenWrite(values, HEADER, dirPath, "puppet_classes_parameters.csv");
+			sortThenWrite(values, dirPath, "puppet_classes_parameters.csv");
 		}
 	}
 	
@@ -89,24 +89,28 @@ public class SmartClassParameterBackupService extends CsvBackupService<SmartClas
 			LOGGER.info("No override values found for host group {}", hostGroup);
 		}else{
 			LOGGER.info("Writing {} override values of host group {} into {}", values.size(), hostGroup, hostGroupFolderPath);
-			sortThenWrite(values, HEADER, hostGroupFolderPath, hostGroup+"-parameters.csv");
+			sortThenWrite(values, hostGroupFolderPath, hostGroup+"-parameters.csv");
 		}
 	}
 	
 	public Map<String, List<SmartClassParameterWrapper>> readHostGroupValues() throws IOException {
 		
-		final String hostGroupFolderPath = this.storage.getHostGroupsFolder();
+		final File hostGroupFolder = new File(this.storage.getHostGroupsFolder());
 		final Map<String, List<SmartClassParameterWrapper>> results = Maps.newHashMap();
 		
-		final Pattern pattern = Pattern.compile("(.*)-parameters.csv");
+		if (hostGroupFolder.exists()) {
 		
-		for(final File file : new File(hostGroupFolderPath).listFiles()) {
-			final Matcher matcher = pattern.matcher(file.getName());
-			if (matcher.find()) {
-				final String hostGroup = matcher.group(1);
-				final List<SmartClassParameterWrapper> values = super.read(file.getPath(), SmartClassParameterWrapper.class);
-				results.put(hostGroup, values);
+			final Pattern pattern = Pattern.compile("(.*)-parameters.csv");
+			
+			for(final File file : hostGroupFolder.listFiles()) {
+				final Matcher matcher = pattern.matcher(file.getName());
+				if (matcher.find()) {
+					final String hostGroup = matcher.group(1);
+					final List<SmartClassParameterWrapper> values = super.read(file.getPath(), SmartClassParameterWrapper.class);
+					results.put(hostGroup, values);
+				}
 			}
+		
 		}
 		
 		return results;
@@ -120,7 +124,7 @@ public class SmartClassParameterBackupService extends CsvBackupService<SmartClas
 			LOGGER.info("No override values found for os {}", os);
 		}else{
 			LOGGER.info("Writing {} override values of os {} into {}", values.size(), os, folderPath);
-			sortThenWrite(values, HEADER, folderPath, os+".csv");
+			sortThenWrite(values, folderPath, os+".csv");
 		}
 	}
 	
@@ -132,11 +136,11 @@ public class SmartClassParameterBackupService extends CsvBackupService<SmartClas
 			LOGGER.info("No override values found for domain {}", domain);
 		}else{
 			LOGGER.info("Writing {} override values of domain {} into {}", values.size(), domain, folderPath);
-			sortThenWrite(values, HEADER, folderPath, domain+".csv");
+			sortThenWrite(values, folderPath, domain+".csv");
 		}
 	}
 	
-	private void sortThenWrite(final List<SmartClassParameterWrapper> values, final String[] headers, final String folderPath, final String fileName) throws IOException {
+	private void sortThenWrite(final List<SmartClassParameterWrapper> values, final String folderPath, final String fileName) throws IOException {
 		
 		Collections.sort(values, Comparators.smartClassParameterComparator());	
 		super.write(values, HEADER, folderPath, fileName);

@@ -68,9 +68,9 @@ public class ForemanClient extends AbstractApiClient {
 		this.mapper = new ObjectMapper();
 		this.mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		
-		this.nbRequests.put(HttpMethod.GET, new Integer(0));
-		this.nbRequests.put(HttpMethod.POST, new Integer(0));
-		this.nbRequests.put(HttpMethod.PUT, new Integer(0));
+		this.nbRequests.put(HttpMethod.GET, 0);
+		this.nbRequests.put(HttpMethod.POST, 0);
+		this.nbRequests.put(HttpMethod.PUT, 0);
 		
 	}
 	
@@ -252,8 +252,7 @@ public class ForemanClient extends AbstractApiClient {
 		final List<SmartClassParameter> results = extractResults(response, SmartClassParameter.class);
 		
 		if (!results.isEmpty()) {
-			final SmartClassParameter result = results.iterator().next();
-			return getSmartClassParameter(result.getId());
+			return getSmartClassParameter(results.get(0).getId());
 		}
 		
 		return null;

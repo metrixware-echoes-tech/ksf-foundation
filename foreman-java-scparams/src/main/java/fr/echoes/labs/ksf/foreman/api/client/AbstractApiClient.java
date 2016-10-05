@@ -132,27 +132,23 @@ public abstract class AbstractApiClient {
 		int statusCode = response.getStatusLine().getStatusCode();
 		
 		switch(statusCode) {
-			case HttpStatus.SC_BAD_REQUEST:
-				throw new BadRequestException(extractBody(response));
 			case HttpStatus.SC_UNAUTHORIZED:
-				throw new ForbiddenException(extractBody(response));
 			case HttpStatus.SC_FORBIDDEN:
 				throw new ForbiddenException(extractBody(response));
 			case HttpStatus.SC_NOT_FOUND:
 				throw new NotFoundException(extractBody(response));
-			case HttpStatus.SC_METHOD_NOT_ALLOWED:
-				throw new BadRequestException(extractBody(response));
 			case HttpStatus.SC_INTERNAL_SERVER_ERROR:
 				throw new InternalServerErrorException(extractBody(response));
 			case HttpStatus.SC_GATEWAY_TIMEOUT:
 				throw new ConnectTimeoutException(extractBody(response));
 			case HttpStatus.SC_SERVICE_UNAVAILABLE:
 				throw new ServiceUnavailableException(extractBody(response));
-			case HttpStatus.SC_BAD_GATEWAY:
-				throw new BadRequestException(extractBody(response));
 			case HttpStatus.SC_REQUEST_TIMEOUT:
 				throw new ConnectTimeoutException(extractBody(response));
+			case HttpStatus.SC_BAD_REQUEST:
+			case HttpStatus.SC_METHOD_NOT_ALLOWED:
 			case HttpStatus.SC_UNSUPPORTED_MEDIA_TYPE:
+			case HttpStatus.SC_BAD_GATEWAY:
 				throw new BadRequestException(extractBody(response));
 		}
 		

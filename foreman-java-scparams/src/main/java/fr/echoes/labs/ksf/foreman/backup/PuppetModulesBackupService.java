@@ -63,18 +63,22 @@ public class PuppetModulesBackupService extends CsvBackupService<PuppetClass> {
 	
 	public Map<String, List<PuppetClass>> readHostGroups() throws IOException {
 		
-		final String dirPath = this.storage.getHostGroupsFolder();		
+		final File groupsDir = new File(this.storage.getHostGroupsFolder());		
 		final Map<String, List<PuppetClass>> results = Maps.newHashMap();
 		
-		final Pattern pattern = Pattern.compile("(.*)-classes.csv");
+		if (groupsDir.exists()) {
 		
-		for(final File file : new File(dirPath).listFiles()) {
-			final Matcher matcher = pattern.matcher(file.getName());
-			if (matcher.find()) {
-				final String hostGroup = matcher.group(1);
-				final List<PuppetClass> values = super.read(file.getPath(), PuppetClass.class);
-				results.put(hostGroup, values);
+			final Pattern pattern = Pattern.compile("(.*)-classes.csv");
+		
+			for(final File file : groupsDir.listFiles()) {
+				final Matcher matcher = pattern.matcher(file.getName());
+				if (matcher.find()) {
+					final String hostGroup = matcher.group(1);
+					final List<PuppetClass> values = super.read(file.getPath(), PuppetClass.class);
+					results.put(hostGroup, values);
+				}
 			}
+		
 		}
 		
 		return results;
