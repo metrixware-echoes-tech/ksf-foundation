@@ -30,109 +30,106 @@
                         </p>
                     </div>
 
-                    <table class="table table-striped table-hover tableRowEllipsis" th:if="${not #lists.isEmpty(features)}">
-                        <thead>
-                            <tr>
-                                <th th:text="#{foundation.projects.overview.widget.overview.project.features}">Feature</th> 
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr th:each="feature : ${features}">
-                                <td th:text="'#' + ${feature.getId()} + ' - ' + ${feature.getSubject()}"></td>
-                                <!--  td th:text="${feature.getAssignee()}"></td -->
-                                <td>
+					<div class="scrollable">
+	                    <table class="table table-striped table-hover tableRowEllipsis" th:if="${not #lists.isEmpty(features)}">
+	                        <thead>
+	                            <tr>
+	                                <th th:text="#{foundation.projects.overview.widget.overview.project.features}">Feature</th> 
+	                                <th></th>
+	                            </tr>
+	                        </thead>
+	                        <tbody>
+	                            <tr th:each="feature : ${features}">
+	                                <td th:text="'#' + ${feature.getId()} + ' - ' + ${feature.getSubject()}"></td>
+	                                <!--  td th:text="${feature.getAssignee()}"></td -->
+	                                <td>
+	
+	                                    <div th:if="${feature.getStatus() == T(fr.echoes.labs.ksf.cc.extensions.services.project.TicketStatus).NEW}" class="pull-right">
+	                                        <form th:attr="action=@{/ui/projects/features/new}"
+	
+	                                              class="form-horizontal" method="post"
+	                                              role="form" data-toggle="validator">
+	
+	                                            <input name="projectKey" type="hidden" th:value="${projectData.project.key}" />
+	                                            <input name="featureId" type="hidden" th:value="${feature.getId()}" />
+	                                            <input name="featureSubject" type="hidden" th:value="${feature.getSubject()}" />
+	                                            <button onclick="return confirm(startFeatureMessage)" class="fa fa-play" type="submit" style="color:Black" data-toggle="tooltip" th:title="#{foundation.projects.overview.widget.overview.project.features.startFeature} + ' #' + ${feature.getId()}"></button>
+	                                        </form>
+	                                    </div>
+	
+	                                    <div th:if="${feature.getStatus() == T(fr.echoes.labs.ksf.cc.extensions.services.project.TicketStatus).CREATED}" class="pull-right">
+	                                        <button class="fa fa-info featureInfoButton" type="button"  style="float:left;" th:attr="data-id=${feature.getId()}, data-subject=${feature.getSubject()}, data-gitbranch=${@projectInformationService.getGitFeatureBranchName(feature.getId(), feature.getSubject())}, data-jenkinsjob=${@projectInformationService.getFeatureJobName(projectData.project.name, feature.getId(), feature.getSubject())}"></button>
+	                                        <form th:attr="action=@{/ui/projects/features/finish}"
+	                                              class="form-horizontal" method="post"
+	                                              role="form" data-toggle="validator"
+	                                               style="float:left;margin:0 5px;" >
+	
+	                                            <input name="projectKey" type="hidden" th:value="${projectData.project.key}" />
+	                                            <input name="featureId" type="hidden" th:value="${feature.getId()}" />
+	                                            <input name="featureSubject" type="hidden" th:value="${feature.getSubject()}" />
+	                                            <button onclick="return confirm(finishFeatureMessage)" class="fa fa-check" type="submit" style="color:Green" data-toggle="tooltip" th:title="#{foundation.projects.overview.widget.overview.project.features.finishFeature} + ' #' + ${feature.getId()}"></button>
+	                                        </form>
+	                                        <form th:attr="action=@{/ui/projects/features/cancel}"
+	                                              class="form-horizontal" method="post"
+	                                              role="form" data-toggle="validator"
+	                                              style="float:left;" >
+	
+	                                            <input name="projectKey" type="hidden" th:value="${projectData.project.key}" />
+	                                            <input name="featureId" type="hidden" th:value="${feature.getId()}" />
+	                                            <input name="featureSubject" type="hidden" th:value="${feature.getSubject()}" />
+	                                            <button onclick="return confirm(cancelFeatureMessage)" class="fa fa-times" type="submit" style="color:Red" data-toggle="tooltip" th:title="#{foundation.projects.overview.widget.overview.project.features.cancelFeature} + ' #' + ${feature.getId()}"></button>
+	                                        </form>
+	                                    </div>							
+	                                </td>
+	                            </tr>
+	                        </tbody>
+	                    </table>
+					</div>
 
-                                    <div th:if="${feature.getStatus() == T(fr.echoes.labs.ksf.cc.extensions.services.project.TicketStatus).NEW}" class="pull-right">
-                                        <form th:attr="action=@{/ui/projects/features/new}"
-
-                                              class="form-horizontal" method="post"
-                                              role="form" data-toggle="validator">
-
-                                            <input name="projectKey" type="hidden" th:value="${projectData.project.key}" />
-                                            <input name="featureId" type="hidden" th:value="${feature.getId()}" />
-                                            <input name="featureSubject" type="hidden" th:value="${feature.getSubject()}" />
-                                            <button onclick="return confirm(startFeatureMessage)" class="fa fa-play" type="submit" style="color:Black" data-toggle="tooltip" th:title="#{foundation.projects.overview.widget.overview.project.features.startFeature} + ' #' + ${feature.getId()}"></button>
-                                        </form>
-                                    </div>
-
-                                    <div th:if="${feature.getStatus() == T(fr.echoes.labs.ksf.cc.extensions.services.project.TicketStatus).CREATED}" class="pull-right">
-                                        <button class="fa fa-info featureInfoButton" type="button"  style="float:left;" th:attr="data-id=${feature.getId()}, data-subject=${feature.getSubject()}, data-gitbranch=${@projectInformationService.getGitFeatureBranchName(feature.getId(), feature.getSubject())}, data-jenkinsjob=${@projectInformationService.getFeatureJobName(projectData.project.name, feature.getId(), feature.getSubject())}"></button>
-                                        <form th:attr="action=@{/ui/projects/features/finish}"
-                                              class="form-horizontal" method="post"
-                                              role="form" data-toggle="validator"
-                                               style="float:left;margin:0 5px;" >
-
-                                            <input name="projectKey" type="hidden" th:value="${projectData.project.key}" />
-                                            <input name="featureId" type="hidden" th:value="${feature.getId()}" />
-                                            <input name="featureSubject" type="hidden" th:value="${feature.getSubject()}" />
-                                            <button onclick="return confirm(finishFeatureMessage)" class="fa fa-check" type="submit" style="color:Green" data-toggle="tooltip" th:title="#{foundation.projects.overview.widget.overview.project.features.finishFeature} + ' #' + ${feature.getId()}"></button>
-                                        </form>
-                                        <form th:attr="action=@{/ui/projects/features/cancel}"
-                                              class="form-horizontal" method="post"
-                                              role="form" data-toggle="validator"
-                                              style="float:left;" >
-
-                                            <input name="projectKey" type="hidden" th:value="${projectData.project.key}" />
-                                            <input name="featureId" type="hidden" th:value="${feature.getId()}" />
-                                            <input name="featureSubject" type="hidden" th:value="${feature.getSubject()}" />
-                                            <button onclick="return confirm(cancelFeatureMessage)" class="fa fa-times" type="submit" style="color:Red" data-toggle="tooltip" th:title="#{foundation.projects.overview.widget.overview.project.features.cancelFeature} + ' #' + ${feature.getId()}"></button>
-                                        </form>
-                                    </div>							
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-
-                    <table class="table table-striped table-hover tableRowEllipsis" th:if="${not #lists.isEmpty(releases)}">
-                        <thead>
-                            <tr>
-                                <th th:text="#{foundation.projects.overview.widget.overview.project.releases}">Release</th> 
-
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr th:each="release : ${releases}">
-                                <!-- td th:text="${release.getId()}"></td -->
-                                <td th:text="${release.getName()}"></td>
-                                <td>
-
-                                    <div th:if="${release.getStatus() == T(fr.echoes.labs.ksf.cc.extensions.services.project.TicketStatus).NEW}" class="pull-right">
-                                        <form th:attr="action=@{/ui/projects/releases/new}"
-                                              class="form-horizontal" method="post"
-                                              role="form" data-toggle="validator">
-
-                                            <input name="projectKey" type="hidden" th:value="${projectData.project.key}" />
-                                            <input name="releaseId" type="hidden" th:value="${release.getId()}" />
-                                            <input name="releaseVersion" type="hidden" th:value="${release.getName()}" />
-                                            <button onclick="return confirm(startReleaseMessage)" class="fa fa-play" type="submit" style="color:Black" data-toggle="tooltip" th:title="#{foundation.projects.overview.widget.overview.project.features.startRelease} + ' ' + ${release.getName()}"></button>
-                                        </form>
-                                    </div>
-
-                                    <div th:if="${release.getStatus() == T(fr.echoes.labs.ksf.cc.extensions.services.project.TicketStatus).CREATED}" class="pull-right">
-                                        <form th:attr="action=@{/ui/projects/releases/finish}"
-                                              class="form-horizontal" method="post"
-                                              role="form" data-toggle="validator">
-
-                                            <input name="projectKey" type="hidden" th:value="${projectData.project.key}" />
-                                            <input name="releaseId" type="hidden" th:value="${release.getId()}" />
-                                            <input name="releaseVersion" type="hidden" th:value="${release.getName()}" />
-                                            <button class="fa fa-info releaseInfoButton" type="button" th:attr="data-name=${release.getName()}, data-gitbranch=${@projectInformationService.getGitReleaseBranchName(release.getName())}, data-jenkinsjob=${@projectInformationService.getReleaseJobName(projectData.project.name, release.getName())}"></button>
-                                            <button onclick="return confirm(finishReleaseMessage)" class="fa fa-check" type="submit" style="color:Green" data-toggle="tooltip" th:title="#{foundation.projects.overview.widget.overview.project.features.finishRelease} + ' ' + ${release.getName()}"></button>
-                                        </form>
-                                    </div>
-                                    <!-- div th:if="${release.getStatus() == T(fr.echoes.labs.ksf.cc.extensions.services.project.TicketStatus).FINISHED}" class="pull-right">
-                                            <button class="glyphicon glyphicon-info-sign disabled" data-dismiss="modal" type="button" data-toggle="modal" data-target="#featureInformation"></button>
-                                    </div -->					
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>			
-
-
-
+					<div class="scrollable">
+	                    <table class="table table-striped table-hover tableRowEllipsis" th:if="${not #lists.isEmpty(releases)}">
+	                        <thead>
+	                            <tr>
+	                                <th th:text="#{foundation.projects.overview.widget.overview.project.releases}">Release</th> 
+	                                <th></th>
+	                            </tr>
+	                        </thead>
+	                        <tbody>
+	                            <tr th:each="release : ${releases}">
+	                                <!-- td th:text="${release.getId()}"></td -->
+	                                <td th:text="${release.getName()}"></td>
+	                                <td>
+	                                    <div th:if="${release.getStatus() == T(fr.echoes.labs.ksf.cc.extensions.services.project.TicketStatus).NEW}" class="pull-right">
+	                                        <form th:attr="action=@{/ui/projects/releases/new}"
+	                                              class="form-horizontal" method="post"
+	                                              role="form" data-toggle="validator">
+	
+	                                            <input name="projectKey" type="hidden" th:value="${projectData.project.key}" />
+	                                            <input name="releaseId" type="hidden" th:value="${release.getId()}" />
+	                                            <input name="releaseVersion" type="hidden" th:value="${release.getName()}" />
+	                                            <button onclick="return confirm(startReleaseMessage)" class="fa fa-play" type="submit" style="color:Black" data-toggle="tooltip" th:title="#{foundation.projects.overview.widget.overview.project.features.startRelease} + ' ' + ${release.getName()}"></button>
+	                                        </form>
+	                                    </div>
+	                                    <div th:if="${release.getStatus() == T(fr.echoes.labs.ksf.cc.extensions.services.project.TicketStatus).CREATED}" class="pull-right">
+	                                        <form th:attr="action=@{/ui/projects/releases/finish}"
+	                                              class="form-horizontal" method="post"
+	                                              role="form" data-toggle="validator">
+	
+	                                            <input name="projectKey" type="hidden" th:value="${projectData.project.key}" />
+	                                            <input name="releaseId" type="hidden" th:value="${release.getId()}" />
+	                                            <input name="releaseVersion" type="hidden" th:value="${release.getName()}" />
+	                                            <button class="fa fa-info releaseInfoButton" type="button" th:attr="data-name=${release.getName()}, data-gitbranch=${@projectInformationService.getGitReleaseBranchName(release.getName())}, data-jenkinsjob=${@projectInformationService.getReleaseJobName(projectData.project.name, release.getName())}"></button>
+	                                            <button onclick="return confirm(finishReleaseMessage)" class="fa fa-check" type="submit" style="color:Green" data-toggle="tooltip" th:title="#{foundation.projects.overview.widget.overview.project.features.finishRelease} + ' ' + ${release.getName()}"></button>
+	                                        </form>
+	                                    </div>
+	                                    <!-- div th:if="${release.getStatus() == T(fr.echoes.labs.ksf.cc.extensions.services.project.TicketStatus).FINISHED}" class="pull-right">
+	                                            <button class="glyphicon glyphicon-info-sign disabled" data-dismiss="modal" type="button" data-toggle="modal" data-target="#featureInformation"></button>
+	                                    </div -->					
+	                                </td>
+	                            </tr>
+	                        </tbody>
+	                    </table>			
+					</div>
 
                     <div id="featureInformation" class="modal fade in" role="dialog">
                         <div class="modal-dialog modal-lg">

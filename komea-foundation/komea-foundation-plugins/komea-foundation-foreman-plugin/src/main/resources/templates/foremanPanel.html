@@ -1,26 +1,28 @@
 <div class="alert alert-danger" role="alert" th:text="${foremanError}" th:if="${foremanError != null}">
 </div>
-<table class="table table-striped">
-	<thead>
-		<tr>
-			<th th:text="${foundationForemanWidgetName}">Name</th>
-			<th th:text="${foundationForemanWigetOs}">Operating System</th>
-			<th>
-				<div class="text-right"></div>
-			</th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr th:each="target, row: ${targets}">
-			<td th:text="${target.getName()}"></td>
-			<td th:text="${target.getOperatingSystemName()}"></td>
-			<td class="text-right">
-				<a class="btn btn-default glyphicon glyphicon-pencil" disabled="disabled">&nbsp;Edit</a>				
-				<button type="button" class="btn btn-default glyphicon glyphicon-play btn-instantiate" role="button" th:attr="data-targetId=${target.getId()}" data-toggle="modal" data-target="#instantiateHostModal">&nbsp;Instantiate</button>				
-			</td>
-		</tr>
-	</tbody>
-</table>
+<div class="scrollable">
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th th:text="${foundationForemanWidgetName}">Name</th>
+				<th th:text="${foundationForemanWigetOs}">Operating System</th>
+				<th>
+					<div class="text-right"></div>
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="target, row: ${targets}">
+				<td th:text="${target.getName()}"></td>
+				<td th:text="${target.getOperatingSystemName()}"></td>
+				<td class="text-right">
+					<a class="btn btn-default glyphicon glyphicon-pencil" disabled="disabled">&nbsp;Edit</a>				
+					<button type="button" class="btn btn-default glyphicon glyphicon-play btn-instantiate" role="button" th:attr="data-targetId=${target.getId()}" data-toggle="modal" data-target="#instantiateHostModal">&nbsp;Instantiate</button>				
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
 <div aria-hidden="true" aria-labelledby="myModalLabel" class="modal fade in" id="createTargetModal" role="dialog" tabindex="-1">
    <div class="modal-dialog">
      <div class="modal-content">

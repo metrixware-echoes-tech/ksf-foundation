@@ -162,7 +162,9 @@ html, body, iframe {
     max-width: 500px;
 }
 
-.widget .panel-body {
-	overflow-y: scroll;
-    max-height: 550px;
+.widget .panel-body .scrollable {
+	max-height: 450px; 
+	width: 100%; 
+	margin: 0; 
+	overflow-y: auto;
 }
