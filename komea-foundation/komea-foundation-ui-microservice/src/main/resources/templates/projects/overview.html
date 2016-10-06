@@ -84,18 +84,33 @@
 
         <div layout:fragment="footer">
             <script type="text/javascript">
-                function hashChanged(hashQuery) {
+                /*<![CDATA[*/
+                function hashChanged(hashQuery, reloadOverviewTab) {
                     if (hashQuery) {
-                        console.log(hashQuery);
                         $('a[role=tab][href="' + hashQuery + '"]').click();
+                    }
+                    if (hashQuery === '#overview' && reloadOverviewTab === true) {
+                        $.ajax({
+                            url: document.URL,
+                            type: "get",
+                            dataType: "html",
+                            success: function (data) {
+                                var oldWidgets = $('.widget');
+                                var newWidgets = $(data).find('.widget');
+                                for (var i = 0; i < oldWidgets.length; i++) {
+                                    $(oldWidgets[i]).html($(newWidgets[i]).html());
+                                }
+                            }
+                        });
                     }
                 }
                 $(document).ready(function () {
-                    hashChanged(window.location.hash);
+                    hashChanged(window.location.hash, false);
                 });
                 window.onhashchange = function () {
-                    hashChanged(window.location.hash);
+                    hashChanged(window.location.hash, true);
                 }
+                /*]]>*/
             </script>
         </div>
 
