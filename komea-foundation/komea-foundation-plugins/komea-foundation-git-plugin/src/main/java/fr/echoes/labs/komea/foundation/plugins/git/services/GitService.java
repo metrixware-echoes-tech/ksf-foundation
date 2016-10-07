@@ -104,10 +104,9 @@ public class GitService implements IGitService {
             if (git != null) {
                 git.close();
             }
-            try {
-                FileUtils.deleteDirectory(workingDirectory);
-            } catch (final IOException e) {
-                LOGGER.warn("Failed to delete the directory " + workingDirectory.getName(), e);
+            if (workingDirectory != null) {
+            	// Delete Git local repository
+            	deleteLocalDirectory(workingDirectory);
             }
         }
 
@@ -220,11 +219,9 @@ public class GitService implements IGitService {
             if (git != null) {
                 git.close();
             }
-            try {
-                // Delete Git local repository
-                FileUtils.deleteDirectory(workingDirectory);
-            } catch (final IOException e) {
-                LOGGER.warn("Failed to delete the directory " + workingDirectory.getName(), e);
+            if (workingDirectory != null) {
+            	// Delete Git local repository
+            	deleteLocalDirectory(workingDirectory);
             }
         }
     }
@@ -343,11 +340,9 @@ public class GitService implements IGitService {
             if (git != null) {
                 git.close();
             }
-            try {
-                // Delete Git local repository
-                FileUtils.deleteDirectory(workingDirectory);
-            } catch (final IOException e) {
-                LOGGER.warn("Failed to delete the directory " + workingDirectory.getName(), e);
+            if (workingDirectory != null) {
+            	// Delete Git local repository
+            	deleteLocalDirectory(workingDirectory);
             }
         }
     }
@@ -379,11 +374,9 @@ public class GitService implements IGitService {
             if (git != null) {
                 git.close();
             }
-            try {
-                // Delete Git local repository
-                FileUtils.deleteDirectory(workingDirectory);
-            } catch (final IOException e) {
-                LOGGER.warn("Failed to delete the directory " + workingDirectory.getName(), e);
+            if (workingDirectory != null) {
+            	// Delete Git local repository
+            	deleteLocalDirectory(workingDirectory);
             }
         }
     }
@@ -446,14 +439,20 @@ public class GitService implements IGitService {
             if (git != null) {
                 git.close();
             }
-            try {
-                // Delete Git local repository
-                FileUtils.deleteDirectory(workingDirectory);
-            } catch (final IOException e) {
-                LOGGER.warn("Failed to delete the directory " + workingDirectory.getName(), e);
+            if (workingDirectory != null) {
+            	// Delete Git local repository
+            	deleteLocalDirectory(workingDirectory);
             }
         }
 
+    }
+    
+    private static void deleteLocalDirectory(final File workingDirectory) {
+    	try {
+            FileUtils.deleteDirectory(workingDirectory);
+        } catch (final IOException e) {
+            LOGGER.warn("Failed to delete the directory " + workingDirectory.getName(), e);
+        }
     }
 
     private void checkout(Git git, String branchName) throws RefAlreadyExistsException, RefNotFoundException, InvalidRefNameException, CheckoutConflictException, GitAPIException {

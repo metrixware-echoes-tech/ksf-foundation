@@ -267,30 +267,34 @@ public class ForemanService implements IForemanService {
      }
 
      private void updateRoleTOuser(final IForemanApi api, String userId, String roleId, boolean add) {
+    	 
     	 LOGGER.info("[foreman] adding role to user roleId={}, userId={}", roleId, userId);
-         final User user = api.getUser(userId);
+         
+    	 final User user = api.getUser(userId);
 
-         if (user == null) {
-        	 LOGGER.error("[foreman] cannot find user with userId=" + userId);
-         }
-
-         final List<String> roleIds = new ArrayList<String>();
-
-         for (final Role role : user.roles) {
-             roleIds.add(role.id);
-         }
-         if (add) {
-             roleIds.add(roleId);
-         } else {
-             roleIds.remove(roleId);
-         }
-         final NewUser newUser = new NewUser();
-
-         final UserWrapper userWrapper = new UserWrapper();
-         newUser.role_ids = roleIds;
-         userWrapper.setUser(newUser);
-
-         api.updateUser(user.id, userWrapper);
+         if (user != null) {
+        	 
+	         final List<String> roleIds = Lists.newArrayList();
+	
+	         for (final Role role : user.roles) {
+	             roleIds.add(role.id);
+	         }
+	         if (add) {
+	             roleIds.add(roleId);
+	         } else {
+	             roleIds.remove(roleId);
+	         }
+	         final NewUser newUser = new NewUser();
+	
+	         final UserWrapper userWrapper = new UserWrapper();
+	         newUser.role_ids = roleIds;
+	         userWrapper.setUser(newUser);
+	
+	         api.updateUser(user.id, userWrapper);
+         
+     	}else{
+     		LOGGER.error("[foreman] cannot find user with userId " + userId);
+     	}
      }
 
      private void addRoleToUser(final IForemanApi api, String userId, String roleId) {
