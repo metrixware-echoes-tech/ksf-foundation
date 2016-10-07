@@ -1,9 +1,29 @@
 package fr.echoes.labs.ksf.cc.plugins.foreman.controllers;
 
+import java.io.IOException;
+import java.util.Set;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.tocea.corolla.products.dao.IProjectDAO;
 import com.tocea.corolla.products.domain.Project;
+
 import fr.echoes.labs.foremanapi.IForemanApi;
 import fr.echoes.labs.foremanapi.model.Host;
+import fr.echoes.labs.foremanapi.model.Image;
 import fr.echoes.labs.foremanclient.IForemanService;
 import fr.echoes.labs.ksf.cc.plugins.foreman.dao.IForemanEnvironmentDAO;
 import fr.echoes.labs.ksf.cc.plugins.foreman.dao.IForemanTargetDAO;
@@ -17,22 +37,6 @@ import fr.echoes.labs.ksf.cc.plugins.foreman.services.ForemanErrorHandlingServic
 import fr.echoes.labs.ksf.cc.plugins.foreman.services.ForemanHostDescriptorFactory;
 import fr.echoes.labs.puppet.PuppetClient;
 import fr.echoes.labs.puppet.PuppetException;
-import java.io.IOException;
-import java.util.Set;
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
-import org.apache.commons.lang3.StringUtils;
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class ForemanActionsController {
@@ -137,24 +141,36 @@ public class ForemanActionsController {
     }
 
     @RequestMapping(value = "/ui/foreman/targets/new", method = RequestMethod.POST)
-    public String createTarget(@RequestParam("projectId") String projectId, @RequestParam("name") String name, @RequestParam("environment") String env, @RequestParam("operatingsystem") String operatingsystem, @RequestParam("computeprofiles") String computeprofiles, @RequestParam("puppetConfiguration") String puppetConfiguration) {
-        final Project project = this.projectDAO.findOne(projectId);
+    public String createTarget(@RequestParam("projectId") String projectId, @RequestParam("name") String name, @RequestParam("environment") String env, @RequestParam("computeprofiles") String computeprofiles, @RequestParam("operatingSystemsImage") Integer imageId, @RequestParam("puppetConfiguration") String puppetConfiguration) throws Exception {
+        
+    	final Project project = this.projectDAO.findOne(projectId);
 
         final ForemanTarget foremanTarget = new ForemanTarget();
         foremanTarget.setProject(project);
         foremanTarget.setName(name);
         foremanTarget.setComputeProfile(computeprofiles);
         foremanTarget.setPuppetConfiguration(puppetConfiguration);
-
-        if (!StringUtils.isEmpty(operatingsystem)) {
-            final String[] os = StringUtils.split(operatingsystem, '-');
-            foremanTarget.setOperatingSystemId(os[0]);
-            foremanTarget.setOperatingSystemName(os[1]);
-        }
-
+        foremanTarget.setImageId(imageId);
+        
+        // retrieve OS image
+        final IForemanApi foremanApi = this.foremanClientFactory.createForemanClient();
+        LOGGER.info("Retrieving image with id {}...", imageId);
+        final Image image = this.foremanService.findOperatingSystemImage(foremanApi, imageId);
+        
+        // associate the target to an OS
+        if (image != null) {
+        	LOGGER.info("Image {} found [os={}, architecure={}]", imageId, image.getOperatingSystemName(), image.getArchitectureName()); 
+        	foremanTarget.setOperatingSystemId(Integer.toString(image.getOperatingSystemId()));
+        	foremanTarget.setOperatingSystemName(image.getOperatingSystemName());
+        	foremanTarget.setArchitectureId(image.getArchitectureId());
+        }     
+        
+        // associate the target to an environment
+        LOGGER.info("Retrieving environment {}...", env);
         final ForemanEnvironnment environment = this.environmentDAO.findOne(env);
         foremanTarget.setEnvironment(environment);
 
+        // validate the target object
         final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         final Validator validator = factory.getValidator();
         final Set<ConstraintViolation<ForemanTarget>> errors = validator.validate(foremanTarget);
@@ -173,15 +189,12 @@ public class ForemanActionsController {
     public String instantiateTarget(@RequestParam("projectId") String projectId, @RequestParam("hostName") String hostName, @RequestParam("hostPass") String hostPass, @RequestParam("targetId") String targetId) {
 
         final Project project = this.projectDAO.findOne(projectId);
-
         final ForemanTarget target = this.targetDAO.findOne(targetId);
-
-        final ForemanEnvironnment environment = target.getEnvironment();
 
         String redirectURL = "/ui/projects/" + project.getKey();
 
         try {
-
+        	
             // Create a host descriptor using the provided data and the data from the configuration file
             final ForemanHostDescriptor hostDescriptor = this.hostDescriptorFactory.createHostDescriptor(project, target, hostName, hostPass);
 

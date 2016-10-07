@@ -59,22 +59,31 @@
                </select>
              </div>
            </div>
-           <div class="form-group">
-             <label class="control-label col-sm-2" for="operatingsystem">Operating System</label>
-             <div class="col-sm-10">
-               <select class="form-control" id="operatingsystem" name="operatingsystem">
-                 <option th:each="operatingSystem : ${operatingSystems}"
-                        th:value="${operatingSystem.id} + '-' + ${operatingSystem.title}" th:text="${operatingSystem.title}"></option>
+<!--            <div class="form-group"> -->
+<!--              <label class="control-label col-sm-2" for="operatingsystem">Operating System</label> -->
+<!--              <div class="col-sm-10"> -->
+<!--                <select class="form-control" id="operatingsystem" name="operatingsystem"> -->
+<!--                  <option th:each="operatingSystem : ${operatingSystems}" -->
+<!--                         th:value="${operatingSystem.id} + '-' + ${operatingSystem.title}" th:text="${operatingSystem.title}"></option> -->
 
-               </select>
-             </div>
-           </div>
+<!--                </select> -->
+<!--              </div> -->
+<!--            </div> -->
            <div class="form-group">
              <label class="control-label col-sm-2" for="computeprofiles" name="computeprofiles">Compute Profiles</label>
              <div class="col-sm-10">
                <select class="form-control" id="computeprofiles" name="computeprofiles">
                  <option th:each="computeProfile : ${computeProfiles}"
                         th:value="${computeProfile.id}" th:text="${computeProfile.name}"></option>
+               </select>
+             </div>
+           </div>
+           <div class="form-group">
+             <label class="control-label col-sm-2" for="operatingSystemsImage" name="operatingSystemsImage">Operating System Image</label>
+             <div class="col-sm-10">
+               <select class="form-control" id="operatingSystemsImage" name="operatingSystemsImage">
+                 <option th:each="operatingSystemsImage : ${operatingSystemsImages}"
+                        th:value="${operatingSystemsImage.id}" th:text="${operatingSystemsImage.name}"></option>
                </select>
              </div>
            </div>

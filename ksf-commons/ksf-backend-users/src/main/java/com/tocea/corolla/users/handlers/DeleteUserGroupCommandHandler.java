@@ -22,6 +22,7 @@ package com.tocea.corolla.users.handlers;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.tocea.corolla.cqrs.annotations.CommandHandler;
@@ -41,13 +42,13 @@ public class DeleteUserGroupCommandHandler implements ICommandHandler<DeleteUser
 	@Override
 	public UserGroup handle(@Valid DeleteUserGroupCommand command) {
 		
-		String id = command.getGroupID();
+		final String id = command.getGroupID();
 		
-		if (id == null || id.equals("")) {
+		if (StringUtils.isEmpty(id)) {
 			throw new InvalidUserGroupInformationException("No ID found");
 		}
 		
-		UserGroup group = groupDAO.findOne(id);
+		final UserGroup group = groupDAO.findOne(id);
 		
 		if (group == null) {
 			throw new InvalidUserGroupInformationException("this user group does not exist");

@@ -29,7 +29,6 @@ public abstract class CsvBackupService<T> {
 	protected void write(final List<T> values, final String[] header, final String filePath) throws IOException {
 		
 		ICsvBeanWriter printer = null;
-		IOException error = null;
 		
 		try {
 			
@@ -42,13 +41,10 @@ public abstract class CsvBackupService<T> {
 			}
 			
 		} catch (IOException ex) {
-			error = ex;
+			throw ex;
 		} finally {
 			if (printer != null) {
 				printer.close();
-			}
-			if (error != null) {
-				throw error;
 			}
 		}
 		

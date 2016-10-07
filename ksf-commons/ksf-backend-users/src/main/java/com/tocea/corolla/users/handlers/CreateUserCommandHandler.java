@@ -22,6 +22,7 @@ package com.tocea.corolla.users.handlers;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -76,7 +77,7 @@ ICommandHandler<CreateUserCommand, User> {
 		if (user == null) {
 			throw new MissingUserInformationException("No data provided to create user");
 		}
-		if (user.getId() != null && !user.getId().equals("")) {
+		if (!StringUtils.isEmpty(user.getId())) {
 			throw new InvalidUserInformationException("No ID expected");
 		}
 		checkUserLogin(user);

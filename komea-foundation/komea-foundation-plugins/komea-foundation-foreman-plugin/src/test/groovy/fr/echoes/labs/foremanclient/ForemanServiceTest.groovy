@@ -7,7 +7,11 @@ import fr.echoes.labs.foremanapi.model.Host
 import fr.echoes.labs.foremanapi.model.HostGroup
 import fr.echoes.labs.foremanapi.model.Hostgroups
 import fr.echoes.labs.foremanapi.model.Hosts
+import fr.echoes.labs.foremanapi.model.Image
+import fr.echoes.labs.foremanapi.model.OperatingSystem
+import fr.echoes.labs.foremanapi.model.OperatingSystems
 import fr.echoes.labs.foremanapi.model.Permission
+import fr.echoes.labs.foremanapi.model.Results
 import fr.echoes.labs.foremanapi.model.Role
 import fr.echoes.labs.foremanapi.model.Roles
 import fr.echoes.labs.foremanapi.model.User
@@ -131,6 +135,51 @@ class ForemanServiceTest extends Specification {
 			def exist = foremanService.hostGroupExists(foremanApi, "notExistingHostGroup")
 		then:
 			exist == false
+	}
+	
+	def "it should return the list of available images"() {
+		
+		given:
+			IForemanApi foremanApi = Mock()
+			
+		and:
+			def os1 = new OperatingSystem(id: 1)
+			def os2 = new OperatingSystem(id: 2)
+			def images = [new Image(id: 51), new Image(id: 52), new Image(id: 53)]
+		
+		when:
+			List<Image> results = foremanService.findOperatingSystemImages(foremanApi)
+			
+		then:
+			foremanApi.getOperatingSystems(null, null, null, ForemanService.PER_PAGE_RESULT) >> new OperatingSystems(results: [os1, os2])
+			foremanApi.getOperatingSystemImages(os1.id, null, ForemanService.PER_PAGE_RESULT) >> new Results<Image>(results: [images[0], images[1]])
+			foremanApi.getOperatingSystemImages(os2.id, null, ForemanService.PER_PAGE_RESULT) >> new Results<Image>(results: [images[2]])
+			
+		then:
+			results == images
+	}
+	
+	def "it should find an image by its id"() {
+		
+		given:
+			IForemanApi foremanApi = Mock()
+			
+		and:
+			def os1 = new OperatingSystem(id: 1)
+			def os2 = new OperatingSystem(id: 2)
+			def images = [new Image(id: 51), new Image(id: 52), new Image(id: 53)]
+		
+		when:
+			final Image result = foremanService.findOperatingSystemImage(foremanApi, images[1].id)
+			
+		then:
+			foremanApi.getOperatingSystems(null, null, null, ForemanService.PER_PAGE_RESULT) >> new OperatingSystems(results: [os1, os2])
+			foremanApi.getOperatingSystemImages(os1.id, null, ForemanService.PER_PAGE_RESULT) >> new Results<Image>(results: [images[0], images[1]])
+			foremanApi.getOperatingSystemImages(os2.id, null, ForemanService.PER_PAGE_RESULT) >> new Results<Image>(results: [images[2]])
+			
+		then:
+			result == images[1]
+		
 	}
 
 }

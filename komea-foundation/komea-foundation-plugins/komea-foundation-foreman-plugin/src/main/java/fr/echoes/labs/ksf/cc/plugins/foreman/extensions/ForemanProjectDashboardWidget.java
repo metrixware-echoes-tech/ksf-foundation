@@ -70,6 +70,9 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
 
     @Autowired
     private ForemanClientFactory foremanClientFactory;
+    
+    @Autowired
+    private ForemanService foremanService;
 
     @Override
     public List<MenuAction> getDropdownActions() {
@@ -112,8 +115,8 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
             final IForemanApi foremanApi = foremanClientFactory.createForemanClient();
 
             ctx.setVariable("operatingSystems", Lists.newArrayList(foremanApi.getOperatingSystems(null, null, null, ForemanService.PER_PAGE_RESULT).results));
-
             ctx.setVariable("computeProfiles", Lists.newArrayList(foremanApi.getComputeProfiles(null, null, null, ForemanService.PER_PAGE_RESULT).results));
+            ctx.setVariable("operatingSystemsImages", foremanService.findOperatingSystemImages(foremanApi));
 
         } catch (final Exception e) {
             LOGGER.error("[foreman] Foreman API call failed : {}", e);

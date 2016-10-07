@@ -28,12 +28,14 @@ import fr.echoes.labs.foremanapi.model.HostPuppetClasses;
 import fr.echoes.labs.foremanapi.model.HostWrapper;
 import fr.echoes.labs.foremanapi.model.Hostgroups;
 import fr.echoes.labs.foremanapi.model.Hosts;
+import fr.echoes.labs.foremanapi.model.Image;
 import fr.echoes.labs.foremanapi.model.OperatingSystems;
 import fr.echoes.labs.foremanapi.model.OverrideValueWrapper;
 import fr.echoes.labs.foremanapi.model.OverrideValues;
 import fr.echoes.labs.foremanapi.model.Permissions;
 import fr.echoes.labs.foremanapi.model.PuppetClassParameters;
 import fr.echoes.labs.foremanapi.model.PuppetClasses;
+import fr.echoes.labs.foremanapi.model.Results;
 import fr.echoes.labs.foremanapi.model.Role;
 import fr.echoes.labs.foremanapi.model.RoleWrapper;
 import fr.echoes.labs.foremanapi.model.Roles;
@@ -174,6 +176,14 @@ public interface IForemanApi {
 	OperatingSystems getOperatingSystems(
 			@QueryParam("search") String name,
 			@QueryParam("order") String order,
+			@QueryParam("page") String page,
+			@QueryParam("per_page") String perPage);
+	
+	@GET
+	@Path("/api/operatingsystems/{id}/images")
+	@Produces(MediaType.APPLICATION_JSON)
+	Results<Image> getOperatingSystemImages(
+			@PathParam("id") String id,
 			@QueryParam("page") String page,
 			@QueryParam("per_page") String perPage);
 
