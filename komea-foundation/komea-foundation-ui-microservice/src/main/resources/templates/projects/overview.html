@@ -35,9 +35,9 @@
 
                                         <!--/* Project information panel */-->
                                         <div id="widgetsGrid" data-columns="">
-                                            <div class="widget" th:include="projectInformation :: projectInformationPanel" />
+                                            <div id="widget-projectInformation" class="widget" th:include="projectInformation :: projectInformationPanel" />
 
-                                            <div class="widget"
+                                            <div class="widget" th:id="${'widget-'+widget.getId()}"
                                                  th:each="widget : ${@projectDashboardWidgets.getDashboardWidgets()}"
                                                  th:if="${widget.hasHtmlPanelBody()}">
                                                 <div class="panel panel-warning project-widget-panel">
@@ -96,9 +96,10 @@
                             dataType: "html",
                             success: function (data) {
                                 var oldWidgets = $('.widget');
-                                var newWidgets = $(data).find('.widget');
                                 for (var i = 0; i < oldWidgets.length; i++) {
-                                    $(oldWidgets[i]).html($(newWidgets[i]).html());
+                                    var id = $(oldWidgets[i]).attr('id');
+                                    var newWidget = $(data).find('#' + id);
+                                    $(oldWidgets[i]).html(newWidget.html());
                                 }
                             }
                         });
