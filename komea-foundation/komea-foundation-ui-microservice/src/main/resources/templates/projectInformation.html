@@ -15,7 +15,7 @@
         </script>
 
 
-        <div th:with="features=${@projectInformationManager.getFeatures(projectData.project)}" th:remove="tag">
+        <div th:with="features=${@projectInformationManager.getFeaturesOfCurrentUser(projectData.project)}" th:remove="tag">
             <div th:with="releases=${@projectInformationManager.getVersions(projectData.project)}" th:remove="tag">
                 <div class="panel-body">
 

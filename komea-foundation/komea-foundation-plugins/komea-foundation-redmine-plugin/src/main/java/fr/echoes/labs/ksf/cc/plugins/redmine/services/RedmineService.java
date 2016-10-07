@@ -136,8 +136,9 @@ public class RedmineService implements IRedmineService {
         }
     }
 
-    private void addProjectMember(final Project redmineProject, String username, RedmineManager redmineManager) throws RedmineException {
-        final User adminUser = findUser(username, redmineManager);
+    private void addProjectMember(final Project redmineProject, String username, RedmineManager redmineManager)
+            throws RedmineException, RedmineExtensionException {
+        final User adminUser = findUser(username);
         if (adminUser != null) {
             final UserManager userManager = redmineManager.getUserManager();
             final MembershipManager membershipManager = redmineManager.getMembershipManager();
@@ -145,24 +146,46 @@ public class RedmineService implements IRedmineService {
         }
     }
 
-    private User findUser(String username, RedmineManager redmineManager) throws RedmineException {
-        final User cachedUser = RedmineUserCache.INSTANCE.get(username);
+    private User findUser(String username) throws RedmineException, RedmineExtensionException {
+        User cachedUser = RedmineUserCache.INSTANCE.get(username);
         if (cachedUser != null) {
             LOGGER.info("[redmine] cached user '{}' found", username);
             return cachedUser;
         }
 
-        final UserManager userManager = redmineManager.getUserManager();
+        final UserManager userManager = this.getAdminRedmineManager().getUserManager();
         for (final User user : userManager.getUsers()) {
+            RedmineUserCache.INSTANCE.put(user.getLogin(), user);
             if (StringUtils.equalsIgnoreCase(user.getLogin(), username)) {
                 LOGGER.info("[redmine] user '{}' found", username);
-                RedmineUserCache.INSTANCE.put(username, user);
-                return user;
+                cachedUser = user;
             }
         }
+        if (cachedUser == null) {
+            LOGGER.info("[redmine] user '{}' not found", username);
+        }
+        return cachedUser;
+    }
 
-        LOGGER.info("[redmine] user '{}' not found", username);
-        return null;
+    private User findUserById(Integer id) throws RedmineException, RedmineExtensionException {
+        User cachedUser = RedmineUserCache.INSTANCE.getUserById(id);
+        if (cachedUser != null) {
+            LOGGER.info("[redmine] cached user '{}' found", id);
+            return cachedUser;
+        }
+
+        final UserManager userManager = this.getAdminRedmineManager().getUserManager();
+        for (final User user : userManager.getUsers()) {
+            RedmineUserCache.INSTANCE.put(user.getLogin(), user);
+            if (id.equals(user.getId())) {
+                LOGGER.info("[redmine] user '{}' found", id);
+                cachedUser = user;
+            }
+        }
+        if (cachedUser == null) {
+            LOGGER.info("[redmine] user '{}' not found", id);
+        }
+        return cachedUser;
     }
 
     @Override
@@ -240,33 +263,41 @@ public class RedmineService implements IRedmineService {
         return queryIssues(query, null);
     }
 
-    private RedmineIssue createRedmineIssue(final Issue issue) {
-        final RedmineIssue redmiIssue = new RedmineIssue(issue.getId());
+    private RedmineIssue createRedmineIssue(final Issue issue) throws RedmineExtensionException {
+        final RedmineIssue redmineIssue = new RedmineIssue(issue.getId());
 
-        final User user = issue.getAssignee();
-        final String assigneFullName = user == null ? StringUtils.EMPTY : StringUtils.defaultString(user.getFullName());
-        redmiIssue.setAssignee(assigneFullName);
+        User assignee = issue.getAssignee();
+        if (assignee != null && assignee.getLogin() == null) {
+            final Integer assigneeId = assignee.getId();
+            try {
+                assignee = this.findUserById(assigneeId);
+            } catch (final RedmineException e) {
+                throw new RedmineExtensionException("Failed to find redmine user with id " + assigneeId, e);
+            }
+        }
+        final String assigneeLogin = assignee == null ? StringUtils.EMPTY : StringUtils.defaultString(assignee.getLogin());
+        redmineIssue.setAssignee(assigneeLogin);
 
         final IssueCategory category = issue.getCategory();
         final String categoryName = category == null ? StringUtils.EMPTY : StringUtils.defaultString(category.getName());
 
-        redmiIssue.setCategory(categoryName);
+        redmineIssue.setCategory(categoryName);
 
-        redmiIssue.setSubject(StringUtils.defaultString(issue.getSubject()));
+        redmineIssue.setSubject(StringUtils.defaultString(issue.getSubject()));
 
-        redmiIssue.setPriority(StringUtils.defaultString(issue.getPriorityText()));
-        redmiIssue.setStatus(StringUtils.defaultString(issue.getStatusName()));
-        redmiIssue.setStatusId(issue.getStatusId());
+        redmineIssue.setPriority(StringUtils.defaultString(issue.getPriorityText()));
+        redmineIssue.setStatus(StringUtils.defaultString(issue.getStatusName()));
+        redmineIssue.setStatusId(issue.getStatusId());
 
         final Version targetVersion = issue.getTargetVersion();
         final String targetVersionName = targetVersion == null ? StringUtils.EMPTY : StringUtils.defaultString(targetVersion.getName());
-        redmiIssue.setTargetVersion(targetVersionName);
+        redmineIssue.setTargetVersion(targetVersionName);
 
         final Tracker tracker = issue.getTracker();
         final String trackerName = tracker == null ? StringUtils.EMPTY : StringUtils.defaultString(tracker.getName());
 
-        redmiIssue.setTracker(trackerName);
-        return redmiIssue;
+        redmineIssue.setTracker(trackerName);
+        return redmineIssue;
     }
 
     private String findProjectIdentifier(String projectName) throws RedmineException {
@@ -385,7 +416,7 @@ public class RedmineService implements IRedmineService {
         try {
 
             final Issue issue = this.getIssueById(Integer.valueOf(ticketId), issueManager);
-            this.changeIssueAssignee(issue, username, redmineManager);
+            this.changeIssueAssignee(issue, username);
             issue.setStatusId(this.configuration.getFeatureStatusClosedId());
             final int resolutionFieldId = this.configuration.getResolutionFieldId();
             CustomField fieldResolution = issue.getCustomFieldById(resolutionFieldId);
@@ -415,7 +446,7 @@ public class RedmineService implements IRedmineService {
         try {
             final Issue issue = this.getIssueById(Integer.valueOf(ticketId), issueManager);
             issue.setStatusId(statusId);
-            this.changeIssueAssignee(issue, username, redmineManager);
+            this.changeIssueAssignee(issue, username);
             issueManager.update(issue);
             LOGGER.info("[redmine] Changing redmine issue status - status updated");
         } catch (final RedmineExtensionException e) {
@@ -427,10 +458,10 @@ public class RedmineService implements IRedmineService {
         }
     }
 
-    private void changeIssueAssignee(Issue issue, String username, final RedmineManager redmineManager)
-            throws RedmineException {
+    private void changeIssueAssignee(Issue issue, String username)
+            throws RedmineException, RedmineExtensionException {
         if (username != null) {
-            final User user = findUser(username, redmineManager);
+            final User user = findUser(username);
             if (user != null) {
                 LOGGER.info("[redmine] Changing issue assignee to '{}'", username);
                 issue.setAssignee(user);
@@ -499,7 +530,7 @@ public class RedmineService implements IRedmineService {
                 issue.setTracker(tracker);
             }
 
-            this.changeIssueAssignee(issue, username, redmineManager);
+            this.changeIssueAssignee(issue, username);
 
             issueManager.createIssue(issue);
 
