@@ -6,7 +6,7 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 import fr.echoes.labs.ksf.foreman.api.model.ForemanHost;
-import fr.echoes.labs.ksf.foreman.api.utils.URLUtils;
+import fr.echoes.labs.ksf.foundation.utils.URLUtils;
 
 public class BackupStorage {
 	
