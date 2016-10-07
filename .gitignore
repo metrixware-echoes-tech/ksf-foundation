@@ -31,4 +31,4 @@ activemq-data
 node_modules/
 bower_components/
 **/src/main/resources/static/assets/
-
+**/logs

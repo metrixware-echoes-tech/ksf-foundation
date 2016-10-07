@@ -42,15 +42,24 @@ import org.springframework.stereotype.Service;
 @Service
 public class JenkinsService implements IJenkinsService {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(JenkinsService.class);
+	
     private static final String DEVELOP = "develop";
-
     private static final String MASTER = "master";
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(JenkinsService.class);
 
     @Autowired
     private JenkinsConfigurationService configurationService;
+    
+    @Autowired
+    private JenkinsTemplateService templateService;
 
+    private static String getTemplateName(final ProjectDto projectDTO) {
+    	if (projectDTO.getOtherAttributes().containsKey(ProjectExtensionConstants.JOB_TEMPLATE)) {
+    		return (String) projectDTO.getOtherAttributes().get(ProjectExtensionConstants.JOB_TEMPLATE);
+    	}
+    	return null;
+    }
+    
     @Override
     public void createProject(ProjectDto projectDTO) throws JenkinsExtensionException {
         try {
@@ -58,7 +67,8 @@ public class JenkinsService implements IJenkinsService {
             final String projectName = projectDTO.getName();
             final String masterJobName = getJobName(projectName, MASTER);
             final String developJobName = getJobName(projectName, DEVELOP);
-
+            final String templateName = getTemplateName(projectDTO);
+            	
             final List<String> jobs = Lists.newArrayList();
 
             if (useFolder()) {
@@ -66,8 +76,9 @@ public class JenkinsService implements IJenkinsService {
                 updateFolderDisplayName(projectName);
                 jobs.add(getFolderJobName(projectName));
             }
-            createJob(projectName, masterJobName, MASTER);
-            createJob(projectName, developJobName, DEVELOP);
+            
+            createJob(templateName, projectName, masterJobName, MASTER);
+            createJob(templateName, projectName, developJobName, DEVELOP);
 
             jobs.add(masterJobName);
             jobs.add(developJobName);
@@ -122,35 +133,6 @@ public class JenkinsService implements IJenkinsService {
 
     private JenkinsServer createJenkinsClient(JenkinsHttpClient jenkinsHttpClient) throws URISyntaxException {
         return new JenkinsServer(jenkinsHttpClient);
-    }
-
-    private String createConfigXml(String displayName, String scmUrl, String branchName) throws IOException {
-
-        final Map<String, String> variables = new HashMap<String, String>();
-
-        variables.put("scmUrl", scmUrl);
-        variables.put("displayName", displayName);
-        variables.put("branchName", branchName);
-        variables.put("buildScript", this.configurationService.getBuildScript());
-        variables.put("publishScript", this.configurationService.getPublishScript());
-
-        final URL url = com.google.common.io.Resources.getResource(this.configurationService.getTemplateName());
-        return substituteText(url, variables);
-    }
-
-    /**
-     * Replaces all the occurrences of variables with their matching values.
-     *
-     * @param url
-     * @param variables the map with the variables' values, can be null.
-     * @return
-     * @throws IOException
-     */
-    private String substituteText(URL url, Map<String, String> variables) throws IOException {
-        final String templateXml = Resources.toString(url, Charsets.UTF_8);
-        final StrSubstitutor sub = new StrSubstitutor(variables);
-        final String resolvedXml = sub.replace(templateXml);
-        return resolvedXml;
     }
 
     @Override
@@ -263,7 +245,8 @@ public class JenkinsService implements IJenkinsService {
         final String projectName = project.getName();
         final String gitBranchName = getGitReleaseBranchName(releaseVersion);
         final String jobName = getReleaseJobName(projectName, releaseVersion);
-        createJob(projectName, jobName, gitBranchName);
+        final String templateName = getTemplateName(project);
+        createJob(templateName, projectName, jobName, gitBranchName);
         JenkinsUtils.registerJob(project, jobName);
     }
 
@@ -272,18 +255,19 @@ public class JenkinsService implements IJenkinsService {
         final String projectName = project.getName();
         final String jobName = getFeatureJobName(projectName, featureId, featureSubject);
         final String gitBranchName = getGitFeatureBranchName(featureId, featureSubject);
-        createJob(projectName, jobName, gitBranchName);
+        final String templateName = getTemplateName(project);
+        createJob(templateName, projectName, jobName, gitBranchName);
         JenkinsUtils.registerJob(project, jobName);
     }
 
-    private void createJob(String projectName, String jobName, String gitBranchName) throws JenkinsExtensionException {
+    private void createJob(final String templateName, String projectName, String jobName, String gitBranchName) throws JenkinsExtensionException {
         final JenkinsServer jenkins;
         try {
             jenkins = createJenkinsClient();
 
             final String scmUrl = getProjectScmUrl(projectName);
             final String displayName = getDisplayName(projectName, gitBranchName);
-            final String resolvedXmlConfig = createConfigXml(displayName, scmUrl, gitBranchName);
+            final String resolvedXmlConfig = this.templateService.createConfigXml(templateName, displayName, scmUrl, gitBranchName);
 
             if (useFolder()) {
                 final FolderJob projectFolder = getProjectFolder(jenkins, projectName);
