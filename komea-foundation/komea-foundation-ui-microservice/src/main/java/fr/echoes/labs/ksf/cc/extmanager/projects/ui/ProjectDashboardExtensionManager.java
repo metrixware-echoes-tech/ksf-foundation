@@ -4,6 +4,8 @@ import com.google.common.collect.Lists;
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.IProjectDashboardExtension;
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.IProjectTabPanel;
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +36,14 @@ public class ProjectDashboardExtensionManager implements IProjectDashboardExtens
         for (final IProjectDashboardExtension extension : this.extensions) {
             extension.reclaimProjectDashboardWidget(projectDashboardWidgets);
         }
-        return projectDashboardWidgets.getWidgets();
+        final List<ProjectDashboardWidget> widgets = Lists.newArrayList(projectDashboardWidgets.getWidgets());
+        Collections.sort(widgets, new Comparator<ProjectDashboardWidget>() {
+            @Override
+            public int compare(ProjectDashboardWidget o1, ProjectDashboardWidget o2) {
+                return o1.getId().compareTo(o2.getId());
+            }
+        });
+        return widgets;
     }
 
     @Override
