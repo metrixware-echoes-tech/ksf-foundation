@@ -5,6 +5,7 @@ import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -22,6 +23,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Lists;
+
 import fr.echoes.labs.foremanapi.IForemanApi;
 import fr.echoes.labs.foremanapi.VmComputeAttributes;
 import fr.echoes.labs.foremanapi.model.Environment;
@@ -34,14 +39,18 @@ import fr.echoes.labs.foremanapi.model.HostGroupWrapper;
 import fr.echoes.labs.foremanapi.model.HostWrapper;
 import fr.echoes.labs.foremanapi.model.Hostgroups;
 import fr.echoes.labs.foremanapi.model.Hosts;
+import fr.echoes.labs.foremanapi.model.Image;
 import fr.echoes.labs.foremanapi.model.NewFilter;
 import fr.echoes.labs.foremanapi.model.NewHost;
 import fr.echoes.labs.foremanapi.model.NewRole;
 import fr.echoes.labs.foremanapi.model.NewUser;
+import fr.echoes.labs.foremanapi.model.OperatingSystem;
+import fr.echoes.labs.foremanapi.model.OperatingSystems;
 import fr.echoes.labs.foremanapi.model.OverrideValueWrapper;
 import fr.echoes.labs.foremanapi.model.Permissions;
 import fr.echoes.labs.foremanapi.model.PuppetClassParameter;
 import fr.echoes.labs.foremanapi.model.PuppetClassParameters;
+import fr.echoes.labs.foremanapi.model.Results;
 import fr.echoes.labs.foremanapi.model.Role;
 import fr.echoes.labs.foremanapi.model.RoleWrapper;
 import fr.echoes.labs.foremanapi.model.Roles;
@@ -652,7 +661,34 @@ public class ForemanService implements IForemanService {
 		return hosts != null ? hosts.results : null;
 
 	}
-
-
+	
+	@Override
+	public List<Image> findOperatingSystemImages(final IForemanApi api) {
+		
+		final List<Image> allImages = Lists.newArrayList();
+		final OperatingSystems operatingSystems = api.getOperatingSystems(null, null, null, PER_PAGE_RESULT);
+		
+		for (final OperatingSystem os : operatingSystems.results) {
+			final Results<Image> osImages = api.getOperatingSystemImages(os.id, null, PER_PAGE_RESULT);
+			allImages.addAll(osImages.getResults());
+		}
+		
+		return allImages;
+	}
+	
+	@Override
+	public Image findOperatingSystemImage(final IForemanApi api, final Integer id) {
+		
+		final List<Image> images = findOperatingSystemImages(api);
+		
+		final Collection<Image> matched = Collections2.filter(images, new Predicate<Image>() {
+			@Override
+			public boolean apply(Image image) {
+				return id.equals(image.getId());
+			}
+		});
+		
+		return matched.isEmpty() ? null : matched.iterator().next();
+	}
 
 }

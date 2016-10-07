@@ -17,18 +17,20 @@ public class ForemanHostDescriptorFactory {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ForemanHostDescriptorFactory.class);
 
+	private static final String PROVISION_METHOD_IMAGE = "image";
+	
 	@Autowired
 	private ForemanConfigurationService configurationService;
 
 	/**
-	 * Create a HostDescriptor object that can be used to instantiate a Host in Foreman
+	 * Creates a HostDescriptor object that can be used to instantiate a Host in Foreman.
 	 * @param project the KSF project associated to the host
 	 * @param target the target associated to the host
 	 * @param hostName the hostName
 	 * @param hostPass the password that will be set during the VM creation (a default password is used if empty)
 	 * @return a HostDescriptor instance
 	 */
-	public ForemanHostDescriptor createHostDescriptor(Project project, ForemanTarget target, String hostName, String hostPass) {
+	public ForemanHostDescriptor createHostDescriptor(final Project project, final ForemanTarget target, final String hostName, final String hostPass) {
 
 		final ForemanEnvironnment environment = target.getEnvironment();
 
@@ -36,6 +38,10 @@ public class ForemanHostDescriptorFactory {
 		final String environmentName = environment.getName();
 		final String operatingSystemId = target.getOperationSystemId();
 		final String puppetConfiguration = target.getPuppetConfiguration();
+		final Integer imageId = target.getImageId();
+		final Integer architectureId = target.getArchitectureId();
+		final String provisionMethod = PROVISION_METHOD_IMAGE;
+		
 		String computeProfileId = target.getComputeProfile();
 
 		if (StringUtils.isEmpty(computeProfileId)) {
@@ -53,9 +59,10 @@ public class ForemanHostDescriptorFactory {
 		LOGGER.info("[foreman] hostGroupName: {}", hostGroupName);
 		LOGGER.info("[foreman] environmentName: {}", environmentName);
 		LOGGER.info("[foreman] operatingSystemId: {}", operatingSystemId);
-		LOGGER.info("[foreman] architectureId: {}", this.configurationService.getArchitectureId());
+		LOGGER.info("[foreman] architectureId: {}", architectureId);
 		LOGGER.info("[foreman] puppetConfiguration: {}", puppetConfiguration);
 		LOGGER.info("[foreman] domainId: {}", this.configurationService.getDomainId());
+		LOGGER.info("[foreman] imageId: {}", imageId);
 
     	final ForemanHostDescriptor hostDescriptor = new ForemanHostDescriptor();
     	hostDescriptor.setHostName(hostName);
@@ -64,13 +71,12 @@ public class ForemanHostDescriptorFactory {
     	hostDescriptor.setHostGroupName(hostGroupName);
     	hostDescriptor.setEnvironmentName(environmentName);
     	hostDescriptor.setOperatingSystemId(operatingSystemId);
-    	hostDescriptor.setArchitectureId(this.configurationService.getArchitectureId());
+    	hostDescriptor.setArchitectureId(Integer.toString(architectureId));
     	hostDescriptor.setPuppetConfiguration(puppetConfiguration);
     	hostDescriptor.setDomainId(this.configurationService.getDomainId());
     	hostDescriptor.setRootPassword(passwordVm);
-    	hostDescriptor.setProvisionMethod(this.configurationService.getProvisionMethod());
-    	hostDescriptor.setImageId(this.configurationService.getImageId());
-
+    	hostDescriptor.setProvisionMethod(provisionMethod);
+    	hostDescriptor.setImageId(Integer.toString(imageId));
 
     	return hostDescriptor;
 	}

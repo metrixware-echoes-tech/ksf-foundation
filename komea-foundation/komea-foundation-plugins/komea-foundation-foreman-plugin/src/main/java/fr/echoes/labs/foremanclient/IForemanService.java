@@ -11,6 +11,7 @@ import org.codehaus.jackson.map.JsonMappingException;
 
 import fr.echoes.labs.foremanapi.IForemanApi;
 import fr.echoes.labs.foremanapi.model.Host;
+import fr.echoes.labs.foremanapi.model.Image;
 import fr.echoes.labs.ksf.cc.plugins.foreman.model.ForemanHostDescriptor;
 
 public interface IForemanService {
@@ -39,5 +40,9 @@ public interface IForemanService {
 			Boolean usePuppetDefault);
 	
 	public List<Host> findHostsByProject(IForemanApi api, String projectName);
+
+	public List<Image> findOperatingSystemImages(IForemanApi api);
+
+	public Image findOperatingSystemImage(IForemanApi api, Integer id);
 
 }
