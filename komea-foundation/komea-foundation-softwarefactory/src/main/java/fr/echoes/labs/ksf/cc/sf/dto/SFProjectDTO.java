@@ -13,6 +13,8 @@ public class SFProjectDTO {
 	@NotEmpty
 	private String name;
 	
+	private String jobTemplate;
+	
 	private List<String> applications;
 
 	public String getId() {
@@ -45,6 +47,14 @@ public class SFProjectDTO {
 
 	public void setApplications(List<String> applications) {
 		this.applications = applications;
+	}
+
+	public String getJobTemplate() {
+		return jobTemplate;
+	}
+
+	public void setJobTemplate(String jobTemplate) {
+		this.jobTemplate = jobTemplate;
 	}
 	
 }

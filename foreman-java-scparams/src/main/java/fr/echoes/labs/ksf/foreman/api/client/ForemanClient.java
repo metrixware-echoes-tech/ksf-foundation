@@ -31,7 +31,7 @@ import fr.echoes.labs.ksf.foreman.api.model.SmartClassParameter;
 import fr.echoes.labs.ksf.foreman.api.model.SmartClassParameterOverrideValue;
 import fr.echoes.labs.ksf.foreman.api.utils.PageAggregator;
 import fr.echoes.labs.ksf.foreman.api.utils.PuppetClassUtils;
-import fr.echoes.labs.ksf.foreman.api.utils.URLUtils;
+import fr.echoes.labs.ksf.foundation.utils.URLUtils;
 
 public class ForemanClient extends AbstractApiClient {
 

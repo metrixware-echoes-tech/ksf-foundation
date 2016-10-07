@@ -21,6 +21,7 @@ import com.tocea.corolla.products.utils.EntityKeyGenerator;
 import com.tocea.corolla.users.dto.UserDto;
 import com.tocea.corolla.utils.domain.KsfDomainException;
 
+import fr.echoes.labs.ksf.cc.extensions.gui.ProjectExtensionConstants;
 import fr.echoes.labs.ksf.cc.sf.commands.CreateProductionLineCommand;
 import fr.echoes.labs.ksf.cc.sf.commands.CreateProjectAndProductionLineCommand;
 import fr.echoes.labs.ksf.cc.sf.dao.ISFApplicationDAO;
@@ -51,7 +52,7 @@ public class CreateProjectAndProductionLineCommandHandler implements ICommandHan
 	@Override
 	public Project handle(@Valid CreateProjectAndProductionLineCommand command) {
 		
-		SFProjectDTO projectDTO = command.getProjectDTO();
+		final SFProjectDTO projectDTO = command.getProjectDTO();
 		
 		Project project = new Project();
 		project.setName(projectDTO.getName());
@@ -65,6 +66,10 @@ public class CreateProjectAndProductionLineCommandHandler implements ICommandHan
 			project.setKey(key);
 		}else{
 			project.setKey(projectDTO.getKey());
+		}
+		
+		if (!StringUtils.isEmpty(projectDTO.getJobTemplate())) {
+			project.getOtherAttributes().put(ProjectExtensionConstants.JOB_TEMPLATE, projectDTO.getJobTemplate());
 		}
 		
 		UserDto userDTO = userDetailsRetrievingService.getCurrentUser();

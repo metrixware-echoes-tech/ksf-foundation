@@ -8,11 +8,16 @@ configurations.all {
 	exclude group: 'com.github.fakemongo'
 	exclude group: 'org.javers'
 	exclude group: 'org.springframework.data'
+	exclude group: 'org.springframework.ldap'
+	exclude group: 'org.springframework.security'
+	exclude group: 'org.springframework.boot'
 	exclude group: 'org.springframework'
 	exclude group: 'org.jboss.logging'
 	exclude group: 'org.jboss.spec.javax.ws.rs'
 	exclude group: 'org.jboss.spec.javax.annotation'
 	exclude group: 'org.codehaus.groovy'
+	exclude group: 'org.ocpsoft.prettytime'
+	exclude group: 'javax.mail'
 	
 }
 
@@ -26,6 +31,8 @@ dependencies{
 	compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: "${JACKSON}"
 	compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: "${JACKSON}"
 	compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: "${JACKSON}"
+	
+	compile project(":ksf-commons:ksf-backend-utils")
 	
 }
 

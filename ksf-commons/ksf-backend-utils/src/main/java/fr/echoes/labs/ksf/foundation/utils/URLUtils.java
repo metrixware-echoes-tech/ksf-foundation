@@ -1,4 +1,4 @@
-package fr.echoes.labs.ksf.foreman.api.utils;
+package fr.echoes.labs.ksf.foundation.utils;
 
 import java.nio.charset.Charset;
 import java.util.List;
@@ -19,6 +19,17 @@ public final class URLUtils {
 		// static class
 	}
 	
+	public static String removeLastSlash(final String url) {
+		
+		int length = url == null ? 0 : url.length();
+		
+		if (length > 0 && url.charAt(length-1) == '/') {
+			return url.substring(0, length-1);
+		}
+		
+		return url;
+	}
+	
 	public static String addPath(final String url, final String path) {
 		
 		final StringBuilder sb = new StringBuilder();
@@ -29,15 +40,6 @@ public final class URLUtils {
 		}
 		
 		return sb.append(path).toString();
-	}
-	
-	public static String removeLastSlash(final String url) {
-		
-		if (url.charAt(url.length()-1) == '/') {
-			return url.substring(0, url.length()-1);
-		}
-		
-		return url;
 	}
 	
 	public static String encodeParam(final String param) {
@@ -59,5 +61,5 @@ public final class URLUtils {
 		
 		return URLEncodedUtils.format(pairs, Charset.defaultCharset());
 	}
-	
+
 }

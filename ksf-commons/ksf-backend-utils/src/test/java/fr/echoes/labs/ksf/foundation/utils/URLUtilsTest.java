@@ -1,4 +1,4 @@
-package fr.echoes.labs.ksf.foreman.api.utils;
+package fr.echoes.labs.ksf.foundation.utils;
 
 import org.junit.Assert;
 import org.junit.Test;

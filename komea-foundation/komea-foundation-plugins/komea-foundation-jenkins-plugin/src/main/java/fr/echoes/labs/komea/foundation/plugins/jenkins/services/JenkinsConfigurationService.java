@@ -13,8 +13,11 @@ public class JenkinsConfigurationService {
     @Value("${ksf.jenkins.url}")
     private String url;
 
-    @Value("${ksf.jenkins.templateName}")
+    @Value("${ksf.jenkins.templateName:}")
     private String templateName;
+    
+    @Value("${ksf.jenkins.templateFolder:}")
+    private String templateFolder;
 
     @Value("${ksf.scmUrl}")
     private String scmUrl;
@@ -132,5 +135,12 @@ public class JenkinsConfigurationService {
      */
     public String getJobDisplayNamePattern() {
         return this.jobDisplayNamePattern;
+    }
+    
+    /**
+     * @return the template folder
+     */
+    public String getTemplateFolder() {
+    	return this.templateFolder;
     }
 }
