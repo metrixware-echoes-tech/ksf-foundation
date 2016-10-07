@@ -19,6 +19,7 @@ import com.google.common.io.Resources;
 public class JenkinsTemplateServiceTest {
 	
 	private static final String TMP_FOLDER = "build/tmp/templates/";
+	private static final String DEFAULT_TEMPLATE = "jenkins_job_templates/job.xml";
 
 	@Mock
 	private JenkinsConfigurationService configuration;
@@ -62,12 +63,9 @@ public class JenkinsTemplateServiceTest {
 	@Test
 	public void testGetTemplate() throws IOException {
 		
-		final String defaultTemplate = getResourceContent("templates/job.xml");
+		final String defaultTemplate = getResourceContent(DEFAULT_TEMPLATE);
 		
-		String content = service.getTemplate("job_demo.xml");
-		Assert.assertEquals(getResourceContent("templates/job_demo.xml"), content);
-		
-		content = service.getTemplate("job.xml");
+		String content = service.getTemplate("job.xml");
 		Assert.assertEquals(defaultTemplate, content);
 		
 		content = service.getTemplate("job_test.xml");
