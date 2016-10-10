@@ -38,7 +38,7 @@ public class ForemanHostDescriptorFactory {
 		final String environmentName = environment.getName();
 		final String operatingSystemId = target.getOperationSystemId();
 		final String puppetConfiguration = target.getPuppetConfiguration();
-		final Integer imageId = target.getImageId();
+		final String imageId = target.getImageUuid();
 		final Integer architectureId = target.getArchitectureId();
 		final String provisionMethod = PROVISION_METHOD_IMAGE;
 		
@@ -76,7 +76,7 @@ public class ForemanHostDescriptorFactory {
     	hostDescriptor.setDomainId(this.configurationService.getDomainId());
     	hostDescriptor.setRootPassword(passwordVm);
     	hostDescriptor.setProvisionMethod(provisionMethod);
-    	hostDescriptor.setImageId(Integer.toString(imageId));
+    	hostDescriptor.setImageId(imageId);
 
     	return hostDescriptor;
 	}

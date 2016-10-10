@@ -160,6 +160,7 @@ public class ForemanActionsController {
         // associate the target to an OS
         if (image != null) {
         	LOGGER.info("Image {} found [os={}, architecure={}]", imageId, image.getOperatingSystemName(), image.getArchitectureName()); 
+        	foremanTarget.setImageUuid(image.getUuid());
         	foremanTarget.setOperatingSystemId(Integer.toString(image.getOperatingSystemId()));
         	foremanTarget.setOperatingSystemName(image.getOperatingSystemName());
         	foremanTarget.setArchitectureId(image.getArchitectureId());

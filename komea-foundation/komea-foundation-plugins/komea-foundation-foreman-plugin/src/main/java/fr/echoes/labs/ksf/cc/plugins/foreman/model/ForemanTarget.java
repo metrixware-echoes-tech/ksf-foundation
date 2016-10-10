@@ -42,6 +42,8 @@ public class ForemanTarget {
 	
 	@NotNull
 	private Integer imageId;
+	
+	private String imageUuid;
 
 	@NotBlank
 	private String operatingSystemId;
@@ -142,7 +144,15 @@ public class ForemanTarget {
 	public void setArchitectureId(Integer architectureId) {
 		this.architectureId = architectureId;
 	}
+	
+	public String getImageUuid() {
+		return imageUuid;
+	}
 
+	public void setImageUuid(String imageUuid) {
+		this.imageUuid = imageUuid;
+	}
+	
 	@Override
 	public String toString() {
 		return "ForemanTarget [id=" + this.id + ", environment=" + this.environment + ", operatingSystem=" + this.operatingSystemName

@@ -264,7 +264,7 @@ public interface IForemanApi {
 	@Consumes(MediaType.APPLICATION_JSON)
 	SmartVariable overrideSmartVariable(
 			@PathParam("smart_variable_id") String smart_variable_id,
-			@PathParam("override_value") Map<String, String> override_value);
+			Map<String, String> override_value);
 
 
 	@PUT
