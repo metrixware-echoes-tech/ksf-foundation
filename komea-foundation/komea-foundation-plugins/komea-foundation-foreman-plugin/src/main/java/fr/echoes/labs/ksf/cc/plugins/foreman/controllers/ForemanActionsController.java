@@ -3,11 +3,14 @@ package fr.echoes.labs.ksf.cc.plugins.foreman.controllers;
 import com.tocea.corolla.products.dao.IProjectDAO;
 import com.tocea.corolla.products.domain.Project;
 import fr.echoes.labs.foremanapi.IForemanApi;
+import fr.echoes.labs.foremanapi.model.Host;
 import fr.echoes.labs.foremanapi.model.Image;
 import fr.echoes.labs.foremanclient.IForemanService;
 import fr.echoes.labs.ksf.cc.plugins.foreman.dao.IForemanEnvironmentDAO;
 import fr.echoes.labs.ksf.cc.plugins.foreman.dao.IForemanTargetDAO;
+import fr.echoes.labs.ksf.cc.plugins.foreman.exceptions.ForemanHostAlreadyExistException;
 import fr.echoes.labs.ksf.cc.plugins.foreman.model.ForemanEnvironnment;
+import fr.echoes.labs.ksf.cc.plugins.foreman.model.ForemanHostDescriptor;
 import fr.echoes.labs.ksf.cc.plugins.foreman.model.ForemanTarget;
 import fr.echoes.labs.ksf.cc.plugins.foreman.services.ForemanClientFactory;
 import fr.echoes.labs.ksf.cc.plugins.foreman.services.ForemanConfigurationService;
@@ -187,6 +190,37 @@ public class ForemanActionsController {
         }
 
         return "redirect:/ui/projects/" + project.getKey();
+    }
+
+    @RequestMapping(value = "/ui/foreman/targets/instantiate", method = RequestMethod.POST)
+    public String instantiateTarget(@RequestParam("projectId") String projectId, @RequestParam("hostName") String hostName, @RequestParam("hostPass") String hostPass, @RequestParam("targetId") String targetId) {
+
+        final Project project = this.projectDAO.findOne(projectId);
+        final ForemanTarget target = this.targetDAO.findOne(targetId);
+
+        String redirectURL = "/ui/projects/" + project.getKey();
+
+        try {
+
+            // Create a host descriptor using the provided data and the data from the configuration file
+            final ForemanHostDescriptor hostDescriptor = this.hostDescriptorFactory.createHostDescriptor(project, target, hostName, hostPass);
+
+            // Call Foreman to create the VM
+            final IForemanApi foremanApi = this.foremanClientFactory.createForemanClient();
+            final Host host = this.foremanService.createHost(foremanApi, hostDescriptor);
+
+            //TODO find a way to generate the plugin tab ID dynamically
+            redirectURL += "?foremanHost=" + host.name + "#foreman";
+
+        } catch (final ForemanHostAlreadyExistException e) {
+            LOGGER.error("[foreman] Failed to create host {} : {}", hostName, e);
+            this.errorHandler.registerError("Failed to instantiate target. The provided name is already used for another instance.");
+        } catch (final Exception e) {
+            LOGGER.error("[foreman] Failed to create host {} : {}.", hostName, e);
+            this.errorHandler.registerError("Failed to instantiate target. Please verify your Foreman configuration.");
+        }
+
+        return "redirect:" + redirectURL;
     }
 
     @RequestMapping(value = "/ui/foreman/targets/delete", method = RequestMethod.POST)
