@@ -70,7 +70,7 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
 
     @Autowired
     private ForemanClientFactory foremanClientFactory;
-    
+
     @Autowired
     private ForemanService foremanService;
 
@@ -83,11 +83,15 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
         actionCreateEnv.setActionName(messageSourceAccessor.getMessage("foundation.foreman.widget.createEnvironment"));
         actionCreateEnv.setUrl("javascript:displayCreateEnvModal()");
 
+        final MenuAction actionDeleteEnv = new MenuAction();
+        actionDeleteEnv.setActionName(messageSourceAccessor.getMessage("foundation.foreman.widget.deleteEnvironment"));
+        actionDeleteEnv.setUrl("javascript:displayDeleteEnvModal()");
+
         final MenuAction actionCreateTarget = new MenuAction();
         actionCreateTarget.setActionName(messageSourceAccessor.getMessage("foundation.foreman.widget.createTarget"));
         actionCreateTarget.setUrl("javascript:displayCreateTargetModal()");
 
-        return Lists.newArrayList(actionCreateEnv, actionCreateTarget);
+        return Lists.newArrayList(actionCreateEnv, actionDeleteEnv, actionCreateTarget);
 
     }
 
