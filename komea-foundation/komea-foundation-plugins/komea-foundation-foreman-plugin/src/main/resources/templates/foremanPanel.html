@@ -16,7 +16,8 @@
                 <td th:text="${target.getName()}"></td>
                 <td th:text="${target.getOperatingSystemName()}"></td>
                 <td class="text-right">
-                    <a class="btn btn-default glyphicon glyphicon-pencil" disabled="disabled">&nbsp;Edit</a>				
+                    <a class="btn btn-default glyphicon glyphicon-pencil" disabled="disabled">&nbsp;Edit</a>
+                    <button id="delete_target_btn" type="button" class="btn btn-default glyphicon glyphicon-trash" role="button" th:attr="data-targetId=${target.getId()}" data-toggle="modal" data-target="#deleteTargetModal">&nbsp;Delete</button>	
                     <button type="button" class="btn btn-default glyphicon glyphicon-play btn-instantiate" role="button" th:attr="data-targetId=${target.getId()}" data-toggle="modal" data-target="#instantiateHostModal">&nbsp;Instantiate</button>				
                 </td>
             </tr>
@@ -233,6 +234,31 @@
     </div>
 </div>
 
+
+<div aria-hidden="true" aria-labelledby="myModalLabel" class="modal fade in" id="deleteTargetModal" role="dialog" tabindex="-1" style="padding-left: 15px;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-hidden="true" class="close" data-dismiss="modal" type="button">&times;</button>
+                <h4 class="modal-title">Delete Target</h4>
+            </div>
+            <div class="modal-body">
+                <form th:attr="action=@{/ui/foreman/targets/delete}" class="form-horizontal" id="instantiate_host" method="post" role="form"  data-toggle="validator">
+                    <div>
+                        <label>Are you sure to delete this target ?</label>
+                    </div>
+                    <input name="projectId" type="hidden" th:value="${projectId}"/>
+                    <input name="targetId" id="deleteTargetId" type="hidden" value="" />
+                    <div class="modal-footer">
+                        <button class="btn btn-default" data-dismiss="modal" type="button">Cancel</button>
+                        <button class="btn btn-primary" type="submit">Delete</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script type="text/javascript" th:inline="text">
 
     var restAPI = {
@@ -244,8 +270,16 @@
 
         $(".btn-instantiate").click(function () {
             var targetId = $(this).attr("data-targetId");
-            alert
             $("#targetId").attr("value", targetId);
+        });
+
+    });
+
+    document.addEventListener("DOMContentLoaded", function (event) {
+
+        $("#delete_target_btn").click(function () {
+            var targetId = $(this).attr("data-targetId");
+            $("#deleteTargetId").attr("value", targetId);
         });
 
     });
