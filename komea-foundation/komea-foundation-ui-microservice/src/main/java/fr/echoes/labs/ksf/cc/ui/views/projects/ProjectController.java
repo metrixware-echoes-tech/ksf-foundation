@@ -160,7 +160,7 @@ public class ProjectController {
 
         if (validateResults.isEmpty()) {
             this.gate.dispatch(new FinishReleaseCommand(project, releaseVersion));
-            deleteFromStartedRelease(releaseVersion);
+            deleteFromStartedRelease(project.getId(), releaseVersion);
 
         } else {
             redirectAttributes.addFlashAttribute("validationErrors", validateResults);
@@ -169,9 +169,10 @@ public class ProjectController {
         return new ModelAndView("redirect:/ui/projects/" + project.getKey());
     }
 
-    private void deleteFromStartedRelease(String releaseVersion) {
+    private void deleteFromStartedRelease(String projectId, String releaseVersion) {
         for (final Release release : this.releaseDao.findAll()) {
-            if (StringUtils.equals(release.getReleaseVersion(), releaseVersion)) {
+            if (StringUtils.equals(release.getReleaseVersion(), releaseVersion)
+                    && StringUtils.equals(release.getProjectId(), projectId)) {
                 this.releaseDao.delete(release);;
             }
         }
