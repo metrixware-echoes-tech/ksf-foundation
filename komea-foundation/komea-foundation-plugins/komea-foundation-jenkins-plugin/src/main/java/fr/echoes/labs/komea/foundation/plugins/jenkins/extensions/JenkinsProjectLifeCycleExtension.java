@@ -60,7 +60,7 @@ public class JenkinsProjectLifeCycleExtension implements IProjectLifecycleExtens
 
         try {
 
-            this.jenkinsService.deleteProject(project.getName());
+            this.jenkinsService.deleteProject(project);
 
         } catch (final Exception ex) {
             LOGGER.error("[Jenkins] Failed to delete project {} ", project.getName(), ex);
@@ -105,7 +105,7 @@ public class JenkinsProjectLifeCycleExtension implements IProjectLifecycleExtens
     public NotifyResult notifyFinishedRelease(ProjectDto project, String releaseName) {
         try {
 
-            this.jenkinsService.deleteReleaseJob(project.getName(), releaseName);
+            this.jenkinsService.deleteReleaseJob(project, releaseName);
         } catch (final Exception ex) {
             LOGGER.error("[Jenkins] Failed to delete the release job", ex);
             this.errorHandler.registerError("Failed to delete the release job.");
@@ -117,7 +117,7 @@ public class JenkinsProjectLifeCycleExtension implements IProjectLifecycleExtens
     public NotifyResult notifyFinishedFeature(ProjectDto projectDto, String featureId,
             String featureSubject) {
         try {
-            this.jenkinsService.deleteFeatureJob(projectDto.getName(), featureId, featureSubject);
+            this.jenkinsService.deleteFeatureJob(projectDto, featureId, featureSubject);
         } catch (final JenkinsExtensionException e) {
             LOGGER.error("[Jenkins] Failed to delete the feature job", e);
             this.errorHandler.registerError("Failed to delete the feature job.");
@@ -130,7 +130,7 @@ public class JenkinsProjectLifeCycleExtension implements IProjectLifecycleExtens
     public NotifyResult notifyCanceledFeature(ProjectDto projectDto, String featureId,
             String featureSubject) {
         try {
-            this.jenkinsService.deleteFeatureJob(projectDto.getName(), featureId, featureSubject);
+            this.jenkinsService.deleteFeatureJob(projectDto, featureId, featureSubject);
         } catch (final JenkinsExtensionException e) {
             LOGGER.error("[Jenkins] Failed to delete the feature job", e);
             this.errorHandler.registerError("Failed to delete the feature job.");

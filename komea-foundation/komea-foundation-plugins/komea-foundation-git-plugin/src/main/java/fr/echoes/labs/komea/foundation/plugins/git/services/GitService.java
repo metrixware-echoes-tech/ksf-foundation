@@ -65,20 +65,21 @@ public class GitService implements IGitService {
 
     @Autowired
     private GitConfigurationService configuration;
+    
+    @Autowired
+    private GitNameResolver nameResolver;
 
     @Override
-    public void createProject(ProjectDto project) throws GitExtensionException {
+    public void createProject(final ProjectDto project) throws GitExtensionException {
 
-        final String projectName = project.getName();
+        Objects.requireNonNull(project);
 
-        Objects.requireNonNull(projectName);
-
-        final String gitProjectUri = getProjectScmUrl(projectName);
+        final String gitProjectUri = this.nameResolver.getProjectScmUrl(project);
 
         File workingDirectory = null;
         Git git = null;
         try {
-            workingDirectory = createCloneDestinationDirectory(projectName);
+            workingDirectory = createCloneDestinationDirectory(project);
 
             // Clone project
             LOGGER.debug("Cloning the repository {} into {}", gitProjectUri, workingDirectory);
@@ -95,6 +96,7 @@ public class GitService implements IGitService {
             LOGGER.debug("Deleting the working directory: {}", workingDirectory);
 
             // Insert Git data in the Project object
+            project.getOtherAttributes().put(ProjectExtensionConstants.GIT_REPOSITORY_KEY, this.nameResolver.getRepositoryKey(project));
             project.getOtherAttributes().put(ProjectExtensionConstants.GIT_URL, gitProjectUri);
             project.getOtherAttributes().put(ProjectExtensionConstants.ANALYZED_BRANCHES, Lists.newArrayList(DEVELOP));
 
@@ -112,10 +114,11 @@ public class GitService implements IGitService {
 
     }
 
-    private File createCloneDestinationDirectory(final String projectName)
+    private File createCloneDestinationDirectory(final ProjectDto project)
             throws GitExtensionException, IOException {
 
-        final File workingDirectory = new File(this.configuration.getGitWorkingdirectory(), ProjectUtils.createIdentifier(projectName));
+    	final String repositoryKey = this.nameResolver.getRepositoryKey(project);
+        final File workingDirectory = new File(this.configuration.getGitWorkingdirectory(), repositoryKey);
 
         if (workingDirectory.exists()) {
             if (!workingDirectory.isDirectory()) {
@@ -179,22 +182,22 @@ public class GitService implements IGitService {
     }
 
     @Override
-    public void deleteProject(String projectName) throws GitExtensionException {
-        Objects.requireNonNull(projectName);
+    public void deleteProject(final ProjectDto project) throws GitExtensionException {
+        Objects.requireNonNull(project);
     }
 
-    private void createBranch(String projectName, String branchName) throws GitExtensionException {
-        Objects.requireNonNull(projectName);
+    private void createBranch(final ProjectDto project, String branchName) throws GitExtensionException {
+        Objects.requireNonNull(project);
 
-        final String gitProjectUri = getProjectScmUrl(projectName);
+        final String gitProjectUri = this.nameResolver.getProjectScmUrl(project);
 
-        LOGGER.info("Creating branch {} for project {}", branchName, projectName);
+        LOGGER.info("Creating branch {} for project {}", branchName, project.getName());
 
         File workingDirectory = null;
         Git git = null;
 
         try {
-            workingDirectory = createCloneDestinationDirectory(projectName);
+            workingDirectory = createCloneDestinationDirectory(project);
 
             // Clone project
             LOGGER.debug("Cloning the repository {} into {}", gitProjectUri, workingDirectory);
@@ -213,7 +216,7 @@ public class GitService implements IGitService {
             git.push().add(branchName).call();
 
         } catch (final Exception e) {
-            LOGGER.error("Failed to create branch " + branchName + " for project " + projectName, e);
+            LOGGER.error("Failed to create branch " + branchName + " for project " + project.getName(), e);
             throw new GitExtensionException(e);
         } finally {
             if (git != null) {
@@ -296,29 +299,28 @@ public class GitService implements IGitService {
     }
 
     @Override
-    public void createRelease(String projectName, String releaseVersion) throws GitExtensionException {
-        final String branchName = getReleaseBranchName(releaseVersion);
-        createBranch(projectName, branchName);
+    public void createRelease(final ProjectDto project, String releaseVersion) throws GitExtensionException {
+        final String branchName = this.nameResolver.getReleaseBranchName(releaseVersion);
+        createBranch(project, branchName);
     }
 
     @Override
-    public void createFeature(String projectName, String featureId, String featureSubject) throws GitExtensionException {
-        final String branchName = getFeatureBranchName(featureId, featureSubject);
-        createBranch(projectName, branchName);
+    public void createFeature(final ProjectDto project, String featureId, String featureSubject) throws GitExtensionException {
+        final String branchName = this.nameResolver.getFeatureBranchName(featureId, featureSubject);
+        createBranch(project, branchName);
     }
 
     @Override
-    public void closeFeature(String projectName, String featureId,
-            String featureSubject) throws GitExtensionException {
+    public void closeFeature(final ProjectDto project, final String featureId, final String featureSubject) throws GitExtensionException {
 
-        final String gitProjectUri = getProjectScmUrl(projectName);
-        final String branchName = getFeatureBranchName(featureId, featureSubject);
+        final String gitProjectUri = this.nameResolver.getProjectScmUrl(project);
+        final String branchName = this.nameResolver.getFeatureBranchName(featureId, featureSubject);
 
         File workingDirectory = null;
         Git git = null;
 
         try {
-            workingDirectory = createCloneDestinationDirectory(projectName);
+            workingDirectory = createCloneDestinationDirectory(project);
 
             // Clone project
             LOGGER.debug("Cloning the repository {} into {}", gitProjectUri, workingDirectory);
@@ -348,17 +350,16 @@ public class GitService implements IGitService {
     }
 
     @Override
-    public void cancelFeature(String projectName, String featureId,
-            String featureSubject) throws GitExtensionException {
+    public void cancelFeature(final ProjectDto project, final String featureId, final String featureSubject) throws GitExtensionException {
 
-        final String gitProjectUri = getProjectScmUrl(projectName);
-        final String branchName = getFeatureBranchName(featureId, featureSubject);
+        final String gitProjectUri = this.nameResolver.getProjectScmUrl(project);
+        final String branchName = this.nameResolver.getFeatureBranchName(featureId, featureSubject);
 
         File workingDirectory = null;
         Git git = null;
 
         try {
-            workingDirectory = createCloneDestinationDirectory(projectName);
+            workingDirectory = createCloneDestinationDirectory(project);
 
             // Clone project
             LOGGER.debug("Cloning the repository {} into {}", gitProjectUri, workingDirectory);
@@ -381,37 +382,17 @@ public class GitService implements IGitService {
         }
     }
 
-    private String getProjectScmUrl(String projectName) {
-        final Map<String, String> variables = new HashMap<String, String>(2);
-        variables.put("scmUrl", this.configuration.getScmUrl());
-        variables.put("projectKey", ProjectUtils.createIdentifier(projectName));
-        return replaceVariables(this.configuration.getProjectScmUrlPattern(), variables);
-    }
-
-    private String getReleaseBranchName(String releaseVersion) {
-        final Map<String, String> variables = new HashMap<String, String>(1);
-        variables.put("releaseVersion", ProjectUtils.createIdentifier(releaseVersion));
-        return replaceVariables(this.configuration.getBranchReleasePattern(), variables);
-    }
-
-    private String getFeatureBranchName(String featureId, String featureDescription) {
-        final Map<String, String> variables = new HashMap<String, String>(2);
-        variables.put("featureId", ProjectUtils.createIdentifier(featureId));
-        variables.put("featureDescription", ProjectUtils.createIdentifier(featureDescription));
-        return replaceVariables(this.configuration.getBranchFeaturePattern(), variables);
-    }
-
     @Override
-    public void closeRelease(String projectName, String releaseName)
-            throws GitExtensionException {
-        final String gitProjectUri = getProjectScmUrl(projectName);
-        final String branchName = getReleaseBranchName(releaseName);
+    public void closeRelease(final ProjectDto project, final String releaseName) throws GitExtensionException {
+        
+    	final String gitProjectUri = this.nameResolver.getProjectScmUrl(project);
+        final String branchName = this.nameResolver.getReleaseBranchName(releaseName);
 
         File workingDirectory = null;
         Git git = null;
 
         try {
-            workingDirectory = createCloneDestinationDirectory(projectName);
+            workingDirectory = createCloneDestinationDirectory(project);
 
             // Clone project
             LOGGER.debug("Cloning the repository {} into {}", gitProjectUri, workingDirectory);
@@ -468,12 +449,6 @@ public class GitService implements IGitService {
         checkout(git, branchName);
         git.tag().setName(ProjectUtils.createIdentifier(tagName)).call();
         git.push().setPushTags().call();
-    }
-
-    private String replaceVariables(String str, Map<String, String> variables) {
-        final StrSubstitutor sub = new StrSubstitutor(variables);
-        sub.setVariablePrefix("%{");
-        return sub.replace(str);
     }
 
 }

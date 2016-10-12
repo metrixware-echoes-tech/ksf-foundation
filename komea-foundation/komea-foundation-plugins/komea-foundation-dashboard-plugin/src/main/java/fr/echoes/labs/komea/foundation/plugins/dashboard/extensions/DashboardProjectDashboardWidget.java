@@ -10,6 +10,8 @@ import fr.echoes.labs.ksf.cc.plugins.dashboard.services.DashboardConfigurationSe
 import fr.echoes.labs.ksf.cc.plugins.dashboard.services.DashboardLiferayService;
 import fr.echoes.labs.ksf.cc.plugins.dashboard.utils.DashboardConstants;
 import fr.echoes.labs.ksf.cc.plugins.dashboard.utils.DashboardUrlBuilder;
+import fr.echoes.labs.ksf.plugins.utils.ThymeleafTemplateEngineUtils;
+
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
@@ -31,7 +33,7 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 @Component
 public class DashboardProjectDashboardWidget implements ProjectDashboardWidget {
 
-    private static TemplateEngine templateEngine = createTemplateEngine();
+    private static TemplateEngine templateEngine = ThymeleafTemplateEngineUtils.createTemplateEngine();
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DashboardProjectDashboardWidget.class);
 
@@ -121,20 +123,6 @@ public class DashboardProjectDashboardWidget implements ProjectDashboardWidget {
         };
 
         return Lists.newArrayList(iframePanel);
-    }
-
-    private static TemplateEngine createTemplateEngine() {
-
-        final ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
-        templateResolver.setTemplateMode("XHTML");
-        templateResolver.setPrefix("templates/");
-        templateResolver.setSuffix(".html");
-
-        final TemplateEngine templateEngine = new TemplateEngine();
-        templateEngine.setTemplateResolver(templateResolver);
-
-        return templateEngine;
-
     }
 
     @Override

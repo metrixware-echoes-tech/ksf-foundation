@@ -17,20 +17,20 @@ public interface IRedmineService {
     /**
      * Creates a new project.
      *
-     * @param projectName the project name.
+     * @param ksfProject the project.
      * @param username the current username. This user will be add as a member
      * of the new project.
      * @return
      */
-    public void createProject(String projectName, String username) throws RedmineExtensionException;
+    public void createProject(ProjectDto ksfProject, String username) throws RedmineExtensionException;
 
     /**
      * Deletes the given project.
      *
-     * @param projectName the project key.
+     * @param ksfProject the project.
      * @return
      */
-    public void deleteProject(String projectName) throws RedmineExtensionException;
+    public void deleteProject(ProjectDto ksfProject) throws RedmineExtensionException;
 
     /**
      * Gets the Redmine issues for the given query.
@@ -43,20 +43,20 @@ public interface IRedmineService {
     /**
      * Returns the list of versions for this project.
      *
-     * @param projectName the project name
+     * @param ksfProject the project.
      * @return a list of versions as a list of strings.
      * @throws RedmineExtensionException
      */
-    public List<IProjectVersion> getVersions(String projectName) throws RedmineExtensionException;
+    public List<IProjectVersion> getVersions(ProjectDto ksfProject) throws RedmineExtensionException;
 
     /**
      * Returns the list of features for this project.
      *
-     * @param projectName the project name
+     * @param ksfProject the project.
      * @return a list of features
      * @throws RedmineExtensionException
      */
-    public List<IProjectFeature> getFeatures(String projectName) throws RedmineExtensionException;
+    public List<IProjectFeature> getFeatures(ProjectDto ksfProject) throws RedmineExtensionException;
 
     /**
      * Returns the Redmine project ID.
@@ -66,7 +66,7 @@ public interface IRedmineService {
      * found.
      * @throws RedmineExtensionException
      */
-    public String getProjectId(String projectName) throws RedmineExtensionException;
+    public String getProjectId(ProjectDto ksfProject);
 
     /**
      * Changes the ticket status.

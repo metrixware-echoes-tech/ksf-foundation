@@ -1,7 +1,17 @@
 package fr.echoes.labs.ksf.cc.extmanager.projects.ui;
 
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.google.common.collect.Lists;
 import com.tocea.corolla.products.domain.Project;
+import com.tocea.corolla.products.utils.ProjectDtoFactory;
+
 import fr.echoes.labs.ksf.cc.extensions.services.project.TicketStatus;
 import fr.echoes.labs.ksf.cc.extensions.services.project.features.IProjectFeatues;
 import fr.echoes.labs.ksf.cc.extensions.services.project.features.IProjectFeature;
@@ -11,14 +21,8 @@ import fr.echoes.labs.ksf.cc.extensions.services.project.versions.ProjectVersion
 import fr.echoes.labs.ksf.cc.releases.dao.IReleaseDAO;
 import fr.echoes.labs.ksf.cc.releases.model.Release;
 import fr.echoes.labs.ksf.cc.releases.model.ReleaseState;
+import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
 import fr.echoes.labs.ksf.users.security.api.CurrentUserService;
-import java.util.ArrayList;
-import java.util.List;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 /**
  * This service allows to obtain project information returned by the plug-ins.
@@ -39,10 +43,10 @@ public class ProjectInformationManager {
     private IProjectFeatues[] features;
 
     @Autowired
-    IReleaseDAO releaseDao;
+    private IReleaseDAO releaseDao;
 
     @Autowired
-    CurrentUserService currentUserService;
+    private CurrentUserService currentUserService;
 
     /**
      * Returns the versions for this project.
@@ -57,13 +61,12 @@ public class ProjectInformationManager {
             return Lists.newArrayList();
         }
 
-        final String projectName = project.getName();
-
-        final List<IProjectVersion> result = new ArrayList<IProjectVersion>();
+        final ProjectDto projectDto = ProjectDtoFactory.convert(project);
+        final List<IProjectVersion> result = Lists.newArrayList();
         final List<Release> startedReleases = this.releaseDao.findAll();
 
         for (final IProjectVersions projectRelease : this.versions) {
-            final List<IProjectVersion> releases = projectRelease.getVersions(projectName);
+            final List<IProjectVersion> releases = projectRelease.getVersions(projectDto);
             if (releases != null) {
                 for (final IProjectVersion r : releases) {
                     for (final Release startedRelease : startedReleases) {
@@ -80,7 +83,7 @@ public class ProjectInformationManager {
                 result.addAll(releases);
             }
         }
-        LOGGER.info("getVersions : the project \"{}\" has {} versions.", projectName, result.size());
+        LOGGER.info("getVersions : the project \"{}\" has {} versions.", project.getName(), result.size());
         return result;
     }
 
@@ -99,24 +102,23 @@ public class ProjectInformationManager {
      * @param projectName the project name.
      * @return a list of features.
      */
-    public List<IProjectFeature> getFeatures(Project project) {
+    public List<IProjectFeature> getFeatures(final Project project) {
 
         if (this.features == null) {
             LOGGER.info("getFeatures : no features.");
             return Lists.newArrayList();
         }
 
-        final String projectName = project.getName();
-
-        final List<IProjectFeature> result = new ArrayList<IProjectFeature>();
+        final ProjectDto projectDto = ProjectDtoFactory.convert(project);
+        final List<IProjectFeature> result = Lists.newArrayList();;
 
         for (final IProjectFeatues projectFeature : this.features) {
-            final List<IProjectFeature> features = projectFeature.getFeatures(projectName);
+            final List<IProjectFeature> features = projectFeature.getFeatures(projectDto);
             if (features != null) {
                 result.addAll(features);
             }
         }
-        LOGGER.info("getVersions : the project \"{}\" has {} features.", projectName, result.size());
+        LOGGER.info("getVersions : the project \"{}\" has {} features.", project.getName(), result.size());
         return result;
     }
 
@@ -126,24 +128,24 @@ public class ProjectInformationManager {
             LOGGER.info("getFeaturesOfCurrentUser : no features.");
             return Lists.newArrayList();
         }
+        
         final String login = this.currentUserService.getCurrentUserLogin();
+        final ProjectDto projectDto = ProjectDtoFactory.convert(project);
 
-        final String projectName = project.getName();
-
-        final List<IProjectFeature> result = new ArrayList<IProjectFeature>();
+        final List<IProjectFeature> result = Lists.newArrayList();
 
         for (final IProjectFeatues projectFeature : this.features) {
-            final List<IProjectFeature> features = projectFeature.getFeatures(projectName);
+            final List<IProjectFeature> features = projectFeature.getFeatures(projectDto);
             if (features != null) {
                 for (final IProjectFeature feature : features) {
                     final String assignee = feature.getAssignee();
-                    if (assignee.isEmpty() || assignee.toLowerCase().equals(login.toLowerCase())) {
+                    if (assignee.isEmpty() || assignee.equalsIgnoreCase(login)) {
                         result.add(feature);
                     }
                 }
             }
         }
-        LOGGER.info("getFeaturesOfCurrentUser : the project \"{}\" has {} features.", projectName, result.size());
+        LOGGER.info("getFeaturesOfCurrentUser : the project \"{}\" has {} features.", project.getName(), result.size());
         return result;
     }
 

@@ -35,7 +35,7 @@ public class JenkinsTemplateService {
 	private static final String RESOURCES_TEMPLATE_FOLDER = "jenkins_job_templates/";
 	private static final String DEFAULT_TEMPLATE = "job.xml";
 	
-	private JenkinsConfigurationService configuration;
+	private final JenkinsConfigurationService configuration;
 	
 	@Autowired
 	public JenkinsTemplateService(final JenkinsConfigurationService configuration) {
@@ -71,7 +71,7 @@ public class JenkinsTemplateService {
 					return name.toLowerCase().endsWith(".xml");
 				}
 			};
-			for (File templateFile : directory.listFiles(filter)) {
+			for (final File templateFile : directory.listFiles(filter)) {
 				templates.add(templateFile.getName());
 			}
 		}else{
@@ -145,11 +145,11 @@ public class JenkinsTemplateService {
 	
 	/**
 	 * Builds the xml configuration of a Jenkins job.
-	 * @param displayName
-	 * @param scmUrl
-	 * @param branchName
+	 * @param displayName the display name of the job
+	 * @param scmUrl the url of a git repository
+	 * @param branchName the branch of the git repository that will be build
 	 * @return a String containing the xml configuration of the Jenkins job.
-	 * @throws IOException
+	 * @throws IOException if the xml configuration cannot be generated
 	 */
 	public String createConfigXml(final String templateName, String displayName, String scmUrl, String branchName) throws IOException {
 
@@ -166,10 +166,9 @@ public class JenkinsTemplateService {
 
     /**
      * Replaces all the occurrences of variables with their matching values.
-     *
-     * @param url
+     * @param templateXml a String containing a XML template
      * @param variables the map with the variables' values, can be null.
-     * @return
+     * @return a String containing the XML template with the replaced values.
      * @throws IOException
      */
     private String substituteText(final String templateXml, final Map<String, String> variables) throws IOException {

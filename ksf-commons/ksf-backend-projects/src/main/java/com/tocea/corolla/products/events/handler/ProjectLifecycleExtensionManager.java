@@ -1,5 +1,9 @@
 package com.tocea.corolla.products.events.handler;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.google.common.eventbus.Subscribe;
 import com.tocea.corolla.cqrs.annotations.EventHandler;
 import com.tocea.corolla.cqrs.gate.Gate;
@@ -13,13 +17,11 @@ import com.tocea.corolla.products.events.EventProjectDeleted;
 import com.tocea.corolla.products.events.EventProjectUpdated;
 import com.tocea.corolla.products.events.EventReleaseCreated;
 import com.tocea.corolla.products.events.EventReleaseFinished;
+import com.tocea.corolla.products.utils.ProjectDtoFactory;
+
 import fr.echoes.labs.ksf.extensions.projects.IProjectLifecycleExtension;
 import fr.echoes.labs.ksf.extensions.projects.NotifyResult;
 import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
-import org.apache.commons.beanutils.BeanMap;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * The Class ProjectLifecycleExtensionManager defines an handler that manages
@@ -41,7 +43,7 @@ public class ProjectLifecycleExtensionManager {
         if (this.extensions == null) {
             return;
         }
-        final ProjectDto projectDto = newProjectDto(_event.getCreatedProject());
+        final ProjectDto projectDto = ProjectDtoFactory.convert(_event.getCreatedProject());
         for (final IProjectLifecycleExtension extension : this.extensions) {
             final String extensionName = extension.getName();
             LOGGER.info("Extension " + extensionName + " is notified that a project has been created.");
@@ -59,7 +61,7 @@ public class ProjectLifecycleExtensionManager {
         if (this.extensions == null) {
             return;
         }
-        final ProjectDto projectDto = newProjectDto(_event.getProject());
+        final ProjectDto projectDto = ProjectDtoFactory.convert(_event.getProject());
         for (final IProjectLifecycleExtension extension : this.extensions) {
             final String extensionName = extension.getName();
             LOGGER.info("Extension " + extensionName + " is notified that a project has been deleted.");
@@ -76,7 +78,7 @@ public class ProjectLifecycleExtensionManager {
         if (this.extensions == null) {
             return;
         }
-        final ProjectDto projectDto = newProjectDto(event.getProject());
+        final ProjectDto projectDto = ProjectDtoFactory.convert(event.getProject());
         for (final IProjectLifecycleExtension extension : this.extensions) {
             final String extensionName = extension.getName();
             LOGGER.info("Extension " + extensionName + " is notified that a release bas been created.");
@@ -94,7 +96,7 @@ public class ProjectLifecycleExtensionManager {
         if (this.extensions == null) {
             return;
         }
-        final ProjectDto projectDto = newProjectDto(event.getProject());
+        final ProjectDto projectDto = ProjectDtoFactory.convert(event.getProject());
         for (final IProjectLifecycleExtension extension : this.extensions) {
             final String extensionName = extension.getName();
             LOGGER.info("Extension " + extensionName + " is notified that a release has been finished.");
@@ -111,7 +113,7 @@ public class ProjectLifecycleExtensionManager {
         if (this.extensions == null) {
             return;
         }
-        final ProjectDto projectDto = newProjectDto(event.getProject());
+        final ProjectDto projectDto = ProjectDtoFactory.convert(event.getProject());
         for (final IProjectLifecycleExtension extension : this.extensions) {
             final String extensionName = extension.getName();
             LOGGER.info("Extension " + extensionName + " is notified that a feature has been created.");
@@ -129,7 +131,7 @@ public class ProjectLifecycleExtensionManager {
         if (this.extensions == null) {
             return;
         }
-        final ProjectDto projectDto = newProjectDto(event.getProject());
+        final ProjectDto projectDto = ProjectDtoFactory.convert(event.getProject());
         for (final IProjectLifecycleExtension extension : this.extensions) {
             final String extensionName = extension.getName();
             LOGGER.info("Extension " + extensionName + " is notified that a feature has been finished.");
@@ -146,7 +148,7 @@ public class ProjectLifecycleExtensionManager {
         if (this.extensions == null) {
             return;
         }
-        final ProjectDto projectDto = newProjectDto(event.getProject());
+        final ProjectDto projectDto = ProjectDtoFactory.convert(event.getProject());
         for (final IProjectLifecycleExtension extension : this.extensions) {
             final String extensionName = extension.getName();
             LOGGER.info("Extension " + extensionName + " is notified that a feature has been canceled.");
@@ -163,7 +165,7 @@ public class ProjectLifecycleExtensionManager {
         if (this.extensions == null) {
             return;
         }
-        final ProjectDto projectDto = newProjectDto(_event.getProject());
+        final ProjectDto projectDto = ProjectDtoFactory.convert(_event.getProject());
         for (final IProjectLifecycleExtension extension : this.extensions) {
             final String extensionName = extension.getName();
             LOGGER.info("Extension " + extensionName + " is notified that a project has been updated.");
@@ -173,21 +175,6 @@ public class ProjectLifecycleExtensionManager {
             }
         }
 
-    }
-
-    private ProjectDto newProjectDto(final Project _createdProject) {
-        try {
-            final ProjectDto projectDto = new ProjectDto();
-            final BeanMap projectMap = new BeanMap(_createdProject);
-            final BeanMap dtoMap = new BeanMap(projectDto);
-            dtoMap.putAllWriteable(projectMap);
-            return (ProjectDto) dtoMap.getBean();
-
-        } catch (final Exception e) {
-            LOGGER.error("Could not convert project to Project DTO", e);
-
-        }
-        return null;
     }
 
     private void saveAttributes(Project project, ProjectDto projectDto) {

@@ -5,34 +5,11 @@
  */
 package fr.echoes.labs.ksf.cc.ui.views.projects;
 
-import com.google.common.collect.Lists;
-import com.tocea.corolla.cqrs.gate.CommandExecutionException;
-import com.tocea.corolla.cqrs.gate.Gate;
-import com.tocea.corolla.products.commands.CancelFeatureCommand;
-import com.tocea.corolla.products.commands.CreateFeatureCommand;
-import com.tocea.corolla.products.commands.CreateReleaseCommand;
-import com.tocea.corolla.products.commands.DeleteProjectCommand;
-import com.tocea.corolla.products.commands.FinishFeatureCommand;
-import com.tocea.corolla.products.commands.FinishReleaseCommand;
-import com.tocea.corolla.products.dao.IProjectDAO;
-import com.tocea.corolla.products.domain.Project;
-import com.tocea.corolla.products.exceptions.ProjectNotFoundException;
-import com.tocea.corolla.users.dao.IUserDAO;
-import com.tocea.corolla.users.domain.User;
-import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.IProjectTabPanel;
-import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
-import fr.echoes.labs.ksf.cc.extensions.services.project.IValidator;
-import fr.echoes.labs.ksf.cc.extensions.services.project.IValidatorResult;
-import fr.echoes.labs.ksf.cc.extmanager.projects.ui.IProjectDashboardExtensionManager;
-import fr.echoes.labs.ksf.cc.releases.dao.IReleaseDAO;
-import fr.echoes.labs.ksf.cc.releases.model.Release;
-import fr.echoes.labs.ksf.cc.releases.model.ReleaseState;
-import fr.echoes.labs.ksf.cc.sf.commands.CreateProjectAndProductionLineCommand;
-import fr.echoes.labs.ksf.cc.sf.dto.SFProjectDTO;
-import fr.echoes.labs.ksf.users.security.auth.UserDetailsRetrievingService;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.validation.Valid;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,6 +28,35 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.google.common.collect.Lists;
+import com.tocea.corolla.cqrs.gate.CommandExecutionException;
+import com.tocea.corolla.cqrs.gate.Gate;
+import com.tocea.corolla.products.commands.CancelFeatureCommand;
+import com.tocea.corolla.products.commands.CreateFeatureCommand;
+import com.tocea.corolla.products.commands.CreateReleaseCommand;
+import com.tocea.corolla.products.commands.DeleteProjectCommand;
+import com.tocea.corolla.products.commands.FinishFeatureCommand;
+import com.tocea.corolla.products.commands.FinishReleaseCommand;
+import com.tocea.corolla.products.dao.IProjectDAO;
+import com.tocea.corolla.products.domain.Project;
+import com.tocea.corolla.products.exceptions.ProjectNotFoundException;
+import com.tocea.corolla.products.utils.ProjectDtoFactory;
+import com.tocea.corolla.users.dao.IUserDAO;
+import com.tocea.corolla.users.domain.User;
+
+import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.IProjectTabPanel;
+import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
+import fr.echoes.labs.ksf.cc.extensions.services.project.IValidator;
+import fr.echoes.labs.ksf.cc.extensions.services.project.IValidatorResult;
+import fr.echoes.labs.ksf.cc.extmanager.projects.ui.IProjectDashboardExtensionManager;
+import fr.echoes.labs.ksf.cc.releases.dao.IReleaseDAO;
+import fr.echoes.labs.ksf.cc.releases.model.Release;
+import fr.echoes.labs.ksf.cc.releases.model.ReleaseState;
+import fr.echoes.labs.ksf.cc.sf.commands.CreateProjectAndProductionLineCommand;
+import fr.echoes.labs.ksf.cc.sf.dto.SFProjectDTO;
+import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
+import fr.echoes.labs.ksf.users.security.auth.UserDetailsRetrievingService;
+
 /**
  *
  * @author rgalerme
@@ -68,19 +74,19 @@ public class ProjectController {
     private IProjectDashboardExtensionManager projectDashboardExtensionManager;
 
     @Autowired
-    IProjectDAO projectDao;
+    private IProjectDAO projectDao;
 
     @Autowired
-    IUserDAO userDao;
+    private IUserDAO userDao;
 
     @Autowired
-    IReleaseDAO releaseDao;
+    private IReleaseDAO releaseDao;
 
     @Autowired
     private UserDetailsRetrievingService userDetailsRetrievingService;
 
     @Autowired
-    Gate gate;
+    private Gate gate;
 
     @Autowired(required = false)
     private IValidator[] validators;
@@ -147,11 +153,13 @@ public class ProjectController {
         if (project == null) {
             throw new ProjectNotFoundException();
         }
+        
+        final ProjectDto projectDto = ProjectDtoFactory.convert(project);
 
         final List<IValidatorResult> validateResults = new ArrayList<IValidatorResult>();
         if (this.validators != null) {
             for (final IValidator validator : this.validators) {
-                final List<IValidatorResult> result = validator.validateRelease(project.getName(), releaseVersion);
+                final List<IValidatorResult> result = validator.validateRelease(projectDto, releaseVersion);
                 if (result != null) {
                     validateResults.addAll(result);
                 }
@@ -202,10 +210,12 @@ public class ProjectController {
             throw new ProjectNotFoundException();
         }
 
+        final ProjectDto projectDto = ProjectDtoFactory.convert(project);
+        
         final List<IValidatorResult> validateResults = new ArrayList<IValidatorResult>();
         if (this.validators != null) {
             for (final IValidator validator : this.validators) {
-                final List<IValidatorResult> result = validator.validateFeature(project.getName(), featureId, featureSubject);
+                final List<IValidatorResult> result = validator.validateFeature(projectDto, featureId, featureSubject);
                 if (result != null) {
                     validateResults.addAll(result);
                 }

@@ -2,6 +2,8 @@ package fr.echoes.labs.ksf.cc.extensions.services.project;
 
 import java.util.List;
 
+import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
+
 /**
  * @author dcollard
  *
@@ -16,7 +18,7 @@ public interface IValidator {
 	 * @param description the feature description.
 	 * @return
 	 */
-	public List<IValidatorResult> validateFeature(String projectName, String featureId, String description);
+	public List<IValidatorResult> validateFeature(ProjectDto project, String featureId, String description);
 
 	/**
 	 * Validates a release.
@@ -25,6 +27,6 @@ public interface IValidator {
 	 * @param releaseName the release name.
 	 * @return
 	 */
-	public List<IValidatorResult> validateRelease(String projectName, String releaseName);
+	public List<IValidatorResult> validateRelease(ProjectDto project, String releaseName);
 
 }

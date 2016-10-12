@@ -20,56 +20,56 @@ public interface IGitService {
     /**
      * Deletes the given project.
      *
-     * @param projectName the project key.
+     * @param project the project.
      * @return
      */
-    public void deleteProject(String projectName) throws GitExtensionException;
+    public void deleteProject(ProjectDto project) throws GitExtensionException;
 
     /**
      * Creates a new branch for the given release.
      *
-     * @param projectName the project name
+     * @param project the project
      * @param releaseVersion the release version
      * @throws GitExtensionException
      */
-    public void createRelease(String projectName, String releaseVersion) throws GitExtensionException;
+    public void createRelease(ProjectDto project, String releaseVersion) throws GitExtensionException;
 
     /**
      * Creates a new branch for the given feature.
      *
-     * @param projectName the project name
+     * @param project the project
      * @param featureId the feature ID
      * @param featureSubject the feature subject
      */
-    public void createFeature(String projectName, String featureId, String featureSubject) throws GitExtensionException;
+    public void createFeature(ProjectDto project, String featureId, String featureSubject) throws GitExtensionException;
 
     /**
      * Closes the feature.
      *
-     * @param projectName the project name
+     * @param project the project
      * @param featureId the feature ID
      * @param featureSubject the feature subject
      * @throws GitExtensionException
      */
-    public void closeFeature(String projectName, String featureId, String featureSubject) throws GitExtensionException;
+    public void closeFeature(ProjectDto project, String featureId, String featureSubject) throws GitExtensionException;
 
     /**
      * Cancels the feature.
      *
-     * @param projectName the project name
+     * @param project the project
      * @param featureId the feature ID
      * @param featureSubject the feature subject
      * @throws GitExtensionException
      */
-    public void cancelFeature(String projectName, String featureId, String featureSubject) throws GitExtensionException;
+    public void cancelFeature(ProjectDto project, String featureId, String featureSubject) throws GitExtensionException;
 
     /**
      * Closes the release.
      *
-     * @param projectName the project name
+     * @param project the project
      * @param releaseName the feature name
      * @throws GitExtensionException
      */
-    public void closeRelease(String projectName, String releaseName) throws GitExtensionException;
+    public void closeRelease(ProjectDto project, String releaseName) throws GitExtensionException;
 
 }

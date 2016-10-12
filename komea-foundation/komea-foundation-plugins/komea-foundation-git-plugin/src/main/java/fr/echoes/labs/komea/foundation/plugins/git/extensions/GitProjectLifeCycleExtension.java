@@ -78,7 +78,7 @@ public class GitProjectLifeCycleExtension implements IProjectLifecycleExtension 
     public NotifyResult notifyCreatedRelease(ProjectDto project, String releaseVersion, String username) {
         try {
 
-            this.gitService.createRelease(project.getName(), releaseVersion);
+            this.gitService.createRelease(project, releaseVersion);
         } catch (final Exception ex) {
             LOGGER.error("[Git] Failed to create release for project {} ", project.getName(), ex);
             this.errorHandler.registerError("Failed to create release.");
@@ -91,7 +91,7 @@ public class GitProjectLifeCycleExtension implements IProjectLifecycleExtension 
             String featureSubject, String username) {
         try {
 
-            this.gitService.createFeature(project.getName(), featureId, featureSubject);
+            this.gitService.createFeature(project, featureId, featureSubject);
         } catch (final Exception ex) {
             LOGGER.error("[Git] Failed to create feature for project {} ", project.getName(), ex);
             this.errorHandler.registerError("Failed to create Git feature branch.");
@@ -103,7 +103,7 @@ public class GitProjectLifeCycleExtension implements IProjectLifecycleExtension 
     public NotifyResult notifyFinishedFeature(ProjectDto project, String featureId,
             String featureSubject) {
         try {
-            this.gitService.closeFeature(project.getName(), featureId, featureSubject);
+            this.gitService.closeFeature(project, featureId, featureSubject);
         } catch (final GitExtensionMergeException e) {
             LOGGER.error("[Git] Failed to finish feature for project {} ", project.getName(), e);
             this.errorHandler.registerError(GitErrorHandlingService.SESSION_ITEM_GIT_MERGE_ERROR, "Failed to finish feature: " + e.getMessage());
@@ -120,7 +120,7 @@ public class GitProjectLifeCycleExtension implements IProjectLifecycleExtension 
     public NotifyResult notifyCanceledFeature(ProjectDto project, String featureId,
             String featureSubject) {
         try {
-            this.gitService.cancelFeature(project.getName(), featureId, featureSubject);
+            this.gitService.cancelFeature(project, featureId, featureSubject);
         } catch (final GitExtensionMergeException e) {
             LOGGER.error("[Git] Failed to cancel feature for project {} ", project.getName(), e);
             this.errorHandler.registerError(GitErrorHandlingService.SESSION_ITEM_GIT_MERGE_ERROR, "Failed to cancel feature: " + e.getMessage());
@@ -136,7 +136,7 @@ public class GitProjectLifeCycleExtension implements IProjectLifecycleExtension 
     @Override
     public NotifyResult notifyFinishedRelease(ProjectDto project, String releaseName) {
         try {
-            this.gitService.closeRelease(project.getName(), releaseName);
+            this.gitService.closeRelease(project, releaseName);
         } catch (final GitExtensionMergeException e) {
             LOGGER.error("[Git] Failed to close feature for project {} ", project.getName(), e);
             this.errorHandler.registerError(GitErrorHandlingService.SESSION_ITEM_GIT_MERGE_ERROR, "Failed to close feature: " + e.getMessage());

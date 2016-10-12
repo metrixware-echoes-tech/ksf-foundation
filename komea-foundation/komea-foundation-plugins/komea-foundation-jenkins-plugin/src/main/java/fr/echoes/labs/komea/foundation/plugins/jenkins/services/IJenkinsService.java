@@ -7,8 +7,8 @@ import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
 
 
 /**
+ * Service for managing Jenkins jobs.
  * @author dcollard
- *
  */
 public interface IJenkinsService {
 
@@ -26,7 +26,7 @@ public interface IJenkinsService {
 	 * @param projectName the project key.
 	 * @return
 	 */
-	public void deleteProject(String projectName) throws JenkinsExtensionException;
+	public void deleteProject(ProjectDto project) throws JenkinsExtensionException;
 
 	/**
 	 * Returns the build history.
@@ -35,7 +35,7 @@ public interface IJenkinsService {
 	 * @return a list of {@link JenkinsBuildInfo}. Is never {@code null}.
 	 * @throws JenkinsExtensionException
 	 */
-	public List<JenkinsBuildInfo> getBuildInfo(String projectName) throws JenkinsExtensionException;
+	public List<JenkinsBuildInfo> getBuildInfo(ProjectDto project) throws JenkinsExtensionException;
 
 	/**
 	 * Creates a new Jenkins job for the given release.
@@ -73,7 +73,7 @@ public interface IJenkinsService {
 	 * @return
 	 * @throws JenkinsExtensionException
 	 */
-	public JenkinsBuildInfo getFeatureStatus(String projectName, String featureId, String description) throws JenkinsExtensionException;
+	public JenkinsBuildInfo getFeatureStatus(ProjectDto project, String featureId, String description) throws JenkinsExtensionException;
 
 	/**
 	 * Returns the release job status.
@@ -83,7 +83,7 @@ public interface IJenkinsService {
 	 * @return
 	 * @throws JenkinsExtensionException
 	 */
-	public JenkinsBuildInfo getReleaseStatus(String projectName, String realeaseVersion) throws JenkinsExtensionException;
+	public JenkinsBuildInfo getReleaseStatus(ProjectDto project, String realeaseVersion) throws JenkinsExtensionException;
 
 	/**
 	 * Deletes the feature job
@@ -93,7 +93,7 @@ public interface IJenkinsService {
 	 * @param featureSubject the feature subject
 	 * @throws JenkinsExtensionException
 	 */
-	public void deleteFeatureJob(String projectName, String featureId, String featureSubject) throws JenkinsExtensionException;
+	public void deleteFeatureJob(ProjectDto project, String featureId, String featureSubject) throws JenkinsExtensionException;
 
 	/**
 	 * Deletes the release job
@@ -103,5 +103,6 @@ public interface IJenkinsService {
 	 * @param featureSubject the feature subject
 	 * @throws JenkinsExtensionException
 	 */
-	public void deleteReleaseJob(String projectName, String releaseName) throws JenkinsExtensionException;
+	public void deleteReleaseJob(ProjectDto project, String releaseName) throws JenkinsExtensionException;
+
 }

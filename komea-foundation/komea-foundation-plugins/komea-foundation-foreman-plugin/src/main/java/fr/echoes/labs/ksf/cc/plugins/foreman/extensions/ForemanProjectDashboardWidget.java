@@ -16,7 +16,8 @@ import fr.echoes.labs.ksf.cc.plugins.foreman.services.ForemanClientFactory;
 import fr.echoes.labs.ksf.cc.plugins.foreman.services.ForemanConfigurationService;
 import fr.echoes.labs.ksf.cc.plugins.foreman.services.ForemanErrorHandlingService;
 import fr.echoes.labs.ksf.cc.plugins.foreman.utils.ForemanConstants;
-import fr.echoes.labs.ksf.cc.plugins.foreman.utils.ThymeleafTemplateEngineUtils;
+import fr.echoes.labs.ksf.plugins.utils.ThymeleafTemplateEngineUtils;
+
 import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;

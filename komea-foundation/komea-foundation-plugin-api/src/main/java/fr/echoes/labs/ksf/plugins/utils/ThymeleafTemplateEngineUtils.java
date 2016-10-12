@@ -1,4 +1,4 @@
-package fr.echoes.labs.ksf.cc.plugins.foreman.utils;
+package fr.echoes.labs.ksf.plugins.utils;
 
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;

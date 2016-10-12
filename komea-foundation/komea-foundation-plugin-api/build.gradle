@@ -1,7 +1,9 @@
 dependencies {
+	
 	compile project(":ksf-commons:ksf-backend-plugin-api")
 	compile project(":ksf-commons:ksf-backend-projects")
+	
 	compile "commons-io:commons-io:$APACHE_COMMONIO"
-	//compile 'javax.servlet:javax.servlet-api:3.0.1'
+	compile("org.springframework.boot:spring-boot-starter-thymeleaf:${springBootVersion}")
 
 }

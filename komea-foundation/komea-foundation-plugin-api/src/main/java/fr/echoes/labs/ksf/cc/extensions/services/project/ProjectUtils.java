@@ -7,7 +7,7 @@ import java.util.Objects;
  * @author dcollard
  *
  */
-public class ProjectUtils {
+public final class ProjectUtils {
 
     private ProjectUtils() {
 

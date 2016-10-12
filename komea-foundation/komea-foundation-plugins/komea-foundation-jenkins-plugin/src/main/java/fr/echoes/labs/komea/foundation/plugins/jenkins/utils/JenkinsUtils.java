@@ -7,8 +7,12 @@ import com.google.common.collect.Lists;
 import fr.echoes.labs.ksf.cc.extensions.gui.ProjectExtensionConstants;
 import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
 
-public class JenkinsUtils {
+public final class JenkinsUtils {
 
+	private JenkinsUtils() {
+		// static class
+	}
+	
 	public static void registerJob(final ProjectDto project, String jobName) {
 		List<String> jobs;
 		if (project.getOtherAttributes().containsKey(ProjectExtensionConstants.CI_JOBS_KEY)) {

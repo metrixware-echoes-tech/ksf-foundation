@@ -42,8 +42,9 @@ public class RedmineProjectLifeCycleExtension implements IProjectLifecycleExtens
     private CurrentUserService currentUserService;
 
     @Override
-    public NotifyResult notifyCreatedProject(ProjectDto project) {
-        final String logginName = this.currentUserService.getCurrentUserLogin();
+    public NotifyResult notifyCreatedProject(final ProjectDto project) {
+        
+    	final String logginName = this.currentUserService.getCurrentUserLogin();
 
         if (StringUtils.isEmpty(logginName)) {
             LOGGER.error("[Redmine] No user found. Aborting project creation in Redmine module");
@@ -53,7 +54,7 @@ public class RedmineProjectLifeCycleExtension implements IProjectLifecycleExtens
         LOGGER.info("[Redmine] project {} creation detected [demanded by: {}]", project.getKey(), logginName);
         try {
 
-            this.redmineService.createProject(project.getName(), logginName);
+            this.redmineService.createProject(project, logginName);
 
         } catch (final Exception ex) {
             LOGGER.error("[Redmine] Failed to create project {} ", project.getName(), ex);
@@ -63,11 +64,11 @@ public class RedmineProjectLifeCycleExtension implements IProjectLifecycleExtens
     }
 
     @Override
-    public NotifyResult notifyDeletedProject(ProjectDto project) {
+    public NotifyResult notifyDeletedProject(final ProjectDto project) {
 
         try {
 
-            this.redmineService.deleteProject(project.getName());
+            this.redmineService.deleteProject(project);
 
         } catch (final Exception ex) {
             LOGGER.error("[Redmine] Failed to delete project {} ", project.getName(), ex);

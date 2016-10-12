@@ -1,6 +1,5 @@
 package fr.echoes.labs.ksf.cc.plugins.redmine.services;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -10,6 +9,8 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.stereotype.Service;
 
+import com.google.common.collect.Lists;
+
 import fr.echoes.labs.ksf.cc.extensions.services.project.IValidator;
 import fr.echoes.labs.ksf.cc.extensions.services.project.IValidatorResult;
 import fr.echoes.labs.ksf.cc.extensions.services.project.ValidatorResult;
@@ -18,6 +19,7 @@ import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineExtensionException;
 import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineIssue;
 import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineQuery;
 import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineQuery.Builder;
+import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
 
 /**
  * @author dcollard
@@ -26,20 +28,22 @@ import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineQuery.Builder;
 @Service
 public class RedmineTicketValidator implements IValidator {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(RedmineTicketValidator.class);
+	
 	@Autowired
-	IRedmineService redmine;
+	private IRedmineService redmine;
 
 	@Autowired
 	private RedmineConfigurationService configurationService;
-
-	private static final Logger LOGGER = LoggerFactory.getLogger(RedmineTicketValidator.class);
+	
+	@Autowired
+	private RedmineNameResolver nameResolver;
 
 	@Autowired
 	private MessageSource messageResource;
 
 	@Override
-	public List<IValidatorResult> validateFeature(String projectName,
-			String featureId, String description) {
+	public List<IValidatorResult> validateFeature(final ProjectDto project, final String featureId, String description) {
 		return null;
 	}
 
@@ -51,21 +55,23 @@ public class RedmineTicketValidator implements IValidator {
 	 * @return
 	 */
 	@Override
-	public List<IValidatorResult> validateRelease(String projectName,
-			String releaseName) {
+	public List<IValidatorResult> validateRelease(final ProjectDto project, final String releaseName) {
+		
 		final Builder redmineQuerryBuilder = new RedmineQuery.Builder();
 
-		redmineQuerryBuilder.projectName(projectName)
+		final String projectKey = this.nameResolver.getProjectKey(project);
+		
+		redmineQuerryBuilder.projectKey(projectKey)
 		                    .addTrackerId(this.configurationService.getFeatureTrackerId());
 
-		final List<IValidatorResult> result = new ArrayList<IValidatorResult>();
+		final List<IValidatorResult> result = Lists.newArrayList();
 
 		try {
 
-			final List<RedmineIssue> issues = new ArrayList<RedmineIssue>();
+			final List<RedmineIssue> issues = Lists.newArrayList();
 
-			addIssuesToList(projectName, releaseName, issues, this.configurationService.getFeatureStatusNewId());
-			addIssuesToList(projectName, releaseName, issues, this.configurationService.getFeatureStatusAssignedId());
+			addIssuesToList(projectKey, releaseName, issues, this.configurationService.getFeatureStatusNewId());
+			addIssuesToList(projectKey, releaseName, issues, this.configurationService.getFeatureStatusAssignedId());
 
 			final MessageSourceAccessor messageSourceAccessor = new MessageSourceAccessor(this.messageResource);
 			for (final RedmineIssue issue : issues) {
@@ -82,14 +88,14 @@ public class RedmineTicketValidator implements IValidator {
 		return result;
 	}
 
-	private void addIssuesToList(String projectName, String releaseName, final List<RedmineIssue> issues, int issueStatusId) throws RedmineExtensionException {
-		final List<RedmineIssue> newIssues = getIssues(projectName, releaseName, issueStatusId);
-		if (newIssues != null ) {
+	private void addIssuesToList(String projectKey, String releaseName, final List<RedmineIssue> issues, int issueStatusId) throws RedmineExtensionException {
+		final List<RedmineIssue> newIssues = getIssues(projectKey, releaseName, issueStatusId);
+		if (newIssues != null) {
 			issues.addAll(newIssues);
 		}
 	}
 
-	private List<RedmineIssue> getIssues(String projectName, String releaseName, int issueStatusId) throws RedmineExtensionException {
+	private List<RedmineIssue> getIssues(String projectKey, String releaseName, int issueStatusId) throws RedmineExtensionException {
 		final Builder requestBuilder = new RedmineQuery.Builder();
 		final Builder builder = requestBuilder
 			.addStatusId(issueStatusId)
@@ -99,12 +105,10 @@ public class RedmineTicketValidator implements IValidator {
 				builder.addTrackerId(trackerId);
 			}
 
-		final RedmineQuery query = requestBuilder.projectName(projectName).build();
+		final RedmineQuery query = requestBuilder.projectKey(projectKey).build();
 		final List<RedmineIssue> issues = this.redmine.queryIssues(query);
 		LOGGER.info("Validating release : {} tickets with status ID '{}'", issues.size());
 		return issues;
 	}
-
-
 
 }

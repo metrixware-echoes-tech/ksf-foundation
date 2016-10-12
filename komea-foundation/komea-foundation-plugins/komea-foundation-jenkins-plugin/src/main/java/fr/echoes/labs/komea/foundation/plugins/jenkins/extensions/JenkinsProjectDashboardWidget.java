@@ -1,23 +1,13 @@
 package fr.echoes.labs.komea.foundation.plugins.jenkins.extensions;
 
-import com.google.common.collect.Lists;
-import com.tocea.corolla.products.dao.IProjectDAO;
-import com.tocea.corolla.products.domain.Project;
-import fr.echoes.labs.komea.foundation.plugins.jenkins.JenkinsExtensionException;
-import fr.echoes.labs.komea.foundation.plugins.jenkins.services.IJenkinsService;
-import fr.echoes.labs.komea.foundation.plugins.jenkins.services.JenkinsBuildInfo;
-import fr.echoes.labs.komea.foundation.plugins.jenkins.services.JenkinsConfigurationService;
-import fr.echoes.labs.komea.foundation.plugins.jenkins.services.JenkinsErrorHandlingService;
-import fr.echoes.labs.komea.foundation.plugins.jenkins.utils.JenkinsConstants;
-import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.IProjectTabPanel;
-import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.MenuAction;
-import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.List;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +20,24 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.context.WebContext;
-import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
+
+import com.google.common.collect.Lists;
+import com.tocea.corolla.products.dao.IProjectDAO;
+import com.tocea.corolla.products.domain.Project;
+import com.tocea.corolla.products.utils.ProjectDtoFactory;
+
+import fr.echoes.labs.komea.foundation.plugins.jenkins.JenkinsExtensionException;
+import fr.echoes.labs.komea.foundation.plugins.jenkins.services.IJenkinsService;
+import fr.echoes.labs.komea.foundation.plugins.jenkins.services.JenkinsBuildInfo;
+import fr.echoes.labs.komea.foundation.plugins.jenkins.services.JenkinsConfigurationService;
+import fr.echoes.labs.komea.foundation.plugins.jenkins.services.JenkinsErrorHandlingService;
+import fr.echoes.labs.komea.foundation.plugins.jenkins.services.JenkinsNameResolver;
+import fr.echoes.labs.komea.foundation.plugins.jenkins.utils.JenkinsConstants;
+import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.IProjectTabPanel;
+import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.MenuAction;
+import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
+import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
+import fr.echoes.labs.ksf.plugins.utils.ThymeleafTemplateEngineUtils;
 
 /**
  * @author dcollard
@@ -39,9 +46,7 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 @Component
 public class JenkinsProjectDashboardWidget implements ProjectDashboardWidget {
 
-    private static final String SLASH = "/";
-
-    private static TemplateEngine templateEngine = createTemplateEngine();
+    private static TemplateEngine templateEngine = ThymeleafTemplateEngineUtils.createTemplateEngine();
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JenkinsProjectDashboardWidget.class);
 
@@ -50,6 +55,9 @@ public class JenkinsProjectDashboardWidget implements ProjectDashboardWidget {
 
     @Autowired
     private IJenkinsService jenkinsService;
+    
+    @Autowired
+    private JenkinsNameResolver nameResolver;
 
     @Autowired
     private IProjectDAO projectDAO;
@@ -67,7 +75,7 @@ public class JenkinsProjectDashboardWidget implements ProjectDashboardWidget {
     private ServletContext servletContext;
 
     @Autowired
-    IProjectDAO projectDao;
+    private IProjectDAO projectDao;
 
     @Autowired
     private MessageSource messageResource;
@@ -82,14 +90,13 @@ public class JenkinsProjectDashboardWidget implements ProjectDashboardWidget {
     public String getHtmlPanelBody(String projectId) {
 
         final Project project = this.projectDAO.findOne(projectId);
+        final ProjectDto projectDto = ProjectDtoFactory.convert(project);
 
         final WebContext ctx = new WebContext(this.request, this.response, this.servletContext);
         ctx.setVariable("projectId", projectId);
 
-        final String projectName = project.getName();
-
         try {
-            final List<JenkinsBuildInfo> buildInfo = this.jenkinsService.getBuildInfo(projectName);
+            final List<JenkinsBuildInfo> buildInfo = this.jenkinsService.getBuildInfo(projectDto);
 
             final String baseUrl = getBaseUrl();
 
@@ -117,7 +124,7 @@ public class JenkinsProjectDashboardWidget implements ProjectDashboardWidget {
 
     @Override
     public String getTitle() {
-        return new MessageSourceAccessor(JenkinsProjectDashboardWidget.this.messageResource).getMessage("foundation.jenkins");
+        return new MessageSourceAccessor(this.messageResource).getMessage("foundation.jenkins");
     }
 
     @Override
@@ -127,7 +134,7 @@ public class JenkinsProjectDashboardWidget implements ProjectDashboardWidget {
 
             @Override
             public String getTitle() {
-                return new MessageSourceAccessor(JenkinsProjectDashboardWidget.this.messageResource).getMessage("foundation.jenkins.tab.title");
+                return new MessageSourceAccessor(messageResource).getMessage("foundation.jenkins.tab.title");
             }
 
             @Override
@@ -139,7 +146,7 @@ public class JenkinsProjectDashboardWidget implements ProjectDashboardWidget {
                         = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
                         .getRequest();
 
-                String url = JenkinsProjectDashboardWidget.this.configurationService.getUrl();
+                String url = configurationService.getUrl();
 
                 final String buildUrl = request.getParameter("buildUrl");
 
@@ -148,12 +155,13 @@ public class JenkinsProjectDashboardWidget implements ProjectDashboardWidget {
                         url = URLDecoder.decode(buildUrl, "UTF-8");
                     } catch (final UnsupportedEncodingException e) {
                         LOGGER.error("[jenkins]", e);
-                        url = JenkinsProjectDashboardWidget.this.configurationService.getUrl();
+                        url = configurationService.getUrl();
                     }
                 } else {
                     try {
-                        final Project project = JenkinsProjectDashboardWidget.this.projectDao.findByKey(projectKey);
-                        final String jobId = JenkinsProjectDashboardWidget.this.jenkinsService.getJobId(project.getName());
+                        final Project project = projectDao.findByKey(projectKey);
+                        final String jobName = nameResolver.getFolderJobName(project);
+                        final String jobId = jenkinsService.getJobId(jobName);
                         if (StringUtils.isNotEmpty(jobId)) {
                             url = url + "/job/" + jobId;
                         }
@@ -181,20 +189,6 @@ public class JenkinsProjectDashboardWidget implements ProjectDashboardWidget {
         };
 
         return Lists.newArrayList(iframePanel);
-    }
-
-    private static TemplateEngine createTemplateEngine() {
-
-        final ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
-        templateResolver.setTemplateMode("XHTML");
-        templateResolver.setPrefix("templates/");
-        templateResolver.setSuffix(".html");
-
-        final TemplateEngine templateEngine = new TemplateEngine();
-        templateEngine.setTemplateResolver(templateResolver);
-
-        return templateEngine;
-
     }
 
     @Override
