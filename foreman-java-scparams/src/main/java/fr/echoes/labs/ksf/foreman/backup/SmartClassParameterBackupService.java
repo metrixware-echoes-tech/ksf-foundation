@@ -78,7 +78,11 @@ public class SmartClassParameterBackupService extends CsvBackupService<SmartClas
 		final String dirPath = this.storage.getRoot()+"/";
 		final String filePath = dirPath+"puppet_classes_parameters.csv";
 		
-		return super.read(filePath, SmartClassParameterWrapper.class);
+		if (new File(filePath).exists()) {
+			return super.read(filePath, SmartClassParameterWrapper.class);
+		}
+		
+		return Lists.newArrayList();
 	}
 	
 	public void writeHostGroupValues(final String hostGroup, final List<SmartClassParameterWrapper> values) throws IOException {

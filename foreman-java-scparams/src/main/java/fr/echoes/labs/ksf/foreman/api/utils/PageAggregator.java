@@ -5,6 +5,11 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
+/**
+ * Aggregates all the results of paginated API requests.
+ * @author dmichel
+ * @param <T> : the results type
+ */
 public abstract class PageAggregator<T> {
 
 	public abstract List<T> executeRequest(int page) throws IOException;
