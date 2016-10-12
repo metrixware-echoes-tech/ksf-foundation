@@ -8,6 +8,7 @@ import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.ServiceUnavailableException;
+import javax.ws.rs.core.HttpHeaders;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpHost;
@@ -53,12 +54,11 @@ public abstract class AbstractApiClient {
 	
 	private static HttpClientContext buildContext(final String protocol, final int port, final String host, final String username, final String password) {
 		
-		HttpHost targetHost = new HttpHost(host, port, protocol);
-		CredentialsProvider credsProvider = new BasicCredentialsProvider();
-		credsProvider.setCredentials(AuthScope.ANY, 
-		  new UsernamePasswordCredentials(username, password));
+		final HttpHost targetHost = new HttpHost(host, port, protocol);
+		final CredentialsProvider credsProvider = new BasicCredentialsProvider();
+		credsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(username, password));
 		 
-		AuthCache authCache = new BasicAuthCache();
+		final AuthCache authCache = new BasicAuthCache();
 		authCache.put(targetHost, new BasicScheme());
 		 
 		// Add AuthCache to the execution context
@@ -69,7 +69,7 @@ public abstract class AbstractApiClient {
 		return context;
 	}
 	
-	protected static String extractBody(final HttpResponse response) throws UnsupportedOperationException, IOException {
+	protected static String extractBody(final HttpResponse response) throws IOException {
 		
 		return IOUtils.toString(response.getEntity().getContent());
 	}
@@ -77,8 +77,8 @@ public abstract class AbstractApiClient {
 	protected String get(final String url, final String contentType) throws IOException {
 		
 		final HttpGet method = new HttpGet(url);
-		method.addHeader("Content-Type", contentType);
-		method.addHeader("Accept", contentType);
+		method.addHeader(HttpHeaders.CONTENT_TYPE, contentType);
+		method.addHeader(HttpHeaders.ACCEPT, contentType);
 
 		return this.executeRequest(method);
 	}
@@ -86,10 +86,10 @@ public abstract class AbstractApiClient {
 	protected void put(final String url, final String contentType, final String content) throws IOException {
 		
 		final HttpPut method = new HttpPut(url);
-		method.addHeader("Content-Type", contentType);
-		method.addHeader("Accept", contentType);
+		method.addHeader(HttpHeaders.CONTENT_TYPE, contentType);
+		method.addHeader(HttpHeaders.ACCEPT, contentType);
 		
-		StringEntity input = new StringEntity(content);
+		final StringEntity input = new StringEntity(content);
 		input.setContentType(contentType);
 		method.setEntity(input);
 		
@@ -99,10 +99,10 @@ public abstract class AbstractApiClient {
 	protected void post(final String url, final String contentType, final String content) throws IOException {
 		
 		final HttpPost method = new HttpPost(url);
-		method.addHeader("Content-Type", contentType);
-		method.addHeader("Accept", contentType);
+		method.addHeader(HttpHeaders.CONTENT_TYPE, contentType);
+		method.addHeader(HttpHeaders.ACCEPT, contentType);
 		
-		StringEntity input = new StringEntity(content);
+		final StringEntity input = new StringEntity(content);
 		input.setContentType(contentType);
 		method.setEntity(input);
 		
@@ -140,11 +140,10 @@ public abstract class AbstractApiClient {
 			case HttpStatus.SC_INTERNAL_SERVER_ERROR:
 				throw new InternalServerErrorException(extractBody(response));
 			case HttpStatus.SC_GATEWAY_TIMEOUT:
+			case HttpStatus.SC_REQUEST_TIMEOUT:
 				throw new ConnectTimeoutException(extractBody(response));
 			case HttpStatus.SC_SERVICE_UNAVAILABLE:
 				throw new ServiceUnavailableException(extractBody(response));
-			case HttpStatus.SC_REQUEST_TIMEOUT:
-				throw new ConnectTimeoutException(extractBody(response));
 			case HttpStatus.SC_BAD_REQUEST:
 			case HttpStatus.SC_METHOD_NOT_ALLOWED:
 			case HttpStatus.SC_UNSUPPORTED_MEDIA_TYPE:
