@@ -14,8 +14,12 @@ Technologies
 Hyperviseur
 ===========
 
+KSF repose sur l'hyperviseur KVM.
+
 Gestionnaire de cycle de vie de machine
 =======================================
+
+KSF utilise Foreman pour gérer le cycle de vie des machines. Foreman est utilisé à la fois pour gérer les machines de l'usine logicielle mais aussi les machines créées pour les besoins des projets.
 
 Définitions
 ***********
@@ -64,7 +68,7 @@ Construire le fichier d'environnement
 
 Le format du fichier est le JSON. Pour connaître sa syntaxe exacte, je vous invite à consulter directement le site du standard JSON : http://json.org
 
-Voici un example de fichier d'environnement : 
+Voici un exemple de fichier d'environnement : 
 
 .. code-block:: json
 
@@ -122,7 +126,7 @@ Construire le fichier de cible
 
 Le format du fichier est le JSON. Pour connaître sa syntaxe exacte, je vous invite à consulter directement le site du standard JSON : http://json.org
 
-Voici un example de fichier de cible : 
+Voici un exemple de fichier de cible : 
 
 .. code-block:: json
 

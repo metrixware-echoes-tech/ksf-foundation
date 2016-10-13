@@ -32,8 +32,8 @@
     <script type="text/javascript" src="_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
     <link rel="top" title="documentation Komea Software Factory 2.0.0" href="index.html" />
-    <link rel="next" title="Gestion des utilisateurs et des droits" href="user_and_rights_management.html" />
-    <link rel="prev" title="Komea Checking" href="tools_komea_checking.html" />
+    <link rel="next" title="Workflows" href="workflows.html" />
+    <link rel="prev" title="Créer des modèles de VMs et les instancier" href="create_vm.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -83,8 +83,6 @@
 <li class="toctree-l2"><a class="reference internal" href="tools_foreman.html">Gestion de cycle de vie des machines</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tools_komea_dashboard.html">Komea Dashboard</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tools_komea_foundation.html">Komea Foundation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tools_komea_activity.html">Komea Activity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tools_komea_checking.html">Komea Checking</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Architecture</a><ul>
@@ -92,7 +90,14 @@
 <li class="toctree-l2"><a class="reference internal" href="#architecture-fonctionnelle">Architecture fonctionnelle</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="user_and_rights_management.html">Gestion des utilisateurs et des droits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_and_rights_management.html">Gestion des utilisateurs et des droits</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="user_and_rights_management.html#forge-logicielle-et-gestion-de-version">Forge logicielle et gestion de version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_and_rights_management.html#integration-continue">Intégration continue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_and_rights_management.html#depot-d-artefacts">Dépôt d&#8217;artefacts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_and_rights_management.html#gestion-du-cycle-de-vie-des-machines">Gestion du cycle de vie des machines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_and_rights_management.html#de-maniere-generale-dans-ksf">De manière générale dans KSF</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="workflows.html">Workflows</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="workflows.html#gestion-de-projet">Gestion de projet</a></li>
 <li class="toctree-l2"><a class="reference internal" href="workflows.html#creation-du-projet">Création du projet</a></li>
@@ -102,7 +107,9 @@
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="login.html">S&#8217;authentifier</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="login.html#specification-detaillee">Spécification détaillée</a></li>
+<li class="toctree-l2"><a class="reference internal" href="login.html#sso-definition">SSO : Définition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="login.html#dans-ksf">Dans KSF</a></li>
+<li class="toctree-l2"><a class="reference internal" href="login.html#deroulement-du-login">Déroulement du login</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="create_project.html">Créer un projet</a><ul>
@@ -124,41 +131,6 @@
 <li class="toctree-l2"><a class="reference internal" href="create_vm.html#creer-un-environnement">Créer un environnement</a></li>
 <li class="toctree-l2"><a class="reference internal" href="create_vm.html#creer-une-cible">Créer une cible</a></li>
 <li class="toctree-l2"><a class="reference internal" href="create_vm.html#instancier-une-vm">Instancier une VM</a></li>
-</ul>
-</li>
-</ul>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="release_plan.html">Release Plan</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="release_plan.html#ksf-1-0-nov-2015-airbus">KSF 1.0    Nov 2015 (Airbus)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="release_plan.html#ksf-1-1-jan-2016-amabis-airbus">KSF 1.1    Jan 2016 (Amabis, Airbus)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="release_plan.html#ksf-1-2-avr-2016-interne">KSF 1.2   Avr 2016 (interne)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="release_plan.html#komea-cc">Komea-CC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="release_plan.html#komea-dashboard">Komea-Dashboard</a></li>
-<li class="toctree-l2"><a class="reference internal" href="release_plan.html#corolla">Corolla</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="hypotheses_et_contraintes.html">Hypotheses et contraintes</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="hypotheses_et_contraintes.html#hypotheses">Hypothèses</a></li>
-<li class="toctree-l2"><a class="reference internal" href="hypotheses_et_contraintes.html#contraintes">Contraintes</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="publications.html">Publications</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="publications.html#documents-produit">Documents Produit</a></li>
-<li class="toctree-l2"><a class="reference internal" href="publications.html#sample-demos">Sample/ Démos</a></li>
-<li class="toctree-l2"><a class="reference internal" href="publications.html#supports-de-formation">Supports de formation (?)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="publications.html#documentation-avant-vente">documentation avant-vente</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="concurrence.html">Concurrence</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="concurrence.html#offres-concurrentes">Offres concurrentes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="concurrence.html#kovair-omnibus">Kovair Omnibus</a></li>
-<li class="toctree-l2"><a class="reference internal" href="concurrence.html#polarion-alm">Polarion ALM</a></li>
-<li class="toctree-l2"><a class="reference internal" href="concurrence.html#tableau-comparatif">Tableau comparatif</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="annexes.html">Annexes</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="references_documentaires.html">Références documentaires</a></li>
-<li class="toctree-l2"><a class="reference internal" href="annexes.html#open-services-for-lifecycle-collaboration">Open Services for Lifecycle Collaboration</a></li>
 </ul>
 </li>
 </ul>
@@ -192,11 +164,11 @@
               
                 
   <li>
-    <a href="tools_komea_checking.html" title="Previous Chapter: Komea Checking"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Komea Checking</span>
+    <a href="create_vm.html" title="Previous Chapter: Créer des modèles de VMs et les instancier"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Créer des mod...</span>
     </a>
   </li>
   <li>
-    <a href="user_and_rights_management.html" title="Next Chapter: Gestion des utilisateurs et des droits"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Gestion des u... &raquo;</span>
+    <a href="workflows.html" title="Next Chapter: Workflows"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Workflows &raquo;</span>
     </a>
   </li>
               
@@ -269,7 +241,7 @@
 <li>Les revues peer to peer</li>
 <li>Les tests unitaires</li>
 </ol>
-<p>La fonction &#8220;Gestion de Projet&#8221; recouvre:</p>
+<p>La fonction &#8220;Gestion de Projet&#8221; recouvre :</p>
 <ol class="arabic simple">
 <li>La gestion des tickets clients</li>
 <li>La gestion des bugs</li>

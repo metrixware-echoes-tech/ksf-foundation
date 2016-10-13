@@ -27,7 +27,7 @@ Pour créer un nouveau projet, il suffit de cliquer sur le + qui se situe en hau
      - Permet de choisir un projet parent parmi les projets existants
    * - Outils
      - Choix multiple
-     - Dans KSF v2, le choix est forcé, nous n'avons implémenté qu'un seul outil par catégorie d'outils.
+     - Les outils actuellement disponibles sont proposés
 	 
 Voici les étapes de création : 
 

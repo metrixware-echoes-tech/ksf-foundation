@@ -5,19 +5,27 @@ Komea Foundation
 ****************
 
 Introduction
-------------
+============
 
-Komea Foundation a été développé pour apporter à la fois un cadre et de la simplicité aux métiers liés au développement d'un logiciel. Komea Foundation est pensé pour faire gagner du temps aux développeurs et aux intégrateurs tout en respectant les meilleures pratiques de code. Ce gain de temps commence dès l'authentification dans l'usine, puisque celle-ci est unifiée et que l'utilisateur se retrouve immédiatement connecté à la plupart des outils. Komea Foundation permet d'appliquer les principes de gitflow à l'emsemble des logiciels. Lorsqu'un utilisateur démarre un nouveau projet, celui-ci est immédiatement créé dans chacun des outils, et les dépendances des projets entre les outils sont pré-paramétrés. Lorsqu'un utilisateur décide de travailler sur une nouvelle fonctionnalité, là aussi tout est créé pour lui, il n'a plus qu'à commencer à coder. Dans les prochains chapitres seront détaillées toutes les fonctionnalités apportées par KSF.
+Komea Foundation a été développé pour apporter à la fois un cadre et de la simplicité aux métiers liés au développement d'un logiciel. Komea Foundation est pensé pour faire gagner du temps aux développeurs et aux intégrateurs tout en respectant les meilleures pratiques de code. 
 
-Liste des features
-------------------
+Ce gain de temps commence dès l'authentification dans l'usine, puisque celle-ci est unifiée et que l'utilisateur se retrouve immédiatement connecté à la plupart des outils. 
+
+Komea Foundation permet d'appliquer les principes de gitflow à l'emsemble des logiciels. Lorsqu'un utilisateur démarre un nouveau projet, celui-ci est immédiatement créé dans chacun des outils, et les dépendances des projets entre les outils sont pré-paramétrés. Lorsqu'un utilisateur décide de travailler sur une nouvelle fonctionnalité, là aussi tout est créé pour lui, il n'a plus qu'à commencer à coder. 
+
+Dans les prochains chapitres toutes les fonctionnalités apportées par KSF seront détaillées.
+
+Fonctionnalités
+===============
+
 .. toctree::
    :maxdepth: 1
    
-   lancer_l_interface
-   s_authentifier
-   gerer_les_outils
-   creer_un_projet
+   login
+   user_and_rights_management
+   create_project
+   manage_project
+   create_vm
 
 
    

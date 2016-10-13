@@ -28,22 +28,8 @@ Fonctionnalités principales :
    manage_project
    create_vm
    
-A classer/trier [NE SERA PAS INCLUS SOUS CETTE FORME DANS LA VERSION DEFINITIVE DE LA DOC] :    
-   
-.. toctree::
-   :maxdepth: 2
-   
-   release_plan
-   hypotheses_et_contraintes
-   publications
-   concurrence
-   annexes
-   
-   
 Indices and tables
 ==================
 
- :ref:`genindex`
- :ref:`modindex`
- :ref:`search`
-	 
+* :ref:`genindex`
+* :ref:`search` 

@@ -1,4 +1,30 @@
-
-
+**************************************
 Gestion des utilisateurs et des droits
+**************************************
+
+Dans KSF, la gestion des utilisateurs est déléguée à chacun des outils sous-jacents.
+
+Forge logicielle et gestion de version
 ======================================
+
+Les droits sont gérés au niveau de Redmine. Ce sont les droits des utilisateurs dans les projets (rapporteur, développeur, manager) qui définissent les possibilités offertes aux utilisateurs. Ces droits sont répercutés sur les dépôts de sources via Gitolite.
+
+Intégration continue
+====================
+
+Dans Jenkins intégré à KSF, les droits des utilisateurs sont gérés par le plugin "Role Strategy Plugin", qui permet d'avoir un système de droits équivalent à celui de Redmine et de gérer facilement le SSO.
+
+Dépôt d'artefacts
+=================
+
+La gestion des droits dans Nexus n'est pas modifiée par l'utilisation de KSF.
+
+Gestion du cycle de vie des machines
+====================================
+
+Dans Foreman, à la création d'un projet, l'utilisateur qui en fait la demande se voit attribuer le rôle qui permet d'accéder au hostgroupe spécifiquement créé pour ce projet. Si l'utilisateur n'avait jamais utilisé Foreman, les droits par défaut lui sont également octroyés.
+
+De manière générale dans KSF
+============================
+
+Les droits des différents outils ne sont pas contraints par KSF. Le ou les administrateurs des outils peuvent gérer les droits d'accès comme ils le souhaitent dans chacun des outils. 

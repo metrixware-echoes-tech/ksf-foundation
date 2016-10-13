@@ -18,3 +18,8 @@ Qu'est ce que Git Flow ?
 ========================
 
 Git flow est l'implémentation du modèle de branche Git reconnu par la communauté.
+
+Qu'est ce que Gitolite ?
+========================
+
+Gitolite permet de centraliser les dépôts git sur un serveur et de gérer les droits d'accès. Dans KSF, gitolite est intégré à Redmine et permet d'associer les droits des projets aux dépôts git.

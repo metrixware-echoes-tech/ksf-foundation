@@ -3,8 +3,6 @@
 Komea Dashboard
 ===============
 
-.. note:: blabla
-
 Komea Dashboard est un outil d’agrégation de données issues de l’usine logicielle. Son objectif principal est de récupérer ces données, de les corréler, de les stocker et enfin de les mettre à disposition pour une analyse humaine.
 
  .. image:: ../images/kd.png
@@ -62,7 +60,7 @@ IE 8 et supérieur compatible
 Captures d’écran
 ----------------
 
-Quelques captures d’écrans de tableaux de bord déjà mis en production chez des clients :
+Quelques captures d’écrans de tableaux de bord :
 
 .. image:: ../images/kd_screen1.png
 

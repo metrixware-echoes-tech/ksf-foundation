@@ -18,7 +18,7 @@ Nous intervenons en support aux développeurs, architectes et chefs de projets d
 Périmètre technico-fonctionnel
 ******************************
 
-Le détail des domaines d'application de l'usine sont abordé tout au long de ce guide d'utilisation. Voici le résumé des principaux champs d'application de Komea Software Factory (KSF).
+Le détail des domaines d'application de l'usine est abordé tout au long de ce guide d'utilisation. Voici le résumé des principaux champs d'application de Komea Software Factory (KSF).
 
 Gestion des sources
 ===================

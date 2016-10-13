@@ -1,8 +1,0 @@
-.. _tools_komea_activity:
-
-***************
-Komea Activity
-***************
-
-.. note:: blabla
-

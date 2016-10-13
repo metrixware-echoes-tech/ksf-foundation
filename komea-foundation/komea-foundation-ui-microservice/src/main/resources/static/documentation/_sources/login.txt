@@ -1,7 +1,11 @@
 .. _login:
 
+**************
 S'authentifier
-==============
+**************
+
+SSO : Définition
+****************
 
 Le SSO (Single Sign On) permet d'utiliser les différents outils de l'usine logicielle sans avoir besoin de s'authentifier avec chaque outil. Idéalement, l'authentification est faite dans l'annuaire de l'entreprise (AD, OpenLDAP, etc.) puis propagée par le SSO vers les composants de l'usine logicielle.
 
@@ -14,20 +18,45 @@ En cas d’absence de SSO, une entreprise s’expose à :
 
 Exemple d'outils Open source : 
 
+*	CAS
 *   gSSO (http://01.org/gsso/)
 *   Keycloack 
 *   ... 
 
-Spécification détaillée
------------------------
-conditions initiales : aucun utilisateur n'est identifié dans KSF
+Dans KSF
+********
 
-- L'utilisateur clique sur l'item "Login" du bandeau 
-- un formulaire s'affiche pour entrer user/pswd. (P2) bouton "remember me".
-- L'authentification est lancée auprès du gestionnaire site (annuaire LDAP ou autre) *ceci est donc configuré lors de l'installation de KSF ou paramétré dans la config?* 
-- Une fois l'utilisateur authentifié :
+Dans KSF, nous avons choisi d'utiliser CAS branché sur un annuaire AD/LDAP.
 
-  - le bandeau affiche son nom suivi d'un bouton "Logout"
-  - un menu Projet apparait avec la liste des Projets dans lequel le développeur peut intervenir **(on la calcule comment?)**, suivi d'un item "+" pour créer un projet
+Aujourd'hui, les différents outils sont liés au SSO : 
+
+* Komea Foundation
+* Redmine
+* Jenkins
+* Komea Dashboard
+
+Les outils restants sont compatibles avec AD/LDAP : 
+
+* Nexus
+* Foreman
+
+Déroulement du login
+********************
+
+Conditions initiales : aucun utilisateur n'est identifié dans KSF
+
+* L'utilisateur clique sur l'item "Login" du bandeau 
+* Un formulaire s'affiche pour entrer login / mot de passe
+* L'authentification est lancée auprès du SSO 
+* Une fois l'utilisateur authentifié
+
+	* Le bandeau affiche son nom suivi d'un bouton "Logout"
+	* Un menu Projet apparait avec la liste des Projets dans lequel le développeur peut intervenir, un item "+" se situe en haut à gauche pour créer un projet
+	* L'utilisateur peut constater qu'il est authentifié dans les logiciels suivants : 
+
+		* Komea Foundation
+		* Redmine
+		* Jenkins
+		* Komea Dashboard (s'il est installé)
   
-  .. image:: ../images/Menu_Projets.png
+  .. image:: ../images/captures/100_project_list.png

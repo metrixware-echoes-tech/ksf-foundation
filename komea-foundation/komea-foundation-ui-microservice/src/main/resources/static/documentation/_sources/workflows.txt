@@ -63,11 +63,11 @@ Résolu
 
 Lorsque l'on arrête de travailler sur le ticket pour différentes raisons documentées dans un sous-statut :
 
-- Fait (tache réalisée à valider)
-- Dupliqué (un ticket identique existe déja. On indique l'id du ticket) 
-- NeSeraPasfait (on ne fait pas finalement alors que le ticket est valide - l'explication est mise en commentaire)
-- Rejeté (l'explication est mise en commentaire)
-- Gelé (mis de coté, en attente de décision ultérieure, etc.)
+* Fait (tache réalisée à valider)
+* Dupliqué (un ticket identique existe déja. On indique l'id du ticket) 
+* NeSeraPasfait (on ne fait pas finalement alors que le ticket est valide - l'explication est mise en commentaire)
+* Rejeté (l'explication est mise en commentaire)
+* Gelé (mis de coté, en attente de décision ultérieure, etc.)
 
 .. note:: Ces sous-statuts sont proposés pour validation/action par le Chef de Projet.
 
@@ -81,27 +81,28 @@ Le ticket est cloturé quand il a été validé par qui de droit (donc suite à 
 
 .. note:: En cas de défaut constaté suite à un test, on a le choix : 
    
-   - Ouverture de un ticket d'anomalie (la méthode préférée)
-   - On repasse le ticket en statut "En cours" avec un commentaire (plutôt hors campagne de test, pour les tickets Support, Defect par exemple)
+* Ouverture de un ticket d'anomalie (la méthode préférée)
+* On repasse le ticket en statut "En cours" avec un commentaire (plutôt hors campagne de test, pour les tickets Support, Defect par exemple)
 
 Les activités (type de travaux effectués)
 =========================================
 
 Les activités permettent de classer les travaux effectués et de quantifier le temps passé sur différentes tâches (en vue par exemple de calculer le CIR)
 
-- Management : au sens Réunion d’équipe et tout acte de gestion/information/coordination interne hors projet
-- Absence : période sans production d’aucune sorte
-- Avant-Vente : réunion client, POC, devis, etc. pour réaliser une vente
-- Marketing Produit : marketing produit amont (Road Map, spécifications fonctionnelles ) et aval (fiche produit, offre, sales materials, etc.) 
-- Veille Technologique : présence à des salons
-- Etude / Specifications : documents produits dans le cadre d’un projet client ou d’une nouvelle fonctionnalité d’un produit
-- Qualification : des produits développés avant livraison (y compris pour une version corrective)
-- Développement : développements (fonctionnalités) et tests unitaires
-- Intégration (Packaging, Mise en Prod) : Opérations post-qualification nécessaires pour générer une version d’un produit (y compris version corrective)
-- Formation : formation ou auto-formation **reçue** par un collaborateur (pas les formations client)
-- Assistance -> pourrait regrouper le support ?
-  - Support : au sens large, pour le client, hors activités déjà mentionnées.
-  - Training : Formation **donnée** ou activité autour d’une formation client (hors création de support de cours)-> Assistance 
+* Management : au sens Réunion d’équipe et tout acte de gestion/information/coordination interne hors projet
+* Absence : période sans production d’aucune sorte
+* Avant-Vente : réunion client, POC, devis, etc. pour réaliser une vente
+* Marketing Produit : marketing produit amont (Road Map, spécifications fonctionnelles ) et aval (fiche produit, offre, sales materials, etc.) 
+* Veille Technologique : présence à des salons
+* Etude / Specifications : documents produits dans le cadre d’un projet client ou d’une nouvelle fonctionnalité d’un produit
+* Qualification : des produits développés avant livraison (y compris pour une version corrective)
+* Développement : développements (fonctionnalités) et tests unitaires
+* Intégration (Packaging, Mise en Prod) : Opérations post-qualification nécessaires pour générer une version d’un produit (y compris version corrective)
+* Formation : formation ou auto-formation **reçue** par un collaborateur (pas les formations client)
+* Assistance -> pourrait regrouper le support ?
+
+	* Support : au sens large, pour le client, hors activités déjà mentionnées.
+	* Training : Formation **donnée** ou activité autour d’une formation client (hors création de support de cours)-> Assistance 
   
   
 Gérer un projet
@@ -110,12 +111,12 @@ Gérer un projet
 Création du projet
 ******************
 
-- Ajout du projet dans l'usine
-- Création d'un dépôt de source contenant les branches master et develop
-- Ajout d'un fichier README.md au dépôt
-- Ajout d'un fichier build.sh et un fichier publish.sh au dépôt qui seront utilisés par l'intégration continue
-- Création d'un répertoire dans l'intégration continue qui contient les jobs qui permettent de construire les branches master et develop
-- Création du tableau de bord qui correspond au projet
+* Ajout du projet dans l'usine
+* Création d'un dépôt de source contenant les branches master et develop
+* Ajout d'un fichier README.md au dépôt
+* Ajout d'un fichier build.sh et un fichier publish.sh au dépôt qui seront utilisés par l'intégration continue
+* Création d'un répertoire dans l'intégration continue qui contient les jobs qui permettent de construire les branches master et develop
+* Création du tableau de bord qui correspond au projet
 
 Gestion des branches
 ********************
@@ -130,25 +131,25 @@ Nomenclature : `feat-idticket-description`
 Création d'une feature dans l'usine
 -----------------------------------
 
-- Prise en charge de la feature par un développeur (à l'origine un ticket dans le gestionnaire de tickets)
-- Passage au status "En cours"
-- Création de la branche
-- Création du job Jenkins
+* Prise en charge de la feature par un développeur (à l'origine un ticket dans le gestionnaire de tickets)
+* Passage au status "En cours"
+* Création de la branche
+* Création du job Jenkins
 
 Fermeture d'une feature dans l'usine
 ------------------------------------
 
-- Merge de la branche vers la branche develop
-- Tag et suppression de la branche (il est ainsi possible de la récupérer si besoin)
-- Suppression du job dans Jenkins
-- Fermeture du ticket dans le gestionnaire de tickets (fait)
+* Merge de la branche vers la branche develop
+* Tag et suppression de la branche (il est ainsi possible de la récupérer si besoin)
+* Suppression du job dans Jenkins
+* Fermeture du ticket dans le gestionnaire de tickets (fait)
 
 Annulation d'une feature dans l'usine
 -------------------------------------
 
-- Tag et suppression de la branche (il est ainsi possible de la récupérer si besoin)
-- Suppression du job dans Jenkins
-- Fermeture du ticket (rejeté)
+* Tag et suppression de la branche (il est ainsi possible de la récupérer si besoin)
+* Suppression du job dans Jenkins
+* Fermeture du ticket (rejeté)
 
 Release
 =======
@@ -157,19 +158,19 @@ Nomenclature : `release-version-description`
 
 Création d'une release dans l'usine
 -----------------------------------
-- Création de la branche release à partir d'une version existante du gestionnaire de tickets
-- Création de la branche à partir de la branche develop
-- Création du job Jenkins
+* Création de la branche release à partir d'une version existante du gestionnaire de tickets
+* Création de la branche à partir de la branche develop
+* Création du job Jenkins
 
 Validation / Fermeture d'une release
 ------------------------------------
-- Vérification des tickets : s'il reste des tickets à traiter dans la version concernée, un message d'avertissement est affiché à l'utilisateur, il n'est pas possible de faire la release dans ce cas
-- Vérification de l'état du build avant merge
-- Merge
-- Tag et suppression de la branche
-- Suppression du job Jenkins
-- Fermeture de la version dans le gestionnaire de tickets
-- (Genéreration de la release note)
+* Vérification des tickets : s'il reste des tickets à traiter dans la version concernée, un message d'avertissement est affiché à l'utilisateur, il n'est pas possible de faire la release dans ce cas
+* Vérification de l'état du build avant merge
+* Merge
+* Tag et suppression de la branche
+* Suppression du job Jenkins
+* Fermeture de la version dans le gestionnaire de tickets
+* (Genéreration de la release note)
 
 Déploiement continu - création des VMs
 --------------------------------------

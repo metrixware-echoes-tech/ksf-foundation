@@ -84,8 +84,6 @@
 <li class="toctree-l2"><a class="reference internal" href="tools_foreman.html">Gestion de cycle de vie des machines</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tools_komea_dashboard.html">Komea Dashboard</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tools_komea_foundation.html">Komea Foundation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tools_komea_activity.html">Komea Activity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tools_komea_checking.html">Komea Checking</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a><ul>
@@ -93,7 +91,14 @@
 <li class="toctree-l2"><a class="reference internal" href="architecture.html#architecture-fonctionnelle">Architecture fonctionnelle</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="user_and_rights_management.html">Gestion des utilisateurs et des droits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_and_rights_management.html">Gestion des utilisateurs et des droits</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="user_and_rights_management.html#forge-logicielle-et-gestion-de-version">Forge logicielle et gestion de version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_and_rights_management.html#integration-continue">Intégration continue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_and_rights_management.html#depot-d-artefacts">Dépôt d&#8217;artefacts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_and_rights_management.html#gestion-du-cycle-de-vie-des-machines">Gestion du cycle de vie des machines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_and_rights_management.html#de-maniere-generale-dans-ksf">De manière générale dans KSF</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="workflows.html">Workflows</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="workflows.html#gestion-de-projet">Gestion de projet</a></li>
 <li class="toctree-l2"><a class="reference internal" href="workflows.html#creation-du-projet">Création du projet</a></li>
@@ -103,7 +108,9 @@
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="login.html">S&#8217;authentifier</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="login.html#specification-detaillee">Spécification détaillée</a></li>
+<li class="toctree-l2"><a class="reference internal" href="login.html#sso-definition">SSO : Définition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="login.html#dans-ksf">Dans KSF</a></li>
+<li class="toctree-l2"><a class="reference internal" href="login.html#deroulement-du-login">Déroulement du login</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="create_project.html">Créer un projet</a><ul>
@@ -128,41 +135,6 @@
 </ul>
 </li>
 </ul>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="release_plan.html">Release Plan</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="release_plan.html#ksf-1-0-nov-2015-airbus">KSF 1.0    Nov 2015 (Airbus)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="release_plan.html#ksf-1-1-jan-2016-amabis-airbus">KSF 1.1    Jan 2016 (Amabis, Airbus)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="release_plan.html#ksf-1-2-avr-2016-interne">KSF 1.2   Avr 2016 (interne)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="release_plan.html#komea-cc">Komea-CC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="release_plan.html#komea-dashboard">Komea-Dashboard</a></li>
-<li class="toctree-l2"><a class="reference internal" href="release_plan.html#corolla">Corolla</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="hypotheses_et_contraintes.html">Hypotheses et contraintes</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="hypotheses_et_contraintes.html#hypotheses">Hypothèses</a></li>
-<li class="toctree-l2"><a class="reference internal" href="hypotheses_et_contraintes.html#contraintes">Contraintes</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="publications.html">Publications</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="publications.html#documents-produit">Documents Produit</a></li>
-<li class="toctree-l2"><a class="reference internal" href="publications.html#sample-demos">Sample/ Démos</a></li>
-<li class="toctree-l2"><a class="reference internal" href="publications.html#supports-de-formation">Supports de formation (?)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="publications.html#documentation-avant-vente">documentation avant-vente</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="concurrence.html">Concurrence</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="concurrence.html#offres-concurrentes">Offres concurrentes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="concurrence.html#kovair-omnibus">Kovair Omnibus</a></li>
-<li class="toctree-l2"><a class="reference internal" href="concurrence.html#polarion-alm">Polarion ALM</a></li>
-<li class="toctree-l2"><a class="reference internal" href="concurrence.html#tableau-comparatif">Tableau comparatif</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="annexes.html">Annexes</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="references_documentaires.html">Références documentaires</a></li>
-<li class="toctree-l2"><a class="reference internal" href="annexes.html#open-services-for-lifecycle-collaboration">Open Services for Lifecycle Collaboration</a></li>
-</ul>
-</li>
-</ul>
 </ul>
 </li>
               
@@ -179,6 +151,7 @@
 <li><a class="reference internal" href="#git">Git</a><ul>
 <li><a class="reference internal" href="#qu-est-ce-que-git">Qu&#8217;est ce que Git ?</a></li>
 <li><a class="reference internal" href="#qu-est-ce-que-git-flow">Qu&#8217;est ce que Git Flow ?</a></li>
+<li><a class="reference internal" href="#qu-est-ce-que-gitolite">Qu&#8217;est ce que Gitolite ?</a></li>
 </ul>
 </li>
 </ul>
@@ -239,6 +212,10 @@
 <div class="section" id="qu-est-ce-que-git-flow">
 <h3>Qu&#8217;est ce que Git Flow ?<a class="headerlink" href="#qu-est-ce-que-git-flow" title="Lien permanent vers ce titre">¶</a></h3>
 <p>Git flow est l&#8217;implémentation du modèle de branche Git reconnu par la communauté.</p>
+</div>
+<div class="section" id="qu-est-ce-que-gitolite">
+<h3>Qu&#8217;est ce que Gitolite ?<a class="headerlink" href="#qu-est-ce-que-gitolite" title="Lien permanent vers ce titre">¶</a></h3>
+<p>Gitolite permet de centraliser les dépôts git sur un serveur et de gérer les droits d&#8217;accès. Dans KSF, gitolite est intégré à Redmine et permet d&#8217;associer les droits des projets aux dépôts git.</p>
 </div>
 </div>
 </div>
