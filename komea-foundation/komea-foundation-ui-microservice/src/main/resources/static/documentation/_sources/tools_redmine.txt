@@ -7,32 +7,27 @@ Forge logicielle
 Redmine
 *******
 
-.. note:: Ci-dessous une brève introduction à Redmine. La documentation complète est disponible à cette adresse : https://puppet.com/
+.. note:: Ci-dessous une brève introduction à Redmine. La documentation complète est disponible à cette adresse : http://www.redmine.org/
 
-  
-Redmine is a flexible project management web application. Written using the Ruby on Rails framework, it is cross-platform and cross-database.
+Redmine est une application web libre (GNU General Public License v2 (GPL)) de gestion de projets presque complète en mode web, développée en Ruby sur la base du framework Ruby on Rails.
 
-Redmine is open source and released under the terms of the GNU General Public License v2 (GPL).
+Principales fonctionnalités
+===========================
+* Gestion multi-projets
+* Gestion fine des droits utilisateurs définis par des rôles
+* Gestion de groupes d'utilisateurs
+* Rapports de bogues (bugs), demandes d'évolutions
+* Personnalisation avancées des demandes (champs, flux, droits personnalisables)
+* Wiki multi-projets
+* Forums multi-projets
+* News accessibles par RSS / ATOM
+* Notifications par courriel (mail)
+* Gestion de feuilles de route, GANTT, calendrier
+* Saisie du temps passé (sans possibilité de modifier une saisie antérieure)
+* Historique
+* Intégration avec divers suivis de versions : SVN, CVS, Mercurial, Git[1], Bazaar et Darcs
+* Identification possible via LDAP, OpenID et CAS[1] (à travers un plugin pour ce dernier)
+* Multilingue (34 langues disponibles pour la 2.6.0)
+* Support de plusieurs bases de données : MySQL[1], PostgreSQL, SQLite ou SQL Server
 
-Fonctionnalités
-===============
-
-Some of the main features of Redmine are:
-
--    Multiple projects support
--    Flexible role based access control
--    Flexible issue tracking system
--    Gantt chart and calendar
--    News, documents & files management
--    Feeds & email notifications
--    Per project wiki
--    Per project forums
--    Time tracking
--    Custom fields for issues, time-entries, projects and users
--    SCM integration (SVN, CVS, Git, Mercurial, Bazaar and Darcs)
--    Issue creation via email
--    Multiple LDAP authentication support
--    User self-registration support
--    Multilanguage support
--    Multiple databases support
-
+[1] Technologies utilisées pour la version installée dans KSF

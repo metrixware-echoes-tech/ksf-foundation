@@ -1,0 +1,4 @@
+puppetModule,puppetClass,parameter,value,usePuppetDefault
+nexus,nexus,revision,01,false
+nexus,nexus,version,2.12.1,false
+wrappers,wrappers::firewall,resources,"{""200 allow HTTP access"":{""dport"":8081,""proto"":""tcp"",""action"":""accept""},""200 allow HTTP access - IPv6"":{""dport"":8081,""proto"":""tcp"",""action"":""accept"",""provider"":""ip6tables""}}",false

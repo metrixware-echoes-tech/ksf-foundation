@@ -1,5 +1,6 @@
 package fr.echoes.labs.ksf.cc.plugins.foreman.model;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -38,8 +39,17 @@ public class ForemanTarget {
 
 	@NotBlank
 	private String computeProfile;
+	
+	@NotNull
+	private Integer imageId;
+	
+	private String imageUuid;
 
+	@NotBlank
 	private String operatingSystemId;
+	
+	@NotNull
+	private Integer architectureId;
 
 	private String puppetConfiguration;
 
@@ -114,7 +124,35 @@ public class ForemanTarget {
 	public String getPuppetConfiguration() {
 		return this.puppetConfiguration;
 	}
+	
+	public Integer getImageId() {
+		return imageId;
+	}
 
+	public void setImageId(Integer imageId) {
+		this.imageId = imageId;
+	}
+
+	public String getOperatingSystemId() {
+		return operatingSystemId;
+	}
+	
+	public Integer getArchitectureId() {
+		return architectureId;
+	}
+	
+	public void setArchitectureId(Integer architectureId) {
+		this.architectureId = architectureId;
+	}
+	
+	public String getImageUuid() {
+		return imageUuid;
+	}
+
+	public void setImageUuid(String imageUuid) {
+		this.imageUuid = imageUuid;
+	}
+	
 	@Override
 	public String toString() {
 		return "ForemanTarget [id=" + this.id + ", environment=" + this.environment + ", operatingSystem=" + this.operatingSystemName

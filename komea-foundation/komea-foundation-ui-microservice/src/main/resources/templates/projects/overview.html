@@ -1,97 +1,119 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:th="http://www.thymeleaf.org"
-	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorator="layout">
-<head>
-	<title th:text="${projectData.project.name}">Project Overview</title>
-</head>
-<body>
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout">
+    <head>
+        <title th:text="${projectData.project.name}">Project Overview</title>
+    </head>
+    <body>
 
-	<div layout:fragment="content">
-		<main class="container-fluid" role="main">
-		<div class="content project-overview">
-			<div class="row">
-				<div class="span12" role="tabpanel">
+        <div layout:fragment="content">
+            <main class="container-fluid" role="main">
+                <div class="content project-overview">
+                    <div class="row">
+                        <div class="span12" role="tabpanel">
 
-					<ul class="nav nav-tabs tabSelect" id="toolsTab" role="tablist">
-						<li class="active" role="presentation"><a
-							aria-controls="overview" data-toggle="tab" href="#overview"
-							role="tab" th:text="#{foundation.projects.overview.tab.overview}"> Project Overview </a></li>
-						<li role="presentation" th:each="panel,it : ${panels}"><a
-							th:attr="aria-controls=${'#pluginTab'+it.index}"
-							th:href="${'#pluginTab'+it.index}" data-toggle="tab" role="tab"
-							th:text="${panel.title}"> </a></li>
-					</ul>
+                            <ul class="nav nav-tabs tabSelect" id="toolsTab" role="tablist">
+                                <li class="active" role="presentation"><a
+                                        aria-controls="overview" data-toggle="tab" href="#overview" onclick="location.href = '#overview';"
+                                        role="tab" th:text="#{foundation.projects.overview.tab.overview}"> Project Overview </a></li>
+                                <li role="presentation" th:each="panel,it : ${panels}"><a
+                                        th:onclick="'location.href=\'' + ${'#'+panel.id} + '\';'"
+                                        th:attr="aria-controls=${'#'+panel.id}" 
+                                        th:href="${'#'+panel.id}" data-toggle="tab" role="tab"
+                                        th:text="${panel.title}"> </a></li>
+                            </ul>
 
-					<div class="tab-content">
-						<div class="tab-pane tab-project-information active" id="overview" role="tabpanel">
+                            <div class="tab-content">
+                                <div class="tab-pane tab-project-information active" id="overview" role="tabpanel">
 
-							<div class="container-fluid overview-container">
-																
-								<!-- div class="row" -->
-								
-								    <!--/* Project information panel */-->
-								<div id="widgetsGrid" data-columns="">
-									<div class="widget" th:include="projectInformation :: projectInformationPanel" />
+                                    <div class="container-fluid overview-container">
 
-									<div class="widget"
-										th:each="widget : ${@projectDashboardWidgets.getDashboardWidgets()}"
-										th:if="${widget.hasHtmlPanelBody()}">
-										<div class="panel panel-warning project-widget-panel">
-											<div class="panel-heading">
-												<img th:src="@{${widget.getIconUrl()}}" />
-												<h3 class="panel-title" th:text="${widget.title}"></h3>
-												<ul th:if="${widget.getDropdownActions() != null}"
-													class="nav nav-pills navbar-right">
-													<li role="presentation" class="dropdown"><a
-														class="dropdown-toggle" data-toggle="dropdown" href="#"
-														role="button" aria-haspopup="true" aria-expanded="false">
-															Actions <span class="caret"></span>
-													</a>
-														<ul class="dropdown-menu">
-															<li th:each="action : ${widget.getDropdownActions()}">
-																<a th:href="${action.url}"
-																th:text="${action.actionName}"></a>
-															</li>
-														</ul></li>
-												</ul>
-											</div>
-											<div class="panel-body"
-												th:utext="${widget.getHtmlPanelBody(projectData.project.id)}"></div>
-										</div>
-									</div>
+                                        <!-- div class="row" -->
+
+                                        <!--/* Project information panel */-->
+                                        <div id="widgetsGrid" data-columns="">
+                                            <div id="widget-projectInformation" class="widget" th:include="projectInformation :: projectInformationPanel" />
+
+                                            <div class="widget" th:id="${'widget-'+widget.getId()}"
+                                                 th:each="widget : ${@projectDashboardWidgets.getDashboardWidgets()}"
+                                                 th:if="${widget.hasHtmlPanelBody()}">
+                                                <div class="panel panel-warning project-widget-panel">
+                                                    <div class="panel-heading">
+                                                        <img th:src="@{${widget.getIconUrl()}}" />
+                                                        <h3 class="panel-title" th:text="${widget.title}"></h3>
+                                                        <ul th:if="${widget.getDropdownActions() != null}"
+                                                            class="nav nav-pills navbar-right">
+                                                            <li role="presentation" class="dropdown"><a
+                                                                    class="dropdown-toggle" data-toggle="dropdown" href="#"
+                                                                    role="button" aria-haspopup="true" aria-expanded="false">
+                                                                    Actions <span class="caret"></span>
+                                                                </a>
+                                                                <ul class="dropdown-menu">
+                                                                    <li th:each="action : ${widget.getDropdownActions()}">
+                                                                        <a th:href="${action.url}"
+                                                                           th:text="${action.actionName}"></a>
+                                                                    </li>
+                                                                </ul></li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="panel-body"
+                                                         th:utext="${widget.getHtmlPanelBody(projectData.project.id)}"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- /div -->
+                                    </div>
                                 </div>
-								<!-- /div -->
-							</div>
-						</div>
-						<div th:each="panel,it : ${panels}" class="tab-pane"
-							th:utext="${panel.content}" th:attr="id=${'pluginTab'+it.index}"
-							role="tabpanel"></div>
-					</div>
-				</div>
-			</div>
-		</div>
+                                <div th:each="panel,it : ${panels}" class="tab-pane"
+                                     th:utext="${panel.content}" th:attr="id=${panel.id}"
+                                     role="tabpanel"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-		<!--/* Create release modal. This modal is opened by using the "Create Release" button form the Project Information panel */-->
-		<div th:include="projectInformation :: projectInformationModal" />
+                <!--/* Create release modal. This modal is opened by using the "Create Release" button form the Project Information panel */-->
+                <div th:include="projectInformation :: projectInformationModal" />
 
-		</main>
-	</div>
+            </main>
+        </div>
 
 
-	<div layout:fragment="footer">
-		<script type="text/javascript">
-			$(document).ready(function() {
-				var hashQuery = window.location.hash;
-				console.log(hashQuery);
-				if (hashQuery) {
-					$('a[role=tab][href="' + hashQuery + '"]').click();
-				}
-			});
-		</script>
-	</div>
+        <div layout:fragment="footer">
+            <script type="text/javascript">
+                /*<![CDATA[*/
+                function hashChanged(hashQuery, reloadOverviewTab) {
+                    if (hashQuery) {
+                        $('a[role=tab][href="' + hashQuery + '"]').click();
+                    }
+                    if (hashQuery === '#overview' && reloadOverviewTab === true) {
+                        $.ajax({
+                            url: document.URL,
+                            type: "get",
+                            dataType: "html",
+                            success: function (data) {
+                                var oldWidgets = $('.widget');
+                                for (var i = 0; i < oldWidgets.length; i++) {
+                                    var id = $(oldWidgets[i]).attr('id');
+                                    var newWidget = $(data).find('#' + id);
+                                    $(oldWidgets[i]).html(newWidget.html());
+                                }
+                            }
+                        });
+                    }
+                }
+                $(document).ready(function () {
+                    hashChanged(window.location.hash, false);
+                });
+                window.onhashchange = function () {
+                    hashChanged(window.location.hash, true);
+                }
+                /*]]>*/
+            </script>
+        </div>
 
-</body>
+    </body>
 </html>

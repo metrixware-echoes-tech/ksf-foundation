@@ -24,7 +24,6 @@ public class ForemanConfigurationService {
     @Value("${ksf.foreman.host.computeProfileId}")
     private String computeProfileId;
 
-
     @Value("${ksf.foreman.host.domainId:1}")
     private String domainId;
 

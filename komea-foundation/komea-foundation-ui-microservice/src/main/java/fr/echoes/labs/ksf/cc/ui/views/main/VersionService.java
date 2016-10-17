@@ -6,10 +6,10 @@ import org.springframework.stereotype.Service;
 @Service(value = "versionService")
 public class VersionService {
 
-    @Value("${buildVersion}")
+    @Value("${buildVersion:}")
     private String buildVersion;
 
-    @Value("${buildTimestamp}")
+    @Value("${buildTimestamp:}")
     private String buildTimestamp;
 
     public String getBuildVersion() {

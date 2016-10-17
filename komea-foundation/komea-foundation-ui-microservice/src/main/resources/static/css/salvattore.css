@@ -1,6 +1,6 @@
 /*
  http://salvattore.com
- */
+*/
 
 /* Base styles */
 .column {
@@ -15,13 +15,26 @@
 .size-1of2 {
     width: 50%;
 }
+.size-1of1 {
+    width: 100%;
+}
 
-#widgetsGrid[data-columns]::before {
-    content: '2 .column.size-1of2';
-    -webkit-box-shadow: 0 0 12px rgba(0,0,0,0.2);
-    box-shadow: 0 0 12px rgba(0,0,0,0.2);
-    overflow: hidden;
+@media screen and (max-width: 1258px) {
+    #widgetsGrid[data-columns]::before {
+        content: '1 .column.size-1of1';
+        -webkit-box-shadow: 0 0 12px rgba(0,0,0,0.2);
+        box-shadow: 0 0 12px rgba(0,0,0,0.2);
+        overflow: hidden;
+    }
+}
+@media screen and (min-width: 1259px) {
+    #widgetsGrid[data-columns]::before {
+        content: '2 .column.size-1of2';
+        -webkit-box-shadow: 0 0 12px rgba(0,0,0,0.2);
+        box-shadow: 0 0 12px rgba(0,0,0,0.2);
+        overflow: hidden;
+    }
 }
 #widgetsGrid .widget {
-	padding: 5px 10px 5px 10px;
+    padding: 5px 10px 5px 10px;
 }

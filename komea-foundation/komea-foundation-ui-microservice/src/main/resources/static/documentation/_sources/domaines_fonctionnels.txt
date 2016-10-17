@@ -2,7 +2,7 @@
 Domaines fonctionnels
 *********************
 
-.. note:: il s’agit de l'ensemble des domaines concernés par l'édition de logiciels de qualités. Il est nécessaire d'avoir connaissance de cet ensemble et d'adresser les différents points évoqués au long de ce document. Pour chaque point nous indiquons quel est son objectif et quels sont les risques encourus si le point est ignoré. Pour mettre en oeuvre un domaines présentés ici de manière adaptée à son organisation, il est nécessaire d'utiliser des outils (allant du papier/crayon jusqu'au Robot intelligent en passant par Excel/LibreOffice). Lorsque c'est possible et utile, une solution est proposée au sein de Komea Software Factory (KSF).
+.. note:: il s’agit de l'ensemble des domaines concernés par l'édition de logiciels de qualité. Il est nécessaire d'avoir connaissance de cet ensemble et d'adresser les différents points évoqués au long de ce document. Pour chaque point nous indiquons quel est son objectif et quels sont les risques encourus si le point est ignoré. Pour mettre en oeuvre un domaines présentés ici de manière adaptée à son organisation, il est nécessaire d'utiliser des outils (allant du papier/crayon jusqu'au Robot intelligent en passant par Excel/LibreOffice). Lorsque c'est possible et utile, une solution est proposée au sein de Komea Software Factory (KSF).
 
 
 Les Conventions
@@ -36,7 +36,7 @@ Exemples
 Dans KSF
 ========
 
-Au sein de KSF, il existe les conventions de nommage suivantes : 
+Au sein de KSF, il existe différentes conventions de nommage. Elles sont détaillées dans le chapitre TBC 
 
 TBC
 
@@ -87,7 +87,7 @@ Exemple d'outil Propriétaire
 Dans KSF
 ========
 
-La modélisation intervient en amont de l'écriture de toute ligne de code. Il n'est à ce jour pas prévu d'intégrer un outil de modélisation dans KSF.
+La modélisation intervient en amont de l'écriture de toute ligne de code, donc en amont de l'utilisation de KSF.
 
 Les Métiers impliqués
 =====================
@@ -115,7 +115,7 @@ Exemples d'outils Open source
 Exemple d'outil Propriétaire
 ============================
 
-*   ClearCase (http://www-03.ibm.com/software/products/fr/clearcase)
+*	ClearCase (http://www-03.ibm.com/software/products/fr/clearcase)
 
 *Son Rôle dans l’intégration continue* : Mise à disposition des sources.
 
@@ -124,7 +124,7 @@ Exemple d'outil Propriétaire
 Dans KSF
 ========
 
-Dans KSF, le gestionnaire de versions utilisé est Git qui permet une gestion facile des sources. KSF respecte le modèle gitflow.
+Dans KSF, le gestionnaire de versions utilisé est Git qui permet une gestion souple des sources. KSF respecte le modèle gitflow.
 
 Les Métiers impliqués
 =====================
@@ -190,7 +190,7 @@ Exemple d'outil Propriétaire : Stash (https://www.atlassian.com/software/stash)
 Dans KSF
 ========
 
-Nous n'avons aujourd'hui pas intégré d'outil spécifique de revue de code dans KSF. Nous pensons qu'un travail de conception efficace en amont (implication de toute l'équipe, maquettes, développement guidé par les tests), ainsi qu'un travail en binôme sur les tâches identifiées comme étant complexes lors de la conception permettent de réduire la nécessité de la relecture de code. Une relecture de code peut tout de même être prévue lors de la réalisation des tâches en question. 
+Nous pensons qu'un travail de conception efficace en amont (implication de toute l'équipe, maquettes, développement guidé par les tests), ainsi qu'un travail en binôme sur les tâches identifiées comme étant complexes lors de la conception permettent de réduire la nécessité de la relecture de code. Une relecture de code peut tout de même être prévue lors de la réalisation des tâches en question. 
 
 Les Métiers impliqués
 =====================
@@ -227,7 +227,7 @@ Exemples d'outils Propriétaires :
 Dans KSF
 ========
 
-Dans KSF, nous utilisons l'outil Redmine complété par des plugins développés par nos équipes. Ces plugins améliorent l'outil Redmine dans plusieurs domaines tels que la gestion de projet Agile, la gestion du "reste à faire", la gestion des exigences et des tests. Ces points sont détaillés dans le chapitre TBC.
+Dans KSF, nous utilisons l'outil Redmine complété par des workflows établis par nos équipes. Ils permettent d'utiliser Redmine de façon nominale sans se perdre dans la multitude de configurations et d'options que l'on peut paramétrer dans Redmine. Ce workflow est détaillé dans le chapitre TBC.
 
 Les Métiers impliqués
 =====================
@@ -275,7 +275,7 @@ Exemples d'outils Propriétaire : Kiuwan (https://www.kiuwan.com/)
 Dans KSF
 ========
 
-Dans KSF, nous utilisons l'outil Kiuwan. D'après nous, c'est aujourd'hui l'outil qui présente le meilleur rapport qualité / simplicité d'utilisation. Cet outil permet d'avoir une douane applicative et ainsi de s'assurer build après build que la qualité du logiciel reste à son maximum.
+Dans KSF, nous utilisons l'outil Kiuwan. D'après notre expérience, c'est aujourd'hui l'outil qui présente le meilleur rapport qualité / simplicité d'utilisation. Cet outil permet d'avoir une douane applicative et ainsi de s'assurer build après build que la qualité du logiciel reste à son maximum.
 
 Les Métiers impliqués
 =====================
@@ -315,7 +315,7 @@ Exemples d'outils Propriétaire :	Parasoft C/C++test (http://www.parasoft.com/pr
 Dans KSF
 ========
 
-Les tests internes dépendent du langage et du type d'applications. Il n'y a donc pas de logiciel spécifique embarqué dans KSF. Cependant, l'outil Jenkins permet de lancer l'exécution de tests et de récupérer et présenter leurs résultats s'ils respectent les standards en la matière, ce qui est le cas de la plupart des framework de test du marché.
+Les tests internes dépendent du langage et du type d'applications. Il n'y a pas de logiciel spécifique embarqué dans KSF, l'outil Jenkins permet de lancer l'exécution de tests et de récupérer et présenter leurs résultats s'ils respectent les standards en la matière, ce qui est le cas de la plupart des framework de test du marché.
 
 Les Métiers impliqués
 =====================
@@ -359,7 +359,9 @@ Exemples d'outils Open source :
 Dans KSF
 ========
 
-A l'heure actuelle, KSF ne propose pas de spécialisation par technologie. Nous proposons donc un script qui est généré à la racine du dépôt où les instructions de build peuvent être ajoutées. Ce script est préparamétré pour être utilisé lors de l'exécution du job Jenkins qui correspond à la branche en question. Il est ainsi possible d'utiliser ce script pour démarrer un outil de gestion de dépendances comme Maven ou Gradle. Dans une version ultérieure, KSF proposera différents types de projets préparamétrés pour utiliser les différentes techologies utilisées par nos clients.
+A l'heure actuelle, KSF propose un script qui est généré à la racine du dépôt où les instructions de build peuvent être ajoutées. Ce script est préparamétré pour être utilisé lors de l'exécution du job Jenkins qui correspond à la branche en question. Il est ainsi possible d'utiliser ce script pour démarrer un outil de gestion de dépendances comme Maven ou Gradle. 
+
+Il est possible de choisir un modèle par défaut parmi des templates déposés dans un répertoire prédéfini.
 
 Les Métiers impliqués
 =====================
@@ -369,7 +371,7 @@ Développeur, Architecte logiciel
 Le Paramétrage de l’application
 *******************************
 
-Le paramétrage d’une application permet que celle-ci soit la plus flexible par rapport aux besoins d’utilisateurs. 
+Le paramétrage d’une application permet que celle-ci soit très flexible par rapport aux besoins d’utilisateurs. 
 
 Mais laisser un paramétrage trop important à l’utilisateur n’est pas sans inconvénients. En effet ceci à pour conséquence de :
 
@@ -390,7 +392,7 @@ Il faut donc choisir consciencieusement quand on doit associer une valeur à un 
 #.	À l’exécution :
 	Les paramètres de l’application sont assignables ou modifiable pendant l’exécution de l’application. Ceci-se fait le plus souvent via une interface graphique. Les données provenant de l’utilisateur, il faut vérifier scrupuleusement les données saisies.
 	
-Pour chaque paramètre de l’application il faut donc se poser la question : qui cela concerne il ?
+Pour chaque paramètre de l’application il faut donc se poser la question : qui cela concerne-t-il ?
 
 *	Toutes les versions de mes produits ?
 *	Un packaging en particulier ?
@@ -436,7 +438,7 @@ Exemple d'outils Propriétaire : Team Foundation Server (https://msdn.microsoft.
 Dans KSF
 ========
 
-A l'heure actuelle, KSF ne propose pas de spécialisation par technologie. Nous proposons donc un script qui est généré à la racine du dépôt où les instructions de build peuvent être ajoutées. Ce script est préparamétré pour être utilisé lors de l'exécution du job Jenkins qui correspond à la branche en question. Il est ainsi possible d'utiliser le moteur de production de son choix en complétant ce script. Dans une version ultérieure, KSF proposera différents types de projets préparamétrés pour utiliser les différentes techologies utilisées par nos clients.
+A l'heure actuelle, KSF propose un script qui est généré à la racine du dépôt où les instructions de build peuvent être ajoutées. Ce script est préparamétré pour être utilisé lors de l'exécution du job Jenkins qui correspond à la branche en question. Il est ainsi possible d'utiliser le moteur de production de son choix en complétant ce script. 
 
 Les Métiers impliqués
 =====================
@@ -476,9 +478,9 @@ Exemple d'outil Propriétaire : Visual Studio (https://www.visualstudio.com)
 Dans KSF
 ========
 
-L'état de l'art actuel des éditeurs intégrés de développements accessible par navigateur, fait qu'il n'est aujourd'hui pas pertinent d'en proposer au sein de KSF. Nous suivons l'évolution de ces technologies afin d'inclure un IDE dans l'usine lorsque cela aura un intérêt fort pour nos utilisateurs.
+Nous recommandons l'utilisation d'Eclipse dont les plugins permettent une intégration parfaite avec KSF.
 
-Aujourd'hui, nous recommandons l'utilisation d'Eclipse.
+Nous suivons l'évolution des éditeurs intégrés de développements accessible par navigateur afin d'inclure un IDE dans l'usine lorsque l'état de l'art le permettra.
 
 Les Métiers impliqués
 =====================
@@ -656,7 +658,7 @@ Chacune de ces versions sont testées dans des conditions réelles par des utili
 Dans KSF
 ========
 
-Dans KSF, le processus de release est en grande partie automatisée. Lorsqu'un utilisateur décide de déclencher une release, il choisit la version à livrer. Ensuite, KSF vérifie que le travail sur la release est terminé et que les derniers builds ont bien fonctionné. Il est alors créé la branche de release et les tests liés à cette dernière peuvent alors commencer. KSF permet ensuite d'effectuer automatiquement les contrôles sur le build de livraison puis les merges nécessaires lorsque le travail est terminé. 
+Dans KSF, **le processus de release est en grande partie automatisé**. Lorsqu'un utilisateur décide de déclencher une release, il choisit la version à livrer. Ensuite, KSF vérifie que le travail sur la release est terminé et que les derniers builds ont bien fonctionné. Il est alors créé la branche de release et les tests liés à cette dernière peuvent alors commencer. KSF permet ensuite d'effectuer automatiquement les contrôles sur le build de livraison puis les merges nécessaires lorsque le travail est terminé. 
 
 Les Métiers impliqués
 =====================
@@ -691,7 +693,7 @@ Exemple d'outil propriétaire : Komea Dashboard (http://www.tocea.fr/solutions/#
 Dans KSF
 ========
 
-KSF est fourni avec Komea Dashboard qui permet de connaitre à tout moment différents paramètres des projets ou de l'ensemble de projets gérés dans l'usine.
+KSF est compatible avec Komea Dashboard qui permet de connaitre à tout moment différents paramètres des projets ou de l'ensemble de projets gérés dans l'usine.
 
 Les Métiers impliqués
 =====================
@@ -703,32 +705,36 @@ La Documentation
 
 La documentation d’un projet logiciel doit être vue sous plusieurs angles :
 
-*	La documentation des sources
+La documentation des sources
+============================
 
-    * commente les sources du logiciel (i.e. variables, fonctions, classes, méthodes, etc.),
-    * peut contenir des exemples d’exploitation des classes, méthodes, etc.
-    * est à destination des développeurs.
+* commente les sources du logiciel (i.e. variables, fonctions, classes, méthodes, etc.),
+* peut contenir des exemples d’exploitation des classes, méthodes, etc.
+* est à destination des développeurs.
     
-*	La documentation technique
+La documentation technique
+==========================
 
-    * contient l’architecture métier/fonctionnelle,
-    * contient l’architecture applicative,
-    * contient le schéma d'exploitation,
-    * contient les informations d'installation et de mise à jour,
-    * contient les informations de paramétrage.
+* contient l’architecture métier/fonctionnelle,
+* contient l’architecture applicative,
+* contient le schéma d'exploitation,
+* contient les informations d'installation et de mise à jour,
+* contient les informations de paramétrage.
     
-*	La documentation d’administration
+La documentation d’administration
+=================================
 
-    * est le manuel complet d’administration du logiciel,
-    * peut contenir des tutoriels pour faciliter l’appréhension de l’administration du logiciel,
-    * est à destination des administrateurs systèmes du logiciel.
+* est le manuel complet d’administration du logiciel,
+* peut contenir des tutoriels pour faciliter l’appréhension de l’administration du logiciel,
+* est à destination des administrateurs systèmes du logiciel.
     
-*	La documentation utilisateur
+La documentation utilisateur
+============================
 
-    * est le manuel complet d’utilisation du logiciel,
-    * peut contenir des tutoriels pour faciliter l’appréhension de l’utilisation du logiciel,
-    * peut contenir une FAQ,
-    * est à destination des utilisateurs du logiciel
+* est le manuel complet d’utilisation du logiciel,
+* peut contenir des tutoriels pour faciliter l’appréhension de l’utilisation du logiciel,
+* peut contenir une FAQ,
+* est à destination des utilisateurs du logiciel
     
 En cas d’absence de documentation, une entreprise s’expose à :
 
@@ -751,39 +757,9 @@ Exemple d'outil propriétaire : Jira (https://www.atlassian.com/software/jira)
 Dans KSF
 ========
 
-La documentation intervient à différents niveaux. Pour la documentation des sources il est possible de paramétrer KSF pour la générer et la publier à partir d'outils comme Doxygen. Pour la documentation technique, nous recommandons l'utilisation des outils proposés par Redmine. Suivant le type de produit, les documentation "d'administration" et "utilisateur" peuvent prendre des formes très différentes. Ce format est à déterminer dès la conception. Dans le cas d'une documentation en ligne compilée à partir de sources (par exemple ReadTheDocs), il est alors possible de faire faire ce travail à KSF via l'utilisation de Jenkins.
+La documentation intervient à différents niveaux. Pour la documentation des sources il est possible de paramétrer KSF pour la générer et la publier à partir d'outils comme Doxygen. Pour la documentation technique, nous recommandons l'utilisation des outils proposés par Redmine. Suivant le type de produit, les documentations "d'administration" et "utilisateur" peuvent prendre des formes très différentes. Ce format est à déterminer dès la conception. Dans le cas d'une documentation en ligne compilée à partir de sources (par exemple ReadTheDocs), il est alors possible de faire faire ce travail à KSF via l'utilisation de Jenkins.
 
 Les Métiers impliqués
 =====================
 
 Développeur, Intégrateur, Responsable produit, Support.
-
-
-Tableau récapitulatif
----------------------
-
-===============================   ==================================  ===============================
-Feature                           Fonction                            Objets concernés               
-===============================   ==================================  ===============================
-Les Conventions                   Normaliser                          Programmes
-La Modélisation                   Concevoir                           Application
-La Gestion de version             Archiver                            Programmes
-Le Suivi des demandes             Gérer                               Features
-La Revue de code                  Relire                              Programmes
-La Forge logicielle               Développer(?)                       Programmes
-La Qualimétrie                    Fiabiliser                          Programmes
-Les Tests internes automatisés    Valider                             Programmes
-La Gestion des bibliothèques      Construire                          Application
-Le Paramétrage de l’application   Déploier                            Release
-Le Moteur de production           Construire                          Release 
-L’IDE                             Développer
-L’Empaquetage                     Délivrer
-Les Tests du système              Valider
-L’intégration continue            Orchestrer
-Le processus de release           Délivrer
-Le Tableau de bord                Piloter
-La Documentation                  Développer
-Single Sign On(*)                 Authentifier                        Utilisateurs 
-===============================   ==================================  ===============================
-
-(*) voir Caractéristiques

@@ -12,14 +12,14 @@ dependencies {
 	compile 'com.google.inject.extensions:guice-multibindings:4.0'
   
 	// Komea Dashboard Clients
-	compile "org.komea.dashboard:client-timeseries-storage:${KOMEA_DASHBOARD_VERSION}"
-	compile "org.komea.dashboard:client-organization-storage:${KOMEA_DASHBOARD_VERSION}"
-	compile "org.komea.dashboard:client-connectors-configuration:${KOMEA_DASHBOARD_VERSION}"
-	compile "org.komea.dashboard:client-liferay:${KOMEA_DASHBOARD_VERSION}"
-	compile "org.komea.dashboard:client-metrics-storage:${KOMEA_DASHBOARD_VERSION}"
+	compile "fr.echoes.labs.ksf.dashboard:client-timeseries-storage:${KOMEA_DASHBOARD_VERSION}"
+	compile "fr.echoes.labs.ksf.dashboard:client-organization-storage:${KOMEA_DASHBOARD_VERSION}"
+	compile "fr.echoes.labs.ksf.dashboard:client-connectors-configuration:${KOMEA_DASHBOARD_VERSION}"
+	compile "fr.echoes.labs.ksf.dashboard:client-liferay:${KOMEA_DASHBOARD_VERSION}"
+	compile "fr.echoes.labs.ksf.dashboard:client-metrics-storage:${KOMEA_DASHBOARD_VERSION}"
 	
 	// Komea Dashboard Model
-	compile "org.komea.dashboard:metrics-model:${KOMEA_DASHBOARD_VERSION}"
+	compile "fr.echoes.labs.ksf.dashboard:metrics-model:${KOMEA_DASHBOARD_VERSION}"
 	
 }
 

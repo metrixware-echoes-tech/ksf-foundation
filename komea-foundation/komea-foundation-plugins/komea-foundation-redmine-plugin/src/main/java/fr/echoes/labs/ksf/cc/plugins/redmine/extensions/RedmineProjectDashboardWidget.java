@@ -1,22 +1,11 @@
 package fr.echoes.labs.ksf.cc.plugins.redmine.extensions;
 
-import com.google.common.collect.Lists;
-import com.tocea.corolla.products.dao.IProjectDAO;
-import com.tocea.corolla.products.domain.Project;
-import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.IProjectTabPanel;
-import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.MenuAction;
-import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
-import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineExtensionException;
-import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineIssue;
-import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineQuery;
-import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineQuery.Builder;
-import fr.echoes.labs.ksf.cc.plugins.redmine.services.IRedmineService;
-import fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineConfigurationService;
-import fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineErrorHandlingService;
 import java.util.List;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +18,24 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.context.WebContext;
-import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
+
+import com.google.common.collect.Lists;
+import com.tocea.corolla.products.dao.IProjectDAO;
+import com.tocea.corolla.products.domain.Project;
+import com.tocea.corolla.products.utils.ProjectDtoFactory;
+
+import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.IProjectTabPanel;
+import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.MenuAction;
+import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
+import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineIssue;
+import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineQuery;
+import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineQuery.Builder;
+import fr.echoes.labs.ksf.cc.plugins.redmine.services.IRedmineService;
+import fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineConfigurationService;
+import fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineErrorHandlingService;
+import fr.echoes.labs.ksf.cc.plugins.redmine.utils.RedmineConstants;
+import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
+import fr.echoes.labs.ksf.plugins.utils.ThymeleafTemplateEngineUtils;
 
 /**
  * @author dcollard
@@ -38,7 +44,7 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 @Component
 public class RedmineProjectDashboardWidget implements ProjectDashboardWidget {
 
-    private static TemplateEngine templateEngine = createTemplateEngine();
+    private static TemplateEngine templateEngine = ThymeleafTemplateEngineUtils.createTemplateEngine();
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RedmineProjectDashboardWidget.class);
 
@@ -71,7 +77,6 @@ public class RedmineProjectDashboardWidget implements ProjectDashboardWidget {
 
     @Override
     public List<MenuAction> getDropdownActions() {
-
         return null;
     }
 
@@ -81,13 +86,14 @@ public class RedmineProjectDashboardWidget implements ProjectDashboardWidget {
         final Project project = this.projectDAO.findOne(projectId);
         final WebContext ctx = new WebContext(this.request, this.response, this.servletContext);
         ctx.setVariable("projectId", projectId);
-
-        final String projectName = project.getName();
+        
+        final ProjectDto projectDto = ProjectDtoFactory.convert(project);
+    	final String projectKey = this.redmineService.getProjectId(projectDto);
 
         try {
-
+        	
             final Builder redmineQuerryBuilder = new RedmineQuery.Builder();
-            redmineQuerryBuilder.projectName(projectName);
+            redmineQuerryBuilder.projectKey(projectKey);
             redmineQuerryBuilder.resultItemsLimit(this.configurationService.getResultItemsLimit());
 
             final RedmineQuery query = redmineQuerryBuilder.build();
@@ -109,7 +115,7 @@ public class RedmineProjectDashboardWidget implements ProjectDashboardWidget {
             ctx.setVariable("issues", issues);
 
         } catch (final Exception e) {
-            LOGGER.error("[Redmine] Failed to list issues for project: " + projectName, e);
+            LOGGER.error("[Redmine] Failed to list issues for project: " + projectKey, e);
             this.errorHandler.registerError(e.getMessage());
         }
 
@@ -162,13 +168,10 @@ public class RedmineProjectDashboardWidget implements ProjectDashboardWidget {
                 } else {
                     final Project project = RedmineProjectDashboardWidget.this.projectDao.findByKey(projectKey);
                     if (project != null) {
-                        try {
-                            final String projectId = RedmineProjectDashboardWidget.this.redmineService.getProjectId(project.getName());
-                            if (StringUtils.isNotEmpty(projectId)) {
-                                url += "/projects/" + projectId;
-                            }
-                        } catch (final RedmineExtensionException e) {
-                            LOGGER.error("[Redmine] failed to construct Redmine project URL", e);
+                    	final ProjectDto projectDto = ProjectDtoFactory.convert(project);
+                        final String projectId = RedmineProjectDashboardWidget.this.redmineService.getProjectId(projectDto);
+                        if (StringUtils.isNotEmpty(projectId)) {
+                            url += "/projects/" + projectId;
                         }
                     }
                 }
@@ -184,28 +187,24 @@ public class RedmineProjectDashboardWidget implements ProjectDashboardWidget {
             public String getIconUrl() {
                 return RedmineProjectDashboardWidget.this.getIconUrl();
             }
+
+            @Override
+            public String getId() {
+                return RedmineConstants.ID;
+            }
         };
 
         return Lists.newArrayList(iframePanel);
     }
 
-    private static TemplateEngine createTemplateEngine() {
-
-        final ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
-        templateResolver.setTemplateMode("XHTML");
-        templateResolver.setPrefix("templates/");
-        templateResolver.setSuffix(".html");
-
-        final TemplateEngine templateEngine = new TemplateEngine();
-        templateEngine.setTemplateResolver(templateResolver);
-
-        return templateEngine;
-
-    }
-
     @Override
     public boolean hasHtmlPanelBody() {
         return true;
+    }
+
+    @Override
+    public String getId() {
+        return RedmineConstants.ID;
     }
 
 }

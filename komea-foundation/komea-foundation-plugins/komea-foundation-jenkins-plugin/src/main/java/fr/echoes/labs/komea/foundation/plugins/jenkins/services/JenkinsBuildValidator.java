@@ -10,11 +10,14 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.stereotype.Service;
 
+import com.tocea.corolla.products.domain.Project;
+
 import fr.echoes.labs.komea.foundation.plugins.jenkins.JenkinsExtensionException;
 import fr.echoes.labs.ksf.cc.extensions.services.project.IValidator;
 import fr.echoes.labs.ksf.cc.extensions.services.project.IValidatorResult;
 import fr.echoes.labs.ksf.cc.extensions.services.project.ValidatorResult;
 import fr.echoes.labs.ksf.cc.extensions.services.project.ValidatorResultType;
+import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
 
 /**
  * @author dcollard
@@ -43,11 +46,10 @@ public class JenkinsBuildValidator implements IValidator {
 	 * @return
 	 */
 	@Override
-	public List<IValidatorResult> validateFeature(String projectName,
-			String featureId, String description) {
+	public List<IValidatorResult> validateFeature(final ProjectDto project, final String featureId, final String description) {
 		List<IValidatorResult>  results = null;
 		try {
-			final JenkinsBuildInfo buildInfo = this.jenkins.getFeatureStatus(projectName, featureId, description);
+			final JenkinsBuildInfo buildInfo = this.jenkins.getFeatureStatus(project, featureId, description);
 			if (buildInfo == null || !"SUCCESS".equals(buildInfo.getResult())) {
 				results = new ArrayList<IValidatorResult>(1);
 				final MessageSourceAccessor messageSourceAccessor = new MessageSourceAccessor(this.messageResource);
@@ -75,11 +77,10 @@ public class JenkinsBuildValidator implements IValidator {
 	 * @return
 	 */
 	@Override
-	public List<IValidatorResult> validateRelease(String projectName,
-			String releaseName) {
+	public List<IValidatorResult> validateRelease(final ProjectDto project, final String releaseName) {
 		List<IValidatorResult>  results = null;
 		try {
-			final JenkinsBuildInfo buildInfo = this.jenkins.getReleaseStatus(projectName, releaseName);
+			final JenkinsBuildInfo buildInfo = this.jenkins.getReleaseStatus(project, releaseName);
 			if (buildInfo == null || !"SUCCESS".equals(buildInfo.getResult())) {
 				results = new ArrayList<IValidatorResult>(1);
 				final MessageSourceAccessor messageSourceAccessor = new MessageSourceAccessor(this.messageResource);

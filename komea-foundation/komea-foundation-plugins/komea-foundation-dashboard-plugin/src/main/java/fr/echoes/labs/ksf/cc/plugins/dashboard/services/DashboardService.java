@@ -50,30 +50,30 @@ public class DashboardService {
 	public void disableProjectEntities(final ProjectDto project) {
 		
 		final List<Entity> entities = getAllEntities(project);
-		Map<String, Set<String>> entitiesKeysByType = DashboardUtils.splitEntitiesByType(entities);
+		final Map<String, Set<String>> entitiesKeysByType = DashboardUtils.splitEntitiesByType(entities);
 		
 		final OrganizationStorageClient organizationStorageClient = clientFactory.organizationStorageClient();
 		
 		for (Entry<String, Set<String>> entry : entitiesKeysByType.entrySet()) {
 			LOGGER.info("Disabling {} entities of type {} in Komea Dashboard", entry.getValue().size(), entry.getKey());
-			organizationStorageClient.disableEntities(entry.getKey(), Lists.newArrayList(entry.getValue()));
+			organizationStorageClient.setEntitiesActivation(entry.getKey(), Lists.newArrayList(entry.getValue()), false);
 		}
 		
 	}
 	
 	public List<Entity> getAllEntities(final ProjectDto project) {
 		
-		List<Entity> entities = Lists.newArrayList();
+		final List<Entity> entities = Lists.newArrayList();
 		
 		entities.add(entityFactory.createProjectEntity(project));
 		
-		List<Entity> jobEntities = entityFactory.createJobEntities(project);
+		final List<Entity> jobEntities = entityFactory.createJobEntities(project);
 		if (!jobEntities.isEmpty()) {
 			entities.addAll(jobEntities);
 		}
 		
-		GitRepository repository = getGitRepository(project);
-		Entity gitEntity = entityFactory.createGitEntity(project, repository);
+		final GitRepository repository = getGitRepository(project);
+		final Entity gitEntity = entityFactory.createGitEntity(project, repository);
 		if (gitEntity != null) {
 			entities.add(gitEntity);
 		}
@@ -83,12 +83,12 @@ public class DashboardService {
 	
 	private GitRepository getGitRepository(final ProjectDto project) {
 		
-		String gitURL = (String) project.getOtherAttributes().get(ProjectExtensionConstants.GIT_URL);
-		List<String> gitIncludedBranches = (List<String>) project.getOtherAttributes().get(ProjectExtensionConstants.ANALYZED_BRANCHES);
+		final String gitURL = (String) project.getOtherAttributes().get(ProjectExtensionConstants.GIT_URL);
+		final List<String> gitIncludedBranches = (List<String>) project.getOtherAttributes().get(ProjectExtensionConstants.ANALYZED_BRANCHES);
 		
 		if (!StringUtils.isEmpty(gitURL)) {
 		
-			GitRepository repository = new GitRepository();
+			final GitRepository repository = new GitRepository();
 			repository.setName(project.getName());
 			repository.setRemoteURL(gitURL);
 			repository.setIncludedBranches(gitIncludedBranches);

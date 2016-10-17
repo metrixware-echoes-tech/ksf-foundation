@@ -1,0 +1,9 @@
+moduleName,name
+tomcat,tomcat
+wrappers,wrappers::tomcat::instance
+wrappers,wrappers::tomcat::war
+wrappers,wrappers::tomcat::service
+java,java
+wrappers,wrappers::firewall
+wrappers,wrappers::jasig::service
+jasig,jasig

@@ -33,3 +33,7 @@ include "komea-foundation:komea-foundation-plugins:komea-foundation-dashboard-pl
 include "komea-foundation:komea-foundation-plugin-api"
 include "komea-foundation:komea-foundation-softwarefactory"
 include "komea-foundation:komea-foundation-tests"
+
+// Foreman Remote Client
+
+include "foreman-java-scparams"

@@ -1,0 +1,15 @@
+puppetModule,puppetClass,parameter,value,usePuppetDefault
+echoes_firewall,echoes_firewall,ipv4_input_policy,accept,false
+echoes_firewall,echoes_firewall,ipv6_input_policy,accept,false
+elasticsearch,elasticsearch,instances,"{""komea"":{""config"":{""node.name"":""komea"",""cluster.name"":""tocea""}}}",false
+elasticsearch,elasticsearch,plugins,"{""mobz/elasticsearch-head"":{""instances"":""komea""}}",false
+java,java,package,openjdk-8-jdk,false
+komea_dashboard_core,komea_dashboard_core,komea_gui_url,https://ksf-dev.metrixware.local/bsc/,false
+komea_dashboard_liferay,komea_dashboard_liferay,dashboard_charts_url,https://ksf-dev.metrixware.local/api/dashboard/charts,false
+komea_dashboard_liferay,komea_dashboard_liferay,dashboard_exporter_url,https://ksf-dev.metrixware.local/api/dashboard/exporter,false
+komea_dashboard_liferay,komea_dashboard_liferay,dashboard_organization_url,https://ksf-dev.metrixware.local/api/dashboard/organization,false
+komea_dashboard_liferay,komea_dashboard_liferay,jdbc_password,,false
+komea_dashboard_liferay,komea_dashboard_liferay,jdbc_user,root,false
+mysql,mysql::server,create_root_user,true,false
+mysql,mysql::server,override_options,"{""mysqld"":{""bind-address"":""*""}}",false
+mysql,mysql::server,root_password,root,false

@@ -1,0 +1,72 @@
+
+apply plugin:'application'
+mainClassName = "fr.echoes.labs.ksf.foreman.Launcher"
+
+configurations.all {
+	
+	exclude group: 'org.mongodb'
+	exclude group: 'com.github.fakemongo'
+	exclude group: 'org.javers'
+	exclude group: 'org.springframework.data'
+	exclude group: 'org.springframework.ldap'
+	exclude group: 'org.springframework.security'
+	exclude group: 'org.springframework.boot'
+	exclude group: 'org.springframework'
+	exclude group: 'org.jboss.logging'
+	exclude group: 'org.jboss.spec.javax.ws.rs'
+	exclude group: 'org.jboss.spec.javax.annotation'
+	exclude group: 'org.codehaus.groovy'
+	exclude group: 'org.ocpsoft.prettytime'
+	exclude group: 'javax.mail'
+	
+}
+
+dependencies{
+	
+	compile group: 'args4j', name: 'args4j', version: '2.33'
+	compile group: 'javax.ws.rs', name: 'javax.ws.rs-api', version: '2.0.1'
+	compile group: 'net.sf.supercsv', name: 'super-csv', version: '2.4.0'
+	compile group: 'ch.qos.logback', name: 'logback-classic', version: "${LOG_LOGBACK}"
+	compile group: 'ch.qos.logback', name: 'logback-core', version: "${LOG_LOGBACK}"
+	compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: "${JACKSON}"
+	compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: "${JACKSON}"
+	compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: "${JACKSON}"
+	
+	compile project(":ksf-commons:ksf-backend-utils")
+	
+}
+
+startScripts {
+	doLast {
+		def winScriptFile  = file getWindowsScript()
+		def winFileText = winScriptFile.text
+		winFileText = winFileText.replaceAll('set CLASSPATH=.*', 'rem original CLASSPATH declaration replaced by:\nset CLASSPATH=%APP_HOME%\\\\lib\\\\\\*')
+		winScriptFile.text = winFileText
+	}
+}
+
+//task copyDocumentation(type: Copy) {
+//	from 'src/main/resources/documentation'
+//	into "$buildDir/documentation"
+//}
+//
+//task createDocs {
+//	def docsPath = "$buildDir/docs"
+//	def docs = new File(docsPath)
+//	outputs.dir docs
+//	doLast {
+//		docs.mkdirs()
+//		copy {
+//			from getTemplateLocation(buildDir)
+//			into docsPath
+//		}
+//		copyContent(docsPath, "connector.html", "index.html")
+//	}
+//}
+
+//applicationDistribution.from(createDocs) {
+//	into 'documentation'
+//}
+
+//createDocs.mustRunAfter processResources
+//createDocs.mustRunAfter markdownToHtml

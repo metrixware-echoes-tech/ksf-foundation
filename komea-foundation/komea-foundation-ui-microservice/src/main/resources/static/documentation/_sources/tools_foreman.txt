@@ -7,37 +7,33 @@ Gestion de cycle de vie des machines
 Foreman
 *******
 
-.. note:: source https://puppetlabs.com/
+.. note:: source https://theforeman.org/
 
 
-What is Foreman?
-================
+Qu'est-ce que Foreman
+=====================
 
-Foreman is an open source project that helps system administrators manage servers throughout their lifecycle, from provisioning and configuration to orchestration and monitoring. Using Puppet, Chef, Salt, and Foreman's smart proxy architecture, you can easily automate repetitive tasks, quickly deploy applications, and proactively manage change, both on-premise with VMs and bare-metal or in the cloud.
+Foreman est un projet open source qui aide les adminstrateurs système à gérer les serveur tout au long de leur cycle de vie, depuis le provisionnement et la configuration jusqu'à l'orchestration et le monitoring. Il utilise des gestionnaires de configuration comme Puppet, Chef, Salt appuyés sur l'architecture "smart proxy" de Foreman pour automatiser les tâches répétitives et déployer les applications à la fois dans le cloud, sur des VMs et sur des machines physiques.
 
-Foreman provides comprehensive, interaction facilities including a web frontend, CLI and RESTful API which enables you to build higher level business logic on top of a solid foundation.
+Fonctionnalités
+===============
 
-Foreman is 5+ years old, and deployed in many organizations, managing from 10s to 10,000s of servers.
+* Découvrir, provisionner et mettre à jour toute l'infrastructure de machines physiques
+* Créer et gérer des instances dans des nuages privés et publics
+* Grouper les hôtes et les gérer au niveau des groupes, quelle que soit la situation géographique
+* Consulter l'historique des changements à des fins d'audits
+* Etre étendu grâce à son système de plugins
+* Construire des images automatiquement pour optimiser les déploiements
 
-It is used in distributions such as RDO and RHOS (Red Hat OpenStack distribution) and has an extensive library of plugins.
-
-With Foreman you can
-====================
-
--    Discover, provision and upgrade your entire bare-metal infrastructure
--    Create and manage instances across private and public clouds
--    Group your hosts and manage them in bulk, regardless of location
--    Review historical changes for auditing or troubleshooting
--    Extend as needed via a robust plugin architecture
--    Automatically build images (on each platform) per system definition to optimize deployment
-
-The following operating systems are known to install successfully from Foreman:
+Compatible avec
+===============
 
 RHEL CentOS Fedora Ubuntu Debian Solaris 8, 10
 
 OpenSUSE SLES Oracle Linux CoreOS FreeBSD Junos
 
-Foreman can provision on bare metal as well as the following cloud providers:
+Capable de provisionner sur les systèmes cloud suivants
+=======================================================
 
 Amazon EC2 Google Compute Engine Libvirt OpenStack oVirt and RHEV Rackspace VMware
 

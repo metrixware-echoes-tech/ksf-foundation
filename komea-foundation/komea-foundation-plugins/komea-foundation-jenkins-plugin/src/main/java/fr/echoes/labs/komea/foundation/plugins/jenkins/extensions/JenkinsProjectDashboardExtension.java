@@ -12,7 +12,7 @@ import fr.echoes.labs.ksf.extensions.annotations.Extension;
 public class JenkinsProjectDashboardExtension implements IProjectDashboardExtension {
 
 	@Autowired
-	public JenkinsProjectDashboardWidget projectDashboardWidget;
+	private JenkinsProjectDashboardWidget projectDashboardWidget;
 
 	@Override
 	public void reclaimProjectDashboardWidget(final IProjectDashboardWidgets widgets) {

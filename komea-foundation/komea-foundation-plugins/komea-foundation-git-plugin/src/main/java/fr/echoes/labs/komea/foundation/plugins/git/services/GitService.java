@@ -1,11 +1,17 @@
 package fr.echoes.labs.komea.foundation.plugins.git.services;
 
+import com.google.common.collect.Lists;
+import com.jcraft.jsch.Session;
+import fr.echoes.labs.komea.foundation.plugins.git.GitExtensionException;
+import fr.echoes.labs.komea.foundation.plugins.git.GitExtensionMergeException;
+import fr.echoes.labs.ksf.cc.extensions.gui.ProjectExtensionConstants;
+import fr.echoes.labs.ksf.cc.extensions.services.project.ProjectUtils;
+import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.StrSubstitutor;
@@ -43,16 +49,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.google.common.collect.Lists;
-import com.jcraft.jsch.Session;
-
-import fr.echoes.labs.komea.foundation.plugins.git.GitExtensionException;
-import fr.echoes.labs.komea.foundation.plugins.git.GitExtensionMergeException;
-import fr.echoes.labs.ksf.cc.extensions.gui.ProjectExtensionConstants;
-import fr.echoes.labs.ksf.cc.extensions.services.project.ProjectUtils;
-import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
-
-
 /**
  * Spring Service for working with the foreman API.
  *
@@ -62,185 +58,183 @@ import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
 @Service
 public class GitService implements IGitService {
 
-	private static final String DEVELOP = "develop";
-	private static final String MASTER = "master";
+    private static final String DEVELOP = "develop";
+    private static final String MASTER = "master";
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(GitService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GitService.class);
 
-	@Autowired
-	private GitConfigurationService configuration;
+    @Autowired
+    private GitConfigurationService configuration;
+    
+    @Autowired
+    private GitNameResolver nameResolver;
 
-	@Override
-	public void createProject(ProjectDto project) throws GitExtensionException {
+    @Override
+    public void createProject(final ProjectDto project) throws GitExtensionException {
 
-		final String projectName = project.getName();
+        Objects.requireNonNull(project);
 
-		Objects.requireNonNull(projectName);
+        final String gitProjectUri = this.nameResolver.getProjectScmUrl(project);
 
-		final String gitProjectUri = getProjectScmUrl(projectName);
+        File workingDirectory = null;
+        Git git = null;
+        try {
+            workingDirectory = createCloneDestinationDirectory(project);
 
-		File workingDirectory = null;
-		Git git = null;
-		try {
-			workingDirectory = createCloneDestinationDirectory(projectName);
+            // Clone project
+            LOGGER.debug("Cloning the repository {} into {}", gitProjectUri, workingDirectory);
 
-			// Clone project
-			LOGGER.debug("Cloning the repository {} into {}", gitProjectUri, workingDirectory);
+            // Clone the repository
+            git = callCloneCommand(gitProjectUri, workingDirectory);
 
-			// Clone the repository
-			git = callCloneCommand(gitProjectUri, workingDirectory);
+            // Create the master and develop branches.
+            // Add the build and publish scripts and push the modification to origin
+            LOGGER.debug("Initializing the repository");
+            initRepo(workingDirectory, git);
 
-			// Create the master and develop branches.
-			// Add the build and publish scripts and push the modification to origin
-			LOGGER.debug("Initializing the repository");
-			initRepo(workingDirectory, git);
+            // Delete the working directory
+            LOGGER.debug("Deleting the working directory: {}", workingDirectory);
 
-			// Delete the working directory
-			LOGGER.debug("Deleting the working directory: {}", workingDirectory);
+            // Insert Git data in the Project object
+            project.getOtherAttributes().put(ProjectExtensionConstants.GIT_REPOSITORY_KEY, this.nameResolver.getRepositoryKey(project));
+            project.getOtherAttributes().put(ProjectExtensionConstants.GIT_URL, gitProjectUri);
+            project.getOtherAttributes().put(ProjectExtensionConstants.ANALYZED_BRANCHES, Lists.newArrayList(DEVELOP));
 
-			// Insert Git data in the Project object
-			project.getOtherAttributes().put(ProjectExtensionConstants.GIT_URL, gitProjectUri);
-			project.getOtherAttributes().put(ProjectExtensionConstants.ANALYZED_BRANCHES, Lists.newArrayList(DEVELOP));
+        } catch (final Exception e) {
+            throw new GitExtensionException(e);
+        } finally {
+            if (git != null) {
+                git.close();
+            }
+            if (workingDirectory != null) {
+            	// Delete Git local repository
+            	deleteLocalDirectory(workingDirectory);
+            }
+        }
 
-		} catch (final Exception e) {
-			throw new GitExtensionException(e);
-		} finally {
-			if (git != null) {
-				git.close();
-			}
-			try {
-				FileUtils.deleteDirectory(workingDirectory);
-			} catch (final IOException e) {
-				LOGGER.warn("Failed to delete the directory " + workingDirectory.getName(), e);
-			}
-		}
+    }
 
-	}
+    private File createCloneDestinationDirectory(final ProjectDto project)
+            throws GitExtensionException, IOException {
 
-	private File createCloneDestinationDirectory(final String projectName)
-			throws GitExtensionException, IOException {
+    	final String repositoryKey = this.nameResolver.getRepositoryKey(project);
+        final File workingDirectory = new File(this.configuration.getGitWorkingdirectory(), repositoryKey);
 
-		final File workingDirectory = new File(this.configuration.getGitWorkingdirectory(), projectName);
+        if (workingDirectory.exists()) {
+            if (!workingDirectory.isDirectory()) {
+                LOGGER.error("Cannot use {} as a Git working directory as it is not a directory.", workingDirectory.getPath());
+                throw new GitExtensionException("Failed to create Git working directory.");
+            }
+        } else {
+            FileUtils.forceMkdir(workingDirectory);
+        }
 
-		if (workingDirectory.exists()) {
-			if (!workingDirectory.isDirectory()) {
-				LOGGER.error("Cannot use {} as a Git working directory as it is not a directory.", workingDirectory.getPath());
-				throw new GitExtensionException("Failed to create Git working directory.");
-			}
-		} else {
-			FileUtils.forceMkdir(workingDirectory);
-		}
+        return workingDirectory;
+    }
 
-		return workingDirectory;
-	}
+    /**
+     * Initializes the repository by adding the build and publish script and
+     * creating the develop branch.
+     */
+    private void initRepo(File workingDirectory, Git git) throws NoFilepatternException, IOException, GitAPIException {
 
-	/**
-     * Initializes the repository by adding the build and publish script and creating the develop branch.
-	 */
-	private void initRepo(File workingDirectory, Git git) throws NoFilepatternException, IOException, GitAPIException {
+        // Create build script
+        addScriptToRepo(workingDirectory, git, this.configuration.getBuildScript());
 
-		// Create build script
-		addScriptToRepo(workingDirectory, git, this.configuration.getBuildScript());
+        // Create publish script
+        addScriptToRepo(workingDirectory, git, this.configuration.getPublishScript());
 
-		// Create publish script
-		addScriptToRepo(workingDirectory, git, this.configuration.getPublishScript());
+        LOGGER.debug("Committing the files {} and {}", this.configuration.getBuildScript(), this.configuration.getPublishScript());
 
-		LOGGER.debug("Committing the files {} and {}", this.configuration.getBuildScript(), this.configuration.getPublishScript());
+        final CommitCommand commitCommand = git.commit().setMessage("Initial commit");
 
-		final CommitCommand commitCommand = git.commit().setMessage("Initial commit");
+        setAuthor(commitCommand);
 
-		setAuthor(commitCommand);
+        commitCommand.call();
 
-		commitCommand.call();
+        LOGGER.debug("Pushing to master");
+        git.push().call();
 
-		LOGGER.debug("Pushing to master");
-		git.push().call();
+        // Create develop branch
+        LOGGER.debug("Creating the develop branch");
+        git.branchCreate().setName(DEVELOP).call();
+        git.push().add(DEVELOP).call();
+    }
 
-		// Create develop branch
-		LOGGER.debug("Creating the develop branch");
-		git.branchCreate().setName(DEVELOP).call();
-		git.push().add(DEVELOP).call();
-	}
+    private void setAuthor(final CommitCommand commitCommand) {
+        final String username = this.configuration.getUsername();
 
-	private void setAuthor(final CommitCommand commitCommand) {
-		final String username = this.configuration.getUsername();
+        if (!StringUtils.isBlank(this.configuration.getUsername())) {
+            commitCommand.setAuthor(username, "");
+        }
+    }
 
-		if (!StringUtils.isBlank( this.configuration .getUsername())) {
-			commitCommand.setAuthor(username , "" );
-		}
-	}
+    /**
+     * Creates a shell script and add it to the staging area.
+     */
+    private File addScriptToRepo(final File workingDirectory, final Git git, String scriptName)
+            throws IOException, GitAPIException, NoFilepatternException {
+        LOGGER.debug("Creating the file {}", scriptName);
+        final File buildScriptFile = new File(workingDirectory, scriptName);
+        FileUtils.writeStringToFile(buildScriptFile, "#!/bin/bash");
+        git.add().addFilepattern(buildScriptFile.getName()).call();
+        return buildScriptFile;
+    }
 
-	/**
-	 * Creates a shell script and add it to the staging area.
-	 */
-	private File addScriptToRepo(final File workingDirectory, final Git git, String scriptName)
-			throws IOException, GitAPIException, NoFilepatternException {
-		LOGGER.debug("Creating the file {}", scriptName);
-		final File buildScriptFile = new File(workingDirectory, scriptName);
-		FileUtils.writeStringToFile(buildScriptFile, "#!/bin/bash");
-		git.add().addFilepattern(buildScriptFile.getName()).call();
-		return buildScriptFile;
-	}
+    @Override
+    public void deleteProject(final ProjectDto project) throws GitExtensionException {
+        Objects.requireNonNull(project);
+    }
 
+    private void createBranch(final ProjectDto project, String branchName) throws GitExtensionException {
+        Objects.requireNonNull(project);
 
-	@Override
-	public void deleteProject(String projectName) throws GitExtensionException {
-		Objects.requireNonNull(projectName);
-	}
+        final String gitProjectUri = this.nameResolver.getProjectScmUrl(project);
 
-	private void createBranch(String projectName, String branchName) throws GitExtensionException {
-		Objects.requireNonNull(projectName);
+        LOGGER.info("Creating branch {} for project {}", branchName, project.getName());
 
-		final String gitProjectUri = getProjectScmUrl(projectName);
+        File workingDirectory = null;
+        Git git = null;
 
-		LOGGER.info("Creating branch {} for project {}", branchName, projectName);
+        try {
+            workingDirectory = createCloneDestinationDirectory(project);
 
-		File workingDirectory = null;
-		Git git = null;
+            // Clone project
+            LOGGER.debug("Cloning the repository {} into {}", gitProjectUri, workingDirectory);
+            git = callCloneCommand(gitProjectUri, workingDirectory);
 
-		try {
-			workingDirectory = createCloneDestinationDirectory(projectName);
+            git.checkout()
+                    .setName(DEVELOP)
+                    .setCreateBranch(true)
+                    .setUpstreamMode(
+                            CreateBranchCommand.SetupUpstreamMode.TRACK)
+                    .setStartPoint(
+                            Constants.DEFAULT_REMOTE_NAME + "/" + DEVELOP)
+                    .call();
 
-			// Clone project
-			LOGGER.debug("Cloning the repository {} into {}", gitProjectUri, workingDirectory);
-			git = callCloneCommand(gitProjectUri, workingDirectory);
+            git.branchCreate().setName(branchName).call();
+            git.push().add(branchName).call();
 
-			git.checkout()
-			.setName(DEVELOP)
-			.setCreateBranch(true)
-			.setUpstreamMode(
-					CreateBranchCommand.SetupUpstreamMode.TRACK)
-					.setStartPoint(
-							Constants.DEFAULT_REMOTE_NAME + "/" + DEVELOP)
-							.call();
+        } catch (final Exception e) {
+            LOGGER.error("Failed to create branch " + branchName + " for project " + project.getName(), e);
+            throw new GitExtensionException(e);
+        } finally {
+            if (git != null) {
+                git.close();
+            }
+            if (workingDirectory != null) {
+            	// Delete Git local repository
+            	deleteLocalDirectory(workingDirectory);
+            }
+        }
+    }
 
-			git.branchCreate().setName(branchName).call();
-			git.push().add(branchName).call();
+    private Git callCloneCommand(final String gitProjectUri, File workingDirectory)
+            throws GitAPIException, InvalidRemoteException, TransportException {
 
+        final CloneCommand cloneCommand = Git.cloneRepository().setURI(gitProjectUri).setDirectory(workingDirectory);
 
-		} catch (final Exception e) {
-			LOGGER.error("Failed to create branch " + branchName + " for project " + projectName, e);
-			throw new GitExtensionException(e);
-		} finally {
-			if (git != null) {
-				git.close();
-			}
-			try {
-				// Delete Git local repository
-				FileUtils.deleteDirectory(workingDirectory);
-			} catch (final IOException e) {
-				LOGGER.warn("Failed to delete the directory " + workingDirectory.getName(), e);
-			}
-		}
-	}
-
-	private Git callCloneCommand(final String gitProjectUri, File workingDirectory)
-			throws GitAPIException, InvalidRemoteException, TransportException {
-
-
-		final CloneCommand cloneCommand = Git.cloneRepository().setURI(gitProjectUri).setDirectory(workingDirectory);
-
-		configureSshConnection(cloneCommand);
+        configureSshConnection(cloneCommand);
 //
 //		final String username = this.configuration.getUsername();
 //		final String password = this.configuration.getPassword();
@@ -250,205 +244,211 @@ public class GitService implements IGitService {
 //			cloneCommand.setCredentialsProvider(credentialsProvider);
 //		}
 
-		return cloneCommand.call();
-	}
+        return cloneCommand.call();
+    }
 
-	private void configureSshConnection(final CloneCommand cloneCommand) {
+    private void configureSshConnection(final CloneCommand cloneCommand) {
 
-		LOGGER.info("[git] configure SSH connection");
+        LOGGER.info("[git] configure SSH connection");
 
-		if (!GitService.this.configuration.isStrictHostKeyChecking()) { // true/yes is the default value so we don't need to change the configuration
+        if (!GitService.this.configuration.isStrictHostKeyChecking()) { // true/yes is the default value so we don't need to change the configuration
 
-            SshSessionFactory. setInstance(new JschConfigSessionFactory() {
+            SshSessionFactory.setInstance(new JschConfigSessionFactory() {
 
-
-            	@Override
-            	protected void configure(Host hc, Session session) {
-            		LOGGER.info("[git] set StrictHostKeyChecking to 'no'");
-            		session.setConfig("StrictHostKeyChecking" , "no");
-            	}
+                @Override
+                protected void configure(Host hc, Session session) {
+                    LOGGER.info("[git] set StrictHostKeyChecking to 'no'");
+                    session.setConfig("StrictHostKeyChecking", "no");
+                }
             });
-		}
+        }
 
-	}
+    }
 
-	private MergeResult mergeBranches(Git git, String branch, String destinationBranch, boolean createBranch) throws IOException, NoHeadException, ConcurrentRefUpdateException, CheckoutConflictException, InvalidMergeHeadsException, WrongRepositoryStateException, NoMessageException, GitAPIException  {
-		final CheckoutCommand checkoutCommand = git.checkout()
-		.setName(destinationBranch)
-		.setUpstreamMode(
-				CreateBranchCommand.SetupUpstreamMode.TRACK)
-				.setStartPoint(
-						Constants.DEFAULT_REMOTE_NAME + "/" + destinationBranch);
-		if (createBranch) {
-			checkoutCommand.setCreateBranch(true);
-		}
+    private MergeResult mergeBranches(Git git, String branch, String destinationBranch, boolean createBranch) throws IOException, NoHeadException, ConcurrentRefUpdateException, CheckoutConflictException, InvalidMergeHeadsException, WrongRepositoryStateException, NoMessageException, GitAPIException {
+        final CheckoutCommand checkoutCommand = git.checkout()
+                .setName(destinationBranch)
+                .setUpstreamMode(
+                        CreateBranchCommand.SetupUpstreamMode.TRACK)
+                .setStartPoint(
+                        Constants.DEFAULT_REMOTE_NAME + "/" + destinationBranch);
+        if (createBranch) {
+            checkoutCommand.setCreateBranch(true);
+        }
 
-		checkoutCommand.call();
+        checkoutCommand.call();
 
+        final MergeCommand mergeCommand = git.merge();
+        final Ref ref = git.getRepository().findRef(Constants.DEFAULT_REMOTE_NAME + "/" + branch);
+        mergeCommand.include(ref);
+        final MergeResult mergeResult = mergeCommand.call();
+        git.push().call();
+        return mergeResult;
 
-		final MergeCommand mergeCommand = git.merge();
-		final Ref ref = git.getRepository().findRef(Constants.DEFAULT_REMOTE_NAME + "/" + branch);
-		mergeCommand.include(ref);
-		final MergeResult mergeResult =  mergeCommand.call();
-		git.push().call();
-		return mergeResult;
+    }
 
-	}
+    private void deleteBranche(Git git, String branchName) throws NotMergedException, CannotDeleteCurrentBranchException, GitAPIException {
 
+        // Delete local branch
+        final DeleteBranchCommand branchDelete = git.branchDelete().setBranchNames(Constants.DEFAULT_REMOTE_NAME + "/" + branchName);
+        branchDelete.call();
 
-	private void deleteBranche(Git git, String branchName) throws NotMergedException, CannotDeleteCurrentBranchException, GitAPIException {
-
-		// Delete local branch
-		final DeleteBranchCommand branchDelete = git.branchDelete().setBranchNames(Constants.DEFAULT_REMOTE_NAME + "/" + branchName);
-		branchDelete.call();
-
-		// Delete remote branch
+        // Delete remote branch
         final RefSpec deleteSpec = new RefSpec().setSource(null).setDestination(Constants.R_HEADS + branchName);
         git.push().setRemote(Constants.DEFAULT_REMOTE_NAME).setRefSpecs(deleteSpec).call();
-	}
+    }
 
+    @Override
+    public void createRelease(final ProjectDto project, String releaseVersion) throws GitExtensionException {
+        final String branchName = this.nameResolver.getReleaseBranchName(releaseVersion);
+        createBranch(project, branchName);
+    }
 
-	@Override
-	public void createRelease(String projectName, String releaseVersion) throws GitExtensionException {
-		final String branchName = getReleaseBranchName(projectName, releaseVersion);
-		createBranch(projectName, branchName);
-	}
+    @Override
+    public void createFeature(final ProjectDto project, String featureId, String featureSubject) throws GitExtensionException {
+        final String branchName = this.nameResolver.getFeatureBranchName(featureId, featureSubject);
+        createBranch(project, branchName);
+    }
 
-	@Override
-	public void createFeature(String projectName, String featureId, String featureSubject) throws GitExtensionException {
-		final String branchName = getFeatureBranchName(projectName, featureId, featureSubject);
-		createBranch(projectName, branchName);
-	}
+    @Override
+    public void closeFeature(final ProjectDto project, final String featureId, final String featureSubject) throws GitExtensionException {
 
-	@Override
-	public void closeFeature(String projectName, String featureId,
-			String featureSubject) throws GitExtensionException {
+        final String gitProjectUri = this.nameResolver.getProjectScmUrl(project);
+        final String branchName = this.nameResolver.getFeatureBranchName(featureId, featureSubject);
 
-		final String gitProjectUri = getProjectScmUrl(projectName);
-		final String branchName = getFeatureBranchName(projectName, featureId, featureSubject);
+        File workingDirectory = null;
+        Git git = null;
 
-		File workingDirectory = null;
-		Git git = null;
+        try {
+            workingDirectory = createCloneDestinationDirectory(project);
 
-		try {
-			workingDirectory = createCloneDestinationDirectory(projectName);
+            // Clone project
+            LOGGER.debug("Cloning the repository {} into {}", gitProjectUri, workingDirectory);
+            git = callCloneCommand(gitProjectUri, workingDirectory);
 
-			// Clone project
-			LOGGER.debug("Cloning the repository {} into {}", gitProjectUri, workingDirectory);
-			git = callCloneCommand(gitProjectUri, workingDirectory);
+            final MergeResult mergeResult = mergeBranches(git, branchName, DEVELOP, true);
 
-			final MergeResult mergeResult = mergeBranches(git, branchName, DEVELOP, true);
+            if (!mergeResult.getMergeStatus().isSuccessful()) {
+                throw new GitExtensionMergeException("Cannot merge '" + branchName + "' into " + DEVELOP + ": " + mergeResult.getMergeStatus());
+            }
 
-			if (!mergeResult.getMergeStatus().isSuccessful()) {
-				throw new GitExtensionMergeException("Cannot merge '"+ branchName +"' into " + DEVELOP + ": " + mergeResult.getMergeStatus());
-			}
+            deleteBranche(git, branchName);
 
-			deleteBranche(git, branchName);
+        } catch (final GitExtensionException e) {
+            throw e;
+        } catch (final Exception e) {
+            throw new GitExtensionException(e);
+        } finally {
+            if (git != null) {
+                git.close();
+            }
+            if (workingDirectory != null) {
+            	// Delete Git local repository
+            	deleteLocalDirectory(workingDirectory);
+            }
+        }
+    }
 
-		} catch (final GitExtensionException e) {
-			throw e;
-		} catch (final Exception e) {
-			throw new GitExtensionException(e);
-		} finally {
-			if (git != null) {
-				git.close();
-			}
-			try {
-				// Delete Git local repository
-				FileUtils.deleteDirectory(workingDirectory);
-			} catch (final IOException e) {
-				LOGGER.warn("Failed to delete the directory " + workingDirectory.getName(), e);
-			}
-		}
-	}
+    @Override
+    public void cancelFeature(final ProjectDto project, final String featureId, final String featureSubject) throws GitExtensionException {
 
-	private String getProjectScmUrl(String projectName) {
-		final Map<String, String> variables = new HashMap<String, String>(2);
-		variables.put("scmUrl", this.configuration.getScmUrl());
-		variables.put("projectName", projectName);
-		variables.put("projectKey", ProjectUtils.createIdentifier(projectName));
-		return replaceVariables(this.configuration.getProjectScmUrlPattern(), variables);
-	}
-	private String getReleaseBranchName(String projectName, String releaseVersion) {
-		final Map<String, String> variables = new HashMap<String, String>(1);
-		variables.put("releaseVersion", releaseVersion);
-		return ProjectUtils.createIdentifier(replaceVariables(this.configuration.getBranchReleasePattern(), variables));
-	}
+        final String gitProjectUri = this.nameResolver.getProjectScmUrl(project);
+        final String branchName = this.nameResolver.getFeatureBranchName(featureId, featureSubject);
 
-	private String getFeatureBranchName(String projectName, String featureId, String featureDescription) {
-		final Map<String, String> variables = new HashMap<String, String>(2);
-		variables.put("featureId", featureId);
-		variables.put("featureDescription", featureDescription);
-		return ProjectUtils.createIdentifier(replaceVariables(this.configuration.getBranchFeaturePattern(), variables));
-	}
+        File workingDirectory = null;
+        Git git = null;
 
-	@Override
-	public void closeRelease(String projectName, String releaseName)
-			throws GitExtensionException {
-		final String gitProjectUri = getProjectScmUrl(projectName);
-		final String branchName = getReleaseBranchName(projectName, releaseName);
+        try {
+            workingDirectory = createCloneDestinationDirectory(project);
 
-		File workingDirectory = null;
-		Git git = null;
+            // Clone project
+            LOGGER.debug("Cloning the repository {} into {}", gitProjectUri, workingDirectory);
+            git = callCloneCommand(gitProjectUri, workingDirectory);
 
-		try {
-			workingDirectory = createCloneDestinationDirectory(projectName);
+            deleteBranche(git, branchName);
 
-			// Clone project
-			LOGGER.debug("Cloning the repository {} into {}", gitProjectUri, workingDirectory);
-			git = callCloneCommand(gitProjectUri, workingDirectory);
+        } catch (final GitExtensionException e) {
+            throw e;
+        } catch (final Exception e) {
+            throw new GitExtensionException(e);
+        } finally {
+            if (git != null) {
+                git.close();
+            }
+            if (workingDirectory != null) {
+            	// Delete Git local repository
+            	deleteLocalDirectory(workingDirectory);
+            }
+        }
+    }
 
-			tagBranch(git, branchName, releaseName);
+    @Override
+    public void closeRelease(final ProjectDto project, final String releaseName) throws GitExtensionException {
+        
+    	final String gitProjectUri = this.nameResolver.getProjectScmUrl(project);
+        final String branchName = this.nameResolver.getReleaseBranchName(releaseName);
 
-			final MergeResult mergeIntoDevlopResult = mergeBranches(git, branchName, DEVELOP, true);
-			if (!mergeIntoDevlopResult.getMergeStatus().isSuccessful()) {
-				throw new GitExtensionMergeException("Cannot merge '"+ branchName +"' into " + DEVELOP  + ": " + mergeIntoDevlopResult.getMergeStatus());
-			}
+        File workingDirectory = null;
+        Git git = null;
 
-			final MergeResult mergeIntoMasterResult = mergeBranches(git, branchName, MASTER, false);
-			if (!mergeIntoMasterResult.getMergeStatus().isSuccessful()) {
-				throw new GitExtensionMergeException("Cannot merge '"+ branchName +"' into " + MASTER + ": " + mergeIntoMasterResult.getMergeStatus());
-			}
+        try {
+            workingDirectory = createCloneDestinationDirectory(project);
 
-			deleteBranche(git, branchName); // Both merges have succeeded we can delete the release branch
+            // Clone project
+            LOGGER.debug("Cloning the repository {} into {}", gitProjectUri, workingDirectory);
+            git = callCloneCommand(gitProjectUri, workingDirectory);
 
-		} catch (final GitExtensionException e) {
-			throw e;
-		} catch (final Exception e) {
-			throw new GitExtensionException(e);
-		} finally {
-			if (git != null) {
-				git.close();
-			}
-			try {
-				// Delete Git local repository
-				FileUtils.deleteDirectory(workingDirectory);
-			} catch (final IOException e) {
-				LOGGER.warn("Failed to delete the directory " + workingDirectory.getName(), e);
-			}
-		}
+            tagBranch(git, branchName, releaseName);
 
-	}
+            final MergeResult mergeIntoDevlopResult = mergeBranches(git, branchName, DEVELOP, true);
+            if (!mergeIntoDevlopResult.getMergeStatus().isSuccessful()) {
+                throw new GitExtensionMergeException("Cannot merge '" + branchName + "' into " + DEVELOP + ": " + mergeIntoDevlopResult.getMergeStatus());
+            }
 
-	private void checkout(Git git, String branchName) throws RefAlreadyExistsException, RefNotFoundException, InvalidRefNameException, CheckoutConflictException, GitAPIException {
-		git.checkout().
-        setCreateBranch(true).
-        setName(branchName).
-        setUpstreamMode(CreateBranchCommand.SetupUpstreamMode.TRACK).
-        setStartPoint("origin/" + branchName).
-        call();
-	}
+            final MergeResult mergeIntoMasterResult = mergeBranches(git, branchName, MASTER, false);
+            if (!mergeIntoMasterResult.getMergeStatus().isSuccessful()) {
+                throw new GitExtensionMergeException("Cannot merge '" + branchName + "' into " + MASTER + ": " + mergeIntoMasterResult.getMergeStatus());
+            }
 
-	private void tagBranch(Git git, String branchName, String tagName) throws RefAlreadyExistsException, RefNotFoundException, InvalidRefNameException, CheckoutConflictException, GitAPIException {
-		checkout(git, branchName);
-       git.tag().setName(ProjectUtils.createIdentifier(tagName)).call();
-       git.push().setPushTags().call();
-	}
+            deleteBranche(git, branchName); // Both merges have succeeded we can delete the release branch
 
-	private String replaceVariables(String str, Map<String, String> variables) {
-		final StrSubstitutor sub = new StrSubstitutor(variables);
-		sub.setVariablePrefix("%{");
-		return sub.replace(str);
-	}
+        } catch (final GitExtensionException e) {
+            throw e;
+        } catch (final Exception e) {
+            throw new GitExtensionException(e);
+        } finally {
+            if (git != null) {
+                git.close();
+            }
+            if (workingDirectory != null) {
+            	// Delete Git local repository
+            	deleteLocalDirectory(workingDirectory);
+            }
+        }
+
+    }
+    
+    private static void deleteLocalDirectory(final File workingDirectory) {
+    	try {
+            FileUtils.deleteDirectory(workingDirectory);
+        } catch (final IOException e) {
+            LOGGER.warn("Failed to delete the directory " + workingDirectory.getName(), e);
+        }
+    }
+
+    private void checkout(Git git, String branchName) throws RefAlreadyExistsException, RefNotFoundException, InvalidRefNameException, CheckoutConflictException, GitAPIException {
+        git.checkout().
+                setCreateBranch(true).
+                setName(branchName).
+                setUpstreamMode(CreateBranchCommand.SetupUpstreamMode.TRACK).
+                setStartPoint("origin/" + branchName).
+                call();
+    }
+
+    private void tagBranch(Git git, String branchName, String tagName) throws RefAlreadyExistsException, RefNotFoundException, InvalidRefNameException, CheckoutConflictException, GitAPIException {
+        checkout(git, branchName);
+        git.tag().setName(ProjectUtils.createIdentifier(tagName)).call();
+        git.push().setPushTags().call();
+    }
 
 }

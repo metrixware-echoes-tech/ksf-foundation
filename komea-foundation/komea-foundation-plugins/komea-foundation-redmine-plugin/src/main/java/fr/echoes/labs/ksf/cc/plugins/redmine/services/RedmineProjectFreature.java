@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import fr.echoes.labs.ksf.cc.extensions.services.project.features.IProjectFeatues;
 import fr.echoes.labs.ksf.cc.extensions.services.project.features.IProjectFeature;
 import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineExtensionException;
+import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
 
 /**
  * @author dcollard
@@ -25,11 +26,11 @@ public class RedmineProjectFreature implements IProjectFeatues {
 	IRedmineService redmineService;	
 	
 	@Override
-	public List<IProjectFeature> getFeatures(String projectName) {
+	public List<IProjectFeature> getFeatures(final ProjectDto ksfProject) {
 		final List<IProjectFeature> releases;
 
 		try {
-			releases = this.redmineService.getFeatures(projectName);
+			releases = this.redmineService.getFeatures(ksfProject);
 
 		} catch (RedmineExtensionException e) {
 			LOGGER.error("RedmineProjectRelease.getReleases", e);

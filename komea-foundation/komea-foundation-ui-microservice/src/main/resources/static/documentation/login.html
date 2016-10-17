@@ -32,8 +32,9 @@
     <script type="text/javascript" src="_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
     <link rel="top" title="documentation Komea Software Factory 2.0.0" href="index.html" />
-    <link rel="next" title="Créer un projet" href="create_project.html" />
-    <link rel="prev" title="Workflows" href="workflows.html" />
+    <link rel="up" title="Komea Foundation" href="tools_komea_foundation.html" />
+    <link rel="next" title="Gestion des utilisateurs et des droits" href="user_and_rights_management.html" />
+    <link rel="prev" title="Komea Foundation" href="tools_komea_foundation.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -68,23 +69,21 @@
      href="index.html">Site <b class="caret"></b></a>
   <ul class="dropdown-menu globaltoc"
       role="menu"
-      aria-labelledby="dLabelGlobalToc"><ul>
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="presentation.html">Introduction</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="resume.html">Périmètre</a></li>
 <li class="toctree-l2"><a class="reference internal" href="definitions.html">Définitions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="domaines_fonctionnels.html">Domaines fonctionnels</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="tools.html">Outils compatibles</a><ul>
+<li class="toctree-l1 current"><a class="reference internal" href="tools.html">Outils compatibles</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="tools_redmine.html">Forge logicielle</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tools_git.html">Gestion de sources</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tools_jenkins.html">Intégration continue</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tools_puppet.html">Gestion de configurations</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tools_foreman.html">Gestion de cycle de vie des machines</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tools_komea_dashboard.html">Komea Dashboard</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tools_komea_foundation.html">Komea Foundation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tools_komea_activity.html">Komea Activity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tools_komea_checking.html">Komea Checking</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="tools_komea_foundation.html">Komea Foundation</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a><ul>
@@ -92,7 +91,14 @@
 <li class="toctree-l2"><a class="reference internal" href="architecture.html#architecture-fonctionnelle">Architecture fonctionnelle</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="user_and_rights_management.html">Gestion des utilisateurs et des droits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_and_rights_management.html">Gestion des utilisateurs et des droits</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="user_and_rights_management.html#forge-logicielle-et-gestion-de-version">Forge logicielle et gestion de version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_and_rights_management.html#integration-continue">Intégration continue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_and_rights_management.html#depot-d-artefacts">Dépôt d&#8217;artefacts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_and_rights_management.html#gestion-du-cycle-de-vie-des-machines">Gestion du cycle de vie des machines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_and_rights_management.html#de-maniere-generale-dans-ksf">De manière générale dans KSF</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="workflows.html">Workflows</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="workflows.html#gestion-de-projet">Gestion de projet</a></li>
 <li class="toctree-l2"><a class="reference internal" href="workflows.html#creation-du-projet">Création du projet</a></li>
@@ -102,7 +108,9 @@
 </ul>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">S&#8217;authentifier</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#specification-detaillee">Spécification détaillée</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sso-definition">SSO : Définition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#dans-ksf">Dans KSF</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#deroulement-du-login">Déroulement du login</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="create_project.html">Créer un projet</a><ul>
@@ -127,41 +135,6 @@
 </ul>
 </li>
 </ul>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="release_plan.html">Release Plan</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="release_plan.html#ksf-1-0-nov-2015-airbus">KSF 1.0    Nov 2015 (Airbus)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="release_plan.html#ksf-1-1-jan-2016-amabis-airbus">KSF 1.1    Jan 2016 (Amabis, Airbus)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="release_plan.html#ksf-1-2-avr-2016-interne">KSF 1.2   Avr 2016 (interne)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="release_plan.html#komea-cc">Komea-CC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="release_plan.html#komea-dashboard">Komea-Dashboard</a></li>
-<li class="toctree-l2"><a class="reference internal" href="release_plan.html#corolla">Corolla</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="hypotheses_et_contraintes.html">Hypotheses et contraintes</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="hypotheses_et_contraintes.html#hypotheses">Hypothèses</a></li>
-<li class="toctree-l2"><a class="reference internal" href="hypotheses_et_contraintes.html#contraintes">Contraintes</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="publications.html">Publications</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="publications.html#documents-produit">Documents Produit</a></li>
-<li class="toctree-l2"><a class="reference internal" href="publications.html#sample-demos">Sample/ Démos</a></li>
-<li class="toctree-l2"><a class="reference internal" href="publications.html#supports-de-formation">Supports de formation (?)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="publications.html#documentation-avant-vente">documentation avant-vente</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="concurrence.html">Concurrence</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="concurrence.html#offres-concurrentes">Offres concurrentes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="concurrence.html#kovair-omnibus">Kovair Omnibus</a></li>
-<li class="toctree-l2"><a class="reference internal" href="concurrence.html#polarion-alm">Polarion ALM</a></li>
-<li class="toctree-l2"><a class="reference internal" href="concurrence.html#tableau-comparatif">Tableau comparatif</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="annexes.html">Annexes</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="references_documentaires.html">Références documentaires</a></li>
-<li class="toctree-l2"><a class="reference internal" href="annexes.html#open-services-for-lifecycle-collaboration">Open Services for Lifecycle Collaboration</a></li>
-</ul>
-</li>
-</ul>
 </ul>
 </li>
               
@@ -175,7 +148,9 @@
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
 <li><a class="reference internal" href="#">S&#8217;authentifier</a><ul>
-<li><a class="reference internal" href="#specification-detaillee">Spécification détaillée</a></li>
+<li><a class="reference internal" href="#sso-definition">SSO : Définition</a></li>
+<li><a class="reference internal" href="#dans-ksf">Dans KSF</a></li>
+<li><a class="reference internal" href="#deroulement-du-login">Déroulement du login</a></li>
 </ul>
 </li>
 </ul>
@@ -187,11 +162,11 @@
               
                 
   <li>
-    <a href="workflows.html" title="Previous Chapter: Workflows"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Workflows</span>
+    <a href="tools_komea_foundation.html" title="Previous Chapter: Komea Foundation"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Komea Foundation</span>
     </a>
   </li>
   <li>
-    <a href="create_project.html" title="Next Chapter: Créer un projet"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Créer un projet &raquo;</span>
+    <a href="user_and_rights_management.html" title="Next Chapter: Gestion des utilisateurs et des droits"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Gestion des u... &raquo;</span>
     </a>
   </li>
               
@@ -221,6 +196,8 @@
       
   <div class="section" id="s-authentifier">
 <span id="login"></span><h1>S&#8217;authentifier<a class="headerlink" href="#s-authentifier" title="Lien permanent vers ce titre">¶</a></h1>
+<div class="section" id="sso-definition">
+<h2>SSO : Définition<a class="headerlink" href="#sso-definition" title="Lien permanent vers ce titre">¶</a></h2>
 <p>Le SSO (Single Sign On) permet d&#8217;utiliser les différents outils de l&#8217;usine logicielle sans avoir besoin de s&#8217;authentifier avec chaque outil. Idéalement, l&#8217;authentification est faite dans l&#8217;annuaire de l&#8217;entreprise (AD, OpenLDAP, etc.) puis propagée par le SSO vers les composants de l&#8217;usine logicielle.</p>
 <p>Il est ainsi possible d&#8217;utiliser l&#8217;annuaire de l&#8217;entreprise pour définir l&#8217;ensemble de rôles des utilisateurs de l&#8217;usine. La configuration des outils pourra ainsi se faire plus rapidement.</p>
 <p>En cas d’absence de SSO, une entreprise s’expose à :</p>
@@ -230,26 +207,58 @@
 </ul>
 <p>Exemple d&#8217;outils Open source :</p>
 <ul class="simple">
+<li>CAS</li>
 <li>gSSO (<a class="reference external" href="http://01.org/gsso/">http://01.org/gsso/</a>)</li>
 <li>Keycloack</li>
 <li>...</li>
 </ul>
-<div class="section" id="specification-detaillee">
-<h2>Spécification détaillée<a class="headerlink" href="#specification-detaillee" title="Lien permanent vers ce titre">¶</a></h2>
-<p>conditions initiales : aucun utilisateur n&#8217;est identifié dans KSF</p>
+</div>
+<div class="section" id="dans-ksf">
+<h2>Dans KSF<a class="headerlink" href="#dans-ksf" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Dans KSF, nous avons choisi d&#8217;utiliser CAS branché sur un annuaire AD/LDAP.</p>
+<p>Aujourd&#8217;hui, les différents outils sont liés au SSO :</p>
+<ul class="simple">
+<li>Komea Foundation</li>
+<li>Redmine</li>
+<li>Jenkins</li>
+<li>Komea Dashboard</li>
+</ul>
+<p>Les outils restants sont compatibles avec AD/LDAP :</p>
+<ul class="simple">
+<li>Nexus</li>
+<li>Foreman</li>
+</ul>
+</div>
+<div class="section" id="deroulement-du-login">
+<h2>Déroulement du login<a class="headerlink" href="#deroulement-du-login" title="Lien permanent vers ce titre">¶</a></h2>
+<p>Conditions initiales : aucun utilisateur n&#8217;est identifié dans KSF</p>
 <ul>
 <li><p class="first">L&#8217;utilisateur clique sur l&#8217;item &#8220;Login&#8221; du bandeau</p>
 </li>
-<li><p class="first">un formulaire s&#8217;affiche pour entrer user/pswd. (P2) bouton &#8220;remember me&#8221;.</p>
+<li><p class="first">Un formulaire s&#8217;affiche pour entrer login / mot de passe</p>
 </li>
-<li><p class="first">L&#8217;authentification est lancée auprès du gestionnaire site (annuaire LDAP ou autre) <em>ceci est donc configuré lors de l&#8217;installation de KSF ou paramétré dans la config?</em></p>
+<li><p class="first">L&#8217;authentification est lancée auprès du SSO</p>
 </li>
-<li><p class="first">Une fois l&#8217;utilisateur authentifié :</p>
-<ul class="simple">
-<li>le bandeau affiche son nom suivi d&#8217;un bouton &#8220;Logout&#8221;</li>
-<li>un menu Projet apparait avec la liste des Projets dans lequel le développeur peut intervenir <strong>(on la calcule comment?)</strong>, suivi d&#8217;un item &#8220;+&#8221; pour créer un projet</li>
+<li><p class="first">Une fois l&#8217;utilisateur authentifié</p>
+<blockquote>
+<div><ul>
+<li><p class="first">Le bandeau affiche son nom suivi d&#8217;un bouton &#8220;Logout&#8221;</p>
+</li>
+<li><p class="first">Un menu Projet apparait avec la liste des Projets dans lequel le développeur peut intervenir, un item &#8220;+&#8221; se situe en haut à gauche pour créer un projet</p>
+</li>
+<li><p class="first">L&#8217;utilisateur peut constater qu&#8217;il est authentifié dans les logiciels suivants :</p>
+<blockquote>
+<div><ul class="simple">
+<li>Komea Foundation</li>
+<li>Redmine</li>
+<li>Jenkins</li>
+<li>Komea Dashboard (s&#8217;il est installé)</li>
 </ul>
-<img alt="_images/Menu_Projets.png" src="_images/Menu_Projets.png" />
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+<img alt="_images/100_project_list.png" src="_images/100_project_list.png" />
 </li>
 </ul>
 </div>

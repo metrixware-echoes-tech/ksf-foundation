@@ -5,29 +5,31 @@
 
 <div th:if="${redmineError == null}" th:remove="tag">
 
-	<table class="table table-striped tableRowEllipsis">
-		<thead>
-			<tr>
-				<th>#</th>
-				<th th:text="${foundationRedmineWidgetTargetVersion}">Version cible</th>
-				<!--/* <th>Catégorie</th> */-->
-				<th th:text="${foundationRedmineWidgetStatus}">Status</th>
-				<th th:text="${foundationRedmineWidgetPriority}">Priorité</th>
-				<th th:text="${foundationRedmineWidgetSubject}">Sujet</th>
-				<th th:text="${foundationRedmineWidgetAssignedTo}">Assigé à</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr th:each="issue : ${issues}">
-				<td><a th:href="${issuesBase} + ${issue.getId()} + '#pluginTab0'" th:text="${issue.getId()}"></a></td>
-				<td th:text="${issue.getTargetVersion()}"></td>
-				<!--/* <td th:text="${issue.getCategory()}"></td> */-->
-				<td th:text="${issue.getStatus()}"></td>
-				<td th:text="${issue.getPriority()}"></td>
-				<td th:text="${issue.getSubject()}" data-toggle="tooltip" th:title="${issue.getSubject()}" data-container="body"></td>
-				<td th:text="${issue.getAssignee()}"></td>
-			</tr>
-		</tbody>
-	</table>
-
+	<div class="scrollable">
+		<table class="table table-striped tableRowEllipsis">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th th:text="${foundationRedmineWidgetTargetVersion}">Version cible</th>
+					<!--/* <th>CatÃ©gorie</th> */-->
+					<th th:text="${foundationRedmineWidgetStatus}">Status</th>
+					<th th:text="${foundationRedmineWidgetPriority}">PrioritÃ©</th>
+					<th th:text="${foundationRedmineWidgetSubject}">Sujet</th>
+					<th th:text="${foundationRedmineWidgetAssignedTo}">AssigÃ© Ã </th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="issue : ${issues}">
+					<td><a th:href="${issuesBase} + ${issue.getId()} + '#redmine'" th:text="${issue.getId()}"></a></td>
+					<td th:text="${issue.getTargetVersion()}"></td>
+					<!--/* <td th:text="${issue.getCategory()}"></td> */-->
+					<td th:text="${issue.getStatus()}"></td>
+					<td th:text="${issue.getPriority()}"></td>
+					<td th:text="${issue.getSubject()}" data-toggle="tooltip" th:title="${issue.getSubject()}" data-container="body"></td>
+					<td th:text="${issue.getAssignee()}"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
 </div>

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import fr.echoes.labs.ksf.cc.extensions.services.project.versions.IProjectVersion;
 import fr.echoes.labs.ksf.cc.extensions.services.project.versions.IProjectVersions;
 import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineExtensionException;
+import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
 
 
 /**
@@ -27,11 +28,11 @@ public class RedmineProjectRelease implements IProjectVersions {
 
 
 	@Override
-	public List<IProjectVersion> getVersions(String projectName) {
+	public List<IProjectVersion> getVersions(final ProjectDto ksfProject) {
 		final List<IProjectVersion> releases;
 
 		try {
-			releases = this.redmineService.getVersions(projectName);
+			releases = this.redmineService.getVersions(ksfProject);
 
 		} catch (final RedmineExtensionException e) {
 			LOGGER.error("RedmineProjectRelease.getReleases", e);

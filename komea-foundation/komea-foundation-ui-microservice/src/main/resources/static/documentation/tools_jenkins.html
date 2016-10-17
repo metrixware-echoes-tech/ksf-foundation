@@ -84,8 +84,6 @@
 <li class="toctree-l2"><a class="reference internal" href="tools_foreman.html">Gestion de cycle de vie des machines</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tools_komea_dashboard.html">Komea Dashboard</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tools_komea_foundation.html">Komea Foundation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tools_komea_activity.html">Komea Activity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tools_komea_checking.html">Komea Checking</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a><ul>
@@ -93,7 +91,14 @@
 <li class="toctree-l2"><a class="reference internal" href="architecture.html#architecture-fonctionnelle">Architecture fonctionnelle</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="user_and_rights_management.html">Gestion des utilisateurs et des droits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_and_rights_management.html">Gestion des utilisateurs et des droits</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="user_and_rights_management.html#forge-logicielle-et-gestion-de-version">Forge logicielle et gestion de version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_and_rights_management.html#integration-continue">Intégration continue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_and_rights_management.html#depot-d-artefacts">Dépôt d&#8217;artefacts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_and_rights_management.html#gestion-du-cycle-de-vie-des-machines">Gestion du cycle de vie des machines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_and_rights_management.html#de-maniere-generale-dans-ksf">De manière générale dans KSF</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="workflows.html">Workflows</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="workflows.html#gestion-de-projet">Gestion de projet</a></li>
 <li class="toctree-l2"><a class="reference internal" href="workflows.html#creation-du-projet">Création du projet</a></li>
@@ -103,7 +108,9 @@
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="login.html">S&#8217;authentifier</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="login.html#specification-detaillee">Spécification détaillée</a></li>
+<li class="toctree-l2"><a class="reference internal" href="login.html#sso-definition">SSO : Définition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="login.html#dans-ksf">Dans KSF</a></li>
+<li class="toctree-l2"><a class="reference internal" href="login.html#deroulement-du-login">Déroulement du login</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="create_project.html">Créer un projet</a><ul>
@@ -128,41 +135,6 @@
 </ul>
 </li>
 </ul>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="release_plan.html">Release Plan</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="release_plan.html#ksf-1-0-nov-2015-airbus">KSF 1.0    Nov 2015 (Airbus)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="release_plan.html#ksf-1-1-jan-2016-amabis-airbus">KSF 1.1    Jan 2016 (Amabis, Airbus)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="release_plan.html#ksf-1-2-avr-2016-interne">KSF 1.2   Avr 2016 (interne)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="release_plan.html#komea-cc">Komea-CC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="release_plan.html#komea-dashboard">Komea-Dashboard</a></li>
-<li class="toctree-l2"><a class="reference internal" href="release_plan.html#corolla">Corolla</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="hypotheses_et_contraintes.html">Hypotheses et contraintes</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="hypotheses_et_contraintes.html#hypotheses">Hypothèses</a></li>
-<li class="toctree-l2"><a class="reference internal" href="hypotheses_et_contraintes.html#contraintes">Contraintes</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="publications.html">Publications</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="publications.html#documents-produit">Documents Produit</a></li>
-<li class="toctree-l2"><a class="reference internal" href="publications.html#sample-demos">Sample/ Démos</a></li>
-<li class="toctree-l2"><a class="reference internal" href="publications.html#supports-de-formation">Supports de formation (?)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="publications.html#documentation-avant-vente">documentation avant-vente</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="concurrence.html">Concurrence</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="concurrence.html#offres-concurrentes">Offres concurrentes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="concurrence.html#kovair-omnibus">Kovair Omnibus</a></li>
-<li class="toctree-l2"><a class="reference internal" href="concurrence.html#polarion-alm">Polarion ALM</a></li>
-<li class="toctree-l2"><a class="reference internal" href="concurrence.html#tableau-comparatif">Tableau comparatif</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="annexes.html">Annexes</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="references_documentaires.html">Références documentaires</a></li>
-<li class="toctree-l2"><a class="reference internal" href="annexes.html#open-services-for-lifecycle-collaboration">Open Services for Lifecycle Collaboration</a></li>
-</ul>
-</li>
-</ul>
 </ul>
 </li>
               
@@ -177,7 +149,7 @@
       aria-labelledby="dLabelLocalToc"><ul>
 <li><a class="reference internal" href="#">Intégration continue</a><ul>
 <li><a class="reference internal" href="#jenkins">Jenkins</a><ul>
-<li><a class="reference internal" href="#features">Features</a></li>
+<li><a class="reference internal" href="#fonctionnalites">Fonctionnalités</a></li>
 </ul>
 </li>
 </ul>
@@ -231,17 +203,15 @@
 <p class="first admonition-title">Note</p>
 <p class="last">d&#8217;après <a class="reference external" href="https://wiki.jenkins-ci.org/display/JENKINS/Meet+Jenkins">https://wiki.jenkins-ci.org/display/JENKINS/Meet+Jenkins</a></p>
 </div>
-<p>Jenkins is an award-winning, cross-platform, continuous integration and continuous delivery application that increases your productivity. Use Jenkins to build and test your software projects continuously making it easier for developers to integrate changes to the project, and making it easier for users to obtain a fresh build. It also allows you to continuously deliver your software by providing powerful ways to define your build pipelines and integrating with a large number of testing and deployment technologies.</p>
-<div class="section" id="features">
-<h3>Features<a class="headerlink" href="#features" title="Lien permanent vers ce titre">¶</a></h3>
-<p>Jenkins offers the following major features out of the box, and many more can be added through plugins:</p>
-<ol class="arabic simple">
-<li>Easy installation: Just run java -jar jenkins.war, deploy it in a servlet container. No additional install, no database. Prefer an installer or native package? We have those as well.</li>
-<li>Easy configuration: Jenkins can be configured entirely from its friendly web GUI with extensive on-the-fly error checks and inline help.</li>
-<li>Rich plugin ecosystem: Jenkins integrates with virtually every SCM or build tool that exists. View plugins.</li>
-<li>Extensibility: Most parts of Jenkins can be extended and modified, and it&#8217;s easy to create new Jenkins plugins. This allows you to customize Jenkins to your needs.</li>
-<li>Distributed builds: Jenkins can distribute build/test loads to multiple computers with different operating systems. Building software for OS X, Linux, and Windows? No problem.</li>
-</ol>
+<p>Jenkins est un outil open source d&#8217;intégration continue. Jenkins permet de construire et tester une application de manière continue, laissant aux développeurs la possibilité d&#8217;intégrer les changements plus facilement et aux utilisateurs de récupérer un build récent sans problème.</p>
+<div class="section" id="fonctionnalites">
+<h3>Fonctionnalités<a class="headerlink" href="#fonctionnalites" title="Lien permanent vers ce titre">¶</a></h3>
+<p>Ci-dessous les fonctionnalités majeures de Jenkins, il est possible d&#8217;en ajouter de nombreuses autres à travers des plugins :</p>
+<p># Facile et rapide à installer
+# Facile à configurer grâce à son interface graphique simple et intuitive
+# Un écosystème de plugins très complet
+# Facile à étendre, la création de nouveaux plugins est simple
+# Construction d&#8217;application distribuée sur différents OS</p>
 </div>
 </div>
 </div>

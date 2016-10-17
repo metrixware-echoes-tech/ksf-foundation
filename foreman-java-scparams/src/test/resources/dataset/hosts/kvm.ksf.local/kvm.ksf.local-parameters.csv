@@ -1,0 +1,9 @@
+puppetModule,puppetClass,parameter,value,usePuppetDefault
+echoes_firewall,echoes_firewall,allow_icmp,true,false
+echoes_firewall,echoes_firewall,ipv4_forward_policy,accept,false
+echoes_firewall,echoes_firewall,ipv4_output_policy,accept,false
+echoes_firewall,echoes_firewall,ipv6_forward_policy,accept,false
+echoes_firewall,echoes_firewall,ipv6_output_policy,accept,false
+sysctl,sysctl::values,args,"{""net.ipv4.ip_forward"":{""value"":1},""net.ipv4.conf.all.accept_source_route"":{""value"":0},""net.ipv4.conf.all.accept_redirects"":{""value"":0},""net.ipv4.icmp_echo_ignore_broadcasts"":{""value"":1},""net.ipv4.icmp_ignore_bogus_error_responses"":{""value"":1}}",false
+wrappers,wrappers::accounts::user,resources,"{""fpoinsaut"":{""comment"":""Florent Poinsaut, Puppet-managed User"",""shell"":""/bin/bash"",""password"":""$6$i4NGG9dc$YzL.tRm0rnIGcjZqEYruYu5k6P6NKniahi28Anc7E7ihal6pPkrnuLRfaK8pTDmZZvOLRJKRSQTDMdMnXcuDQ1""},""tsaquet"":{""comment"":""Thomas Saquet, Puppet-managed User"",""shell"":""/bin/bash"",""password"":""$6$Ynwb02zE$Sg9kKilNozEqX0W1.wXy512dxVD/SjRt5ycHjoU4lh58XbxjmrhXeIKgIyJL.WKbOzO8WrIIRv1wMJiT1YXG8/""},""scarreau"":{""comment"":""Sebastien Carreau, Puppet-managed User"",""shell"":""/bin/bash"",""password"":""$6$PgndOsNV$LA2ELFNUVihShz38jmHIpUzh/38ZDUTh9ioRW1zQ.WWTwmYuqj.2kp8VxCMr/rUL3..IYEks09s2/aaqF/5Q20""},""dmichel"":{""comment"":""Sebastien Carreau, Puppet-managed User"",""shell"":""/bin/bash"",""password"":""$6$PgndOsNV$LA2ELFNUVihShz38jmHIpUzh/38ZDUTh9ioRW1zQ.WWTwmYuqj.2kp8VxCMr/rUL3..IYEks09s2/aaqF/5Q20""}}",false
+wrappers,wrappers::firewall,resources,"{""101 allow SNMP access"":{""source"":""10.1.0.116"",""dport"":161,""proto"":""udp"",""action"":""accept""},""200 allow VNC access"":{""dport"":""5900-5999"",""proto"":""tcp"",""action"":""accept""},""201 allow traffic from default network to the LAN network"":{""iniface"":""virbr0"",""proto"":""all"",""source"":""192.168.122.0/24"",""action"":""accept""}}",false

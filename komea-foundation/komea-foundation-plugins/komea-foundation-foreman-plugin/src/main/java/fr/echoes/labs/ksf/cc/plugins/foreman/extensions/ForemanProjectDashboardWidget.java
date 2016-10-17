@@ -15,7 +15,9 @@ import fr.echoes.labs.ksf.cc.plugins.foreman.model.ForemanTarget;
 import fr.echoes.labs.ksf.cc.plugins.foreman.services.ForemanClientFactory;
 import fr.echoes.labs.ksf.cc.plugins.foreman.services.ForemanConfigurationService;
 import fr.echoes.labs.ksf.cc.plugins.foreman.services.ForemanErrorHandlingService;
-import fr.echoes.labs.ksf.cc.plugins.foreman.utils.ThymeleafTemplateEngineUtils;
+import fr.echoes.labs.ksf.cc.plugins.foreman.utils.ForemanConstants;
+import fr.echoes.labs.ksf.plugins.utils.ThymeleafTemplateEngineUtils;
+
 import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -70,6 +72,9 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
     @Autowired
     private ForemanClientFactory foremanClientFactory;
 
+    @Autowired
+    private ForemanService foremanService;
+
     @Override
     public List<MenuAction> getDropdownActions() {
 
@@ -79,11 +84,15 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
         actionCreateEnv.setActionName(messageSourceAccessor.getMessage("foundation.foreman.widget.createEnvironment"));
         actionCreateEnv.setUrl("javascript:displayCreateEnvModal()");
 
+        final MenuAction actionDeleteEnv = new MenuAction();
+        actionDeleteEnv.setActionName(messageSourceAccessor.getMessage("foundation.foreman.widget.deleteEnvironment"));
+        actionDeleteEnv.setUrl("javascript:displayDeleteEnvModal()");
+
         final MenuAction actionCreateTarget = new MenuAction();
         actionCreateTarget.setActionName(messageSourceAccessor.getMessage("foundation.foreman.widget.createTarget"));
         actionCreateTarget.setUrl("javascript:displayCreateTargetModal()");
 
-        return Lists.newArrayList(actionCreateEnv, actionCreateTarget);
+        return Lists.newArrayList(actionCreateEnv, actionDeleteEnv, actionCreateTarget);
 
     }
 
@@ -111,8 +120,8 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
             final IForemanApi foremanApi = foremanClientFactory.createForemanClient();
 
             ctx.setVariable("operatingSystems", Lists.newArrayList(foremanApi.getOperatingSystems(null, null, null, ForemanService.PER_PAGE_RESULT).results));
-
             ctx.setVariable("computeProfiles", Lists.newArrayList(foremanApi.getComputeProfiles(null, null, null, ForemanService.PER_PAGE_RESULT).results));
+            ctx.setVariable("operatingSystemsImages", foremanService.findOperatingSystemImages(foremanApi));
 
         } catch (final Exception e) {
             LOGGER.error("[foreman] Foreman API call failed : {}", e);
@@ -172,6 +181,11 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
             public String getIconUrl() {
                 return ForemanProjectDashboardWidget.this.getIconUrl();
             }
+
+            @Override
+            public String getId() {
+                return ForemanConstants.ID;
+            }
         };
 
         return Lists.newArrayList(iframePanel);
@@ -180,6 +194,11 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
     @Override
     public boolean hasHtmlPanelBody() {
         return true;
+    }
+
+    @Override
+    public String getId() {
+        return ForemanConstants.ID;
     }
 
 }

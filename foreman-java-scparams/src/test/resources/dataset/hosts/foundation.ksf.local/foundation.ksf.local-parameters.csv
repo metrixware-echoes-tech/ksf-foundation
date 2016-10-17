@@ -1,0 +1,28 @@
+puppetModule,puppetClass,parameter,value,usePuppetDefault
+java,java,package,openjdk-8-jdk,false
+komea_foundation,komea_foundation,dashboard_metrics_url,ksf-dev.metrixware.local:8092/,false
+komea_foundation,komea_foundation,foreman_hostGroup_mediumId,2,false
+komea_foundation,komea_foundation,foreman_hostGroup_operatingsystemId,4,false
+komea_foundation,komea_foundation,foreman_hostGroup_ptableId,54,false
+komea_foundation,komea_foundation,foreman_hostGroup_subnetId,2,false
+komea_foundation,komea_foundation,foreman_host_architectureId,1,false
+komea_foundation,komea_foundation,foreman_host_computeProfileId,5,false
+komea_foundation,komea_foundation,foreman_host_computeResourceId,2,false
+komea_foundation,komea_foundation,foreman_host_defaultPassword,rootroot,false
+komea_foundation,komea_foundation,foreman_host_domainId,3,false
+komea_foundation,komea_foundation,foreman_host_smartProxyId,2,false
+komea_foundation,komea_foundation,foreman_imageId,/var/lib/libvirt/images/debian-8-5-x86-64.2.ksf.local-disk1,false
+komea_foundation,komea_foundation,foreman_provisionMethod,image,false
+komea_foundation,komea_foundation,ksf_fqdn,ksf-dev.metrixware.local,false
+komea_foundation,komea_foundation,ksf_security_internal_remember_token,e7b5c9d5a95157f75f7e8058256c10e1fa7a3338,false
+komea_foundation,komea_foundation,nexus_artifact_gav,fr.echoes.ksf.foundation:komea-foundation-ui-microservice:0.4.3-SNAPSHOT.HEAD,false
+komea_foundation,komea_foundation,nexus_artifact_output,/opt/echoes/foundation/foundation.jar,false
+komea_foundation,komea_foundation,nexus_artifact_repository,branches-releases,false
+komea_foundation,komea_foundation,nexus_password,490ebc83a2b4dc242a957551e082a1a6024259ef9676058e72fc8851ac1bf22b,false
+komea_foundation,komea_foundation,nexus_url,https://ksf.metrixware.local/nexus,false
+komea_foundation,komea_foundation,nexus_username,ksfuser,false
+komea_foundation,komea_foundation,root_ca_content,-----BEGIN CERTIFICATE-----\r\nMIID0TCCArmgAwIBAgIJAMycZZoLl0uvMA0GCSqGSIb3DQEBCwUAMH8xCzAJBgNV\r\nBAYTAkZSMQwwCgYDVQQIDANJREYxETAPBgNVBAcMCE5hbnRlcnJlMQ8wDQYDVQQK\r\nDAZFY2hvZXMxCzAJBgNVBAsMAklUMQ8wDQYDVQQDDAZFY2hvZXMxIDAeBgkqhkiG\r\n9w0BCQEWEWNvbnRhY3RAZWNob2VzLmZyMB4XDTE2MDQyOTA5MTgyN1oXDTE5MDIx\r\nNzA5MTgyN1owfzELMAkGA1UEBhMCRlIxDDAKBgNVBAgMA0lERjERMA8GA1UEBwwI\r\nTmFudGVycmUxDzANBgNVBAoMBkVjaG9lczELMAkGA1UECwwCSVQxDzANBgNVBAMM\r\nBkVjaG9lczEgMB4GCSqGSIb3DQEJARYRY29udGFjdEBlY2hvZXMuZnIwggEiMA0G\r\nCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDZhQeGTXnqFvEBwTFmPYLoetTxD+Wu\r\n0pH5X966nEb/+cNlKCoAGsWIL95GLFDeabNa2H5pW6K9RD2MGErkzFzqSHkderxK\r\ne97OreIskhivEV70F9g+2ycmJbIUQPlXHLowEnFdmE8r/+AWOtxiXRDpw7J1cjz9\r\nFE3KyKC3k7hqcDzdkpdfLH5uNUrOJTqk9tIM8CdPs3l5xc5uu7kq7Cl07aZoVRSd\r\nuCHvgXNIR4zTW2sEjgnkKfoxhqO/tgiUVcQkrW3tcMAhlX0zZiWLcH3xjh6xHoAZ\r\nv3oNxfvf7hWwRVrtCn2gs7dpxDaTJFLcHENsMjpu5De170IxBcezzfYJAgMBAAGj\r\nUDBOMB0GA1UdDgQWBBSBhMIZFLt/6S9MV328VMWk6JK/IjAfBgNVHSMEGDAWgBSB\r\nhMIZFLt/6S9MV328VMWk6JK/IjAMBgNVHRMEBTADAQH/MA0GCSqGSIb3DQEBCwUA\r\nA4IBAQCrl8cypPax+Y7nTvq/qik+ftqJTJ4wm5hpT3he0dsJWny596jauBYQRLy1\r\nfk9+3CBb9vMHR+IR6p0qAQ5aEJYpC0dyJo3hLC10o5XDYKeGfoQZHw+g2AS+MFzt\r\neZVLo9JS84msWaBnqfe5UjGij/4OyBssxDnlA61m5/6VUY2n/DY3oXHwhWhNl7G/\r\nKdgI0rATIkf0t+ziZpY3ZkBxPdLm7zc+cbZI5sSlIPTi9o/SVBUWk2dAqUWTINZJ\r\n7H3wvPavxKZsw4iPBML1Swk6DegY+F4HJgpbGUmCyxdEVHRKI25/ba/y2i4FwTh8\r\n+lv3Th1h7oKFstXZeWCmAcVLXlwY\r\n-----END CERTIFICATE-----,false
+komea_foundation,komea_foundation,superuser_login,ksfuser,false
+komea_foundation,komea_foundation,superuser_password,490ebc83a2b4dc242a957551e082a1a6024259ef9676058e72fc8851ac1bf22b,false
+wrappers,wrappers::file,resources,"\""/root/.ssh/id_rsa\"":\r\n  ensure: file\r\n  mode: '0600'\r\n  content: <%= @host.params['id_dsa'] %>\r\n\""/root/.ssh/id_rsa.pub\"":\r\n  ensure: file\r\n  mode: '0644'\r\n  content: <%= !@host.params['id_dsa.pub'].empty? && @host.params['id_dsa.pub'].split(@host.shortname + \"": \"").size > 1 ? @host.params['id_dsa.pub'].split(@host.shortname + \"": \"")[1].split(\""\\n\"")[0] : \""\"" %>\r\n\""/root/.ssh/known_hosts\"":\r\n  ensure: file\r\n  mode: '0644'\r\n\""/home/ksfuser/.ssh/id_rsa.pub\"":\r\n  ensure: file\r\n  owner: 'ksfuser'\r\n  group: 'ksfuser'\r\n  mode: '0644'\r\n  content: \""ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDLa3affPW23w2TlziTbSu0+QbH23dZ3EW3/IdjwrvCjIedjxqpXARcn+AwI6aQ5NAHgv7wfeoIwOMsbUl+GVC78+0UgFi1RIrs+6QIlwid2Q1t6H5Fs1ELrWTP/WQkGQZSaTng7Q/gWvRv89tBF5dBDhu24uyfKePt9wmFvQCFJTXl+wpzalglzubkkXDhtu/lUu8Ghmj5dwihJ6+PHLO0L0jBPAZYPSpw9nSDjFgV0+xcxVQYqLAHWL36XvPw5SSUY/kG9RqwoRU6XD4tn0AOALLx7NjddOdygfhg9YQqYZ3MKeIGN8tINf7Y7mnD2mtCyqUlIMGiul1GNY2s/Jbr ksfuser@foundation\""",false
+wrappers,wrappers::firewall,resources,"{""200 allow HTTP access"":{""dport"":8888,""proto"":""tcp"",""action"":""accept""},""200 allow HTTP access - IPv6"":{""dport"":8080,""proto"":""tcp"",""action"":""accept"",""provider"":""ip6tables""}}",false

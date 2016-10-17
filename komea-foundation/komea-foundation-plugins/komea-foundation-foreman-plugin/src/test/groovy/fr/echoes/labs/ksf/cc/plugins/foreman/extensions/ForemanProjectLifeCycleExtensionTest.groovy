@@ -12,7 +12,7 @@ import fr.echoes.labs.ksf.cc.plugins.foreman.extensions.ForemanProjectLifeCycleE
 import fr.echoes.labs.ksf.cc.plugins.foreman.model.ForemanTarget
 import fr.echoes.labs.ksf.cc.plugins.foreman.services.ForemanClientFactory
 import fr.echoes.labs.ksf.extensions.projects.ProjectDto
-import fr.echoes.labs.ksf.users.security.api.ICurrentUserService
+import fr.echoes.labs.ksf.users.security.api.CurrentUserService
 
 class ForemanProjectLifeCycleExtensionTest extends Specification {
 
@@ -20,7 +20,7 @@ class ForemanProjectLifeCycleExtensionTest extends Specification {
 	ForemanClientFactory foremanClientFactory = Mock(ForemanClientFactory)
 	IForemanApi foremanApi = Mock(IForemanApi)
 	IForemanService foremanService = Mock(IForemanService)
-	ICurrentUserService currentUserService = Mock(ICurrentUserService)
+	CurrentUserService currentUserService = Mock(CurrentUserService)
 	IForemanTargetDAO targetDAO = Mock(IForemanTargetDAO)
 	IProjectDAO projectDAO = Mock(IProjectDAO)
 

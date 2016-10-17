@@ -1,6 +1,7 @@
 package fr.echoes.labs.komea.foundation.plugins.puppet.extensions;
 
 import com.google.common.collect.Lists;
+import fr.echoes.labs.komea.foundation.plugins.puppet.utils.PuppetConstants;
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.IProjectTabPanel;
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.MenuAction;
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
@@ -48,6 +49,11 @@ public class PuppetProjectDashboardWidget implements ProjectDashboardWidget {
     @Override
     public boolean hasHtmlPanelBody() {
         return false;
+    }
+
+    @Override
+    public String getId() {
+        return PuppetConstants.ID;
     }
 
 }

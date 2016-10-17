@@ -14,16 +14,16 @@ La description de chaque brique de l'usine logicielle est dans le chapitre :ref:
 
 Les élements clés de l'architecture de l'usine logicielle sont 
 
-- Une plateforme de virtualisation (KVM) qui permet d'héberger les outils nécessaires au bon fonctionnement de KSF
-- Un reverse proxy (HAProxy) qui permet de rassembler tous les produits derrière une interface unique
-- Komea Foundation, l'interface graphique qui permet de piloter l'ensemble des logiciels embarqués dans KSF
-- Foreman et Puppet qui permettent d'assurer la configuration de l'ensemble des briques de KSF
+* Une plateforme de virtualisation (KVM) qui permet d'héberger les outils nécessaires au bon fonctionnement de KSF
+* Un reverse proxy (HAProxy) qui permet de rassembler tous les produits derrière une interface unique
+* Komea Foundation, l'interface graphique qui permet de piloter l'ensemble des logiciels embarqués dans KSF
+* Foreman et Puppet qui permettent d'assurer la configuration de l'ensemble des briques de KSF
 
 Briques logicielles "maison"
 ============================
 
-- Komea Dashboard 
-- Komea Foundation 
+* Komea Dashboard 
+* Komea Foundation 
 
 Les spécifications générales de ces outils seront dans le chapitre :ref:`tools` 
 
@@ -40,15 +40,13 @@ La fonction "piloter" couvre 3 fonctions :
 2. Orchestrer = commander de manière synchronisée les outils de l'usine = **Komea Foundation**
 3. Superviser = surveiller le bon fonctionnement de l'usine logicielle = **Munin**
 
-
 La fonction "Valider les développements" recouvre :
 
 1. L'analyse qualité du code
 2. Les revues peer to peer
 3. Les tests unitaires
 
-
-La fonction "Gestion de Projet" recouvre:
+La fonction "Gestion de Projet" recouvre :
 
 1. La gestion des tickets clients
 2. La gestion des bugs

@@ -2,6 +2,8 @@ package fr.echoes.labs.ksf.cc.extensions.services.project.features;
 
 import java.util.List;
 
+import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
+
 /**
  * @author dcollard
  *
@@ -11,9 +13,9 @@ public interface IProjectFeatues {
 	/**
 	 * Returns the list of feature for the given project.
 	 *
-	 * @param projectName the project name.
-	 * @return a list of featues.
+	 * @param ksfProject the project
+	 * @return a list of features.
 	 */
-	public List<IProjectFeature> getFeatures(String projectName);
+	public List<IProjectFeature> getFeatures(ProjectDto ksfProject);
 	
 }

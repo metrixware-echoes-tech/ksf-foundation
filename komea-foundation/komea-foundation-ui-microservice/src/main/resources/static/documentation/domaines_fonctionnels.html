@@ -84,8 +84,6 @@
 <li class="toctree-l2"><a class="reference internal" href="tools_foreman.html">Gestion de cycle de vie des machines</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tools_komea_dashboard.html">Komea Dashboard</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tools_komea_foundation.html">Komea Foundation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tools_komea_activity.html">Komea Activity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tools_komea_checking.html">Komea Checking</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a><ul>
@@ -93,7 +91,14 @@
 <li class="toctree-l2"><a class="reference internal" href="architecture.html#architecture-fonctionnelle">Architecture fonctionnelle</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="user_and_rights_management.html">Gestion des utilisateurs et des droits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_and_rights_management.html">Gestion des utilisateurs et des droits</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="user_and_rights_management.html#forge-logicielle-et-gestion-de-version">Forge logicielle et gestion de version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_and_rights_management.html#integration-continue">Intégration continue</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_and_rights_management.html#depot-d-artefacts">Dépôt d&#8217;artefacts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_and_rights_management.html#gestion-du-cycle-de-vie-des-machines">Gestion du cycle de vie des machines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_and_rights_management.html#de-maniere-generale-dans-ksf">De manière générale dans KSF</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="workflows.html">Workflows</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="workflows.html#gestion-de-projet">Gestion de projet</a></li>
 <li class="toctree-l2"><a class="reference internal" href="workflows.html#creation-du-projet">Création du projet</a></li>
@@ -103,7 +108,9 @@
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="login.html">S&#8217;authentifier</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="login.html#specification-detaillee">Spécification détaillée</a></li>
+<li class="toctree-l2"><a class="reference internal" href="login.html#sso-definition">SSO : Définition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="login.html#dans-ksf">Dans KSF</a></li>
+<li class="toctree-l2"><a class="reference internal" href="login.html#deroulement-du-login">Déroulement du login</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="create_project.html">Créer un projet</a><ul>
@@ -125,41 +132,6 @@
 <li class="toctree-l2"><a class="reference internal" href="create_vm.html#creer-un-environnement">Créer un environnement</a></li>
 <li class="toctree-l2"><a class="reference internal" href="create_vm.html#creer-une-cible">Créer une cible</a></li>
 <li class="toctree-l2"><a class="reference internal" href="create_vm.html#instancier-une-vm">Instancier une VM</a></li>
-</ul>
-</li>
-</ul>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="release_plan.html">Release Plan</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="release_plan.html#ksf-1-0-nov-2015-airbus">KSF 1.0    Nov 2015 (Airbus)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="release_plan.html#ksf-1-1-jan-2016-amabis-airbus">KSF 1.1    Jan 2016 (Amabis, Airbus)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="release_plan.html#ksf-1-2-avr-2016-interne">KSF 1.2   Avr 2016 (interne)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="release_plan.html#komea-cc">Komea-CC</a></li>
-<li class="toctree-l2"><a class="reference internal" href="release_plan.html#komea-dashboard">Komea-Dashboard</a></li>
-<li class="toctree-l2"><a class="reference internal" href="release_plan.html#corolla">Corolla</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="hypotheses_et_contraintes.html">Hypotheses et contraintes</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="hypotheses_et_contraintes.html#hypotheses">Hypothèses</a></li>
-<li class="toctree-l2"><a class="reference internal" href="hypotheses_et_contraintes.html#contraintes">Contraintes</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="publications.html">Publications</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="publications.html#documents-produit">Documents Produit</a></li>
-<li class="toctree-l2"><a class="reference internal" href="publications.html#sample-demos">Sample/ Démos</a></li>
-<li class="toctree-l2"><a class="reference internal" href="publications.html#supports-de-formation">Supports de formation (?)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="publications.html#documentation-avant-vente">documentation avant-vente</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="concurrence.html">Concurrence</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="concurrence.html#offres-concurrentes">Offres concurrentes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="concurrence.html#kovair-omnibus">Kovair Omnibus</a></li>
-<li class="toctree-l2"><a class="reference internal" href="concurrence.html#polarion-alm">Polarion ALM</a></li>
-<li class="toctree-l2"><a class="reference internal" href="concurrence.html#tableau-comparatif">Tableau comparatif</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="annexes.html">Annexes</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="references_documentaires.html">Références documentaires</a></li>
-<li class="toctree-l2"><a class="reference internal" href="annexes.html#open-services-for-lifecycle-collaboration">Open Services for Lifecycle Collaboration</a></li>
 </ul>
 </li>
 </ul>
@@ -267,11 +239,12 @@
 </ul>
 </li>
 <li><a class="reference internal" href="#la-documentation">La Documentation</a><ul>
+<li><a class="reference internal" href="#la-documentation-des-sources">La documentation des sources</a></li>
+<li><a class="reference internal" href="#la-documentation-technique">La documentation technique</a></li>
+<li><a class="reference internal" href="#la-documentation-dadministration">La documentation d’administration</a></li>
+<li><a class="reference internal" href="#la-documentation-utilisateur">La documentation utilisateur</a></li>
 <li><a class="reference internal" href="#id34">Dans KSF</a></li>
-<li><a class="reference internal" href="#id35">Les Métiers impliqués</a><ul>
-<li><a class="reference internal" href="#tableau-recapitulatif">Tableau récapitulatif</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#id35">Les Métiers impliqués</a></li>
 </ul>
 </li>
 </ul>
@@ -321,7 +294,7 @@
 <h1>Domaines fonctionnels<a class="headerlink" href="#domaines-fonctionnels" title="Lien permanent vers ce titre">¶</a></h1>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">il s’agit de l&#8217;ensemble des domaines concernés par l&#8217;édition de logiciels de qualités. Il est nécessaire d&#8217;avoir connaissance de cet ensemble et d&#8217;adresser les différents points évoqués au long de ce document. Pour chaque point nous indiquons quel est son objectif et quels sont les risques encourus si le point est ignoré. Pour mettre en oeuvre un domaines présentés ici de manière adaptée à son organisation, il est nécessaire d&#8217;utiliser des outils (allant du papier/crayon jusqu&#8217;au Robot intelligent en passant par Excel/LibreOffice). Lorsque c&#8217;est possible et utile, une solution est proposée au sein de Komea Software Factory (KSF).</p>
+<p class="last">il s’agit de l&#8217;ensemble des domaines concernés par l&#8217;édition de logiciels de qualité. Il est nécessaire d&#8217;avoir connaissance de cet ensemble et d&#8217;adresser les différents points évoqués au long de ce document. Pour chaque point nous indiquons quel est son objectif et quels sont les risques encourus si le point est ignoré. Pour mettre en oeuvre un domaines présentés ici de manière adaptée à son organisation, il est nécessaire d&#8217;utiliser des outils (allant du papier/crayon jusqu&#8217;au Robot intelligent en passant par Excel/LibreOffice). Lorsque c&#8217;est possible et utile, une solution est proposée au sein de Komea Software Factory (KSF).</p>
 </div>
 <div class="section" id="les-conventions">
 <h2>Les Conventions<a class="headerlink" href="#les-conventions" title="Lien permanent vers ce titre">¶</a></h2>
@@ -355,7 +328,7 @@ En cas d’absence de convention, une entreprise s’expose à :</p>
 </div>
 <div class="section" id="dans-ksf">
 <h3>Dans KSF<a class="headerlink" href="#dans-ksf" title="Lien permanent vers ce titre">¶</a></h3>
-<p>Au sein de KSF, il existe les conventions de nommage suivantes :</p>
+<p>Au sein de KSF, il existe différentes conventions de nommage. Elles sont détaillées dans le chapitre TBC</p>
 <p>TBC</p>
 </div>
 <div class="section" id="les-metiers-impliques">
@@ -403,7 +376,7 @@ En cas d’absence de convention, une entreprise s’expose à :</p>
 </div>
 <div class="section" id="id1">
 <h3>Dans KSF<a class="headerlink" href="#id1" title="Lien permanent vers ce titre">¶</a></h3>
-<p>La modélisation intervient en amont de l&#8217;écriture de toute ligne de code. Il n&#8217;est à ce jour pas prévu d&#8217;intégrer un outil de modélisation dans KSF.</p>
+<p>La modélisation intervient en amont de l&#8217;écriture de toute ligne de code, donc en amont de l&#8217;utilisation de KSF.</p>
 </div>
 <div class="section" id="id2">
 <h3>Les Métiers impliqués<a class="headerlink" href="#id2" title="Lien permanent vers ce titre">¶</a></h3>
@@ -437,7 +410,7 @@ En cas d’absence de convention, une entreprise s’expose à :</p>
 </div>
 <div class="section" id="id4">
 <h3>Dans KSF<a class="headerlink" href="#id4" title="Lien permanent vers ce titre">¶</a></h3>
-<p>Dans KSF, le gestionnaire de versions utilisé est Git qui permet une gestion facile des sources. KSF respecte le modèle gitflow.</p>
+<p>Dans KSF, le gestionnaire de versions utilisé est Git qui permet une gestion souple des sources. KSF respecte le modèle gitflow.</p>
 </div>
 <div class="section" id="id5">
 <h3>Les Métiers impliqués<a class="headerlink" href="#id5" title="Lien permanent vers ce titre">¶</a></h3>
@@ -491,7 +464,7 @@ En cas d’absence de convention, une entreprise s’expose à :</p>
 <p><em>Son Rôle dans l’intégration continue</em> permet de trouver par anticipation des bogues ou des vulnérabilités potentielles ou de corriger des erreurs de conception afin d&#8217;améliorer la qualité et la sécurité du logiciel.</p>
 <div class="section" id="id8">
 <h3>Dans KSF<a class="headerlink" href="#id8" title="Lien permanent vers ce titre">¶</a></h3>
-<p>Nous n&#8217;avons aujourd&#8217;hui pas intégré d&#8217;outil spécifique de revue de code dans KSF. Nous pensons qu&#8217;un travail de conception efficace en amont (implication de toute l&#8217;équipe, maquettes, développement guidé par les tests), ainsi qu&#8217;un travail en binôme sur les tâches identifiées comme étant complexes lors de la conception permettent de réduire la nécessité de la relecture de code. Une relecture de code peut tout de même être prévue lors de la réalisation des tâches en question.</p>
+<p>Nous pensons qu&#8217;un travail de conception efficace en amont (implication de toute l&#8217;équipe, maquettes, développement guidé par les tests), ainsi qu&#8217;un travail en binôme sur les tâches identifiées comme étant complexes lors de la conception permettent de réduire la nécessité de la relecture de code. Une relecture de code peut tout de même être prévue lors de la réalisation des tâches en question.</p>
 </div>
 <div class="section" id="id9">
 <h3>Les Métiers impliqués<a class="headerlink" href="#id9" title="Lien permanent vers ce titre">¶</a></h3>
@@ -523,7 +496,7 @@ En cas d’absence de convention, une entreprise s’expose à :</p>
 <p><em>L’Interconnexion :</em> La forge logicielle permet de mettre en cohérence facilement le gestionnaire de version et l’outil de suivi des demandes. Par exemple, via une notation dans le commentaire d’un commit, il est possible de lier ce dernier à une demande.</p>
 <div class="section" id="id10">
 <h3>Dans KSF<a class="headerlink" href="#id10" title="Lien permanent vers ce titre">¶</a></h3>
-<p>Dans KSF, nous utilisons l&#8217;outil Redmine complété par des plugins développés par nos équipes. Ces plugins améliorent l&#8217;outil Redmine dans plusieurs domaines tels que la gestion de projet Agile, la gestion du &#8220;reste à faire&#8221;, la gestion des exigences et des tests. Ces points sont détaillés dans le chapitre TBC.</p>
+<p>Dans KSF, nous utilisons l&#8217;outil Redmine complété par des workflows établis par nos équipes. Ils permettent d&#8217;utiliser Redmine de façon nominale sans se perdre dans la multitude de configurations et d&#8217;options que l&#8217;on peut paramétrer dans Redmine. Ce workflow est détaillé dans le chapitre TBC.</p>
 </div>
 <div class="section" id="id11">
 <h3>Les Métiers impliqués<a class="headerlink" href="#id11" title="Lien permanent vers ce titre">¶</a></h3>
@@ -569,7 +542,7 @@ En cas d’absence de convention, une entreprise s’expose à :</p>
 </ul>
 <div class="section" id="id12">
 <h3>Dans KSF<a class="headerlink" href="#id12" title="Lien permanent vers ce titre">¶</a></h3>
-<p>Dans KSF, nous utilisons l&#8217;outil Kiuwan. D&#8217;après nous, c&#8217;est aujourd&#8217;hui l&#8217;outil qui présente le meilleur rapport qualité / simplicité d&#8217;utilisation. Cet outil permet d&#8217;avoir une douane applicative et ainsi de s&#8217;assurer build après build que la qualité du logiciel reste à son maximum.</p>
+<p>Dans KSF, nous utilisons l&#8217;outil Kiuwan. D&#8217;après notre expérience, c&#8217;est aujourd&#8217;hui l&#8217;outil qui présente le meilleur rapport qualité / simplicité d&#8217;utilisation. Cet outil permet d&#8217;avoir une douane applicative et ainsi de s&#8217;assurer build après build que la qualité du logiciel reste à son maximum.</p>
 </div>
 <div class="section" id="id13">
 <h3>Les Métiers impliqués<a class="headerlink" href="#id13" title="Lien permanent vers ce titre">¶</a></h3>
@@ -601,7 +574,7 @@ En cas d’absence de tests unitaires, une entreprise s’expose à :</p>
 <p><em>Son Rôle dans l’intégration continue :</em> Les tests permettent de valider la cohérence au cours du temps des entrées et des sorties de chaque fonction ou méthode.</p>
 <div class="section" id="id14">
 <h3>Dans KSF<a class="headerlink" href="#id14" title="Lien permanent vers ce titre">¶</a></h3>
-<p>Les tests internes dépendent du langage et du type d&#8217;applications. Il n&#8217;y a donc pas de logiciel spécifique embarqué dans KSF. Cependant, l&#8217;outil Jenkins permet de lancer l&#8217;exécution de tests et de récupérer et présenter leurs résultats s&#8217;ils respectent les standards en la matière, ce qui est le cas de la plupart des framework de test du marché.</p>
+<p>Les tests internes dépendent du langage et du type d&#8217;applications. Il n&#8217;y a pas de logiciel spécifique embarqué dans KSF, l&#8217;outil Jenkins permet de lancer l&#8217;exécution de tests et de récupérer et présenter leurs résultats s&#8217;ils respectent les standards en la matière, ce qui est le cas de la plupart des framework de test du marché.</p>
 </div>
 <div class="section" id="id15">
 <h3>Les Métiers impliqués<a class="headerlink" href="#id15" title="Lien permanent vers ce titre">¶</a></h3>
@@ -638,7 +611,8 @@ Pour aller plus loin, il est possible d’harmoniser l’ensembles des technolog
 <p><em>L’Interconnexion :</em> peut être utilisé par le moteur de production</p>
 <div class="section" id="id16">
 <h3>Dans KSF<a class="headerlink" href="#id16" title="Lien permanent vers ce titre">¶</a></h3>
-<p>A l&#8217;heure actuelle, KSF ne propose pas de spécialisation par technologie. Nous proposons donc un script qui est généré à la racine du dépôt où les instructions de build peuvent être ajoutées. Ce script est préparamétré pour être utilisé lors de l&#8217;exécution du job Jenkins qui correspond à la branche en question. Il est ainsi possible d&#8217;utiliser ce script pour démarrer un outil de gestion de dépendances comme Maven ou Gradle. Dans une version ultérieure, KSF proposera différents types de projets préparamétrés pour utiliser les différentes techologies utilisées par nos clients.</p>
+<p>A l&#8217;heure actuelle, KSF propose un script qui est généré à la racine du dépôt où les instructions de build peuvent être ajoutées. Ce script est préparamétré pour être utilisé lors de l&#8217;exécution du job Jenkins qui correspond à la branche en question. Il est ainsi possible d&#8217;utiliser ce script pour démarrer un outil de gestion de dépendances comme Maven ou Gradle.</p>
+<p>Il est possible de choisir un modèle par défaut parmi des templates déposés dans un répertoire prédéfini.</p>
 </div>
 <div class="section" id="id17">
 <h3>Les Métiers impliqués<a class="headerlink" href="#id17" title="Lien permanent vers ce titre">¶</a></h3>
@@ -647,7 +621,7 @@ Pour aller plus loin, il est possible d’harmoniser l’ensembles des technolog
 </div>
 <div class="section" id="le-parametrage-de-lapplication">
 <h2>Le Paramétrage de l’application<a class="headerlink" href="#le-parametrage-de-lapplication" title="Lien permanent vers ce titre">¶</a></h2>
-<p>Le paramétrage d’une application permet que celle-ci soit la plus flexible par rapport aux besoins d’utilisateurs.</p>
+<p>Le paramétrage d’une application permet que celle-ci soit très flexible par rapport aux besoins d’utilisateurs.</p>
 <p>Mais laisser un paramétrage trop important à l’utilisateur n’est pas sans inconvénients. En effet ceci à pour conséquence de :</p>
 <ul class="simple">
 <li>Devoir documenter chacun des paramètres (Leurs impacts, ainsi que leurs interactions) ;</li>
@@ -666,7 +640,7 @@ D’autres paramètres peuvent être assignés au moment de processus de déploi
 <li>À l’exécution :
 Les paramètres de l’application sont assignables ou modifiable pendant l’exécution de l’application. Ceci-se fait le plus souvent via une interface graphique. Les données provenant de l’utilisateur, il faut vérifier scrupuleusement les données saisies.</li>
 </ol>
-<p>Pour chaque paramètre de l’application il faut donc se poser la question : qui cela concerne il ?</p>
+<p>Pour chaque paramètre de l’application il faut donc se poser la question : qui cela concerne-t-il ?</p>
 <ul class="simple">
 <li>Toutes les versions de mes produits ?</li>
 <li>Un packaging en particulier ?</li>
@@ -707,7 +681,7 @@ En cas d’absence de moteur de production, une entreprise s’expose à :</p>
 <p><em>Son Rôle dans l’intégration continue :</em> permet la fourniture de binaires exploitables pour l’ensemble des environnements cibles.</p>
 <div class="section" id="id20">
 <h3>Dans KSF<a class="headerlink" href="#id20" title="Lien permanent vers ce titre">¶</a></h3>
-<p>A l&#8217;heure actuelle, KSF ne propose pas de spécialisation par technologie. Nous proposons donc un script qui est généré à la racine du dépôt où les instructions de build peuvent être ajoutées. Ce script est préparamétré pour être utilisé lors de l&#8217;exécution du job Jenkins qui correspond à la branche en question. Il est ainsi possible d&#8217;utiliser le moteur de production de son choix en complétant ce script. Dans une version ultérieure, KSF proposera différents types de projets préparamétrés pour utiliser les différentes techologies utilisées par nos clients.</p>
+<p>A l&#8217;heure actuelle, KSF propose un script qui est généré à la racine du dépôt où les instructions de build peuvent être ajoutées. Ce script est préparamétré pour être utilisé lors de l&#8217;exécution du job Jenkins qui correspond à la branche en question. Il est ainsi possible d&#8217;utiliser le moteur de production de son choix en complétant ce script.</p>
 </div>
 <div class="section" id="id21">
 <h3>Les Métiers impliqués<a class="headerlink" href="#id21" title="Lien permanent vers ce titre">¶</a></h3>
@@ -742,8 +716,8 @@ En cas d’absence de moteur de production, une entreprise s’expose à :</p>
 <p><em>L’Interconnexion :</em> L’IDE exploite toutes les fonctionnalités du gestionnaire de version. Il peut être connecté avec l’outil de suivi de demande afin que le développeur puisse mettre à jour via son IDE les demandes au fur et à mesure de ses développements. Enfin, une intégration des tests unitaires est souhaitable pour aider le développeur à les réaliser.</p>
 <div class="section" id="id22">
 <h3>Dans KSF<a class="headerlink" href="#id22" title="Lien permanent vers ce titre">¶</a></h3>
-<p>L&#8217;état de l&#8217;art actuel des éditeurs intégrés de développements accessible par navigateur, fait qu&#8217;il n&#8217;est aujourd&#8217;hui pas pertinent d&#8217;en proposer au sein de KSF. Nous suivons l&#8217;évolution de ces technologies afin d&#8217;inclure un IDE dans l&#8217;usine lorsque cela aura un intérêt fort pour nos utilisateurs.</p>
-<p>Aujourd&#8217;hui, nous recommandons l&#8217;utilisation d&#8217;Eclipse.</p>
+<p>Nous recommandons l&#8217;utilisation d&#8217;Eclipse dont les plugins permettent une intégration parfaite avec KSF.</p>
+<p>Nous suivons l&#8217;évolution des éditeurs intégrés de développements accessible par navigateur afin d&#8217;inclure un IDE dans l&#8217;usine lorsque l&#8217;état de l&#8217;art le permettra.</p>
 </div>
 <div class="section" id="id23">
 <h3>Les Métiers impliqués<a class="headerlink" href="#id23" title="Lien permanent vers ce titre">¶</a></h3>
@@ -895,7 +869,7 @@ Chacune de ces versions sont testées dans des conditions réelles par des utili
 <p><em>Son Rôle dans la livraison continue :</em> Validateur une version donné d’un produit pour une mise en production</p>
 <div class="section" id="id30">
 <h3>Dans KSF<a class="headerlink" href="#id30" title="Lien permanent vers ce titre">¶</a></h3>
-<p>Dans KSF, le processus de release est en grande partie automatisée. Lorsqu&#8217;un utilisateur décide de déclencher une release, il choisit la version à livrer. Ensuite, KSF vérifie que le travail sur la release est terminé et que les derniers builds ont bien fonctionné. Il est alors créé la branche de release et les tests liés à cette dernière peuvent alors commencer. KSF permet ensuite d&#8217;effectuer automatiquement les contrôles sur le build de livraison puis les merges nécessaires lorsque le travail est terminé.</p>
+<p>Dans KSF, <strong>le processus de release est en grande partie automatisé</strong>. Lorsqu&#8217;un utilisateur décide de déclencher une release, il choisit la version à livrer. Ensuite, KSF vérifie que le travail sur la release est terminé et que les derniers builds ont bien fonctionné. Il est alors créé la branche de release et les tests liés à cette dernière peuvent alors commencer. KSF permet ensuite d&#8217;effectuer automatiquement les contrôles sur le build de livraison puis les merges nécessaires lorsque le travail est terminé.</p>
 </div>
 <div class="section" id="id31">
 <h3>Les Métiers impliqués<a class="headerlink" href="#id31" title="Lien permanent vers ce titre">¶</a></h3>
@@ -920,7 +894,7 @@ Chacune de ces versions sont testées dans des conditions réelles par des utili
 <p><em>Son Rôle dans le déploiement continu :</em> permet de suivre l’évolution des déploiements.</p>
 <div class="section" id="id32">
 <h3>Dans KSF<a class="headerlink" href="#id32" title="Lien permanent vers ce titre">¶</a></h3>
-<p>KSF est fourni avec Komea Dashboard qui permet de connaitre à tout moment différents paramètres des projets ou de l&#8217;ensemble de projets gérés dans l&#8217;usine.</p>
+<p>KSF est compatible avec Komea Dashboard qui permet de connaitre à tout moment différents paramètres des projets ou de l&#8217;ensemble de projets gérés dans l&#8217;usine.</p>
 </div>
 <div class="section" id="id33">
 <h3>Les Métiers impliqués<a class="headerlink" href="#id33" title="Lien permanent vers ce titre">¶</a></h3>
@@ -930,49 +904,40 @@ Chacune de ces versions sont testées dans des conditions réelles par des utili
 <div class="section" id="la-documentation">
 <h2>La Documentation<a class="headerlink" href="#la-documentation" title="Lien permanent vers ce titre">¶</a></h2>
 <p>La documentation d’un projet logiciel doit être vue sous plusieurs angles :</p>
+<div class="section" id="la-documentation-des-sources">
+<h3>La documentation des sources<a class="headerlink" href="#la-documentation-des-sources" title="Lien permanent vers ce titre">¶</a></h3>
 <ul class="simple">
-<li>La documentation des sources</li>
-</ul>
-<blockquote>
-<div><ul class="simple">
 <li>commente les sources du logiciel (i.e. variables, fonctions, classes, méthodes, etc.),</li>
 <li>peut contenir des exemples d’exploitation des classes, méthodes, etc.</li>
 <li>est à destination des développeurs.</li>
 </ul>
-</div></blockquote>
+</div>
+<div class="section" id="la-documentation-technique">
+<h3>La documentation technique<a class="headerlink" href="#la-documentation-technique" title="Lien permanent vers ce titre">¶</a></h3>
 <ul class="simple">
-<li>La documentation technique</li>
-</ul>
-<blockquote>
-<div><ul class="simple">
 <li>contient l’architecture métier/fonctionnelle,</li>
 <li>contient l’architecture applicative,</li>
 <li>contient le schéma d&#8217;exploitation,</li>
 <li>contient les informations d&#8217;installation et de mise à jour,</li>
 <li>contient les informations de paramétrage.</li>
 </ul>
-</div></blockquote>
+</div>
+<div class="section" id="la-documentation-dadministration">
+<h3>La documentation d’administration<a class="headerlink" href="#la-documentation-dadministration" title="Lien permanent vers ce titre">¶</a></h3>
 <ul class="simple">
-<li>La documentation d’administration</li>
-</ul>
-<blockquote>
-<div><ul class="simple">
 <li>est le manuel complet d’administration du logiciel,</li>
 <li>peut contenir des tutoriels pour faciliter l’appréhension de l’administration du logiciel,</li>
 <li>est à destination des administrateurs systèmes du logiciel.</li>
 </ul>
-</div></blockquote>
+</div>
+<div class="section" id="la-documentation-utilisateur">
+<h3>La documentation utilisateur<a class="headerlink" href="#la-documentation-utilisateur" title="Lien permanent vers ce titre">¶</a></h3>
 <ul class="simple">
-<li>La documentation utilisateur</li>
-</ul>
-<blockquote>
-<div><ul class="simple">
 <li>est le manuel complet d’utilisation du logiciel,</li>
 <li>peut contenir des tutoriels pour faciliter l’appréhension de l’utilisation du logiciel,</li>
 <li>peut contenir une FAQ,</li>
 <li>est à destination des utilisateurs du logiciel</li>
 </ul>
-</div></blockquote>
 <p>En cas d’absence de documentation, une entreprise s’expose à :</p>
 <ul class="simple">
 <li>Faire de son produit un outil interne et pas réellement un produit ;</li>
@@ -990,108 +955,14 @@ Chacune de ces versions sont testées dans des conditions réelles par des utili
 <li>Trac (<a class="reference external" href="http://trac.edgewall.org/">http://trac.edgewall.org/</a>)</li>
 </ul>
 <p>Exemple d&#8217;outil propriétaire : Jira (<a class="reference external" href="https://www.atlassian.com/software/jira">https://www.atlassian.com/software/jira</a>)</p>
+</div>
 <div class="section" id="id34">
 <h3>Dans KSF<a class="headerlink" href="#id34" title="Lien permanent vers ce titre">¶</a></h3>
-<p>La documentation intervient à différents niveaux. Pour la documentation des sources il est possible de paramétrer KSF pour la générer et la publier à partir d&#8217;outils comme Doxygen. Pour la documentation technique, nous recommandons l&#8217;utilisation des outils proposés par Redmine. Suivant le type de produit, les documentation &#8220;d&#8217;administration&#8221; et &#8220;utilisateur&#8221; peuvent prendre des formes très différentes. Ce format est à déterminer dès la conception. Dans le cas d&#8217;une documentation en ligne compilée à partir de sources (par exemple ReadTheDocs), il est alors possible de faire faire ce travail à KSF via l&#8217;utilisation de Jenkins.</p>
+<p>La documentation intervient à différents niveaux. Pour la documentation des sources il est possible de paramétrer KSF pour la générer et la publier à partir d&#8217;outils comme Doxygen. Pour la documentation technique, nous recommandons l&#8217;utilisation des outils proposés par Redmine. Suivant le type de produit, les documentations &#8220;d&#8217;administration&#8221; et &#8220;utilisateur&#8221; peuvent prendre des formes très différentes. Ce format est à déterminer dès la conception. Dans le cas d&#8217;une documentation en ligne compilée à partir de sources (par exemple ReadTheDocs), il est alors possible de faire faire ce travail à KSF via l&#8217;utilisation de Jenkins.</p>
 </div>
 <div class="section" id="id35">
 <h3>Les Métiers impliqués<a class="headerlink" href="#id35" title="Lien permanent vers ce titre">¶</a></h3>
 <p>Développeur, Intégrateur, Responsable produit, Support.</p>
-<div class="section" id="tableau-recapitulatif">
-<h4>Tableau récapitulatif<a class="headerlink" href="#tableau-recapitulatif" title="Lien permanent vers ce titre">¶</a></h4>
-<table border="1" class="docutils">
-<colgroup>
-<col width="32%" />
-<col width="35%" />
-<col width="32%" />
-</colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Feature</th>
-<th class="head">Fonction</th>
-<th class="head">Objets concernés</th>
-</tr>
-</thead>
-<tbody valign="top">
-<tr class="row-even"><td>Les Conventions</td>
-<td>Normaliser</td>
-<td>Programmes</td>
-</tr>
-<tr class="row-odd"><td>La Modélisation</td>
-<td>Concevoir</td>
-<td>Application</td>
-</tr>
-<tr class="row-even"><td>La Gestion de version</td>
-<td>Archiver</td>
-<td>Programmes</td>
-</tr>
-<tr class="row-odd"><td>Le Suivi des demandes</td>
-<td>Gérer</td>
-<td>Features</td>
-</tr>
-<tr class="row-even"><td>La Revue de code</td>
-<td>Relire</td>
-<td>Programmes</td>
-</tr>
-<tr class="row-odd"><td>La Forge logicielle</td>
-<td>Développer(?)</td>
-<td>Programmes</td>
-</tr>
-<tr class="row-even"><td>La Qualimétrie</td>
-<td>Fiabiliser</td>
-<td>Programmes</td>
-</tr>
-<tr class="row-odd"><td>Les Tests internes automatisés</td>
-<td>Valider</td>
-<td>Programmes</td>
-</tr>
-<tr class="row-even"><td>La Gestion des bibliothèques</td>
-<td>Construire</td>
-<td>Application</td>
-</tr>
-<tr class="row-odd"><td>Le Paramétrage de l’application</td>
-<td>Déploier</td>
-<td>Release</td>
-</tr>
-<tr class="row-even"><td>Le Moteur de production</td>
-<td>Construire</td>
-<td>Release</td>
-</tr>
-<tr class="row-odd"><td>L’IDE</td>
-<td>Développer</td>
-<td>&nbsp;</td>
-</tr>
-<tr class="row-even"><td>L’Empaquetage</td>
-<td>Délivrer</td>
-<td>&nbsp;</td>
-</tr>
-<tr class="row-odd"><td>Les Tests du système</td>
-<td>Valider</td>
-<td>&nbsp;</td>
-</tr>
-<tr class="row-even"><td>L’intégration continue</td>
-<td>Orchestrer</td>
-<td>&nbsp;</td>
-</tr>
-<tr class="row-odd"><td>Le processus de release</td>
-<td>Délivrer</td>
-<td>&nbsp;</td>
-</tr>
-<tr class="row-even"><td>Le Tableau de bord</td>
-<td>Piloter</td>
-<td>&nbsp;</td>
-</tr>
-<tr class="row-odd"><td>La Documentation</td>
-<td>Développer</td>
-<td>&nbsp;</td>
-</tr>
-<tr class="row-even"><td>Single Sign On(*)</td>
-<td>Authentifier</td>
-<td>Utilisateurs</td>
-</tr>
-</tbody>
-</table>
-<p>(*) voir Caractéristiques</p>
-</div>
 </div>
 </div>
 </div>

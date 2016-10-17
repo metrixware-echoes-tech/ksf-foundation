@@ -19,7 +19,8 @@ Avec Puppet, il suffit de décrire l'état dans lequel on souhaite avoir son inf
 Dans KSF, Puppet est utilisé pour assurer le déploiement et la configuration des logiciels, à la fois ceux de l'usine elle-même et ceux produits en son sein.
 
 En résumé, grâce à Puppet et son intégration dans KSF vous allez :
-- Libérer du temps pour vous consacrer à ce qui a réellement une valeur "business"
-- Assurer la stabilité et la fiabilité de vos logiciels
-- Améliorer la collaboration entre les admin sys, les intégrateurs et les développeurs
+
+* Libérer du temps pour vous consacrer à ce qui a réellement une valeur "business"
+* Assurer la stabilité et la fiabilité de vos logiciels
+* Améliorer la collaboration entre les admin sys, les intégrateurs et les développeurs
 

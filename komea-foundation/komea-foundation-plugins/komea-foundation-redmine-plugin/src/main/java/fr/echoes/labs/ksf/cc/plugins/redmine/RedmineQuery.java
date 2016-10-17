@@ -9,21 +9,21 @@ import java.util.List;
  */
 public class RedmineQuery {
 
-	private final String projectName;
+	private final String projectKey;
 	private final int resultItemsLimit;
 	private final List<Integer> trackerIds;
 	private final List<Integer> statusIds;
 	private final String targetVersion;
 
 	public static class Builder {
-		private String projectName;
+		private String projectKey;
 		private int resultItemsLimit = -1;
 		private final List<Integer> trackerIds = new ArrayList<Integer>();
 		private final List<Integer> statusIds = new ArrayList<Integer>();
 		private String targetVersion = null;
 
-		public Builder projectName(String projectName) {
-			this.projectName = projectName;
+		public Builder projectKey(String projectKey) {
+			this.projectKey = projectKey;
 			return this;
 		}
 
@@ -57,7 +57,7 @@ public class RedmineQuery {
 	}
 
 	private RedmineQuery(Builder builder) {
-		this.projectName = builder.projectName;
+		this.projectKey= builder.projectKey;
 		this.resultItemsLimit = builder.resultItemsLimit;
 		this.trackerIds = builder.trackerIds;
 		this.statusIds = builder.statusIds;
@@ -65,10 +65,10 @@ public class RedmineQuery {
 	}
 
 	/**
-	 * @return the projectName
+	 * @return the project key
 	 */
-	public String getProjectName() {
-		return this.projectName;
+	public String getProjectKey() {
+		return this.projectKey;
 	}
 
 	/**

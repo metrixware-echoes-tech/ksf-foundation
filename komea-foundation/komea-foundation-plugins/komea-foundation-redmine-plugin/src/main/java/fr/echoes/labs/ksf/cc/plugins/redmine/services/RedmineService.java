@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.common.collect.Maps;
 import com.taskadapter.redmineapi.IssueManager;
 import com.taskadapter.redmineapi.MembershipManager;
 import com.taskadapter.redmineapi.ProjectManager;
@@ -21,6 +22,8 @@ import com.taskadapter.redmineapi.RedmineException;
 import com.taskadapter.redmineapi.RedmineManager;
 import com.taskadapter.redmineapi.RedmineManagerFactory;
 import com.taskadapter.redmineapi.UserManager;
+import com.taskadapter.redmineapi.bean.CustomField;
+import com.taskadapter.redmineapi.bean.CustomFieldFactory;
 import com.taskadapter.redmineapi.bean.Issue;
 import com.taskadapter.redmineapi.bean.IssueCategory;
 import com.taskadapter.redmineapi.bean.Project;
@@ -29,7 +32,7 @@ import com.taskadapter.redmineapi.bean.Tracker;
 import com.taskadapter.redmineapi.bean.User;
 import com.taskadapter.redmineapi.bean.Version;
 
-import fr.echoes.labs.ksf.cc.extensions.services.project.ProjectUtils;
+import fr.echoes.labs.ksf.cc.extensions.gui.ProjectExtensionConstants;
 import fr.echoes.labs.ksf.cc.extensions.services.project.TicketStatus;
 import fr.echoes.labs.ksf.cc.extensions.services.project.features.IProjectFeature;
 import fr.echoes.labs.ksf.cc.extensions.services.project.features.ProjectFeature;
@@ -40,6 +43,7 @@ import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineIssue;
 import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineQuery;
 import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineQuery.Builder;
 import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
+import fr.echoes.labs.ksf.users.security.api.CurrentUserService;
 
 /**
  * Spring Service for working with the foreman API.
@@ -53,23 +57,72 @@ public class RedmineService implements IRedmineService {
     private static final Logger LOGGER = LoggerFactory.getLogger(RedmineService.class);
 
     private final RedmineConfigurationService configuration;
-
-    private final RedmineManager redmineManager;
+    private final CurrentUserService currentUserService;
+    private final RedmineNameResolver nameResolver;
 
     @Autowired
-    public RedmineService(final RedmineConfigurationService configuration) {
+    public RedmineService(final RedmineConfigurationService configuration,
+    		final RedmineNameResolver nameResolver,
+            final CurrentUserService currentUserService) {
         this.configuration = configuration;
+        this.currentUserService = currentUserService;
+        this.nameResolver = nameResolver;
+    }
+
+    private RedmineManager getAdminRedmineManager() throws RedmineExtensionException {
         final String apiAccessKey = this.configuration.getApiAccessKey();
         final String url = this.configuration.getUrl();
-        this.redmineManager = RedmineManagerFactory.createWithApiKey(url, apiAccessKey);
+        return RedmineManagerFactory.createWithApiKey(url, apiAccessKey);
+    }
+
+    private RedmineManager getUserRedmineManager() throws RedmineExtensionException {
+        final String login = this.currentUserService.getCurrentUserLogin();
+        final String apiAccessKey = this.getUserApiKey(login);
+        final String url = this.configuration.getUrl();
+        return RedmineManagerFactory.createWithApiKey(url, apiAccessKey);
+    }
+
+    private User getUserByLogin(final String login, final RedmineManager redmineManager) throws RedmineException {
+        final Map<String, String> params = Maps.newHashMap();
+        params.put("name", login);
+        final List<User> users = redmineManager.getUserManager().getUsers(params);
+        User userByLogin = null;
+        for (final User us : users) {
+            if (us.getLogin().equals(login)) {
+                userByLogin = us;
+                break;
+            }
+        }
+        return userByLogin;
+    }
+
+    private String getUserApiKey(final String username) throws RedmineExtensionException {
+        String apiKey = null;
+        final RedmineManager redmineManager = this.getAdminRedmineManager();
+        try {
+            final User user = this.getUserByLogin(username, redmineManager);
+            if (user == null) {
+                throw new RedmineExtensionException("Redmine user with login " + username + " does not exist.");
+            }
+            apiKey = redmineManager.getUserManager().getUserById(user.getId()).getApiKey();
+            if (apiKey == null) {
+                throw new RedmineExtensionException("Redmine api-key for user " + username + " does not exist.");
+            }
+        } catch (RedmineException ex) {
+            throw new RedmineExtensionException("Fail to get Redmine users.", ex);
+        }
+        return apiKey;
     }
 
     @Override
-    public void createProject(String projectName, String username) throws RedmineExtensionException {
-        Objects.requireNonNull(projectName);
+    public void createProject(final ProjectDto ksfProject, String username) throws RedmineExtensionException {
+       
+    	Objects.requireNonNull(ksfProject);
 
-        final ProjectManager projectManager = this.redmineManager.getProjectManager();
-        final Project project = ProjectFactory.create(projectName, ProjectUtils.createIdentifier(projectName));
+    	final String projectKey = this.nameResolver.getProjectKey(ksfProject);
+        final RedmineManager redmineManager = getAdminRedmineManager();
+        final ProjectManager projectManager = redmineManager.getProjectManager();
+        final Project project = ProjectFactory.create(ksfProject.getName(), projectKey);
 
         try {
 
@@ -80,74 +133,103 @@ public class RedmineService implements IRedmineService {
                 LOGGER.info(t.getId() + " name: " + t.getName());
             }
 
-            this.addProjectMember(redmineProject, this.configuration.getAdminUserName());
-            this.addProjectMember(redmineProject, username);
+            final String adminUserName = this.configuration.getAdminUserName();
+            this.addProjectMember(redmineProject, adminUserName, redmineManager);
+            if (!adminUserName.equals(username)) {
+                this.addProjectMember(redmineProject, username, redmineManager);
+            }
+            
+            ksfProject.getOtherAttributes().put(ProjectExtensionConstants.REDMINE_KEY, projectKey);
 
         } catch (final RedmineException e) {
-            throw new RedmineExtensionException("Failed to create projet " + projectName, e);
+            throw new RedmineExtensionException("Failed to create projet " + ksfProject.getName(), e);
         }
     }
 
-    private void addProjectMember(final Project redmineProject, String username) throws RedmineException {
+    private void addProjectMember(final Project redmineProject, String username, RedmineManager redmineManager)
+            throws RedmineException, RedmineExtensionException {
         final User adminUser = findUser(username);
         if (adminUser != null) {
-            final UserManager userManager = this.redmineManager.getUserManager();
-            final MembershipManager membershipManager = this.redmineManager.getMembershipManager();
+            final UserManager userManager = redmineManager.getUserManager();
+            final MembershipManager membershipManager = redmineManager.getMembershipManager();
             membershipManager.createMembershipForUser(redmineProject.getId(), adminUser.getId(), userManager.getRoles());
         }
     }
 
-    private User findUser(String username) throws RedmineException {
-        final User cachedUser = RedmineUserCache.INSTANCE.get(username);
+    private User findUser(String username) throws RedmineException, RedmineExtensionException {
+        User cachedUser = RedmineUserCache.INSTANCE.get(username);
         if (cachedUser != null) {
             LOGGER.info("[redmine] cached user '{}' found", username);
             return cachedUser;
         }
 
-        final UserManager userManager = this.redmineManager.getUserManager();
+        final UserManager userManager = this.getAdminRedmineManager().getUserManager();
         for (final User user : userManager.getUsers()) {
+            RedmineUserCache.INSTANCE.put(user.getLogin(), user);
             if (StringUtils.equalsIgnoreCase(user.getLogin(), username)) {
                 LOGGER.info("[redmine] user '{}' found", username);
-                RedmineUserCache.INSTANCE.put(username, user);
-                return user;
+                cachedUser = user;
             }
         }
+        if (cachedUser == null) {
+            LOGGER.info("[redmine] user '{}' not found", username);
+        }
+        return cachedUser;
+    }
 
-        LOGGER.info("[redmine] user '{}' not found", username);
-        return null;
+    private User findUserById(Integer id) throws RedmineException, RedmineExtensionException {
+        User cachedUser = RedmineUserCache.INSTANCE.getUserById(id);
+        if (cachedUser != null) {
+            LOGGER.info("[redmine] cached user '{}' found", id);
+            return cachedUser;
+        }
+
+        final UserManager userManager = this.getAdminRedmineManager().getUserManager();
+        for (final User user : userManager.getUsers()) {
+            RedmineUserCache.INSTANCE.put(user.getLogin(), user);
+            if (id.equals(user.getId())) {
+                LOGGER.info("[redmine] user '{}' found", id);
+                cachedUser = user;
+            }
+        }
+        if (cachedUser == null) {
+            LOGGER.info("[redmine] user '{}' not found", id);
+        }
+        return cachedUser;
     }
 
     @Override
-    public void deleteProject(String projectName) throws RedmineExtensionException {
-        Objects.requireNonNull(projectName);
+    public void deleteProject(final ProjectDto ksfProject) throws RedmineExtensionException {
+        
+    	Objects.requireNonNull(ksfProject);
 
-        final ProjectManager projectManager = this.redmineManager.getProjectManager();
+    	final String projectKey = this.nameResolver.getProjectKey(ksfProject);
+        final ProjectManager projectManager = getAdminRedmineManager().getProjectManager();
+        
         try {
-            projectManager.deleteProject(projectName);
+            projectManager.deleteProject(projectKey);
         } catch (final RedmineException e) {
-            throw new RedmineExtensionException("Failed to delete projet " + projectName, e);
+            throw new RedmineExtensionException("Failed to delete projet " + projectKey, e);
         }
 
     }
 
-    @Override
-    public List<RedmineIssue> queryIssues(RedmineQuery query) throws RedmineExtensionException {
+    private List<RedmineIssue> queryIssues(final RedmineQuery query, final RedmineManager manager) throws RedmineExtensionException {
+
         Objects.requireNonNull(query);
 
         List<Issue> issues;
         final List<RedmineIssue> redmineIssues;
-        final String projectName = query.getProjectName();
+        final String projectIdentifier = query.getProjectKey();
         final int resultItemsLimit = query.getResultItemsLimit();
         final String requestTargetVersion = query.getTargetVersion();
         final int resultNumberOfItems;
-
+        final RedmineManager redmineManager = manager == null ? getUserRedmineManager() : manager;
         try {
-            final IssueManager issueManager = this.redmineManager.getIssueManager();
-
-            final String projectIdentifier = findProjectIdentifier(projectName);
+            final IssueManager issueManager = redmineManager.getIssueManager();
 
             if (projectIdentifier == null) {
-                throw new RedmineExtensionException("Cannot find project " + projectName);
+                throw new RedmineExtensionException("Cannot find project " + projectIdentifier);
             }
 
             issues = issueManager.getIssues(projectIdentifier, null);
@@ -160,7 +242,7 @@ public class RedmineService implements IRedmineService {
             redmineIssues = new ArrayList<>(resultNumberOfItems);
 
         } catch (final RedmineException e) {
-            throw new RedmineExtensionException("Failed to list the issues of " + projectName, e);
+            throw new RedmineExtensionException("Failed to list the issues of " + projectIdentifier, e);
         }
 
         for (int i = 0; i < resultNumberOfItems; i++) {
@@ -187,46 +269,58 @@ public class RedmineService implements IRedmineService {
         return redmineIssues;
     }
 
-    private RedmineIssue createRedmineIssue(final Issue issue) {
-        final RedmineIssue redmiIssue = new RedmineIssue(issue.getId());
+    @Override
+    public List<RedmineIssue> queryIssues(RedmineQuery query) throws RedmineExtensionException {
+        return queryIssues(query, null);
+    }
 
-        final User user = issue.getAssignee();
-        final String assigneFullName = user == null ? StringUtils.EMPTY : StringUtils.defaultString(user.getFullName());
-        redmiIssue.setAssignee(assigneFullName);
+    private RedmineIssue createRedmineIssue(final Issue issue) throws RedmineExtensionException {
+        final RedmineIssue redmineIssue = new RedmineIssue(issue.getId());
+
+        User assignee = issue.getAssignee();
+        if (assignee != null && assignee.getLogin() == null) {
+            final Integer assigneeId = assignee.getId();
+            try {
+                assignee = this.findUserById(assigneeId);
+            } catch (final RedmineException e) {
+                throw new RedmineExtensionException("Failed to find redmine user with id " + assigneeId, e);
+            }
+        }
+        final String assigneeLogin = assignee == null ? StringUtils.EMPTY : StringUtils.defaultString(assignee.getLogin());
+        redmineIssue.setAssignee(assigneeLogin);
 
         final IssueCategory category = issue.getCategory();
         final String categoryName = category == null ? StringUtils.EMPTY : StringUtils.defaultString(category.getName());
 
-        redmiIssue.setCategory(categoryName);
+        redmineIssue.setCategory(categoryName);
 
-        redmiIssue.setSubject(StringUtils.defaultString(issue.getSubject()));
+        redmineIssue.setSubject(StringUtils.defaultString(issue.getSubject()));
 
-        redmiIssue.setPriority(StringUtils.defaultString(issue.getPriorityText()));
-        redmiIssue.setStatus(StringUtils.defaultString(issue.getStatusName()));
-        redmiIssue.setStatusId(issue.getStatusId());
+        redmineIssue.setPriority(StringUtils.defaultString(issue.getPriorityText()));
+        redmineIssue.setStatus(StringUtils.defaultString(issue.getStatusName()));
+        redmineIssue.setStatusId(issue.getStatusId());
 
         final Version targetVersion = issue.getTargetVersion();
         final String targetVersionName = targetVersion == null ? StringUtils.EMPTY : StringUtils.defaultString(targetVersion.getName());
-        redmiIssue.setTargetVersion(targetVersionName);
+        redmineIssue.setTargetVersion(targetVersionName);
 
         final Tracker tracker = issue.getTracker();
         final String trackerName = tracker == null ? StringUtils.EMPTY : StringUtils.defaultString(tracker.getName());
 
-        redmiIssue.setTracker(trackerName);
-        return redmiIssue;
-    }
-
-    private String findProjectIdentifier(String projectName) throws RedmineException {
-        return ProjectUtils.createIdentifier(projectName);
+        redmineIssue.setTracker(trackerName);
+        return redmineIssue;
     }
 
     @Override
-    public List<IProjectVersion> getVersions(String projectName) throws RedmineExtensionException {
-        Objects.requireNonNull(projectName);
+    public List<IProjectVersion> getVersions(final ProjectDto ksfProject) throws RedmineExtensionException {
+        
+    	Objects.requireNonNull(ksfProject);
 
         final List<IProjectVersion> result;
-        final ProjectManager projectManager = this.redmineManager.getProjectManager();
-        final String projectKey = ProjectUtils.createIdentifier(projectName);
+        final ProjectManager projectManager = getUserRedmineManager().getProjectManager();
+        final String projectKey = this.nameResolver.getProjectKey(ksfProject);
+        final String projectName = ksfProject.getName();
+        
         try {
             final Project project = projectManager.getProjectByKey(projectKey);
             final List<Version> versions = projectManager.getVersions(project.getId());
@@ -280,19 +374,21 @@ public class RedmineService implements IRedmineService {
     }
 
     @Override
-    public List<IProjectFeature> getFeatures(String projectName)
-            throws RedmineExtensionException {
-        Objects.requireNonNull(projectName);
-
-        final List<IProjectFeature> features = buildFeaturesList(projectName, this.configuration.getFeatureIds());
+    public List<IProjectFeature> getFeatures(final ProjectDto ksfProject) throws RedmineExtensionException {
+        
+    	Objects.requireNonNull(ksfProject);
+        final RedmineManager redmineManager = getUserRedmineManager();
+        final List<IProjectFeature> features = buildFeaturesList(ksfProject, this.configuration.getFeatureIds(), redmineManager);
 
         return features;
     }
 
-    private List<IProjectFeature> buildFeaturesList(String projectName, List<Integer> trackerIds) throws RedmineExtensionException {
-        final Builder redmineQuerryBuilder = new RedmineQuery.Builder();
+    private List<IProjectFeature> buildFeaturesList(final ProjectDto ksfProject, final List<Integer> trackerIds, final RedmineManager redmineManager) throws RedmineExtensionException {
+        
+    	final Builder redmineQuerryBuilder = new RedmineQuery.Builder();
 
-        final Builder builder = redmineQuerryBuilder.projectName(projectName);
+    	final String projectKey = this.nameResolver.getProjectKey(ksfProject);
+        final Builder builder = redmineQuerryBuilder.projectKey(projectKey);
 
         for (final Integer trackerId : trackerIds) {
             builder.addTrackerId(trackerId);
@@ -302,7 +398,7 @@ public class RedmineService implements IRedmineService {
         builder.addStatusId(this.configuration.getFeatureStatusAssignedId());
 
         final RedmineQuery query = redmineQuerryBuilder.build();
-        final List<RedmineIssue> issues = queryIssues(query);
+        final List<RedmineIssue> issues = queryIssues(query, redmineManager);
 
         final List<IProjectFeature> features = new ArrayList<IProjectFeature>(issues.size());
         for (final RedmineIssue issue : issues) {
@@ -323,34 +419,58 @@ public class RedmineService implements IRedmineService {
     }
 
     @Override
+    public void rejectIssue(String ticketId, String username) throws RedmineExtensionException {
+
+        LOGGER.info("[redmine] Rejecting redmine issue '{}'", ticketId);
+        final RedmineManager redmineManager = getUserRedmineManager();
+        final IssueManager issueManager = redmineManager.getIssueManager();
+        try {
+
+            final Issue issue = this.getIssueById(Integer.valueOf(ticketId), issueManager);
+            this.changeIssueAssignee(issue, username);
+            issue.setStatusId(this.configuration.getFeatureStatusClosedId());
+            final int resolutionFieldId = this.configuration.getResolutionFieldId();
+            CustomField fieldResolution = issue.getCustomFieldById(resolutionFieldId);
+            if (fieldResolution == null) {
+                fieldResolution = CustomFieldFactory.create(resolutionFieldId);
+                issue.addCustomField(fieldResolution);
+            }
+            fieldResolution.setValue(this.configuration.getFeatureResolutionRejectedValue());
+            issueManager.update(issue);
+
+            LOGGER.info("[redmine] Rejecting redmine issue - issue rejected");
+        } catch (final RedmineExtensionException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw e;
+        } catch (final Exception e) {
+            LOGGER.error("[redmine] Failed to reject issue '" + ticketId + "'", e);
+            throw new RedmineExtensionException("Failed to reject ticket.", e);
+        }
+    }
+
+    @Override
     public void changeStatus(String ticketId, int statusId, String username) throws RedmineExtensionException {
 
         LOGGER.info("[redmine] Changing redmine issue '{}' status to status ID '{}'", ticketId, statusId);
-
-        final IssueManager issueManager = this.redmineManager.getIssueManager();
+        final RedmineManager redmineManager = getUserRedmineManager();
+        final IssueManager issueManager = redmineManager.getIssueManager();
         try {
-            final Issue issue;
-            LOGGER.info("[redmine] Changing redmine issue - property bug API is {}", this.configuration.isHackBugApi());
-            if (this.configuration.isHackBugApi()) {
-                issue = this.getIssueById(Integer.valueOf(ticketId));
-            } else {
-                issue = issueManager.getIssueById(Integer.valueOf(ticketId));
-            }
-
+            final Issue issue = this.getIssueById(Integer.valueOf(ticketId), issueManager);
             issue.setStatusId(statusId);
-
             this.changeIssueAssignee(issue, username);
-
             issueManager.update(issue);
             LOGGER.info("[redmine] Changing redmine issue status - status updated");
+        } catch (final RedmineExtensionException e) {
+            LOGGER.error(e.getMessage(), e);
+            throw e;
         } catch (final Exception e) {
             LOGGER.error("[redmine] Failed to change issue '" + ticketId + "' status", e);
             throw new RedmineExtensionException("Failed to change ticket status.", e);
         }
     }
 
-    private void changeIssueAssignee(Issue issue, String username)
-            throws RedmineException {
+    private void changeIssueAssignee(final Issue issue, final String username)
+            throws RedmineException, RedmineExtensionException {
         if (username != null) {
             final User user = findUser(username);
             if (user != null) {
@@ -360,55 +480,60 @@ public class RedmineService implements IRedmineService {
         }
     }
 
-    private Issue getIssueById(Integer issueId) throws RedmineException {
-        final List<Issue> issues = this.redmineManager.getIssueManager().getIssues(null, null);
-        if (issues != null) {
-            for (final Issue issue : issues) {
-                if (issue.getId().equals(issueId)) {
-                    return issue;
+    private Issue getIssueById(final Integer issueId, final IssueManager issueManager) throws RedmineException, RedmineExtensionException {
+        Issue issue = null;
+        LOGGER.info("[redmine] property bug API is {}", this.configuration.isHackBugApi());
+        if (this.configuration.isHackBugApi()) {
+            final List<Issue> issues = issueManager.getIssues(null, null);
+            if (issues != null) {
+                for (final Issue iss : issues) {
+                    if (iss.getId().equals(issueId)) {
+                        issue = iss;
+                        break;
+                    }
                 }
             }
+        } else {
+            issue = issueManager.getIssueById(issueId);
         }
-        return null;
+        if (issue == null) {
+            throw new RedmineExtensionException("[redmine] Issue '" + issueId + "' was not found.");
+        }
+        return issue;
     }
 
     @Override
-    public String getProjectId(String projectName) throws RedmineExtensionException {
+    public String getProjectId(final ProjectDto ksfProject) {
 
-        Objects.requireNonNull(projectName);
+        Objects.requireNonNull(ksfProject);
 
-        final String id;
-        try {
-            id = findProjectIdentifier(projectName);
-        } catch (final RedmineException e) {
-            throw new RedmineExtensionException("Failed to get project \"" + projectName + "\" ID", e);
-        }
-        return id;
+        return this.nameResolver.getProjectKey(ksfProject);
     }
 
     @Override
-    public void createTicket(ProjectDto foundationProject, String releaseVersion, String subject, String username, Integer trackerId) throws RedmineExtensionException {
+    public void createTicket(final ProjectDto foundationProject, final String releaseVersion, final String subject, final String username, final Integer trackerId) throws RedmineExtensionException {
 
         Objects.requireNonNull(foundationProject);
         Objects.requireNonNull(releaseVersion);
 
         try {
-            final String projectIdentifier = findProjectIdentifier(foundationProject.getName());
-            final ProjectManager projectManager = this.redmineManager.getProjectManager();
-            final IssueManager issueManager = this.redmineManager.getIssueManager();
+            final String projectIdentifier = this.nameResolver.getProjectKey(foundationProject);
+            final RedmineManager redmineManager = getUserRedmineManager();
+            final ProjectManager projectManager = redmineManager.getProjectManager();
+            final IssueManager issueManager = redmineManager.getIssueManager();
 
             final Project redmineProject = projectManager.getProjectByKey(projectIdentifier);
-            final Version version = this.findVersion(redmineProject, releaseVersion);
+            final Version version = this.findVersion(redmineProject, releaseVersion, redmineManager);
 
             final Issue issue = new Issue();
             issue.setProject(redmineProject);
             issue.setTargetVersion(version);
             issue.setSubject(subject);
 
-			if (trackerId != null) {
-				final Tracker tracker = findTracker(issueManager, trackerId);
-				issue.setTracker(tracker);
-			}
+            if (trackerId != null) {
+                final Tracker tracker = findTracker(issueManager, trackerId);
+                issue.setTracker(tracker);
+            }
 
             this.changeIssueAssignee(issue, username);
 
@@ -419,25 +544,25 @@ public class RedmineService implements IRedmineService {
         }
     }
 
-	private Tracker findTracker(IssueManager issueManager, Integer trackerId) throws RedmineException {
+    private Tracker findTracker(IssueManager issueManager, Integer trackerId) throws RedmineException {
 
-		if (issueManager == null || trackerId == null) {
-			return null;
-		}
+        if (issueManager == null || trackerId == null) {
+            return null;
+        }
 
-		final List<Tracker> trackers = issueManager.getTrackers();
+        final List<Tracker> trackers = issueManager.getTrackers();
 
-		for (final Tracker tracker : trackers) {
-			if (trackerId.equals(tracker.getId())) {
-				return tracker;
-			}
-		}
+        for (final Tracker tracker : trackers) {
+            if (trackerId.equals(tracker.getId())) {
+                return tracker;
+            }
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-    private Version findVersion(Project redmineProject, String releaseVersion) throws RedmineException {
-        final List<Version> versions = this.redmineManager.getProjectManager().getVersions(redmineProject.getId());
+    private Version findVersion(Project redmineProject, String releaseVersion, RedmineManager redmineManager) throws RedmineException {
+        final List<Version> versions = redmineManager.getProjectManager().getVersions(redmineProject.getId());
         for (final Version version : versions) {
             if (StringUtils.equals(releaseVersion, version.getName())) {
                 return version;
@@ -452,11 +577,12 @@ public class RedmineService implements IRedmineService {
         Objects.requireNonNull(releaseVersion);
 
         try {
-            final String projectIdentifier = findProjectIdentifier(foundationProject.getName());
-            final ProjectManager projectManager = this.redmineManager.getProjectManager();
+            final String projectIdentifier = this.nameResolver.getProjectKey(foundationProject);
+            final RedmineManager redmineManager = getUserRedmineManager();
+            final ProjectManager projectManager = redmineManager.getProjectManager();
 
             final Project redmineProject = projectManager.getProjectByKey(projectIdentifier);
-            final Version version = findVersion(redmineProject, releaseVersion);
+            final Version version = findVersion(redmineProject, releaseVersion, redmineManager);
             version.setStatus(status);
             projectManager.update(version);
 

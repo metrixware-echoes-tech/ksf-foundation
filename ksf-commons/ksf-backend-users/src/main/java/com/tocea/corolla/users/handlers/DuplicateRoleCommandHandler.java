@@ -52,7 +52,7 @@ ICommandHandler<DuplicateRoleCommand, Role> {
 		
 		final String roleID = _command.getRoleID();
 		
-		Role roleToDuplicate = this.roleDAO.findOne(roleID.toString());
+		Role roleToDuplicate = this.roleDAO.findOne(roleID);
 		
 		if (roleToDuplicate == null) {
 			throw new MissingRoleInformationException("No role provided");
