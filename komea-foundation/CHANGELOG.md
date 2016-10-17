@@ -1,5 +1,23 @@
 # Product ChangeLog
 
+### 0.4.3 October 17 2016
+  - [#20994] Feature: Stocker en base les clés d'un projet
+  - [#20965] Feature: Choix d'une image de VM
+  - [#20964] Feature: Choix d'un template de job Jenkins
+  - [#20982] Feature: Gestion des suppressions (Jobs / Cibles / Environnements)
+  - [#20963] Feature: Prévoir un ascenseur dans les widget de l'onglet principal
+  - [#20966] Feature: Une tâche affectée ne doit être visible/démarrable que par la personne à qui elle est affectée au niveau de l'overview
+  - [#20962] Feature: Actualiser l'onglet principal des projets (overview) lorsque l'on clique dessus
+  - [#20084] Feature: Gestion de l'api key des utilisateurs dans Redmine
+  - [#20991] Bugfix: Terminer une release "exemple" supprime toutes les release "exemple" de la bdd
+  - [#20968] Bugfix: Les utilisateurs dont le login est en MAJUSCULE dans LDAP font exploser la création de projet dans la partie Foreman
+  - [#20601] Bugfix: Supprimer le contournement dans Foundation pour la connexion SSO dans Jenkins
+  - [#20546] Bugfix: Lorsque l'on utilise un "_" pour instancier une VM, Foreman renvoie une erreur
+  - [#20329] Bugfix: Exception lors de l'afichage des informations d'un projet
+  - [#20314] Bugfix: Pas de changement d'URL au changement d'onglet
+  - [#20197] Bugfix: Revoir l'encodage des noms de projets Jenkins
+  - [#20155] Bugfix: Le tableau présentant les tickets de Redmine n'est pas responsive
+
 ### 0.4.2 July 31 2016
   - [#20582] Feature: Permettre d'accéder / de publier des fichiers externes au jar à travers foundation
   - [#20558] Bugfix: Indisponibilité de l'adresse IP utilisée par Foreman lors de l'instantiation d'une nouvelle VM.
