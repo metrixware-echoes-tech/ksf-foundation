@@ -20,9 +20,9 @@ import fr.echoes.labs.ksf.foreman.api.utils.Comparators;
 
 public class SmartClassParameterBackupService extends CsvBackupService<SmartClassParameterWrapper> {
 
-	private final static Logger LOGGER = LoggerFactory.getLogger(SmartClassParameterBackupService.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(SmartClassParameterBackupService.class);
 
-	private final static String[] HEADER = new String[] {
+	private static final String[] HEADER = new String[] {
 			"puppetModule",
 			"puppetClass",
 			"parameter",
