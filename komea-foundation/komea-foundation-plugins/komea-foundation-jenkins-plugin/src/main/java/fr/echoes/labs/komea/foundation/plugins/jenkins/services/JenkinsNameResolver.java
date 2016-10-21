@@ -70,9 +70,25 @@ public class JenkinsNameResolver {
 	public String getProjectScmUrl(final ProjectDto project) {
         final Map<String, String> variables = new HashMap<String, String>(2);
         variables.put("scmUrl", this.configurationService.getScmUrl());
-        variables.put("projectKey", ProjectUtils.createIdentifier(project.getName()));	// TODO: extract the project key defined by the Git plugin
+        variables.put("projectKey", getScmRepositoryName(project));
         return replaceVariables(this.configurationService.getProjectScmUrlPattern(), variables);
     }
+	
+	public String getScmRepositoryName(final ProjectDto project) {		
+		final String repoName = (String) project.getOtherAttributes().get(ProjectExtensionConstants.GIT_REPOSITORY_KEY);	
+		if (!StringUtils.isEmpty(repoName)) {
+			return repoName;
+		}
+		return ProjectUtils.createIdentifier(project.getName());
+	}
+	
+	public String getNexusRepositoryKey(final ProjectDto project) {		
+		final String repository = (String) project.getOtherAttributes().get(ProjectExtensionConstants.NEXUS_REPOSITORY_KEY);
+		if (!StringUtils.isEmpty(repository)) {
+			return repository;
+		}
+		return ProjectUtils.createIdentifier(project.getName());
+	}
 	
 	public String getDisplayName(final String projectName, final String branchName) {
         final Map<String, String> variables = new HashMap<String, String>(2);

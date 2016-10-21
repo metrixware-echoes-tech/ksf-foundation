@@ -279,9 +279,7 @@ public class JenkinsService implements IJenkinsService {
         try {
             jenkins = this.createJenkinsClient();
 
-            final String scmUrl = this.nameResolver.getProjectScmUrl(project);
-            final String displayName = this.nameResolver.getDisplayName(project.getName(), gitBranchName);
-            final String resolvedXmlConfig = this.templateService.createConfigXml(templateName, displayName, scmUrl, gitBranchName);
+            final String resolvedXmlConfig = this.templateService.createConfigXml(project, templateName, gitBranchName);
 
             if (useFolder()) {
                 final FolderJob projectFolder = getProjectFolder(jenkins, this.nameResolver.getFolderJobName(project));

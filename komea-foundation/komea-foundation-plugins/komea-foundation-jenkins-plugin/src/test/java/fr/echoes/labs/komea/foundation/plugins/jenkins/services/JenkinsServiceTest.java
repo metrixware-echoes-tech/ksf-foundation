@@ -103,7 +103,7 @@ public class JenkinsServiceTest {
 		Mockito.when(this.server.getJobXml(expectedJobName)).thenReturn(jobXML);
 		Mockito.when(this.server.getJob(expectedJobName)).thenReturn(folderJobWithDetails);
 		Mockito.when(this.server.getFolderJob(folderJobWithDetails)).thenReturn(Optional.of(folderJob));
-		Mockito.when(this.templateService.createConfigXml(Matchers.anyString(), Matchers.anyString(), Matchers.anyString(), Matchers.anyString())).thenReturn("");
+		Mockito.when(this.templateService.createConfigXml(Matchers.eq(project), Matchers.anyString(), Matchers.anyString())).thenReturn("");
 		
 		// when
 		this.jenkinsService.createProject(project);
@@ -248,7 +248,7 @@ public class JenkinsServiceTest {
 		Mockito.when(this.configuration.useFolders()).thenReturn(true);
 		Mockito.when(this.server.getJob(folderJobName)).thenReturn(folderJobWithDetails);
 		Mockito.when(this.server.getFolderJob(folderJobWithDetails)).thenReturn(Optional.of(folderJob));
-		Mockito.when(this.templateService.createConfigXml(Matchers.anyString(), Matchers.anyString(), Matchers.anyString(), Matchers.anyString())).thenReturn("");
+		Mockito.when(this.templateService.createConfigXml(Matchers.eq(project), Matchers.anyString(), Matchers.anyString())).thenReturn("");
 		
 		// when
 		this.jenkinsService.createRelease(project, releaseVersion);
@@ -276,7 +276,7 @@ public class JenkinsServiceTest {
 		Mockito.when(this.configuration.useFolders()).thenReturn(true);
 		Mockito.when(this.server.getJob(folderJobName)).thenReturn(folderJobWithDetails);
 		Mockito.when(this.server.getFolderJob(folderJobWithDetails)).thenReturn(Optional.of(folderJob));
-		Mockito.when(this.templateService.createConfigXml(Matchers.anyString(), Matchers.anyString(), Matchers.anyString(), Matchers.anyString())).thenReturn("");
+		Mockito.when(this.templateService.createConfigXml(Matchers.eq(project), Matchers.anyString(), Matchers.anyString())).thenReturn("");
 		
 		// when
 		this.jenkinsService.createRelease(project, releaseVersion);
@@ -311,9 +311,8 @@ public class JenkinsServiceTest {
 		
 		// then
 		Mockito.verify(this.templateService).createConfigXml(
-				DEFAULT_TEMPLATE, 
-				buildFeatureJobName(project.getName(), featureId, featureSubject), 
-				buildScmURL(folderJobName), 
+				project,
+				DEFAULT_TEMPLATE,  
 				buildFeatureBranchName(featureId, featureSubject)
 		);
 		
@@ -347,9 +346,8 @@ public class JenkinsServiceTest {
 		
 		// then
 		Mockito.verify(this.templateService).createConfigXml(
-				DEFAULT_TEMPLATE, 
-				buildFeatureJobName(project.getName(), featureId, featureSubject), 
-				buildScmURL("job_name"), 
+				project,
+				DEFAULT_TEMPLATE,
 				buildFeatureBranchName(featureId, featureSubject)
 		);
 		
