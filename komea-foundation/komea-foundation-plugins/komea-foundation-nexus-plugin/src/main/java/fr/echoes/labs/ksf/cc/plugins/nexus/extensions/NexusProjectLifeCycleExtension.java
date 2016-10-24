@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import fr.echoes.labs.ksf.cc.extensions.gui.ProjectExtensionConstants;
 import fr.echoes.labs.ksf.cc.plugins.nexus.services.NexusConfigurationService;
 import fr.echoes.labs.ksf.cc.plugins.nexus.services.NexusNameResolver;
 import fr.echoes.labs.ksf.extensions.annotations.Extension;
@@ -86,6 +87,9 @@ public class NexusProjectLifeCycleExtension implements IProjectLifecycleExtensio
             if (response.getStatus() != HttpStatus.SC_CREATED) {
                 LOGGER.error("[nexus] failed to create Nexus repositories status : " + response.getStatus());
             }
+            
+            // save the repository key
+            project.getOtherAttributes().put(ProjectExtensionConstants.NEXUS_REPOSITORY_KEY, projectKey);
             
         } catch (final Exception e) {
             LOGGER.error("[nexus] project creation failed", e);

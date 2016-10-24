@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +67,16 @@ public class JenkinsService implements IJenkinsService {
     }
     
     private JenkinsHttpClient newClient() throws URISyntaxException {
-    	return new JenkinsHttpClient(getJenkinsUri());
+    	
+    	final URI url = getJenkinsUri();
+    	final String username = this.configurationService.getUsername();
+    	final String apiKey = this.configurationService.getApiKey();
+    	
+    	if (StringUtils.isNotEmpty(username) && StringUtils.isNotEmpty(apiKey)) {
+    		return new JenkinsHttpClient(url, username, apiKey);
+    	}
+    	
+    	return new JenkinsHttpClient(url);
     }
     
     private JenkinsServer createJenkinsClient() throws URISyntaxException {
@@ -269,9 +279,7 @@ public class JenkinsService implements IJenkinsService {
         try {
             jenkins = this.createJenkinsClient();
 
-            final String scmUrl = this.nameResolver.getProjectScmUrl(project);
-            final String displayName = this.nameResolver.getDisplayName(project.getName(), gitBranchName);
-            final String resolvedXmlConfig = this.templateService.createConfigXml(templateName, displayName, scmUrl, gitBranchName);
+            final String resolvedXmlConfig = this.templateService.createConfigXml(project, templateName, gitBranchName);
 
             if (useFolder()) {
                 final FolderJob projectFolder = getProjectFolder(jenkins, this.nameResolver.getFolderJobName(project));

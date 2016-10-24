@@ -16,6 +16,8 @@ import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
 import com.google.common.io.Resources;
 
+import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
+
 public class JenkinsTemplateServiceTest {
 	
 	private static final String TMP_FOLDER = "build/tmp/templates/";
@@ -24,13 +26,16 @@ public class JenkinsTemplateServiceTest {
 	@Mock
 	private JenkinsConfigurationService configuration;
 	
+	@Mock
+	private JenkinsNameResolver nameResolver;
+	
 	private JenkinsTemplateService service;
 	
 	@Before
 	public void setup() throws IOException {
 		
 		MockitoAnnotations.initMocks(this);
-		this.service = new JenkinsTemplateService(this.configuration);
+		this.service = new JenkinsTemplateService(this.configuration, this.nameResolver);
 		
 		final File tmpFolder = new File(TMP_FOLDER);
 		FileUtils.deleteDirectory(tmpFolder);
@@ -85,6 +90,38 @@ public class JenkinsTemplateServiceTest {
 		content = service.getTemplate(null);
 		Assert.assertEquals(defaultTemplate, content);
 		
+	}
+	
+	@Test
+	public void testCreateConfigXml() throws IOException {
+		
+		// given
+		final ProjectDto project =  new ProjectDto();
+		final String templateName = "job_demo.xml";
+		final String branchName = "develop";
+		
+		// and
+		final String scmURL = "ssh://git@localhost:6969/ksf-foundation.git";
+		final String nexusRepo = "myNexusRepo";
+		final String buildScript = "myBuildScript";
+		final String publishScript = "myPublishScript";
+		
+		// mock
+		Mockito.when(nameResolver.getProjectScmUrl(project)).thenReturn(scmURL);
+		Mockito.when(nameResolver.getNexusRepositoryKey(project)).thenReturn(nexusRepo);
+		Mockito.when(configuration.getBuildScript()).thenReturn(buildScript);
+		Mockito.when(configuration.getPublishScript()).thenReturn(publishScript);
+		
+		// when
+		final String result = service.createConfigXml(project, templateName, branchName);
+		
+		// then
+		Assert.assertTrue(result.contains("<url>"+scmURL+"</url>"));
+		Assert.assertTrue(result.contains("<name>"+branchName+"</name>"));
+		Assert.assertTrue(result.contains("<version>"+branchName+"</version>"));
+		Assert.assertTrue(result.contains("<repository>"+nexusRepo+"</repository>"));
+		Assert.assertTrue(result.contains("./"+buildScript+"</command>"));
+		Assert.assertTrue(result.contains("<filePath>"+publishScript+"</filePath>"));
 	}
 	
 	private static String getResourceContent(final String filePath) throws IOException {

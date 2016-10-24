@@ -24,6 +24,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.common.io.Resources;
 
+import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
 import fr.echoes.labs.ksf.foundation.utils.URLUtils;
 
 @Service("jenkinsTemplates")
@@ -36,10 +37,12 @@ public class JenkinsTemplateService {
 	private static final String DEFAULT_TEMPLATE = "job.xml";
 	
 	private final JenkinsConfigurationService configuration;
+	private final JenkinsNameResolver nameResolver;
 	
 	@Autowired
-	public JenkinsTemplateService(final JenkinsConfigurationService configuration) {
+	public JenkinsTemplateService(final JenkinsConfigurationService configuration, final JenkinsNameResolver nameResolver) {
 		this.configuration = configuration;
+		this.nameResolver = nameResolver;
 	}
 	
 	/**
@@ -143,6 +146,7 @@ public class JenkinsTemplateService {
 		return null;
 	}
 	
+	
 	/**
 	 * Builds the xml configuration of a Jenkins job.
 	 * @param displayName the display name of the job
@@ -151,15 +155,17 @@ public class JenkinsTemplateService {
 	 * @return a String containing the xml configuration of the Jenkins job.
 	 * @throws IOException if the xml configuration cannot be generated
 	 */
-	public String createConfigXml(final String templateName, String displayName, String scmUrl, String branchName) throws IOException {
+	public String createConfigXml(final ProjectDto project, final String templateName, String branchName) throws IOException {
 
         final Map<String, String> variables = Maps.newHashMap();
 
-        variables.put("scmUrl", scmUrl);
-        variables.put("displayName", displayName);
+        variables.put("scmUrl", this.nameResolver.getProjectScmUrl(project));
+        variables.put("displayName", this.nameResolver.getDisplayName(project.getName(), branchName));
         variables.put("branchName", branchName);
         variables.put("buildScript", configuration.getBuildScript());
         variables.put("publishScript", configuration.getPublishScript());
+        variables.put("scmRepositoryKey", this.nameResolver.getScmRepositoryName(project));
+        variables.put("nexusRepositoryKey", this.nameResolver.getNexusRepositoryKey(project));
 
         return substituteText(getTemplate(templateName), variables);
     }
@@ -171,7 +177,7 @@ public class JenkinsTemplateService {
      * @return a String containing the XML template with the replaced values.
      * @throws IOException
      */
-    private String substituteText(final String templateXml, final Map<String, String> variables) throws IOException {
+    private static String substituteText(final String templateXml, final Map<String, String> variables) throws IOException {
         final StrSubstitutor sub = new StrSubstitutor(variables);
         final String resolvedXml = sub.replace(templateXml);
         return resolvedXml;
