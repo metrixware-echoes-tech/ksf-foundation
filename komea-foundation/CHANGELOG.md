@@ -1,5 +1,11 @@
 # Product ChangeLog
 
+### 0.4.4 October 24 2016
+  - Hotfix: Correction du fichier application.properties dont les défauts aveient été changé par erreur
+  - Hotfix: Correction de l'auth Jenkins
+  - Hotfix: Correction des variables acceptées dans les templates Jenkins
+  - [#20994] Feature: ajout de la clé Nexus qui avait été omise
+
 ### 0.4.3 October 17 2016
   - [#20994] Feature: Stocker en base les clés d'un projet
   - [#20965] Feature: Choix d'une image de VM
