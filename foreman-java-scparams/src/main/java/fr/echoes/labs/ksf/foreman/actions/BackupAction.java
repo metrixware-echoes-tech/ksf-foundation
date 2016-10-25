@@ -72,7 +72,7 @@ public class BackupAction implements IAction {
 		for (final ForemanHostGroup hostGroup : hostGroups) {
 			LOGGER.info("Retrieving puppet classes of host group {}...", hostGroup.getName());
 			final List<PuppetClass> puppetClasses = foreman.getPuppetClassesOfHostGroup(hostGroup);
-			hostPuppetModulesBackupService.writeHostGroupClasses(hostGroup.getName(), puppetClasses);
+			hostPuppetModulesBackupService.writeHostGroupClasses(hostGroup.getFullName(), puppetClasses);
 		}
 		
 		// export OS override values to CSV
