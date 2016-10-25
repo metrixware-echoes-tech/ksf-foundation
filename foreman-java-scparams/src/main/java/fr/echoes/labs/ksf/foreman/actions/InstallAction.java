@@ -128,10 +128,10 @@ public class InstallAction implements IAction {
 				final PuppetClass puppetClass = retrievePuppetClassOrDie(hostGroupValue.getPuppetModule(), hostGroupValue.getPuppetClass());
 				final SmartClassParameter scParameter = retrieveSmartClassParameterOrDie(hostGroupValue, puppetClass);
 				
-				final SmartClassParameterOverrideValue overrideValue = ScParamsUtils.getOverrideValueForHostGroup(scParameter, hostGroup.getName());	
+				final SmartClassParameterOverrideValue overrideValue = ScParamsUtils.getOverrideValueForHostGroup(scParameter, hostGroup.getFullName());	
 				
 				if (overrideValue == null) {
-					foreman.createSmartClassParameterOverrideValue(scParameter.getId(), ScParamsUtils.newOverrideValue(hostGroupValue, ForemanEntities.TYPE_HOSTGROUP, hostGroup.getName()));
+					foreman.createSmartClassParameterOverrideValue(scParameter.getId(), ScParamsUtils.newOverrideValue(hostGroupValue, ForemanEntities.TYPE_HOSTGROUP, hostGroup.getFullName()));
 				}else{				
 					foreman.updateSmartClassParameterOverrideValue(scParameter.getId(), ScParamsUtils.mergeOverrideValue(hostGroupValue, overrideValue));
 				}

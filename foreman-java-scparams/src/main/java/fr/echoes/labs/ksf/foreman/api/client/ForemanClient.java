@@ -29,6 +29,7 @@ import fr.echoes.labs.ksf.foreman.api.model.ForemanHostGroup;
 import fr.echoes.labs.ksf.foreman.api.model.PuppetClass;
 import fr.echoes.labs.ksf.foreman.api.model.SmartClassParameter;
 import fr.echoes.labs.ksf.foreman.api.model.SmartClassParameterOverrideValue;
+import fr.echoes.labs.ksf.foreman.api.utils.ForemanEntities;
 import fr.echoes.labs.ksf.foreman.api.utils.PageAggregator;
 import fr.echoes.labs.ksf.foreman.api.utils.PuppetClassUtils;
 import fr.echoes.labs.ksf.foundation.utils.URLUtils;
@@ -82,26 +83,26 @@ public class ForemanClient extends AbstractApiClient {
 		nbRequests.put(method, nbRequests.get(method)+1);
 	}
 	
-	private String get(final String path, final Map<String, String> params) throws IOException {
+	protected String get(final String path, final Map<String, String> params) throws IOException {
 		
 		this.incNbRequest(HttpMethod.GET);
 		final String query = URLUtils.buildQuery(params);
 		return super.get(this.apiUrl+path+'?'+query, CONTENT_TYPE);
 	}
 	
-	private String get(final String path) throws IOException {
+	protected String get(final String path) throws IOException {
 		
 		this.incNbRequest(HttpMethod.GET);
 		return super.get(this.apiUrl+path, CONTENT_TYPE);
 	}
 	
-	private void put(final String path, final Object entity) throws IOException {
+	protected void put(final String path, final Object entity) throws IOException {
 		
 		this.incNbRequest(HttpMethod.PUT);
 		super.put(this.apiUrl+path, CONTENT_TYPE, this.mapper.writeValueAsString(entity));
 	}
 	
-	private void post(final String path, final Object entity) throws IOException {
+	protected void post(final String path, final Object entity) throws IOException {
 		
 		this.incNbRequest(HttpMethod.POST);
 		super.post(this.apiUrl+path, CONTENT_TYPE, this.mapper.writeValueAsString(entity));
@@ -142,11 +143,13 @@ public class ForemanClient extends AbstractApiClient {
 	
 	public ForemanHostGroup getHostGroup(final String hostGroupName) throws IOException {
 		
-		final String response = get(API_HOSTS_GROUP, ImmutableMap.of(PARAM_SEARCH, hostGroupName));
-		
+		final String searchValue = ForemanEntities.removeParentName(hostGroupName);
+
+		final String response = get(API_HOSTS_GROUP, ImmutableMap.of(PARAM_SEARCH, searchValue));	
 		final List<ForemanHostGroup> hostGroups = extractResults(response, ForemanHostGroup.class);
+		
 		for (final ForemanHostGroup hostGroup : hostGroups) {
-			if (hostGroupName.equals(hostGroup.getName())) {
+			if (searchValue.equals(hostGroup.getName())) {
 				return hostGroup;
 			}
 		}
