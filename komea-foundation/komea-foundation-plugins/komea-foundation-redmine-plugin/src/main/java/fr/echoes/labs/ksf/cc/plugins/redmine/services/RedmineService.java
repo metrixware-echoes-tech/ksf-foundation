@@ -81,6 +81,15 @@ public class RedmineService implements IRedmineService {
         final String url = this.configuration.getUrl();
         return RedmineManagerFactory.createWithApiKey(url, apiAccessKey);
     }
+    
+    @Override
+    public boolean isAdmin() throws RedmineExtensionException, RedmineException {
+    	
+    	final RedmineManager manager = this.getUserRedmineManager();
+    	final User user = manager.getUserManager().getCurrentUser();
+    	
+    	return user.getStatus() != null;
+    }
 
     private User getUserByLogin(final String login, final RedmineManager redmineManager) throws RedmineException {
         final Map<String, String> params = Maps.newHashMap();

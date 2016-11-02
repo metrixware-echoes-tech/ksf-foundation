@@ -43,6 +43,7 @@ import com.tocea.corolla.products.exceptions.ProjectNotFoundException;
 import com.tocea.corolla.products.utils.ProjectDtoFactory;
 import com.tocea.corolla.users.dao.IUserDAO;
 import com.tocea.corolla.users.domain.User;
+import com.tocea.corolla.users.dto.UserDto;
 
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.IProjectTabPanel;
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
@@ -54,6 +55,8 @@ import fr.echoes.labs.ksf.cc.releases.model.Release;
 import fr.echoes.labs.ksf.cc.releases.model.ReleaseState;
 import fr.echoes.labs.ksf.cc.sf.commands.CreateProjectAndProductionLineCommand;
 import fr.echoes.labs.ksf.cc.sf.dto.SFProjectDTO;
+import fr.echoes.labs.ksf.extensions.exceptions.PermissionDeniedException;
+import fr.echoes.labs.ksf.extensions.projects.IDeleteProjectApprobator;
 import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
 import fr.echoes.labs.ksf.users.security.auth.UserDetailsRetrievingService;
 
@@ -90,6 +93,9 @@ public class ProjectController {
 
     @Autowired(required = false)
     private IValidator[] validators;
+    
+    @Autowired(required = false)
+    private IDeleteProjectApprobator[] deleteProjectApprobators;
 
     @RequestMapping(value = "/ui/projects/new", method = RequestMethod.POST)
     public ModelAndView createProject(@Valid @ModelAttribute("project") SFProjectDTO newProject, final BindingResult _result) {
@@ -316,9 +322,20 @@ public class ProjectController {
     }
 
     @RequestMapping(value = "/ui/projects/delete/{projectKey}")
-    public ModelAndView DeleteProjectPage(@PathVariable final String projectKey) {
-        final Project findByKey = this.projectDao.findByKey(projectKey);
-        this.gate.dispatch(new DeleteProjectCommand(findByKey.getId()));
+    public ModelAndView DeleteProjectPage(@PathVariable final String projectKey) throws PermissionDeniedException {
+    	
+    	final Project project = this.projectDao.findByKey(projectKey);    	
+    	if (project == null) {
+    		throw new ProjectNotFoundException();
+    	}
+    	
+    	final UserDto user = this.userDetailsRetrievingService.getCurrentUser();
+    	
+    	for (final IDeleteProjectApprobator approbator : this.deleteProjectApprobators) {
+    		approbator.approve(ProjectDtoFactory.convert(project));
+    	}
+    	
+        this.gate.dispatch(new DeleteProjectCommand(project.getId()));
         return new ModelAndView("redirect:/ui/projects/");
     }
 
@@ -327,6 +344,15 @@ public class ProjectController {
         ProjectNotFoundException.class
     })
     public void handlePageNotFoundException() {
+    }
+    
+//    @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler({ PermissionDeniedException.class })
+    public ModelAndView handlePermissionDeniedException(final Exception ex) {
+    	ModelAndView model = new ModelAndView("401");
+    	LOGGER.error("Permission denied.", ex);
+    	model.addObject("exception", ex);
+    	return model;
     }
 
     private ProjectPagelistDTO createProjectPageListDTO(final Project project) {

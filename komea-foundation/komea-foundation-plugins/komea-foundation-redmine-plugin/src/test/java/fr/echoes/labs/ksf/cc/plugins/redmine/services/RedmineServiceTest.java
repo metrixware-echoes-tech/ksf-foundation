@@ -189,6 +189,44 @@ public class RedmineServiceTest {
 		
 	}
 	
+	@Test
+	public void testIsAdmin() throws RedmineExtensionException, RedmineException {
+		
+		// given
+		final String username = "ksfuser";
+		final List<User> users = Lists.newArrayList(mockUser(1, username, "userApiKey"));
+		
+		// mock
+		Mockito.when(this.userManager.getUsers(Matchers.anyMapOf(String.class, String.class))).thenReturn(users);
+		Mockito.when(this.userManager.getCurrentUser()).thenReturn(users.get(0));
+		
+		//when
+		final Boolean isAdmin = this.redmineService.isAdmin();
+		
+		// then
+		Assert.assertTrue(isAdmin);		
+	}
+	
+	@Test
+	public void testIsNotAdmin() throws RedmineException, RedmineExtensionException {
+		
+		// given
+		final String username = "ksfuser";
+		final User user = mockUser(1, username, "userApiKey");
+		user.setStatus(null);
+		final List<User> users = Lists.newArrayList(mockUser(1, username, "userApiKey"));
+		
+		// mock
+		Mockito.when(this.userManager.getUsers(Matchers.anyMapOf(String.class, String.class))).thenReturn(users);
+		Mockito.when(this.userManager.getCurrentUser()).thenReturn(users.get(0));
+		
+		//when
+		final Boolean isAdmin = this.redmineService.isAdmin();
+		
+		// then
+		Assert.assertTrue(isAdmin);	
+	}
+	
 	private User mockUser(final Integer id, final String login, final String apiKey) throws RedmineException {
 		
 		final User user = Mockito.mock(User.class);
