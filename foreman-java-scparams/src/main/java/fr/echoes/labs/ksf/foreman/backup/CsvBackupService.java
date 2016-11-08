@@ -18,12 +18,24 @@ import com.google.common.collect.Lists;
 
 public abstract class CsvBackupService<T> {
 	
-	private final static Logger LOGGER = LoggerFactory.getLogger(CsvBackupService.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(CsvBackupService.class);
+	
+	private static final String SLASH_REPLACEMENT = "\\-\\_\\-";
+	
+	protected static String encodeFileName(final String fileName) {
+		
+		return fileName.replaceAll("/", SLASH_REPLACEMENT);
+	}
+	
+	protected static String decodeFileName(final String fileName) {
+		
+		return fileName.replaceAll(SLASH_REPLACEMENT, "/");
+	}
 	
 	protected void write(final List<T> values, final String[] headers, final String folderPath, final String fileName) throws IOException {
 		
 		new File(folderPath).mkdirs();
-		write(values, headers, folderPath+fileName);
+		write(values, headers, folderPath + encodeFileName(fileName));
 	}
 	
 	protected void write(final List<T> values, final String[] header, final String filePath) throws IOException {
@@ -31,7 +43,6 @@ public abstract class CsvBackupService<T> {
 		ICsvBeanWriter printer = null;
 		
 		try {
-			
 			printer = new CsvBeanWriter(new FileWriter(filePath), CsvPreference.STANDARD_PREFERENCE);
 
 			printer.writeHeader(header);
@@ -52,7 +63,7 @@ public abstract class CsvBackupService<T> {
 	
 	protected List<T> read(final String folderPath, final String fileName, final Class<T> beanClass) throws IOException {
 		
-		return read(folderPath+fileName, beanClass);
+		return read(folderPath + encodeFileName(fileName), beanClass);
 	}
 	
 	protected List<T> read(final String filePath, final Class<T> beanClass) throws IOException {

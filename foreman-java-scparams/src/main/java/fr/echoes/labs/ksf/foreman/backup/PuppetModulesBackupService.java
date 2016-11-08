@@ -73,7 +73,7 @@ public class PuppetModulesBackupService extends CsvBackupService<PuppetClass> {
 			for(final File file : groupsDir.listFiles()) {
 				final Matcher matcher = pattern.matcher(file.getName());
 				if (matcher.find()) {
-					final String hostGroup = matcher.group(1);
+					final String hostGroup = decodeFileName(matcher.group(1));
 					final List<PuppetClass> values = super.read(file.getPath(), PuppetClass.class);
 					results.put(hostGroup, values);
 				}

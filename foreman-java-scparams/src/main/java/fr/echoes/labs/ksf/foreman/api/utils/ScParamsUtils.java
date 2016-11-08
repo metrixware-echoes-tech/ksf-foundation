@@ -52,7 +52,13 @@ public final class ScParamsUtils {
 	
 	public static SmartClassParameterOverrideValue getOverrideValueForHostGroup(final SmartClassParameter param, final String hostGroup) {
 		
-		return getOverrideValueForMatcher(param, TYPE_HOSTGROUP, hostGroup);
+		SmartClassParameterOverrideValue overrideValue = getOverrideValueForMatcher(param, TYPE_HOSTGROUP, hostGroup);
+		
+		if (overrideValue == null) {
+			overrideValue = getOverrideValueForMatcher(param, TYPE_HOSTGROUP, ForemanEntities.removeParentName(hostGroup));
+		}
+		
+		return overrideValue;
 	}
 	
 	public static SmartClassParameterOverrideValue getOverrideValueForMatcher(final SmartClassParameter param, final String matchType, final String matchValue) {

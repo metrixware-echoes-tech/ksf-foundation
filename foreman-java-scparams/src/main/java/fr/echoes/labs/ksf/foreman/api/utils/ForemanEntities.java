@@ -24,4 +24,14 @@ public final class ForemanEntities {
 		return buildMatcher(TYPE_FQDN, hostName);
 	}
 	
+	public static String removeParentName(final String hostGroupName) {
+		
+		if (hostGroupName.contains("/")) {
+			final String[] parts = hostGroupName.split("/");
+			return parts[parts.length-1];
+		}
+		
+		return hostGroupName;
+	}
+	
 }

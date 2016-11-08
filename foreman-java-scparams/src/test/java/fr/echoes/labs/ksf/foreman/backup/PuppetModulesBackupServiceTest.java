@@ -104,6 +104,39 @@ public class PuppetModulesBackupServiceTest {
 	}
 	
 	@Test
+	public void testWriteHostGroupWithSlash() throws IOException {
+		
+		// given
+		final String hostGroup = "my Host/Group";
+		final List<PuppetClass> puppetClasses = Lists.newArrayList(
+				new PuppetClass(1, "module1:class1", "module1"),
+				new PuppetClass(2, "module1:class2", "module1"),
+				new PuppetClass(3, "module2:class1", "module")
+		);
+		
+		// when
+		this.backupService.writeHostGroupClasses(hostGroup, puppetClasses);
+		
+		// then
+		Assert.assertTrue(new File(STORAGE_PATH+"/hostgroups").exists());	
+		
+		// then
+		final Map<String, List<PuppetClass>> results = this.backupService.readHostGroups();
+		Assert.assertNotNull(results);
+		Assert.assertFalse(results.isEmpty());
+		Assert.assertNotNull(results.get(hostGroup));
+		
+		// then
+		for (int i = 0; i<puppetClasses.size(); i++) {
+			final PuppetClass expectedClass = puppetClasses.get(i);
+			final PuppetClass actualClass = results.get(hostGroup).get(i);
+			Assert.assertEquals(expectedClass.getName(), actualClass.getName());
+			Assert.assertEquals(expectedClass.getModuleName(), actualClass.getModuleName());
+		}
+		
+	}
+	
+	@Test
 	public void testWriteEmptyHostGroups() throws IOException {
 		
 		// given

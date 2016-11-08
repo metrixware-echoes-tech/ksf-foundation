@@ -109,7 +109,7 @@ public class SmartClassParameterBackupService extends CsvBackupService<SmartClas
 			for(final File file : hostGroupFolder.listFiles()) {
 				final Matcher matcher = pattern.matcher(file.getName());
 				if (matcher.find()) {
-					final String hostGroup = matcher.group(1);
+					final String hostGroup = decodeFileName(matcher.group(1));
 					final List<SmartClassParameterWrapper> values = super.read(file.getPath(), SmartClassParameterWrapper.class);
 					results.put(hostGroup, values);
 				}

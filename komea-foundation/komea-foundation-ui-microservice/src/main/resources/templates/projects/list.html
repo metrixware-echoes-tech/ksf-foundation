@@ -42,9 +42,42 @@
                                     <!-- a onclick="return confirm('Are you sure you want to remove project ?')" th:href="@{/ui/projects/delete/}+${prod.project.key}" class="btn btn-danger">
                                         <span class="glyphicon glyphicon-trash"></span> Delete
                                     </a -->
-                                    <a onclick="return confirm('Are you sure you want to remove project ?')" th:href="@{/ui/projects/delete/}+${prod.project.key}">
+<!--                                     <a onclick="return confirm('Are you sure you want to remove project ?')" th:href="@{/ui/projects/delete/}+${prod.project.key}"> -->
+									<a href="#" data-toggle="modal" th:attr="data-target=${'#deleteProjectModal-'+prod.project.key}" data-placement="bottom">
                                         <span class="fa fa-trash"></span>&nbsp;<span th:text="#{foundation.projects.list.delete.text}"></span>
-                                    </a>                                    
+                                    </a>
+                                    <div>
+										<div aria-hidden="true" aria-labelledby="myModalLabel"
+											class="modal fade in" th:id="${'deleteProjectModal-'+prod.project.key}" role="dialog" tabindex="-1"
+											style="padding-left: 15px;">
+											<div class="modal-dialog">
+												<div class="modal-content">
+													<div class="modal-header">
+														<button aria-hidden="true" class="close" data-dismiss="modal"
+															type="button">&times;</button>
+														<h4 class="modal-title" th:text="#{foundation.projects.list.delete.text}">Delete</h4>
+													</div>
+													<div class="modal-body">
+														<img th:src="@{/pictures/warning-icon.png}" alt="Warning" height="78" style="float: left; margin-right: 12px;"/>
+														<div class="information">
+															<div class="container-wrapper">
+																<div class="information-section">
+																	<br/>
+																	<div th:utext="#{foundation.projects.list.confirm.delete(${prod.project.name})}"></div>
+																	<br/>
+																	<p th:text="#{foundation.projects.list.confirm.delete.warning}"></p>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="modal-footer">
+														<a class="btn btn-danger" th:href="@{/ui/projects/delete/}+${prod.project.key}" th:text="#{foundation.confirm.yes}">Yes</a>
+												        <button type="button" class="btn btn-primary" data-dismiss="modal" th:text="#{foundation.confirm.no}">No</button>
+												    </div>
+												</div>
+											</div>
+										</div>
+									</div>                                  
                             	</td>
                             </tr>
                         </tbody>

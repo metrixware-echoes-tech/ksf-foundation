@@ -8,6 +8,8 @@ import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineQuery;
 import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
 import java.util.List;
 
+import com.taskadapter.redmineapi.RedmineException;
+
 /**
  * @author dcollard
  *
@@ -99,6 +101,14 @@ public interface IRedmineService {
      * @param username the assignee username. Can be {@code null}.
      * @throws RedmineExtensionException
      */
-    void rejectIssue(String ticketId, String username) throws RedmineExtensionException;
+    public void rejectIssue(String ticketId, String username) throws RedmineExtensionException;
+    
+    /**
+     * Checks if the current user is a valid Redmine administrator.
+     * return true if the current user is an administrator
+     * @throws RedmineExtensionException
+     * @throws RedmineException
+     */
+    public boolean isAdmin() throws RedmineExtensionException, RedmineException;
 
 }

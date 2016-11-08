@@ -1,7 +1,12 @@
 # Product ChangeLog
 
+### 0.4.5 November 08 2016
+  - Mise à jour version Komea Dashboard
+  - [#21022] Amélioration du message d'avertissement à la déletion d'un projet + limitation de la suppression aux admin Redmine
+  - [foreman-java-scparams] correction d'un problème lorsque les groupes d'hôtes Foreman ont un parent
+
 ### 0.4.4 October 24 2016
-  - Hotfix: Correction du fichier application.properties dont les défauts aveient été changé par erreur
+  - Hotfix: Correction du fichier application.properties dont les défauts avaient été changés par erreur
   - Hotfix: Correction de l'auth Jenkins
   - Hotfix: Correction des variables acceptées dans les templates Jenkins
   - [#20994] Feature: ajout de la clé Nexus qui avait été omise

@@ -6,8 +6,9 @@
     <head><title>401</title></head>
     <body>
 
-        <div layout:fragment="content">
-            <h1>401 / Unauthorized</h1>
+        <div layout:fragment="content" style="margin: 20px; padding-bottom: 20px;" class="alert alert-danger">
+        	<img th:src="@{/pictures/forbidden-icon.png}" alt="Warning" height="78" style="float: left; margin-right: 12px; margin-top: 12px;"/>
+            <h1 th:text="#{foundation.errors.unauthorized}">401 / Unauthorized</h1>
             <p th:if="${url}">
                 <b>Page:</b> <span th:text="${url}">Page URL</span>
             </p>
@@ -23,9 +24,9 @@
             <!--/* ${ex} is set by ourSimpleMappingExceptionResolver,
 ${exception} or ${message} are set internally by Spring Boot. */-->
             <div th:if="${ex} or ${exception} or (${message} and ${message.length() != 0})">
-                <b>Cause:</b> <span th:if="${ex}" th:text="${ex}">exception ...</span> <span th:if="${exception}"
-                                                                                             th:text="${exception}"
-                                                                                             >exception ...</span> <span th:if="${message} and ${message.length() != 0}" th:text="${message}">message ...</span>
+                <b>Cause:</b> <span th:if="${ex}" th:text="${ex.getMessage()}">exception ...</span> 
+                <span th:if="${exception}" th:text="${exception.getMessage()}">exception ...</span> 
+                <span th:if="${message} and ${message.length() != 0}" th:text="${message}">message ...</span>
                 <!-- <blockquote>
                         <i>Note: You would never generate a page that displays a Java exception to an end-user in a real application</i>
                 </blockquote> -->

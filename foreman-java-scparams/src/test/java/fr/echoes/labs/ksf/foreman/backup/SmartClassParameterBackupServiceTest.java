@@ -169,6 +169,36 @@ public class SmartClassParameterBackupServiceTest {
 	}
 	
 	@Test
+	public void testWriteHostGroupValuesWithSlash() throws IOException {
+		
+		// given
+		final String hostGroup = "test Host /Group with Slash";
+		
+		// and
+		final List<SmartClassParameterWrapper> params = Lists.newArrayList(
+				new SmartClassParameterWrapper("param1", puppetClass1, "value1", false),
+				new SmartClassParameterWrapper("param2", puppetClass1, null, true),
+				new SmartClassParameterWrapper("param1", puppetClass2, "value3", false)
+		);
+		
+		// when
+		this.backupService.writeHostGroupValues(hostGroup, params);
+		
+		for (File file : new File(STORAGE_PATH+"/hostgroups/").listFiles()) {
+			System.out.println(file.getName());
+		}
+		
+		// then
+		final Map<String, List<SmartClassParameterWrapper>> hostGroupValues = this.backupService.readHostGroupValues();
+		System.out.println(hostGroupValues.keySet().iterator().next());
+		Assert.assertNotNull(hostGroupValues);
+		Assert.assertEquals(1, hostGroupValues.size());
+		
+		// then
+		verifyWrittenValues(params, hostGroupValues.values().iterator().next());
+	}
+	
+	@Test
 	public void testWriteEmptyHostGroupValues() throws IOException {
 		
 		// given
