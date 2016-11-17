@@ -1,6 +1,6 @@
 package fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard;
 
-import fr.echoes.labs.ksf.extensions.api.IExtension;
+import fr.echoes.labs.pluginfwk.api.extension.Extension;
 
 /**
  * This extension points allows a plugin to add a new widget to the project
@@ -9,7 +9,7 @@ import fr.echoes.labs.ksf.extensions.api.IExtension;
  * @author sleroy
  *
  */
-public interface IProjectDashboardExtension  extends IExtension{
+public interface IProjectDashboardExtension extends Extension {
 
 	void reclaimProjectDashboardWidget(IProjectDashboardWidgets _widgets);
 }

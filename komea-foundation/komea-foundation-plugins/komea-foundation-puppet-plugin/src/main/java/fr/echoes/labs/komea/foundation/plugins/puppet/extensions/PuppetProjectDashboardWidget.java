@@ -1,14 +1,17 @@
 package fr.echoes.labs.komea.foundation.plugins.puppet.extensions;
 
-import com.google.common.collect.Lists;
-import fr.echoes.labs.komea.foundation.plugins.puppet.utils.PuppetConstants;
-import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.IProjectTabPanel;
-import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.MenuAction;
-import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
 import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+
+import com.google.common.collect.Lists;
+
+import fr.echoes.labs.komea.foundation.plugins.puppet.PuppetPlugin;
+import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.IProjectTabPanel;
+import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.MenuAction;
+import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
 
 /**
  * @author dcollard
@@ -53,7 +56,7 @@ public class PuppetProjectDashboardWidget implements ProjectDashboardWidget {
 
     @Override
     public String getId() {
-        return PuppetConstants.ID;
+        return PuppetPlugin.ID;
     }
 
 }

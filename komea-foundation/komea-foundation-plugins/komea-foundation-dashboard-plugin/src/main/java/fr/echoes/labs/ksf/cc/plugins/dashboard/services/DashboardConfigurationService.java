@@ -1,7 +1,13 @@
 package fr.echoes.labs.ksf.cc.plugins.dashboard.services;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import fr.echoes.labs.ksf.cc.extensions.gui.KomeaFoundationContext;
+import fr.echoes.labs.ksf.cc.plugins.dashboard.DashboardConfigurationBean;
+import fr.echoes.labs.ksf.cc.plugins.dashboard.KomeaDashboardPlugin;
+import fr.echoes.labs.pluginfwk.api.plugin.PluginFramework;
+import fr.echoes.labs.pluginfwk.api.propertystorage.PluginPropertyStorage;
 
 /**
  * @author dcollard
@@ -10,6 +16,31 @@ import org.springframework.stereotype.Service;
 @Service("dashboardConfiguration")
 public class DashboardConfigurationService {
 	
+	public final static String GIT_REPOSITORIES_PROPERTY = "gitRepositories";
+	
+	private final KomeaFoundationContext foundation;
+	private final PluginPropertyStorage pluginPropertyStorage;
+	
+	private DashboardConfigurationBean configuration;
+
+    @Autowired
+    public DashboardConfigurationService(final PluginFramework pluginFramework, final KomeaFoundationContext foundation) {
+        super();
+        this.pluginPropertyStorage = pluginFramework.getPluginPropertyStorage();
+        this.foundation = foundation;
+    }
+
+    public DashboardConfigurationBean getPluginConfigurationBean() {
+    	
+    	if (this.configuration == null) {
+    		this.configuration = this.pluginPropertyStorage.readPluginProperties(KomeaDashboardPlugin.ID, DashboardConfigurationBean.class);
+    		foundation.completeProperties(this.configuration);
+    	}
+   	
+        return this.configuration;
+    }
+	
+    /*
 	public final static String GIT_REPOSITORIES_PROPERTY = "gitRepositories";
 
     @Value("${ksf.dashboard.url}")
@@ -130,5 +161,6 @@ public class DashboardConfigurationService {
 	public boolean calculateAverageTimeOnSite() {
 		return calculateAverageTimeOnSite;
 	}
-	
+	*/
 }
+

@@ -24,6 +24,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.common.io.Resources;
 
+import fr.echoes.labs.komea.foundation.plugins.jenkins.JenkinsConfigurationBean;
 import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
 import fr.echoes.labs.ksf.foundation.utils.URLUtils;
 
@@ -45,6 +46,10 @@ public class JenkinsTemplateService {
 		this.nameResolver = nameResolver;
 	}
 	
+	private String getTemplateFolder() {
+		return this.configuration.getConfigurationBean().getTemplateFolder();
+	}
+	
 	/**
 	 * Retrieves the list of all available template files.
 	 * @return the names of the template files.
@@ -52,7 +57,7 @@ public class JenkinsTemplateService {
 	public Collection<String> getAvailableTemplates() {
 		
 		final Set<String> templates = Sets.newHashSet(DEFAULT_TEMPLATE);	
-		final String templateFolder = configuration.getTemplateFolder();
+		final String templateFolder = getTemplateFolder();
 		
 		// retrieve the templates in the provided folder
 		if (!StringUtils.isEmpty(templateFolder)) {
@@ -115,7 +120,7 @@ public class JenkinsTemplateService {
 	private String findTemplateInFolder(final String templateName) {
 		
 		String path = null;
-		final String templateFolder = configuration.getTemplateFolder();
+		final String templateFolder = getTemplateFolder();
 		
 		if (!StringUtils.isEmpty(templateFolder)) {
 			try {
@@ -157,13 +162,14 @@ public class JenkinsTemplateService {
 	 */
 	public String createConfigXml(final ProjectDto project, final String templateName, String branchName) throws IOException {
 
+		final JenkinsConfigurationBean config = this.configuration.getConfigurationBean();
         final Map<String, String> variables = Maps.newHashMap();
 
         variables.put("scmUrl", this.nameResolver.getProjectScmUrl(project));
         variables.put("displayName", this.nameResolver.getDisplayName(project.getName(), branchName));
         variables.put("branchName", branchName);
-        variables.put("buildScript", configuration.getBuildScript());
-        variables.put("publishScript", configuration.getPublishScript());
+        variables.put("buildScript", config.getBuildScript());
+        variables.put("publishScript", config.getPublishScript());
         variables.put("scmRepositoryKey", this.nameResolver.getScmRepositoryName(project));
         variables.put("nexusRepositoryKey", this.nameResolver.getNexusRepositoryKey(project));
 

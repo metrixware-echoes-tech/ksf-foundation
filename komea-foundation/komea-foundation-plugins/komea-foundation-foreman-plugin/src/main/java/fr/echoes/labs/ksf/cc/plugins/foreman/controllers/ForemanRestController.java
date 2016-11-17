@@ -10,12 +10,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import fr.echoes.labs.foremanapi.IForemanApi;
-import fr.echoes.labs.foremanclient.IForemanService;
+import fr.echoes.labs.ksf.cc.extensions.services.ErrorHandlingService;
+import fr.echoes.labs.ksf.cc.plugins.foreman.ForemanConfigurationBean;
+import fr.echoes.labs.ksf.cc.plugins.foreman.ForemanPlugin;
 import fr.echoes.labs.ksf.cc.plugins.foreman.dao.IForemanEnvironmentDAO;
 import fr.echoes.labs.ksf.cc.plugins.foreman.model.ForemanEnvironnment;
 import fr.echoes.labs.ksf.cc.plugins.foreman.services.ForemanClientFactory;
 import fr.echoes.labs.ksf.cc.plugins.foreman.services.ForemanConfigurationService;
-import fr.echoes.labs.ksf.cc.plugins.foreman.services.ForemanErrorHandlingService;
+import fr.echoes.labs.ksf.cc.plugins.foreman.services.IForemanService;
 
 @RestController
 public class ForemanRestController {
@@ -35,7 +37,7 @@ public class ForemanRestController {
 	private ForemanConfigurationService configurationService;
 
     @Autowired
-    private ForemanErrorHandlingService errorHandler;
+    private ErrorHandlingService errorHandler;
 
 	@RequestMapping(value = "/rest/foreman/environments/all")
 	public List<ForemanEnvironnment> findAll() {
@@ -51,17 +53,18 @@ public class ForemanRestController {
 
 	@RequestMapping(value = "/rest/foreman/puppet_class_parameters/{id}")
 	public String puppetClassParameters(@PathVariable("id") String id) {
+		final ForemanConfigurationBean configuration = this.configurationService.getConfigurationBean();
 		final ForemanEnvironnment environment = this.environmentDAO.findOne(id);
 		String json = "";
 		final String environmentName = environment.getName();
 		try {
 
 			final IForemanApi foremanApi = foremanClientFactory.createForemanClient();
-			json = foremanService.getModulesPuppetClassParameters(foremanApi, environmentName, configurationService.getCreateParametersEnabled());
+			json = foremanService.getModulesPuppetClassParameters(foremanApi, environmentName, configuration.getCreateParametersEnabled());
 			
 		} catch (final Exception e) {
             LOGGER.error("Failed to get puppet classes parameters for the environment: " + environmentName, e);
-            this.errorHandler.registerError("Failed to get puppet classes parameters for " + environmentName);
+            this.errorHandler.registerError(ForemanPlugin.ID, "Failed to get puppet classes parameters for " + environmentName);
 		}
 		return json;
 	}

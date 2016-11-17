@@ -30,7 +30,8 @@ import com.taskadapter.redmineapi.bean.Tracker;
 import com.taskadapter.redmineapi.bean.User;
 import com.taskadapter.redmineapi.bean.Version;
 
-import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineExtensionException;
+import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineConfigurationBean;
+import fr.echoes.labs.ksf.cc.plugins.redmine.exceptions.RedmineExtensionException;
 import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
 import fr.echoes.labs.ksf.users.security.api.CurrentUserService;
 
@@ -44,7 +45,10 @@ public class RedmineServiceTest {
 	private static final String REDMINE_ADMIN_USER = "ksfuser";
 	
 	@Mock
-	private RedmineConfigurationService configuration;
+	private RedmineConfigurationService configurationService;
+	
+	@Mock
+	private RedmineConfigurationBean configuration;
 	
 	@Mock
 	private CurrentUserService currentUserService;
@@ -77,7 +81,9 @@ public class RedmineServiceTest {
 		MockitoAnnotations.initMocks(this);
 		
 		this.nameResolver = new RedmineNameResolver();
-		this.redmineService = new RedmineService(configuration, nameResolver, currentUserService);
+		this.redmineService = new RedmineService(configurationService, nameResolver, currentUserService);
+		
+		Mockito.when(this.configurationService.getConfigurationBean()).thenReturn(this.configuration);
 		
 		Mockito.when(this.configuration.getUrl()).thenReturn(REDMINE_URL);
 		Mockito.when(this.configuration.getApiAccessKey()).thenReturn(REDMINE_API_KEY);

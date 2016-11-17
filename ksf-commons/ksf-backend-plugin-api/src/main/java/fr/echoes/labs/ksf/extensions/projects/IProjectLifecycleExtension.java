@@ -1,6 +1,6 @@
 package fr.echoes.labs.ksf.extensions.projects;
 
-import fr.echoes.labs.ksf.extensions.api.IExtension;
+import fr.echoes.labs.pluginfwk.api.extension.Extension;
 
 /**
  * This interface provides to the plugin a way to handle events associated to
@@ -9,7 +9,7 @@ import fr.echoes.labs.ksf.extensions.api.IExtension;
  * @author sleroy
  *
  */
-public interface IProjectLifecycleExtension extends IExtension {
+public interface IProjectLifecycleExtension extends Extension {
 
     String getName();
 

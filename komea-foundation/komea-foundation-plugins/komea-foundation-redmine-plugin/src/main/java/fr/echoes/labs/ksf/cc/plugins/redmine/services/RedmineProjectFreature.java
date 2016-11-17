@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import fr.echoes.labs.ksf.cc.extensions.services.project.features.IProjectFeatues;
 import fr.echoes.labs.ksf.cc.extensions.services.project.features.IProjectFeature;
-import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineExtensionException;
+import fr.echoes.labs.ksf.cc.plugins.redmine.exceptions.RedmineExtensionException;
 import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
 
 /**
@@ -23,7 +23,7 @@ public class RedmineProjectFreature implements IProjectFeatues {
 	private static final Logger LOGGER = LoggerFactory.getLogger(RedmineProjectFreature.class);
 	
 	@Autowired
-	IRedmineService redmineService;	
+	private IRedmineService redmineService;	
 	
 	@Override
 	public List<IProjectFeature> getFeatures(final ProjectDto ksfProject) {

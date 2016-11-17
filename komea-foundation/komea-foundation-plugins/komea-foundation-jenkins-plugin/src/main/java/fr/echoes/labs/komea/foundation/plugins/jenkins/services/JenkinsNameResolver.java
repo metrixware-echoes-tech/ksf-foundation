@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.tocea.corolla.products.domain.Project;
 
+import fr.echoes.labs.komea.foundation.plugins.jenkins.JenkinsConfigurationBean;
 import fr.echoes.labs.ksf.cc.extensions.gui.ProjectExtensionConstants;
 import fr.echoes.labs.ksf.cc.extensions.services.project.ProjectUtils;
 import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
@@ -48,14 +49,14 @@ public class JenkinsNameResolver {
         final Map<String, String> variables = new HashMap<String, String>(2);
         variables.put("projectName", getFolderJobName(project));
         variables.put("branchName", ProjectUtils.createIdentifier(branchName));
-        return replaceVariables(this.configurationService.getJobNamePattern(), variables);
+        return replaceVariables(this.configurationService.getConfigurationBean().getJobNamePattern(), variables);
     }
 	
 	public String getReleaseJobName(final ProjectDto project, final String releaseVersion) {
         final Map<String, String> variables = new HashMap<String, String>(2);
         variables.put("projectName", getFolderJobName(project));
         variables.put("releaseVersion", ProjectUtils.createIdentifier(releaseVersion));
-        return replaceVariables(this.configurationService.getJobReleasePattern(), variables);
+        return replaceVariables(this.configurationService.getConfigurationBean().getJobReleasePattern(), variables);
     }
 	
 	public String getFeatureJobName(final ProjectDto project, final String featureId,
@@ -64,14 +65,15 @@ public class JenkinsNameResolver {
         variables.put("projectName", getFolderJobName(project));
         variables.put("featureId", ProjectUtils.createIdentifier(featureId));
         variables.put("featureDescription", ProjectUtils.createIdentifier(featureSubject));
-        return replaceVariables(this.configurationService.getJobFeaturePattern(), variables);
+        return replaceVariables(this.configurationService.getConfigurationBean().getJobFeaturePattern(), variables);
     }
 	
 	public String getProjectScmUrl(final ProjectDto project) {
+		final JenkinsConfigurationBean configuration = this.configurationService.getConfigurationBean();
         final Map<String, String> variables = new HashMap<String, String>(2);
-        variables.put("scmUrl", this.configurationService.getScmUrl());
+        variables.put("scmUrl", configuration.getScmUrl());
         variables.put("projectKey", getScmRepositoryName(project));
-        return replaceVariables(this.configurationService.getProjectScmUrlPattern(), variables);
+        return replaceVariables(configuration.getProjectScmUrlPattern(), variables);
     }
 	
 	public String getScmRepositoryName(final ProjectDto project) {		
@@ -94,20 +96,20 @@ public class JenkinsNameResolver {
         final Map<String, String> variables = new HashMap<String, String>(2);
         variables.put("projectName", projectName);
         variables.put("branchName", branchName);
-        return replaceVariables(this.configurationService.getJobNamePattern(), variables);
+        return replaceVariables(this.configurationService.getConfigurationBean().getJobNamePattern(), variables);
     }
 
     public String getGitReleaseBranchName(String releaseVersion) {
         final Map<String, String> variables = new HashMap<String, String>(1);
         variables.put("releaseVersion", ProjectUtils.createIdentifier(releaseVersion));
-        return replaceVariables(this.configurationService.getGitReleaseBranchPattern(), variables);
+        return replaceVariables(this.configurationService.getConfigurationBean().getGitReleaseBranchPattern(), variables);
     }
 
     public String getGitFeatureBranchName(String featureId, String featureDescription) {
         final Map<String, String> variables = new HashMap<String, String>(2);
         variables.put("featureId", ProjectUtils.createIdentifier(featureId));
         variables.put("featureDescription", ProjectUtils.createIdentifier(featureDescription));
-        return replaceVariables(this.configurationService.getGitFeatureBranchPattern(), variables);
+        return replaceVariables(this.configurationService.getConfigurationBean().getGitFeatureBranchPattern(), variables);
     }
     
     private static String replaceVariables(String str, Map<String, String> variables) {

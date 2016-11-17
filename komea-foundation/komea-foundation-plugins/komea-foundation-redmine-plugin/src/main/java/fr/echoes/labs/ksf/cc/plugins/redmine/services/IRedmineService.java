@@ -2,9 +2,9 @@ package fr.echoes.labs.ksf.cc.plugins.redmine.services;
 
 import fr.echoes.labs.ksf.cc.extensions.services.project.features.IProjectFeature;
 import fr.echoes.labs.ksf.cc.extensions.services.project.versions.IProjectVersion;
-import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineExtensionException;
-import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineIssue;
-import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineQuery;
+import fr.echoes.labs.ksf.cc.plugins.redmine.exceptions.RedmineExtensionException;
+import fr.echoes.labs.ksf.cc.plugins.redmine.model.RedmineIssue;
+import fr.echoes.labs.ksf.cc.plugins.redmine.utils.RedmineQuery;
 import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
 import java.util.List;
 

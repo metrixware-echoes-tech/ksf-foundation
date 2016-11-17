@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import fr.echoes.labs.ksf.cc.extensions.services.project.versions.IProjectVersion;
 import fr.echoes.labs.ksf.cc.extensions.services.project.versions.IProjectVersions;
-import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineExtensionException;
+import fr.echoes.labs.ksf.cc.plugins.redmine.exceptions.RedmineExtensionException;
 import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
 
 
@@ -24,7 +24,7 @@ public class RedmineProjectRelease implements IProjectVersions {
 	private static final Logger LOGGER = LoggerFactory.getLogger(RedmineProjectRelease.class);
 
 	@Autowired
-	IRedmineService redmineService;
+	private IRedmineService redmineService;
 
 
 	@Override

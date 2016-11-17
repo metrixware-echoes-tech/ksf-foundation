@@ -26,6 +26,7 @@ import com.offbytwo.jenkins.model.FolderJob;
 import com.offbytwo.jenkins.model.Job;
 import com.offbytwo.jenkins.model.JobWithDetails;
 
+import fr.echoes.labs.komea.foundation.plugins.jenkins.JenkinsConfigurationBean;
 import fr.echoes.labs.komea.foundation.plugins.jenkins.JenkinsExtensionException;
 import fr.echoes.labs.ksf.cc.extensions.gui.ProjectExtensionConstants;
 import fr.echoes.labs.ksf.cc.extensions.services.project.ProjectUtils;
@@ -41,7 +42,10 @@ public class JenkinsServiceTest {
 	private static final String DEFAULT_TEMPLATE = "job.xml";
 	
 	@Mock
-	private JenkinsConfigurationService configuration;
+	private JenkinsConfigurationBean configuration;
+	
+	@Mock
+	private JenkinsConfigurationService configurationService;
 	
 	@Mock
 	private JenkinsTemplateService templateService;
@@ -63,10 +67,11 @@ public class JenkinsServiceTest {
 		MockitoAnnotations.initMocks(this);
 		
 		this.jenkinsService = new JenkinsService();
-		this.jenkinsService.configurationService = this.configuration;
+		this.jenkinsService.configurationService = this.configurationService;
 		this.jenkinsService.templateService = this.templateService;
-		this.jenkinsService.nameResolver = new JenkinsNameResolver(this.configuration);
+		this.jenkinsService.nameResolver = new JenkinsNameResolver(this.configurationService);
 		
+		Mockito.when(this.configurationService.getConfigurationBean()).thenReturn(this.configuration);
 		Mockito.when(this.configuration.getUrl()).thenReturn(JENKINS_URL);
 		Mockito.when(this.configuration.getScmUrl()).thenReturn(SCM_URL);
 		Mockito.when(this.configuration.getJobNamePattern()).thenReturn("%{projectName}-%{branchName}");

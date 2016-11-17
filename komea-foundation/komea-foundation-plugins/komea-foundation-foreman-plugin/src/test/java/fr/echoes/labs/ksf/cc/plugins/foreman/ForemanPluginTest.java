@@ -6,19 +6,18 @@ import java.util.List;
 
 import org.junit.Test;
 
-import fr.echoes.labs.ksf.cc.plugins.foreman.ForemanPlugin;
-import fr.echoes.labs.ksf.extensions.api.IExtension;
+import com.google.common.collect.Lists;
+
+import fr.echoes.labs.pluginfwk.api.extension.Extension;
 
 public class ForemanPluginTest {
 
 	@Test
 	public void testGetExtensions() throws Exception {
-		try (final ForemanPlugin foremanPlugin = new ForemanPlugin()) {
-			foremanPlugin.init();
-			final List<IExtension> extensions = foremanPlugin.getExtensions();
-			System.out.println(extensions);
-			assertEquals(2, extensions.size());
-		}
+		final ForemanPlugin foremanPlugin = new ForemanPlugin();
+		final List<Extension> extensions = Lists.newArrayList(foremanPlugin.getExtensions());
+		System.out.println(extensions);
+		assertEquals(2, extensions.size());
 	}
 
 }

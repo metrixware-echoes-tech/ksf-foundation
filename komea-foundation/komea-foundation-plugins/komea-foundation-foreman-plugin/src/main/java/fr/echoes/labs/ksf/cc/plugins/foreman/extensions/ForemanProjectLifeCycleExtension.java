@@ -1,23 +1,26 @@
 package fr.echoes.labs.ksf.cc.plugins.foreman.extensions;
 
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.tocea.corolla.products.dao.IProjectDAO;
+
 import fr.echoes.labs.foremanapi.IForemanApi;
-import fr.echoes.labs.foremanclient.IForemanService;
+import fr.echoes.labs.ksf.cc.extensions.services.ErrorHandlingService;
+import fr.echoes.labs.ksf.cc.plugins.foreman.ForemanPlugin;
 import fr.echoes.labs.ksf.cc.plugins.foreman.dao.IForemanTargetDAO;
 import fr.echoes.labs.ksf.cc.plugins.foreman.model.ForemanTarget;
 import fr.echoes.labs.ksf.cc.plugins.foreman.services.ForemanClientFactory;
-import fr.echoes.labs.ksf.cc.plugins.foreman.services.ForemanErrorHandlingService;
-import fr.echoes.labs.ksf.cc.plugins.foreman.utils.ForemanConstants;
+import fr.echoes.labs.ksf.cc.plugins.foreman.services.IForemanService;
 import fr.echoes.labs.ksf.extensions.annotations.Extension;
 import fr.echoes.labs.ksf.extensions.projects.IProjectLifecycleExtension;
 import fr.echoes.labs.ksf.extensions.projects.NotifyResult;
 import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
 import fr.echoes.labs.ksf.users.security.api.CurrentUserService;
-import java.util.List;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @Extension
 public class ForemanProjectLifeCycleExtension implements IProjectLifecycleExtension {
@@ -31,7 +34,7 @@ public class ForemanProjectLifeCycleExtension implements IProjectLifecycleExtens
     private ForemanClientFactory foremanClientFactory;
 
     @Autowired
-    private ForemanErrorHandlingService errorHandler;
+    private ErrorHandlingService errorHandler;
 
     @Autowired
     private IForemanTargetDAO targetDAO;
@@ -63,7 +66,7 @@ public class ForemanProjectLifeCycleExtension implements IProjectLifecycleExtens
 
         } catch (final Exception e) {
             LOGGER.error("[Foreman] project creation failed", e);
-            this.errorHandler.registerError("Unable to create Foreman project. Please verify your Foreman configuration.");
+            this.errorHandler.registerError(ForemanPlugin.ID, "Unable to create Foreman project. Please verify your Foreman configuration.");
         }
         return NotifyResult.CONTINUE;
     }
@@ -83,7 +86,7 @@ public class ForemanProjectLifeCycleExtension implements IProjectLifecycleExtens
 
         } catch (final Exception ex) {
             LOGGER.error("[foreman] project delete failed", ex);
-            this.errorHandler.registerError("Unable to delete Foreman project. Please verify your Foreman configuration.");
+            this.errorHandler.registerError(ForemanPlugin.ID, "Unable to delete Foreman project. Please verify your Foreman configuration.");
         }
         return NotifyResult.CONTINUE;
     }
@@ -137,7 +140,7 @@ public class ForemanProjectLifeCycleExtension implements IProjectLifecycleExtens
 
     @Override
     public String getName() {
-        return ForemanConstants.ID;
+        return ForemanPlugin.ID;
     }
 
 }

@@ -1,27 +1,7 @@
 package fr.echoes.labs.ksf.cc.plugins.foreman.extensions;
 
-import com.google.common.collect.Lists;
-import com.tocea.corolla.products.dao.IProjectDAO;
-import com.tocea.corolla.products.domain.Project;
-import fr.echoes.labs.foremanapi.IForemanApi;
-import fr.echoes.labs.foremanclient.ForemanService;
-import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.IProjectTabPanel;
-import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.MenuAction;
-import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
-import fr.echoes.labs.ksf.cc.plugins.foreman.dao.IForemanEnvironmentDAO;
-import fr.echoes.labs.ksf.cc.plugins.foreman.dao.IForemanTargetDAO;
-import fr.echoes.labs.ksf.cc.plugins.foreman.model.ForemanEnvironnment;
-import fr.echoes.labs.ksf.cc.plugins.foreman.model.ForemanTarget;
-import fr.echoes.labs.ksf.cc.plugins.foreman.services.ForemanClientFactory;
-import fr.echoes.labs.ksf.cc.plugins.foreman.services.ForemanConfigurationService;
-import fr.echoes.labs.ksf.cc.plugins.foreman.services.ForemanErrorHandlingService;
-import fr.echoes.labs.ksf.cc.plugins.foreman.utils.ForemanConstants;
-import fr.echoes.labs.ksf.plugins.utils.ThymeleafTemplateEngineUtils;
-
 import java.util.List;
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,16 +9,34 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.context.WebContext;
+
+import com.google.common.collect.Lists;
+import com.tocea.corolla.products.dao.IProjectDAO;
+import com.tocea.corolla.products.domain.Project;
+
+import fr.echoes.labs.foremanapi.IForemanApi;
+import fr.echoes.labs.ksf.cc.extensions.gui.KomeaFoundationContext;
+import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.IProjectTabPanel;
+import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.MenuAction;
+import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
+import fr.echoes.labs.ksf.cc.extensions.services.ErrorHandlingService;
+import fr.echoes.labs.ksf.cc.plugins.foreman.ForemanConfigurationBean;
+import fr.echoes.labs.ksf.cc.plugins.foreman.ForemanPlugin;
+import fr.echoes.labs.ksf.cc.plugins.foreman.dao.IForemanEnvironmentDAO;
+import fr.echoes.labs.ksf.cc.plugins.foreman.dao.IForemanTargetDAO;
+import fr.echoes.labs.ksf.cc.plugins.foreman.model.ForemanEnvironnment;
+import fr.echoes.labs.ksf.cc.plugins.foreman.model.ForemanTarget;
+import fr.echoes.labs.ksf.cc.plugins.foreman.services.ForemanClientFactory;
+import fr.echoes.labs.ksf.cc.plugins.foreman.services.ForemanConfigurationService;
+import fr.echoes.labs.ksf.cc.plugins.foreman.services.ForemanService;
+import fr.echoes.labs.ksf.plugins.utils.ThymeleafTemplateEngine;
 
 @Component
 public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
 
-    private static TemplateEngine templateEngine = ThymeleafTemplateEngineUtils.createTemplateEngine();
+    private static ThymeleafTemplateEngine templateEngine = new ThymeleafTemplateEngine();
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ForemanProjectDashboardWidget.class);
 
@@ -55,16 +53,7 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
     private IProjectDAO projectDAO;
 
     @Autowired
-    private ForemanErrorHandlingService errorHandler;
-
-    @Autowired
-    private HttpServletRequest request;
-
-    @Autowired
-    private HttpServletResponse response;
-
-    @Autowired
-    private ServletContext servletContext;
+    private ErrorHandlingService errorHandler;
 
     @Autowired
     private MessageSource messageResource;
@@ -74,6 +63,9 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
 
     @Autowired
     private ForemanService foremanService;
+    
+    @Autowired
+    private KomeaFoundationContext foundation;
 
     @Override
     public List<MenuAction> getDropdownActions() {
@@ -101,7 +93,7 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
 
         final Project project = this.projectDAO.findOne(projectId);
 
-        final WebContext ctx = new WebContext(this.request, this.response, this.servletContext);
+        final WebContext ctx = this.foundation.newThymeleafWebContext();
         ctx.setVariable("projectId", projectId);
 
         final List<ForemanEnvironnment> environments = this.environmentDAO.findAll();
@@ -125,12 +117,12 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
 
         } catch (final Exception e) {
             LOGGER.error("[foreman] Foreman API call failed : {}", e);
-            this.errorHandler.registerError("Unable to invoke Foreman. Please verify your Foreman configuration");
+            this.errorHandler.registerError(ForemanPlugin.ID, "Unable to invoke Foreman. Please verify your Foreman configuration");
         }
 
-        ctx.setVariable("foremanError", this.errorHandler.retrieveError());
+        ctx.setVariable("foremanError", this.errorHandler.retrieveError(ForemanPlugin.ID));
 
-        return templateEngine.process("foremanPanel", ctx);
+        return templateEngine.process("foremanPanel", ctx, this.getClass().getClassLoader());
     }
 
     @Override
@@ -146,6 +138,8 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
     @Override
     public List<IProjectTabPanel> getTabPanels(final String projectKey) {
 
+    	final ForemanConfigurationBean configuration = this.configurationService.getConfigurationBean();
+    	
         final IProjectTabPanel iframePanel = new IProjectTabPanel() {
 
             @Override
@@ -157,14 +151,9 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
             public String getContent() {
 
                 final Context ctx = new Context();
-
-                final HttpServletRequest request
-                        = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
-                        .getRequest();
-
-                String foremanURL = ForemanProjectDashboardWidget.this.configurationService.getForemanUrl();
-
-                final String foremanHost = request.getParameter("foremanHost");
+                final String foremanHost = foundation.getRequest().getParameter("foremanHost");
+                
+                String foremanURL = configuration.getForemanUrl();
 
                 if (StringUtils.isNotEmpty(foremanHost)) {
                     foremanURL += "/hosts/" + foremanHost;
@@ -174,7 +163,7 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
 
                 ctx.setVariable("foremanURL", foremanURL);
 
-                return templateEngine.process("foremanManagementPanel", ctx);
+                return templateEngine.process("foremanManagementPanel", ctx, this.getClass().getClassLoader());
             }
 
             @Override
@@ -184,7 +173,7 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
 
             @Override
             public String getId() {
-                return ForemanConstants.ID;
+                return ForemanPlugin.ID;
             }
         };
 
@@ -198,7 +187,7 @@ public class ForemanProjectDashboardWidget implements ProjectDashboardWidget {
 
     @Override
     public String getId() {
-        return ForemanConstants.ID;
+        return ForemanPlugin.ID;
     }
 
 }

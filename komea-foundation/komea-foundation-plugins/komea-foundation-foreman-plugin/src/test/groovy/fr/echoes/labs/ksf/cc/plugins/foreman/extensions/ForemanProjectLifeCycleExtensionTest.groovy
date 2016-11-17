@@ -6,11 +6,11 @@ import com.tocea.corolla.products.dao.IProjectDAO
 import com.tocea.corolla.products.domain.Project
 
 import fr.echoes.labs.foremanapi.IForemanApi
-import fr.echoes.labs.foremanclient.IForemanService
 import fr.echoes.labs.ksf.cc.plugins.foreman.dao.IForemanTargetDAO
 import fr.echoes.labs.ksf.cc.plugins.foreman.extensions.ForemanProjectLifeCycleExtension
 import fr.echoes.labs.ksf.cc.plugins.foreman.model.ForemanTarget
 import fr.echoes.labs.ksf.cc.plugins.foreman.services.ForemanClientFactory
+import fr.echoes.labs.ksf.cc.plugins.foreman.services.IForemanService;
 import fr.echoes.labs.ksf.extensions.projects.ProjectDto
 import fr.echoes.labs.ksf.users.security.api.CurrentUserService
 

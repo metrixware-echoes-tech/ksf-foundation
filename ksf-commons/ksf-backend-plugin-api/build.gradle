@@ -1,3 +1,10 @@
 dependencies {
+	
 	compile "org.apache.commons:commons-lang3:$APACHE_COMMONLANG3"
+	
+	compile "fr.echoes.labs.pluginframework:pluginfwk-core:${PLUGIN_FWK}"
+	compile "fr.echoes.labs.pluginframework:plugin-api:${PLUGIN_FWK}"
+	compile "fr.echoes.labs.pluginframework:plugin-java-scanner:${PLUGIN_FWK}"
+	compile "fr.echoes.labs.pluginframework:plugin-spring-scanner:${PLUGIN_FWK}"
+	
 }

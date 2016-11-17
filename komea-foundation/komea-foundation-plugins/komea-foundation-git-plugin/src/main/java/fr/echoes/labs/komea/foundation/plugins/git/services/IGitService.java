@@ -1,6 +1,6 @@
 package fr.echoes.labs.komea.foundation.plugins.git.services;
 
-import fr.echoes.labs.komea.foundation.plugins.git.GitExtensionException;
+import fr.echoes.labs.komea.foundation.plugins.git.exceptions.GitExtensionException;
 import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
 
 /**

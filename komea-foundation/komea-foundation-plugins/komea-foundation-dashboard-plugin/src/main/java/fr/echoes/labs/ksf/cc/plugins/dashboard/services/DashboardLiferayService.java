@@ -7,19 +7,24 @@ import org.springframework.stereotype.Service;
 
 import com.tocea.corolla.products.domain.Project;
 
+import fr.echoes.labs.ksf.cc.plugins.dashboard.DashboardConfigurationBean;
 import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
 
 @Service
 public class DashboardLiferayService {
 	
-	@Autowired
-	private DashboardConfigurationService configuration;
+	private DashboardConfigurationService configurationService;
 	
-	@Autowired
 	private DashboardClientFactory clientFactory;
 	
-	@Autowired
 	private DashboardEntityFactory entityFactory;
+	
+	@Autowired
+	public DashboardLiferayService(final DashboardConfigurationService configurationService, final DashboardClientFactory clientFactory, final DashboardEntityFactory entityFactory) {
+		this.clientFactory = clientFactory;
+		this.entityFactory = entityFactory;
+		this.configurationService = configurationService;
+	}
 	
 	public String getLiferaySiteName(final ProjectDto project) {
 		return project.getName();
@@ -30,6 +35,8 @@ public class DashboardLiferayService {
 	}
 	
 	public void createSite(final ProjectDto project) throws Exception {
+		
+		final DashboardConfigurationBean configuration = this.configurationService.getPluginConfigurationBean();
 		
 		LiferaySoapClient liferay = clientFactory.liferaySoapClient();
 		final String projectKey = entityFactory.getProjectEntityKey(project);
@@ -51,6 +58,8 @@ public class DashboardLiferayService {
 	}
 	
 	public void deleteSite(final ProjectDto project) throws Exception {
+		
+		final DashboardConfigurationBean configuration = this.configurationService.getPluginConfigurationBean();
 		
 		final String siteName = getLiferaySiteName(project);
 		LiferaySoapClient liferay = clientFactory.liferaySoapClient();

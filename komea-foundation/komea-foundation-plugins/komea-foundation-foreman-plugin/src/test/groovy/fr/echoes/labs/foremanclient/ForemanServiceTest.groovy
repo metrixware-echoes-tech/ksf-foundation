@@ -15,6 +15,8 @@ import fr.echoes.labs.foremanapi.model.Results
 import fr.echoes.labs.foremanapi.model.Role
 import fr.echoes.labs.foremanapi.model.Roles
 import fr.echoes.labs.foremanapi.model.User
+import fr.echoes.labs.ksf.cc.plugins.foreman.services.ForemanService
+import fr.echoes.labs.ksf.cc.plugins.foreman.services.IForemanService;;
 
 
 class ForemanServiceTest extends Specification {

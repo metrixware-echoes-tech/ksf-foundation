@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import com.google.common.collect.Lists;
 
 import fr.echoes.labs.ksf.cc.extensions.gui.ProjectExtensionConstants;
+import fr.echoes.labs.ksf.cc.plugins.dashboard.DashboardConfigurationBean;
 import fr.echoes.labs.ksf.cc.plugins.dashboard.entities.GitRepository;
 import fr.echoes.labs.ksf.cc.plugins.dashboard.utils.DashboardUtils;
 import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
@@ -27,14 +28,18 @@ public class DashboardService {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(DashboardService.class);
 
-	@Autowired
 	private DashboardClientFactory clientFactory;
 	
-	@Autowired
 	private DashboardConfigurationService configurationService;
 	
-	@Autowired
 	private DashboardEntityFactory entityFactory;
+	
+	@Autowired
+	public DashboardService(final DashboardConfigurationService configurationService, final DashboardClientFactory clientFactory, final DashboardEntityFactory entityFactory) {
+		this.clientFactory = clientFactory;
+		this.entityFactory = entityFactory;
+		this.configurationService = configurationService;
+	}
 	
 	public void updateProjectEntities(final ProjectDto project) {
 		
@@ -83,6 +88,8 @@ public class DashboardService {
 	
 	private GitRepository getGitRepository(final ProjectDto project) {
 		
+		final DashboardConfigurationBean configuration = this.configurationService.getPluginConfigurationBean();
+		
 		final String gitURL = (String) project.getOtherAttributes().get(ProjectExtensionConstants.GIT_URL);
 		final List<String> gitIncludedBranches = (List<String>) project.getOtherAttributes().get(ProjectExtensionConstants.ANALYZED_BRANCHES);
 		
@@ -92,8 +99,8 @@ public class DashboardService {
 			repository.setName(project.getName());
 			repository.setRemoteURL(gitURL);
 			repository.setIncludedBranches(gitIncludedBranches);
-			repository.setUsername(configurationService.getUsername());
-			repository.setPassword(configurationService.getPassword());
+			repository.setUsername(configuration.getUsername());
+			repository.setPassword(configuration.getPassword());
 			
 			return repository;		
 		}
@@ -103,8 +110,8 @@ public class DashboardService {
 	
 	public void updateConnectorProperties(final ProjectDto project) {
 		
-		List<ConnectorProperty> properties = Lists.newArrayList();
-		ConnectorsConfigurationClient configurationClient = clientFactory.connectorsConfigurationClient();
+		final List<ConnectorProperty> properties = Lists.newArrayList();
+		final ConnectorsConfigurationClient configurationClient = clientFactory.connectorsConfigurationClient();
 		
 		GitRepository repository = getGitRepository(project);
 			

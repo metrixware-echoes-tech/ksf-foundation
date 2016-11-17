@@ -16,6 +16,7 @@ import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
 import com.google.common.io.Resources;
 
+import fr.echoes.labs.komea.foundation.plugins.jenkins.JenkinsConfigurationBean;
 import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
 
 public class JenkinsTemplateServiceTest {
@@ -24,7 +25,10 @@ public class JenkinsTemplateServiceTest {
 	private static final String DEFAULT_TEMPLATE = "jenkins_job_templates/job.xml";
 
 	@Mock
-	private JenkinsConfigurationService configuration;
+	private JenkinsConfigurationBean configuration;
+	
+	@Mock
+	private JenkinsConfigurationService configurationService;
 	
 	@Mock
 	private JenkinsNameResolver nameResolver;
@@ -35,7 +39,9 @@ public class JenkinsTemplateServiceTest {
 	public void setup() throws IOException {
 		
 		MockitoAnnotations.initMocks(this);
-		this.service = new JenkinsTemplateService(this.configuration, this.nameResolver);
+		this.service = new JenkinsTemplateService(this.configurationService, this.nameResolver);
+		
+		Mockito.when(this.configurationService.getConfigurationBean()).thenReturn(this.configuration);
 		
 		final File tmpFolder = new File(TMP_FOLDER);
 		FileUtils.deleteDirectory(tmpFolder);

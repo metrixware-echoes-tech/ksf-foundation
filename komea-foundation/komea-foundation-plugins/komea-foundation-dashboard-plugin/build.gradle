@@ -1,6 +1,17 @@
+
+configurations.all {
+	
+	exclude group: 'com.github.fakemongo'
+	exclude group: 'org.javers'
+	exclude group: 'org.springframework.ldap'
+	exclude group: 'org.springframework.security'
+	exclude group: 'javax.mail'
+	
+}
+
 dependencies {
 		
-	compile 'commons-lang:commons-lang:2.6'
+	compile "commons-lang:commons-lang:${APACHE_COMMONLANG}"
 	
 	compile project(":komea-foundation:komea-foundation-plugin-api")
 	compile project(":ksf-commons:ksf-backend-domain-commons") // TO REMOVE IN 1.1

@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 import com.taskadapter.redmineapi.RedmineException;
 
-import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineExtensionException;
+import fr.echoes.labs.ksf.cc.plugins.redmine.exceptions.RedmineExtensionException;
 import fr.echoes.labs.ksf.cc.plugins.redmine.services.IRedmineService;
 import fr.echoes.labs.ksf.extensions.exceptions.PermissionDeniedException;
 import fr.echoes.labs.ksf.extensions.projects.IDeleteProjectApprobator;

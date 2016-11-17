@@ -1,19 +1,20 @@
 package fr.echoes.labs.komea.foundation.plugins.jenkins.extensions;
 
-import fr.echoes.labs.komea.foundation.plugins.jenkins.JenkinsExtensionException;
-import fr.echoes.labs.komea.foundation.plugins.jenkins.services.IJenkinsService;
-import fr.echoes.labs.komea.foundation.plugins.jenkins.services.JenkinsErrorHandlingService;
-import fr.echoes.labs.komea.foundation.plugins.jenkins.utils.JenkinsConstants;
-import fr.echoes.labs.ksf.extensions.annotations.Extension;
-import fr.echoes.labs.ksf.extensions.projects.IProjectLifecycleExtension;
-import fr.echoes.labs.ksf.extensions.projects.NotifyResult;
-import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
-import fr.echoes.labs.ksf.users.security.api.CurrentUserService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
+
+import fr.echoes.labs.komea.foundation.plugins.jenkins.JenkinsExtensionException;
+import fr.echoes.labs.komea.foundation.plugins.jenkins.JenkinsPlugin;
+import fr.echoes.labs.komea.foundation.plugins.jenkins.services.IJenkinsService;
+import fr.echoes.labs.ksf.cc.extensions.services.ErrorHandlingService;
+import fr.echoes.labs.ksf.extensions.annotations.Extension;
+import fr.echoes.labs.ksf.extensions.projects.IProjectLifecycleExtension;
+import fr.echoes.labs.ksf.extensions.projects.NotifyResult;
+import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
+import fr.echoes.labs.ksf.users.security.api.CurrentUserService;
 
 /**
  * @author dcollard
@@ -26,7 +27,7 @@ public class JenkinsProjectLifeCycleExtension implements IProjectLifecycleExtens
     private static final Logger LOGGER = LoggerFactory.getLogger(JenkinsProjectLifeCycleExtension.class);
 
     @Autowired
-    private JenkinsErrorHandlingService errorHandler;
+    private ErrorHandlingService errorHandler;
 
     @Autowired
     private IJenkinsService jenkinsService;
@@ -50,7 +51,7 @@ public class JenkinsProjectLifeCycleExtension implements IProjectLifecycleExtens
 
         } catch (final Exception ex) {
             LOGGER.error("[Jenkins] Failed to create project {} ", project.getName(), ex);
-            this.errorHandler.registerError("Unable to create Jenkins project.");
+            this.errorHandler.registerError(JenkinsPlugin.ID, "Unable to create Jenkins project.");
         }
         return NotifyResult.CONTINUE;
     }
@@ -64,7 +65,7 @@ public class JenkinsProjectLifeCycleExtension implements IProjectLifecycleExtens
 
         } catch (final Exception ex) {
             LOGGER.error("[Jenkins] Failed to delete project {} ", project.getName(), ex);
-            this.errorHandler.registerError("Unable to delete Jenkins project.");
+            this.errorHandler.registerError(JenkinsPlugin.ID, "Unable to delete Jenkins project.");
         }
         return NotifyResult.CONTINUE;
     }
@@ -85,7 +86,7 @@ public class JenkinsProjectLifeCycleExtension implements IProjectLifecycleExtens
             this.jenkinsService.createRelease(project, releaseVersion);
         } catch (final Exception ex) {
             LOGGER.error("[Jenkins] Failed to create release for project {} ", project.getName(), ex);
-            this.errorHandler.registerError("Failed to create release.");
+            this.errorHandler.registerError(JenkinsPlugin.ID, "Failed to create release.");
         }
         return NotifyResult.CONTINUE;
     }
@@ -96,7 +97,7 @@ public class JenkinsProjectLifeCycleExtension implements IProjectLifecycleExtens
             this.jenkinsService.createFeature(project, featureId, featureSubject);
         } catch (final Exception ex) {
             LOGGER.error("[Jenkins] Failed to create release for project {} ", project.getName(), ex);
-            this.errorHandler.registerError("Failed to create release.");
+            this.errorHandler.registerError(JenkinsPlugin.ID, "Failed to create release.");
         }
         return NotifyResult.CONTINUE;
     }
@@ -108,7 +109,7 @@ public class JenkinsProjectLifeCycleExtension implements IProjectLifecycleExtens
             this.jenkinsService.deleteReleaseJob(project, releaseName);
         } catch (final Exception ex) {
             LOGGER.error("[Jenkins] Failed to delete the release job", ex);
-            this.errorHandler.registerError("Failed to delete the release job.");
+            this.errorHandler.registerError(JenkinsPlugin.ID, "Failed to delete the release job.");
         }
         return NotifyResult.CONTINUE;
     }
@@ -120,7 +121,7 @@ public class JenkinsProjectLifeCycleExtension implements IProjectLifecycleExtens
             this.jenkinsService.deleteFeatureJob(projectDto, featureId, featureSubject);
         } catch (final JenkinsExtensionException e) {
             LOGGER.error("[Jenkins] Failed to delete the feature job", e);
-            this.errorHandler.registerError("Failed to delete the feature job.");
+            this.errorHandler.registerError(JenkinsPlugin.ID, "Failed to delete the feature job.");
         }
         return NotifyResult.CONTINUE;
 
@@ -133,7 +134,7 @@ public class JenkinsProjectLifeCycleExtension implements IProjectLifecycleExtens
             this.jenkinsService.deleteFeatureJob(projectDto, featureId, featureSubject);
         } catch (final JenkinsExtensionException e) {
             LOGGER.error("[Jenkins] Failed to delete the feature job", e);
-            this.errorHandler.registerError("Failed to delete the feature job.");
+            this.errorHandler.registerError(JenkinsPlugin.ID, "Failed to delete the feature job.");
         }
         return NotifyResult.CONTINUE;
 
@@ -141,6 +142,6 @@ public class JenkinsProjectLifeCycleExtension implements IProjectLifecycleExtens
 
     @Override
     public String getName() {
-        return JenkinsConstants.ID;
+        return JenkinsPlugin.ID;
     }
 }

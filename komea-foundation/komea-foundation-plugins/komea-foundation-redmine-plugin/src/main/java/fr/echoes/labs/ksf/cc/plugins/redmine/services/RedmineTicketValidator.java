@@ -15,10 +15,11 @@ import fr.echoes.labs.ksf.cc.extensions.services.project.IValidator;
 import fr.echoes.labs.ksf.cc.extensions.services.project.IValidatorResult;
 import fr.echoes.labs.ksf.cc.extensions.services.project.ValidatorResult;
 import fr.echoes.labs.ksf.cc.extensions.services.project.ValidatorResultType;
-import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineExtensionException;
-import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineIssue;
-import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineQuery;
-import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineQuery.Builder;
+import fr.echoes.labs.ksf.cc.plugins.redmine.RedmineConfigurationBean;
+import fr.echoes.labs.ksf.cc.plugins.redmine.exceptions.RedmineExtensionException;
+import fr.echoes.labs.ksf.cc.plugins.redmine.model.RedmineIssue;
+import fr.echoes.labs.ksf.cc.plugins.redmine.utils.RedmineQuery;
+import fr.echoes.labs.ksf.cc.plugins.redmine.utils.RedmineQuery.Builder;
 import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
 
 /**
@@ -58,11 +59,12 @@ public class RedmineTicketValidator implements IValidator {
 	public List<IValidatorResult> validateRelease(final ProjectDto project, final String releaseName) {
 		
 		final Builder redmineQuerryBuilder = new RedmineQuery.Builder();
-
+		
+		final RedmineConfigurationBean configuration = this.configurationService.getConfigurationBean();
 		final String projectKey = this.nameResolver.getProjectKey(project);
 		
 		redmineQuerryBuilder.projectKey(projectKey)
-		                    .addTrackerId(this.configurationService.getFeatureTrackerId());
+		                    .addTrackerId(configuration.getFeatureTrackerId());
 
 		final List<IValidatorResult> result = Lists.newArrayList();
 
@@ -70,8 +72,8 @@ public class RedmineTicketValidator implements IValidator {
 
 			final List<RedmineIssue> issues = Lists.newArrayList();
 
-			addIssuesToList(projectKey, releaseName, issues, this.configurationService.getFeatureStatusNewId());
-			addIssuesToList(projectKey, releaseName, issues, this.configurationService.getFeatureStatusAssignedId());
+			addIssuesToList(projectKey, releaseName, issues, configuration.getFeatureStatusNewId());
+			addIssuesToList(projectKey, releaseName, issues, configuration.getFeatureStatusAssignedId());
 
 			final MessageSourceAccessor messageSourceAccessor = new MessageSourceAccessor(this.messageResource);
 			for (final RedmineIssue issue : issues) {
@@ -97,11 +99,12 @@ public class RedmineTicketValidator implements IValidator {
 
 	private List<RedmineIssue> getIssues(String projectKey, String releaseName, int issueStatusId) throws RedmineExtensionException {
 		final Builder requestBuilder = new RedmineQuery.Builder();
+		final RedmineConfigurationBean configuration = this.configurationService.getConfigurationBean();
 		final Builder builder = requestBuilder
 			.addStatusId(issueStatusId)
 			.setTargetVersion(releaseName);
 
-			for (final Integer trackerId : this.configurationService.getFeatureIds()) {
+			for (final Integer trackerId : configuration.getFeatureIds()) {
 				builder.addTrackerId(trackerId);
 			}
 

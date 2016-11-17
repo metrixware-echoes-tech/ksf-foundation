@@ -10,9 +10,10 @@ import org.springframework.stereotype.Component;
 
 import fr.echoes.labs.foremanapi.IForemanApi;
 import fr.echoes.labs.foremanclient.ForemanClient;
-import fr.echoes.labs.foremanclient.ForemanService;
+import fr.echoes.labs.ksf.cc.plugins.foreman.ForemanConfigurationBean;
 import fr.echoes.labs.ksf.cc.plugins.foreman.exceptions.ForemanConfigurationException;
 import fr.echoes.labs.ksf.cc.plugins.foreman.services.ForemanConfigurationService;
+import fr.echoes.labs.ksf.cc.plugins.foreman.services.ForemanService;
 
 @Component
 public class ForemanHealthIndicator extends AbstractHealthIndicator {
@@ -25,27 +26,29 @@ public class ForemanHealthIndicator extends AbstractHealthIndicator {
 	@Override
 	protected void doHealthCheck(Builder builder) throws Exception {
 		
+		final ForemanConfigurationBean configuration = this.configurationService.getConfigurationBean();
+		
 		try {
 			
-			String url = configurationService.getForemanUrl();
+			final String url = configuration.getForemanUrl();
 			
 			if (StringUtils.isEmpty(url)) {
 				throw new ForemanConfigurationException("missing property url");
 			}
 			
-			String username = configurationService.getForemanUsername();
+			final String username = configuration.getForemanUsername();
 			
 			if (StringUtils.isEmpty(username)) {
 				throw new ForemanConfigurationException("missing property username");
 			}
 			
-			String password = configurationService.getForemanPassword();
+			final String password = configuration.getForemanPassword();
 			
 			if (StringUtils.isEmpty(password)) {
 				throw new ForemanConfigurationException("missing property password");
 			}
 			
-			IForemanApi foremanClient = ForemanClient.createApi(url, username, password);
+			final IForemanApi foremanClient = ForemanClient.createApi(url, username, password);
 
 			foremanClient.getUsers("10");
 			

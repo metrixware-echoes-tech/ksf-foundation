@@ -40,6 +40,7 @@ import org.apache.http.protocol.BasicHttpContext;
 import org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider;
 import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.type.TypeFactory;
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
@@ -105,9 +106,7 @@ public class ForemanClient {
 		    }
 		}).build();
 
-		httpClientBuilder.setSslcontext( sslContext);
-
-
+		httpClientBuilder.setSslcontext(sslContext);
 
 		final SSLConnectionSocketFactory sslSocketFactory = new SSLConnectionSocketFactory(sslContext, hostnameVerifier);
 		final Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory>create()
@@ -136,20 +135,41 @@ public class ForemanClient {
 
 		client.register(ClientErrorResponseFilter.class);
 		client.register(JacksonJaxbJsonProvider.class);
-//		client.register(JacksonConfigurator.class);
 		client.register(AddVersionHeaderRequestFilter.class);
 
-		  final ObjectMapper objectMapper=new ObjectMapper();
-
-		  objectMapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		  final JacksonJaxbJsonProvider jacksonProvider=new JacksonJaxbJsonProvider();
-//		  jacksonProvider.setMapper(m);
-		  jacksonProvider.setMapper(objectMapper);
-		  client.register(jacksonProvider);
-
-        final ResteasyWebTarget target = client.target(url);
-
-        return target.proxy(IForemanApi.class);
+		IForemanApi api;
+		final ClassLoader initialClassLoader = Thread.currentThread().getContextClassLoader();
+		
+		try {			
+			
+			/*
+			 * Make sure to use the Foreman Plugin's class loader
+			 * otherwise the plugin's classes may not be found when creating the IForemanApi instance
+			 */
+			Thread.currentThread().setContextClassLoader(IForemanApi.class.getClassLoader());
+			
+			client.register(newJacksonProvider());
+	
+	        final ResteasyWebTarget target = client.target(url);
+	
+	        api = target.proxy(IForemanApi.class);
+	        
+		} finally {
+			Thread.currentThread().setContextClassLoader(initialClassLoader);
+		}
+		
+		return api;
+	}
+	
+	private static JacksonJaxbJsonProvider newJacksonProvider() {
+		
+		final ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		
+		final JacksonJaxbJsonProvider jacksonProvider=new JacksonJaxbJsonProvider();
+		jacksonProvider.setMapper(objectMapper);
+		
+		return jacksonProvider;
 	}
 
 	private static CredentialsProvider createCredentialsProvider(String username, String password) {

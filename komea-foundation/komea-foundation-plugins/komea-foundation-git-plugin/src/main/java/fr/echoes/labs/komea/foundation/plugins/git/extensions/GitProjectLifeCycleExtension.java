@@ -1,19 +1,20 @@
 package fr.echoes.labs.komea.foundation.plugins.git.extensions;
 
-import fr.echoes.labs.komea.foundation.plugins.git.GitExtensionMergeException;
-import fr.echoes.labs.komea.foundation.plugins.git.services.GitErrorHandlingService;
-import fr.echoes.labs.komea.foundation.plugins.git.services.IGitService;
-import fr.echoes.labs.komea.foundation.plugins.git.utils.GitConstants;
-import fr.echoes.labs.ksf.extensions.annotations.Extension;
-import fr.echoes.labs.ksf.extensions.projects.IProjectLifecycleExtension;
-import fr.echoes.labs.ksf.extensions.projects.NotifyResult;
-import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
-import fr.echoes.labs.ksf.users.security.api.CurrentUserService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
+
+import fr.echoes.labs.komea.foundation.plugins.git.GitPlugin;
+import fr.echoes.labs.komea.foundation.plugins.git.exceptions.GitExtensionMergeException;
+import fr.echoes.labs.komea.foundation.plugins.git.services.IGitService;
+import fr.echoes.labs.ksf.cc.extensions.services.ErrorHandlingService;
+import fr.echoes.labs.ksf.extensions.annotations.Extension;
+import fr.echoes.labs.ksf.extensions.projects.IProjectLifecycleExtension;
+import fr.echoes.labs.ksf.extensions.projects.NotifyResult;
+import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
+import fr.echoes.labs.ksf.users.security.api.CurrentUserService;
 
 /**
  * @author dcollard
@@ -26,7 +27,7 @@ public class GitProjectLifeCycleExtension implements IProjectLifecycleExtension 
     private static final Logger LOGGER = LoggerFactory.getLogger(GitProjectLifeCycleExtension.class);
 
     @Autowired
-    private GitErrorHandlingService errorHandler;
+    private ErrorHandlingService errorHandler;
 
     @Autowired
     private IGitService gitService;
@@ -52,7 +53,7 @@ public class GitProjectLifeCycleExtension implements IProjectLifecycleExtension 
 
         } catch (final Exception ex) {
             LOGGER.error("[Git] Failed to create project {} ", project.getName(), ex);
-            this.errorHandler.registerError("Unable to create Git repository.");
+            this.errorHandler.registerError(GitPlugin.ID, "Unable to create Git repository.");
         }
 
         return NotifyResult.CONTINUE;
@@ -81,7 +82,7 @@ public class GitProjectLifeCycleExtension implements IProjectLifecycleExtension 
             this.gitService.createRelease(project, releaseVersion);
         } catch (final Exception ex) {
             LOGGER.error("[Git] Failed to create release for project {} ", project.getName(), ex);
-            this.errorHandler.registerError("Failed to create release.");
+            this.errorHandler.registerError(GitPlugin.ID, "Failed to create release.");
         }
         return NotifyResult.CONTINUE;
     }
@@ -94,7 +95,7 @@ public class GitProjectLifeCycleExtension implements IProjectLifecycleExtension 
             this.gitService.createFeature(project, featureId, featureSubject);
         } catch (final Exception ex) {
             LOGGER.error("[Git] Failed to create feature for project {} ", project.getName(), ex);
-            this.errorHandler.registerError("Failed to create Git feature branch.");
+            this.errorHandler.registerError(GitPlugin.ID, "Failed to create Git feature branch.");
         }
         return NotifyResult.CONTINUE;
     }
@@ -106,11 +107,11 @@ public class GitProjectLifeCycleExtension implements IProjectLifecycleExtension 
             this.gitService.closeFeature(project, featureId, featureSubject);
         } catch (final GitExtensionMergeException e) {
             LOGGER.error("[Git] Failed to finish feature for project {} ", project.getName(), e);
-            this.errorHandler.registerError(GitErrorHandlingService.SESSION_ITEM_GIT_MERGE_ERROR, "Failed to finish feature: " + e.getMessage());
+            this.errorHandler.registerError(GitPlugin.MERGE_ERROR, "Failed to finish feature: " + e.getMessage());
             return NotifyResult.TERMINATE;
         } catch (final Exception e) {
             LOGGER.error("[Git] Failed to finish feature for project {} ", project.getName(), e);
-            this.errorHandler.registerError("Failed to finish feature.");
+            this.errorHandler.registerError(GitPlugin.ID, "Failed to finish feature.");
             return NotifyResult.TERMINATE;
         }
         return NotifyResult.CONTINUE;
@@ -123,11 +124,11 @@ public class GitProjectLifeCycleExtension implements IProjectLifecycleExtension 
             this.gitService.cancelFeature(project, featureId, featureSubject);
         } catch (final GitExtensionMergeException e) {
             LOGGER.error("[Git] Failed to cancel feature for project {} ", project.getName(), e);
-            this.errorHandler.registerError(GitErrorHandlingService.SESSION_ITEM_GIT_MERGE_ERROR, "Failed to cancel feature: " + e.getMessage());
+            this.errorHandler.registerError(GitPlugin.MERGE_ERROR, "Failed to cancel feature: " + e.getMessage());
             return NotifyResult.TERMINATE;
         } catch (final Exception e) {
             LOGGER.error("[Git] Failed to cancel feature for project {} ", project.getName(), e);
-            this.errorHandler.registerError("Failed to cancel feature.");
+            this.errorHandler.registerError(GitPlugin.ID, "Failed to cancel feature.");
             return NotifyResult.TERMINATE;
         }
         return NotifyResult.CONTINUE;
@@ -139,11 +140,11 @@ public class GitProjectLifeCycleExtension implements IProjectLifecycleExtension 
             this.gitService.closeRelease(project, releaseName);
         } catch (final GitExtensionMergeException e) {
             LOGGER.error("[Git] Failed to close feature for project {} ", project.getName(), e);
-            this.errorHandler.registerError(GitErrorHandlingService.SESSION_ITEM_GIT_MERGE_ERROR, "Failed to close feature: " + e.getMessage());
+            this.errorHandler.registerError(GitPlugin.MERGE_ERROR, "Failed to close feature: " + e.getMessage());
             return NotifyResult.TERMINATE;
         } catch (final Exception ex) {
             LOGGER.error("[Git] Failed to close feature for project {} ", project.getName(), ex);
-            this.errorHandler.registerError("Failed to create release.");
+            this.errorHandler.registerError(GitPlugin.ID, "Failed to create release.");
             return NotifyResult.TERMINATE;
         }
         return NotifyResult.CONTINUE;
@@ -151,7 +152,7 @@ public class GitProjectLifeCycleExtension implements IProjectLifecycleExtension 
 
     @Override
     public String getName() {
-        return GitConstants.ID;
+        return GitPlugin.ID;
     }
 
 }

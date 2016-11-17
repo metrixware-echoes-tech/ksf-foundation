@@ -19,6 +19,9 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.testng.Assert;
 
+import fr.echoes.labs.ksf.cc.plugins.nexus.model.Repository;
+import fr.echoes.labs.ksf.cc.plugins.nexus.model.RepositoryData;
+
 public class NexusProjectLifeCycleExtensionTest {
 
     @Ignore

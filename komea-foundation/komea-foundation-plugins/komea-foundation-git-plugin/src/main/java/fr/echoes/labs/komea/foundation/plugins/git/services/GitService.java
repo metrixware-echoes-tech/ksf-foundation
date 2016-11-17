@@ -1,20 +1,11 @@
 package fr.echoes.labs.komea.foundation.plugins.git.services;
 
-import com.google.common.collect.Lists;
-import com.jcraft.jsch.Session;
-import fr.echoes.labs.komea.foundation.plugins.git.GitExtensionException;
-import fr.echoes.labs.komea.foundation.plugins.git.GitExtensionMergeException;
-import fr.echoes.labs.ksf.cc.extensions.gui.ProjectExtensionConstants;
-import fr.echoes.labs.ksf.cc.extensions.services.project.ProjectUtils;
-import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.text.StrSubstitutor;
 import org.eclipse.jgit.api.CheckoutCommand;
 import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.CommitCommand;
@@ -49,6 +40,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.common.collect.Lists;
+import com.jcraft.jsch.Session;
+
+import fr.echoes.labs.komea.foundation.plugins.git.GitConfigurationBean;
+import fr.echoes.labs.komea.foundation.plugins.git.exceptions.GitExtensionException;
+import fr.echoes.labs.komea.foundation.plugins.git.exceptions.GitExtensionMergeException;
+import fr.echoes.labs.ksf.cc.extensions.gui.ProjectExtensionConstants;
+import fr.echoes.labs.ksf.cc.extensions.services.project.ProjectUtils;
+import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
+
 /**
  * Spring Service for working with the foreman API.
  *
@@ -61,13 +62,19 @@ public class GitService implements IGitService {
     private static final String DEVELOP = "develop";
     private static final String MASTER = "master";
 
+    private static final String INITIAL_COMMIT_MESSAGE = "Initial commit";
+    
     private static final Logger LOGGER = LoggerFactory.getLogger(GitService.class);
 
-    @Autowired
-    private GitConfigurationService configuration;
+    private GitConfigurationService configurationService;
+    
+    private GitNameResolver nameResolver;
     
     @Autowired
-    private GitNameResolver nameResolver;
+    public GitService(final GitConfigurationService configurationService, final GitNameResolver nameResolver) {
+    	this.configurationService = configurationService;
+    	this.nameResolver = nameResolver;
+    }
 
     @Override
     public void createProject(final ProjectDto project) throws GitExtensionException {
@@ -118,7 +125,8 @@ public class GitService implements IGitService {
             throws GitExtensionException, IOException {
 
     	final String repositoryKey = this.nameResolver.getRepositoryKey(project);
-        final File workingDirectory = new File(this.configuration.getGitWorkingdirectory(), repositoryKey);
+    	final String gitWorkingDirectory = this.configurationService.getConfigurationBean().getGitWorkingdirectory();
+        final File workingDirectory = new File(gitWorkingDirectory, repositoryKey);
 
         if (workingDirectory.exists()) {
             if (!workingDirectory.isDirectory()) {
@@ -138,17 +146,19 @@ public class GitService implements IGitService {
      */
     private void initRepo(File workingDirectory, Git git) throws NoFilepatternException, IOException, GitAPIException {
 
+    	final GitConfigurationBean configuration = this.configurationService.getConfigurationBean();
+    	
         // Create build script
-        addScriptToRepo(workingDirectory, git, this.configuration.getBuildScript());
+        addScriptToRepo(workingDirectory, git, configuration.getBuildScript());
 
         // Create publish script
-        addScriptToRepo(workingDirectory, git, this.configuration.getPublishScript());
+        addScriptToRepo(workingDirectory, git, configuration.getPublishScript());
 
-        LOGGER.debug("Committing the files {} and {}", this.configuration.getBuildScript(), this.configuration.getPublishScript());
+        LOGGER.debug("Committing the files {} and {}", configuration.getBuildScript(), configuration.getPublishScript());
 
-        final CommitCommand commitCommand = git.commit().setMessage("Initial commit");
+        final CommitCommand commitCommand = git.commit().setMessage(INITIAL_COMMIT_MESSAGE);
 
-        setAuthor(commitCommand);
+        setAuthor(commitCommand, configuration.getUsername());
 
         commitCommand.call();
 
@@ -161,10 +171,8 @@ public class GitService implements IGitService {
         git.push().add(DEVELOP).call();
     }
 
-    private void setAuthor(final CommitCommand commitCommand) {
-        final String username = this.configuration.getUsername();
-
-        if (!StringUtils.isBlank(this.configuration.getUsername())) {
+    private static void setAuthor(final CommitCommand commitCommand, final String username) {
+        if (!StringUtils.isBlank(username)) {
             commitCommand.setAuthor(username, "");
         }
     }
@@ -251,7 +259,9 @@ public class GitService implements IGitService {
 
         LOGGER.info("[git] configure SSH connection");
 
-        if (!GitService.this.configuration.isStrictHostKeyChecking()) { // true/yes is the default value so we don't need to change the configuration
+        final GitConfigurationBean configuration = this.configurationService.getConfigurationBean();
+        
+        if (!configuration.isStrictHostKeyChecking()) { // true/yes is the default value so we don't need to change the configuration
 
             SshSessionFactory.setInstance(new JschConfigSessionFactory() {
 

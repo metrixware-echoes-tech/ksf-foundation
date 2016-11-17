@@ -27,6 +27,7 @@ import com.offbytwo.jenkins.model.FolderJob;
 import com.offbytwo.jenkins.model.Job;
 import com.offbytwo.jenkins.model.JobWithDetails;
 
+import fr.echoes.labs.komea.foundation.plugins.jenkins.JenkinsConfigurationBean;
 import fr.echoes.labs.komea.foundation.plugins.jenkins.JenkinsExtensionException;
 import fr.echoes.labs.komea.foundation.plugins.jenkins.utils.JenkinsUtils;
 import fr.echoes.labs.ksf.cc.extensions.gui.ProjectExtensionConstants;
@@ -62,15 +63,15 @@ public class JenkinsService implements IJenkinsService {
     	return null;
     }
     
-    private URI getJenkinsUri() throws URISyntaxException {
-        return new URI(this.configurationService.getUrl());
+    private static URI getJenkinsUri(final JenkinsConfigurationBean configuration) throws URISyntaxException {
+        return new URI(configuration.getUrl());
     }
     
-    private JenkinsHttpClient newClient() throws URISyntaxException {
+    private static JenkinsHttpClient newClient(final JenkinsConfigurationBean configuration) throws URISyntaxException {
     	
-    	final URI url = getJenkinsUri();
-    	final String username = this.configurationService.getUsername();
-    	final String apiKey = this.configurationService.getApiKey();
+    	final URI url = getJenkinsUri(configuration);
+    	final String username = configuration.getUsername();
+    	final String apiKey = configuration.getApiKey();
     	
     	if (StringUtils.isNotEmpty(username) && StringUtils.isNotEmpty(apiKey)) {
     		return new JenkinsHttpClient(url, username, apiKey);
@@ -79,14 +80,15 @@ public class JenkinsService implements IJenkinsService {
     	return new JenkinsHttpClient(url);
     }
     
-    private JenkinsServer createJenkinsClient() throws URISyntaxException {
-        return new JenkinsServer(newClient());
+    private static JenkinsServer createJenkinsClient(final JenkinsConfigurationBean configuration) throws URISyntaxException {
+        return new JenkinsServer(newClient(configuration));
     }
     
     @Override
     public void createProject(ProjectDto projectDTO) throws JenkinsExtensionException {
         try {
 
+        	final JenkinsConfigurationBean configuration = this.configurationService.getConfigurationBean();
             final String projectName = projectDTO.getName();
 
             final String masterJobName = this.nameResolver.getJobName(projectDTO, MASTER);
@@ -97,7 +99,7 @@ public class JenkinsService implements IJenkinsService {
             final List<String> jobs = Lists.newArrayList();
 
             if (useFolder()) {
-                createFolder(newClient(), folderJobName);
+                createFolder(newClient(configuration), folderJobName);
                 updateFolderDisplayName(folderJobName, projectName);
                 jobs.add(folderJobName);
             }
@@ -129,7 +131,8 @@ public class JenkinsService implements IJenkinsService {
 
     private void updateFolderDisplayName(final String jobName, String projectName) throws JenkinsExtensionException {
         try {
-            final JenkinsServer jenkins = this.createJenkinsClient();
+        	final JenkinsConfigurationBean configuration = this.configurationService.getConfigurationBean();
+            final JenkinsServer jenkins = this.createJenkinsClient(configuration);
             final String jobXml = jenkins.getJobXml(jobName);
             final int index = jobXml.indexOf("<properties");
             final String jobNewXml = jobXml.substring(0, index)
@@ -168,13 +171,14 @@ public class JenkinsService implements IJenkinsService {
         final JenkinsServer jenkins;
         try {
 
-            jenkins = this.createJenkinsClient();
+        	final JenkinsConfigurationBean configuration = this.configurationService.getConfigurationBean();
+            jenkins = createJenkinsClient(configuration);
 
             final boolean useFolder = useFolder();
             final String projectName = project.getName();
             final String rootFolder = this.nameResolver.getFolderJobName(project);
 
-            final int builsdPerJobLimit = this.configurationService.getBuilsdPerJobLimit();
+            final int builsdPerJobLimit = configuration.getBuilsdPerJobLimit();
 
             final List<Build> builds;
             if (useFolder) {
@@ -277,7 +281,8 @@ public class JenkinsService implements IJenkinsService {
     private void createJob(final String templateName, ProjectDto project, String jobName, String gitBranchName) throws JenkinsExtensionException {
         final JenkinsServer jenkins;
         try {
-            jenkins = this.createJenkinsClient();
+        	final JenkinsConfigurationBean configuration = this.configurationService.getConfigurationBean();
+            jenkins = createJenkinsClient(configuration);
 
             final String resolvedXmlConfig = this.templateService.createConfigXml(project, templateName, gitBranchName);
 
@@ -298,7 +303,8 @@ public class JenkinsService implements IJenkinsService {
     private void deleteJob(String folderJobName, String jobName) throws JenkinsExtensionException {
         String path = "";
         try {
-            final JenkinsHttpClient jenkinsHttpClient = newClient();
+        	final JenkinsConfigurationBean configuration = this.configurationService.getConfigurationBean();
+            final JenkinsHttpClient jenkinsHttpClient = newClient(configuration);
             if (folderJobName != null) {
                 path += "/job/" + EncodingUtils.encode(folderJobName);
             }
@@ -310,7 +316,7 @@ public class JenkinsService implements IJenkinsService {
     }
 
     private boolean useFolder() {
-        return this.configurationService.useFolders();
+        return this.configurationService.getConfigurationBean().useFolders();
     }
 
     @Override
@@ -320,7 +326,9 @@ public class JenkinsService implements IJenkinsService {
         
         try {
 
-            final JenkinsServer jenkinsClient = this.createJenkinsClient();
+        	final JenkinsConfigurationBean configuration = this.configurationService.getConfigurationBean();
+            final JenkinsServer jenkinsClient = createJenkinsClient(configuration);
+            
             final Map<String, Job> jobs = jenkinsClient.getJobs();
             for (final Map.Entry<String, Job> entry : jobs.entrySet()) {
                 final Job job = entry.getValue();
@@ -339,7 +347,8 @@ public class JenkinsService implements IJenkinsService {
     private JenkinsBuildInfo getJobLastBuildInfo(final String rootFolder, final String jobName) throws JenkinsExtensionException {
         try {
 
-            final JenkinsServer jenkins = this.createJenkinsClient();
+        	final JenkinsConfigurationBean configuration = this.configurationService.getConfigurationBean();
+            final JenkinsServer jenkins = createJenkinsClient(configuration);
 
             final boolean useFolder = this.useFolder();
             final JobWithDetails jobWithDetails = getJobWithDetails(jenkins, rootFolder, jobName, useFolder);

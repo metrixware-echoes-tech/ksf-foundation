@@ -1,6 +1,8 @@
 package fr.echoes.labs.ksf.cc.plugins.dashboard.filters;
 
 import com.google.common.collect.Lists;
+
+import fr.echoes.labs.ksf.cc.plugins.dashboard.DashboardConfigurationBean;
 import fr.echoes.labs.ksf.cc.plugins.dashboard.services.DashboardClientFactory;
 import fr.echoes.labs.ksf.cc.plugins.dashboard.services.DashboardConfigurationService;
 import java.io.IOException;
@@ -28,9 +30,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-//@Component
+@Component
 public class TimeOnSiteMetricFilter extends OncePerRequestFilter {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(TimeOnSiteMetricFilter.class);
@@ -41,12 +44,9 @@ public class TimeOnSiteMetricFilter extends OncePerRequestFilter {
     public static final String METRIC_TYPE_KEY = "WebPerformance";
     public static final String ENTITY_TYPE_KEY = "webPage";
 
-    @Autowired
     private DashboardClientFactory dashboardClientFactory;
-
-    @Autowired
     private DashboardConfigurationService configurationService;
-
+    
     public MetricType webPerformanceType = new MetricType()
             .setKey(METRIC_TYPE_KEY)
             .setName("Web Performance")
@@ -68,15 +68,21 @@ public class TimeOnSiteMetricFilter extends OncePerRequestFilter {
             .setKey(ENTITY_TYPE_KEY)
             .setName(ENTITY_TYPE_KEY)
             .setDescription(ENTITY_TYPE_KEY);
+    
+    @Autowired
+    public TimeOnSiteMetricFilter(final DashboardClientFactory dashboardClientFactory, final DashboardConfigurationService configurationService) {
+    	this.dashboardClientFactory = dashboardClientFactory;
+    	this.configurationService = configurationService;
+    }
 
-    @PostConstruct
-    public void init() {
+    public void initMetrics() {
 
         LOGGER.info("Initializing TimeOnSiteMetricFilter...");
+        final DashboardConfigurationBean configuration = this.configurationService.getPluginConfigurationBean();
+        
+        if (configuration.getCalculateAverageTimeOnSite()) {
 
-        if (configurationService.calculateAverageTimeOnSite()) {
-
-            MetricsStorageClient storageClient = dashboardClientFactory.metricStorageClient();
+            final MetricsStorageClient storageClient = dashboardClientFactory.metricStorageClient();
 
             try {
                 LOGGER.info("Creating metric type {}...", METRIC_TYPE_KEY);
@@ -107,9 +113,10 @@ public class TimeOnSiteMetricFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
+    	final DashboardConfigurationBean configuration = this.configurationService.getPluginConfigurationBean();
         String url = request.getRequestURI();
 
-        if (url.contains("/ui/") && configurationService.calculateAverageTimeOnSite()) {
+        if (url.contains("/ui/") && configuration.getCalculateAverageTimeOnSite()) {
 
             LOGGER.info("Intercepting request {}...", url);
 

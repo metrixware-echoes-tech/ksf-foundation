@@ -23,7 +23,6 @@ class Authenticator implements ClientRequestFilter {
         final MultivaluedMap<String, Object> headers = requestContext.getHeaders();
         final String basicAuthentication = getBasicAuthentication();
         headers.add("Authorization", basicAuthentication);
-
     }
 
     private String getBasicAuthentication() {

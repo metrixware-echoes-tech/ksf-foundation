@@ -4,9 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.List;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -17,7 +15,6 @@ import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.context.WebContext;
 
@@ -26,18 +23,20 @@ import com.tocea.corolla.products.dao.IProjectDAO;
 import com.tocea.corolla.products.domain.Project;
 import com.tocea.corolla.products.utils.ProjectDtoFactory;
 
+import fr.echoes.labs.komea.foundation.plugins.jenkins.JenkinsConfigurationBean;
 import fr.echoes.labs.komea.foundation.plugins.jenkins.JenkinsExtensionException;
+import fr.echoes.labs.komea.foundation.plugins.jenkins.JenkinsPlugin;
 import fr.echoes.labs.komea.foundation.plugins.jenkins.services.IJenkinsService;
 import fr.echoes.labs.komea.foundation.plugins.jenkins.services.JenkinsBuildInfo;
 import fr.echoes.labs.komea.foundation.plugins.jenkins.services.JenkinsConfigurationService;
-import fr.echoes.labs.komea.foundation.plugins.jenkins.services.JenkinsErrorHandlingService;
 import fr.echoes.labs.komea.foundation.plugins.jenkins.services.JenkinsNameResolver;
-import fr.echoes.labs.komea.foundation.plugins.jenkins.utils.JenkinsConstants;
+import fr.echoes.labs.ksf.cc.extensions.gui.KomeaFoundationContext;
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.IProjectTabPanel;
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.MenuAction;
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
+import fr.echoes.labs.ksf.cc.extensions.services.ErrorHandlingService;
 import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
-import fr.echoes.labs.ksf.plugins.utils.ThymeleafTemplateEngineUtils;
+import fr.echoes.labs.ksf.plugins.utils.ThymeleafTemplateEngine;
 
 /**
  * @author dcollard
@@ -46,7 +45,7 @@ import fr.echoes.labs.ksf.plugins.utils.ThymeleafTemplateEngineUtils;
 @Component
 public class JenkinsProjectDashboardWidget implements ProjectDashboardWidget {
 
-    private static TemplateEngine templateEngine = ThymeleafTemplateEngineUtils.createTemplateEngine();
+    private static ThymeleafTemplateEngine templateEngine = new ThymeleafTemplateEngine();
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JenkinsProjectDashboardWidget.class);
 
@@ -63,16 +62,19 @@ public class JenkinsProjectDashboardWidget implements ProjectDashboardWidget {
     private IProjectDAO projectDAO;
 
     @Autowired
-    private JenkinsErrorHandlingService errorHandler;
+    private ErrorHandlingService errorHandler;
 
+//    @Autowired
+//    private HttpServletRequest request;
+//
+//    @Autowired
+//    private HttpServletResponse response;
+//
+//    @Autowired
+//    private ServletContext servletContext;
+    
     @Autowired
-    private HttpServletRequest request;
-
-    @Autowired
-    private HttpServletResponse response;
-
-    @Autowired
-    private ServletContext servletContext;
+    private KomeaFoundationContext foundation;
 
     @Autowired
     private IProjectDAO projectDao;
@@ -92,29 +94,25 @@ public class JenkinsProjectDashboardWidget implements ProjectDashboardWidget {
         final Project project = this.projectDAO.findOne(projectId);
         final ProjectDto projectDto = ProjectDtoFactory.convert(project);
 
-        final WebContext ctx = new WebContext(this.request, this.response, this.servletContext);
+//        final WebContext ctx = new WebContext(this.request, this.response, this.servletContext);
+        final WebContext ctx = new WebContext(foundation.getRequest(), foundation.getResponse(), foundation.getServletContext());
         ctx.setVariable("projectId", projectId);
 
         try {
             final List<JenkinsBuildInfo> buildInfo = this.jenkinsService.getBuildInfo(projectDto);
-
-            final String baseUrl = getBaseUrl();
+            final String baseUrl = this.foundation.getContextPath();
 
             ctx.setVariable("buildBase", baseUrl + "/ui/projects/" + project.getKey() + "?buildUrl=");
-
             ctx.setVariable("jenkinsBuildHistory", buildInfo);
-        } catch (final JenkinsExtensionException e) {
-            LOGGER.error("[Jenkins] Failed to retrieve build history", e);
-            this.errorHandler.registerError(e);
+            
+        } catch (final JenkinsExtensionException ex) {
+            LOGGER.error("[Jenkins] Failed to retrieve build history", ex);
+            this.errorHandler.registerError(JenkinsPlugin.ID, ex);
         }
 
-        ctx.setVariable("jenkinsError", this.errorHandler.retrieveError());
+        ctx.setVariable("jenkinsError", this.errorHandler.retrieveError(JenkinsPlugin.ID));
 
-        return templateEngine.process("jenkinsPanel", ctx);
-    }
-
-    private String getBaseUrl() {
-        return this.request.getContextPath();
+        return templateEngine.process("jenkinsPanel", ctx, this.getClass().getClassLoader());
     }
 
     @Override
@@ -140,13 +138,14 @@ public class JenkinsProjectDashboardWidget implements ProjectDashboardWidget {
             @Override
             public String getContent() {
 
+            	final JenkinsConfigurationBean configuration = configurationService.getConfigurationBean();
                 final Context ctx = new Context();
 
                 final HttpServletRequest request
                         = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
                         .getRequest();
 
-                String url = configurationService.getUrl();
+                String url = configuration.getUrl();
 
                 final String buildUrl = request.getParameter("buildUrl");
 
@@ -155,7 +154,7 @@ public class JenkinsProjectDashboardWidget implements ProjectDashboardWidget {
                         url = URLDecoder.decode(buildUrl, "UTF-8");
                     } catch (final UnsupportedEncodingException e) {
                         LOGGER.error("[jenkins]", e);
-                        url = configurationService.getUrl();
+                        url = configuration.getUrl();
                     }
                 } else {
                     try {
@@ -174,7 +173,7 @@ public class JenkinsProjectDashboardWidget implements ProjectDashboardWidget {
 
                 ctx.setVariable("jenkinsURL", url);
 
-                return templateEngine.process("jenkinsManagementPanel", ctx);
+                return templateEngine.process("jenkinsManagementPanel", ctx, this.getClass().getClassLoader());
             }
 
             @Override
@@ -184,7 +183,7 @@ public class JenkinsProjectDashboardWidget implements ProjectDashboardWidget {
 
             @Override
             public String getId() {
-                return JenkinsConstants.ID;
+                return JenkinsPlugin.ID;
             }
         };
 
@@ -198,6 +197,6 @@ public class JenkinsProjectDashboardWidget implements ProjectDashboardWidget {
 
     @Override
     public String getId() {
-        return JenkinsConstants.ID;
+        return JenkinsPlugin.ID;
     }
 }

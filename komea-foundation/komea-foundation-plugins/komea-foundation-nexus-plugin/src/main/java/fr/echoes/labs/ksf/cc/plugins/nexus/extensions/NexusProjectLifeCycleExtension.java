@@ -15,6 +15,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import fr.echoes.labs.ksf.cc.extensions.gui.ProjectExtensionConstants;
+import fr.echoes.labs.ksf.cc.extensions.services.ErrorHandlingService;
+import fr.echoes.labs.ksf.cc.plugins.nexus.NexusConfigurationBean;
+import fr.echoes.labs.ksf.cc.plugins.nexus.NexusPlugin;
+import fr.echoes.labs.ksf.cc.plugins.nexus.model.Repository;
+import fr.echoes.labs.ksf.cc.plugins.nexus.model.RepositoryData;
 import fr.echoes.labs.ksf.cc.plugins.nexus.services.NexusConfigurationService;
 import fr.echoes.labs.ksf.cc.plugins.nexus.services.NexusNameResolver;
 import fr.echoes.labs.ksf.extensions.annotations.Extension;
@@ -29,7 +34,7 @@ public class NexusProjectLifeCycleExtension implements IProjectLifecycleExtensio
     private static final Logger LOGGER = LoggerFactory.getLogger(NexusProjectLifeCycleExtension.class);
 
     @Autowired
-    private NexusErrorHandlingService errorHandler;
+    private ErrorHandlingService errorHandler;
 
     @Autowired
     private NexusConfigurationService config;
@@ -44,6 +49,7 @@ public class NexusProjectLifeCycleExtension implements IProjectLifecycleExtensio
     public NotifyResult notifyCreatedProject(final ProjectDto project) {
 
         final String logginName = this.currentUserService.getCurrentUserLogin();
+        final NexusConfigurationBean configuration = this.config.getConfigurationBean();
 
         if (StringUtils.isEmpty(logginName)) {
             LOGGER.error("[nexus] No user found. Aborting project creation in Foreman module");
@@ -56,14 +62,15 @@ public class NexusProjectLifeCycleExtension implements IProjectLifecycleExtensio
         
         try {
         	
-            final String username = this.config.getUsername();
-            final String password = this.config.getPassword();
+        	final String nexusURL = configuration.getUrl();
+            final String username = configuration.getUsername();
+            final String password = configuration.getPassword();
 
             client = ClientBuilder.newClient().register(new Authenticator(username, password));
 
             final String projectKey = this.nameResolver.getRepositoryKey(project);
 
-            final WebTarget target = client.target(this.config.getUrl()).path("service/local/repositories");
+            final WebTarget target = client.target(nexusURL).path("service/local/repositories");
             final Invocation.Builder invocationBuilder = target.request(MediaType.APPLICATION_XML);
 
             final RepositoryData data = new RepositoryData()
@@ -93,7 +100,7 @@ public class NexusProjectLifeCycleExtension implements IProjectLifecycleExtensio
             
         } catch (final Exception e) {
             LOGGER.error("[nexus] project creation failed", e);
-            this.errorHandler.registerError("Unable to create Nexus repositories.");
+            this.errorHandler.registerError(NexusPlugin.ID, "Unable to create Nexus repositories.");
         } finally {
         	if (client != null) {
         		client.close();
