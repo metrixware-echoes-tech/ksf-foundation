@@ -56,7 +56,7 @@ public final class URLUtils {
 		
 		final List<NameValuePair> pairs = Lists.newArrayList();
 		for (final Entry<String, String> entry : params.entrySet()) {
-			pairs.add(new BasicNameValuePair(entry.getKey(), encodeParam(entry.getValue())));
+			pairs.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
 		}
 		
 		return URLEncodedUtils.format(pairs, Charset.defaultCharset());
