@@ -1,13 +1,19 @@
 
 subprojects {
 
+  def pluginArchiveName = "PLUGIN_" + project.name  + "-" + project.version + ".zip"
+	
   task plugin(type: Zip) {
 	    from configurations.runtime.allArtifacts.files
 	    from configurations.runtime
-	    archiveName "PLUGIN_" + project.name  + "-" + project.version + ".zip"
+	    archiveName pluginArchiveName
   }
   
   build.finalizedBy(plugin)
+  
+  artifacts {
+	  archives new File("build/distributions/"+pluginArchiveName)
+  }
 
   dependencies {
 	  compile group: 'org.springframework', name: 'spring-web', version: "${SPRING_VERSION}"
