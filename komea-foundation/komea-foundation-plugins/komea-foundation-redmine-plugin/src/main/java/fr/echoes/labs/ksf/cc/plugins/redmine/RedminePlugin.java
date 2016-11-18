@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import fr.echoes.labs.ksf.cc.plugins.redmine.extensions.RedmineProjectDashboardExtension;
 import fr.echoes.labs.ksf.cc.plugins.redmine.extensions.RedmineProjectLifeCycleExtension;
+import fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineProjectFreature;
+import fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineProjectRelease;
 import fr.echoes.labs.ksf.extensions.annotations.Plugin;
 import fr.echoes.labs.pluginfwk.api.extension.Extension;
 import fr.echoes.labs.pluginfwk.api.plugin.PluginDefinition;
@@ -15,14 +17,17 @@ public class RedminePlugin implements PluginDefinition {
 
 	public static final String ID = "redmine";
 	
-	private final RedmineProjectDashboardExtension projectDashboardExtension;
-	private final RedmineProjectLifeCycleExtension projectLifeCycleExtension;
+	@Autowired
+	private RedmineProjectDashboardExtension projectDashboardExtension;
 	
 	@Autowired
-	public RedminePlugin(final RedmineProjectDashboardExtension projectDashboardExtension, final RedmineProjectLifeCycleExtension projectLifeCycleExtension) {
-		this.projectDashboardExtension = projectDashboardExtension;
-		this.projectLifeCycleExtension = projectLifeCycleExtension;
-	}
+	private RedmineProjectLifeCycleExtension projectLifeCycleExtension;
+	
+	@Autowired
+	private RedmineProjectFreature projectFeaturesExtension;
+	
+	@Autowired
+	private RedmineProjectRelease projectReleasesExtension;
 	
 	@Override
 	public String getDescription() {
@@ -31,7 +36,12 @@ public class RedminePlugin implements PluginDefinition {
 
 	@Override
 	public Extension[] getExtensions() {
-		return new Extension[] { this.projectDashboardExtension, this.projectLifeCycleExtension };
+		return new Extension[] { 
+				this.projectDashboardExtension, 
+				this.projectLifeCycleExtension,
+				this.projectReleasesExtension,
+				this.projectFeaturesExtension
+		};
 	}
 
 	@Override

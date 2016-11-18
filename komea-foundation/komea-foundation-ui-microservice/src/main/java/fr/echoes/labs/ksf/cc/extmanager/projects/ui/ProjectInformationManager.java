@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Lists;
@@ -21,8 +22,10 @@ import fr.echoes.labs.ksf.cc.extensions.services.project.versions.ProjectVersion
 import fr.echoes.labs.ksf.cc.releases.dao.IReleaseDAO;
 import fr.echoes.labs.ksf.cc.releases.model.Release;
 import fr.echoes.labs.ksf.cc.releases.model.ReleaseState;
+import fr.echoes.labs.ksf.extensions.api.ExtensionResolver;
 import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
 import fr.echoes.labs.ksf.users.security.api.CurrentUserService;
+import fr.echoes.labs.pluginfwk.api.extension.ExtensionManager;
 
 /**
  * This service allows to obtain project information returned by the plug-ins.
@@ -36,18 +39,28 @@ public class ProjectInformationManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ProjectInformationManager.class);
 
-    @Autowired(required = false)
-    private IProjectVersions[] versions;
-
-    @Autowired(required = false)
-    private IProjectFeatues[] features;
-
     @Autowired
     private IReleaseDAO releaseDao;
 
     @Autowired
     private CurrentUserService currentUserService;
+    
+    @Autowired
+    private ApplicationContext applicationContext;
+    
+    @Autowired
+    private ExtensionManager extensionManager;
+    
+    private List<IProjectFeatues> getProjectFeaturesExtensions() {
+    	
+    	return new ExtensionResolver(this.applicationContext, this.extensionManager).findExtensions(IProjectFeatues.class);
+    }
 
+    private List<IProjectVersions> getProjectVersionsExtensions() {
+    	
+    	return new ExtensionResolver(this.applicationContext, this.extensionManager).findExtensions(IProjectVersions.class);
+    }
+    
     /**
      * Returns the versions for this project.
      *
@@ -56,7 +69,9 @@ public class ProjectInformationManager {
      */
     public List<IProjectVersion> getVersions(Project project) {
 
-        if (this.versions == null) {
+    	final List<IProjectVersions> extensions = getProjectVersionsExtensions();
+    	
+        if (extensions.isEmpty()) {
             LOGGER.info("getVersions : no versions.");
             return Lists.newArrayList();
         }
@@ -64,8 +79,8 @@ public class ProjectInformationManager {
         final ProjectDto projectDto = ProjectDtoFactory.convert(project);
         final List<IProjectVersion> result = Lists.newArrayList();
         final List<Release> startedReleases = this.releaseDao.findAll();
-
-        for (final IProjectVersions projectRelease : this.versions) {
+        
+        for (final IProjectVersions projectRelease : extensions) {
             final List<IProjectVersion> releases = projectRelease.getVersions(projectDto);
             if (releases != null) {
                 for (final IProjectVersion r : releases) {
@@ -104,7 +119,9 @@ public class ProjectInformationManager {
      */
     public List<IProjectFeature> getFeatures(final Project project) {
 
-        if (this.features == null) {
+    	final List<IProjectFeatues> extensions = getProjectFeaturesExtensions();
+    	
+        if (extensions.isEmpty()) {
             LOGGER.info("getFeatures : no features.");
             return Lists.newArrayList();
         }
@@ -112,8 +129,8 @@ public class ProjectInformationManager {
         final ProjectDto projectDto = ProjectDtoFactory.convert(project);
         final List<IProjectFeature> result = Lists.newArrayList();;
 
-        for (final IProjectFeatues projectFeature : this.features) {
-            final List<IProjectFeature> features = projectFeature.getFeatures(projectDto);
+        for (final IProjectFeatues extension : extensions) {
+            final List<IProjectFeature> features = extension.getFeatures(projectDto);
             if (features != null) {
                 result.addAll(features);
             }
@@ -124,7 +141,9 @@ public class ProjectInformationManager {
 
     public List<IProjectFeature> getFeaturesOfCurrentUser(Project project) {
 
-        if (this.features == null) {
+    	final List<IProjectFeatues> extensions = getProjectFeaturesExtensions();
+    	
+        if (extensions.isEmpty()) {
             LOGGER.info("getFeaturesOfCurrentUser : no features.");
             return Lists.newArrayList();
         }
@@ -134,8 +153,8 @@ public class ProjectInformationManager {
 
         final List<IProjectFeature> result = Lists.newArrayList();
 
-        for (final IProjectFeatues projectFeature : this.features) {
-            final List<IProjectFeature> features = projectFeature.getFeatures(projectDto);
+        for (final IProjectFeatues extension : extensions) {
+            final List<IProjectFeature> features = extension.getFeatures(projectDto);
             if (features != null) {
                 for (final IProjectFeature feature : features) {
                     final String assignee = feature.getAssignee();
