@@ -12,7 +12,7 @@ subprojects {
   build.finalizedBy(plugin)
   
   artifacts {
-	  archives new File("build/distributions/"+pluginArchiveName)
+	  archives new File("$buildDir/distributions/$pluginArchiveName")
   }
 
   dependencies {
