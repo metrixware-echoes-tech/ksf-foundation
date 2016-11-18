@@ -1,11 +1,13 @@
 package fr.echoes.labs.ksf.cc.ui.views.projects;
 
-import fr.echoes.labs.ksf.cc.extensions.services.project.ProjectUtils;
 import java.util.HashMap;
 import java.util.Map;
-import org.apache.commons.lang3.text.StrSubstitutor;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import fr.echoes.labs.ksf.cc.extensions.services.project.ProjectUtils;
+import fr.echoes.labs.ksf.plugins.utils.ConfigurationPropertiesUtils;
 
 @Service("projectInformationService")
 public class ProjectInformationService {
@@ -25,14 +27,14 @@ public class ProjectInformationService {
     public String getGitReleaseBranchName(String releaseVersion) {
         final Map<String, String> variables = new HashMap<String, String>(1);
         variables.put("releaseVersion", ProjectUtils.createIdentifier(releaseVersion));
-        return replaceVariables(gitReleaseBranchPattern, variables);
+        return ConfigurationPropertiesUtils.replaceVariables(gitReleaseBranchPattern, variables);
     }
 
     public String getGitFeatureBranchName(String featureId, String featureDescription) {
         final Map<String, String> variables = new HashMap<String, String>(2);
         variables.put("featureId", ProjectUtils.createIdentifier(featureId));
         variables.put("featureDescription", ProjectUtils.createIdentifier(featureDescription));
-        return replaceVariables(gitFeatureBranchPattern, variables);
+        return ConfigurationPropertiesUtils.replaceVariables(gitFeatureBranchPattern, variables);
     }
 
     public String getFeatureJobName(String projectName, String featureId,
@@ -41,20 +43,14 @@ public class ProjectInformationService {
         variables.put("projectName", ProjectUtils.createIdentifier(projectName));
         variables.put("featureId", ProjectUtils.createIdentifier(featureId));
         variables.put("featureDescription", ProjectUtils.createIdentifier(featureSubject));
-        return replaceVariables(jobFeaturePattern, variables);
+        return ConfigurationPropertiesUtils.replaceVariables(jobFeaturePattern, variables);
     }
 
     public String getReleaseJobName(String projectName, String releaseVersion) {
         final Map<String, String> variables = new HashMap<String, String>(2);
         variables.put("projectName", ProjectUtils.createIdentifier(projectName));
         variables.put("releaseVersion", ProjectUtils.createIdentifier(releaseVersion));
-        return replaceVariables(jobReleasePattern, variables);
-    }
-
-    private String replaceVariables(String str, Map<String, String> variables) {
-        final StrSubstitutor sub = new StrSubstitutor(variables);
-        sub.setVariablePrefix("%{");
-        return sub.replace(str);
+        return ConfigurationPropertiesUtils.replaceVariables(jobReleasePattern, variables);
     }
 
 }
