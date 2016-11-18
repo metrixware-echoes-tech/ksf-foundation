@@ -12,6 +12,7 @@ import com.tocea.corolla.products.domain.ProjectCustomField;
 import fr.echoes.labs.komea.foundation.plugins.jenkins.extensions.JenkinsProjectDashboardExtension;
 import fr.echoes.labs.komea.foundation.plugins.jenkins.extensions.JenkinsProjectLifeCycleExtension;
 import fr.echoes.labs.komea.foundation.plugins.jenkins.services.JenkinsTemplateService;
+import fr.echoes.labs.ksf.cc.extensions.gui.ResourceRegistryService;
 import fr.echoes.labs.ksf.cc.extensions.services.ProjectCustomFieldService;
 import fr.echoes.labs.ksf.extensions.annotations.Plugin;
 import fr.echoes.labs.pluginfwk.api.extension.Extension;
@@ -23,6 +24,7 @@ import fr.echoes.labs.pluginfwk.api.propertystorage.PluginPropertyStorage;
 public class JenkinsPlugin implements PluginDefinition {
 
 	public static final String ID = "jenkins";
+	public static final String ICON = "/pictures/jenkins.png";
 	
 	@Autowired
 	private JenkinsProjectDashboardExtension projectDashboardExtension;
@@ -38,6 +40,9 @@ public class JenkinsPlugin implements PluginDefinition {
 	
 	@Autowired
     private MessageSource messageResource;
+	
+	@Autowired
+	private ResourceRegistryService resourceRegistryService;
 	
 	@Override
 	public String getDescription() {
@@ -82,6 +87,9 @@ public class JenkinsPlugin implements PluginDefinition {
 		
 		// register the custom field
 		this.projectCustomFieldService.register(templateField);
+		
+		// register public resources
+		this.resourceRegistryService.registerResource(this.getClass().getClassLoader(), "pictures", "assets/jenkins.png");
 	}
 	
 }

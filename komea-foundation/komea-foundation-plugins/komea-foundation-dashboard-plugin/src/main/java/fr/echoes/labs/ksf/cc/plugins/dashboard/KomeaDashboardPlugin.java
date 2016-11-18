@@ -2,6 +2,7 @@ package fr.echoes.labs.ksf.cc.plugins.dashboard;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import fr.echoes.labs.ksf.cc.extensions.gui.ResourceRegistryService;
 import fr.echoes.labs.ksf.cc.plugins.dashboard.extensions.DashboardProjectDashboardExtension;
 import fr.echoes.labs.ksf.cc.plugins.dashboard.extensions.DashboardProjectLifeCycleExtension;
 import fr.echoes.labs.ksf.cc.plugins.dashboard.filters.TimeOnSiteMetricFilter;
@@ -14,19 +15,19 @@ import fr.echoes.labs.pluginfwk.api.propertystorage.PluginPropertyStorage;
 public class KomeaDashboardPlugin implements PluginDefinition {
 	
 	public static final String ID = "komea-dashboard";
+	public static final String ICON = "/pictures/dashboard.png";
 
-    private final DashboardProjectDashboardExtension dashboardExtension;
-    private final DashboardProjectLifeCycleExtension dashboardProjectLifeCycleExtension;
-    private final TimeOnSiteMetricFilter timeOnSiteMetricFilter;
+	@Autowired
+    private DashboardProjectDashboardExtension dashboardExtension;
+	
+	@Autowired
+    private DashboardProjectLifeCycleExtension dashboardProjectLifeCycleExtension;
+    
+	@Autowired
+	private TimeOnSiteMetricFilter timeOnSiteMetricFilter;
 
     @Autowired
-    public KomeaDashboardPlugin(final DashboardProjectDashboardExtension dashboardExtension,
-            final DashboardProjectLifeCycleExtension dashboardProjectLifeCycleExtension, final TimeOnSiteMetricFilter timeOnSiteMetricFilter) {
-        super();
-        this.dashboardExtension = dashboardExtension;
-        this.dashboardProjectLifeCycleExtension = dashboardProjectLifeCycleExtension;
-        this.timeOnSiteMetricFilter = timeOnSiteMetricFilter;
-    }
+    private ResourceRegistryService resourceRegistryService;
 
     @Override
     public void destroy() {
@@ -60,6 +61,11 @@ public class KomeaDashboardPlugin implements PluginDefinition {
 
     @Override
     public void init(final PluginPropertyStorage pps) {
+    	
+    	// Register public resources
+    	this.resourceRegistryService.registerResource(this.getClass().getClassLoader(), "pictures", "assets/dashboard.png");
+    	
+    	// Initializes metrics
         timeOnSiteMetricFilter.initMetrics();
     }
 

@@ -35,7 +35,7 @@ public class PuppetProjectDashboardWidget implements ProjectDashboardWidget {
 
     @Override
     public String getIconUrl() {
-        return "/pictures/puppet.png";
+        return PuppetPlugin.ICON;
     }
 
     @Override

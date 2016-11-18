@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import fr.echoes.labs.ksf.cc.extensions.gui.ResourceRegistryService;
 import fr.echoes.labs.ksf.cc.plugins.nexus.extensions.NexusProjectDashboardExtension;
 import fr.echoes.labs.ksf.cc.plugins.nexus.extensions.NexusProjectLifeCycleExtension;
 import fr.echoes.labs.ksf.extensions.annotations.Plugin;
@@ -18,15 +19,16 @@ public class NexusPlugin implements PluginDefinition {
 	private static final Logger LOGGER = LoggerFactory.getLogger(NexusPlugin.class);
 	
 	public static final String ID = "nexus";
-	
-	private final NexusProjectDashboardExtension projectDashboardExtension;
-	private final NexusProjectLifeCycleExtension projectLifeCycleExtension;
+	public static final String ICON = "/pictures/nexus.png";
 	
 	@Autowired
-	public NexusPlugin(final NexusProjectDashboardExtension projectDashboardExtension, final NexusProjectLifeCycleExtension projectLifeCycleExtension) {
-		this.projectDashboardExtension = projectDashboardExtension;
-		this.projectLifeCycleExtension = projectLifeCycleExtension;
-	}
+	private NexusProjectDashboardExtension projectDashboardExtension;
+	
+	@Autowired
+	private NexusProjectLifeCycleExtension projectLifeCycleExtension;
+	
+	@Autowired
+	private ResourceRegistryService resourceRegistryService;
 	
 	@Override
 	public String getDescription() {
@@ -60,7 +62,8 @@ public class NexusPlugin implements PluginDefinition {
 
 	@Override
 	public void init(final PluginPropertyStorage propertyStorage) throws PluginException {
-		// Nothing to do.
+		// Register resources
+		this.resourceRegistryService.registerResource(this.getClass().getClassLoader(), "pictures", "assets/nexus.png");
 	}
 
 }

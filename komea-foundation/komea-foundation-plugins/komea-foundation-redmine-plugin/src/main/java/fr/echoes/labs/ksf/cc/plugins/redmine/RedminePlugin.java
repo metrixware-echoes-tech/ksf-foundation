@@ -2,6 +2,9 @@ package fr.echoes.labs.ksf.cc.plugins.redmine;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.google.common.collect.Lists;
+
+import fr.echoes.labs.ksf.cc.extensions.gui.ResourceRegistryService;
 import fr.echoes.labs.ksf.cc.plugins.redmine.extensions.RedmineProjectDashboardExtension;
 import fr.echoes.labs.ksf.cc.plugins.redmine.extensions.RedmineProjectLifeCycleExtension;
 import fr.echoes.labs.ksf.cc.plugins.redmine.services.RedmineProjectFreature;
@@ -16,6 +19,8 @@ import fr.echoes.labs.pluginfwk.api.propertystorage.PluginPropertyStorage;
 public class RedminePlugin implements PluginDefinition {
 
 	public static final String ID = "redmine";
+	public static final String ICON_REDMINE = "pictures/redmine.png";
+	public static final String ICON_KOMEA_ACTIVITY = "/pictures/komea-activity.png";
 	
 	@Autowired
 	private RedmineProjectDashboardExtension projectDashboardExtension;
@@ -28,6 +33,9 @@ public class RedminePlugin implements PluginDefinition {
 	
 	@Autowired
 	private RedmineProjectRelease projectReleasesExtension;
+	
+	@Autowired
+	private ResourceRegistryService resourceRegistryService;
 	
 	@Override
 	public String getDescription() {
@@ -66,7 +74,11 @@ public class RedminePlugin implements PluginDefinition {
 
 	@Override
 	public void init(final PluginPropertyStorage propertyStorage) throws PluginException {
-		// Nothing to do.
+		// Register public resources
+		this.resourceRegistryService.registerResources(this.getClass().getClassLoader(), "pictures", Lists.newArrayList(
+				"assets/komea-activity.png",
+				"assets/redmine.png"
+		));
 	}
 	
 }

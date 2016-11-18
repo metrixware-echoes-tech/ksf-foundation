@@ -63,15 +63,6 @@ public class JenkinsProjectDashboardWidget implements ProjectDashboardWidget {
 
     @Autowired
     private ErrorHandlingService errorHandler;
-
-//    @Autowired
-//    private HttpServletRequest request;
-//
-//    @Autowired
-//    private HttpServletResponse response;
-//
-//    @Autowired
-//    private ServletContext servletContext;
     
     @Autowired
     private KomeaFoundationContext foundation;
@@ -84,7 +75,6 @@ public class JenkinsProjectDashboardWidget implements ProjectDashboardWidget {
 
     @Override
     public List<MenuAction> getDropdownActions() {
-
         return null;
     }
 
@@ -94,8 +84,7 @@ public class JenkinsProjectDashboardWidget implements ProjectDashboardWidget {
         final Project project = this.projectDAO.findOne(projectId);
         final ProjectDto projectDto = ProjectDtoFactory.convert(project);
 
-//        final WebContext ctx = new WebContext(this.request, this.response, this.servletContext);
-        final WebContext ctx = new WebContext(foundation.getRequest(), foundation.getResponse(), foundation.getServletContext());
+        final WebContext ctx = this.foundation.newThymeleafWebContext();
         ctx.setVariable("projectId", projectId);
 
         try {
@@ -117,7 +106,7 @@ public class JenkinsProjectDashboardWidget implements ProjectDashboardWidget {
 
     @Override
     public String getIconUrl() {
-        return "/pictures/jenkins.png";
+        return JenkinsPlugin.ICON;
     }
 
     @Override

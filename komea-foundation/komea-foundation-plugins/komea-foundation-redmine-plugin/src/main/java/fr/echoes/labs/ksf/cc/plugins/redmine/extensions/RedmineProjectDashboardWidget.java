@@ -117,9 +117,9 @@ public class RedmineProjectDashboardWidget implements ProjectDashboardWidget {
     @Override
     public String getIconUrl() {
     	if (this.configurationService.getConfigurationBean().getKomeaActivity()) {
-    		return "/pictures/komea-activity.png";
+    		return RedminePlugin.ICON_KOMEA_ACTIVITY;
     	}
-    	return "/pictures/redmine.png";
+    	return RedminePlugin.ICON_REDMINE;
     }
 
     @Override

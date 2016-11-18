@@ -81,7 +81,7 @@ public class GitProjectDashboardWidget implements ProjectDashboardWidget {
 
     @Override
     public String getIconUrl() {
-        return "/pictures/git.png";
+        return GitPlugin.ICON;
     }
 
     @Override

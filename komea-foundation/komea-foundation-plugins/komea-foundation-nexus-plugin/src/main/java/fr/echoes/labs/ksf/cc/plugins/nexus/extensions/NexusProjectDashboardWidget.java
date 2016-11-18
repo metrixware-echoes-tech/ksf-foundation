@@ -58,7 +58,7 @@ public class NexusProjectDashboardWidget implements ProjectDashboardWidget {
 
     @Override
     public String getIconUrl() {
-        return "/pictures/nexus.png";
+        return NexusPlugin.ICON;
     }
 
     @Override

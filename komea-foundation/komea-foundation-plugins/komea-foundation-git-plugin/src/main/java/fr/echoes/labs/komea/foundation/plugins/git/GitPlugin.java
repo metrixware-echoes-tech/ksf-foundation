@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import fr.echoes.labs.komea.foundation.plugins.git.extensions.GitProjectDashboardExtension;
 import fr.echoes.labs.komea.foundation.plugins.git.extensions.GitProjectLifeCycleExtension;
+import fr.echoes.labs.ksf.cc.extensions.gui.ResourceRegistryService;
 import fr.echoes.labs.ksf.extensions.annotations.Plugin;
 import fr.echoes.labs.pluginfwk.api.extension.Extension;
 import fr.echoes.labs.pluginfwk.api.plugin.PluginDefinition;
@@ -14,16 +15,17 @@ import fr.echoes.labs.pluginfwk.api.propertystorage.PluginPropertyStorage;
 public class GitPlugin implements PluginDefinition {
 
 	public static final String ID = "git";
+	public static final String ICON = "/pictures/git.png";
 	public static final String MERGE_ERROR = "gitMergeError";
 	
-	private final GitProjectDashboardExtension projectDashboardExtension;
-	private final GitProjectLifeCycleExtension projectLifeCycleExtension;
+	@Autowired
+	private GitProjectDashboardExtension projectDashboardExtension;
 	
 	@Autowired
-	public GitPlugin(final GitProjectDashboardExtension projectDashboardExtension, final GitProjectLifeCycleExtension projectLifeCycleExtension) {
-		this.projectDashboardExtension = projectDashboardExtension;
-		this.projectLifeCycleExtension = projectLifeCycleExtension;
-	}
+	private GitProjectLifeCycleExtension projectLifeCycleExtension;
+	
+	@Autowired
+	private ResourceRegistryService resourceRegistryService;
 	
 	@Override
 	public String getDescription() {
@@ -57,6 +59,7 @@ public class GitPlugin implements PluginDefinition {
 
 	@Override
 	public void init(final PluginPropertyStorage propertyStorage) throws PluginException {
-		// Nothing to do.
+		// Register public resources
+    	this.resourceRegistryService.registerResource(this.getClass().getClassLoader(), "pictures", "assets/git.png");
 	}	
 }

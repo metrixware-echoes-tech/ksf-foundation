@@ -18,6 +18,7 @@ import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.IProjectTabPanel;
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.MenuAction;
 import fr.echoes.labs.ksf.cc.extensions.gui.project.dashboard.ProjectDashboardWidget;
 import fr.echoes.labs.ksf.cc.plugins.dashboard.DashboardConfigurationBean;
+import fr.echoes.labs.ksf.cc.plugins.dashboard.KomeaDashboardPlugin;
 import fr.echoes.labs.ksf.cc.plugins.dashboard.services.DashboardConfigurationService;
 import fr.echoes.labs.ksf.cc.plugins.dashboard.services.DashboardLiferayService;
 import fr.echoes.labs.ksf.cc.plugins.dashboard.utils.DashboardConstants;
@@ -59,7 +60,7 @@ public class DashboardProjectDashboardWidget implements ProjectDashboardWidget {
 
     @Override
     public String getIconUrl() {
-        return "/pictures/dashboard.png";
+        return KomeaDashboardPlugin.ICON;
     }
 
     @Override
