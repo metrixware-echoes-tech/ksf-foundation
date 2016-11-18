@@ -54,6 +54,9 @@ public class RedmineConfigurationBean {
 
     @Value("${ksf.redmine.taskTrackerId}")
     private Integer taskTrackerId;
+    
+    @Value("${ksf.redmine.komeaActivity}")
+    private Boolean komeaActivity;
 
     public String getUrl() {
         if (url != null && '/' == this.url.charAt(this.url.length() - 1)) {
@@ -250,6 +253,14 @@ public class RedmineConfigurationBean {
 
 	public void setTaskTrackerId(Integer taskTrackerId) {
 		this.taskTrackerId = taskTrackerId;
+	}
+
+	public Boolean getKomeaActivity() {
+		return komeaActivity;
+	}
+	
+	public void setKomeaActivity(Boolean komeaActivity) {
+		this.komeaActivity = komeaActivity;
 	}
 	
 }

@@ -59,7 +59,7 @@ public class RedmineProjectDashboardWidget implements ProjectDashboardWidget {
     private IRedmineService redmineService;
 
     @Autowired
-    IProjectDAO projectDao;
+    private IProjectDAO projectDao;
 
     @Autowired
     private MessageSource messageResource;
@@ -116,12 +116,19 @@ public class RedmineProjectDashboardWidget implements ProjectDashboardWidget {
 
     @Override
     public String getIconUrl() {
-        return "/pictures/komea-activity.png";
+    	if (this.configurationService.getConfigurationBean().getKomeaActivity()) {
+    		return "/pictures/komea-activity.png";
+    	}
+    	return "/pictures/redmine.png";
     }
 
     @Override
     public String getTitle() {
-        return new MessageSourceAccessor(this.messageResource).getMessage("foundation.redmine");
+    	final MessageSourceAccessor accessor = new MessageSourceAccessor(this.messageResource);
+    	if (this.configurationService.getConfigurationBean().getKomeaActivity()) {
+    		return accessor.getMessage("foundation.komeaActivity");
+    	}
+        return accessor.getMessage("foundation.redmine");
     }
 
     @Override
@@ -133,7 +140,11 @@ public class RedmineProjectDashboardWidget implements ProjectDashboardWidget {
 
             @Override
             public String getTitle() {
-                return new MessageSourceAccessor(RedmineProjectDashboardWidget.this.messageResource).getMessage("foundation.redmine.tab.title");
+            	final MessageSourceAccessor accessor = new MessageSourceAccessor(RedmineProjectDashboardWidget.this.messageResource);
+            	if (configuration.getKomeaActivity()) {
+            		return accessor.getMessage("foundation.komeaActivity.tab.title");
+            	}
+                return accessor.getMessage("foundation.redmine.tab.title");
             }
 
             @Override
