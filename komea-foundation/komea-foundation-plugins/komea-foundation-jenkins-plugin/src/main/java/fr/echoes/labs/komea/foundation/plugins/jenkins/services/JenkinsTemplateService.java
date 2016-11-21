@@ -26,6 +26,7 @@ import com.google.common.io.Resources;
 
 import fr.echoes.labs.komea.foundation.plugins.jenkins.JenkinsConfigurationBean;
 import fr.echoes.labs.ksf.extensions.projects.ProjectDto;
+import fr.echoes.labs.ksf.foundation.utils.ClassLoaderUtils;
 import fr.echoes.labs.ksf.foundation.utils.URLUtils;
 
 @Service("jenkinsTemplates")
@@ -139,9 +140,10 @@ public class JenkinsTemplateService {
 		URL url = null;
 		
 		try {
-			url = Resources.getResource(RESOURCES_TEMPLATE_FOLDER+templateName);
-			LOGGER.info("Using Jenkins job template: {}", url.toString());
-			return  Resources.toString(url, DEFAULT_CHARSET);
+			
+			final String templateLocation = RESOURCES_TEMPLATE_FOLDER+templateName;
+			return ClassLoaderUtils.readResource(this.getClass().getClassLoader(), templateLocation, DEFAULT_CHARSET);
+
 		} catch (final IllegalArgumentException ex) {
 			LOGGER.error("Cannot find template "+templateName+" in resources folder.", ex);
 		} catch (final IOException ex) {

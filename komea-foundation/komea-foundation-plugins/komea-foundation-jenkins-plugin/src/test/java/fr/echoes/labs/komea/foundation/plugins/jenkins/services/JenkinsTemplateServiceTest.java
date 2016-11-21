@@ -2,6 +2,7 @@ package fr.echoes.labs.komea.foundation.plugins.jenkins.services;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.Collection;
 
 import org.apache.commons.io.FileUtils;
@@ -23,6 +24,7 @@ public class JenkinsTemplateServiceTest {
 	
 	private static final String TMP_FOLDER = "build/tmp/templates/";
 	private static final String DEFAULT_TEMPLATE = "jenkins_job_templates/job.xml";
+	private static final Charset CHARSET = Charsets.UTF_8;
 
 	@Mock
 	private JenkinsConfigurationBean configuration;
@@ -46,9 +48,9 @@ public class JenkinsTemplateServiceTest {
 		final File tmpFolder = new File(TMP_FOLDER);
 		FileUtils.deleteDirectory(tmpFolder);
 		tmpFolder.mkdirs();
-		FileUtils.writeStringToFile(new File(TMP_FOLDER+"job_test.xml"), "test");
-		FileUtils.writeStringToFile(new File(TMP_FOLDER+"job.xml"), "test doublon");
-		FileUtils.writeStringToFile(new File(TMP_FOLDER+"not_a_template"), "Nope");
+		FileUtils.writeStringToFile(new File(TMP_FOLDER+"job_test.xml"), "test", CHARSET);
+		FileUtils.writeStringToFile(new File(TMP_FOLDER+"job.xml"), "test doublon", CHARSET);
+		FileUtils.writeStringToFile(new File(TMP_FOLDER+"not_a_template"), "Nope", CHARSET);
 	}
 	
 	@Test
@@ -85,10 +87,10 @@ public class JenkinsTemplateServiceTest {
 		Mockito.when(configuration.getTemplateFolder()).thenReturn(TMP_FOLDER);
 		
 		content = service.getTemplate("job.xml");
-		Assert.assertEquals(FileUtils.readFileToString(new File(TMP_FOLDER+"job.xml")), content);
+		Assert.assertEquals(FileUtils.readFileToString(new File(TMP_FOLDER+"job.xml"), CHARSET), content);
 		
 		content = service.getTemplate("job_test.xml");
-		Assert.assertEquals(FileUtils.readFileToString(new File(TMP_FOLDER+"job_test.xml")), content);
+		Assert.assertEquals(FileUtils.readFileToString(new File(TMP_FOLDER+"job_test.xml"), CHARSET), content);
 		
 		content = service.getTemplate("nope.xml");
 		Assert.assertEquals(defaultTemplate, content);
@@ -132,7 +134,7 @@ public class JenkinsTemplateServiceTest {
 	
 	private static String getResourceContent(final String filePath) throws IOException {
 		
-		return Resources.toString(Resources.getResource(filePath), Charsets.UTF_8);
+		return Resources.toString(Resources.getResource(filePath), CHARSET);
 	}
 	
 }
