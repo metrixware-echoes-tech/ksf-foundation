@@ -250,7 +250,7 @@ public class ForemanClient extends AbstractApiClient {
 	
 	public SmartClassParameter getSmartClassParameterByPuppetClass(final Integer puppetClassId, final String parameter) throws IOException {
 		
-		final String response = get(API_PUPPET_CLASSES+"/"+puppetClassId+API_SMART_CLASS_PARAMETERS, ImmutableMap.of(PARAM_SEARCH, parameter));
+		final String response = get(API_PUPPET_CLASSES+"/"+puppetClassId+API_SMART_CLASS_PARAMETERS, ImmutableMap.of(PARAM_SEARCH, '='+parameter));
 		
 		final List<SmartClassParameter> results = extractResults(response, SmartClassParameter.class);
 		
