@@ -301,7 +301,10 @@ public class ForemanClient extends AbstractApiClient {
 			throw new IllegalArgumentException("Cannot update a puppet class without its ID.");
 		}
 		
-		final List<ForemanHostGroup> groups = Lists.newArrayList(puppetClass.getHostGroups());
+		final List<ForemanHostGroup> groups = Lists.newArrayList();
+		if (puppetClass.getHostGroups() != null) {
+			groups.addAll(puppetClass.getHostGroups());
+		}
 		groups.add(hostGroup);
 		
 		LOGGER.info("Updating puppet class {}...", puppetClass.getId());
