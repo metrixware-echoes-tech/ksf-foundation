@@ -156,4 +156,11 @@ public final class ScParamsUtils {
 		return null;
 	}
 	
+	public static String toHash(final String value) {
+		if (value != null) {
+			return value.replace("\\n", "\n").replace("\\r", "\r").replace("\\\"", "\"");
+		}
+		return null;
+	}
+	
 }

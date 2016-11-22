@@ -2,6 +2,7 @@ package fr.echoes.labs.ksf.foreman.api.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
@@ -9,8 +10,11 @@ import fr.echoes.labs.ksf.foreman.api.utils.KeepAsJsonDeserializer;
 
 public class SmartClassParameter {
 
+	public static final String TYPE_HASH = "hash";
+	
 	private Integer id;
 	private String parameter;
+	private String type;
 	private String defaultValue;
 	private PuppetClass puppetClass;
 	private boolean usePuppetDefault;
@@ -81,6 +85,20 @@ public class SmartClassParameter {
 
 	public void setOverride(boolean override) {
 		this.override = override;
+	}
+	
+	public String getType() {
+		return type;
+	}
+	
+	@JsonSetter("parameter_type")
+	public void setType(String type) {
+		this.type = type;
+	}
+	
+	@JsonIgnore
+	public boolean isHash() {
+		return TYPE_HASH.equals(this.type);
 	}
 
 	@Override
