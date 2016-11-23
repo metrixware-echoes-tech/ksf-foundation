@@ -130,6 +130,10 @@ public class InstallAction implements IAction {
 				
 				final SmartClassParameterOverrideValue overrideValue = ScParamsUtils.getOverrideValueForHostGroup(scParameter, hostGroup.getFullName());	
 				
+				if (scParameter.isHash()) {
+					hostGroupValue.setValue(ScParamsUtils.toHash(hostGroupValue.getValue()));
+				}
+				
 				if (overrideValue == null) {
 					foreman.createSmartClassParameterOverrideValue(scParameter.getId(), ScParamsUtils.newOverrideValue(hostGroupValue, ForemanEntities.TYPE_HOSTGROUP, hostGroup.getFullName()));
 				}else{				
