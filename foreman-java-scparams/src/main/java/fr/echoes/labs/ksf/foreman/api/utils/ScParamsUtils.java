@@ -163,4 +163,12 @@ public final class ScParamsUtils {
 		return null;
 	}
 	
+	public static String formatOverrideValue(final String value, final String type) {
+		if (SmartClassParameter.TYPE_HASH.equalsIgnoreCase(type)) {
+			// Fix issue with YAML deserialization
+			return ScParamsUtils.toHash(value);
+		}
+		return value;
+	}
+	
 }

@@ -110,9 +110,9 @@ public class SmartClassParameterBackupServiceTest {
 		
 		// given
 		final List<SmartClassParameterWrapper> params = Lists.newArrayList(
-				new SmartClassParameterWrapper("param1", puppetClass1, "value1", false),
-				new SmartClassParameterWrapper("param2", puppetClass1, null, true),
-				new SmartClassParameterWrapper("param1", puppetClass2, "value3", false)
+				new SmartClassParameterWrapper("param1", "hash", puppetClass1, "value1", false),
+				new SmartClassParameterWrapper("param2", "string", puppetClass1, null, true),
+				new SmartClassParameterWrapper("param1", "hash", puppetClass2, "value3", false)
 		);
 		
 		// when
@@ -147,9 +147,9 @@ public class SmartClassParameterBackupServiceTest {
 		
 		// and
 		final List<SmartClassParameterWrapper> params = Lists.newArrayList(
-				new SmartClassParameterWrapper("param1", puppetClass1, "value1", false),
-				new SmartClassParameterWrapper("param2", puppetClass1, null, true),
-				new SmartClassParameterWrapper("param1", puppetClass2, "value3", false)
+				new SmartClassParameterWrapper("param1", "hash", puppetClass1, "value1", false),
+				new SmartClassParameterWrapper("param2", "string", puppetClass1, null, true),
+				new SmartClassParameterWrapper("param1", "hash", puppetClass2, "value3", false)
 		);
 		
 		// when
@@ -176,9 +176,9 @@ public class SmartClassParameterBackupServiceTest {
 		
 		// and
 		final List<SmartClassParameterWrapper> params = Lists.newArrayList(
-				new SmartClassParameterWrapper("param1", puppetClass1, "value1", false),
-				new SmartClassParameterWrapper("param2", puppetClass1, null, true),
-				new SmartClassParameterWrapper("param1", puppetClass2, "value3", false)
+				new SmartClassParameterWrapper("param1", "hash", puppetClass1, "value1", false),
+				new SmartClassParameterWrapper("param2", "string", puppetClass1, null, true),
+				new SmartClassParameterWrapper("param1", "hash", puppetClass2, "value3", false)
 		);
 		
 		// when
@@ -220,9 +220,9 @@ public class SmartClassParameterBackupServiceTest {
 		
 		// and
 		final List<SmartClassParameterWrapper> params = Lists.newArrayList(
-				new SmartClassParameterWrapper("param1", puppetClass1, "value1", false),
-				new SmartClassParameterWrapper("param2", puppetClass1, null, true),
-				new SmartClassParameterWrapper("param1", puppetClass2, "value3", false)
+				new SmartClassParameterWrapper("param1", "hash", puppetClass1, "value1", false),
+				new SmartClassParameterWrapper("param2", "string", puppetClass1, null, true),
+				new SmartClassParameterWrapper("param1", "hash", puppetClass2, "value3", false)
 		);
 		
 		// when
@@ -260,6 +260,7 @@ public class SmartClassParameterBackupServiceTest {
 			Assert.assertNotNull(writtenParam);
 			Assert.assertEquals(param.getValue(), writtenParam.getValue());
 			Assert.assertEquals(param.getUsePuppetDefault(), writtenParam.getUsePuppetDefault());
+			Assert.assertEquals(param.getType(), writtenParam.getType());
 		}		
 	}
 	

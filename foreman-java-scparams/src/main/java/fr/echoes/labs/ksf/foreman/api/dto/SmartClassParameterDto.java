@@ -11,6 +11,7 @@ import fr.echoes.labs.ksf.foreman.api.model.SmartClassParameter;
  */
 public class SmartClassParameterDto {
 
+	private String type;
 	private String override;
 	private String defaultValue;
 	private String usePuppetDefault;
@@ -49,6 +50,15 @@ public class SmartClassParameterDto {
 
 	public void setUsePuppetDefault(String usePuppetDefault) {
 		this.usePuppetDefault = usePuppetDefault;
+	}
+
+	@JsonGetter("parameter_type")
+	public String getType() {
+		return type;
+	}
+	
+	public void setType(String type) {
+		this.type = type;
 	}
 	
 }

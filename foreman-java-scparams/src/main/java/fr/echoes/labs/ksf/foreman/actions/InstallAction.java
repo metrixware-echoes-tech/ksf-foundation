@@ -77,8 +77,10 @@ public class InstallAction implements IAction {
 			
 			scParam.setOverride(true);
 			scParam.setUsePuppetDefault(param.getUsePuppetDefault());
+			scParam.setType(getType(scParam, param));
+			
 			if (!param.getUsePuppetDefault()) {
-				scParam.setDefaultValue(param.getValue());
+				scParam.setDefaultValue(ScParamsUtils.formatOverrideValue(param.getValue(), scParam.getType()));
 			}
 			
 			// update smart class parameter
@@ -128,18 +130,7 @@ public class InstallAction implements IAction {
 				final PuppetClass puppetClass = retrievePuppetClassOrDie(hostGroupValue.getPuppetModule(), hostGroupValue.getPuppetClass());
 				final SmartClassParameter scParameter = retrieveSmartClassParameterOrDie(hostGroupValue, puppetClass);
 				
-				final SmartClassParameterOverrideValue overrideValue = ScParamsUtils.getOverrideValueForHostGroup(scParameter, hostGroup.getFullName());	
-				
-				if (scParameter.isHash()) {
-					hostGroupValue.setValue(ScParamsUtils.toHash(hostGroupValue.getValue()));
-				}
-				
-				if (overrideValue == null) {
-					foreman.createSmartClassParameterOverrideValue(scParameter.getId(), ScParamsUtils.newOverrideValue(hostGroupValue, ForemanEntities.TYPE_HOSTGROUP, hostGroup.getFullName()));
-				}else{				
-					foreman.updateSmartClassParameterOverrideValue(scParameter.getId(), ScParamsUtils.mergeOverrideValue(hostGroupValue, overrideValue));
-				}
-				
+				createOrUpdateSmartClassParameterOverrideValue(scParameter, hostGroupValue, ForemanEntities.TYPE_HOSTGROUP, hostGroup.getFullName());
 			}
 			
 		}
@@ -196,21 +187,48 @@ public class InstallAction implements IAction {
 				final PuppetClass puppetClass = retrievePuppetClassOrDie(hostValue.getPuppetModule(), hostValue.getPuppetClass());
 				final SmartClassParameter scParameter = retrieveSmartClassParameterOrDie(hostValue, puppetClass);
 				
-				final SmartClassParameterOverrideValue overrideValue = ScParamsUtils.getOverrideValueForHost(scParameter, hostName);
-				
-				if (scParameter.isHash()) {
-					hostValue.setValue(ScParamsUtils.toHash(hostValue.getValue()));
-				}
-				
-				if (overrideValue == null) {
-					foreman.createSmartClassParameterOverrideValue(scParameter.getId(), ScParamsUtils.newOverrideValue(hostValue, ForemanEntities.TYPE_FQDN, hostName));
-				}else{				
-					foreman.updateSmartClassParameterOverrideValue(scParameter.getId(), ScParamsUtils.mergeOverrideValue(hostValue, overrideValue));
-				}					
-				
+				createOrUpdateSmartClassParameterOverrideValue(scParameter, hostValue, ForemanEntities.TYPE_FQDN, hostName);					
 			}
 			
 		}
+	}
+	
+	private void createOrUpdateSmartClassParameterOverrideValue(final SmartClassParameter scParameter, final SmartClassParameterWrapper param, final String entityType, final String entityName) throws IOException {
+		
+		final String type = getType(scParameter, param);
+		
+		if (type == null) {
+			LOGGER.warn("Cannot find type of parameter #{}", scParameter.getId());
+		}else{
+			if (!type.equals(scParameter.getType())) {
+				// Update the parameter's type if the override value's type does not match the current type
+				LOGGER.info("Updating type of parameter {} from {} to {}...", scParameter.getId(), scParameter.getType(), type);
+				scParameter.setType(type);
+				foreman.updateSmartClassParameter(scParameter);
+			}
+		}
+		
+		// Formatting the value
+		param.setValue(ScParamsUtils.formatOverrideValue(param.getValue(), type));
+		
+		// Retrieve the override value of the parameter for the given entity if it already exists
+		final SmartClassParameterOverrideValue overrideValue = ScParamsUtils.getOverrideValueForMatcher(scParameter, entityType, entityName);
+		
+		if (overrideValue == null) {
+			foreman.createSmartClassParameterOverrideValue(scParameter.getId(), ScParamsUtils.newOverrideValue(param, entityType, entityName));
+		}else{				
+			foreman.updateSmartClassParameterOverrideValue(scParameter.getId(), ScParamsUtils.mergeOverrideValue(param, overrideValue));
+		}
+	}
+	
+	private static String getType(final SmartClassParameter scParam, final SmartClassParameterWrapper wrapper) {
+		
+		if (wrapper.getType() != null) {
+			// use the type defined in the csv, if available
+			return wrapper.getType();
+		}
+		// otherwise: use the type defined in Foreman
+		return scParam.getType();
 	}
 	
 	private PuppetClass retrievePuppetClassOrDie(final String moduleName, final String className) throws IOException {

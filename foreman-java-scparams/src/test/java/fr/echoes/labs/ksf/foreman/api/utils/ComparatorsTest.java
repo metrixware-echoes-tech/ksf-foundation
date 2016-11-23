@@ -23,10 +23,10 @@ public class ComparatorsTest {
 		
 		// and
 		final List<SmartClassParameterWrapper> params = Lists.newArrayList(
-				new SmartClassParameterWrapper("C", puppetClass3, "", false),
-				new SmartClassParameterWrapper("B", puppetClass2, "", false),
-				new SmartClassParameterWrapper("A", puppetClass2, "", false),
-				new SmartClassParameterWrapper("A", puppetClass1, "", false)
+				new SmartClassParameterWrapper("C", "", puppetClass3, "", false),
+				new SmartClassParameterWrapper("B", "", puppetClass2, "", false),
+				new SmartClassParameterWrapper("A", "", puppetClass2, "", false),
+				new SmartClassParameterWrapper("A", "", puppetClass1, "", false)
 		);
 		
 		// when
