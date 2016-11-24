@@ -11,25 +11,11 @@ import org.junit.Test;
 
 import com.google.common.collect.Lists;
 
-public class BackupStorageTest {
-
-	private static final String STORAGE_PATH = "build/tmp/dataset";
-	private static final String SOURCE_PATH = "src/test/resources/dataset/";
-	
-	private BackupStorage backupStorage;
+public class BackupStorageTest extends AbstractBackupStorageTest {
 	
 	@Before
 	public void setup() throws IOException {
-		
-		FileUtils.deleteDirectory(new File(STORAGE_PATH));
-		new File(STORAGE_PATH).mkdirs();
-		
-		this.backupStorage = new BackupStorage(STORAGE_PATH);
-	}
-	
-	
-	private void initDataset() throws IOException {
-		FileUtils.copyDirectory(new File(SOURCE_PATH), new File(STORAGE_PATH));
+		super.setup();
 	}
 	
 	@Test

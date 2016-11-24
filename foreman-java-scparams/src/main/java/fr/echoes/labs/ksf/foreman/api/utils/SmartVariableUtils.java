@@ -7,8 +7,10 @@ import java.util.regex.Pattern;
 
 import com.google.common.collect.Sets;
 
+import fr.echoes.labs.ksf.foreman.api.model.PuppetClass;
 import fr.echoes.labs.ksf.foreman.api.model.SmartClassParameterOverrideValue;
 import fr.echoes.labs.ksf.foreman.api.model.SmartVariable;
+import fr.echoes.labs.ksf.foreman.api.model.SmartVariableWrapper;
 
 public final class SmartVariableUtils {
 
@@ -51,6 +53,15 @@ public final class SmartVariableUtils {
 		}
 		
 		return results;
+	}
+	
+	public static void injectValues(final SmartVariable smartVariable, final SmartVariableWrapper wrapper, final PuppetClass puppetClass) {
+		
+		smartVariable.setPuppetClassId(puppetClass != null ? puppetClass.getId() : null);
+		smartVariable.setType(wrapper.getType());
+		smartVariable.setVariable(wrapper.getVariable());
+		smartVariable.setDefaultValue(wrapper.getValue());
+		
 	}
 	
 }

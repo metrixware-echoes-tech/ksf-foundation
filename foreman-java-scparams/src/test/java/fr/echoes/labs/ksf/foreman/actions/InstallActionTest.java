@@ -25,6 +25,7 @@ import fr.echoes.labs.ksf.foreman.api.utils.ForemanEntities;
 import fr.echoes.labs.ksf.foreman.backup.BackupStorage;
 import fr.echoes.labs.ksf.foreman.backup.PuppetModulesBackupService;
 import fr.echoes.labs.ksf.foreman.backup.SmartClassParameterBackupService;
+import fr.echoes.labs.ksf.foreman.backup.SmartVariableBackupService;
 import fr.echoes.labs.ksf.foreman.exceptions.HostGroupNotFoundException;
 import fr.echoes.labs.ksf.foreman.exceptions.HostNotFoundException;
 
@@ -33,6 +34,7 @@ public class InstallActionTest {
 	private ForemanClient client;
 	private SmartClassParameterBackupService scParamBackupService;
 	private PuppetModulesBackupService modulesBackupService;
+	private SmartVariableBackupService smartVariableBackupService;
 	private BackupStorage storage;
 	private InstallAction action;
 	
@@ -48,8 +50,9 @@ public class InstallActionTest {
 		this.client = Mockito.mock(ForemanClient.class);
 		this.scParamBackupService = Mockito.mock(SmartClassParameterBackupService.class);
 		this.modulesBackupService = Mockito.mock(PuppetModulesBackupService.class);
+		this.smartVariableBackupService = Mockito.mock(SmartVariableBackupService.class);
 		this.storage = Mockito.mock(BackupStorage.class);
-		this.action = new InstallAction(this.client, this.scParamBackupService, this.modulesBackupService, this.storage);
+		this.action = new InstallAction(this.client, this.scParamBackupService, this.modulesBackupService, this.smartVariableBackupService, this.storage);
 
 	}
 	

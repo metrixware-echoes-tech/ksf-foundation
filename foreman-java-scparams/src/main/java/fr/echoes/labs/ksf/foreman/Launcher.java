@@ -85,7 +85,7 @@ public class Launcher {
 		if (ACTION_BACKUP.equalsIgnoreCase(mode)) {
 			return new BackupAction(foreman, smartParamBackupdService, hostPuppetModulesBackupService, smartVariableBackupService);
 		}else if (ACTION_INSTALL.equalsIgnoreCase(mode)) {
-			return new InstallAction(foreman, smartParamBackupdService, hostPuppetModulesBackupService, backupStorage);
+			return new InstallAction(foreman, smartParamBackupdService, hostPuppetModulesBackupService,smartVariableBackupService, backupStorage);
 		}else{
 			throw new IllegalArgumentException(mode+" is not a valid mode.");
 		}

@@ -22,6 +22,7 @@ import com.google.common.collect.Sets;
 
 import fr.echoes.labs.ksf.foreman.api.dto.OverrideValueDto;
 import fr.echoes.labs.ksf.foreman.api.dto.SmartClassParameterDto;
+import fr.echoes.labs.ksf.foreman.api.dto.SmartVariableDto;
 import fr.echoes.labs.ksf.foreman.api.model.ForemanApiResult;
 import fr.echoes.labs.ksf.foreman.api.model.ForemanApiResultMap;
 import fr.echoes.labs.ksf.foreman.api.model.ForemanHost;
@@ -408,6 +409,64 @@ public class ForemanClient extends AbstractApiClient {
 		}
 		
 		return results;
+	}
+	
+	public SmartVariable getSmartVariableByName(final String variable) throws IOException {
+		
+		final String response = get(API_SMART_VARIABLES, ImmutableMap.of(PARAM_SEARCH, '='+variable));
+		final List<SmartVariable> results = extractResults(response, SmartVariable.class);
+		
+		if (results != null && !results.isEmpty()) {
+			return getSmartVariable(results.get(0).getId());
+		}
+		
+		return null;
+	}
+	
+	public void createSmartVariable(final SmartVariable variable) throws IOException {	
+		if (variable == null) {
+			throw new IllegalArgumentException("Smart variable cannot be null.");
+		}
+		if (variable.getId() != null) {
+			throw new IllegalArgumentException("Id must be null.");
+		}
+		post(API_SMART_VARIABLES, new SmartVariableDto(variable));
+	}
+	
+	public void updateSmartVariable(final SmartVariable variable) throws IOException {
+		if (variable == null) {
+			throw new IllegalArgumentException("Smart variable cannot be null.");
+		}
+		if (variable.getId() == null) {
+			throw new IllegalArgumentException("Cannot update a smart variable without its ID.");
+		}
+		put(API_SMART_VARIABLES+'/'+variable.getId(), new SmartVariableDto(variable));
+	}
+	
+	public void createSmartVariableOverrideValue(final Integer variableId, final SmartClassParameterOverrideValue overrideValue) throws IOException {
+		if (variableId == null) {
+			throw new IllegalArgumentException("Cannot create a smart variable override value without a smart variable ID.");
+		}
+		if (overrideValue == null) {
+			throw new IllegalArgumentException("Override value must not be null.");
+		}
+		if (overrideValue.getId() != null) {
+			throw new IllegalArgumentException("Id must be null.");
+		}
+		post(API_SMART_VARIABLES+'/'+variableId+"/override_values/", overrideValue);
+	}
+	
+	public void updateSmartVariableOverrideValue(final Integer variableId, final SmartClassParameterOverrideValue overrideValue) throws IOException {	
+		if (variableId == null) {
+			throw new IllegalArgumentException("Cannot update a smart variable override value without a smart variable ID.");
+		}
+		if (overrideValue == null) {
+			throw new IllegalArgumentException("Override value must not be null.");
+		}
+		if (overrideValue.getId() == null) {
+			throw new IllegalArgumentException("Cannot update a smart variable override value without its ID.");
+		}
+		put(API_SMART_VARIABLES+'/'+variableId+"/override_values/"+overrideValue.getId(), overrideValue);
 	}
 	
 	private List<Object> extractResults(final String response) throws IOException {

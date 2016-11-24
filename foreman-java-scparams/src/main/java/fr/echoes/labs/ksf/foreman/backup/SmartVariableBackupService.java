@@ -1,12 +1,20 @@
 package fr.echoes.labs.ksf.foreman.backup;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+
 import fr.echoes.labs.ksf.foreman.api.model.ForemanHost;
+import fr.echoes.labs.ksf.foreman.api.model.SmartClassParameterWrapper;
 import fr.echoes.labs.ksf.foreman.api.model.SmartVariableWrapper;
 
 public class SmartVariableBackupService extends CsvBackupService<SmartVariableWrapper> {
@@ -14,6 +22,7 @@ public class SmartVariableBackupService extends CsvBackupService<SmartVariableWr
 	private static final Logger LOGGER = LoggerFactory.getLogger(SmartVariableBackupService.class);
 	
 	private static final String FILENAME_SUFFIX = "-variables.csv"; 
+	private static final String FILENAME_GLOBAL_VALUES = "smart_variables.csv";
 
 	private static final String[] HEADER = new String[] {
 			"variable",
@@ -37,7 +46,7 @@ public class SmartVariableBackupService extends CsvBackupService<SmartVariableWr
 			LOGGER.info("No global smart variable found.");
 		}else{
 			LOGGER.info("Writing {} smart variable into {}", values.size(), dirPath);
-			super.write(values, HEADER, dirPath, "smart_variables.csv");
+			super.write(values, HEADER, dirPath, FILENAME_GLOBAL_VALUES);
 		}
 	}
 	
@@ -64,6 +73,64 @@ public class SmartVariableBackupService extends CsvBackupService<SmartVariableWr
 			LOGGER.info("Writing {} smart variables of host group {} into {}", values.size(), hostGroup, hostGroupFolderPath);
 			super.write(values, HEADER, hostGroupFolderPath, hostGroup+FILENAME_SUFFIX);
 		}
+	}
+	
+	public List<SmartVariableWrapper> read() throws IOException {
+		
+		final String dirPath = this.storage.getRoot()+"/";
+		final String filePath = dirPath+FILENAME_GLOBAL_VALUES;
+		
+		if (new File(filePath).exists()) {
+			return super.read(filePath, SmartVariableWrapper.class);
+		}
+		
+		return Lists.newArrayList();
+	}
+	
+	public Map<String, List<SmartVariableWrapper>> readHostGroupValues() throws IOException {
+		
+		final File hostGroupFolder = new File(this.storage.getHostGroupsFolder());
+		final Map<String, List<SmartVariableWrapper>> results = Maps.newHashMap();
+		
+		if (hostGroupFolder.exists()) {
+		
+			final Pattern pattern = Pattern.compile("(.*)"+FILENAME_SUFFIX);
+			
+			for(final File file : hostGroupFolder.listFiles()) {
+				final Matcher matcher = pattern.matcher(file.getName());
+				if (matcher.find()) {
+					final String hostGroup = decodeFileName(matcher.group(1));
+					results.put(hostGroup, readHostGroupValues(hostGroup));
+				}
+			}
+			
+		}
+		
+		return results;
+	}
+	
+	public List<SmartVariableWrapper> readHostGroupValues(final String hostGroup) throws IOException {
+		
+		final String dirPath = this.storage.getHostGroupsFolder();
+		final String filePath = dirPath + hostGroup + FILENAME_SUFFIX;
+		
+		if (new File(filePath).exists()) {
+			return super.read(filePath, SmartVariableWrapper.class);
+		}
+		
+		return Lists.newArrayList();
+	}
+	
+	public List<SmartVariableWrapper> readHostValues(final ForemanHost host) throws IOException {
+		
+		final String dirPath = this.storage.getHostFolder(host);
+		final String filePath = dirPath + host.getName() + FILENAME_SUFFIX;
+		
+		if (new File(filePath).exists()) {
+			return super.read(filePath, SmartVariableWrapper.class);
+		}
+		
+		return Lists.newArrayList();
 	}
 	
 }

@@ -135,6 +135,8 @@ public abstract class AbstractApiClient {
 			case HttpStatus.SC_UNAUTHORIZED:
 			case HttpStatus.SC_FORBIDDEN:
 				throw new ForbiddenException(extractBody(response));
+			case HttpStatus.SC_UNPROCESSABLE_ENTITY:
+				throw new IllegalArgumentException(extractBody(response));
 			case HttpStatus.SC_NOT_FOUND:
 				throw new NotFoundException(extractBody(response));
 			case HttpStatus.SC_INTERNAL_SERVER_ERROR:
