@@ -16,22 +16,28 @@ import fr.echoes.labs.ksf.foreman.api.model.PuppetClass;
 import fr.echoes.labs.ksf.foreman.api.model.SmartClassParameter;
 import fr.echoes.labs.ksf.foreman.api.model.SmartClassParameterOverrideValue;
 import fr.echoes.labs.ksf.foreman.api.model.SmartClassParameterWrapper;
+import fr.echoes.labs.ksf.foreman.api.model.SmartVariable;
+import fr.echoes.labs.ksf.foreman.api.model.SmartVariableWrapper;
 import fr.echoes.labs.ksf.foreman.api.utils.ScParamsUtils;
+import fr.echoes.labs.ksf.foreman.api.utils.SmartVariableUtils;
 import fr.echoes.labs.ksf.foreman.backup.PuppetModulesBackupService;
 import fr.echoes.labs.ksf.foreman.backup.SmartClassParameterBackupService;
+import fr.echoes.labs.ksf.foreman.backup.SmartVariableBackupService;
 
 public class BackupAction implements IAction {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(BackupAction.class);
 	
-	final ForemanClient foreman;
-	final PuppetModulesBackupService hostPuppetModulesBackupService;
-	final SmartClassParameterBackupService smartParamBackupdService;
+	private final ForemanClient foreman;
+	private final PuppetModulesBackupService hostPuppetModulesBackupService;
+	private final SmartClassParameterBackupService smartParamBackupdService;
+	private final SmartVariableBackupService smartVariableBackupService;
 	
-	public BackupAction(final ForemanClient client, final SmartClassParameterBackupService smartParamBackupdService, final PuppetModulesBackupService hostPuppetModulesBackupService) {
+	public BackupAction(final ForemanClient client, final SmartClassParameterBackupService smartParamBackupdService, final PuppetModulesBackupService hostPuppetModulesBackupService, final SmartVariableBackupService smartVariableBackupService) {
 		this.foreman = client;
 		this.hostPuppetModulesBackupService = hostPuppetModulesBackupService;
 		this.smartParamBackupdService = smartParamBackupdService;
+		this.smartVariableBackupService = smartVariableBackupService;
 	}
 	
 	@Override
@@ -62,6 +68,21 @@ public class BackupAction implements IAction {
 			overrideValues.add(new SmartClassParameterWrapper(param));
 		}
 		smartParamBackupdService.write(overrideValues);
+		
+		// retrieve the smart variables
+		LOGGER.info("Retrieving smart variables...");
+		final List<SmartVariable> smartVariables = foreman.getSmartVariableWithOverrideValues();
+		
+		LOGGER.info("{} smart variables found.", smartVariables.size());
+		
+		// export the global smart variable values
+		final List<SmartVariableWrapper> globalVariablesValues = Lists.newArrayList();
+		for (final SmartVariable smartVariable : smartVariables) {
+			if (smartVariable.getDefaultValue() != null) {
+				globalVariablesValues.add(getWrapper(smartVariable));
+			}
+		}
+		this.smartVariableBackupService.write(globalVariablesValues);
 
 		// export host group override values to CSV
 		for (final Entry<String, List<SmartClassParameterWrapper>> entry : ScParamsUtils.groupByHostGroup(params).entrySet()) {
@@ -85,6 +106,18 @@ public class BackupAction implements IAction {
 			smartParamBackupdService.writeDomainValues(entry.getKey(), entry.getValue());
 		}
 		
+		// export host group smart variable to CSV
+		for (final String hostGroupName : SmartVariableUtils.extractHostGroupNames(smartVariables)) {
+			final List<SmartVariableWrapper> values = Lists.newArrayList();
+			for (final SmartVariable smartVariable : smartVariables) {
+				final SmartClassParameterOverrideValue overrideValue = SmartVariableUtils.getOverrideValueForHostGroup(smartVariable, hostGroupName);
+				if (overrideValue != null) {
+					values.add(getWrapper(smartVariable, overrideValue));
+				}
+			}
+			smartVariableBackupService.writeHostGroupValues(hostGroupName, values);
+		}
+		
 		for(final ForemanHost host : hosts) {
 			
 			// retrieve host's details
@@ -106,8 +139,37 @@ public class BackupAction implements IAction {
 			
 			// export smart class parameters to CSV
 			smartParamBackupdService.write(targetHost, values);
+						
+			// export the smart variables values of the host
+			final List<SmartVariableWrapper> variableValues = Lists.newArrayList();
+			for (final SmartVariable smartVariable : smartVariables) {
+				final SmartClassParameterOverrideValue value = SmartVariableUtils.getOverrideValueForHost(smartVariable, host.getName());
+				if (value != null) {
+					variableValues.add(getWrapper(smartVariable, value));
+				}
+			}
+			this.smartVariableBackupService.write(targetHost, variableValues);
 		}
 		
+	}
+	
+	private SmartVariableWrapper getWrapper(final SmartVariable smartVariable) throws IOException {
+		
+		PuppetClass puppetClass = null;
+		
+		if (smartVariable.getPuppetClassId() != null) {
+			puppetClass = foreman.getPuppetClass(smartVariable.getPuppetClassId());
+		}
+		
+		return new SmartVariableWrapper(smartVariable, puppetClass);
+	}
+	
+	private SmartVariableWrapper getWrapper(final SmartVariable smartVariable, final SmartClassParameterOverrideValue overrideValue) throws IOException {
+		
+		final SmartVariableWrapper result = getWrapper(smartVariable);
+		result.setValue(overrideValue.getValue());
+		
+		return result;
 	}
 
 }

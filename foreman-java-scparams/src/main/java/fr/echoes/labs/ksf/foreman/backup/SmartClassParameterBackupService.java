@@ -15,10 +15,8 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import fr.echoes.labs.ksf.foreman.api.model.ForemanHost;
-import fr.echoes.labs.ksf.foreman.api.model.SmartClassParameter;
 import fr.echoes.labs.ksf.foreman.api.model.SmartClassParameterWrapper;
 import fr.echoes.labs.ksf.foreman.api.utils.Comparators;
-import fr.echoes.labs.ksf.foreman.api.utils.ScParamsUtils;
 
 public class SmartClassParameterBackupService extends CsvBackupService<SmartClassParameterWrapper> {
 

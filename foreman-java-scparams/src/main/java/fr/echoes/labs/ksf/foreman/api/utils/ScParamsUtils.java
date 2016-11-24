@@ -62,16 +62,9 @@ public final class ScParamsUtils {
 	}
 	
 	public static SmartClassParameterOverrideValue getOverrideValueForMatcher(final SmartClassParameter param, final String matchType, final String matchValue) {
-
-		if (param != null && param.getOverrideValues() != null) {
-			final String matcher = buildMatcher(matchType, matchValue);	
-			for (final SmartClassParameterOverrideValue value : param.getOverrideValues()) {
-				if (matcher.equals(value.getMatch())) {
-					return value;
-				}
-			}		
+		if (param != null) {
+			return OverrideValueUtils.getOverrideValueForMatcher(param.getOverrideValues(), matchType, matchValue);
 		}
-		
 		return null;
 	}
 	
@@ -154,21 +147,6 @@ public final class ScParamsUtils {
 		}
 		
 		return null;
-	}
-	
-	public static String toHash(final String value) {
-		if (value != null) {
-			return value.replace("\\n", "\n").replace("\\r", "\r").replace("\\\"", "\"");
-		}
-		return null;
-	}
-	
-	public static String formatOverrideValue(final String value, final String type) {
-		if (SmartClassParameter.TYPE_HASH.equalsIgnoreCase(type)) {
-			// Fix issue with YAML deserialization
-			return ScParamsUtils.toHash(value);
-		}
-		return value;
 	}
 	
 }

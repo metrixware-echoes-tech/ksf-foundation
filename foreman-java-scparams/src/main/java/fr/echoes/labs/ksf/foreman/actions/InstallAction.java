@@ -18,6 +18,7 @@ import fr.echoes.labs.ksf.foreman.api.model.SmartClassParameter;
 import fr.echoes.labs.ksf.foreman.api.model.SmartClassParameterOverrideValue;
 import fr.echoes.labs.ksf.foreman.api.model.SmartClassParameterWrapper;
 import fr.echoes.labs.ksf.foreman.api.utils.ForemanEntities;
+import fr.echoes.labs.ksf.foreman.api.utils.OverrideValueUtils;
 import fr.echoes.labs.ksf.foreman.api.utils.PuppetClassUtils;
 import fr.echoes.labs.ksf.foreman.api.utils.ScParamsUtils;
 import fr.echoes.labs.ksf.foreman.backup.BackupStorage;
@@ -80,7 +81,7 @@ public class InstallAction implements IAction {
 			scParam.setType(getType(scParam, param));
 			
 			if (!param.getUsePuppetDefault()) {
-				scParam.setDefaultValue(ScParamsUtils.formatOverrideValue(param.getValue(), scParam.getType()));
+				scParam.setDefaultValue(OverrideValueUtils.formatOverrideValue(param.getValue(), scParam.getType()));
 			}
 			
 			// update smart class parameter
@@ -209,7 +210,7 @@ public class InstallAction implements IAction {
 		}
 		
 		// Formatting the value
-		param.setValue(ScParamsUtils.formatOverrideValue(param.getValue(), type));
+		param.setValue(OverrideValueUtils.formatOverrideValue(param.getValue(), type));
 		
 		// Retrieve the override value of the parameter for the given entity if it already exists
 		final SmartClassParameterOverrideValue overrideValue = ScParamsUtils.getOverrideValueForMatcher(scParameter, entityType, entityName);

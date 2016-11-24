@@ -29,6 +29,7 @@ import fr.echoes.labs.ksf.foreman.api.model.ForemanHostGroup;
 import fr.echoes.labs.ksf.foreman.api.model.PuppetClass;
 import fr.echoes.labs.ksf.foreman.api.model.SmartClassParameter;
 import fr.echoes.labs.ksf.foreman.api.model.SmartClassParameterOverrideValue;
+import fr.echoes.labs.ksf.foreman.api.model.SmartVariable;
 import fr.echoes.labs.ksf.foreman.api.utils.ForemanEntities;
 import fr.echoes.labs.ksf.foreman.api.utils.PageAggregator;
 import fr.echoes.labs.ksf.foreman.api.utils.PuppetClassUtils;
@@ -43,6 +44,7 @@ public class ForemanClient extends AbstractApiClient {
 	private static final String API_HOSTS_GROUP = "/hostgroups";
 	private static final String API_SMART_CLASS_PARAMETERS = "/smart_class_parameters";
 	private static final String API_PUPPET_CLASSES = "/puppetclasses";
+	private static final String API_SMART_VARIABLES = "/smart_variables";
 	
 	private static final String PARAM_PAGE = "page";
 	private static final String PARAM_SEARCH = "search";
@@ -365,6 +367,47 @@ public class ForemanClient extends AbstractApiClient {
 		}
 		
 		return puppetClasses;
+	}
+	
+	public List<SmartVariable> getSmartVariables() throws IOException {
+		
+		final PageAggregator<SmartVariable> aggregator = new PageAggregator<SmartVariable>() {
+			@Override
+			public List<SmartVariable> executeRequest(int page) throws IOException {
+				return getSmartVariables(page);
+			}
+		};
+		
+		return aggregator.execute();
+	}
+	
+	public List<SmartVariable> getSmartVariables(final int page) throws IOException {
+		
+		final String response = get(API_SMART_VARIABLES, ImmutableMap.of(
+				PARAM_PAGE, Integer.toString(page),
+				PARAM_PER_PAGE, Integer.toString(NB_ITEMS_PER_PAGE)
+		));
+		
+		return extractResults(response, SmartVariable.class);
+	}
+	
+	public SmartVariable getSmartVariable(final Integer id) throws IOException {
+		
+		final String response = get(API_SMART_VARIABLES+'/'+id);		
+		return this.mapper.readValue(response, SmartVariable.class);
+	}
+	
+	public List<SmartVariable> getSmartVariableWithOverrideValues() throws IOException {
+		
+		final List<SmartVariable> results = Lists.newArrayList();
+		final List<SmartVariable> variables = getSmartVariables();
+		
+		for (final SmartVariable variable : variables) {
+			LOGGER.info("Retrieving smart variable [{}/{}]...", results.size() + 1, variables.size());
+			results.add(getSmartVariable(variable.getId()));
+		}
+		
+		return results;
 	}
 	
 	private List<Object> extractResults(final String response) throws IOException {
