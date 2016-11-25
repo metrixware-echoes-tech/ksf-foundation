@@ -106,7 +106,7 @@ public class InstallAction implements IAction {
 	private void configureSmartVariables() throws IOException {
 		
 		final List<SmartVariableWrapper> variables = smartVariableBackupService.read();
-		LOGGER.info("{} smart variables found.");
+		LOGGER.info("{} smart variables found.", variables.size());
 		
 		for (final SmartVariableWrapper variable : variables) {
 			PuppetClass puppetClass = null;
