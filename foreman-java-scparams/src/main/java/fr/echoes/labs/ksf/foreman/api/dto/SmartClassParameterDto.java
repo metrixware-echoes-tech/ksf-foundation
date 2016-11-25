@@ -24,6 +24,7 @@ public class SmartClassParameterDto {
 		this.override = Boolean.toString(param.isOverride());
 		this.defaultValue = param.getDefaultValue();
 		this.usePuppetDefault = Boolean.toString(param.isUsePuppetDefault());
+		this.type = param.getType();
 	}
 
 	public String getOverride() {
