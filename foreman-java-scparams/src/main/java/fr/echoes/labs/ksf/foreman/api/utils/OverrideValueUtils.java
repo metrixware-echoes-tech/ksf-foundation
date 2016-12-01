@@ -4,6 +4,8 @@ import static fr.echoes.labs.ksf.foreman.api.utils.ForemanEntities.buildMatcher;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 import fr.echoes.labs.ksf.foreman.api.model.SmartClassParameter;
 import fr.echoes.labs.ksf.foreman.api.model.SmartClassParameterOverrideValue;
 
@@ -29,7 +31,11 @@ public final class OverrideValueUtils {
 	
 	public static String toHash(final String value) {
 		if (value != null) {
-			return value.replace("\\n", "\n").replace("\\r", "\r").replace("\\\"", "\"");
+			final String escapedString = value
+					.replace("\\n", "\n")
+					.replace("\\r", "\r")
+					.replace("\\\"", "\"");
+			return escapedString;
 		}
 		return null;
 	}
@@ -37,7 +43,7 @@ public final class OverrideValueUtils {
 	public static String formatOverrideValue(final String value, final String type) {
 		if (SmartClassParameter.TYPE_HASH.equalsIgnoreCase(type)) {
 			// Fix issue with YAML deserialization
-			return toHash(value);
+			return toHash(StringEscapeUtils.unescapeJava(value));
 		}
 		return value;
 	}
