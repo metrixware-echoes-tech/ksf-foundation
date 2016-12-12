@@ -32,8 +32,9 @@ public final class OverrideValueUtils {
 	public static String toHash(final String value) {
 		if (value != null) {
 			final String escapedString = value
-					.replace("\\n", "\n")
-					.replace("\\r", "\r")
+					.replace("\\r\\n", "\r\n")
+					//.replace("\\n", "\n")
+					//.replace("\\r", "\r")
 					.replace("\\\"", "\"");
 			return escapedString;
 		}
@@ -43,7 +44,7 @@ public final class OverrideValueUtils {
 	public static String formatOverrideValue(final String value, final String type) {
 		if (SmartClassParameter.TYPE_HASH.equalsIgnoreCase(type)) {
 			// Fix issue with YAML deserialization
-			return toHash(StringEscapeUtils.unescapeJava(value));
+			return toHash(value); //toHash(StringEscapeUtils.unescapeJava(value));
 		}
 		return value;
 	}

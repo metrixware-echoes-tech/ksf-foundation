@@ -19,7 +19,7 @@ public class OverrideValueUtilsTest {
 	public void testFormatOverrideValueHash() {
 		
 		// given
-		final String value = "test:\\n\\rsuccess:\\\"yes\\\""; 
+		final String value = "test:\\r\\nsuccess:\\\"yes\\\""; 
 		
 		// when
 		final String result = OverrideValueUtils.formatOverrideValue(value, SmartClassParameter.TYPE_HASH);
@@ -55,7 +55,22 @@ public class OverrideValueUtilsTest {
 		
 		// then
 		Assert.assertNotNull(result);
-		Assert.assertFalse(result.contains("\\\\\\"));
+		//Assert.assertFalse(result.contains("\\\\\\"));
+		
+	}
+	
+	@Test
+	public void testFormatOverrideValueHash3() throws IOException {
+		
+		//given
+		final String value = FileUtils.readFileToString(new File("src/test/resources/test2.txt"), Charsets.UTF_8.name());
+		
+		// when
+		final String result = OverrideValueUtils.formatOverrideValue(value, SmartClassParameter.TYPE_HASH);
+		
+		// then
+		System.out.println(result);
+		Assert.assertFalse(result.contains("\\\n"));
 		
 	}
 	
