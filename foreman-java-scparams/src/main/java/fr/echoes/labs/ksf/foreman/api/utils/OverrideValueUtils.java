@@ -33,6 +33,8 @@ public final class OverrideValueUtils {
 		if (value != null) {
 			final String escapedString = value
 					.replace("\\r\\n", "\r\n")
+					.replace("\\\\n", "\\n")
+					.replace("\\\\r", "\\r")
 					//.replace("\\n", "\n")
 					//.replace("\\r", "\r")
 					.replace("\\\"", "\"");
@@ -46,7 +48,7 @@ public final class OverrideValueUtils {
 			// Fix issue with YAML deserialization
 			return toHash(value); //toHash(StringEscapeUtils.unescapeJava(value));
 		}
-		return value;
+		return StringEscapeUtils.unescapeJava(value);
 	}
 	
 }
