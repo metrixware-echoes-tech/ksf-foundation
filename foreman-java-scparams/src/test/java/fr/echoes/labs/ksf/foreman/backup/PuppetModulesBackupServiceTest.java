@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,26 +15,14 @@ import com.google.common.collect.Lists;
 import fr.echoes.labs.ksf.foreman.api.model.ForemanHost;
 import fr.echoes.labs.ksf.foreman.api.model.PuppetClass;
 
-public class PuppetModulesBackupServiceTest {
+public class PuppetModulesBackupServiceTest extends AbstractBackupStorageTest {
 
-	private static final String STORAGE_PATH = "build/tmp/dataset";
-	private static final String SOURCE_PATH = "src/test/resources/dataset/";
-	
-	private BackupStorage backupStorage;
 	private PuppetModulesBackupService backupService;
 	
 	@Before
 	public void setup() throws IOException {
-
-		FileUtils.deleteDirectory(new File(STORAGE_PATH));
-		new File(STORAGE_PATH).mkdirs();
-		
-		this.backupStorage = new BackupStorage(STORAGE_PATH);
+		super.setup();
 		this.backupService = new PuppetModulesBackupService(this.backupStorage);
-	}
-	
-	private void initDataset() throws IOException {
-		FileUtils.copyDirectory(new File(SOURCE_PATH), new File(STORAGE_PATH));
 	}
 	
 	@Test

@@ -18,6 +18,7 @@ import fr.echoes.labs.ksf.foreman.api.client.ForemanClientProxy;
 import fr.echoes.labs.ksf.foreman.backup.BackupStorage;
 import fr.echoes.labs.ksf.foreman.backup.PuppetModulesBackupService;
 import fr.echoes.labs.ksf.foreman.backup.SmartClassParameterBackupService;
+import fr.echoes.labs.ksf.foreman.backup.SmartVariableBackupService;
 
 public class Launcher {
 
@@ -32,6 +33,7 @@ public class Launcher {
 	private BackupStorage backupStorage;
 	private SmartClassParameterBackupService smartParamBackupdService;
 	private PuppetModulesBackupService hostPuppetModulesBackupService;
+	private SmartVariableBackupService smartVariableBackupService;
 	
 	public Launcher(final CommandLineOptions options) {
 		this.options = options;
@@ -61,6 +63,7 @@ public class Launcher {
 		this.backupStorage = new BackupStorage(options.getBackupFolder()); 
 		this.smartParamBackupdService = new SmartClassParameterBackupService(backupStorage);
 		this.hostPuppetModulesBackupService = new PuppetModulesBackupService(backupStorage);
+		this.smartVariableBackupService = new SmartVariableBackupService(backupStorage);
 		
 		return this;
 	}
@@ -80,9 +83,9 @@ public class Launcher {
 	public IAction resolveAction(final String mode) {
 		
 		if (ACTION_BACKUP.equalsIgnoreCase(mode)) {
-			return new BackupAction(foreman, smartParamBackupdService, hostPuppetModulesBackupService);
+			return new BackupAction(foreman, smartParamBackupdService, hostPuppetModulesBackupService, smartVariableBackupService);
 		}else if (ACTION_INSTALL.equalsIgnoreCase(mode)) {
-			return new InstallAction(foreman, smartParamBackupdService, hostPuppetModulesBackupService, backupStorage);
+			return new InstallAction(foreman, smartParamBackupdService, hostPuppetModulesBackupService,smartVariableBackupService, backupStorage);
 		}else{
 			throw new IllegalArgumentException(mode+" is not a valid mode.");
 		}

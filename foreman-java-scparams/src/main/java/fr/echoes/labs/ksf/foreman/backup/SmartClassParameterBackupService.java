@@ -26,6 +26,7 @@ public class SmartClassParameterBackupService extends CsvBackupService<SmartClas
 			"puppetModule",
 			"puppetClass",
 			"parameter",
+			"type",
 			"value",
 			"usePuppetDefault"
 	};
@@ -55,7 +56,7 @@ public class SmartClassParameterBackupService extends CsvBackupService<SmartClas
 		final String folderPath = storage.getHostFolder(host);
 		
 		if (new File(folderPath).exists()) {
-			return super.read(folderPath+host.getName()+"-parameters.csv", SmartClassParameterWrapper.class);
+			return readScParams(folderPath+host.getName()+"-parameters.csv");
 		}
 		
 		return Lists.newArrayList();
@@ -79,7 +80,7 @@ public class SmartClassParameterBackupService extends CsvBackupService<SmartClas
 		final String filePath = dirPath+"puppet_classes_parameters.csv";
 		
 		if (new File(filePath).exists()) {
-			return super.read(filePath, SmartClassParameterWrapper.class);
+			return readScParams(filePath);
 		}
 		
 		return Lists.newArrayList();
@@ -110,7 +111,7 @@ public class SmartClassParameterBackupService extends CsvBackupService<SmartClas
 				final Matcher matcher = pattern.matcher(file.getName());
 				if (matcher.find()) {
 					final String hostGroup = decodeFileName(matcher.group(1));
-					final List<SmartClassParameterWrapper> values = super.read(file.getPath(), SmartClassParameterWrapper.class);
+					final List<SmartClassParameterWrapper> values = readScParams(file.getPath());
 					results.put(hostGroup, values);
 				}
 			}
@@ -118,6 +119,11 @@ public class SmartClassParameterBackupService extends CsvBackupService<SmartClas
 		}
 		
 		return results;
+	}
+	
+	private List<SmartClassParameterWrapper> readScParams(final String filePath) throws IOException {
+		
+		return super.read(filePath, SmartClassParameterWrapper.class);
 	}
 	
 	public void writeOsValues(final String os, final List<SmartClassParameterWrapper> values) throws IOException {

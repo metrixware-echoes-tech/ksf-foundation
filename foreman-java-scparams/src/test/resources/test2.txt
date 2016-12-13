@@ -1,0 +1,4 @@
+"/etc/dhcp/dhclient-enter-hooks.d/nodnsupdate":
+  ensure: file
+  mode: '755' 
+  content: "#!/bin/sh\nmake_resolv_conf(){\n        :\n}"

@@ -44,14 +44,14 @@ public class URLUtilsTest {
 	public void testBuildQuery() {
 		
 		final String key1 = "search";
-		final String value1 = "my query";
+		final String value1 = "my que::ry";
 		
 		final String key2 = "page";
 		final String value2 = "1";
 		
 		final String query = URLUtils.buildQuery(ImmutableMap.of(key1, value1, key2, value2));
 		
-		Assert.assertEquals(key1+"="+value1.replace(" ", "%2B")+"&"+key2+"="+value2, query);
+		Assert.assertEquals(key1+"="+value1.replace(" ", "+").replace(":", "%3A")+"&"+key2+"="+value2, query);
 		
 	}
 	

@@ -12,6 +12,15 @@ public class SmartClassParameterOverrideValue {
 	private String value;
 	private Boolean usePuppetDefault;
 	
+	public SmartClassParameterOverrideValue() {
+		// default constructor
+	}
+	
+	public SmartClassParameterOverrideValue(final String match, final String value) {
+		this.match = match;
+		this.value = value;
+	}
+	
 	public Integer getId() {
 		return id;
 	}

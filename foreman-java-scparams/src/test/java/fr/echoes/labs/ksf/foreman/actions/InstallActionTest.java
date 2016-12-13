@@ -25,6 +25,7 @@ import fr.echoes.labs.ksf.foreman.api.utils.ForemanEntities;
 import fr.echoes.labs.ksf.foreman.backup.BackupStorage;
 import fr.echoes.labs.ksf.foreman.backup.PuppetModulesBackupService;
 import fr.echoes.labs.ksf.foreman.backup.SmartClassParameterBackupService;
+import fr.echoes.labs.ksf.foreman.backup.SmartVariableBackupService;
 import fr.echoes.labs.ksf.foreman.exceptions.HostGroupNotFoundException;
 import fr.echoes.labs.ksf.foreman.exceptions.HostNotFoundException;
 
@@ -33,6 +34,7 @@ public class InstallActionTest {
 	private ForemanClient client;
 	private SmartClassParameterBackupService scParamBackupService;
 	private PuppetModulesBackupService modulesBackupService;
+	private SmartVariableBackupService smartVariableBackupService;
 	private BackupStorage storage;
 	private InstallAction action;
 	
@@ -48,8 +50,9 @@ public class InstallActionTest {
 		this.client = Mockito.mock(ForemanClient.class);
 		this.scParamBackupService = Mockito.mock(SmartClassParameterBackupService.class);
 		this.modulesBackupService = Mockito.mock(PuppetModulesBackupService.class);
+		this.smartVariableBackupService = Mockito.mock(SmartVariableBackupService.class);
 		this.storage = Mockito.mock(BackupStorage.class);
-		this.action = new InstallAction(this.client, this.scParamBackupService, this.modulesBackupService, this.storage);
+		this.action = new InstallAction(this.client, this.scParamBackupService, this.modulesBackupService, this.smartVariableBackupService, this.storage);
 
 	}
 	
@@ -69,6 +72,7 @@ public class InstallActionTest {
 		param1.setPuppetModule(puppetClass1.getModuleName());
 		param1.setUsePuppetDefault(false);
 		param1.setValue("blblbl");
+		param1.setType("hash");
 		
 		final SmartClassParameterWrapper param2 = new SmartClassParameterWrapper();
 		param2.setParameter("param2");
@@ -76,6 +80,7 @@ public class InstallActionTest {
 		param2.setPuppetModule(puppetClass2.getModuleName());
 		param2.setUsePuppetDefault(true);
 		param2.setValue("nope");
+		param2.setType("Integer");
 		
 		final SmartClassParameter scParam1 = new SmartClassParameter();
 		scParam1.setId(1);
@@ -116,6 +121,7 @@ public class InstallActionTest {
 		Assert.assertEquals(true, valuesSaved.get(0).isOverride());
 		Assert.assertEquals(param1.getUsePuppetDefault(), valuesSaved.get(0).isUsePuppetDefault());
 		Assert.assertEquals(param1.getValue(), valuesSaved.get(0).getDefaultValue());
+		Assert.assertEquals(param1.getType(), valuesSaved.get(0).getType());
 		
 		// then
 		Assert.assertEquals(scParam2.getId(), valuesSaved.get(1).getId());
@@ -124,6 +130,7 @@ public class InstallActionTest {
 		Assert.assertEquals(true, valuesSaved.get(1).isOverride());
 		Assert.assertEquals(param2.getUsePuppetDefault(), valuesSaved.get(1).isUsePuppetDefault());
 		Assert.assertEquals(null, valuesSaved.get(1).getDefaultValue());
+		Assert.assertEquals(param2.getType(), valuesSaved.get(1).getType());
 		
 	}
 	
@@ -164,8 +171,8 @@ public class InstallActionTest {
 		final String matcherForGroup1 = ForemanEntities.buildMatcher(ForemanEntities.TYPE_HOSTGROUP, group1.getName());
 		
 		// given : 2 smart class parameters override values
-		final SmartClassParameterWrapper param1 = new SmartClassParameterWrapper("param1", puppetClass1, "35", false);
-		final SmartClassParameterWrapper param2 = new SmartClassParameterWrapper("param2", puppetClass2, "56", false);
+		final SmartClassParameterWrapper param1 = new SmartClassParameterWrapper("param1", "Integer", puppetClass1, "35", false);
+		final SmartClassParameterWrapper param2 = new SmartClassParameterWrapper("param2", "Integer", puppetClass2, "56", false);
 		
 		final SmartClassParameterOverrideValue overrideValue = new SmartClassParameterOverrideValue();
 		overrideValue.setId(1);
@@ -283,8 +290,8 @@ public class InstallActionTest {
 		final ForemanHost host1 = new ForemanHost("1", "foreman.ksf.local");
 		final String matcherForHost1 = ForemanEntities.buildMatcher(ForemanEntities.TYPE_FQDN, host1.getName());
 
-		final SmartClassParameterWrapper param1 = new SmartClassParameterWrapper("param1", puppetClass1, "35", false);
-		final SmartClassParameterWrapper param2 = new SmartClassParameterWrapper("param2", puppetClass2, "56", false);
+		final SmartClassParameterWrapper param1 = new SmartClassParameterWrapper("param1", "Integer", puppetClass1, "35", false);
+		final SmartClassParameterWrapper param2 = new SmartClassParameterWrapper("param2", "Integer", puppetClass2, "56", false);
 		
 		final SmartClassParameterOverrideValue overrideValue = new SmartClassParameterOverrideValue();
 		overrideValue.setId(1);

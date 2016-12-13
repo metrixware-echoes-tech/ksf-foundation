@@ -1,0 +1,6 @@
+variable,puppetModule,puppetClass,type,value
+/home/ksfuser/.ssh/config,wrappers,wrappers::file,string,
+/home/ksfuser/.ssh/id_rsa,wrappers,wrappers::file,string,
+/home/ksfuser/.ssh/id_rsa.pub,wrappers,wrappers::file,hash,{}
+/root/.ssh/id_rsa,wrappers,wrappers::file,string,
+/root/.ssh/id_rsa.pub,wrappers,wrappers::file,hash,{}

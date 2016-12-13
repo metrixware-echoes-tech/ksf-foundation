@@ -26,6 +26,7 @@ import fr.echoes.labs.ksf.foreman.api.model.SmartClassParameterWrapper;
 import fr.echoes.labs.ksf.foreman.api.utils.ForemanEntities;
 import fr.echoes.labs.ksf.foreman.backup.PuppetModulesBackupService;
 import fr.echoes.labs.ksf.foreman.backup.SmartClassParameterBackupService;
+import fr.echoes.labs.ksf.foreman.backup.SmartVariableBackupService;
 
 public class BackupActionTest {
 
@@ -40,6 +41,9 @@ public class BackupActionTest {
 	@Mock
 	private PuppetModulesBackupService modulesBackupService;
 	
+	@Mock
+	private SmartVariableBackupService smartVariableBackupService;
+	
 	@Captor
 	private ArgumentCaptor<ArrayList<SmartClassParameterWrapper>> paramCaptor;
 	
@@ -50,7 +54,7 @@ public class BackupActionTest {
 	public void setup() {
 		
 		MockitoAnnotations.initMocks(this);
-		this.action = new BackupAction(this.client, this.scParamBackupService, this.modulesBackupService);
+		this.action = new BackupAction(this.client, this.scParamBackupService, this.modulesBackupService, this.smartVariableBackupService);
 		
 	}
 	

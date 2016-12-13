@@ -62,16 +62,9 @@ public final class ScParamsUtils {
 	}
 	
 	public static SmartClassParameterOverrideValue getOverrideValueForMatcher(final SmartClassParameter param, final String matchType, final String matchValue) {
-
-		if (param != null && param.getOverrideValues() != null) {
-			final String matcher = buildMatcher(matchType, matchValue);	
-			for (final SmartClassParameterOverrideValue value : param.getOverrideValues()) {
-				if (matcher.equals(value.getMatch())) {
-					return value;
-				}
-			}		
+		if (param != null) {
+			return OverrideValueUtils.getOverrideValueForMatcher(param.getOverrideValues(), matchType, matchValue);
 		}
-		
 		return null;
 	}
 	

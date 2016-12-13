@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,12 +18,17 @@ import fr.echoes.labs.ksf.foreman.api.model.PuppetClass;
 import fr.echoes.labs.ksf.foreman.api.model.SmartClassParameter;
 import fr.echoes.labs.ksf.foreman.api.model.SmartClassParameterOverrideValue;
 import fr.echoes.labs.ksf.foreman.api.model.SmartClassParameterWrapper;
+import fr.echoes.labs.ksf.foreman.api.model.SmartVariable;
+import fr.echoes.labs.ksf.foreman.api.model.SmartVariableWrapper;
 import fr.echoes.labs.ksf.foreman.api.utils.ForemanEntities;
+import fr.echoes.labs.ksf.foreman.api.utils.OverrideValueUtils;
 import fr.echoes.labs.ksf.foreman.api.utils.PuppetClassUtils;
 import fr.echoes.labs.ksf.foreman.api.utils.ScParamsUtils;
+import fr.echoes.labs.ksf.foreman.api.utils.SmartVariableUtils;
 import fr.echoes.labs.ksf.foreman.backup.BackupStorage;
 import fr.echoes.labs.ksf.foreman.backup.PuppetModulesBackupService;
 import fr.echoes.labs.ksf.foreman.backup.SmartClassParameterBackupService;
+import fr.echoes.labs.ksf.foreman.backup.SmartVariableBackupService;
 import fr.echoes.labs.ksf.foreman.exceptions.HostGroupNotFoundException;
 import fr.echoes.labs.ksf.foreman.exceptions.HostNotFoundException;
 import fr.echoes.labs.ksf.foreman.exceptions.PuppetClassNotFoundException;
@@ -36,12 +42,14 @@ public class InstallAction implements IAction {
 	private final BackupStorage backupStorage;
 	private final PuppetModulesBackupService puppetModulesBackupService;
 	private final SmartClassParameterBackupService scParamsBackupService;
+	private final SmartVariableBackupService smartVariableBackupService;
 	
-	public InstallAction(final ForemanClient client, final SmartClassParameterBackupService scParamsBackupService, final PuppetModulesBackupService puppetModulesBackupService, final BackupStorage backupStorage) {
+	public InstallAction(final ForemanClient client, final SmartClassParameterBackupService scParamsBackupService, final PuppetModulesBackupService puppetModulesBackupService, final SmartVariableBackupService smartVariableBackupService, final BackupStorage backupStorage) {
 		this.foreman = client;
 		this.backupStorage = backupStorage;
 		this.puppetModulesBackupService = puppetModulesBackupService;
 		this.scParamsBackupService = scParamsBackupService;
+		this.smartVariableBackupService = smartVariableBackupService;
 	}
 	
 	@Override
@@ -49,6 +57,8 @@ public class InstallAction implements IAction {
 		
 		// declare the smart class parameters that will be override and override default values
 		configureOverrideValues();
+		
+		configureSmartVariables();
 		
 		// configure host groups
 		installHostGroups();
@@ -77,12 +87,43 @@ public class InstallAction implements IAction {
 			
 			scParam.setOverride(true);
 			scParam.setUsePuppetDefault(param.getUsePuppetDefault());
+			scParam.setType(getType(scParam, param));
+			
 			if (!param.getUsePuppetDefault()) {
-				scParam.setDefaultValue(param.getValue());
+				scParam.setDefaultValue(OverrideValueUtils.formatOverrideValue(param.getValue(), scParam.getType()));
 			}
 			
 			// update smart class parameter
 			foreman.updateSmartClassParameter(scParam);
+		}
+		
+	}
+	
+	/**
+	 * Declares the smart variables.
+	 * @throws IOException
+	 */
+	private void configureSmartVariables() throws IOException {
+		
+		final List<SmartVariableWrapper> variables = smartVariableBackupService.read();
+		LOGGER.info("{} smart variables found.", variables.size());
+		
+		for (final SmartVariableWrapper variable : variables) {
+			PuppetClass puppetClass = null;
+			SmartVariable smartVariable = foreman.getSmartVariableByName(variable.getVariable());
+			if (!StringUtils.isEmpty(variable.getPuppetClass()) && !StringUtils.isEmpty(variable.getPuppetModule())) {
+				puppetClass = foreman.findPuppetClass(variable.getPuppetModule(), variable.getPuppetClass());
+			}
+			if (smartVariable == null) {
+				smartVariable = new SmartVariable();
+				SmartVariableUtils.injectValues(smartVariable, variable, puppetClass);
+				LOGGER.info("Creating smart variable {}...", smartVariable.getVariable());
+				foreman.createSmartVariable(smartVariable);
+			}else{
+				SmartVariableUtils.injectValues(smartVariable, variable, puppetClass);
+				LOGGER.info("Updating smart variable {}...", smartVariable.getVariable());
+				foreman.updateSmartVariable(smartVariable);
+			}
 		}
 		
 	}
@@ -128,16 +169,16 @@ public class InstallAction implements IAction {
 				final PuppetClass puppetClass = retrievePuppetClassOrDie(hostGroupValue.getPuppetModule(), hostGroupValue.getPuppetClass());
 				final SmartClassParameter scParameter = retrieveSmartClassParameterOrDie(hostGroupValue, puppetClass);
 				
-				final SmartClassParameterOverrideValue overrideValue = ScParamsUtils.getOverrideValueForHostGroup(scParameter, hostGroup.getFullName());	
-				
-				if (overrideValue == null) {
-					foreman.createSmartClassParameterOverrideValue(scParameter.getId(), ScParamsUtils.newOverrideValue(hostGroupValue, ForemanEntities.TYPE_HOSTGROUP, hostGroup.getFullName()));
-				}else{				
-					foreman.updateSmartClassParameterOverrideValue(scParameter.getId(), ScParamsUtils.mergeOverrideValue(hostGroupValue, overrideValue));
-				}
-				
+				createOrUpdateSmartClassParameterOverrideValue(scParameter, hostGroupValue, ForemanEntities.TYPE_HOSTGROUP, hostGroup.getFullName());
 			}
 			
+		}
+		
+		// import host group smart variables
+		for (final Entry<String, List<SmartVariableWrapper>> entry : smartVariableBackupService.readHostGroupValues().entrySet()) {
+			for (final SmartVariableWrapper var : entry.getValue()) {
+				createOrUpdateSmartVariableOverrideValue(var, ForemanEntities.TYPE_HOSTGROUP, entry.getKey());
+			}
 		}
 		
 	}
@@ -192,17 +233,74 @@ public class InstallAction implements IAction {
 				final PuppetClass puppetClass = retrievePuppetClassOrDie(hostValue.getPuppetModule(), hostValue.getPuppetClass());
 				final SmartClassParameter scParameter = retrieveSmartClassParameterOrDie(hostValue, puppetClass);
 				
-				final SmartClassParameterOverrideValue overrideValue = ScParamsUtils.getOverrideValueForHost(scParameter, hostName);
-				
-				if (overrideValue == null) {
-					foreman.createSmartClassParameterOverrideValue(scParameter.getId(), ScParamsUtils.newOverrideValue(hostValue, ForemanEntities.TYPE_FQDN, hostName));
-				}else{				
-					foreman.updateSmartClassParameterOverrideValue(scParameter.getId(), ScParamsUtils.mergeOverrideValue(hostValue, overrideValue));
-				}					
-				
+				createOrUpdateSmartClassParameterOverrideValue(scParameter, hostValue, ForemanEntities.TYPE_FQDN, hostName);					
+			}
+			
+			// import host smart variables
+			final List<SmartVariableWrapper> variables = this.smartVariableBackupService.readHostValues(targetHost);
+			LOGGER.info("{} smart variables found for host {}", variables.size(), hostName);
+			for (final SmartVariableWrapper var : variables) {
+				createOrUpdateSmartVariableOverrideValue(var, ForemanEntities.TYPE_FQDN, hostName);
 			}
 			
 		}
+	}
+	
+	private void createOrUpdateSmartClassParameterOverrideValue(final SmartClassParameter scParameter, final SmartClassParameterWrapper param, final String entityType, final String entityName) throws IOException {
+		
+		final String type = getType(scParameter, param);
+		
+		if (type == null) {
+			LOGGER.warn("Cannot find type of parameter #{}", scParameter.getId());
+		}else{
+			if (!type.equals(scParameter.getType())) {
+				// Update the parameter's type if the override value's type does not match the current type
+				LOGGER.info("Updating type of parameter {} from {} to {}...", scParameter.getId(), scParameter.getType(), type);
+				scParameter.setType(type);
+				foreman.updateSmartClassParameter(scParameter);
+			}
+		}
+		
+		// Formatting the value
+		param.setValue(OverrideValueUtils.formatOverrideValue(param.getValue(), type));
+		
+		// Retrieve the override value of the parameter for the given entity if it already exists
+		final SmartClassParameterOverrideValue overrideValue = ScParamsUtils.getOverrideValueForMatcher(scParameter, entityType, entityName);
+		
+		if (overrideValue == null) {
+			foreman.createSmartClassParameterOverrideValue(scParameter.getId(), ScParamsUtils.newOverrideValue(param, entityType, entityName));
+		}else{				
+			foreman.updateSmartClassParameterOverrideValue(scParameter.getId(), ScParamsUtils.mergeOverrideValue(param, overrideValue));
+		}
+	}
+	
+	private void createOrUpdateSmartVariableOverrideValue(final SmartVariableWrapper var, final String entityType, final String entityName) throws IOException {
+		
+		final SmartVariable smartVariable = foreman.getSmartVariableByName(var.getVariable());
+		
+		var.setValue(OverrideValueUtils.formatOverrideValue(var.getValue(), smartVariable.getType()));
+		
+		SmartClassParameterOverrideValue overrideValue = SmartVariableUtils.getOverrideValueForMatcher(smartVariable, entityType, entityName);
+		if (overrideValue == null) {
+			overrideValue = new SmartClassParameterOverrideValue(ForemanEntities.buildMatcher(entityType, entityName), var.getValue());
+			LOGGER.info("Creating override value for smart variable {}...", smartVariable.getVariable());
+			foreman.createSmartVariableOverrideValue(smartVariable.getId(), overrideValue);
+		}else{
+			overrideValue.setValue(var.getValue());
+			LOGGER.info("Updating override value for smart variable {}...", smartVariable.getVariable());
+			foreman.updateSmartVariableOverrideValue(smartVariable.getId(), overrideValue);
+		}
+		
+	}
+	
+	private static String getType(final SmartClassParameter scParam, final SmartClassParameterWrapper wrapper) {
+		
+		if (wrapper.getType() != null) {
+			// use the type defined in the csv, if available
+			return wrapper.getType();
+		}
+		// otherwise: use the type defined in Foreman
+		return scParam.getType();
 	}
 	
 	private PuppetClass retrievePuppetClassOrDie(final String moduleName, final String className) throws IOException {

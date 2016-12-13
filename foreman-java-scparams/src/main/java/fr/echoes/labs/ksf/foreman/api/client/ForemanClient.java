@@ -22,6 +22,7 @@ import com.google.common.collect.Sets;
 
 import fr.echoes.labs.ksf.foreman.api.dto.OverrideValueDto;
 import fr.echoes.labs.ksf.foreman.api.dto.SmartClassParameterDto;
+import fr.echoes.labs.ksf.foreman.api.dto.SmartVariableDto;
 import fr.echoes.labs.ksf.foreman.api.model.ForemanApiResult;
 import fr.echoes.labs.ksf.foreman.api.model.ForemanApiResultMap;
 import fr.echoes.labs.ksf.foreman.api.model.ForemanHost;
@@ -29,6 +30,7 @@ import fr.echoes.labs.ksf.foreman.api.model.ForemanHostGroup;
 import fr.echoes.labs.ksf.foreman.api.model.PuppetClass;
 import fr.echoes.labs.ksf.foreman.api.model.SmartClassParameter;
 import fr.echoes.labs.ksf.foreman.api.model.SmartClassParameterOverrideValue;
+import fr.echoes.labs.ksf.foreman.api.model.SmartVariable;
 import fr.echoes.labs.ksf.foreman.api.utils.ForemanEntities;
 import fr.echoes.labs.ksf.foreman.api.utils.PageAggregator;
 import fr.echoes.labs.ksf.foreman.api.utils.PuppetClassUtils;
@@ -43,6 +45,7 @@ public class ForemanClient extends AbstractApiClient {
 	private static final String API_HOSTS_GROUP = "/hostgroups";
 	private static final String API_SMART_CLASS_PARAMETERS = "/smart_class_parameters";
 	private static final String API_PUPPET_CLASSES = "/puppetclasses";
+	private static final String API_SMART_VARIABLES = "/smart_variables";
 	
 	private static final String PARAM_PAGE = "page";
 	private static final String PARAM_SEARCH = "search";
@@ -250,7 +253,7 @@ public class ForemanClient extends AbstractApiClient {
 	
 	public SmartClassParameter getSmartClassParameterByPuppetClass(final Integer puppetClassId, final String parameter) throws IOException {
 		
-		final String response = get(API_PUPPET_CLASSES+"/"+puppetClassId+API_SMART_CLASS_PARAMETERS, ImmutableMap.of(PARAM_SEARCH, parameter));
+		final String response = get(API_PUPPET_CLASSES+"/"+puppetClassId+API_SMART_CLASS_PARAMETERS, ImmutableMap.of(PARAM_SEARCH, '='+parameter));
 		
 		final List<SmartClassParameter> results = extractResults(response, SmartClassParameter.class);
 		
@@ -301,7 +304,10 @@ public class ForemanClient extends AbstractApiClient {
 			throw new IllegalArgumentException("Cannot update a puppet class without its ID.");
 		}
 		
-		final List<ForemanHostGroup> groups = Lists.newArrayList(puppetClass.getHostGroups());
+		final List<ForemanHostGroup> groups = Lists.newArrayList();
+		if (puppetClass.getHostGroups() != null) {
+			groups.addAll(puppetClass.getHostGroups());
+		}
 		groups.add(hostGroup);
 		
 		LOGGER.info("Updating puppet class {}...", puppetClass.getId());
@@ -362,6 +368,105 @@ public class ForemanClient extends AbstractApiClient {
 		}
 		
 		return puppetClasses;
+	}
+	
+	public List<SmartVariable> getSmartVariables() throws IOException {
+		
+		final PageAggregator<SmartVariable> aggregator = new PageAggregator<SmartVariable>() {
+			@Override
+			public List<SmartVariable> executeRequest(int page) throws IOException {
+				return getSmartVariables(page);
+			}
+		};
+		
+		return aggregator.execute();
+	}
+	
+	public List<SmartVariable> getSmartVariables(final int page) throws IOException {
+		
+		final String response = get(API_SMART_VARIABLES, ImmutableMap.of(
+				PARAM_PAGE, Integer.toString(page),
+				PARAM_PER_PAGE, Integer.toString(NB_ITEMS_PER_PAGE)
+		));
+		
+		return extractResults(response, SmartVariable.class);
+	}
+	
+	public SmartVariable getSmartVariable(final Integer id) throws IOException {
+		
+		final String response = get(API_SMART_VARIABLES+'/'+id);		
+		return this.mapper.readValue(response, SmartVariable.class);
+	}
+	
+	public List<SmartVariable> getSmartVariableWithOverrideValues() throws IOException {
+		
+		final List<SmartVariable> results = Lists.newArrayList();
+		final List<SmartVariable> variables = getSmartVariables();
+		
+		for (final SmartVariable variable : variables) {
+			LOGGER.info("Retrieving smart variable [{}/{}]...", results.size() + 1, variables.size());
+			results.add(getSmartVariable(variable.getId()));
+		}
+		
+		return results;
+	}
+	
+	public SmartVariable getSmartVariableByName(final String variable) throws IOException {
+		
+		final String response = get(API_SMART_VARIABLES, ImmutableMap.of(PARAM_SEARCH, '='+variable));
+		final List<SmartVariable> results = extractResults(response, SmartVariable.class);
+		
+		if (results != null && !results.isEmpty()) {
+			return getSmartVariable(results.get(0).getId());
+		}
+		
+		return null;
+	}
+	
+	public void createSmartVariable(final SmartVariable variable) throws IOException {	
+		if (variable == null) {
+			throw new IllegalArgumentException("Smart variable cannot be null.");
+		}
+		if (variable.getId() != null) {
+			throw new IllegalArgumentException("Id must be null.");
+		}
+		post(API_SMART_VARIABLES, new SmartVariableDto(variable));
+	}
+	
+	public void updateSmartVariable(final SmartVariable variable) throws IOException {
+		if (variable == null) {
+			throw new IllegalArgumentException("Smart variable cannot be null.");
+		}
+		if (variable.getId() == null) {
+			throw new IllegalArgumentException("Cannot update a smart variable without its ID.");
+		}
+		put(API_SMART_VARIABLES+'/'+variable.getId(), new SmartVariableDto(variable));
+	}
+	
+	public void createSmartVariableOverrideValue(final Integer variableId, final SmartClassParameterOverrideValue overrideValue) throws IOException {
+		if (variableId == null) {
+			throw new IllegalArgumentException("Cannot create a smart variable override value without a smart variable ID.");
+		}
+		if (overrideValue == null) {
+			throw new IllegalArgumentException("Override value must not be null.");
+		}
+		if (overrideValue.getId() != null) {
+			throw new IllegalArgumentException("Id must be null.");
+		}
+		post(API_SMART_VARIABLES+'/'+variableId+"/override_values/", overrideValue);
+	}
+	
+	public void updateSmartVariableOverrideValue(final Integer variableId, final SmartClassParameterOverrideValue overrideValue) throws IOException {	
+		if (variableId == null) {
+			throw new IllegalArgumentException("Cannot update a smart variable override value without a smart variable ID.");
+		}
+		if (overrideValue == null) {
+			throw new IllegalArgumentException("Override value must not be null.");
+		}
+		if (overrideValue.getId() == null) {
+			throw new IllegalArgumentException("Cannot update a smart variable override value without its ID.");
+		}
+		put(API_SMART_VARIABLES+'/'+variableId+"/override_values/"+overrideValue.getId(), overrideValue);
 	}
 	
 	private List<Object> extractResults(final String response) throws IOException {
