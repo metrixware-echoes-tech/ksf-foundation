@@ -38,7 +38,8 @@ public final class OverrideValueUtils {
 					//.replace("\\n", "\n")
 					//.replace("\\r", "\r")
 					.replace("\\\\\"", "\\\"")
-					.replace("\\\"", "\"");
+					.replace("\\\"", "\"")
+					.replace("\\\\", "\\");
 			return escapedString;
 		}
 		return null;
