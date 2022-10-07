@@ -13,7 +13,7 @@
     }
   ],
   "dependencies": {
-    "jquery": "1"
+    "jquery": "3.5.0"
   },
   "description": "A jQuery plugin to create tag input fields, which works nicely with Twitter Typeahead.js and Twitter Bootstrap",
   "keywords": [
